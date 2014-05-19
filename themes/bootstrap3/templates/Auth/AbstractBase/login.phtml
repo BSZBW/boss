@@ -4,8 +4,8 @@
   <form method="post" class="form-horizontal" action="<?=$this->url('myresearch-home')?>" name="loginForm" id="loginForm">
     <?=$this->auth()->getLoginFields()?>
     <input type="hidden" name="auth_method" value="<?=$this->auth()->getActiveAuthMethod()?>">
-    <div class="control-group">
-      <div class="controls">
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
         <? if ($account->supportsCreation()): ?>
           <a class="btn btn-link createAccountLink" href="<?=$this->url('myresearch-account') ?>"><?=$this->transEsc('Create New Account')?></a>
         <? endif; ?>

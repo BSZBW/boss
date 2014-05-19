@@ -110,11 +110,10 @@ function registerLightboxEvents() {
     }
   });
 }
-function updatePageForLogin()
-{
+function updatePageForLogin() {
   // Hide "log in" options and show "log out" options:
-  $('#loginOptions').hide();
-  $('.logoutOptions').show();
+  $('#loginOptions').addClass('hidden');
+  $('.logoutOptions').removeClass('hidden');
 
   var recordId = $('#record_id').val();
 
