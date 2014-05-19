@@ -13,6 +13,7 @@ return array(
         'core/jquery.min.js',
         'core/bootstrap.min.js',
         'core/bootstrap-accessibility.min.js',
+        'core/typeahead.js',
         'common.js',
         'lightbox.js',
         'rc4.js'

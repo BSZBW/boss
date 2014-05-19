@@ -1,6 +1,5 @@
 <? if ($this->pageCount): ?>
-  <div class="pagination pagination-centered noprint">
-    <ul>
+  <ul class="pagination">
     <? if (isset($this->previous)): ?>
       <li><a href="<?=$this->currentPath() . $this->results->getUrlQuery()->setPage(1)?>">[1]</a></li>
       <li><a href="<?=$this->currentPath() . $this->results->getUrlQuery()->setPage($this->previous)?>">&laquo; <?=$this->transEsc('Prev')?></a></li>
@@ -20,6 +19,5 @@
       <li><a href="<?=$this->currentPath() . $this->results->getUrlQuery()->setPage($this->next)?>"><?=$this->transEsc('Next');?> &raquo;</a></li>
       <li><a href="<?=$this->currentPath() . $this->results->getUrlQuery()->setPage($this->pageCount)?>">[<?=$this->pageCount?>]</a></li>
     <? endif; ?>
-    </ul>
-  </div>
+  </ul>
 <? endif; ?>

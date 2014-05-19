@@ -12,7 +12,7 @@
     <? foreach($cluster['list'] as $thisFacet): ?>
       <? /* More link */ ?>
       <? if ($iter == $corner+1): ?>
-        </div><div id="moreNarrowGroupHidden_<?=$this->escapeHtml($title)?>" class="row">
+        </div><div id="more-NarrowGroupHidden_<?=$this->escapeHtml($title)?>" class="row">
           <span class="col-md-12"><a href="#" onclick="moreFacets('NarrowGroupHidden_<?=$this->escapeHtml($title)?>'); return false;"><?=$this->transEsc('more') ?> ...</a></span>
         </div><div class="row<?=$moreClass ?>">
       <? endif; ?>

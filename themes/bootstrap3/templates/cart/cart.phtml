@@ -11,9 +11,8 @@
   <? if (!$this->cart()->isEmpty()): ?>
     <label class="checkbox">
       <input type="checkbox" name="selectAll" class="checkbox-select-all"/> <?=$this->transEsc('select_page')?>
+        | <?=$this->transEsc('with_selected')?>:
     </label>
-    <span class="help-inline">|</span>
-    <span class="help-inline"><?=$this->transEsc('with_selected')?>: </span>
     <? if ($this->userlist()->getMode() !== 'disabled'): ?>
       <input class="btn btn-small" type="submit" name="saveCart" value="<?=$this->transEsc('bookbag_save_selected')?>" title="<?=$this->transEsc('bookbag_save')?>"/>
     <? endif; ?>

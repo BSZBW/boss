@@ -74,7 +74,7 @@
               </label>
             </div>
             <? if ($rangeFacets[$title]['type'] == 'date'): ?>
-              <div class="row"><input type="text" class="col-md-10 hidden" id="<?=$this->escapeHtml($title)?><?=$this->escapeHtml($rangeFacets[$title]['type'])?>Slider"/></div>
+              <div><input type="text" class="col-md-10 hidden" id="<?=$this->escapeHtml($title)?><?=$this->escapeHtml($rangeFacets[$title]['type'])?>Slider"/></div>
             <? endif; ?>
             <input class="btn btn-default" type="submit" value="<?=$this->transEsc('Set')?>"/>
           </form>
