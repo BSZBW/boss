@@ -7,14 +7,13 @@
 
   // Set up breadcrumbs:
   $currPage = isset($list) ? 'List' : 'Favorites';
-  $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a> <span class="divider">&gt;</span></li>'
-    . '<li class="active">' . $this->transEsc($currPage) . '</li>';
+  $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc($currPage) . '</li>';
 
   // Load Javascript dependencies into header:
   $this->headScript()->appendFile("check_item_statuses.js");
-  
+
   $recordTotal = $this->results->getResultTotal();
-  
+
   // Convenience variable:
   $account = $this->auth()->getManager();
   $user = $this->auth()->isLoggedIn();

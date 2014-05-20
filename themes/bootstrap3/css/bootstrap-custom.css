@@ -1,4 +1,4 @@
 .fa-grid:before {content: "\f00a"}
-[id^=side-panel-] .list-group {margin-bottom:0}
+[id^=side-panel-] .list-group {margin-bottom:1px}
 .icon-bar {background-color:#888}
 #modal .modal-body > h2:first-child {display:none}

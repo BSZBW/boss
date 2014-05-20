@@ -1,6 +1,6 @@
 <?
   $this->headTitle($this->translate($this->title) .' - '. $this->details['title']['value']);
-  
+
   // Multiple breadcrumbs
   $this->layout()->breadcrumbs = $this->parents;
   $this->layout()->title = $this->details['title']['value'];
@@ -14,7 +14,7 @@
   // HEADER FILES
   $this->headLink()->appendStylesheet('vudl.css');
   $this->headScript()->appendFile('vudl/grid.js');
-  
+
   // Compact header
   $this->layout()->headerType = 'grid';
   $this->layout()->vudlID = $this->id;
@@ -34,43 +34,37 @@
   var documentID = '<?=$this->id ?>';
   var initPage = <?=isset($this->initPage) ? $this->initPage : 0 ?>;
 </script>
-<div class="inspector_container row">
+<div class="vudl container row">
   <div class="col-md-3">
     <?=$this->context($this)->renderInContext('vudl/details.phtml', array())?>
   </div>
-  <div class="col-md-6" id="view">
-    <div class="row">
-      <? $index=0; foreach($this->outline['lists'] as $key=>$list): ?>
-        <!-- PRE LOADING PLACEHOLDERS -->
-        <? for($i=0;$i<current(array_keys($list))-1;$i++): ?>
-          <a class="col-md-3 page-grid" id="item<?=$i ?>" title="<?=$i ?>">Loading...</a>
-          <? if((++$index)%4 == 0 && $index > 1): ?></div><div class="row"><? endif; ?>
-        <? endfor; ?>
-        <!-- LOADED ITEMS -->
-        <? foreach($list as $i=>$item): ?>
-          <a href="<?=$this->url('vudl-record', array('id'=>$item['id'])) ?>" class="col-md-3 page-grid active" title="<?=$item['id'] ?>" id="item<?=$index?>">
-          <? if(isset($item['thumbnail'])): ?>
-            <img src="<?=$item['thumbnail'] ?>" alt="<?=$item['label'] ?>"/>
-          <? else: ?>
-            <img class="<?=$item['fulltype'] ?>" src="<?=$this->imageLink('vudl/'.$item['fulltype'].'.png') ?>"/>
-          <? endif; ?>
-            <br/><?=$this->transEsc($item['label']) ?>
-          </a>
-          <? if((++$index)%4 == 0 && $index > 1): ?></div><div class="row"><? endif; ?>
-        <? endforeach; ?>
-        <!-- POST LOADING PLACEHOLDERS -->
-        <? if(isset($this->outline['counts'][$key])): ?>
-          <? for($i=$this->initPage+count($list);$i<$this->outline['counts'][$key];$i++): ?>
-            <a class="col-md-3 page-grid" id="item<?=$i ?>" title="<?=$i ?>">Loading...</a>
-            <? if((++$index)%4 == 0 && $index > 1): ?></div><div class="row"><? endif; ?>
-          <? endfor; ?>
+  <? $index=0; foreach($this->outline['lists'] as $key=>$list): ?>
+    <!-- PRE LOADING PLACEHOLDERS -->
+    <? for($i=0;$i<current(array_keys($list))-1;$i++, $index++): ?>
+      <a class="col-md-3 page-grid" id="item<?=$i ?>" title="<?=$i ?>">Loading...</a>
+    <? endfor; ?>
+    <!-- LOADED ITEMS -->
+    <? foreach($list as $i=>$item): ?>
+      <a href="<?=$this->url('vudl-record', array('id'=>$item['id'])) ?>" class="col-md-3 page-grid active" title="<?=$item['id'] ?>" id="item<?=$index?>">
+        <? if(isset($item['thumbnail'])): ?>
+          <img src="<?=$item['thumbnail'] ?>" alt="<?=$item['label'] ?>"/>
+        <? else: ?>
+          <img class="<?=$item['fulltype'] ?>" src="<?=$this->imageLink('vudl/'.$item['fulltype'].'.png') ?>"/>
         <? endif; ?>
-      <? endforeach; ?>
-    </div>
-  </div>
+        <br/><?=$this->transEsc($item['label']) ?>
+      </a>
+      <? $index++; ?>
+    <? endforeach; ?>
+    <!-- POST LOADING PLACEHOLDERS -->
+    <? if(isset($this->outline['counts'][$key])): ?>
+      <? for($i=$this->initPage+count($list);$i<$this->outline['counts'][$key];$i++, $index++): ?>
+        <a class="col-md-3 page-grid" id="item<?=$i ?>" title="<?=$i ?>">Loading...</a>
+      <? endfor; ?>
+    <? endif; ?>
+  <? endforeach; ?>
   <script>
     $.ajax({dataType:'json',
-      url:'../VuDL/ajax?method=pageAjax&record=<?=$this->id ?>&start=0&end=16',       
+      url:'../VuDL/ajax?method=pageAjax&record=<?=$this->id ?>&start=0&end=16',
       success:ajaxLoadPages,
       error:function(d,e){
         console.log(d);console.log(e)

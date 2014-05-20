@@ -1,5 +1,5 @@
-<li><a href="<?=$this->url('home') ?>">Home</a> <span class="divider">&gt;</span></li>
-<li><a href="<?=$this->url('vudl-default-collection') ?>">Collections</a> <span class="divider">&gt;</span></li>
+<li><a href="<?=$this->url('home') ?>">Home</a></li>
+<li><a href="<?=$this->url('vudl-default-collection') ?>">Collections</a></li>
 <li class="dropdown">
   <a class="dropdown-toggle pointer">In <?=count($this->layout()->breadcrumbs) ?> Collections</a>
   <ul class="dropdown-menu" role="menu">
@@ -14,7 +14,7 @@
   <span class="divider">&gt;</span>
 </li>
 <? if(isset($this->layout()->end)): ?>
-  <li title="<?=$this->layout()->title ?>"><?=$this->truncate($this->layout()->title, 100) ?> <span class="divider">&gt;</span></li>
+  <li title="<?=$this->layout()->title ?>"><?=$this->truncate($this->layout()->title, 100) ?></li>
   <li class="active"><?=$this->layout()->end ?></li>
 <? else: ?>
   <li class="active" title="<?=$this->layout()->title ?>"><?=$this->truncate($this->layout()->title, 100) ?></li>

@@ -3,8 +3,9 @@
   $this->headTitle($this->translate('Export Record'));
 
   // Set up breadcrumbs:
-  $this->layout()->breadcrumbs = '<li>' . $this->getLastSearchLink($this->transEsc('Search'), '', '<span class="divider">&gt;</span></li>')
-    . $this->recordLink()->getBreadcrumb($this->driver) . '<span class="divider">&gt;</span><li class="active">' . $this->transEsc('Export Record') . '</li>';
+  $this->layout()->breadcrumbs = '<li>' . $this->getLastSearchLink($this->transEsc('Search'), '', '</li> ')
+    . '<li>' . $this->recordLink()->getBreadcrumb($this->driver) . '</li> '
+    . '<li class="active">' . $this->transEsc('Export Record') . '</li>';
 ?>
 <?=$this->flashmessages()?>
 <? $exportFormats = $this->export()->getFormatsForRecord($this->driver); if (count($exportFormats) > 0): ?>

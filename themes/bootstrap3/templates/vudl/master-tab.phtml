@@ -1,6 +1,6 @@
 <? if(isset($this->master)): ?>
   <form method="get" id="file-download" action="<?=$this->url('files', array('id'=>$this->id, 'type'=>'MASTER')) ?>?download=true">
-    <button id="download-button" class="btn btn-large btn-primary" style="width:300px;margin-top:12px">
+    <button id="download-button" class="btn btn-primary btn-lg" style="width:300px;margin-top:12px">
       <i class="fa fa-download-alt icon-2x pull-left"></i> <?=$this->transEsc('Download File') ?><br>
       <small><?=$this->techinfo['type'] ?><?if(isset($this->techinfo['size'])):?> ~ <?=$this->techinfo['size'] ?><? endif ?></small>
     </button>

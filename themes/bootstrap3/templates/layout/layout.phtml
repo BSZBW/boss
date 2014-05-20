@@ -86,7 +86,7 @@
         && !empty($this->layout()->breadcrumbs)
         && $this->layout()->breadcrumbs !== false
       ): ?>
-        <ul class="breadcrumb">
+        <ul class="breadcrumb hidden-print">
         <? if(is_array($this->layout()->breadcrumbs)): ?>
           <? if(count($this->layout()->breadcrumbs) > 1): ?>
             <?=$this->render('breadcrumbs/multi.phtml', array(
@@ -106,9 +106,9 @@
         <? endif; ?>
         </ul>
       <? endif; ?>
-      <section class="main row">
+      <div class="main row">
         <?=$this->layout()->content?>
-      </section>
+      </div>
       <footer class="hidden-print">
         <?=$this->render('footer.phtml')?>
         <?=$this->layout()->poweredBy ?>

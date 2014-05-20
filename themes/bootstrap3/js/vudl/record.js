@@ -115,7 +115,7 @@ function prevPage() {
   $('.page-link.selected').prev('.page-link').click();
   scrollToSelected();
 }
-function nextPage() {  
+function nextPage() {
   $('.page-link.selected').next('.page-link').click();
   scrollToSelected();
 }
@@ -136,12 +136,12 @@ function resizeAccordions(offset) {
     // Subtract height of the headers
     - ($('#side-nav .accordion-heading').length*vudlSettings.accordion.headerHeight);
   // All accordions
-  $('#side-nav .accordion-body').css({
+  $('#side-nav .panel-collapse').css({
     'max-height':accordionHeight,
     'overflow-y':'auto'
   });
   // Set height in the open accordion
-  $('#side-nav .accordion-body.in').css({
+  $('#side-nav .panel-collapse.in').css({
     'height':accordionHeight
   });
   $('.zoomy-container').css('height',
@@ -168,7 +168,7 @@ $(document).ready(function() {
   $('.page-link').click(function() {
     $('.page-link.selected').removeClass('selected');
     $(this).addClass('selected');
-  });  
+  });
   // Load clicked items
   $('.unloaded').click(function() {
     scrollToSelected();
@@ -180,6 +180,8 @@ $(document).ready(function() {
     loadWait = true;
     findVisible();
   });
+  // Side nav toggle
+  $('#side-nav-toggle').click(toggleSideNav);
   setTimeout(findVisible, 1000);
   ajaxGetView(initPage);
 });

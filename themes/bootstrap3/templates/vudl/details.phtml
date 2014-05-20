@@ -4,14 +4,16 @@
   );
   $no_link = array('title', 'description');
 ?>
-<div class="accordion-group">
-  <div class="accordion-heading">
-    <a class="accordion-toggle" data-toggle="collapse" data-parent="#side-nav" href="#collapse0">
-      <?=$this->transEsc('Summary & Rights') ?>
-    </a>
+<div class="panel">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <a data-toggle="collapse" data-parent="#accordion" href="#collapse0">
+        <?=$this->transEsc('Summary & Rights') ?>
+      </a>
+    </h4>
   </div>
-  <div id="collapse0" class="accordion-body collapse">
-    <div class="accordion-inner">
+  <div id="collapse0" class="panel-collapse collapse">
+    <div class="panel-body">
       <table class="table small details">
         <tr><td><?=$this->transEsc('Full Title') ?></td><td><?=$this->details['title']['value'] ?></td></tr>
       <? foreach ($this->details as $attr=>$val):
@@ -21,7 +23,7 @@
           <? // Special format for first_indexed ?>
           <? if($attr == 'first_indexed'): ?>
             <?=date_create($val['value'])->format('j F Y') ?>
-            
+
           <? // If we need exploding and backlinking ?>
           <? elseif($attr == 'topic' || $attr == 'series'): ?>
             <? if(!is_array($val['value'])) $val['value'] = array($val['value']); ?>
@@ -37,11 +39,11 @@
               <? if(count($val['value']) > 1): ?></li><? endif ?>
             <? endforeach; ?>
             <? if(count($val['value']) > 1): ?></ul><? endif ?>
-            
+
           <? // Items not useful to link ?>
           <? elseif(in_array($attr, $no_link)): ?>
             <?=is_array($val['value']) ? implode('<br/>', $val['value']) : $val['value'] ?>
-            
+
           <? // Array handling ?>
           <? elseif(is_array($val['value'])): ?>
             <? if(count($val['value']) == 1): ?>
@@ -53,7 +55,7 @@
               <? endforeach; ?>
               </ul>
             <? endif; ?>
-          
+
           <? // The rest are linked ?>
           <? else: ?>
             <a href="<?=$this->url('search-results') ?>?filter[]=<?=$attr ?>:<?=urlencode($val['value']) ?>"><?=$val['value'] ?></a>
@@ -71,7 +73,7 @@
       <? if(isset($this->details['license'])): ?>
         <div class="block text-center">
         <?  switch($this->details['special_license']):
-            case 'CC': 
+            case 'CC':
                 $cctype = array();
                 preg_match('/licenses\/([^\/]*)/', $this->details['license'], $cctype);
                 $cctype = $cctype[1];

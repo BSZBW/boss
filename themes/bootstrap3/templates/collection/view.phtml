@@ -10,10 +10,10 @@
 
   // Set flag for special cases relating to full-width hierarchy tree tab:
   $tree = (strtolower($this->activeTab) == 'hierarchytree');
-  
+
   // Set up breadcrumbs:
-  $this->layout()->breadcrumbs = '<li>' . $this->getLastSearchLink($this->transEsc('Search'), '', ' <span class="divider">&gt;</span> </li>')
-     . '<li><a href="' . $this->url('collections-home') . '">' . $this->transEsc('Collections') . '</a> <span class="divider">&gt;</span> </li>'
+  $this->layout()->breadcrumbs = '<li>' . $this->getLastSearchLink($this->transEsc('Search'), '', '</li> ')
+     . '<li><a href="' . $this->url('collections-home') . '">' . $this->transEsc('Collections') . '</a></li> '
      . '<li class="active">' . $this->recordLink()->getBreadcrumb($this->driver) . '</li>';
 ?>
 
