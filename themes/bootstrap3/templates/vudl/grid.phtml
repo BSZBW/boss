@@ -38,30 +38,32 @@
   <div class="col-md-3">
     <?=$this->context($this)->renderInContext('vudl/details.phtml', array())?>
   </div>
-  <? $index=0; foreach($this->outline['lists'] as $key=>$list): ?>
-    <!-- PRE LOADING PLACEHOLDERS -->
-    <? for($i=0;$i<current(array_keys($list))-1;$i++, $index++): ?>
-      <a class="col-md-3 page-grid" id="item<?=$i ?>" title="<?=$i ?>">Loading...</a>
-    <? endfor; ?>
-    <!-- LOADED ITEMS -->
-    <? foreach($list as $i=>$item): ?>
-      <a href="<?=$this->url('vudl-record', array('id'=>$item['id'])) ?>" class="col-md-3 page-grid active" title="<?=$item['id'] ?>" id="item<?=$index?>">
-        <? if(isset($item['thumbnail'])): ?>
-          <img src="<?=$item['thumbnail'] ?>" alt="<?=$item['label'] ?>"/>
-        <? else: ?>
-          <img class="<?=$item['fulltype'] ?>" src="<?=$this->imageLink('vudl/'.$item['fulltype'].'.png') ?>"/>
-        <? endif; ?>
-        <br/><?=$this->transEsc($item['label']) ?>
-      </a>
-      <? $index++; ?>
-    <? endforeach; ?>
-    <!-- POST LOADING PLACEHOLDERS -->
-    <? if(isset($this->outline['counts'][$key])): ?>
-      <? for($i=$this->initPage+count($list);$i<$this->outline['counts'][$key];$i++, $index++): ?>
+  <div class="col-md-9">
+    <? $index=0; foreach($this->outline['lists'] as $key=>$list): ?>
+      <!-- PRE LOADING PLACEHOLDERS -->
+      <? for($i=0;$i<current(array_keys($list))-1;$i++, $index++): ?>
         <a class="col-md-3 page-grid" id="item<?=$i ?>" title="<?=$i ?>">Loading...</a>
       <? endfor; ?>
-    <? endif; ?>
-  <? endforeach; ?>
+      <!-- LOADED ITEMS -->
+      <? foreach($list as $i=>$item): ?>
+        <a href="<?=$this->url('vudl-record', array('id'=>$item['id'])) ?>" class="col-md-3 page-grid" title="<?=$item['id'] ?>" id="item<?=$index?>">
+          <? if(isset($item['thumbnail'])): ?>
+            <img src="<?=$item['thumbnail'] ?>" alt="<?=$item['label'] ?>"/>
+          <? else: ?>
+            <img class="<?=$item['fulltype'] ?>" src="<?=$this->imageLink('vudl/'.$item['fulltype'].'.png') ?>"/>
+          <? endif; ?>
+          <br/><?=$this->transEsc($item['label']) ?>
+        </a>
+        <? $index++; ?>
+      <? endforeach; ?>
+      <!-- POST LOADING PLACEHOLDERS -->
+      <? if(isset($this->outline['counts'][$key])): ?>
+        <? for($i=$this->initPage+count($list);$i<$this->outline['counts'][$key];$i++, $index++): ?>
+          <a class="col-md-3 page-grid" id="item<?=$i ?>" title="<?=$i ?>">Loading...</a>
+        <? endfor; ?>
+      <? endif; ?>
+    <? endforeach; ?>
+  </div>
   <script>
     $.ajax({dataType:'json',
       url:'../VuDL/ajax?method=pageAjax&record=<?=$this->id ?>&start=0&end=16',

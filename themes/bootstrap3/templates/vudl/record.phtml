@@ -87,7 +87,7 @@
     <div class="panel">
       <div class="panel-heading">
         <h4 class="panel-title">
-          <a data-toggle="collapse" data-parent="#accordion" id="side-nav-toggle">
+          <a data-toggle="collapse" data-parent="#side-nav" id="side-nav-toggle">
             <i class="fa fa-caret-left"></i>
             <i class="fa fa-caret-left"></i>
             <i class="fa fa-caret-left"></i>
@@ -100,7 +100,7 @@
       <div class="panel">
         <div class="panel-heading">
           <h4 class="panel-title">
-            <a data-toggle="collapse" data-parent="#accordion" href="#collapse<?=$key+1 ?>">
+            <a data-toggle="collapse" data-parent="#side-nav" href="#collapse<?=$key+1 ?>">
             <?=$this->outline['names'][$key] ?>
             </a>
           </h4>
@@ -117,10 +117,7 @@
               <? if(isset($item['thumbnail'])): ?>
                 <img src="<?=$item['thumbnail'] ?>" alt="<?=$item['label'] ?>"/><br/>
               <? else: ?>
-                <? $imgType = $item['filetype'] == 'download' ? $item['fulltype'] : $item['filetype'];
-                   $imgSrc = $this->imageLink('vudl/'.$imgType.'.png');
-                   if(empty($imgSrc)) $imgSrc = $this->imageLink('vudl/'.$imgType.'.jpg'); ?>
-                <img src="<?=$imgSrc ?>" alt="<?=$imgType ?>" style="max-width:100px"/><br/>
+                <i class="fa fa-file file-<?=$item['fulltype'] ?>"></i><br/>
               <? endif; ?>
                 <?=$item['label'] ?>
               </a>

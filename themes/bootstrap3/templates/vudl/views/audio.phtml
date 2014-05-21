@@ -9,13 +9,13 @@
       if(data['mp3']) media.mp3 = data['mp3'];
       if(!data['ogg'] && !data['mp3']) data[data['fulltype']] = data['master'];
       swfobject.embedSWF(
-        "<?=$this->imageLink('flash/audio_player.swf') ?>", 
-        "player_fallback", 
-        "300", 
-        "30", 
-        "9.0.0", 
-        "", 
-        media, 
+        "<?=$this->imageLink('flash/audio_player.swf') ?>",
+        "player_fallback",
+        "300",
+        "30",
+        "9.0.0",
+        "",
+        media,
         {"bgcolor":"#F7F7F9"}
       );
       $('audio').hide();
@@ -30,16 +30,12 @@
       $('#player_fallback').hide();
     }
   };
+  $(document).ready(function() {
+    $('#view .nav-tabs li.opener a').hide();
+  });
 </script>
-<? if($this->counts[0] > 1): ?>
-  <div class="row btn-group visible-phone text-center">
-    <a href="javascript:prevPage()" class="btn">Prev Page</a>
-    <a href="javascript:nextPage()" class="btn">Next Page</a>
-    <br/><br/>
-  </div>
-<? endif; ?>
 <ul class="nav nav-tabs">
-  <li class="opener">
+  <li class="static opener">
     <a onClick="toggleSideNav()">
       <i class="fa fa-caret-right"></i>
       <i class="fa fa-caret-right"></i>
@@ -48,10 +44,11 @@
   </li>
   <li class="active"><a>Player and Downloads</a></li>
   <? if($this->counts[0] > 1): ?>
-    <div class="btn-group pull-right hidden-phone">
-      <a href="javascript:prevPage()" class="btn btn-small">Prev Page</a>
-      <a href="javascript:nextPage()" class="btn btn-small">Next Page</a>
-    </div>
+    <li class="pull-right static hidden-xs">
+      <a class="pull-left" href="javascript:prevPage()">Prev Page</a>
+      <a class="pull-left" href="<?=$this->url('vudl-grid', array('id'=>$this->id)) ?>"><i class="fa fa-th"></i></a>
+      <a class="pull-left" href="javascript:nextPage()">Next Page</a>
+    </li>
   <? endif; ?>
 </ul>
 <div class="tab-container text-center tab-content">
@@ -70,12 +67,12 @@
   && !document.createElement('video').canPlayType('audio/mpeg')
   && !document.createElement('video').canPlayType('<?=$this->mimetype ?>')) {
     swfobject.embedSWF(
-      "<?=$this->imageLink('flash/audio_player.swf') ?>", 
-      "player_fallback", 
-      "300", 
-      "30", 
-      "9.0.0", 
-      "", 
+      "<?=$this->imageLink('flash/audio_player.swf') ?>",
+      "player_fallback",
+      "300",
+      "30",
+      "9.0.0",
+      "",
       {
         <? if(isset($this->ogg)): ?>"ogg":"<?=$this->ogg ?>?download=true",<?endif?>
         <? if(isset($this->mp3)): ?>"mp3":"<?=$this->mp3 ?>?download=true",<?endif?>
@@ -83,7 +80,7 @@
         "ogg":"<?=$this->ogg ?>?download=true",
         "mp3":"<?=$this->mp3 ?>?download=true",
         "config":"<?=$this->imageLink('flash/config.txt') ?>"
-      }, 
+      },
       {"bgcolor":"#5C595A"}
     );
     $('audio').trigger('pause').remove();

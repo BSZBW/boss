@@ -1,12 +1,14 @@
 <!-- ALL FILES -->
-<div class="accordion-group">
-  <div class="accordion-heading">
-    <a class="accordion-toggle" data-toggle="collapse" data-parent="#techinfo" href="#allFiles">
-      <?=$this->transEsc('All Files')?>
-    </a>
+<div class="panel">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <a data-toggle="collapse" data-parent="#techinfo" href="#allFiles">
+        <?=$this->transEsc('All Files')?>
+      </a>
+    </h4>
   </div>
-  <div id="allFiles" class="accordion-body collapse">
-    <div class="accordion-inner">
+  <div id="allFiles" class="panel-collapse collapse">
+    <div class="panel-body">
       <? foreach ($this->record as $key=>$link): ?>
         <? $mtKey = array_search(strToUpper($key), $this->record['datastreams']); ?>
         <? if (
@@ -16,14 +18,14 @@
           || strpos($key, '-') !== false
           || $key == 'techinfo'
         ) continue; ?>
-        <a class="btn btn-block" href="<?=$this->url(
+        <a class="btn btn-default clearfix" href="<?=$this->url(
           'files',
           array(
             'id'=>$this->record['id'],
             'type'=>strtoupper($key)
           )
         )?>?download=true">
-          <?=strToUpper($this->transEsc($key)) ?>
+          <span class="pull-left"><?=strToUpper($this->transEsc($key)) ?></span>
           <? if (isset($this->record['mimetypes'])): ?>
             <span class="pull-right small"><?=$this->record['mimetypes'][$mtKey] ?></span>
           <? endif; ?>
@@ -35,14 +37,16 @@
 
 <!-- OCR --->
 <? if (isset($this->record['ocr-dirty'])): ?>
-  <div class="accordion-group">
-    <div class="accordion-heading">
-      <a class="accordion-toggle" data-toggle="collapse" data-parent="#techinfo" href="#ocr">
-        <?=$this->transEsc('Computer Generated Transcription (OCR)')?>
-      </a>
+  <div class="panel">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#techinfo" href="#ocr">
+          <?=$this->transEsc('Computer Generated Transcription (OCR)')?>
+        </a>
+      </h4>
     </div>
-    <div id="ocr" class="accordion-body collapse">
-      <div class="accordion-inner">
+    <div id="ocr" class="panel-collapse collapse">
+      <div class="panel-body">
         <pre><?=$this->record['ocr-dirty'] ?></pre>
       </div>
     </div>
@@ -51,14 +55,16 @@
 
 <!-- Technical Information XML --->
 <? if (isset($this->record['techinfo'])): ?>
-  <div class="accordion-group">
-    <div class="accordion-heading">
-      <a class="accordion-toggle" data-toggle="collapse" data-parent="#techinfo" href="#xml">
-        <?=$this->transEsc('Technical Information (Master File)')?>
-      </a>
+  <div class="panel">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#techinfo" href="#xml">
+          <?=$this->transEsc('Technical Information (Master File)')?>
+        </a>
+      </h4>
     </div>
-    <div id="xml" class="accordion-body collapse">
-      <div class="accordion-inner">
+    <div id="xml" class="panel-collapse collapse">
+      <div class="panel-body">
         <?=$this->vudl()->formatTechInfo($this->record['techinfo'])?>
       </div>
     </div>

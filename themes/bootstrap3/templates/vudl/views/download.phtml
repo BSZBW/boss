@@ -3,17 +3,12 @@
   updateFunction = function(data, tab) {
     $('#file-download').attr("action", data['master']);
   };
+  $(document).ready(function() {
+    $('#view .nav-tabs li.opener a').hide();
+  });
 </script>
-<? if($this->counts[0] > 1): ?>
-  <div class="row btn-group visible-phone text-center">
-    <a href="javascript:prevPage()" class="btn">Prev Page</a>
-    <a href="<?=$this->url('vudl-grid', array('id'=>$this->id)) ?>" class="btn grid-btn"><i class="fa fa-th"></i></a>
-    <a href="javascript:nextPage()" class="btn">Next Page</a>
-    <br/><br/>
-  </div>
-<? endif; ?>
 <ul class="nav nav-tabs">
-  <li class="opener">
+  <li class="static opener">
     <a onClick="toggleSideNav()">
       <i class="fa fa-caret-right"></i>
       <i class="fa fa-caret-right"></i>
@@ -22,13 +17,13 @@
   </li>
   <li class="active"><a href="#master" id="master-tab">Downloads</a></li>
   <? if($this->counts[0] > 1): ?>
-    <div class="btn-group pull-right hidden-phone">
-      <a href="javascript:prevPage()" class="btn btn-small">Prev Page</a>
-      <a href="<?=$this->url('vudl-grid', array('id'=>$this->id)) ?>" class="btn grid-btn"><i class="fa fa-th"></i></a>
-      <a href="javascript:nextPage()" class="btn btn-small">Next Page</a>
-    </div>
+    <li class="pull-right static">
+      <a class="pull-left" href="javascript:prevPage()">Prev Page</a>
+      <a class="pull-left" href="<?=$this->url('vudl-grid', array('id'=>$this->id)) ?>"><i class="fa fa-th"></i></a>
+      <a class="pull-left" href="javascript:nextPage()">Next Page</a>
+    </li>
   <? endif; ?>
 </ul>
-<div class="tab-container text-center tab-content">  
+<div class="tab-container text-center tab-content">
   <?=$this->context($this)->renderInContext('vudl/master-tab.phtml', array())?>
 </div>

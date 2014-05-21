@@ -63,7 +63,7 @@
             'left'  :(state.container.width  - state.page.zwidth) /2,
             'top'   :(state.container.height - state.page.zheight)/2
           };
-          state.page.elem.css(center)                
+          state.page.elem.css(center)
             .draggable({containment:".zoomy-container .bounds",scroll:false,drag:core.moveMap})
             .unbind('mousewheel').bind('mousewheel', core.zoom);
           // Initial map size
@@ -94,7 +94,7 @@
               var height = state.page.sideways ? state.page.zwidth : state.page.zheight;
               var top = height < state.container.height
                        ? (height-state.container.height)/2
-                       : ($(this).offset().top -state.map.elem.offset().top -1)/state.map.zoom*state.page.zoom;            
+                       : ($(this).offset().top -state.map.elem.offset().top -1)/state.map.zoom*state.page.zoom;
               state.page.elem.css({
                 'left':-left,
                 'top' :-top
@@ -322,24 +322,24 @@
         }
       }
     };
-    
+
     core.load(src, thumb);
-    
+
     $('.zoomy-container .turn-left').unbind('click').bind('click', core.rotateLeft);
     $('.zoomy-container .turn-right').unbind('click').bind('click', core.rotateRight);
     $('.zoomy-container .zoom-in').unbind('click').bind('click', function(){core.zoom({fake:1},-1)});
     $('.zoomy-container .zoom-out').unbind('click').bind('click', function(){core.zoom({fake:1},1)});
     $('.zoomy-container .zoom .level').unbind('keyup').bind('keyup', function(){core.zoom({setZoom:this.value/100},0)});
     $('.zoomy-container #toggle').unbind('click').bind('click', function(){core.toggleUI()});
-    
+
     return {'src':src,'load':core.load,'resize':core.resize};
   };
-  
+
   $.fn.zoomy = function(src, thumb) {
     var elem = this,
-        instance = elem.data('zoomy');            
+        instance = elem.data('zoomy');
     if(!instance) { // init
-      $(this).html('<div class="bounds"></div><div class="page"><img src=""></div><div class="map ui"><img src="" class="mini_map"><div class="scope"></div></div><div class="loading-bar"><div class="progress progress-striped active" style="width:40%;margin:auto;border:1px solid #FFF"><div class="bar" style="width:100%;">Loading...</div></div></div><div class="control"><a class="turn-right ui"><span class="fa fa-stack"><i class="fa fa-sign-blank icon-muted icon-stack-base"></i><i class="fa fa-rotate-left"></i></span></i></a><a class="turn-left ui"><span class="fa fa-stack"><i class="fa fa-sign-blank icon-muted icon-stack-base"></i><i class="fa fa-rotate-right"></i></span></a><a id="toggle"><span class="fa fa-stack"><i class="fa fa-sign-blank icon-muted icon-stack-base"></i><i class="fa fa-resize-small icon-rotate-90"></i></span></a></div><div class="zoom ui"><a class="zoom-out"><span class="fa fa-stack"><i class="fa fa-sign-blank icon-muted icon-stack-base"></i><i class="fa fa-plus"></i></span></a><input class="level">%<a class="zoom-in"><span class="fa fa-stack"><i class="fa fa-sign-blank icon-muted icon-stack-base"></i><i class="fa fa-minus"></i></span></a></div>');
+      $(this).html('<div class="bounds"></div><div class="page"><img src=""></div><div class="map ui"><img src="" class="mini_map"><div class="scope"></div></div><div class="loading-bar"><div class="progress progress-striped active" style="width:40%;margin:auto;border:1px solid #FFF"><div class="progress-bar" style="width:100%;">Loading...</div></div></div><div class="control"><a class="turn-right ui"><span class="fa fa-stack"><i class="fa fa-sign-blank icon-muted icon-stack-base"></i><i class="fa fa-rotate-left"></i></span></i></a><a class="turn-left ui"><span class="fa fa-stack"><i class="fa fa-sign-blank icon-muted icon-stack-base"></i><i class="fa fa-rotate-right"></i></span></a><a id="toggle"><span class="fa fa-stack"><i class="fa fa-sign-blank icon-muted icon-stack-base"></i><i class="fa fa-resize-small icon-rotate-90"></i></span></a></div><div class="zoom ui"><a class="zoom-out"><span class="fa fa-stack"><i class="fa fa-sign-blank icon-muted icon-stack-base"></i><i class="fa fa-plus"></i></span></a><input class="level">%<a class="zoom-in"><span class="fa fa-stack"><i class="fa fa-sign-blank icon-muted icon-stack-base"></i><i class="fa fa-minus"></i></span></a></div>');
       $(this).addClass('zoomy-container');
       instance = new Zoomy(src, thumb);
       elem.data('zoomy', instance);
@@ -352,11 +352,11 @@
     }
     return this;
   }
-  
+
   $.fn.zoomyResize = function() {
       var instance = this.data('zoomy');
       //console.log(instance);
       instance['resize']();
-    
+
   }
 })(jQuery);

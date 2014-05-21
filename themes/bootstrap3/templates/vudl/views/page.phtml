@@ -5,7 +5,7 @@
     if(!data['zoom'] && data['large']) data['zoom'] = data['large'];
     pageData = data;
     //console.log(data);
-    $('#view .nav-tabs li a').hide();
+    $('#view .nav-tabs li:not(.static) a').hide();
     for(var i in data) {
       $('#'+i+'-tab').show();
     }
@@ -35,7 +35,8 @@
   }
 
   $(document).ready(function() {
-    $('#view .nav-tabs li:not(.opener) a').click(function (e) {
+    $('#view .nav-tabs li.opener a').hide();
+    $('#view .nav-tabs li:not(.static) a').click(function (e) {
       e.preventDefault();
       $(this).tab('show');
       currTab = $(this).attr('id');
@@ -54,15 +55,14 @@
   });
 </script>
 <? if($this->counts[0] > 1): ?>
-  <div class="row btn-group visible-sm text-center">
+  <div class="row btn-group visible-xs">
     <a href="javascript:prevPage()" class="btn">Prev Page</a>
     <a href="<?=$this->url('vudl-grid', array('id'=>$this->id)) ?>" class="btn grid-btn"><i class="fa fa-th"></i></a>
     <a href="javascript:nextPage()" class="btn">Next Page</a>
-    <br/><br/>
   </div>
 <? endif; ?>
 <ul class="nav nav-tabs">
-  <li class="opener">
+  <li class="static opener">
     <a onClick="toggleSideNav()">
       <i class="fa fa-caret-right"></i>
       <i class="fa fa-caret-right"></i>
@@ -70,22 +70,24 @@
     </a>
   </li>
   <li><a href="#image" id="medium-tab" onClick="showPreview('medium', this)">Medium</a></li>
-  <li class="hidden-sm"><a href="#image" id="large-tab" onClick="showPreview('large', this)">Large</a></li>
+  <li class="hidden-xs"><a href="#image" id="large-tab" onClick="showPreview('large', this)">Large</a></li>
   <li><a href="#zoom" id="zoom-tab" onClick="showZoom(this)">Zoom</a></li>
   <li><a href="#master" id="master-tab">Downloads</a></li>
   <? if($this->counts[0] > 1): ?>
-    <div class="btn-group pull-right hidden-sm">
-      <a href="javascript:prevPage()" class="btn btn-small">Prev Page</a>
-      <a href="<?=$this->url('vudl-grid', array('id'=>$this->id)) ?>" class="btn btn-small grid-btn"><i class="fa fa-th"></i></a>
-      <a href="javascript:nextPage()" class="btn btn-small">Next Page</a>
-    </div>
+    <li class="pull-right static hidden-xs">
+      <a class="pull-left" href="javascript:prevPage()">Prev Page</a>
+      <a class="pull-left" href="<?=$this->url('vudl-grid', array('id'=>$this->id)) ?>"><i class="fa fa-th"></i></a>
+      <a class="pull-left" href="javascript:nextPage()">Next Page</a>
+    </li>
   <? endif; ?>
 </ul>
 <div class="tab-container tab-content">
   <div class="tab-pane text-center" id="image">
     <div class="loading-bar front">
-      <div class="progress progress-striped active" style="width:40%;margin:auto;border:1px solid #FFF">
-        <div class="bar" style="width:100%;">Loading...</div>
+      <div class="progress progress-striped active">
+        <div class="progress-bar"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+          <span>Loading...</span>
+        </div>
       </div>
     </div>
     <img id="preview" src="<?=isset($this->medium) ? $this->medium : '' ?>">

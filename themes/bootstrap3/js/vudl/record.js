@@ -44,13 +44,12 @@ function updateTechInfo(record) {
     type:'post',
     url:path+'/VuDL/ajax?method=getTechInfo',
     data:record,
-    success:function(d){
+    success:function(d) {
       $('#techinfo').html(d.data.div);
       $('#file-download').attr('action', path+'/files/'+record.id+'/MASTER?download=true');
-      $('#download-button small').html(d.data.type+' ~ '+d.data.size);
-      $('#allFiles').addClass('in');
+      $('#download-button .details').html(d.data.type+' ~ '+d.data.size);
     },
-    error:function(d,e){
+    error:function(d,e) {
       console.log(d.responseText);
       console.log(e);
     }
@@ -140,15 +139,11 @@ function resizeAccordions(offset) {
     'max-height':accordionHeight,
     'overflow-y':'auto'
   });
-  // Set height in the open accordion
-  $('#side-nav .panel-collapse.in').css({
-    'height':accordionHeight
-  });
   $('.zoomy-container').css('height',
     window.innerHeight
     + $('#side-nav').position().top
-    -vudlSettings.accordion.bottom
-    -$('.zoomy-container').parent().position().top+2
+    - vudlSettings.accordion.bottom
+    - $('.zoomy-container').parent().position().top+2
   );
 }
 // Toggle side menu
@@ -160,7 +155,7 @@ function toggleSideNav() {
   } else {
     opener.css('display','inherit');
   }
-  $('#view').toggleClass('wide');
+  $('#view').toggleClass('col-md-9').toggleClass('col-md-12');
   $('#zoom').zoomyResize();
 }
 // Ready? Let's go
