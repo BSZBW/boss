@@ -59,21 +59,25 @@
           <ul class="list-group collapsed">
             <? if (isset($rangeFacets[$title])): ?>
               <li class="list-group-item">
-                <form class="form-inline text-center" action="" name="<?=$this->escapeHtml($title)?>Filter" id="<?=$this->escapeHtml($title)?>Filter">
+                <form action="" name="<?=$this->escapeHtml($title)?>Filter" id="<?=$this->escapeHtml($title)?>Filter">
                   <?=$results->getUrlQuery()->asHiddenFields(array('page' => "/./", 'filter' => "/^{$title}:.*/"))?>
                   <input type="hidden" name="<?=$this->escapeHtml($rangeFacets[$title]['type'])?>range[]" value="<?=$this->escapeHtml($title)?>"/>
                   <div class="row">
-                    <label class="col-md-6" for="<?=$this->escapeHtml($title)?>from">
-                      <?=$this->transEsc('date_from')?>:<br/>
-                      <input type="text" maxlength="4" class="col-md-12" name="<?=$this->escapeHtml($title)?>from" id="<?=$this->escapeHtml($title)?>from" value="<?=isset($rangeFacets[$title]['values'][0])?$this->escapeHtml($rangeFacets[$title]['values'][0]):''?>" />
-                    </label>
-                    <label class="col-md-6" for="<?=$this->escapeHtml($title)?>to">
-                      <?=$this->transEsc('date_to')?>:<br/>
-                      <input type="text" maxlength="4" class="col-md-12" name="<?=$this->escapeHtml($title)?>to" id="<?=$this->escapeHtml($title)?>to" value="<?=isset($rangeFacets[$title]['values'][1])?$this->escapeHtml($rangeFacets[$title]['values'][1]):''?>" />
-                    </label>
+                    <div class="col-md-6">
+                      <label for="<?=$this->escapeHtml($title)?>from">
+                        <?=$this->transEsc('date_from')?>:
+                      </label>
+                      <input type="text" maxlength="4" class="form-control" name="<?=$this->escapeHtml($title)?>from" id="<?=$this->escapeHtml($title)?>from" value="<?=isset($rangeFacets[$title]['values'][0])?$this->escapeHtml($rangeFacets[$title]['values'][0]):''?>" />
+                    </div>
+                    <div class="col-md-6">
+                      <label for="<?=$this->escapeHtml($title)?>to">
+                        <?=$this->transEsc('date_to')?>:
+                      </label>
+                      <input type="text" maxlength="4" class="form-control" name="<?=$this->escapeHtml($title)?>to" id="<?=$this->escapeHtml($title)?>to" value="<?=isset($rangeFacets[$title]['values'][1])?$this->escapeHtml($rangeFacets[$title]['values'][1]):''?>" />
+                    </div>
                   </div>
                   <? if ($rangeFacets[$title]['type'] == 'date'): ?>
-                    <div><input type="text" class="col-md-10 hidden" id="<?=$this->escapeHtml($title)?><?=$this->escapeHtml($rangeFacets[$title]['type'])?>Slider"/></div>
+                    <div><input type="text" class="col-sm-10 hidden" id="<?=$this->escapeHtml($title)?><?=$this->escapeHtml($rangeFacets[$title]['type'])?>Slider"/></div>
                   <? endif; ?>
                   <input class="btn btn-default" type="submit" value="<?=$this->transEsc('Set')?>"/>
                 </form>

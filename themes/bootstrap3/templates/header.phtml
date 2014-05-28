@@ -41,6 +41,7 @@
           <? endif; ?>
         </li>
       <? endif; ?>
+
       <? if (isset($this->layout()->themeOptions) && count($this->layout()->themeOptions) > 1): ?>
         <li class="dropdown">
           <form method="post" name="themeForm" action="" id="themeForm">
@@ -54,9 +55,11 @@
           </ul>
         </li>
       <? endif; ?>
+
       <? if ($this->feedback()->tabEnabled()): ?>
         <?=$this->render('feedback/form.phtml'); ?>
       <? endif; ?>
+
       <? if (isset($this->layout()->allLangs) && count($this->layout()->allLangs) > 1): ?>
         <li class="dropdown">
           <form method="post" name="langForm" action="" id="langForm">

@@ -41,8 +41,8 @@
     <? endforeach; ?>
   <? endif; ?>
   <?=$this->flashmessages()?>
-  <div class="clearfix noprint search-controls">
-    <div class="pull-left help-block">
+  <div class="clearfix hidden-print search-controls">
+    <div class="pull-left">
       <? if ($recordTotal > 0): ?>
         <?=$this->transEsc("Showing")?>
         <strong><?=number_format($this->results->getStartRecord())?></strong> - <strong><?=number_format($this->results->getEndRecord())?></strong>
@@ -67,7 +67,6 @@
       <div class="pull-right">
         <?=$this->render('search/controls/limit.phtml')?>
         <?=$this->render('search/controls/sort.phtml')?>
-        <br/>
         <?=$this->render('search/controls/view.phtml')?>
       </div>
     <? endif; ?>

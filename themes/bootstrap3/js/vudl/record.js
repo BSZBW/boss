@@ -140,10 +140,13 @@ function resizeAccordions(offset) {
     'overflow-y':'auto'
   });
   $('.zoomy-container').css('height',
-    window.innerHeight
-    + $('#side-nav').position().top
+    window.innerHeight // Window height
+    // Add scroll distance
+    + Math.min($('#side-nav').position().top, document.body.scrollTop)
+    // Minus the top of the accordion
+    - $('#side-nav').position().top
+    // Minus the target distance from the bottom
     - vudlSettings.accordion.bottom
-    - $('.zoomy-container').parent().position().top+2
   );
 }
 // Toggle side menu

@@ -12,8 +12,11 @@
   $tree = (strtolower($this->activeTab) == 'hierarchytree');
 
   // Set up breadcrumbs:
-  $this->layout()->breadcrumbs = '<li>' . $this->getLastSearchLink($this->transEsc('Search'), '', '</li> ')
-     . '<li><a href="' . $this->url('collections-home') . '">' . $this->transEsc('Collections') . '</a></li> '
+  $lastSearch = $this->getLastSearchLink($this->transEsc('Search'));
+  if (!empty($lastSearch)) {
+    $this->layout()->breadcrumbs = '<li>' . $lastSearch . '</li> ';
+  }
+  $this->layout()->breadcrumbs .= '<li><a href="' . $this->url('collections-home') . '">' . $this->transEsc('Collections') . '</a></li> '
      . '<li class="active">' . $this->recordLink()->getBreadcrumb($this->driver) . '</li>';
 ?>
 
@@ -55,7 +58,7 @@
         $desc = $obj->getDescription();
         $isCurrent = (strtolower($this->activeTab) == strtolower($tab));
         if ($isCurrent) {
-          $this->layout()->breadcrumbs .= '<li class="active"><span class="divider">&gt;</span> ' . $this->transEsc($desc) . '</li>';
+          $this->layout()->breadcrumbs .= ' <li class="active">' . $this->transEsc($desc) . '</li>';
           $activeTabObj = $obj;
         }
       ?>
