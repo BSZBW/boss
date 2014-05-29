@@ -1,15 +1,21 @@
 <? if (isset($this->ranges) && !empty($this->ranges)): ?>
   <? $params = $this->searchParams($this->searchClassId); $params->activateAllFacets(); ?>
   <? foreach ($this->ranges as $current): $escField = $this->escapeHtml($current['field']); ?>
-    <fieldset class="col-md-4 text-center">
-      <legend class="text-left"><?=$this->transEsc($params->getFacetLabel($current['field']))?></legend>
+    <fieldset class="col-md-4">
+      <legend><?=$this->transEsc($params->getFacetLabel($current['field']))?></legend>
       <input type="hidden" name="<?=$this->escapeHtml($current['type'])?>range[]" value="<?=$escField?>"/>
-      <label for="<?=$escField?>from"><?=$this->transEsc('date_from')?>:</label>
-      <input type="text" maxlength="4" class="yearbox col-md-4" name="<?=$escField?>from" id="<?=$escField?>from" value="<?=isset($current['values'][0])?$this->escapeHtml($current['values'][0]):''?>" />
-      <label for="<?=$escField?>to"><?=$this->transEsc('date_to')?>:</label>
-      <input type="text" maxlength="4" class="yearbox col-md-4" name="<?=$escField?>to" id="<?=$escField?>to" value="<?=isset($current['values'][1])?$this->escapeHtml($current['values'][1]):''?>" />
+      <div class="row">
+        <div class="col-sm-6">
+          <label for="<?=$escField?>from"><?=$this->transEsc('date_from')?>:</label>
+          <input type="text" maxlength="4" name="<?=$escField?>from" id="<?=$escField?>from" value="<?=isset($current['values'][0])?$this->escapeHtml($current['values'][0]):''?>" class="form-control"/>
+        </div>
+        <div class="col-sm-6">
+          <label for="<?=$escField?>to"><?=$this->transEsc('date_to')?>:</label>
+          <input type="text" maxlength="4" name="<?=$escField?>to" id="<?=$escField?>to" value="<?=isset($current['values'][1])?$this->escapeHtml($current['values'][1]):''?>" class="form-control"/>
+        </div>
+      </div>
       <? if ($current['type'] == 'date'): ?>
-        <div class="pad"><input type="text" id="<?=$escField?><?=$this->escapeHtml($current['type'])?>Slider"></div>
+        <input type="text" id="<?=$escField?><?=$this->escapeHtml($current['type'])?>Slider">
       <? endif; ?>
     </fieldset>
     <? if ($current['type'] == 'date'): ?>
@@ -26,24 +32,24 @@
         $high = intval($high);
         $init = !empty($current['values'][0]) ? 'fillTexts()' : '';
         $script = <<<JS
-          $(document).ready(function() {
-            var fillTexts = function() {
-              var v = {$escField}dateSlider.getValue();
-              $('#${escField}from').val(v[0]);
-              $('#${escField}to').val(v[1]);
-            };
-            var {$escField}dateSlider = $('#{$escField}dateSlider')
-              .slider({
-                 'min':{$min},
-                 'max':{$max},
-                 'handle':"square",
-                 'tooltip':"hide",
-                 'value':[{$low},{$high}]
-              })
-              .on('slide', fillTexts)
-              .data('slider');
-            {$init}
-          });
+$(document).ready(function() {
+  var fillTexts = function() {
+    var v = {$escField}dateSlider.getValue();
+    $('#${escField}from').val(v[0]);
+    $('#${escField}to').val(v[1]);
+  };
+  var {$escField}dateSlider = $('#{$escField}dateSlider')
+    .slider({
+       'min':{$min},
+       'max':{$max},
+       'handle':"square",
+       'tooltip':"hide",
+       'value':[{$low},{$high}]
+    })
+    .on('slide', fillTexts)
+    .data('slider');
+  {$init}
+});
 JS;
       ?>
       <?=$this->inlineScript(\Zend\View\Helper\HeadScript::SCRIPT, $script, 'SET'); ?>

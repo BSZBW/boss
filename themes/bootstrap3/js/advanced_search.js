@@ -11,9 +11,8 @@ function addSearch(group, term, field)
   // Build the new search
   var inputIndex = $('#group'+group+' input').length;
   var inputID = group+'_'+$('#group'+group+' input').length;
-  var newSearch = '<div class="search" id="search'+inputID+'"><input class="span7" id="search_lookfor'+inputID+'" type="text" name="lookfor'+group+'[]" value="'+term+'">'
-    + '<span class="help-inline">'+searchFieldLabel+'</span> '
-    + '<select class="span4" id="search_type'+inputID+'" name="type'+group+'[]">';
+  var newSearch = '<div class="search" id="search'+inputID+'"><div class="form-group row"><div class="col-md-7"><input id="search_lookfor'+inputID+'" class="form-control" type="text" name="lookfor'+group+'[]" value="'+term+'"/></div>'
+    + '<div class="col-md-4"><select id="search_type'+inputID+'" name="type'+group+'[]" class="form-control">';
   for (var key in searchFields) {
     newSearch += '<option value="' + key + '"';
     if (key == field) {
@@ -21,15 +20,20 @@ function addSearch(group, term, field)
     }
     newSearch += ">" + searchFields[key] + "</option>";
   }
-  newSearch += '</select> <a href="#" onClick="deleteSearch('+group+','+inputIndex+')" class="help-inline" title="Remove this term">&times;</a></div>';
+  newSearch += '</select></div><div class="col-md-1"><a class="help-block delete" href="#" onClick="deleteSearch('+group+','+inputIndex+')" class="delete" title="Remove this term">&times;</a></div></div>';
 
   // Insert it
   $("#group" + group + "Holder").before(newSearch);
   // Show x
-  $('#group'+group+' .search .help-inline').show();
+  if($('#group'+group+' .search').length > 1) {
+    $('#group'+group+' .search .delete').removeClass('hidden');
+  } else {
+    $('#group'+group+' .search .delete').addClass('hidden');
+  }
 }
 
-function deleteSearch(group, eq) {
+function deleteSearch(group, eq)
+{
   var searches = $('#group'+group+' .search');
   for(var i=eq;i<searches.length-1;i++) {
     $(searches[i]).find('input').val($(searches[i+1]).find('input').val());
@@ -42,7 +46,7 @@ function deleteSearch(group, eq) {
   }
   // Hide x
   if($('#group'+group+' .search').length == 1) {
-    $('#group'+group+' .search .help-inline').hide();
+    $('#group'+group+' .search .delete').addClass('hidden');
   }
 }
 
@@ -51,11 +55,14 @@ function addGroup(firstTerm, firstField, join)
   if (firstTerm  == undefined) {firstTerm  = '';}
   if (firstField == undefined) {firstField = '';}
   if (join       == undefined) {join       = '';}
-  
+
   var newGroup = '<div id="group'+nextGroup+'" class="group well clearfix">'
-    + '<div class="span4 pull-right">'
-    + '<label for="search_bool'+nextGroup+'"><span class="help-inline">'+searchMatch+':</span>&nbsp;</label>'
-    + '<select class="span8" id="search_bool'+nextGroup+'" name="bool'+nextGroup+'[]">'
+    + '<div class="col-md-9"><div class="row"><div class="col-md-3"><label>'+searchLabel+':</label></div>'
+    + '<div class="col-md-9"><i id="group'+nextGroup+'Holder" class="fa fa-plus-circle"></i> <a href="#" onClick="addSearch('+nextGroup+')">'+addSearchString+'</a></div></div></div>'
+    + '<div class="col-md-3">'
+    + '<label for="search_bool'+nextGroup+'">'+searchMatch+':&nbsp;</label>'
+    + '<a href="#" onClick="deleteGroup('+nextGroup+')" class="close hidden" title="Remove Group">&times;</a>'
+    + '<select id="search_bool'+nextGroup+'" name="bool'+nextGroup+'[]" class="form-control">'
     + '<option value="AND"';
   if(join == 'AND') {
     newGroup += ' selected';
@@ -71,16 +78,15 @@ function addGroup(firstTerm, firstField, join)
     newGroup += ' selected';
   }
   newGroup += '>NO Terms</option>'
-    + '</select><a href="#" onClick="deleteGroup('+nextGroup+')" class="close hide" title="Remove Group">&times;</a></div><div class="span8 pull-left switch-margins row-fluid"><div class="span3 text-right"><span class="help-inline">'+searchLabel+':</span></div>'
-    + '<div class="span9"><i id="group'+nextGroup+'Holder" class="fa fa-plus-sign"></i> <a href="#" onClick="addSearch('+nextGroup+')">'+addSearchString+'</a></div></div></div>';
-  
-  $('#groupPlaceHolder').before(newGroup);  
+    + '</select></div></div>';
+
+  $('#groupPlaceHolder').before(newGroup);
   addSearch(nextGroup, firstTerm, firstField);
   // Show join menu
   if($('.group').length > 1) {
     $('#groupJoin').removeClass('hidden');
     // Show x
-    $('.group .close').show();
+    $('.group .close').removeClass('hidden');
   }
   return nextGroup++;
 }
@@ -95,7 +101,7 @@ function deleteGroup(group)
   } else if($('.group').length == 1) { // Hide join menu
     $('#groupJoin').addClass('hidden');
     // Hide x
-    $('.group .close').hide();
+    $('.group .close').addClass('hidden');
   }
 }
 

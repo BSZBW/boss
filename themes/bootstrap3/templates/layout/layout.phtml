@@ -76,7 +76,7 @@
           $this->layout()->searchbox = $this->render('search/searchbox.phtml');
         }
       ?>
-      <header class="navbar hidden-print">
+      <header role="banner" class="navbar hidden-print">
         <?=$this->render('header.phtml')?>
       </header>
       <nav class="nav searchbox hidden-lg hidden-print">
@@ -106,10 +106,10 @@
         <? endif; ?>
         </ul>
       <? endif; ?>
-      <div class="main row">
+      <div role="main" class="main row">
         <?=$this->layout()->content?>
       </div>
-      <footer class="hidden-print">
+      <footer role="contentinfo" class="hidden-print">
         <?=$this->render('footer.phtml')?>
         <?=$this->layout()->poweredBy ?>
       </footer>

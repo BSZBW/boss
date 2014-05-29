@@ -339,9 +339,6 @@ $(document).ready(function() {
     $.getJSON(path + '/AJAX/JSON', {method: 'keepAlive'});
   }
 
-  // Collapsing facets
-  $('.sidebar .collapsed .nav-header').click(function(){$(this).parent().toggleClass('open');});
-
   // Advanced facets
   setupOrFacets();
 

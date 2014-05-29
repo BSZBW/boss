@@ -28,39 +28,36 @@
 ?>
 
 <?=$this->flashmessages()?>
-<form class="form-inline" method="get" action="<?=$this->url($this->options->getSearchAction())?>" id="advSearchForm" name="searchForm">
-
+<form role="search" name="searchForm" id="advSearchForm" method="get" action="<?=$this->url($this->options->getSearchAction())?>">
   <div class="<?=$this->layoutClass('mainbody')?>">
     <input type="hidden" name="sort" value="relevance">
     <div class="clearfix">
       <p class="lead pull-left"><?=$this->transEsc('Advanced Search')?></p>
-      <div id="groupJoin" class="pull-right hidden">
+      <div id="groupJoin" class="form-inline pull-right hidden">
         <label for="join"><?=$this->transEsc("search_match")?>:</label>
-        <select id="search_bool0" name="join">
+        <select id="search_bool0" name="join" class="form-control">
           <option value="AND"<? if($searchDetails && $searchDetails->getOperator()=='ALL'):?> selected<?endif?>><?= $this->transEsc('ALL Groups') ?></option>
           <option value="OR"<? if($searchDetails && $searchDetails->getOperator()=='OR'):?> selected<?endif?>><?= $this->transEsc('ANY Groups') ?></option>
         </select>
       </div>
     </div>
-    <div class="row">
-      <i id="groupPlaceHolder" class="fa fa-plus-sign"></i> <a href="#" onClick="addGroup()"><?= $this->transEsc('Add Group') ?></a>
-    </div>
-    <div class="pad"><input class="btn btn-primary pull-right" type="submit" value="<?= $this->transEsc('Find')?>"></div>
+    <i id="groupPlaceHolder" class="fa fa-plus-circle"></i> <a href="#" onClick="addGroup()"><?= $this->transEsc('Add Group') ?></a>
+    <input class="btn btn-primary pull-right" type="submit" value="<?= $this->transEsc('Find')?>">
     <?=$this->render('search/advanced/solr.phtml')?>
-    <div class="pad"><input class="btn btn-primary pull-right" type="submit" value="<?= $this->transEsc('Find')?>"></div>
+    <input class="btn btn-primary pull-right" type="submit" value="<?= $this->transEsc('Find')?>">
   </div>
 
-  <div class="<?=$this->layoutClass('sidebar')?>">
+  <div role="complimentary" class="<?=$this->layoutClass('sidebar')?>">
     <? if (!empty($searchFilters)): ?>
-      <div class="filterList">
-        <h4><?=$this->transEsc("adv_search_filters")?></h4>
-        <label class="checkbox"><?=$this->transEsc("adv_search_select_all")?> <input type="checkbox" checked="checked" class="checkbox-select-all"/></label>
+      <ul class="filterList list-group">
+        <li class="list-group-item"><strong><?=$this->transEsc("adv_search_filters")?></strong></li>
+        <label class="list-group-item checkbox"><?=$this->transEsc("adv_search_select_all")?> <input type="checkbox" checked="checked" class="checkbox-select-all"/></label>
         <? foreach ($searchFilters as $field => $data): ?>
           <div>
             <h4><?=$this->transEsc($field)?></h4>
-            <ul class="unstyled">
+            <ul class="list-group">
               <? foreach ($data as $value): ?>
-                <li><label class="checkbox"><input class="checkbox-select-item" type="checkbox" checked="checked" name="filter[]" value='<?=$this->escapeHtml($value['field'])?>:"<?=$this->escapeHtml($value['value'])?>"' /> <?=$this->escapeHtml($value['displayText'])?></label></li>
+                <li class="list-group-item"><label class="checkbox"><input class="checkbox-select-item" type="checkbox" checked="checked" name="filter[]" value='<?=$this->escapeHtml($value['field'])?>:"<?=$this->escapeHtml($value['value'])?>"' /> <?=$this->escapeHtml($value['displayText'])?></label></li>
               <? endforeach; ?>
             </ul>
           </div>
@@ -69,9 +66,9 @@
     <? endif; ?>
     <div class="sidegroup">
       <h4><?=$this->transEsc("Search Tips")?></h4>
-      <ul class="nav nav-list">
-        <li><a href="<?=$this->url('help-home')?>?topic=advsearch" class="help-link" title="<?=$this->transEsc('Help with Advanced Search')?>"><?=$this->transEsc("Help with Advanced Search")?></a></li>
-        <li><a href="<?=$this->url('help-home')?>?topic=search" class="help-link" title="<?=$this->transEsc('Help with Search Operators')?>"><?=$this->transEsc("Help with Search Operators")?></a></li>
+      <ul class="list-group">
+        <a class="list-group-item" href="<?=$this->url('help-home')?>?topic=advsearch" title="<?=$this->transEsc('Help with Advanced Search')?>"><?=$this->transEsc("Help with Advanced Search")?></a>
+        <a class="list-group-item" href="<?=$this->url('help-home')?>?topic=search" title="<?=$this->transEsc('Help with Search Operators')?>"><?=$this->transEsc("Help with Search Operators")?></a>
       </ul>
     </div>
   </div>
