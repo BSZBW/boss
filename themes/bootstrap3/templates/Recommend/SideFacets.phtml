@@ -18,7 +18,7 @@
 <? $collapsedFacets = $this->recommend->getCollapsedFacets() ?>
 <? $filterList = array_merge($results->getParams()->getFilterList(true), $extraFilters); if (!empty($filterList)): ?>
   <div class="list-group filters">
-    <li class="list-group-item"><strong><?=$this->transEsc('Remove Filters')?></strong></li>
+    <li class="list-group-item title"><?=$this->transEsc('Remove Filters')?></li>
     <? foreach ($filterList as $field => $filters): ?>
       <? foreach ($filters as $i => $filter): ?>
         <?
@@ -49,8 +49,8 @@
   <? foreach ($sideFacetSet as $title => $cluster): ?>
     <? $allowExclude = $this->recommend->excludeAllowed($title); ?>
     <ul class="list-group panel-group" id="side-panel-<?=$this->escapeHtml($title) ?>">
-      <li class="list-group-item" data-toggle="collapse" data-parent="#side-panel-<?=$this->escapeHtml($title) ?>" href="#side-collapse-<?=$this->escapeHtml($title) ?>">
-        <strong><?=$this->transEsc($cluster['label'])?></strong>
+      <li class="list-group-item title" data-toggle="collapse" data-parent="#side-panel-<?=$this->escapeHtml($title) ?>" href="#side-collapse-<?=$this->escapeHtml($title) ?>">
+        <?=$this->transEsc($cluster['label'])?>
       </li>
       <div id="side-collapse-<?=$this->escapeHtml($title) ?>" class="panel-collapse collapse<? if(!in_array($title, $collapsedFacets)): ?> in<? endif ?>">
         <? if (isset($rangeFacets[$title])): ?>

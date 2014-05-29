@@ -1,6 +1,7 @@
 .fa-grid:before {content: "\f00a"}
+.group [class^=col-] {padding-left:0}
 [id^=side-panel-] .list-group {margin-bottom:1px}
 .icon-bar {background-color:#888}
-#modal .modal-body > h2:first-child {display:none}
 label.list-group-item {border-radius:0;font-weight:normal;margin-top:0;padding-left:35px}
-.group [class^=col-] {padding-left:0}
+.list-group-item.title {font-weight:bold}
+#modal .modal-body > h2:first-child {display:none}

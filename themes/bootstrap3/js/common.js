@@ -215,33 +215,6 @@ function ajaxLogin(form) {
   });
 }
 
-/* --- BOOTSTRAP LIBRARY TWEAKS --- /
-// Prevent typeahead highlighting
-$.fn.typeahead.Constructor.prototype.render = function(items) {
-  var that = this;
-
-  items = $(items).map(function (i, item) {
-    i = $(that.options.item).attr('data-value', item);
-    i.find('a').html(that.highlighter(item));
-    return i[0];
-  });
-
-  this.$menu.html(items);
-  return this;
-};
-// Enter without highlight does not delete the query
-$.fn.typeahead.Constructor.prototype.select = function () {
-  var val = this.$menu.find('.active');
-  if (val.length > 0) {
-    val = val.attr('data-value');
-  } else {
-    val = this.$element.val();
-  }
-  this.$element.val(this.updater(val)).change();
-  return this.hide();
-};
-//*/
-
 $(document).ready(function() {
   // support "jump menu" dropdown boxes
   $('select.jumpMenu').change(function(){ $(this).parent('form').submit(); });
@@ -278,7 +251,6 @@ $(document).ready(function() {
     });
 
   // Search autocomplete
-  /* TODO
   var autoCompleteRequest, autoCompleteTimer;
   $('.autocomplete').typeahead({
     minLength:3,
@@ -291,7 +263,12 @@ $(document).ready(function() {
       autoCompleteTimer = setTimeout(function() {
         autoCompleteRequest = $.ajax({
           url: path + '/AJAX/JSON',
-          data: {method:'getACSuggestions',type:$('#searchForm_type').val(),searcher:searcher['searcher'],q:query},
+          data: {
+            method:'getACSuggestions',
+            type:$('#searchForm_type').val(),
+            searcher:searcher['searcher'],
+            q:query
+          },
           dataType:'json',
           success: function(json) {
             if (json.status == 'OK' && json.data.length > 0) {
@@ -310,11 +287,18 @@ $(document).ready(function() {
       return item;
     }
   });
-  */
 
   // Checkbox select all
-  $('.checkbox-select-all').change(function() {
-    $(this).closest('form').find('.checkbox-select-item').attr('checked', this.checked);
+  $('.checkbox-select-all').click(function(event) {
+    if(this.checked) {
+      $(this).closest('form').find('.checkbox-select-item').each(function() {
+        this.checked = true;
+      });
+    } else {
+      $(this).closest('form').find('.checkbox-select-item').each(function() {
+        this.checked = false;
+      });
+    }
   });
 
   // handle QR code links
