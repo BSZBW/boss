@@ -159,7 +159,6 @@ function toggleSideNav() {
     opener.css('display','inherit');
   }
   $('#view').toggleClass('col-md-9').toggleClass('col-md-12');
-  $('#zoom').zoomyResize();
 }
 // Ready? Let's go
 $(document).ready(function() {
