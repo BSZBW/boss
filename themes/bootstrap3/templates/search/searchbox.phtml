@@ -76,6 +76,7 @@
     <? endif; ?>
     <? if ((isset($this->filterList) && is_array($this->filterList) && count($this->filterList) > 0) || $hasCheckboxFilters): ?>
       <? $defaultFilterState = $options->getRetainFilterSetting() ? ' checked="checked"' : ''; ?>
+      <br />
       <label class="checkbox">
         <input onChange="$('.applied-filter').click()" type="checkbox"<?=$defaultFilterState?> id="searchFormKeepFilters"/>
         <?=$this->transEsc("basic_search_keep_filters")?>
