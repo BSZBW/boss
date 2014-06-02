@@ -56,8 +56,8 @@ class LayoutClass extends \VuFind\View\Helper\AbstractLayoutClass
             return $this->left ? 'col-md-9 col-md-pull-3' : 'col-md-9';
         case 'sidebar':
             return $this->left
-                ? 'col-md-3 col-md-push-9 hidden-print'
-                : 'col-md-3 hidden-print';
+                ? 'sidebar col-md-3 col-md-push-9 hidden-print'
+                : 'sidebar col-md-3 hidden-print';
         }
     }
 }
