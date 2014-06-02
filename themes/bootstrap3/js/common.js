@@ -251,42 +251,44 @@ $(document).ready(function() {
     });
 
   // Search autocomplete
-  var autoCompleteRequest, autoCompleteTimer;
-  $('.autocomplete').typeahead({
-    minLength:3,
-    source:function(query, process) {
-      clearTimeout(autoCompleteTimer);
-      if(autoCompleteRequest) {
-        autoCompleteRequest.abort();
-      }
-      var searcher = extractClassParams('.autocomplete');
-      autoCompleteTimer = setTimeout(function() {
-        autoCompleteRequest = $.ajax({
-          url: path + '/AJAX/JSON',
-          data: {
-            method:'getACSuggestions',
-            type:$('#searchForm_type').val(),
-            searcher:searcher['searcher'],
-            q:query
-          },
-          dataType:'json',
-          success: function(json) {
-            if (json.status == 'OK' && json.data.length > 0) {
-              process(json.data);
-            } else {
-              process([]);
-            }
+  var searcher = extractClassParams('.autocomplete');
+  var autocompleteEngine = new Bloodhound({
+    name: 'search-suggestions',
+    remote: {
+      url: path + '/AJAX/JSON?q=%QUERY',
+      ajax: {
+        data: {
+          method:'getACSuggestions',
+          type:$('#searchForm_type').val(),
+          searcher:searcher['searcher']
+        },
+        dataType:'json'
+      },
+      filter: function(json) {
+        if (json.status == 'OK' && json.data.length > 0) {
+          var datums = [];
+          for (var i=0;i<json.data.length;i++) {
+            datums.push({val:json.data[i]});
           }
-        });
-      }, 500); // Delay request submission
+          return datums;
+        } else {
+          return [];
+        }
+      }
     },
-    updater : function(item) { // Submit on update
-      console.log(this.$element[0].form.submit);
-      this.$element[0].value = item;
-      this.$element[0].form.submit();
-      return item;
-    }
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('val'),
+    queryTokenizer: Bloodhound.tokenizers.whitespace
   });
+  autocompleteEngine.initialize();
+  $('.autocomplete').typeahead(
+    {
+      highlight: true,
+      minLength: 3,
+    }, {
+      displayKey:'val',
+      source: autocompleteEngine.ttAdapter()
+    }
+  );
 
   // Checkbox select all
   $('.checkbox-select-all').click(function(event) {
