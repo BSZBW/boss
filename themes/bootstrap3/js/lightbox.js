@@ -196,7 +196,7 @@ var Lightbox = {
     } else {
       $('#modal .modal-body').prepend('<div class="alert alert-danger">'+message+'</div>');
     }
-    $('.icon-spinner').remove();
+    $('.fa-spinner').remove();
   },
 
   /***********************************/

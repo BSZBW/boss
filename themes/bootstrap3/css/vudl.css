@@ -1,3 +1,11 @@
+.panel {border:1px solid #DDD}
+.panel .panel-heading {background:#EEE}
+
+.details {text-align:center}
+.details .copyright {margin-bottom:1em}
+.details .description {margin-top:1em;text-align:left}
+.details .table {text-align:left}
+
 .page-link {
   display:block;
   margin:1em 0;

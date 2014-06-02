@@ -3,6 +3,9 @@ var Zoomy = {
   // Create
   init: function(canvas) {
     this.canvas  = canvas;
+    console.log(canvas.clientWidth);
+    this.canvas.width  = Math.floor(this.canvas.clientWidth);
+    this.canvas.height = Math.floor(this.canvas.clientHeight);
     addEventListener('mousemove', Zoomy.mouseHandle, false);
     addEventListener('mouseup', function(e) {
       Zoomy.mouseDown = false;
@@ -45,8 +48,6 @@ var Zoomy = {
   },
   finishLoad: function(img) {
     //console.log('Loaded.');
-    this.canvas.width  = Math.floor(this.canvas.offsetWidth);
-    this.canvas.height = Math.floor(this.canvas.offsetHeight);
     Zoomy.image = {
       x: 0,
       y: 0,

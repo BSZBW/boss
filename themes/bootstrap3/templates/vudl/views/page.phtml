@@ -1,7 +1,7 @@
 <script>
   // Mandatory update function
   updateFunction = function(data, tab) {
-    $('#techinfo').html('<span style="color:#FFF;margin:20px;display:block">Loading...</span>');
+    $('.loading-bar').show();
     if(!data['zoom'] && data['large']) data['zoom'] = data['large'];
     pageData = data;
     //console.log(data);
@@ -10,7 +10,7 @@
       $('#'+i+'-tab').show();
     }
     $('.download').attr('href', data['master']);
-    Zoomy.load(data['large']);
+    Zoomy.load(data['large'], function() {$('.loading-bar').hide()});
     $('#'+tab).click();
   };
   // Load an image into the preview (to be deprecated by the new template system)
@@ -30,14 +30,6 @@
         })
     }
   }
-  function showZoom(tab) {
-    $('.loading-bar').show();
-    var sidenav = document.getElementById('side-nav');
-    $('#zoomy').css('height', sidenav.offsetTop + sidenav.offsetHeight - $('#zoomy').offset().top);
-    $('#zoomy').css('width', '100%');
-    Zoomy.init(document.getElementById('zoomy'));
-    Zoomy.load(pageData['large'], function() { $('.loading-bar').hide(); });
-  }
 
   $(document).ready(function() {
     $('#view .nav-tabs li.opener a').hide();
@@ -45,6 +37,15 @@
       e.preventDefault();
       $(this).tab('show');
       currTab = $(this).attr('id');
+    });
+    // Initialize the size of Zoomy
+    $('#zoom-tab').on('shown.bs.tab', function(e) {
+      $('.loading-bar').show();
+      var sidenav = document.getElementById('side-nav');
+      $('#zoomy').css('width', '100%');
+      $('#zoomy').css('height', sidenav.offsetTop + sidenav.offsetHeight - $('#zoomy').offset().top);
+      Zoomy.init(document.getElementById('zoomy'));
+      Zoomy.load(pageData['large'], function() { $('.loading-bar').hide();console.log('lbh') });
     });
 
     var pageData = {
@@ -76,7 +77,7 @@
   </li>
   <li><a href="#image" id="medium-tab" onClick="showPreview('medium', this)">Medium</a></li>
   <li class="hidden-xs"><a href="#image" id="large-tab" onClick="showPreview('large', this)">Large</a></li>
-  <li><a href="#zoom" id="zoom-tab" onClick="showZoom(this)">Zoom</a></li>
+  <li><a href="#zoom" id="zoom-tab">Zoom</a></li>
   <li><a href="#master" id="master-tab">Downloads</a></li>
   <? if($this->counts[0] > 1): ?>
     <li class="pull-right static hidden-xs">

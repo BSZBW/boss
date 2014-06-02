@@ -10,6 +10,7 @@ function htmlEncode(value){
 }
 function extractClassParams(str) {
   str = $(str).attr('class');
+  if (typeof str === "undefined") return [];
   var params = {};
   var classes = str.split(/\s+/);
   for(var i = 0; i < classes.length; i++) {
@@ -93,11 +94,11 @@ function registerLightboxEvents() {
   // Highlight which submit button clicked
   $(modal).find("form input[type=submit]").click(function() {
     // Abort requests triggered by the lightbox
-    $('#modal .icon-spinner').remove();
+    $('#modal .fa-spinner').remove();
     // Add useful information
     $(this).attr("clicked", "true");
     // Add prettiness
-    $(this).after(' <i class="fa fa-spinner icon-spin"></i> ');
+    $(this).after(' <i class="fa fa-spinner fa-spin"></i> ');
   });
   /**
    * Hide the header in the lightbox content
