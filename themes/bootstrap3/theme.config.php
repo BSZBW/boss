@@ -10,13 +10,14 @@ return array(
         'slider.css',
     ),
     'js' => array(
-        'core/jquery.min.js',
-        'core/bootstrap.min.js',
-        'core/bootstrap-accessibility.min.js',
-        'core/typeahead.js',
+        'vendor/jquery.min.js',
+        'vendor/bootstrap.min.js',
+        'vendor/bootstrap-accessibility.min.js',
+        'vendor/typeahead.js',
         'common.js',
         'lightbox.js',
-        'rc4.js'
+        'rc4.js',
+        'vendor/cssrefresh.js'
     ),
     'favicon' => 'vufind-favicon.ico',
     'helpers' => array(

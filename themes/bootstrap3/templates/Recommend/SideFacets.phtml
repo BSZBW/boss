@@ -79,7 +79,7 @@
             </form>
           </li>
           <? if ($rangeFacets[$title]['type'] == 'date'): ?>
-            <? $this->headScript()->appendFile('bootstrap-slider.js'); ?>
+            <? $this->headScript()->appendFile('vendor/bootstrap-slider.js'); ?>
             <?
               $min = !empty($rangeFacets[$title][0]) ? min($rangeFacets[$title][0], 1400) : 1400;
               $future = date('Y', time()+31536000);

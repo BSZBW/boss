@@ -7,6 +7,6 @@ return array(
         'bootprint-custom.css',
     ),
     'js' => array(
-        'bootstrap.min.js'
+        'vendor/bootstrap.min.js'
     )
 );

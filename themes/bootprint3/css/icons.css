@@ -45,14 +45,13 @@ i.fa-sitemap,
 i.fa-spinner,
 i.fa-star,
 i.fa-suitcase,
-i.fa-trash,
+i.fa-trash-o,
 i.fa-tree,
 i.fa-tree-muted,
 i.fa-usd,
 i.fa-user {
-  background-position:center top;
+  background-position:center center;
   background-repeat:no-repeat;
-  background-size:16px 16px;
   color:transparent;
   content:'';
   display:inline-block;
@@ -80,105 +79,53 @@ i.fa-user {
   height:16px;
   width:16px
 }
-.small i.fa-archive,
-.small i.fa-asterisk,
-.small i.fa-bell,
-.small i.fa-book,
-.small i.fa-bookbag-add,
-.small i.fa-bookbag-delete,
-.small i.fa-bookbag-empty,
-.small i.fa-bookmark,
-.small i.fa-cancel-all-holds,
-.small i.fa-cancel-all-storage-retrieval-requests,
-.small i.fa-cancel-holds,
-.small i.fa-cancel-storage-retrieval-requests,
-.small i.fa-edit,
-.small i.fa-email,
-.small i.fa-envelope,
-.small i.fa-envelope-alt,
-.small i.fa-export,
-.small i.fa-exchange,
-.small i.fa-flag,
-.small i.fa-heart,
-.small i.fa-home,
-.small i.fa-inbox,
-.small i.fa-leaf,
-.small i.fa-list-alt,
-.small i.fa-lock,
-.small i.fa-minus-sign,
-.small i.fa-ok,
-.small i.fa-phone-sign,
-.small i.fa-plus,
-.small i.fa-plus-sign,
-.small i.fa-print,
-.small i.fa-qrcode,
-.small i.fa-remove,
-.small i.fa-renew,
-.small i.fa-renew-all,
-.small i.fa-report,
-.small i.fa-rss,
-.small i.fa-search,
-.small i.fa-shopping-cart,
-.small i.fa-sign-in,
-.small i.fa-sign-out,
-.small i.fa-sitemap,
-.small i.fa-spinner,
-.small i.fa-star,
-.small i.fa-suitcase,
-.small i.fa-trash,
-.small i.fa-tree,
-.small i.fa-tree-muted,
-.small i.fa-usd,
-.small i.fa-user {
-  background-size:13px 13px;
-  height:13px;
-  width:13px;
-}
-i.fa-archive {background:url('../images/icons/package.png')}
-i.fa-asterisk {background:url('../images/icons/list.png')}
-i.fa-bell {background:url('../images/icons/bell.png')}
-i.fa-book {background:url('../images/icons/book.png')}
-i.fa-bookbag-add {background:url('../images/icons/bookbag_add.png')}
-i.fa-bookbag-delete {background:url('../images/icons/bookbag_delete.png')}
-i.fa-bookbag-empty {background:url('../images/icons/bookbag_empty.png')}
-i.fa-bookmark {background:url('../images/icons/bookmark_add.png')}
-i.fa-cancel-all-holds {background:url('../images/icons/holdCancelAll.png')}
-i.fa-cancel-all-storage-retrieval-requests {background:url('../images/icons/holdCancelAll.png')}
-i.fa-cancel-holds {background:url('../images/icons/holdCancel.png')}
-i.fa-cancel-storage-retrieval-requests {background:url('../images/icons/holdCancel.png')}
-i.fa-edit {background:url('../images/icons/edit.png')}
+i.fa-archive {background-image:url('../images/icons/package.png')}
+i.fa-asterisk {background-image:url('../images/icons/list.png')}
+i.fa-bell {background-image:url('../images/icons/bell.png')}
+i.fa-book {background-image:url('../images/icons/book.png')}
+i.fa-bookbag-add {background-image:url('../images/icons/bookbag_add.png')}
+i.fa-bookbag-delete {background-image:url('../images/icons/bookbag_delete.png')}
+i.fa-bookbag-empty {background-image:url('../images/icons/bookbag_empty.png')}
+i.fa-bookmark {background-image:url('../images/icons/bookmark_add.png')}
+i.fa-cancel-all-holds {background-image:url('../images/icons/holdCancelAll.png')}
+i.fa-cancel-all-storage-retrieval-requests {background-image:url('../images/icons/holdCancelAll.png')}
+i.fa-cancel-holds {background-image:url('../images/icons/holdCancel.png')}
+i.fa-cancel-storage-retrieval-requests {background-image:url('../images/icons/holdCancel.png')}
+i.fa-edit {background-image:url('../images/icons/edit.png')}
 i.fa-email,
 i.fa-envelope,
-i.fa-envelope-alt {background:url('../images/icons/email.png')}
-i.fa-exchange {background:url('../images/icons/arrow_refresh.png')}
-i.fa-flag {background:url('../images/icons/flag_red.png')}
-i.fa-heart {background:url('../images/icons/heart.png')}
-i.fa-home {background:url('../images/icons/house.png')}
-i.fa-inbox {background:url('../images/icons/box.png')}
-i.fa-leaf,.fa-sitemap {background:url('../images/icons/treeCurrent.png')}
-i.fa-list-alt,i.fa-export {background:url('../images/icons/application_add.png')}
-i.fa-lock {background:url('../images/icons/lock.png')}
-i.fa-minus-sign {background:url('../images/icons/delete.png')}
-i.fa-ok {background:url('../images/icons/tick.png')}
-i.fa-phone-sign {background:url('../images/icons/phone.png')}
-i.fa-plus {background:url('../images/icons/add.png')}
-i.fa-plus-sign {background:url('../images/icons/add.png')}
-i.fa-print {background:url('../images/icons/printer.png')}
-i.fa-qrcode {background:url('../images/icons/qrcode.png')}
-i.fa-remove {background:url('../images/icons/delete.png')}
-i.fa-renew {background:url('../images/icons/renew.png')}
-i.fa-renew-all {background:url('../images/icons/renewAll.png')}
-i.fa-report {background:url('../images/icons/report.png')}
-i.fa-rss {background:url('../images/icons/feed.png')}
-i.fa-search {background:url('../images/icons/magnifier.png')}
-i.fa-shopping-cart {background:url('../images/icons/cart.png')}
-i.fa-sign-in {background:url('../images/icons/door_in.png')}
-i.fa-sign-out {background:url('../images/icons/door_out.png')}
-i.fa-spinner {background:url('../images/icons/ajax_loading.gif')}
-i.fa-star {background:url('../images/icons/star.png')}
-i.fa-suitcase {background:url('../images/icons/bookbag.png')}
-i.fa-trash {background:url('../images/icons/bin.png')}
-i.fa-tree {background:url('../images/icons/treeCurrent.png')}
-i.fa-tree-muted {background:url('../images/icons/treeMuted.png')}
-i.fa-usd {background:url('../images/icons/money_dollar.png')}
-i.fa-user {background:url('../images/icons/user.png')}
+i.fa-envelope-alt {background-image:url('../images/icons/email.png')}
+i.fa-exchange {background-image:url('../images/icons/arrow_refresh.png')}
+i.fa-flag {background-image:url('../images/icons/flag_red.png')}
+i.fa-grid {background-image:url('../images/icons/view_grid.png')}
+i.fa-heart {background-image:url('../images/icons/heart.png')}
+i.fa-home {background-image:url('../images/icons/house.png')}
+i.fa-inbox {background-image:url('../images/icons/box.png')}
+i.fa-leaf,.fa-sitemap {background-image:url('../images/icons/treeCurrent.png')}
+i.fa-list {background-image:url('../images/icons/view_list.png')}
+i.fa-list-alt,i.fa-export {background-image:url('../images/icons/application_add.png')}
+i.fa-lock {background-image:url('../images/icons/lock.png')}
+i.fa-minus-sign {background-image:url('../images/icons/delete.png')}
+i.fa-ok {background-image:url('../images/icons/tick.png')}
+i.fa-phone-sign {background-image:url('../images/icons/phone.png')}
+i.fa-plus {background-image:url('../images/icons/add.png')}
+i.fa-plus-sign {background-image:url('../images/icons/add.png')}
+i.fa-print {background-image:url('../images/icons/printer.png')}
+i.fa-qrcode {background-image:url('../images/icons/qrcode.png')}
+i.fa-remove {background-image:url('../images/icons/delete.png')}
+i.fa-renew {background-image:url('../images/icons/renew.png')}
+i.fa-renew-all {background-image:url('../images/icons/renewAll.png')}
+i.fa-report {background-image:url('../images/icons/report.png')}
+i.fa-rss {background-image:url('../images/icons/feed.png')}
+i.fa-search {background-image:url('../images/icons/magnifier.png')}
+i.fa-shopping-cart {background-image:url('../images/icons/cart.png')}
+i.fa-sign-in {background-image:url('../images/icons/door_in.png')}
+i.fa-sign-out {background-image:url('../images/icons/door_out.png')}
+i.fa-spinner {background-image:url('../images/icons/ajax_loading.gif')}
+i.fa-star {background-image:url('../images/icons/star.png')}
+i.fa-suitcase {background-image:url('../images/icons/bookbag.png')}
+i.fa-trash-o {background-image:url('../images/icons/bin.png')}
+i.fa-tree {background-image:url('../images/icons/treeCurrent.png')}
+i.fa-tree-muted {background-image:url('../images/icons/treeMuted.png')}
+i.fa-usd {background-image:url('../images/icons/money_dollar.png')}
+i.fa-user {background-image:url('../images/icons/user.png')}
