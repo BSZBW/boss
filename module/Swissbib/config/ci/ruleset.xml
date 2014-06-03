@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="swissBibVuFind2">
+	<description>Coding standard for swissbib vufind 2 - PSR with tabs</description>
+
+	<exclude-pattern>*/config/*</exclude-pattern>
+	<exclude-pattern>*\config\*</exclude-pattern>
+	<exclude-pattern>*/test/*</exclude-pattern>
+	<exclude-pattern>*\test\*</exclude-pattern>
+	<exclude-pattern>*/data/*</exclude-pattern>
+	<exclude-pattern>*\data\*</exclude-pattern>
+	<exclude-pattern>*.phtml</exclude-pattern>
+
+	<!--Allow tabs -->
+	<rule ref="PSR2">
+		<exclude name="Generic.WhiteSpace.DisallowTabIndent"/>
+		<exclude name="Generic.WhiteSpace.ScopeIndent"/>
+		<exclude name="PEAR.Functions.FunctionCallSignature"/>
+		<exclude name="PSR2.ControlStructures.SwitchDeclaration"/>
+	</rule>
+
+</ruleset>
