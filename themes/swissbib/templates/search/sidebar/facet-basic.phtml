@@ -1,0 +1,79 @@
+<?php
+use Vufind\Search\Base\Results;
+
+/** @var Array $facetList */
+/** @var String $basicSearch */
+/** @var Results $results */
+
+$facetConfigArray	= $this->facetConfig ? $this->facetConfig->toArray() : array();
+$facetDefaultLimit	= isset($facetConfigArray['facet_limit_default']) ? $facetConfigArray['facet_limit_default'] : 20; // initially shown
+$toggleLabel		= $this->transEsc('more_info_toggle');
+
+?>
+<?php /* Iterate over facet groups (topic, author, language, ... */ ?>
+<?php foreach ($facetList as $facetGroup => $facetGroupData): ?>
+	<?php
+			// Check if there are not applied facets available
+		$hasNotAppliedFacets = false;
+		foreach ($facetGroupData['list'] as $facetItem) {
+			if (!$facetItem['isApplied']) {
+				$hasNotAppliedFacets = true;
+				break;
+			}
+		}
+		if (!$hasNotAppliedFacets) {
+			continue;
+		}
+
+		$facetId         = strtolower($facetGroup);
+		$facetGroupLabel = $facetGroupData['label'];
+		$facetField		 = isset($facetGroupData['field']) ? $facetGroupData['field'] : $facetGroup; // Optional override of field name
+		$facetGroupItems = $this->SortAndPrepareFacetList(
+												$results,
+												$facetField,
+												$facetGroupData['list'],
+												$basicSearch,
+												array('tab' => ucfirst($this->activeTabKey))
+											);
+
+		// Get limit of initially shown items per facet
+		$amountItems = sizeof($facetGroupItems);
+		$amountItemsShown = isset($facetConfigArray['facet_limit_' . $facetGroup]) ? $facetConfigArray['facet_limit_' . $facetGroup] : $facetDefaultLimit;
+		$itemsCount = 0;
+
+	?>
+	<!-- facet start: <?=$facetGroup?> -->
+	<div class="facet" id="facet_<?=$facetId ?>">
+		<h5 class="toggler persist expanded" id="facet_toggler_<?=$facetId ?>">
+			<?=$this->transEsc($facetGroupLabel) ?>
+		</h5>
+		<ul class="facet_toggler_<?=$facetId ?>">
+
+			<?php foreach ($facetGroupItems as $facet): ?>
+				<?php if ($itemsCount++ >= $amountItemsShown) break; /* Limit initially shown items per facet*/ ?>
+				<?=$this->facetItem($facet, $facetField)?>
+			<?php endforeach; ?>
+
+			<?php if ($amountItems > $amountItemsShown): /* Show "more facets" link if there are more */ ?>
+				<?php $amountMore = $amountItems - $amountItemsShown ?>
+				<li id="more<?=$facetId ?>" class="facet_more">
+					<a href="javascript:moreFacets('<?=$facetId ?>')" title="<?=$toggleLabel?>">
+						<?=$toggleLabel?> (<?=$amountMore ?>)
+					</a>
+				</li>
+				<div id="narrowGroupHidden_<?=$facetId ?>" class="offscreen">
+					<?php while ($itemsCount <= $amountItems): ?>
+                        <? $itemsPosition = $itemsCount++ - 1 ?>
+						<?=$this->facetItem($facetGroupItems[$itemsPosition], $facetField) ?>
+					<?php endwhile; ?>
+					<li id="less<?=$facetId ?>" class="facet_more">
+						<a href="javascript:lessFacets('<?=$facetId?>')" title="<?=$toggleLabel?>">
+							<?=$toggleLabel?> (<?=$amountMore ?>)
+						</a>
+					</li>
+				</div>
+			<? endif; ?>
+		</ul>
+	</div>
+	<!-- facet -->
+<?php endforeach; ?>

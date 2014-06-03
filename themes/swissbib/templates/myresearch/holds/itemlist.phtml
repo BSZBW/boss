@@ -1,0 +1,55 @@
+<?php
+/** @var VuFind\RecordDriver\SolrDefault  $holding */
+
+?>
+<table>
+    <thead>
+    <tr>
+        <th>&nbsp;</th>
+        <th><?=$this->transEsc('Title')?></th>
+        <th><?=$this->transEsc('Created') ?></th>
+        <th><?=$this->transEsc('pick_up_location') ?></th>
+        <th><?=$this->transEsc('Status')?></th>
+        <th><?=$this->transEsc('Library')?></th>
+        <th><?=$this->transEsc('Call Number')?></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach($this->recordList as $index => $holding): ?>
+        <?php
+			$ilsDetails		= $holding->getExtraDetail('ils_details');
+			//$isNonMissingRecord	= is_a($holding, 'VuFind\\RecordDriver\\SolrDefault') && !is_a($holding, 'VuFind\\RecordDriver\\Missing');
+			$safeId 		= preg_replace('/[^a-zA-Z0-9]/', '', $holding->getUniqueId());
+
+            /* Display Reservationsstatus */
+            if (preg_match('/due date/', $ilsDetails['status']))
+            {
+                $status = $this->transEsc('Waiting in queue') . ': ' . $ilsDetails['position'] . '; ' .
+                          $this->transEsc('Due Date') . ': ' . $ilsDetails['duedate'];
+            }
+            elseif (preg_match('/queue$/', $ilsDetails['status']))
+            {
+                $status = $this->transEsc('Waiting in queue') . ': ' . $ilsDetails['position'];
+            }
+            else
+            {
+                $status = $this->transEsc($ilsDetails['status']);
+            }
+        ?>
+    <tr>
+        <td>
+			<span><?=$index+1?></span>
+			<?php if ($this->cancelForm && isset($ilsDetails['cancel_details'])): ?>
+				<input type="checkbox" name="cancelSelectedIDS[]" value="<?=$this->escapeHtml($ilsDetails['cancel_details']) ?>" class="checkbox" style="margin-left:0;" id="checkbox_<?=$safeId?>" />
+			<?php endif; ?>
+		</td>
+        <td><?=$this->escapeHtml($ilsDetails['title']) ?> <?=$this->escapeHtml($ilsDetails['description']) ?></td>
+        <td><?=$this->escapeHtml($ilsDetails['create']) ?></td>
+        <td><?=$this->escapeHtml($this->transEsc($ilsDetails['location'])) ?></td>
+        <td><?=$status?></td>
+        <td><?=$this->escapeHtml($this->zendTranslate($ilsDetails['institution'], 'institution'))?></td>
+        <td><?=$this->escapeHtml($ilsDetails['signature'])?></td>
+    </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>

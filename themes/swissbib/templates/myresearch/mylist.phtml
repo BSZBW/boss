@@ -1,0 +1,161 @@
+<?php
+// Grab list object from search results (if applicable)
+$list = $this->results->getListObject();
+
+// Set page title
+$this->headTitle(isset($list) ? $list->title : $this->translate('Favorites'));
+
+// Set up breadcrumbs
+//$currPage = isset($list) ? 'List' : 'Favorites';
+//$this->layout()->breadcrumbs = '<a href="' . $this->url('myresearch-home') . '">'
+//	. $this->transEsc('Your Account') . '</a>' . '<span>&gt;</span><em>'
+//	. $this->transEsc($currPage) . '</em>';
+
+// Load Javascript dependencies into header
+$this->headScript()->appendFile("bulk_actions.js");
+$this->headScript()->appendFile("check_item_statuses.js");
+
+// Convenience variable
+$account = $this->auth()->getManager();
+$recordTotal = $this->results->getResultTotal()
+
+//	$activeTab	= isset($list) ? $list : 'favorites';
+
+?>
+<?=
+$this->render('myresearch/sidebar/wrap.phtml', array(
+    'active' => 'favorites',
+    'location' => '',
+    'results' => $this->results
+));?>
+
+<!-- begin: col3 (content) -->
+<div id="col3" class="content">
+    <div id="col3_content" class="clearfix">
+        <!-- begin: content -->
+        <div id="content">
+
+            <div>
+                <?php if (isset($list)): ?>
+                    <div id="breadcrumb">
+                        <ul>
+                            <li class="selected">
+                                <a class="notepad" href="#"><?= $this->escapeHtml($list->title) ?></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <?php if (!empty($list->description)): ?>
+                        <div class="status information">
+                            <p class="listDescription"><?= $this->escapeHtml($list->description) ?></p>
+                        </div>
+                    <?php endif; ?>
+
+
+                    <div class="tools floatbox">
+                        <?php if ($list->editAllowed($account->isLoggedIn())): ?>
+                            <a href="<?= $this->url('editList', array('id' => $list->id)) ?>"
+                               class="linkbutton"
+                               title="<?= $this->transEsc("edit_list") ?>"><span><?= $this->transEsc("edit_list") ?></span></a>
+                            <a href="<?= $this->url('myresearch-deletelist') ?>?listID=<?= urlencode($list->id) ?>"
+                               class="linkbutton icon_delete deleteList" id="deleteList<?= $list->id ?>"
+                               title="<?= $this->transEsc("delete_list") ?>"><span><?= $this->transEsc("delete_list") ?></span></a>
+                        <?php endif; ?>
+
+                    </div>
+                <?php else: ?>
+                    <div id="breadcrumb" class="no-print">
+                        <ul>
+                            <li class="selected">
+                                <a class="notepad" href="#"><?= $this->transEsc("mymemorizelists") ?></a>
+                            </li>
+                        </ul>
+                    </div>
+                <?php endif; ?>
+
+
+                <?php if ($recordTotal > 0): ?>
+
+                    <div class="floatbox no-print">
+                        <div class="floatleft">
+                            <p><?= $this->transEsc("Showing") ?>
+                                <strong><?= $this->escapeHtml($this->results->getStartRecord()) ?></strong> -
+                                <strong><?= $this->escapeHtml($this->results->getEndRecord()) ?></strong>
+                                <?= $this->transEsc('of') ?> <strong><?= $this->escapeHtml($recordTotal) ?></strong></p>
+                        </div>
+                        <div class="floatright">
+                            <?= $this->render('search/controls/sort.phtml') ?>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+
+
+                    <form method="post" name="bulkActionForm" action="<?= $this->url('cart-myresearchbulk') ?>">
+
+                        <?php if (isset($list)): ?>
+                            <input type="hidden" name="listID" value="<?= $this->escapeHtml($list->id) ?>"/>
+                            <input type="hidden" name="listName" value="<?= $this->escapeHtml($list->title) ?>"/>
+                        <?php endif; ?>
+
+                        <div class="tools floatbox">
+                            <div class="floatleft">
+                                <?= $this->context($this)->renderInContext('myresearch/bulk-action-buttons.phtml', array('idPrefix' => '', 'list' => isset($list) ? $list : null)) ?>
+                            </div>
+                            <div class="floatright">
+                                <?= $this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', array('results' => $this->results)) ?>
+                            </div>
+                        </div>
+                        <?= $this->flashmessages() ?>
+                        <table class="data">
+                            <colgroup>
+                                <col width="3%"/>
+                                <col width="3%"/>
+                                <col width="7%"/>
+                                <col width="*"/>
+                                <col width="13%"/>
+                            </colgroup>
+                            <caption class="hidden">
+                                <?php if (isset($list)): ?>
+                                    <?= $this->transEsc("mymemorizelists") ?> &quot;<?= $this->escapeHtml($list->title) ?>&quot;
+                                <?php else: ?>
+                                    <?= $this->transEsc("mymemorizelists") ?>
+                                <?php endif ?>
+                            </caption>
+                            <thead class="hidden no-print">
+                            <tr>
+                                <th>Nummer</th>
+                                <th>Verwalten</th>
+                                <th>Bild</th>
+                                <th>Beschreibung</th>
+                                <th>Verfügbarkeit</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php foreach ($this->results->getResults() as $index => $favoriteItem): ?>
+                                <?php $favoriteItem->position = $this->results->getStartRecord() + $index; ?>
+                                <?= $this->record($favoriteItem)->getListEntry($list, $account->isLoggedIn()) ?>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+
+                        <div class="floatbox no-print">
+                            <?= $this->context($this)->renderInContext('myresearch/bulk-action-buttons.phtml', array('idPrefix' => 'bottom_', 'list' => isset($list) ? $list : null)) ?>
+                        </div>
+
+                    </form>
+
+                <?php else: ?>
+                    <p><?= $this->transEsc('You do not have any saved resources') ?></p>
+                <?php endif; ?>
+
+            </div>
+
+            <div class="clear"></div>
+
+        </div>
+        <!-- end: content -->
+    </div>
+    <div id="ie_clearing">
+        &nbsp;
+    </div>
+</div>
+<!-- end: col3 (content) -->

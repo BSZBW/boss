@@ -1,0 +1,30 @@
+<?
+    	// Set page title
+    $this->headTitle($this->translate('An error has occurred'));
+
+?>
+
+<div id="col1" class="sidebar">
+	<div id="col1_content" class="clearfix">
+		<div id="sidebar">
+			<!-- Sidebar error-->
+		</div>
+	</div>
+</div>
+
+<div id="col3" class="content">
+	<div id="col3_content" class="clearfix">
+		<div id="content">
+			<h1><?=$this->transEsc('An error has occurred')?></h1>
+			<h2><?=$this->transEsc($this->message)?></h2>
+
+			<? if( isset($this->reason) && $this->reason ): ?>
+				<b><?=$this->transEsc('Message')?>:</b> <?= $this->transEsc($this->reason) ?>
+			<? endif; ?>
+
+		</div>
+	</div>
+	<div id="ie_clearing">
+		&nbsp;
+	</div>
+</div>

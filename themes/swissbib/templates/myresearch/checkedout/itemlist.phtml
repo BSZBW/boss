@@ -1,0 +1,117 @@
+<?php
+/** @var VuFind\RecordDriver\SolrDefault $transaction */
+/** @var Array[] $renewResult */
+?>
+<table>
+	<thead>
+		<tr>
+			<th colspan="2">&nbsp;</th>
+            <th><?=$this->transEsc('Title')?></th>
+			<th><?=$this->transEsc('Checked Out')?></th>
+			<th><?=$this->transEsc('Due')?></th>
+			<th><?=$this->transEsc('Renewals')?></th>
+			<th><?=$this->transEsc('Library')?></th>
+			<th><?=$this->transEsc('Call Number')?></th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php foreach($this->transactions as $index => $transaction): ?>
+			<?php
+				/** @var Array $ilsDetails */
+				$ilsDetails 		= $transaction->getExtraDetail('ils_details');
+				$isRenewable		= $ilsDetails['renewable'];
+				$safeId 			= preg_replace('/[^a-zA-Z0-9]/', '', $transaction->getUniqueId());
+				$infoMessages		= array();
+
+            if ( $isRenewable )
+            {
+                $renewalLimit = preg_replace('/^\d+ \(out of (\d+)\).*$/', '$1', $ilsDetails['renew_info']);
+                if (is_numeric($renewalLimit))
+                {
+                   $Renewals = $ilsDetails['renewals'] . ' ' .$this->transEsc('of') . ' ' . $renewalLimit;
+                }
+                else
+                {
+                   $renewalInfo = preg_replace('/^\d+ \((.*)\).$/', '$1', $ilsDetails['renew_info']);
+                   $Renewals = $ilsDetails['renewals'] . ' (' .$this->translate($renewalInfo) . ')';
+                   //$Renewals = $ilsDetails['renew_info'];
+                }
+            }
+            else
+            {
+                $Renewals = $this->translate('no_renewal');
+            }
+
+            if (isset($this->renewResult[$ilsDetails['item_id']])) {
+					$renewDetails = $this->renewResult[$ilsDetails['item_id']];
+
+					if (isset($renewDetails['success']) && $renewDetails['success']) {
+						$infoMessages[] = $this->translate('renew_success');
+					} else {
+						$infoMessages[] = $this->translate('renew_fail');
+
+                        // no display of sysMessage. Information about the reason of failure is in other element
+						//if (isset($renewDetails['sysMessage'])) {
+						//	$infoMessages[] = $renewDetails['sysMessage'];
+						//}
+					}
+			}
+					// Not supported statuses for solr
+//				if (isset($ilsDetails['dueStatus']) && $ilsDetails['dueStatus'] == "overdue") {
+//					$infoMessages[] = $this->transslate("renew_item_overdue");
+//				} elseif (isset($ilsDetails['dueStatus']) && $ilsDetails['dueStatus'] == "due") {
+//					$infoMessages[] = $this->transslate("renew_item_due");
+//				}
+//				if (isset($ilsDetails['message']) && !empty($ilsDetails['message'])) {
+//					$infoMessages[] = $this->transslate($ilsDetails['message']);
+//				}
+			?>
+			<tr>
+				<td><?=$index+1?></td>
+                <td>
+					<?php if ($isRenewable): ?>
+						<input type="checkbox" name="renewSelectedIDS[]" value="<?=$this->escapeHtml($ilsDetails['renew_details'])?>" class="checkbox" style="margin-left: 0" id="checkbox_<?=$safeId?>" />
+					<?php endif; ?>
+				</td>
+                <td><?=$this->escapeHtml($ilsDetails['title'])?></td>
+				<td><?=$this->escapeHtml($ilsDetails['loandate'])?></td>
+				<td>
+					<?php
+						if (isset($this->renewResult[$ilsDetails['item_id']])) {
+							$renewDetails = $this->renewResult[$ilsDetails['item_id']];
+						}
+					?>
+                    <?if ($ilsDetails['status'] == 'Active'): ?>
+						<?=$this->escapeHtml($ilsDetails['duedate'])?>
+                    <? else: ?>
+						<?=$this->escapeHtml($ilsDetails['duedate'])?> (<?=$this->escapeHtml($this->transEsc($ilsDetails['status']))?>)
+                    <? endif; ?>
+                </td>
+				<td><?=$this->escapeHtml($Renewals)?></td>
+				<td><?=$this->escapeHtml($ilsDetails['library'])?></td>
+				<td><?=$this->escapeHtml($ilsDetails['callnum'])?></td>
+			</tr>
+
+			<?php /** Show messages for item as extra row */ ?>
+			<?php if (sizeof($infoMessages)): ?>
+				<tr class="infoMessagesRow">
+					<td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>
+						<ul>
+							<?php foreach($infoMessages as $infoMessage): ?>
+								<li><b><?=$this->escapeHtml($infoMessage)?></b></li>
+							<?php endforeach; ?>
+						</ul>
+					</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+			<?php endif; ?>
+
+		<?php endforeach; ?>
+	</tbody>
+</table>

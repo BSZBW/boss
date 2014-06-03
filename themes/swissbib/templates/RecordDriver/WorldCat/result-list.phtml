@@ -1,0 +1,78 @@
+<?php
+
+	/** @var	Swissbib\RecordDriver\WorldCat	$resultItem  */
+	/** @var	VuFind\View\Helper\Root\Record		$viewRecord  */
+$resultItem		= $this->driver;
+$viewRecord		= $this->record($this->driver);
+$thumbnailUrl	= $resultItem->getThumbnail() ? $resultItem->getThumbnail() : $this->url('cover-unavailable');
+$detailLink		= $this->recordLink()->getUrl($resultItem);
+$title			= $resultItem->getShortTitle();
+$edition		= $resultItem->getEdition();
+
+$publicationDate    = $this->publicationDateWorldCat($resultItem->getPublicationDates());
+
+?>
+
+<tr>
+    <!-- col 1: Counter -->
+	<td class="small center nodivider"><?=$this->recordIndex?></td>
+    <!-- colr 2: Merkliste -->
+	<td class="nodivider">
+		<a href="#" class="icon_notepad_add" title="Zur Merkliste hinzufügen">Zur Merkliste hinzufügen</a>
+	</td>
+    <!-- col 3: Teaser-image / Thumbnail -->
+	<td class="right nodivider">
+		<a href="<?=$detailLink?>" title="<?=$title?>">
+<?
+/** ------------------------------------------------------
+ *   temporarily fix params over here, to do: fix in driver
+ */
+ if(is_array($title)) {
+	 $title = implode(' ', $title);
+ }
+ if(is_array($thumbnailUrl)) {
+	 $thumbnailUrl = implode(' ', $thumbnailUrl);
+ }
+ /** ---------------------------------------------------- */
+?>
+			<img src="<?=$thumbnailUrl?>" alt="<?=$title?>" class="dropshadow"/>
+		</a>
+	</td>
+    <!-- col 4: Title and author details => links to full-view -->
+	<td>
+		<h3><a href="<?=$detailLink?>" title="<?=$title?>" class="color"><?=$title?></a></h3>
+		<p>
+			<?php /*var_dump($solrRecord->getSummary())*/?>
+		</p><!-- meta -->
+		<div class="meta">
+            <span><?=$resultItem->getSubtitle()?></span><br />
+            <h6><?=$this->transEsc('Author')?>:</h6>
+            <span><?=$resultItem->getTitleStatement()?></span><br/>
+			<h6><?=$this->transEsc('Year')?>:</h6>
+
+            <span><?=$publicationDate?></span><br />
+
+            <?php if($edition): ?>
+                <h6><?=$this->transEsc('Edition')?>:</h6>
+                <span><?=$this->escapeHtml($edition)?></span>
+            <?php endif; ?>
+		</div><!-- format -->
+		<div class="format">
+			<?=$viewRecord->getFormatList()?>
+<!--			<h6 class="icon_format_book">Buch</h6>-->
+            <?php if(!empty($groupID)): ?>
+                <a href="#frbr.html" class="linkbutton icon_show" title="<?=$this->transEsc('FRBR_Button')?>">
+					<span><?=$this->transEsc('FRBR_Button')?></span>
+				</a>
+            <?php endif; ?>
+
+		</div>
+	</td>
+    <!-- col 5 & 6 : libraries, links, info -->
+	<td class="small right nodivider colholdingscounter">
+		<?=$this->render('search/results/available.phtml')?>
+	</td>
+	<td class="right">
+		<?=$this->render('search/results/libraries.phtml')?>
+	</td>
+</tr>

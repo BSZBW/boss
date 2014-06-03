@@ -1,0 +1,31 @@
+<div class="paging">
+	<?php if( $this->pageCount ): ?>
+
+		<? if (isset($this->previous)): ?>
+        	<a href="<?=$this->currentPath() . $this->results->getUrlQuery()->setPage(0)?>" title="<?=$this->transEsc('Start Page')?>" class="paging_first"><?=$this->transEsc('Start Page')?></a>
+			<a href="<?=$this->currentPath() . $this->results->getUrlQuery()->setPage($this->previous)?>" title="<?=$this->transEsc('Prev')?>" class="paging_back"><?=$this->transEsc('Prev')?></a>
+		<?php endif; ?>
+
+		<?php if (count($this->pagesInRange) > 1): ?>
+		<div class="paging_pages">
+			<ul>
+				<?php foreach($this->pagesInRange as $page): ?>
+					<li>
+						<?php if( $page == $this->current): ?>
+							<span><?=$page?></span>
+						<?php else: ?>
+							<a href="<?=$this->currentPath() . $this->results->getUrlQuery()->setPage($page)?>" title="<?=$this->transEsc('pagination.page')?> <?=$page?>"><?=$page?></a>
+						<?php endif; ?>
+					</li>
+				<?php endforeach; ?>
+			</ul>
+		</div>
+		<?php endif; ?>
+
+		<?php if(isset($this->next)): ?>
+			<a href="<?=$this->currentPath() . $this->results->getUrlQuery()->setPage($this->next)?>" title="<?=$this->transEsc('Next');?>" class="paging_forward"><?=$this->transEsc('Next');?></a>
+			
+		<?php endif; ?>
+
+	<?php endif; ?>
+</div>

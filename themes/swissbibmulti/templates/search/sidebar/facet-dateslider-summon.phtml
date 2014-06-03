@@ -1,0 +1,50 @@
+<?php
+if ( $results->getResultTotal() > 0  ) {
+    $viewRecord         = $this->record();
+    $dateRange          = $params->getDateRange();
+    $publishDateFrom    = $dateRange['from'];
+    $publishDateTo      = $dateRange['to'];
+    $this->headScript()->appendFile('pubdate_slider.js');
+?>
+<script language="javascript">
+    setPublishDateSliderMin(<?=$dateRange['min'] ?>)
+</script>
+<div id="facet_pubdate_slider" class="facet">
+    <h5 id="facet_toggler_publishdate" onclick="$('#publishDateForceHeight').toggleClass('publishDateForceHeight')"
+        class="toggler persist expanded" title="adv_search_year"><?=$this->transEsc('adv_search_year')?></h5>
+
+    <form action="" name="publishDateFilter" id="publishDateFilter">
+        <?php /* Pass on other filter criteria via hidden fields, remove last publishDate */ ?>
+        <?= $results->getUrlQuery()->asHiddenFields(array('filter' => "/PublicationDate:.*/")) ?>
+        <input type="hidden" name="daterange[]" value="PublicationDate"/>
+
+        <div class="publishDateForceHeight" id="publishDateForceHeight">
+            <fieldset class="publishDateLimit facet_toggler_publishdate" id="publishDateSlider">
+                <div class="values">
+                    <div>
+                        <label for="PublicationDatefrom"><?= $this->transEsc('date_from') ?>:</label>
+                        <input type="text" size="4" maxlength="4" class="yearbox" name="publicationDatefrom"
+                               id="PublicationDatefrom" value="<?= $publishDateFrom ?>"/>
+                    </div>
+                    <div>
+                        <label for="PublicationDateto"><?= $this->transEsc('date_to') ?>:</label>
+                        <input type="text" size="4" maxlength="4" class="yearbox" name="publicationDateto"
+                               id="PublicationDateto" value="<?= $publishDateTo ?>"/>
+                    </div>
+                </div>
+                <div id="PublicationDateSlider" class="dateSlider"></div>
+                <input type="submit" value="<?= $this->transEsc('Set') ?>" id="publishDategoButton"/>
+            </fieldset>
+        </div>
+    </form>
+    <script language="javascript">
+        $().ready(function() {
+            if($('#facet_toggler_publishdate').hasClass('collapsed')) {
+                $('#publishDateForceHeight').hide();
+            }
+        });
+    </script>
+</div>
+<?php
+}   /* end if */
+?>

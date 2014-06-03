@@ -1,0 +1,953 @@
+/** ------------ Logo HOME and OTHER - PNG-versions ------------  */
+
+/* home logo
+.template_home #logo a {
+	display:block;
+	height:100px;
+	width:300px;
+	padding:75px 660px 48px 30px;
+	background-image:url(../../images/logo_swissbib-home.png);
+	background-position:30px 75px;
+} */
+
+/* logo
+#logo a {
+	display:block;
+	height:50px;
+	width:140px;
+	padding:15px 835px 18px 15px;
+	background-color:#32CD0F;
+	background-image:url(../../images/logo_swissbib.png);
+	background-position:15px 15px;
+	background-repeat:no-repeat;
+}*/
+
+/** ------------ Basic table design ------------  */
+
+#content table.data {
+    width: 760px;
+}
+
+#content table th,
+#content table td {
+    font-size: 12px;
+}
+
+#content table tr.link td {
+    cursor: pointer;
+}
+
+/** ------------ Login form ------------  */
+
+#loginForm label {
+    width: 100px;
+}
+
+#loginForm input[type=text],
+#loginForm input[type=password] {
+    width: 200px;
+    margin-bottom: 20px;
+}
+
+#loginForm input[type=submit] {
+    margin-left: 111px;
+}
+
+#loginForm label.invalid {
+    color: red;
+    float: none;
+    margin-top: -20px;
+}
+
+/** ------------ Advanced search ------------ */
+
+#advSearchForm .group {
+    border: 1px solid #CCC;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+#advSearchForm  #groupJoin {
+    background-color: #efefef;
+    margin-bottom: 30px;
+    padding: 10px;
+}
+
+#advSearchForm #groupJoin .searchGroupDetails {
+    float: right;
+}
+
+#advSearchForm #searchHolder .addSearch {
+
+}
+
+#advSearchForm #searchHolder .addSearch a,
+#advSearchForm #addGroupLink {
+    font-size: 12px;
+    background: url(../images/icon_add.gif) no-repeat 0 4px;
+    padding: 3px;
+    padding-left: 16px;
+}
+
+#advSearchForm #addGroupLink {
+    display: inline-block;
+    margin: -10px 0 20px -10px;
+}
+
+#advSearchForm .advRow {
+    clear: both;
+}
+
+#advSearchForm .advRow > .label {
+    display: none;
+}
+
+#advSearchForm .fieldbox .text.large {
+    width: 450px;
+}
+
+#advSearchForm .groupSearchDetails {
+    float: right;
+    border: 1px solid #ccc;
+    padding: 5px;
+    margin: -20px -20px 15px;
+    background-color: #EEE;
+}
+
+#advSearchForm .groupSearchDetails .join {
+    float: right;
+}
+
+#advSearchForm .groupSearchDetails .delete {
+    background: url(../images/avail_stop_16.16.png) no-repeat 0 3px;
+    margin-right: 5px;;
+    padding: 5px;
+    padding-left: 18px;
+}
+
+/** ------------ adv. search: year/dates box, slider, etc. ------------  */
+
+#advSearchForm input.yearbox {
+    clear: none;
+    width: 30px;
+}
+
+#advSearchForm .yearSliderBox {
+    width: 480px;
+}
+
+#advSearchForm .dateSlider {
+    margin: 15px 5px 5px;
+    width: 450px;
+    background-repeat: repeat-x;
+}
+
+/** ------------ adv. search: jump navi ------------  */
+
+#advancedSearchJumpNavi {
+    background-color: #E8E8E8;
+    border: 1px solid #2A2D33;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+#advancedSearchJumpNavi .advSearchQuery {
+    margin-top: 5px;
+}
+
+#search.advSearch {
+    height: auto;
+}
+
+/** ------------ adv. search: classification tree ------------  */
+.classification-tree {
+    float: left;
+    width: 540px;
+    font-size: 1.2em;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.classification-tree.jstree-default .jstree-clicked {
+    background: none;
+    border: 1px solid #FFF;
+    padding: 0 2px 0 1px;
+}
+
+.classification-tree.jstree-default li.selected > a,
+.classification-tree.jstree-default li a:hover {
+    background: #188100;
+    color: #FFF;
+    border: 1px solid #188100;
+    padding: 0 2px 0 1px;
+    cursor: pointer;
+}
+
+/* root node -> uncomment if root node is needed
+#classification-tree.jstree-default > ul > li.selected > a {
+    background: none;
+    color: #000;
+    border: 1px solid #FFF;
+    padding: 0 2px 0 1px;
+}
+*/
+
+/** ------------ adv. search: tabs ------------  */
+#adv_tab label,
+#adv_tab.ui-widget select,
+#adv_tab.ui-widget input{
+    font-size: 1.2em;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#adv_tab.tabs .ui-slider .ui-slider-handle {
+    background-position: 50% 50%;
+    background-repeat: repeat-x;
+}
+
+/** ------------ facets ------------  */
+div.facets fieldset#publishDateSlider {
+    margin: 5px 0 0 5px !important;;
+}
+
+div.facets .ui-slider {
+    width: 150px !important;
+}
+
+.publishDateForceHeight {
+    clear: both;
+    height: 83px;
+    padding-left: 10px;
+    margin-right: 4px;
+}
+
+#facet_pubdate_slider label {
+    color: #ffffff;
+    font-size: 11px;
+}
+
+#facet_pubdate_slider div.values {
+    margin: 5px;
+}
+
+#facet_pubdate_slider div.values div {
+    float: left;
+    padding: 20px 4px 3px 0;
+}
+
+#facet_pubdate_slider input[type=text] {
+    width: 28px;
+    font-size: 11px;
+}
+
+#facet_pubdate_slider input[type=submit] {
+    color: #ffffff;
+    font-size: 11px;
+    background-color: #2D313A;
+    float: right;
+    margin: 5px;
+}
+
+#facet_pubdate_slider div.dateSlider {
+    margin: 0 0 0 5px;
+}
+
+.facets label {
+    cursor: pointer;
+}
+
+/** ------------ facet: checkbox ------------ */
+#facet_checkbox ul li label {
+    color: #fff;
+    font-size: 11px;
+    padding: 1px 2px;
+    width: 122px;
+    float: left;
+}
+
+ul.facet_toggler_checkbox li {
+    float: left;
+    clear: left;
+    width: 100%;
+    margin-bottom: 2px;
+}
+
+span.facet_toggler_checkbox_clear {
+    float: none;
+    width: auto;
+    display: block;
+    visibility: hidden;
+}
+
+/** ------------ page function ------------ */
+
+#pagefunction_save .menu {
+    display: none;
+}
+
+#pagefunction_save:hover .menu {
+    display: block;
+}
+
+#pagefunction_save .menu {
+    width: 200px;
+    right: 5px;
+    position: absolute;
+    border: 1px solid #CCC;
+    z-index: 101; /* over info icon */
+}
+
+#pagefunctions #pagefunction_save .menu li {
+    float: none;
+}
+
+#pagefunctions #pagefunction_save .menu li a {
+    width: 95%;
+    font-size: 12px;
+    line-height: 16px;
+    text-indent: 20px;
+    text-decoration: underline;
+    background-color: #e6e6e6;
+}
+
+.notFirstMatchWarning {
+    margin-bottom: -10px;
+    padding-top: 20px;
+    font-weight: bold;
+    color: #F67F00;
+}
+
+#tab-holdings .miniactions {
+    display: inline-block;
+    margin-bottom: -5px;
+}
+
+#tabbed .selected a span {
+    cursor: default;
+}
+
+#treeSearch #treeSearchText {
+    width: 70%;
+    padding: 1px;
+}
+
+#hierarchyTree {
+    min-height: 0;
+}
+
+/** ------------ Recommendations --------------- */
+div.summondbrecommendations {
+    padding: 5px 10px 10px 10px;
+    margin-bottom: 10px;
+    background-color: #d4d4d4;
+}
+
+div.summondbrecommendations h2 {
+    margin-bottom: 14px;
+}
+
+div.summondbrecommendations a.singleLink {
+    font-weight: bold;
+}
+
+/* Status messages */
+#content div.info,
+#content div.error {
+    display: block;
+    width: 80%;
+    margin-bottom: 20px;
+    margin-right: 100px;
+    padding: 5px;
+    font-size: 12px;
+    text-indent: 30px;
+    line-height: 14px;
+    background-position: 5px 5px;
+    font-weight: bold;
+    float: none;
+    cursor: default;
+}
+
+#content div.error {
+    background-color: red;
+}
+
+#content div.info {
+    background-color: green;
+    color: white;
+}
+
+/* MyList */
+input.selectAllCheckboxes {
+    float: left;
+    margin-right: 10px;
+}
+
+form[name="editListForm"] > label,
+form[name="saveRecord"] label,
+form[name="newList"] label {
+    /*float: none;*/
+}
+
+form[name="editListForm"] fieldset input,
+form[name="newList"] fieldset input {
+    float: left;
+}
+
+form[name="bulkActionForm"] span,
+form[name="bulkActionForm"] label {
+    font-size: 12px;
+}
+
+form[name="bulkActionForm"] .mail {
+    margin-left: 20px;
+}
+
+.bulkActionButtons .mail {
+    display: none; /* not implemented yet */
+}
+
+/* MyList sidebar */
+#sidebar .listWithCounter ul li a {
+    display: inline-block;
+}
+
+#sidebar .listWithCounter ul li .counter {
+    color: #fff;
+}
+
+#sidebar .subnavigation .filters {
+    background-image: none;
+    border: none;
+}
+
+#sidebar .subnavigation .tagList li a,
+#sidebar .subnavigation .filters li a {
+    display: inline-block;
+}
+
+#sidebar .subnavigation .filters li a.filter_remove {
+    display: block;
+    font-size: 11px;
+    line-height: 13px;
+    color: #FFFFFF;
+    text-decoration: none;
+    padding: 1px 20px 1px 2px;
+    margin-right: 5px;
+    background-image: url('../images/icon_remove.gif');
+    background-position: right 1px;
+    background-repeat: no-repeat;
+}
+
+#popupDetails .info {
+    height: auto;
+    margin-top: 40px;
+    margin-bottom: 0px;
+}
+
+#popupDetails .status_info {
+    height: auto;
+    margin-top: 40px;
+    margin-bottom: 0px;
+}
+
+#popupDetails .status_error {
+    height: auto;
+    margin-top: 40px;
+    margin-bottom: 0px;
+}
+
+/* Disable favorites search in search box */
+#search_favorites {
+    display: none;
+}
+
+label[for="search_favorites"] {
+    display: none !important;
+}
+
+/* Hide favorites list in search results */
+#notepad {
+    display: none;
+}
+
+.holdingsAjaxSpinner {
+    display: none;
+}
+
+.holdingsAjaxSpinner .spinner {
+    width: 26px;
+    height: 26px;
+    display: inline-block;
+    background: url(../images/ajax_spinner.png) no-repeat 0 0;
+    vertical-align: middle;
+}
+
+.institutionToggler {
+    margin-top: 10px;
+    display: inline-block;
+}
+
+.holdingMapLink {
+    display: block;
+}
+
+.holdingActions {
+
+}
+
+.holdingActions li {
+    line-height: 1.3em;
+}
+
+.holdingActions li.eod {
+
+}
+
+.holdingActions li.eod a {
+    display: inline-block;
+    width: 80px;
+    height: 20px;
+    background: url(../images/eod_button.gif) no-repeat 0 0;
+}
+
+.holdingActions li.eod span {
+    display: none;
+}
+
+#tab-collectionlist form[name=bulkActionForm] table.data {
+    width: 740px;
+}
+
+a#tagRecord {
+    padding-left: 12px;
+    background: url(../images/icon_add.gif) no-repeat 0 2px;
+}
+
+/** Holding Table */
+.holdingTable th.actions {
+    width: 100px;
+}
+
+.holdingTable th.availability {
+    width: 150px;
+}
+
+.holdingTable th.location {
+    width: 120px;
+}
+
+.holdingTable th.signature {
+    width: 120px;
+}
+
+.holdingTable th.signature {
+    width: 30px;
+}
+
+.tabs .ui-widget-header {
+    border: none
+}
+
+.tabs.ui-widget-content {
+    border: none;
+}
+
+.tabs .ui-state-default,
+.tabs .ui-state-active {
+    border: none;
+    background: none;
+}
+
+.ui-tabs .ui-tabs-nav li {
+    margin: 0;
+}
+
+.qrCodeIcon {
+    cursor: pointer;
+}
+
+.qrCodePopup .infotext {
+    top: 0;
+    color: #AAAAAA;
+    padding: 5px;
+}
+
+.qrCodePopup .datatext {
+    bottom: 0;
+    padding: 5px;
+}
+
+#holdings-items-filter-form {
+
+    margin-bottom: 10px;
+}
+
+#holdings-items-filter-form td {
+    width: 200px;
+}
+
+#holdings-items-filter-form td.pagingHeader {
+    width: 345px;
+}
+
+#holdings-items-header label {
+    font-size: 0.9em;
+}
+
+#holding-items-popup-paging {
+    font-size: 0.75em;
+}
+
+#holdings-items-header td {
+    border-right: none;
+}
+
+#holdings-items-popup {
+    padding-bottom: 20px;
+}
+
+/** Loading mask */
+
+.loadmask-msg {
+    border-color: #ccc !important;
+    background-color: #F89205 !important;
+}
+
+.loadmask-msg div {
+    border-color: #fc9405 !important;
+}
+
+#library-toggler-favorite span {
+    background: url(../images/icon_favorit_library.gif) no-repeat right 1px;
+    padding-right: 20px;
+}
+
+pre {
+    background-color: #EEEEEE;
+    font-family: Courier New, Arial;
+    overflow: visible;
+    padding: 5px;
+    text-align: left;
+    white-space: normal;
+    margin-bottom: 3px;
+}
+
+span.highlight {
+    font-weight: bold;
+}
+
+#sidebar .subnavigation ul li a {
+    word-wrap: break-word;
+}
+
+tr.infoMessagesRow td {
+    padding-bottom: 20px;
+}
+
+/** Subject vocabularies in record description */
+.subjectVocabularies .vocabularyList {
+    margin-bottom: 10px;
+    margin-left: 5px;
+}
+
+.subjectVocabularies .vocabularyList li {
+    font-size: 1.3em;
+    line-height: 1.2em;
+}
+
+/** TOC **/
+.keywordList {
+    margin-bottom: 15px;
+}
+
+.keywordList li {
+    font-size: 1.3em;
+    list-style: square inside;
+    line-height: 1.1538em;
+}
+
+#modalDialog .info {
+    font-size: 1em;
+    text-indent: 0;
+    line-height: 1em;
+    padding-left: 30px;
+    width: auto;
+}
+
+/*
+Bibliotheksinfo-Link mit Fragezeichen - TVI: 20130920
+*/
+.bibinfo {
+    position: relative;
+    display: block;
+    width: 45px;
+    height: 12px;
+    font-size: 0;
+    line-height: 0;
+    text-indent: -10000px;
+    margin: 2px 1px 0 1px;
+    background-image: url(../images/icon_link-external.gif);
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    text-decoration: none;
+    cursor: pointer;
+    overflow: visible;
+}
+
+.placeMaskIcon {
+
+    margin-left: 40px;
+    width: 150px;
+    height: 60px;
+    background-color: #F5F5F5;
+}
+
+/*
+Linkbutton with smaller text used for example for UEG button in sbHitDetailTabsLibraryTab.jsp
+TVI: 20100811
+*/
+.linkbutton.small {
+    font-size: 1.1em;
+    font-weight: normal;
+    line-height: 1.1538em;
+    text-decoration: none;
+}
+
+/*
+  Styles for swissbib availability-elements -- changed TVi20130729
+*/
+.availability_ok {
+    /*background: url(../images/avail_ok_16.16.png) no-repeat scroll left top transparent;*/
+    background: url(../images/icon_lending_online.gif) no-repeat scroll left top transparent;
+    border: medium none;
+    display: block;
+    line-height: 1.3em;
+    text-indent: 20px;
+}
+
+.availability_notok {
+    /*background: url(../images/avail_stop_16.16.png) no-repeat scroll left top transparent;*/
+    background: url(../images/icon_lending_notavailable.gif) no-repeat scroll left top transparent;
+    border: medium none;
+    display: block;
+    line-height: 1.3em;
+    text-indent: 20px;
+}
+
+.availability_moreInfo {
+    /*background: url(../images/avail_moreInformation_16.16.png) no-repeat scroll left top transparent;*/
+    background: url(../images/icon_lending_onplace.gif) no-repeat scroll left top transparent;
+    border: medium none;
+    display: block;
+    line-height: 1.3em;
+    text-indent: 20px;
+}
+
+.nice {
+    line-height: 1.3em;
+    text-indent: 0px;
+    margin-left: 20px;
+}
+
+/** ------------ Libraries ------------  */
+
+#content.libraries .clear {
+    clear: both;
+}
+
+#content.libraries p {
+    margin-bottom: 0;
+}
+
+#content.libraries #logo h1 {
+    display: none;
+}
+
+#content.libraries #logo h2.hidden {
+    display: block;
+    visibility: visible;
+    position: relative;
+    width: auto;
+    height: auto;
+    left: 0;
+    line-height: normal;
+    font-size: 2em;
+}
+
+#content.libraries .navigation {
+    margin: 25px 0 20px 0;
+}
+
+#content.libraries .navigation li {
+    float: left;
+    font-size: 1.4em;
+    margin-bottom: 5px;
+}
+
+#content.libraries .institution {
+    margin: 15px 0;
+}
+
+#content.libraries .group h2 {
+    border-bottom: 1px solid #494E59;
+}
+
+/* -------------------------------------------------------------------------------------
+ AUTOCOMPLETE
+ ======================================================================================*/
+.ui-autocomplete {
+    background: #FFFFFF;
+    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 100;
+    width: 400px;
+    max-height: 500px;
+    list-style-position: outside;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: none;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #494E59;
+    font-size: 1em;
+    font-weight: normal;
+}
+
+.ui-autocomplete li,
+.ui-autocomplete .ui-menu-item {
+    display: inline;
+    list-style: none;
+}
+
+.ui-autocomplete li.ui-menu-item:first-child a,
+.ui-autocomplete li.ui-menu-item:first-child a:hover,
+.ui-autocomplete li.ui-menu-item:first-child a.ui-state-hover,
+.ui-autocomplete li.ui-menu-item:first-child a.ui-state-focus {
+    border-top: 1px solid #494E59;
+    margin: 0;
+}
+
+.ui-autocomplete li a,
+.ui-autocomplete .ui-menu-item a {
+    border-bottom: 1px solid #494E59;
+    border-left: 1px solid #494E59;
+    border-right: 1px solid #494E59;
+    color: #494E59;
+    cursor: pointer;
+    display: block;
+    font-size: 13px;
+    line-height: 20px;
+    margin: 0px;
+    overflow: hidden;
+    padding: 2px 5px;
+    text-align: left;
+    text-decoration: none;
+}
+
+.ui-autocomplete li a:hover,
+.ui-autocomplete li a.ui-state-hover,
+.ui-autocomplete li a.ui-state-focus {
+    background: #D4F2CE;
+    color: #494E59;
+    border: 1px solid #494E59;
+}
+
+.ui-autocomplete .ui-menu-item a.ui-state-focus {
+    margin: -1px 0 0 0;
+    font-weight: normal;
+}
+
+.ui-autocomplete.ui-corner-all,
+.ui-autocomplete .ui-corner-all {
+    border-radius: 0;
+}
+
+/** Preview-Bild in Vollanzeige */
+.c25l .memorize img {
+    position: absolute;
+    z-index: 2;
+}
+
+.c25l .preview img {
+    position: relative;
+    left: 35px;
+    max-width: 125px;
+    z-index: 1;
+}
+
+/** Preview-Bild in Trefferliste */
+.col-3 img {
+    position: relative;
+    max-width: 100px;
+}
+
+/** Slider green */
+.ui-widget-header {
+    border: 1px solid #1D9E0A;
+    background: #1D9E0A url(../images/bg_button_primary.gif) 50% 50% repeat-x;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+#publishDateSlider a.ui-state-hover {
+    border: 1px solid #D4F2CE;
+    background: #D4F2CE url(../images/bg_navigation.gif) 50% 50% repeat-x;
+    font-weight: bold;
+    color: #c77405;
+}
+
+
+/** lightbox */
+.ui-dialog {
+	min-width: 400px;
+	min-height: 250px;
+}
+
+.ui-dialog .ui-state-default .ui-icon,
+.ui-dialog .ui-state-hover .ui-icon {
+	background-image: url(ui-lightness/images/ui-icons_222222_256x240.png);
+}
+
+.ui-dialog .ui-widget-header .ui-state-hover {
+	border: 1px solid #ccc;
+	background: #eee;
+	font-weight: bold;
+	color: #222;
+}
+
+input.close {
+	display: none;
+}
+
+.ui-dialog input.close {
+	display: block;
+}
+
+.ui-dialog form {
+	text-align: left;
+	margin: 0 20px;
+}
+
+/** Bild rechtsbündig (Inhaltsseite) */
+img.small.right {
+    border: medium none;
+    float: right;
+    margin: 0 13px 13px 0;
+}
+
+/** Korrektur Advanced Search Dropdown-option */
+option {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1em;
+}
+
+/**  Advanced Search Select-boxen */
+select.xlarge {
+    width: 460px;
+}
+
+/** Korrektur der jquery ui Schrift auf nose-Vorgabe */
+.ui-widget {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.0em;
+}

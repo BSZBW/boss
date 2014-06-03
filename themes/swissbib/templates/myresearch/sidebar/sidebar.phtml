@@ -1,0 +1,120 @@
+<?php
+if (!isset($active)) {
+	$active = '';
+}
+
+$staticItems = array(
+    'history'	=> array(
+        'route'	=> 'search-history',
+        'label'	=> 'history_saved_searches',
+        'class'	=> ''
+    ),
+    'libraries'	=> array(
+        'route'	=> 'myresearch-favorite-institutions',
+        'label'	=> 'menu.mylibraries',
+        'class'	=> ''
+    ),
+    'favorites'	=> array(
+        'route'	=> 'myresearch-favorites',
+        'label'	=> 'memorizelists',
+        'class'	=> ''
+    ),
+    'settings' => array(
+        'route'	=> 'myresearch-settings',
+        'label'	=> 'My_Search_Settings',
+		'class'	=> ''
+    ),
+);
+
+if( isset($staticItems[$active]) ) {
+	$staticItems[$active]['class'] = 'selected';
+}
+
+
+$locationItems	= array();
+$activeLocation	= !isset($staticItems[$active]) && isset($this->location) ? $this->location : '';
+
+$tlocationItems = $this->configAccess()->Site->library_locations;
+//explode on null value creates an one item array...
+//ok - use empty instead of isset (PHP loves the buggy keywords....)
+$tlocationItems = !empty($tlocationItems) ? explode("##",$tlocationItems): array();
+
+$locations = array();
+
+foreach ($tlocationItems as $location) {
+
+    $singleLocation = explode("#",$location);
+    $locations[$singleLocation[0]] =  $singleLocation[1];
+
+};
+
+
+
+$locationSubItems = array(
+	'profile'	    => array('label'	=> 'Profile'),
+	'checkedout'    => array('label'	=> 'Checked Out Items'),
+	'holds'	        => array('label'	=> 'Holds and Recalls'),
+	'fines'         => array('label'	=> 'Fines'),
+	'photocopies'   => array('label'    => 'Photocopies'),
+	'bookings'      => array('label'	=> 'Bookings')
+);
+	// Build location based sub navigations
+foreach($locations as $locationKey => $locationLabel) {
+	$locationMenuItem = array(
+		'label'	=> $locationLabel,
+		'route'	=> 'accountWithLocation',
+		'class'	=> '',
+		'params'=> array(
+			'location'	=> $locationKey
+		)
+	);
+
+	if( $active !== 'searchsettings' && $activeLocation === $locationKey ) {
+		$locationMenuItem['sub'] = array();
+		foreach($locationSubItems as $subKey => $subItem) {
+			$locationMenuItem['sub'][$subKey] = array_merge_recursive(array(
+				'route'		=> 'accountWithLocation',
+				'class'		=> '',
+				'params'	=> array(
+					'action'	=> $subKey,
+					'location'	=> $locationKey
+				)
+			), $subItem);
+
+			if( $subKey === $active ) {
+				$locationMenuItem['sub'][$subKey]['class'] .= 'selected';
+			}
+		}
+	}
+
+	$locationItems[$locationKey] = $locationMenuItem;
+}
+
+$menuItems = $staticItems + $locationItems;
+?>
+<h3><?=$this->transEsc('menu.swissbib')?></h3>
+<div class="subnavigation accountSidebar">
+	<ul>
+		<?php foreach($menuItems as $key => $menuItem): ?>
+			<li class="<?=$menuItem['class']?>">
+				<a href="<?=$this->url($menuItem['route'], (isset($menuItem['params'])?$menuItem['params']:array()))?>" title="<?=$this->transEsc($menuItem['label'])?>"><?=$this->transEsc($menuItem['label'])?></a>
+				<?php if( isset($menuItem['sub']) && is_array($menuItem['sub']) ): ?>
+					<ul>
+						<?php foreach($menuItem['sub'] as $subKey => $subMenuItem): ?>
+							<li class="<?=$subMenuItem['class']?>">
+								<a href="<?=$this->url($subMenuItem['route'], (isset($subMenuItem['params'])?$subMenuItem['params']:array()))?>" title="<?=$this->transEsc($subMenuItem['label'])?>"><?=$this->transEsc($subMenuItem['label'])?></a>
+							</li>
+						<?php endforeach; ?>
+					</ul>
+				<?php endif; ?>
+			</li>
+		<?php endforeach; ?>
+
+	</ul>
+</div>
+
+<?php if (isset($results)): ?>
+	<?php  foreach ($this->results->getRecommendations('side') as $current): ?>
+	  <?=$this->recommend($current)?>
+	<?php endforeach; ?>
+<?php endif; ?>

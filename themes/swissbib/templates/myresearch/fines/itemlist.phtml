@@ -1,0 +1,31 @@
+<?php
+/** @var 	Array[]		$fines */
+?>
+<!-- display fines -->
+<table class="datagrid fines" summary="<?=$this->transEsc('Your Fines')?>">
+	<tr>
+        <th>&nbsp;</th>
+        <th><?=$this->transEsc('Fine')?></th>
+		<th><?=$this->transEsc('Title')?></th>
+		<th><?=$this->transEsc('Library')?></th>
+		<th><?=$this->transEsc('Call Number')?></th>
+        <th><?=$this->transEsc('Fee')?></th>
+        <th><?=$this->transEsc('Date')?></th>
+	</tr>
+	<?php foreach($this->fines as $index => $fine): ?>
+		<?php
+			$title	= empty($fine['title']) ? $this->translate('not_applicable') : $fine['title'];
+		?>
+		<tr>
+            <td>
+				<span><?=$index+1?></span>
+            </td>
+            <td><?=$this->escapeHtml($fine['description'])?></td>
+			<td><?=$this->escapeHtml($title)?></td>
+			<td><?=$this->escapeHtml($this->zendTranslate($fine['institution'], 'institution'))?></td>
+			<td><?=$this->escapeHtml($fine['signature'])?></td>
+			<td>CHF <?=number_format($fine['amount'], 2, '.', '\'')?></td>
+			<td><?=$this->escapeHtml($fine['checkout'])?></td>
+		</tr>
+	<?php endforeach; ?>
+</table>
