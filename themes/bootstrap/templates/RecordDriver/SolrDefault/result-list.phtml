@@ -123,7 +123,9 @@
             but even if we don't plan to display the link, we still want to get the $openUrl
             value for use in generating a COinS (Z3988) tag -- see bottom of file.
           */
-        $openUrl = $this->driver->getOpenURL();
+
+        /* @TODO: We have to refactor the getOpenURL method to not use the $view parameter, otherwise we have to overwrite this template like I did now  */
+        $openUrl = $this->driver->getOpenURL($this);
         $openUrlActive = $this->driver->openURLActive('results');
         $urls = $this->record($this->driver)->getLinkDetails();
         if ($openUrlActive || !empty($urls)): ?>
