@@ -66,8 +66,8 @@
   <div class="tab-container">
     <?=isset($activeTabObj) ? $this->record($this->driver)->getTab($activeTabObj) : '' ?>
   </div>
-
-  <span class="Z3988" title="<?=$this->escapeHtml($this->driver->getOpenURL())?>"></span>
+  <? /* @TODO: We have to refactor the getOpenURL method to not use the $view parameter, otherwise we have to overwrite this template like I did now  */ ?>
+  <span class="Z3988" title="<?=$this->escapeHtml($this->driver->getOpenURL($this))?>"></span>
 </div>
 
 <div class="<?=$this->layoutClass('sidebar')?>">
