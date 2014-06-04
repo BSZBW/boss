@@ -3,7 +3,7 @@
     $account = $this->auth()->getManager();
     $user = $account->isLoggedIn();
     $holdings = $this->driver->getRealTimeHoldings();
-    $openUrl = $this->driver->openURLActive('holdings') ? $this->driver->getOpenURL() : false;
+    $openUrl = $this->driver->openURLActive('holdings') ? $this->driver->getOpenURL($this) : false;
     $offlineMode = $this->ils()->getOfflineMode();
     // Account for replace_other_urls setting
     $urls = ($openUrl && $this->driver->replaceURLsWithOpenURL()) ? array() : $this->record($this->driver)->getLinkDetails();
