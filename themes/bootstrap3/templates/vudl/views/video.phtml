@@ -1,122 +1,22 @@
 <script>
-  updateFunction = function(src) {
-    $("#jplayer").jPlayer('setMedia',src);
+  var mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent);
+  var videoSupported = document.createElement('video').canPlayType('video/mpeg')
+    || document.createElement('video').canPlayType('video/ogg')
+    || document.createElement('video').canPlayType(data['mimetype']);
+  updateFunction = mobile ? false : function(data, tab) {
+    if (videoSupported) {
+      var html = '<source src="'+data['ogg']+'?download=true"/>'
+      + '<source src="'+data['mp4']+'?download=true"/>'
+      + '<source src="'+data[data['master']]+'?download=true"/>';
+      var video = $('video');
+      video.trigger('pause').html(html).show();
+      video[0].load();
+    }
   };
   $(document).ready(function() {
     $('#view .nav-tabs li.opener a').hide();
-    $("#jquery_jplayer_1").jPlayer({
-      ready: function () {
-        $(this).jPlayer("setMedia", {
-          <?=$this->filetype ?>: "<?=$this->master ?>"
-        });
-      },
-      swfPath: "http://www.jplayer.org/2.2.0/js",
-      supplied: "<?=$this->filetype ?>",
-      size: {
-        width: "640px",
-        height: "360px",
-        cssClass: "jp-video-360p"
-      }
-    });
   });
 </script>
-<style>
-  #jp_container_1 {
-    display:table;
-    padding:15px 15px 8px 15px;
-    background:#777;
-    border-radius:4px;
-    box-shadow:inset 0 1px 4px #000;
-  }
-
-  .jp-controls-holder {
-    padding:12px 0 0 0;
-  }
-  .jp-controls {
-    display:inline;
-    list-style:none;
-    text-indent:0;
-    vertical-align:top;
-  }
-  .jp-controls a {
-    display:inline-block;
-    border-radius:2px;
-    box-shadow:0 1px 2px #000;
-    width:20px;
-    height:24px;
-    color:#EEE;
-    background:#888;
-    font-size:14pt;
-    padding:0 5px 4px 5px;
-    vertical-align:top;
-  }
-  .jp-controls a:hover {
-    text-decoration:none;
-    background:#999;
-  }
-  .jp-controls a:active {
-    background:#666;
-    box-shadow:none;
-  }
-
-  .jp-progress {
-    display:inline-block;
-    background:#666;
-    width: 300px;
-    height: 15px;
-    padding: 0;
-    margin:8px 0;
-    overflow:hidden;
-  }
-  .jp-seek-bar {
-    display:block;
-    background:#888;
-    width:0px;
-    height: 100%;
-    overflow:hidden;
-    cursor:pointer;
-  }
-  .jp-play-bar {
-    display:block;
-    background:#B0DC28;
-    width:0px;
-    height: 100%;
-    overflow:hidden;
-  }
-
-  .jp-current-time,.jp-duration {
-    display:inline-block;
-    padding:5px;
-    color:#FFF;
-    vertical-align:top;
-  }
-
-  .jp-jplayer {display:none}
-  .jp-video-play {
-    display:block;
-    width:640px;
-    height:360px;
-    position:relative;
-    border:1px solid #000;
-    border-radius:2px;
-  }
-  .jp-video-play .jp-video-play-icon {
-    position:absolute;
-    display:block;
-    width:50px;
-    height:50px;
-    left:50%;
-    top:50%;
-    margin:-25px auto auto -25px;
-    background:rgba(0,0,0,.5);
-    color:#FFF;
-    text-decoration:none;
-    font-size:24pt;
-    box-shadow:inset 0 1px 2px #000;
-    border-radius:4px;
-    text-shadow:0 2px 1px #000;
-  }
-</style>
 <ul class="nav nav-tabs">
   <li class="static opener">
     <a onClick="toggleSideNav()">
@@ -125,7 +25,7 @@
       <i class="fa fa-caret-right"></i>
     </a>
   </li>
-  <li class="active"><a>Downloads</a></li>
+  <li class="active"><a>Player and Downloads</a></li>
   <? if($this->counts[0] > 1): ?>
     <li class="pull-right static hidden-xs">
       <a class="pull-left" href="javascript:prevPage()">Prev Page</a>
@@ -135,37 +35,11 @@
   <? endif; ?>
 </ul>
 <div class="tab-container text-center tab-content">
-  <br/>
-  <div id="jplayer"></div>
-  <div id="jp_container_1" class="jp-video jp-video-360p">
-    <div class="jp-type-single">
-      <div id="jquery_jplayer_1" class="jp-jplayer"></div>
-      <div class="jp-gui">
-        <div class="jp-video-play">
-          <a href="javascript:;" onClick="$('.jp-jplayer').show()" class="jp-video-play-icon" tabindex="1">&#9654;</a>
-        </div>
-        <div class="jp-interface">
-          <div class="jp-controls-holder">
-            <div class="jp-controls">
-              <a href="javascript:;" onClick="$('.jp-jplayer').show()" class="jp-play" tabindex="1">&#9654;</a>
-              <a href="javascript:;" class="jp-pause" tabindex="1">&#10073;&#10073;</a>
-              <a href="javascript:;" class="jp-stop" tabindex="1">&#9724;</a>
-            </div>
-            <div class="jp-current-time"></div>
-            <div class="jp-progress">
-              <div class="jp-seek-bar">
-                <div class="jp-play-bar"></div>
-              </div>
-            </div>
-            <div class="jp-duration"></div>
-          </div>
-        </div>
-      </div>
-      <div class="jp-no-solution">
-        <span>Update Required</span>
-        To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
-      </div>
-    </div>
-  </div>
+  <video controls>
+    <? if(isset($this->ogg)): ?><source src="<?=$this->ogg ?>?download=true"/><?endif?>
+    <? if(isset($this->mp4)): ?><source src="<?=$this->mp4 ?>?download=true"/><?endif?>
+    <? if(!isset($this->ogg) && !isset($this->mp4)): ?><source src="<?=$this->master ?>?download=true"/><?endif?>
+  </video>
+  <br/><br/>
   <?=$this->context($this)->renderInContext('vudl/master-tab.phtml', array())?>
 </div>

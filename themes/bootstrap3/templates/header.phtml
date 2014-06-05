@@ -16,7 +16,7 @@
     <ul role="navigation" class="nav navbar-nav navbar-right">
       <? if ($this->feedback()->tabEnabled()): ?>
         <li><a href="#contact_form" role="button" data-toggle="modal">
-          <i class="fa fa-envelope-alt"></i> <?=$this->transEsc("Feedback")?>
+          <i class="fa fa-envelope"></i> <?=$this->transEsc("Feedback")?>
         </a></li>
       <? endif; ?>
       <? $cart = $this->cart(); if ($cart->isActive()): ?>

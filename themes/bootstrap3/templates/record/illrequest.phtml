@@ -17,10 +17,10 @@
   <form action="" name="placeILLRequest" class="form-horizontal" method="post">
 
     <? if (in_array("itemId", $this->extraFields)): ?>
-      <div class="control-group">
-        <label class="control-label"><?=$this->transEsc('ill_request_item')?>:</label>
-        <div class="controls">
-          <select id="itemId" name="gatheredDetails[itemId]">
+      <div class="form-group">
+        <label class="col-sm-3 control-label"><?=$this->transEsc('ill_request_item')?>:</label>
+        <div class="col-sm-9">
+          <select id="itemId" name="gatheredDetails[itemId]" class="form-control">
           <? foreach ($this->items as $item): ?>
             <option value="<?=$this->escapeHtml($item['id'])?>"<?=($this->gatheredDetails['itemId'] == $item['id']) ? ' selected="selected"' : ''?>>
               <?=$this->escapeHtml($item['name'])?>
@@ -32,7 +32,7 @@
     <? endif; ?>
 
     <? if (in_array("pickUpLibrary", $this->extraFields)): ?>
-      <div class="control-group">
+      <div class="form-group">
       <? if (count($this->pickupLibraries) > 1): ?>
         <?
           if (isset($this->gatheredDetails['pickUpLibrary']) && $this->gatheredDetails['pickUpLibrary'] !== "") {
@@ -41,9 +41,9 @@
               $selected = false;
           }
         ?>
-        <label class="control-label"><?=$this->transEsc("ill_request_pick_up_library")?>:</label>
-        <div class="controls">
-          <select id="pickupLibrary" name="gatheredDetails[pickUpLibrary]">
+        <label class="col-sm-3 control-label"><?=$this->transEsc("ill_request_pick_up_library")?>:</label>
+        <div class="col-sm-9">
+          <select id="pickupLibrary" name="gatheredDetails[pickUpLibrary]" class="form-control">
           <? foreach ($this->pickupLibraries as $lib): ?>
             <option value="<?=$this->escapeHtml($lib['id'])?>"<?=(($selected === false && isset($lib['isDefault']) && $lib['isDefault']) || $selected === $lib['id']) ? ' selected="selected"' : ''?>>
               <?=$this->transEsc('library_' . $lib['name'], null, $lib['name'])?>
@@ -56,10 +56,10 @@
     <? endif; ?>
 
     <? if (in_array("pickUpLibraryLocation", $this->extraFields)): ?>
-      <div class="control-group">
-        <label id="pickupLibraryLocationLabel" class="control-label"><i></i>&nbsp;<?=$this->transEsc("ill_request_pick_up_location")?>:<noscript> (<?=$this->transEsc("Please enable JavaScript.")?>)</noscript></label>
-        <div class="controls">
-          <select id="pickupLibraryLocation" name="gatheredDetails[pickUpLibraryLocation]">
+      <div class="form-group">
+        <label id="pickupLibraryLocationLabel" class="col-sm-3 control-label"><i></i>&nbsp;<?=$this->transEsc("ill_request_pick_up_location")?>:<noscript> (<?=$this->transEsc("Please enable JavaScript.")?>)</noscript></label>
+        <div class="col-sm-9">
+          <select id="pickupLibraryLocation" name="gatheredDetails[pickUpLibraryLocation]" class="form-control">
           </select>
         </div>
       </div>
@@ -67,7 +67,7 @@
 
     <? if (in_array("pickUpLocation", $this->extraFields)): ?>
       <? if (count($this->pickup) > 1): ?>
-        <div class="control-group">
+        <div class="form-group">
           <?
             if (isset($this->gatheredDetails['pickUpLocation']) && $this->gatheredDetails['pickUpLocation'] !== "") {
                 $selected = $this->gatheredDetails['pickUpLocation'];
@@ -77,9 +77,9 @@
                 $selected = $this->defaultPickup;
             }
           ?>
-          <label class="control-label"><?=$this->transEsc("pick_up_location")?>:</label>
-          <div class="controls">
-            <select name="gatheredDetails[pickUpLocation]">
+          <label class="col-sm-3 control-label"><?=$this->transEsc("pick_up_location")?>:</label>
+          <div class="col-sm-9">
+            <select name="gatheredDetails[pickUpLocation]" class="form-control">
             <? foreach ($this->pickup as $lib): ?>
               <option value="<?=$this->escapeHtml($lib['locationID'])?>"<?=($selected == $lib['locationID']) ? ' selected="selected"' : ''?>>
                 <?=$this->escapeHtml($lib['locationDisplay'])?>
@@ -94,26 +94,26 @@
     <? endif; ?>
 
     <? if (in_array("requiredByDate", $this->extraFields)): ?>
-      <div class="control-group">
-        <label class="control-label"><?=$this->transEsc("hold_required_by")?>:</label>
-        <div class="controls">
-          <input id="requiredByDate" type="text" name="gatheredDetails[requiredBy]" value="<?=(isset($this->gatheredDetails['requiredBy']) && !empty($this->gatheredDetails['requiredBy'])) ? $this->escapeHtml($this->gatheredDetails['requiredBy']) : $this->escapeHtml($this->defaultRequiredDate)?>" size="8" />
+      <div class="form-group">
+        <label class="col-sm-3 control-label"><?=$this->transEsc("hold_required_by")?>:</label>
+        <div class="col-sm-9">
+          <input id="requiredByDate" type="text" name="gatheredDetails[requiredBy]" value="<?=(isset($this->gatheredDetails['requiredBy']) && !empty($this->gatheredDetails['requiredBy'])) ? $this->escapeHtml($this->gatheredDetails['requiredBy']) : $this->escapeHtml($this->defaultRequiredDate)?>" size="8" class="form-control"/>
           (<?=$this->dateTime()->getDisplayDateFormat()?>)
         </div>
       </div>
     <? endif; ?>
 
     <? if (in_array("comments", $this->extraFields)): ?>
-      <div class="control-group">
-        <label class="control-label"><?=$this->transEsc("Comments")?>:</label>
-        <div class="controls">
-          <textarea rows="3" cols="20" name="gatheredDetails[comment]"><?=isset($this->gatheredDetails['comment']) ? $this->escapeHtml($this->gatheredDetails['comment']) : ''?></textarea>
+      <div class="form-group">
+        <label class="col-sm-3 control-label"><?=$this->transEsc("Comments")?>:</label>
+        <div class="col-sm-9">
+          <textarea rows="3" cols="20" name="gatheredDetails[comment]" class="form-control"><?=isset($this->gatheredDetails['comment']) ? $this->escapeHtml($this->gatheredDetails['comment']) : ''?></textarea>
         </div>
       </div>
     <? endif; ?>
 
-    <div class="control-group">
-      <div class="controls">
+    <div class="form-group">
+      <div class="col-sm-9 col-sm-offset-3">
         <input class="btn btn-primary" type="submit" name="placeILLRequest" value="<?=$this->transEsc('ill_request_submit_text')?>"/>
       </div>
     </div>

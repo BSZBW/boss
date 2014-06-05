@@ -23,8 +23,6 @@
   $this->headScript()->appendFile('vudl/config.js');
   $this->headScript()->appendFile('vudl/record.js');
   $this->headScript()->appendFile('zoomy/canvas-zoomy.js');
-  // AUDIO
-  $this->headScript()->appendFile('http://www.google.com/jsapi');
 
   // Compact header
   $this->layout()->headerType = 'record';
@@ -42,7 +40,6 @@
   }
 ?>
 <script>
-  google.load("swfobject", "2.2");
   var documentID = '<?=$this->id ?>';
   var initPage = $.parseJSON('<?=json_encode($this->outline['lists'][$this->initList][$this->initPage], JSON_HEX_APOS | JSON_HEX_AMP) ?>');
 

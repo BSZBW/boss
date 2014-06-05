@@ -12,13 +12,13 @@
 <?=$this->flashmessages()?>
 
 <? if (!empty($this->exportOptions)): ?>
-  <form class="form-inline" method="post" action="<?=$this->url('cart-export')?>" name="exportForm" title="<?=$this->transEsc('Export Items')?>">
+  <form class="form-horizontal" method="post" action="<?=$this->url('cart-export')?>" name="exportForm" title="<?=$this->transEsc('Export Items')?>">
     <? foreach ($this->records as $current): ?>
       <input type="hidden" name="ids[]" value="<?=$this->escapeHtml($current->getResourceSource() . '|' . $current->getUniqueId())?>" />
     <? endforeach; ?>
-    <div class="control-group">
-      <label class="control-label"><?=$this->transEsc('Title')?></label>
-      <div class="controls">
+    <div class="form-group">
+      <label class="col-sm-3 control-label"><?=$this->transEsc('Title')?></label>
+      <div class="col-sm-9">
       <? if(count($this->records) > 1): ?>
         <button type="button" class="btn hidden" data-toggle="collapse" data-target="#itemhide">
           <?=count($this->records).' '.$this->transEsc('items') ?>
@@ -31,22 +31,22 @@
           </ul>
         </div>
       <? else: ?>
-        <span class="uneditable-input"><?=$this->records[0]->getBreadcrumb() ?></span>
+        <p class="form-control-static"><?=$this->records[0]->getBreadcrumb() ?></p>
       <? endif; ?>
       </div>
     </div>
-    <div class="control-group">
-      <label class="control-label" for="format"><?=$this->transEsc('Format')?>:</label>
-      <div class="controls">
-        <select name="format" id="format">
+    <div class="form-group">
+      <label for="format" class="col-sm-3 control-label"><?=$this->transEsc('Format')?>:</label>
+      <div class="col-sm-9">
+        <select name="format" id="format" class="form-control">
           <? foreach ($this->exportOptions as $exportOption): ?>
             <option value="<?=$this->escapeHtml($exportOption)?>"><?=$this->transEsc($exportOption)?></option>
           <? endforeach; ?>
         </select>
       </div>
     </div>
-    <div class="control-group">
-      <div class="controls">
+    <div class="form-group">
+      <div class="col-sm-9 col-sm-offset-3">
         <input class="btn" type="submit" name="submit" value="<?=$this->transEsc('Export')?>"/>
       </div>
     </div>
