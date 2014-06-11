@@ -141,6 +141,7 @@ return array(
   'Swissbib\VuFind\Search\Tags\Results'                         => __DIR__ . '/Swissbib/VuFind/Search/Tags/Results.php',
   'Swissbib\VuFind\View\Helper\Root\Citation'                   => __DIR__ . '/Swissbib/VuFind/View/Helper/Root/Citation.php',
   'Swissbib\VuFind\View\Helper\Root\Flashmessages'              => __DIR__ . '/Swissbib/VuFind/View/Helper/Root/Flashmessages.php',
+  'Swissbib\VuFind\View\Helper\Bootstrap3\LayoutClass'          => __DIR__ . '/Swissbib/VuFind/View/Helper/Bootstrap3/LayoutClass.php',
   'Swissbib\VuFind\l18n\Translator\Loader\ExtendedIni'          => __DIR__ . '/Swissbib/VuFind/l18n/Translator/Loader/ExtendedIni.php',
   'Swissbib\Vufind\Search\Summon\Options'                       => __DIR__ . '/Swissbib/VuFind/Search/Summon/Options.php',
   'Swissbib\Vufind\Search\Summon\Results'                       => __DIR__ . '/Swissbib/VuFind/Search/Summon/Results.php',

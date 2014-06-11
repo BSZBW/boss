@@ -61,7 +61,8 @@ class SearchController extends VuFindSearchController
         $activeTabConfig    = $allTabsConfig[$activeTabKey];
 
         // Set default target
-        $this->searchClassId = $activeTabConfig['searchClassId'];
+//        $this->searchClassId = $activeTabConfig['searchClassId'];
+        $this->searchClassId = 'Solr';
 
         //do not remember FRBR searches because we ant to jump back to the original search
 
@@ -102,7 +103,9 @@ class SearchController extends VuFindSearchController
         $allTabsConfig          = $this->getThemeTabsConfig();
         $activeTabKey           = $this->getActiveTab();
         $activeTabConfig        = $allTabsConfig[$activeTabKey];
-        $this->searchClassId    = $activeTabConfig['searchClassId'];
+//        $this->searchClassId    = $activeTabConfig['searchClassId'];
+        $this->searchClassId    = 'Solr';
+
         $viewModel              = parent::advancedAction();
         $viewModel->options     = $this->getServiceLocator()->get('Swissbib\SearchOptionsPluginManager')->get($this->searchClassId);
         $results                = $this->getResultsManager()->get($this->searchClassId);
