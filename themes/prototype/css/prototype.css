@@ -42,23 +42,79 @@ header,
 	display: none;
 }
 
+.fa {
+	margin: 0 5px;
+}
+
 .sidebar {
 	margin-top: 10px;
+	background: none;
 }
 
 .sidebar h4 {
 	background-color: #3c4250;
 	color: #e8e7e5;
 	border-bottom: 5px solid #e8e7e5;
-	margin: -10px -15px 5px -15px;
+	margin: -10px 0 0 0;
 	padding: 10px;
 }
 
 .list-group-item,
-.sidebar,
 .sidebar a {
 	background-color: #252932;
 	color: #cccecd;
+}
+
+.sidebar .list-group.filters {
+	padding: 7px;
+}
+
+.sidebar .list-group {
+	background: #252932;
+	border-top: 1px solid #383a46;
+	border-bottom: 1px solid #1A1D22;
+	margin: 0;
+	padding: 1px;
+}
+
+.sidebar .list-group-item {
+	border: none;
+	background-color: #252932;
+}
+
+.sidebar .list-group-item.title {
+	font-weight: normal;
+}
+
+.sidebar .list-group-item:first-child {
+	border-radius: 0;
+}
+.sidebar a.list-group-item.active {
+	display: inline-block;
+}
+
+.sidebar a.list-group-item.active {
+	width: auto;
+	background: #50BF9E;
+	border: none;
+	border-radius: 0;
+	margin: 3px;
+	padding: 3px;
+}
+
+a.list-group-item:hover, a.list-group-item:focus {
+	text-decoration: none;
+	background-color: #13141b;
+}
+
+.sidebar .list-group.filters .list-group-item.title{
+	display: none;
+}
+
+a.list-group-item.active>.badge, .nav-pills>.active>a>.badge {
+	color: #428BCA;
+	background-color: #FFF;
+	margin: 0 6px;
 }
 
 .result {
