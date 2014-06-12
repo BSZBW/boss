@@ -4,7 +4,7 @@
 <? else: ?>
   <? foreach ($comments as $comment): ?>
     <div class="comment row">
-      <div class="col-md-3 text-right">
+      <div class="col-sm-3 text-right">
         <br/>
         <strong><?=$this->escapeHtml(trim($comment->firstname . ' ' . $comment->lastname))?></strong>
         <br/>
@@ -15,7 +15,7 @@
           <? endif; ?>
         </small>
       </div>
-      <div class="popover right col-md-6">
+      <div class="popover right col-sm-6">
         <div class="arrow"></div>
         <div class="popover-content">
           <p><?=$this->escapeHtml($comment->comment)?></p>

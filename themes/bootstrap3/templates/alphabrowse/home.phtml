@@ -53,9 +53,9 @@
             <? else: ?>
               <? $query = array('type' => ucwords($this->source) . 'Browse', 'lookfor' => '"' . addcslashes($item['heading'], '"') . '"'); ?>
             <? endif; ?>
-            <a class="col-md-6" href="<?=$this->escapeHtml($this->url('search-results', array(), array('query' => $query)))?>"><?=$this->escapeHtml($item['heading'])?></a>
+            <a class="col-sm-6" href="<?=$this->escapeHtml($this->url('search-results', array(), array('query' => $query)))?>"><?=$this->escapeHtml($item['heading'])?></a>
           <? else: ?>
-            <span class="col-md-6"><?=$this->escapeHtml($item['heading'])?></span>
+            <span class="col-sm-6"><?=$this->escapeHtml($item['heading'])?></span>
           <? endif; ?>
 
           <?

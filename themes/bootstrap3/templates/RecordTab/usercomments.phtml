@@ -7,10 +7,10 @@
   <?=$this->render('record/comments-list.phtml')?>
 </div>
 <form class="comment row" name="commentRecord" id="commentRecord" action="<?=$this->recordLink()->getActionUrl($this->driver, 'AddComment')?>" method="post">
-  <div class="col-md-3 text-right">
+  <div class="col-sm-3 text-right">
     <strong><?=$this->transEsc("Your Comment")?>:</strong>
   </div>
-  <div class="popover right col-md-6">
+  <div class="popover right col-sm-6">
     <div class="arrow"></div>
     <div class="popover-content">
       <textarea id="comment" name="comment" class="span12" rows="3" required></textarea>

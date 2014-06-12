@@ -1,7 +1,7 @@
 <? if (isset($this->ranges) && !empty($this->ranges)): ?>
   <? $params = $this->searchParams($this->searchClassId); $params->activateAllFacets(); ?>
   <? foreach ($this->ranges as $current): $escField = $this->escapeHtml($current['field']); ?>
-    <fieldset class="col-md-4">
+    <fieldset class="col-sm-4">
       <legend><?=$this->transEsc($params->getFacetLabel($current['field']))?></legend>
       <input type="hidden" name="<?=$this->escapeHtml($current['type'])?>range[]" value="<?=$escField?>"/>
       <div class="row">

@@ -1,13 +1,13 @@
 <div class="result source<?=$this->escapeHtml($this->driver->getResourceSource())?> recordId<?=$this->driver->supportsAjaxStatus()?' ajaxItemId':''?>">
   <input type="hidden" value="<?=$this->escapeHtml($this->driver->getUniqueID())?>" class="hiddenId" />
-  <div class="col-md-2">
+  <div class="col-sm-2">
   <? if ($summThumb = $this->record($this->driver)->getThumbnail()): ?>
     <img src="<?=$this->escapeHtml($summThumb)?>" alt="<?=$this->transEsc('Cover Image')?>"/>
   <? else: ?>
     <img src="<?=$this->url('cover-unavailable')?>" alt="<?=$this->transEsc('No Cover Image')?>"/>
   <? endif; ?>
   </div>
-  <div class="col-md-6">
+  <div class="col-sm-6">
     <div>
       <b><?
         $summHighlightedTitle = $this->driver->getHighlightedTitle();
