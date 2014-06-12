@@ -1,6 +1,38 @@
 @media screen and (max-width: 767px) {
+
+	.main {
+		margin: 0;
+		width: 100%;
+	}
+
 	.mainbody {
 		margin: 0 -40px;
+	}
+
+	.jumbotron {
+		padding: 3% 0;
+	}
+
+	.searchbox .btn,
+	.jumbotron .btn {
+		width: 45%;
+		height: auto;
+		margin: 5px auto;
+		padding: 2% 5%;
+
+		background-color: #fff;
+		color: #50bf9e;
+	}
+
+	.searchbox .btn:hover,
+	.jumbotron .btn:hover {
+		background-color: #50bf9e;
+		color: #fff;
+	}
+
+	.row {
+		margin: 0;
+		width: 100%;
 	}
 
 	footer {
@@ -11,25 +43,34 @@
 	footer .row,
 	footer ul {
 		margin: 0;
+		padding: 0;
+		width: 100%;
+	}
+
+	footer .row>div {
+		margin: 0;
+		padding: 0;
+		width: 100%;
 	}
 
 	footer a {
 		color: #cccecd;
-		font-size: 1em;
+		font-size: 1.1em;
+	}
+
+	footer a:hover {
+		color: #cccecd;
+		text-decoration: none;
 	}
 
 	footer p {
 		font-size: 1.2em;
+		padding: 10px 15px;
 	}
 
 	footer li {
 		list-style: none;
-		padding: 3px;
+		padding: 5px 15px;
 		width: 100%;
-	}
-
-
-	footer li:hover {
-		background-color: #50bf9e;
 	}
 }
