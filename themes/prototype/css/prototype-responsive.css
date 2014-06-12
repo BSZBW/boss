@@ -73,4 +73,30 @@
 		padding: 5px 15px;
 		width: 100%;
 	}
+
+	footer li:hover {
+		background-color: #50bf9e;
+	}
+
+	.sidebar {
+		right: -80%;
+		width: 80%;
+		position: absolute;
+		top: 0;
+		height: 100%;
+		background-color: #F7F7F7;
+		padding: 0px;
+	}
+
+	.container.offcanvas-active {
+		right: 80%;
+	}
+
+	.container {
+		position: relative;
+		right: 0;
+		-webkit-transition: right .3s ease-in;
+		-most-transition: right .3s ease-in;
+		transition: right .3s ease-in;
+	}
 }
