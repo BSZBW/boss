@@ -13,9 +13,18 @@
 		padding: 3% 0;
 	}
 
+	.searchbox {
+		padding: 3% 0;
+	}
+
+	.searchbox>form {
+		margin: 0;
+		padding: 0;
+	}
+
 	.searchbox .btn,
 	.jumbotron .btn {
-		width: 45%;
+		width: 42%;
 		height: auto;
 		margin: 5px auto;
 		padding: 2% 5%;
@@ -24,10 +33,30 @@
 		color: #50bf9e;
 	}
 
+	.jumbotron .btn {
+		width: 49%
+	}
+
+	#toggle-sidebar-offcanvas {
+		width: 13%;
+		border-radius: 0;
+		padding: 3% 3%;
+	}
+
+	#toggle-sidebar-offcanvas span {
+		background-color: #50bf9e;
+        width: 100%;
+	}
+
+	#toggle-sidebar-offcanvas:hover span {
+		background-color: #fff;
+	}
+
 	.searchbox .btn:hover,
 	.jumbotron .btn:hover {
 		background-color: #50bf9e;
 		color: #fff;
+        text-decoration: none;
 	}
 
 	.row {
@@ -70,8 +99,14 @@
 
 	footer li {
 		list-style: none;
-		padding: 5px 15px;
 		width: 100%;
+	}
+
+	footer li>a {
+		display: inline-block;
+		width: inherit;
+		padding: 2% 6%;
+		height: 100%;
 	}
 
 	footer li:hover {
@@ -90,6 +125,8 @@
 
 	.container.offcanvas-active {
 		right: 80%;
+		overflow-x: visible;
+		overflow-y: visible;
 	}
 
 	.container {
@@ -98,5 +135,19 @@
 		-webkit-transition: right .3s ease-in;
 		-most-transition: right .3s ease-in;
 		transition: right .3s ease-in;
+		overflow-x: hidden;
+		overflow-y: hidden;
 	}
+}
+
+@media screen and (min-width: 768px) {
+
+    .navbar-form {
+        width: 60%;
+    }
+
+
+    .navbar-form .form-control {
+        width: 60%;
+    }
 }

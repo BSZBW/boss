@@ -1,5 +1,3 @@
-"use strict";
-
 var BootstrapPrototype = {
 	container: null,
 
@@ -8,8 +6,12 @@ var BootstrapPrototype = {
 	},
 
 	initOffCanvas: function() {
-		this.container = $(".container");
-		$("button#toggle-sidebar-offcanvas").click(this.toggleOffCanvas.bind(this));
+		if ($(".sidebar").length > 0) {
+			this.container = $(".container");
+			$("button#toggle-sidebar-offcanvas").click(this.toggleOffCanvas.bind(this));
+		} else {
+			$('button#toggle-sidebar-offcanvas').hide();
+		}
 	},
 
 	toggleOffCanvas: function() {
@@ -20,5 +22,7 @@ var BootstrapPrototype = {
 		}
 	}
 };
+
+"use strict";
 
 $(BootstrapPrototype.init.bind(BootstrapPrototype));
