@@ -3,7 +3,8 @@ return array(
 	'extends' => 'bootstrap3',
 
 	'css'	=> array(
-		'prototype.css'
+		'prototype.css',
+		'prototype-responsive.css'
 	),
 
     'helpers' => array(

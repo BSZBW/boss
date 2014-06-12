@@ -1,0 +1,35 @@
+@media screen and (max-width: 767px) {
+	.mainbody {
+		margin: 0 -40px;
+	}
+
+	footer {
+		background-color: #252932;
+		color: #cccecd;
+	}
+
+	footer .row,
+	footer ul {
+		margin: 0;
+	}
+
+	footer a {
+		color: #cccecd;
+		font-size: 1em;
+	}
+
+	footer p {
+		font-size: 1.2em;
+	}
+
+	footer li {
+		list-style: none;
+		padding: 3px;
+		width: 100%;
+	}
+
+
+	footer li:hover {
+		background-color: #50bf9e;
+	}
+}
