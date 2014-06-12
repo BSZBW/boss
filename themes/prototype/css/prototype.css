@@ -10,6 +10,14 @@ body {
 	width: 100%;
 }
 
+img {
+	max-width: 100%;
+}
+
+label {
+	font-weight: normal;
+}
+
 header,
 .label-info {
 	background-color: #50bf9e;
@@ -20,6 +28,33 @@ header,
 	border-radius: 0;
 	margin: 0;
 	padding: 0 6%;
+}
+
+.navbar a {
+	color: #fff;
+}
+
+.navbar-brand {
+	background: url('../images/logo_swissbib-home.png');
+	width: 150px;
+	background-size: 150px;
+	margin-bottom: 10px;
+}
+.navbar-form {
+	margin-top: 13px;
+}
+
+.btn.btn-primary {
+	background: #fff;
+	color: #50BF9E;
+	border: none;
+	border-radius: 0;
+}
+
+.nav>li>a:hover, .nav>li>a:focus {
+	text-decoration: none;
+	color: #50BF9E;
+	background-color: #fff;
 }
 
 .breadcrumb,
