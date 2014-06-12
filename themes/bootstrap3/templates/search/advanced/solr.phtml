@@ -1,6 +1,9 @@
-<? if (!empty($this->facetList)): ?>
+<? if (!empty($this->facetList) || !empty($this->checkboxFacets)): ?>
   <fieldset class="col-sm-12">
     <legend><?=$this->transEsc('Limit To')?></legend>
+    <? if (!empty($this->checkboxFacets)): ?>
+      <?=$this->render('search/advanced/checkbox-filters.phtml')?>
+    <? endif; ?>
     <div class="row">
       <? foreach ($this->facetList as $field => $list): ?>
         <div class="col-sm-<?=floor(12/count($this->facetList)) ?>">
