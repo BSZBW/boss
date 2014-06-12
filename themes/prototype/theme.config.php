@@ -7,6 +7,10 @@ return array(
 		'prototype-responsive.css'
 	),
 
+	'js'	=> array(
+		'prototype.js'
+	),
+
     'helpers' => array(
         'factories' => array(
             'layoutClass'                        => 'Swissbib\View\Helper\Swissbib\Factory::getLayoutClass',
