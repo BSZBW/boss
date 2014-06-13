@@ -65,6 +65,21 @@ header,
 
 .search-controls {
 	color: #fff;
+	padding: 12px;
+}
+
+.search-controls .sort,
+.search-controls .limit {
+	margin-right: 10px;
+}
+
+.search-controls .sort label,
+.search-controls .limit label {
+	display: none;
+}
+
+.search-controls .hits {
+	margin-top: 6px;
 }
 
 .row,

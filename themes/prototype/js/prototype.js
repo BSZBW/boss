@@ -1,3 +1,5 @@
+"use strict";
+
 var BootstrapPrototype = {
 	container: null,
 
@@ -22,7 +24,5 @@ var BootstrapPrototype = {
 		}
 	}
 };
-
-"use strict";
 
 $(BootstrapPrototype.init.bind(BootstrapPrototype));
