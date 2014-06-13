@@ -4,7 +4,7 @@
 
   // Disable top search box -- this page has a special layout.
   $this->layout()->searchbox = false;
-    
+
   $this->layout()->breadcrumbs = '<li class="active">Error</li>';
 ?>
 <div class="alert alert-error">
@@ -16,7 +16,7 @@
   <p>
     <?=$this->transEsc('Please contact the Library Reference Department for assistance')?>
     <br/>
-    <? $supportEmail = $this->escapeHtml($this->systemEmail()); ?>
+    <? $supportEmail = $this->escapeHtmlAttr($this->systemEmail()); ?>
     <a href="mailto:<?=$supportEmail?>"><?=$supportEmail?></a>
   </p>
 </div>

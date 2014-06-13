@@ -6,8 +6,8 @@
   <? foreach ($checkboxFilters as $current): ?>
     <div class="checkboxFilter<?=($results->getResultTotal() < 1 && !$current['selected'] && !$current['alwaysVisible']) ? ' hide' : ''?>">
       <label class="checkbox">
-        <input type="checkbox" name="filter[]" value="<?=$this->escapeHtml($current['filter'])?>"
-        <?=$current['selected'] ? 'checked="checked"' : ''?> id="<?=$this->escapeHtml(str_replace(' ', '', $current['desc']))?>"
+        <input type="checkbox" name="filter[]" value="<?=$this->escapeHtmlAttr($current['filter'])?>"
+        <?=$current['selected'] ? 'checked="checked"' : ''?> id="<?=$this->escapeHtmlAttr(str_replace(' ', '', $current['desc']))?>"
         onclick="document.location.href='<?=$current['selected'] ? $results->getUrlQuery()->removeFilter($current['filter']) : $results->getUrlQuery()->addFilter($current['filter'])?>';" />
         <?=$this->transEsc($current['desc'])?>
       </label>
@@ -17,7 +17,7 @@
 <? $extraFilters = isset($this->extraSideFacetFilters) ? $this->extraSideFacetFilters : array(); ?>
 <? $collapsedFacets = $this->recommend->getCollapsedFacets() ?>
 <? $filterList = array_merge($results->getParams()->getFilterList(true), $extraFilters); if (!empty($filterList)): ?>
-  <div class="list-group filters">
+  <ul class="list-group filters">
     <li class="list-group-item title"><?=$this->transEsc('Remove Filters')?></li>
     <? foreach ($filterList as $field => $filters): ?>
       <? foreach ($filters as $i => $filter): ?>
@@ -41,39 +41,39 @@
         </a>
       <? endforeach; ?>
     <? endforeach; ?>
-  </div>
+  </ul>
 <? endif; ?>
 <?= isset($this->sideFacetExtraControls) ? $this->sideFacetExtraControls : '' ?>
 <? $sideFacetSet = $this->recommend->getFacetSet(); $rangeFacets = $this->recommend->getAllRangeFacets(); ?>
 <? if (!empty($sideFacetSet) && $results->getResultTotal() > 0): ?>
   <? foreach ($sideFacetSet as $title => $cluster): ?>
     <? $allowExclude = $this->recommend->excludeAllowed($title); ?>
-    <ul class="list-group" id="side-panel-<?=$this->escapeHtml($title) ?>">
-      <li class="list-group-item title" data-toggle="collapse" href="#side-collapse-<?=$this->escapeHtml($title) ?>">
+    <ul class="list-group" id="side-panel-<?=$this->escapeHtmlAttr($title) ?>">
+      <li class="list-group-item title" data-toggle="collapse" href="#side-collapse-<?=$this->escapeHtmlAttr($title) ?>">
         <?=$this->transEsc($cluster['label'])?>
       </li>
-      <div id="side-collapse-<?=$this->escapeHtml($title) ?>" class="collapse<? if(!in_array($title, $collapsedFacets)): ?> in<? endif ?>">
+      <div id="side-collapse-<?=$this->escapeHtmlAttr($title) ?>" class="collapse<? if(!in_array($title, $collapsedFacets)): ?> in<? endif ?>">
         <? if (isset($rangeFacets[$title])): ?>
           <li class="list-group-item">
-            <form action="" name="<?=$this->escapeHtml($title)?>Filter" id="<?=$this->escapeHtml($title)?>Filter">
+            <form action="" name="<?=$this->escapeHtmlAttr($title)?>Filter" id="<?=$this->escapeHtmlAttr($title)?>Filter">
               <?=$results->getUrlQuery()->asHiddenFields(array('page' => "/./", 'filter' => "/^{$title}:.*/"))?>
-              <input type="hidden" name="<?=$this->escapeHtml($rangeFacets[$title]['type'])?>range[]" value="<?=$this->escapeHtml($title)?>"/>
+              <input type="hidden" name="<?=$this->escapeHtmlAttr($rangeFacets[$title]['type'])?>range[]" value="<?=$this->escapeHtmlAttr($title)?>"/>
               <div class="row">
                 <div class="col-sm-6">
-                  <label for="<?=$this->escapeHtml($title)?>from">
+                  <label for="<?=$this->escapeHtmlAttr($title)?>from">
                     <?=$this->transEsc('date_from')?>:
                   </label>
-                  <input type="text" maxlength="4" class="form-control" name="<?=$this->escapeHtml($title)?>from" id="<?=$this->escapeHtml($title)?>from" value="<?=isset($rangeFacets[$title]['values'][0])?$this->escapeHtml($rangeFacets[$title]['values'][0]):''?>" />
+                  <input type="text" maxlength="4" class="form-control" name="<?=$this->escapeHtmlAttr($title)?>from" id="<?=$this->escapeHtmlAttr($title)?>from" value="<?=isset($rangeFacets[$title]['values'][0])?$this->escapeHtmlAttr($rangeFacets[$title]['values'][0]):''?>" />
                 </div>
                 <div class="col-sm-6">
-                  <label for="<?=$this->escapeHtml($title)?>to">
+                  <label for="<?=$this->escapeHtmlAttr($title)?>to">
                     <?=$this->transEsc('date_to')?>:
                   </label>
-                  <input type="text" maxlength="4" class="form-control" name="<?=$this->escapeHtml($title)?>to" id="<?=$this->escapeHtml($title)?>to" value="<?=isset($rangeFacets[$title]['values'][1])?$this->escapeHtml($rangeFacets[$title]['values'][1]):''?>" />
+                  <input type="text" maxlength="4" class="form-control" name="<?=$this->escapeHtmlAttr($title)?>to" id="<?=$this->escapeHtmlAttr($title)?>to" value="<?=isset($rangeFacets[$title]['values'][1])?$this->escapeHtmlAttr($rangeFacets[$title]['values'][1]):''?>" />
                 </div>
               </div>
               <? if ($rangeFacets[$title]['type'] == 'date'): ?>
-                <div><input type="text" class="col-sm-10 hidden" id="<?=$this->escapeHtml($title)?><?=$this->escapeHtml($rangeFacets[$title]['type'])?>Slider"/></div>
+                <div><input type="text" class="col-sm-10 hidden" id="<?=$this->escapeHtmlAttr($title)?><?=$this->escapeHtml($rangeFacets[$title]['type'])?>Slider"/></div>
               <? endif; ?>
               <input class="btn btn-default" type="submit" value="<?=$this->transEsc('Set')?>"/>
             </form>
@@ -88,21 +88,21 @@
               $high = !empty($rangeFacets[$title][1]) ? $rangeFacets[$title][1] : $max;
               $script = <<<JS
 $(document).ready(function() {
-var fillTexts = function() {
-var v = {$this->escapeHtml($title)}dateSlider.getValue();
-$('#{$this->escapeHtml($title)}from').val(v[0]);
-$('#{$this->escapeHtml($title)}to').val(v[1]);
-};
-var {$this->escapeHtml($title)}dateSlider = $('#{$this->escapeHtml($title)}dateSlider')
-.slider({
-   'min':{$min},
-   'max':{$max},
-   'handle':"square",
-   'tooltip':"hide",
-   'value':[{$low},{$high}]
-})
-.on('slide', fillTexts)
-.data('slider');
+  var fillTexts = function() {
+  var v = {$this->escapeHtmlAttr($title)}dateSlider.getValue();
+  $('#{$this->escapeHtmlAttr($title)}from').val(v[0]);
+  $('#{$this->escapeHtmlAttr($title)}to').val(v[1]);
+  };
+  var {$this->escapeHtmlAttr($title)}dateSlider = $('#{$this->escapeHtmlAttr($title)}dateSlider')
+  .slider({
+     'min':{$min},
+     'max':{$max},
+     'handle':"square",
+     'tooltip':"hide",
+     'value':[{$low},{$high}]
+  })
+  .on('slide', fillTexts)
+  .data('slider');
 });
 JS;
             ?>
@@ -115,9 +115,9 @@ JS;
                 $thisFacet['displayText'] = "-";
               }
             ?>
-            <? $moreClass = 'narrowGroupHidden-'.$this->escapeHtml($title).' hidden'; ?>
+            <? $moreClass = 'narrowGroupHidden-'.$this->escapeHtmlAttr($title).' hidden'; ?>
           <? if ($i == 6): ?>
-            <a id="more-narrowGroupHidden-<?=$this->escapeHtml($title)?>" class="list-group-item" href="javascript:moreFacets('narrowGroupHidden-<?=$title ?>')"><?=$this->transEsc('more')?> ...</a>
+            <a id="more-narrowGroupHidden-<?=$this->escapeHtmlAttr($title)?>" class="list-group-item" href="javascript:moreFacets('narrowGroupHidden-<?=$title ?>')"><?=$this->transEsc('more')?> ...</a>
           <? endif; ?>
           <? if ($thisFacet['isApplied']): ?>
             <a class="list-group-item active<? if ($i>5): ?><?=$moreClass ?><?endif ?><? if ($thisFacet['operator'] == 'OR'): ?> facetOR applied" href="<?=$this->currentPath().$results->getUrlQuery()->removeFacet($title, $thisFacet['value'], true, $thisFacet['operator']) ?><? endif ?>">

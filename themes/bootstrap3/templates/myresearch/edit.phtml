@@ -24,14 +24,14 @@
     <? foreach ($this->savedData as $i=>$current): ?>
       <fieldset>
         <legend>
-          <a href="<?=$this->url('userList', array('id' => $current['listId'])) ?>?delete=<?=urlencode($this->driver->getUniqueId())?>&amp;source=<?=urlencode($this->driver->getResourceSource())?>" id="<?=$this->escapeHtml($this->driver->getUniqueId())?>delete<?=$current['listId'] ?>" title="<?=$this->transEsc('confirm_delete')?>" class="close">&times;</a> <?=$this->transEsc('List') ?>: <?=$this->escapeHtml($current['listTitle'])?>
+          <a href="<?=$this->url('userList', array('id' => $current['listId'])) ?>?delete=<?=urlencode($this->driver->getUniqueId())?>&amp;source=<?=urlencode($this->driver->getResourceSource())?>" id="<?=$this->escapeHtmlAttr($this->driver->getUniqueId())?>delete<?=$current['listId'] ?>" title="<?=$this->transEsc('confirm_delete')?>" class="close">&times;</a> <?=$this->transEsc('List') ?>: <?=$this->escapeHtml($current['listTitle'])?>
         </legend>
         <input type="hidden" name="lists[]" value="<?=$current['listId'] ?>"/>
         <? if ($this->usertags()->getMode() !== 'disabled'): ?>
           <div class="form-group">
             <label class="col-sm-2 control-label" for="edit_tags<?=$current['listId'] ?>"><?=$this->transEsc('Tags') ?>:</label>
             <div class="col-sm-10">
-              <input type="text" name="tags<?=$current['listId'] ?>" id="edit_tags<?=$current['listId'] ?>" class="form-control" value="<?=$this->escapeHtml($current['tags'])?>"/>
+              <input type="text" name="tags<?=$current['listId'] ?>" id="edit_tags<?=$current['listId'] ?>" class="form-control" value="<?=$this->escapeHtmlAttr($current['tags'])?>"/>
               <span class="help-block"><?=$this->transEsc("add_tag_note") ?></span>
             </div>
           </div>

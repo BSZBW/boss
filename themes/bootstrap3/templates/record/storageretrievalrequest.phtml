@@ -31,15 +31,15 @@
         <div id="storageRetrievalRequestReference" class="storageRetrievalRequestReference">
           <label class="col-sm-3 control-label"><?=$this->transEsc('storage_retrieval_request_volume')?>:</label>
           <div class="col-sm-9">
-            <input type="text" name="gatheredDetails[volume]" value="<?=isset($this->gatheredDetails['volume']) ? $this->escapeHtml($this->gatheredDetails['volume']) : ''?>"/><br/>
+            <input type="text" name="gatheredDetails[volume]" value="<?=isset($this->gatheredDetails['volume']) ? $this->escapeHtmlAttr($this->gatheredDetails['volume']) : ''?>"/><br/>
           </div>
           <label class="col-sm-3 control-label"><?=$this->transEsc('storage_retrieval_request_issue')?>:</label>
           <div class="col-sm-9">
-            <input type="text" name="gatheredDetails[issue]" value="<?=isset($this->gatheredDetails['issue']) ? $this->escapeHtml($this->gatheredDetails['issue']) : ''?>" class="form-control"/><br/>
+            <input type="text" name="gatheredDetails[issue]" value="<?=isset($this->gatheredDetails['issue']) ? $this->escapeHtmlAttr($this->gatheredDetails['issue']) : ''?>" class="form-control"/><br/>
           </div>
           <label class="col-sm-3 control-label"><?=$this->transEsc('storage_retrieval_request_year')?>:</label>
           <div class="col-sm-9">
-            <input type="text" name="gatheredDetails[year]" value="<?=isset($this->gatheredDetails['year']) ? $this->escapeHtml($this->gatheredDetails['year']) : ''?>" class="form-control"/><br/>
+            <input type="text" name="gatheredDetails[year]" value="<?=isset($this->gatheredDetails['year']) ? $this->escapeHtmlAttr($this->gatheredDetails['year']) : ''?>" class="form-control"/><br/>
           </div>
         </div>
       </div>
@@ -49,7 +49,7 @@
       <div class="form-group">
         <label class="col-sm-3 control-label"><?=$this->transEsc("hold_required_by")?>:</label>
         <div class="col-sm-9">
-          <input id="requiredByDate" type="text" name="gatheredDetails[requiredBy]" value="<?=(isset($this->gatheredDetails['requiredBy']) && !empty($this->gatheredDetails['requiredBy'])) ? $this->escapeHtml($this->gatheredDetails['requiredBy']) : $this->escapeHtml($this->defaultRequiredDate)?>" size="8" class="form-control"/>
+          <input id="requiredByDate" type="text" name="gatheredDetails[requiredBy]" value="<?=(isset($this->gatheredDetails['requiredBy']) && !empty($this->gatheredDetails['requiredBy'])) ? $this->escapeHtmlAttr($this->gatheredDetails['requiredBy']) : $this->escapeHtmlAttr($this->defaultRequiredDate)?>" size="8" class="form-control"/>
           (<?=$this->dateTime()->getDisplayDateFormat()?>)
         </div>
       </div>
@@ -76,7 +76,7 @@
               </option>
             <? endif; ?>
             <? foreach ($this->pickup as $lib): ?>
-              <option value="<?=$this->escapeHtml($lib['locationID'])?>"<?=($selected == $lib['locationID']) ? ' selected="selected"' : ''?>>
+              <option value="<?=$this->escapeHtmlAttr($lib['locationID'])?>"<?=($selected == $lib['locationID']) ? ' selected="selected"' : ''?>>
                 <?=$this->escapeHtml($lib['locationDisplay'])?>
               </option>
             <? endforeach; ?>
@@ -84,7 +84,7 @@
           </div>
         </div>
       <? else: ?>
-        <input type="hidden" name="gatheredDetails[pickUpLocation]" value="<?=$this->escapeHtml($this->defaultPickup)?>" />
+        <input type="hidden" name="gatheredDetails[pickUpLocation]" value="<?=$this->escapeHtmlAttr($this->defaultPickup)?>" />
       <? endif; ?>
     <? endif; ?>
 

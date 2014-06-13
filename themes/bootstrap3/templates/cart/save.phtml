@@ -14,7 +14,7 @@
   <? $idParams = array(); ?>
   <? foreach ($this->records as $current): ?>
     <? $idParams[] = urlencode('ids[]') . '=' . urlencode($current->getResourceSource() . '|' . $current->getUniqueId()) ?>
-    <input type="hidden" name="ids[]" value="<?=$this->escapeHtml($current->getResourceSource() . '|' . $current->getUniqueId())?>" />
+    <input type="hidden" name="ids[]" value="<?=$this->escapeHtmlAttr($current->getResourceSource() . '|' . $current->getUniqueId())?>" />
   <? endforeach; ?>
   <div class="form-group">
     <label class="col-sm-3 control-label"><?=$this->transEsc('Title')?></label>
@@ -70,8 +70,8 @@
 
 <?
   $script = <<<JS
-    $('button.btn.hidden').removeClass('hidden');
-    $('.collapse.in').removeClass('in');
+  $('button.btn.hidden').removeClass('hidden');
+  $('.collapse.in').removeClass('in');
 JS;
 ?>
 <?=$this->inlineScript(\Zend\View\Helper\HeadScript::SCRIPT, $script, 'SET') ?>

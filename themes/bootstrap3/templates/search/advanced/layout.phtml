@@ -57,7 +57,7 @@
             <ul class="list-group">
               <li class="list-group-item title"><?=$this->transEsc($field)?></li>
               <? foreach ($data as $value): ?>
-                <label class="list-group-item checkbox"><input class="checkbox-select-item" type="checkbox" checked="checked" name="filter[]" value='<?=$this->escapeHtml($value['field'])?>:"<?=$this->escapeHtml($value['value'])?>"' /> <?=$this->escapeHtml($value['displayText'])?></label>
+                <label class="list-group-item checkbox"><input class="checkbox-select-item" type="checkbox" checked="checked" name="filter[]" value='<?=$this->escapeHtmlAttr($value['field'])?>:"<?=$this->escapeHtmlAttr($value['value'])?>"' /> <?=$this->escapeHtml($value['displayText'])?></label>
               <? endforeach; ?>
             </ul>
           <? endforeach; ?>
