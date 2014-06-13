@@ -1,7 +1,9 @@
 "use strict";
 
 var BootstrapPrototype = {
-	container: null,
+	container:	null,
+	sidebar:	null,
+	body:		null,
 
 	init: function() {
 		this.initOffCanvas();
@@ -9,7 +11,11 @@ var BootstrapPrototype = {
 
 	initOffCanvas: function() {
 		if ($(".sidebar").length > 0) {
-			this.container = $(".container");
+
+			this.container	= $(".container");
+			this.sidebar 	= $(".sidebar");
+			this.body 		= $("body");
+
 			$("button#toggle-sidebar-offcanvas").click(this.toggleOffCanvas.bind(this));
 		} else {
 			$('button#toggle-sidebar-offcanvas').hide();
@@ -19,8 +25,15 @@ var BootstrapPrototype = {
 	toggleOffCanvas: function() {
 		if ( this.container.hasClass("offcanvas-active") ) {
 			this.container.removeClass("offcanvas-active");
+			this.sidebar.css('height', 'auto');
+			this.body.css('height', 'auto');
+			this.body.css('overflow', 'scroll');
 		} else {
 			this.container.addClass("offcanvas-active");
+			this.sidebar.css('height', window.innerHeight);
+			this.sidebar.css('overflow-y', 'scroll');
+			this.body.css('height', window.innerHeight);
+			this.body.css('overflow-y', 'hidden');
 		}
 	}
 };
