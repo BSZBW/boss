@@ -6,7 +6,7 @@
 	}
 
 	.mainbody {
-		margin: 0 -40px;
+		margin: 0 -15px;
 	}
 
 	.jumbotron {
@@ -24,13 +24,14 @@
 
 	.searchbox .btn,
 	.jumbotron .btn {
-		width: 42%;
-		height: auto;
-		margin: 5px auto;
-		padding: 2% 5%;
-
+		width: 43.5%;
+		display: block;
+		float: left;
+		margin: 1% 0.3%;
 		background-color: #fff;
 		color: #50bf9e;
+		border: none;
+		box-sizing: border-box;
 	}
 
 	.jumbotron .btn {
@@ -38,14 +39,27 @@
 	}
 
 	#toggle-sidebar-offcanvas {
-		width: 13%;
+		width: 32px;
+		margin: 1% 0.3% 1% 0;
+		border: none;
+		box-sizing: border-box;
 		border-radius: 0;
-		padding: 3% 3%;
+		overflow: visible;
+		float: right;
 	}
+
 
 	#toggle-sidebar-offcanvas span {
 		background-color: #50bf9e;
-        width: 100%;
+		width: 15px;
+	}
+
+	#toggle-sidebar-offcanvas span:first-child {
+		margin-top: 2%;
+	}
+
+	#toggle-sidebar-offcanvas span:first-child {
+		margin-bottom: 2%;
 	}
 
 	#toggle-sidebar-offcanvas:hover span {
@@ -138,6 +152,8 @@
 		overflow-x: hidden;
 		overflow-y: hidden;
 	}
+
+
 }
 
 @media screen and (min-width: 768px) {
@@ -145,7 +161,6 @@
     .navbar-form {
         width: 60%;
     }
-
 
     .navbar-form .form-control {
         width: 60%;
