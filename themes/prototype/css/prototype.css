@@ -85,7 +85,7 @@ header,
 
 .search-controls .sort,
 .search-controls .limit {
-	margin-right: 10px;
+	margin-right: 6px;
 }
 
 .search-controls .sort label,
@@ -324,7 +324,11 @@ a.list-group-item.active>.badge, .nav-pills>.active>a>.badge {
 	font-size: 12px;
 	font-weight: normal;
 	vertical-align: top;
-	padding: 4px 0 4px 15px;
+	padding: 4px 0 4px 0;
+}
+
+.record td  {
+	padding-left: 15px;
 }
 
 .record table {
