@@ -134,7 +134,8 @@ header,
 	padding: 7px;
 }
 
-.sidebar .list-group {
+.sidebar .list-group,
+.sidebar ul {
 	background: #252932;
 	border-top: 1px solid #383a46;
 	border-bottom: 1px solid #1A1D22;
@@ -312,4 +313,20 @@ a.list-group-item.active>.badge, .nav-pills>.active>a>.badge {
 
 .recordcover {
 	margin-top: 20px;
+}
+
+.record p{
+	font-size: 12px;
+}
+
+.record td,
+.record th {
+	font-size: 12px;
+	font-weight: normal;
+	vertical-align: top;
+	padding: 4px 0 4px 15px;
+}
+
+.record table {
+	margin-top: 22px;
 }
