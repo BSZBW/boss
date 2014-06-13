@@ -6,7 +6,7 @@
 	}
 
 	.mainbody {
-		margin: 0 -15px;
+		margin: 0 -10px;
 	}
 
 	.jumbotron {
@@ -76,6 +76,14 @@
 	.row {
 		margin: 0;
 		width: 100%;
+	}
+
+	.result .left {
+		display: none;
+	}
+
+	.result .pull-left {
+		display: none;
 	}
 
 	footer {
@@ -153,7 +161,29 @@
 		overflow-y: hidden;
 	}
 
+	.searchtools {
+		padding: 0;
+		margin: 0;
+	}
 
+	.searchtools a {
+		display: block;
+		height: 100%;
+		width: 33%;
+		float: left;
+		padding: 10px 5px;
+	}
+	.searchtools a:hover {
+		background-color: #fff;
+	}
+
+	.searchtools a span {
+		display: none;
+	}
+
+	.searchtools strong {
+		display: none;
+	}
 }
 
 @media screen and (min-width: 768px) {
