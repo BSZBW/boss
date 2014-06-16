@@ -2,9 +2,11 @@
 return array(
     'extends' => 'root',
     'css' => array(
-        'font-awesome.min.css',
-        'bootstrap-accessibility.css',
-        'bootstrap-custom.css',
+        'a11y.css',
+        //'bootstrap.min.css',
+        //'font-awesome.min.css',
+        //'bootstrap-accessibility.css',
+        //'bootstrap-custom.css',
         'print.css:print',
         'slider.css',
     ),
@@ -19,11 +21,12 @@ return array(
         //'vendor/cssrefresh.js'
     ),
     'less' => array(
-        //'bootstrap.less',
+        'core.less',
+        'font-awesome.less'
     ),
     'scss' => array(
-        'bootstrap.scss',
-        'bootstrap-accessibility.scss',
+        //'core.scss',
+        //'font-awesome.scss'
     ),
     'favicon' => 'vufind-favicon.ico',
     'helpers' => array(

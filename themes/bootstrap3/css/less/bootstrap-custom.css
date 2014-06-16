@@ -5893,32 +5893,8 @@ label.list-group-item {
 .tt-dropdown-menu {
   margin-bottom: 20px;
   padding-left: 0;
-  margin-top: 10px;
 }
-.tt-suggestion {
-  position: relative;
-  display: block;
-  padding: 10px 15px;
-  margin-bottom: -1px;
-  background-color: #ffffff;
-  border: 1px solid #dddddd;
-}
-.tt-suggestion:first-child {
-  border-top-right-radius: 4px;
-  border-top-left-radius: 4px;
-}
-.tt-suggestion:last-child {
-  margin-bottom: 0;
-  border-bottom-right-radius: 4px;
-  border-bottom-left-radius: 4px;
-}
-.tt-suggestion > .badge {
-  float: right;
-}
-.tt-suggestion > .badge + .badge {
-  margin-right: 5px;
-}
-.tt-suggestion.tt-cursor {
+.list-group-item .tt-suggestion.tt-cursor {
   background-color: #265680;
   color: #FFF;
 }
