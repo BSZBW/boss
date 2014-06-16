@@ -87,36 +87,28 @@ class HeadLink extends \Zend\View\Helper\HeadLink
     public function addLessStylesheet($file)
     {
         $relPath = 'less/' . $file;
+        $urlHelper = $this->getView()->plugin('url');
         $currentTheme = $this->themeInfo->findContainingTheme($relPath);
         $home = APPLICATION_PATH . "/themes/$currentTheme/";
-        $inputFile  = $home . $relPath;
+        $cssDirectory = $urlHelper('home') . "themes/$currentTheme/css/less/";
+        $cacheDirectory = $home . 'less/cache/';
         list($fileName, ) = explode('.', $file);
-        $outputFile = $home . 'css/less/' . $fileName . '.css';
-        $cacheFile  = $home . 'css/less/' . $fileName . '.cache';
-
-        $lesscss = new \lessc;
-        $lesscss->setFormatter('compressed');
-        $lesscss->setImportDir(array($home . 'less', APPLICATION_PATH . "/themes/bootstrap/less"));
-
-        if (file_exists($cacheFile)) {
-            $cache = unserialize(file_get_contents($cacheFile));
-        } else {
-            $cache = $inputFile;
-        }
+        $inputFile  = $home . $relPath;
 
         try {
-            $newCache = $lesscss->cachedCompile($cache, true);
+            $less_files = array($inputFile => $cssDirectory);
+            $css_file_name = \Less_Cache::Get($less_files, array('cache_dir' => $cacheDirectory ));
+            $css = file_get_contents($cacheDirectory . $css_file_name);
+        } catch (\Exception $e) {
+            $directories = array($home . 'less/bootstrap' => $cssDirectory);
+            $parser = new \Less_Parser(array('compress' => true));
+            $parser->SetImportDirs($directories);
 
-            if (!is_array($cache) || $newCache["updated"] > $cache["updated"]) {
-                file_put_contents($cacheFile, serialize($newCache));
-                file_put_contents($outputFile, $newCache['compiled']);
-            }
-        } catch(\Exception $e) {
-            var_dump($e->getMessage());
+            $parser->parseFile($inputFile, $cssDirectory);
+            $css = $parser->getCss();
         }
-
-        $urlHelper = $this->getView()->plugin('url');
-        $this->prependStylesheet($urlHelper('home') . "themes/$currentTheme/css/less/" . $fileName . '.css');
+        $int = file_put_contents($home . 'css/less/' . $fileName . '.css', $css);
+        $this->prependStylesheet($cssDirectory . $fileName . '.css');
     }
 
     /**

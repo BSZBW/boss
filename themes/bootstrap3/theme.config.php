@@ -2,7 +2,6 @@
 return array(
     'extends' => 'root',
     'css' => array(
-        'bootstrap.min.css',
         'font-awesome.min.css',
         'bootstrap-accessibility.css',
         'bootstrap-custom.css',
@@ -17,7 +16,10 @@ return array(
         'common.js',
         'lightbox.js',
         'rc4.js',
-        'vendor/cssrefresh.js'
+        //'vendor/cssrefresh.js'
+    ),
+    'less' => array(
+        'bootstrap.less',
     ),
     'favicon' => 'vufind-favicon.ico',
     'helpers' => array(
