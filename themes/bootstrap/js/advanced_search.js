@@ -55,6 +55,12 @@ function addGroup(firstTerm, firstField, join)
 
   var newGroup = '<div id="group'+nextGroup+'" class="group well clearfix">'
     + '<div class="span4 pull-right">'
+
+  // Group content
+  var newGroup = '<div id="group'+nextGroup+'" class="group well clearfix"><div class="span8 row-fluid"><div class="span2 text-right"><span class="help-inline">'+searchLabel+':</span></div>'
+    + '<div class="span9"><i id="group'+nextGroup+'Holder" class="icon-plus-sign"></i> <a href="#" onClick="addSearch('+nextGroup+')">'+addSearchString+'</a></div></div>';
+  // Group Menu
+  newGroup += '<div class="span3 pull-right">'
     + '<label for="search_bool'+nextGroup+'"><span class="help-inline">'+searchMatch+':</span>&nbsp;</label>'
     + '<select class="span8" id="search_bool'+nextGroup+'" name="bool'+nextGroup+'[]">'
     + '<option value="AND"';

@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "e66238d1080a176e38ae125b46348914",
+    "hash": "490ac3e7e773d2da888880f20c200e02",
     "packages": [
         {
             "name": "aferrandini/phpqrcode",
@@ -55,12 +55,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Jasig/phpCAS.git",
-                "reference": "27a971e0beee74b7b62c5d669be0823e585dfe82"
+                "reference": "56721b8c572f35841f52a39d8fcd4390622cd19e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Jasig/phpCAS/zipball/27a971e0beee74b7b62c5d669be0823e585dfe82",
-                "reference": "27a971e0beee74b7b62c5d669be0823e585dfe82",
+                "url": "https://api.github.com/repos/Jasig/phpCAS/zipball/56721b8c572f35841f52a39d8fcd4390622cd19e",
+                "reference": "56721b8c572f35841f52a39d8fcd4390622cd19e",
                 "shasum": ""
             },
             "require": {
@@ -98,7 +98,7 @@
                 "source": "https://github.com/Jasig/phpCAS/tree/master",
                 "issues": "https://github.com/Jasig/phpCAS/issues"
             },
-            "time": "2013-12-08 09:32:42"
+            "time": "2014-05-14 13:37:58"
         },
         {
             "name": "johnwohlers/sip2",
@@ -115,6 +115,47 @@
                     "/"
                 ]
             }
+        },
+        {
+            "name": "leafo/lessphp",
+            "version": "v0.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/leafo/lessphp.git",
+                "reference": "51f3f06f0fe78a722dabfd14578444bdd078d9de"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/leafo/lessphp/zipball/51f3f06f0fe78a722dabfd14578444bdd078d9de",
+                "reference": "51f3f06f0fe78a722dabfd14578444bdd078d9de",
+                "shasum": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.3-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "lessc.inc.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT",
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Leaf Corcoran",
+                    "email": "leafot@gmail.com",
+                    "homepage": "http://leafo.net"
+                }
+            ],
+            "description": "lessphp is a compiler for LESS written in PHP.",
+            "homepage": "http://leafo.net/lessphp/",
+            "time": "2013-08-09 17:09:19"
         },
         {
             "name": "mobileesp/mdetect",
@@ -327,10 +368,10 @@
         },
         {
             "name": "pear-pear.php.net/XML_Util",
-            "version": "1.2.1",
+            "version": "1.2.3",
             "dist": {
                 "type": "file",
-                "url": "http://pear.php.net/get/XML_Util-1.2.1.tgz",
+                "url": "http://pear.php.net/get/XML_Util-1.2.3.tgz",
                 "reference": null,
                 "shasum": null
             },
@@ -339,7 +380,7 @@
                 "php": ">=4.3.0.0"
             },
             "replace": {
-                "pear-pear/xml_util": "== 1.2.1.0"
+                "pear-pear/xml_util": "== 1.2.3.0"
             },
             "type": "pear-library",
             "autoload": {
@@ -351,6 +392,57 @@
                 "/"
             ],
             "description": "Selection of methods that are often needed when working with XML documents.  Functionality includes creating of attribute lists from arrays, creation of tags, validation of XML names and more."
+        },
+        {
+            "name": "richthegeek/phpsass",
+            "version": "2014-03-20",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/richthegeek/phpsass.git",
+                "reference": "22659dc78b070ae7479fada8868d6abdc7896197"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/richthegeek/phpsass/zipball/22659dc78b070ae7479fada8868d6abdc7896197",
+                "reference": "22659dc78b070ae7479fada8868d6abdc7896197",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "script/",
+                    "renderers/",
+                    "tree/",
+                    "SassException.php",
+                    "SassFile.php",
+                    "SassParser.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Richard Lyon",
+                    "homepage": "https://github.com/richthegeek"
+                },
+                {
+                    "name": "Sebastian Siemssen",
+                    "homepage": "https://twitter.com/thefubhy"
+                },
+                {
+                    "name": "Steve Jones",
+                    "homepage": "https://github.com/darthsteven"
+                },
+                {
+                    "name": "Sam Richard",
+                    "homepage": "https://github.com/snugug"
+                }
+            ],
+            "description": "PHPSass is a PHP compiler for SASS, a popular CSS pre-processor language.",
+            "homepage": "http://phpsass.com",
+            "time": "2014-03-20 17:07:47"
         },
         {
             "name": "serialssolutions/summon",
@@ -390,17 +482,17 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.4.3",
+            "version": "v2.5.0",
             "target-dir": "Symfony/Component/Yaml",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "77a41c2835ab7cfe8bf6d15e25d3af8f3eb3bacd"
+                "reference": "b4b09c68ec2f2727574544ef0173684281a5033c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/77a41c2835ab7cfe8bf6d15e25d3af8f3eb3bacd",
-                "reference": "77a41c2835ab7cfe8bf6d15e25d3af8f3eb3bacd",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/b4b09c68ec2f2727574544ef0173684281a5033c",
+                "reference": "b4b09c68ec2f2727574544ef0173684281a5033c",
                 "shasum": ""
             },
             "require": {
@@ -409,7 +501,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.4-dev"
+                    "dev-master": "2.5-dev"
                 }
             },
             "autoload": {
@@ -435,7 +527,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2014-03-12 18:29:58"
+            "time": "2014-05-16 14:25:18"
         },
         {
             "name": "zendframework/zendframework",
@@ -758,10 +850,10 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
+        "jasig/phpcas": 20,
         "johnwohlers/sip2": 20,
         "mobileesp/mdetect": 20,
-        "serialssolutions/summon": 20,
-        "jasig/phpcas": 20
+        "serialssolutions/summon": 20
     },
     "platform": [
 
