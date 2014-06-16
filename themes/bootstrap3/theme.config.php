@@ -21,7 +21,7 @@ return array(
         //'vendor/cssrefresh.js'
     ),
     'less' => array(
-        'core.less',
+        'bootstrap-core.less',
         'font-awesome.less'
     ),
     'scss' => array(

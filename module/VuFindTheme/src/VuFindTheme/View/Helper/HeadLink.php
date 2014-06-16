@@ -100,7 +100,12 @@ class HeadLink extends \Zend\View\Helper\HeadLink
             $css_file_name = \Less_Cache::Get($less_files, array('cache_dir' => $cacheDirectory ));
             $css = file_get_contents($cacheDirectory . $css_file_name);
         } catch (\Exception $e) {
+            $directories = array(
+                $home . 'less' => $cssDirectory,
+                APPLICATION_PATH . "/themes/bootstrap3/less/" => $cssDirectory
+            );
             $parser = new \Less_Parser(array('compress' => true));
+            $parser->SetImportDirs($directories);
             $parser->parseFile($inputFile, $cssDirectory);
             $css = $parser->getCss();
         }

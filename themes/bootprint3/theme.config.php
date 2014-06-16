@@ -2,9 +2,12 @@
 return array(
     'extends' => 'bootstrap3',
     'css' => array(
-        'bootstrap.min.css',
+        //'bootstrap.min.css',
         'icons.css',
-        'bootprint-custom.css',
+        //'bootprint-custom.css',
+    ),
+    'less' => array(
+        'bootprint-core.less'
     ),
     'js' => array(
         'vendor/bootstrap.min.js'
