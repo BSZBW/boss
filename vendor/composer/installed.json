@@ -409,59 +409,6 @@
         "description": "Package containes ISPN (International Standard Product Numbers) validations such as:\n * ISSN\n * ISBN\n * ISMN\n * ISRC (International Standard Recording Code)\n * EAN8\n * EAN13\n * EAN14\n * UCC12\n * SSCC"
     },
     {
-        "name": "richthegeek/phpsass",
-        "version": "2014-03-20",
-        "version_normalized": "2014-03-20",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/richthegeek/phpsass.git",
-            "reference": "22659dc78b070ae7479fada8868d6abdc7896197"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/richthegeek/phpsass/zipball/22659dc78b070ae7479fada8868d6abdc7896197",
-            "reference": "22659dc78b070ae7479fada8868d6abdc7896197",
-            "shasum": ""
-        },
-        "time": "2014-03-20 17:07:47",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "classmap": [
-                "script/",
-                "renderers/",
-                "tree/",
-                "SassException.php",
-                "SassFile.php",
-                "SassParser.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "BSD-2-Clause"
-        ],
-        "authors": [
-            {
-                "name": "Richard Lyon",
-                "homepage": "https://github.com/richthegeek"
-            },
-            {
-                "name": "Sebastian Siemssen",
-                "homepage": "https://twitter.com/thefubhy"
-            },
-            {
-                "name": "Steve Jones",
-                "homepage": "https://github.com/darthsteven"
-            },
-            {
-                "name": "Sam Richard",
-                "homepage": "https://github.com/snugug"
-            }
-        ],
-        "description": "PHPSass is a PHP compiler for SASS, a popular CSS pre-processor language.",
-        "homepage": "http://phpsass.com"
-    },
-    {
         "name": "symfony/yaml",
         "version": "v2.5.0",
         "version_normalized": "2.5.0.0",
@@ -894,5 +841,53 @@
             "php",
             "stylesheet"
         ]
+    },
+    {
+        "name": "leafo/scssphp",
+        "version": "0.0.10",
+        "version_normalized": "0.0.10.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/leafo/scssphp.git",
+            "reference": "558357feceb9b932a192966945904414dc372e4d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/leafo/scssphp/zipball/558357feceb9b932a192966945904414dc372e4d",
+            "reference": "558357feceb9b932a192966945904414dc372e4d",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.2.0"
+        },
+        "require-dev": {
+            "php": ">=5.3.0",
+            "phpunit/phpunit": "3.7.*"
+        },
+        "time": "2014-04-15 02:25:09",
+        "bin": [
+            "pscss"
+        ],
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "scss.inc.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT",
+            "GPL-3.0"
+        ],
+        "authors": [
+            {
+                "name": "Leaf Corcoran",
+                "email": "leafot@gmail.com",
+                "homepage": "http://leafo.net"
+            }
+        ],
+        "description": "scssphp is a compiler for SCSS written in PHP.",
+        "homepage": "http://leafo.net/scssphp/"
     }
 ]

@@ -100,7 +100,7 @@ class HeadLink extends \Zend\View\Helper\HeadLink
             $css_file_name = \Less_Cache::Get($less_files, array('cache_dir' => $cacheDirectory ));
             $css = file_get_contents($cacheDirectory . $css_file_name);
         } catch (\Exception $e) {
-            $directories = array($home . 'less/bootstrap' => $cssDirectory);
+            $directories = array(APPLICATION_PATH . '/themes/bootstrap/less' => $cssDirectory); // Parent
             $parser = new \Less_Parser(array('compress' => true));
             $parser->SetImportDirs($directories);
 
@@ -112,29 +112,26 @@ class HeadLink extends \Zend\View\Helper\HeadLink
     }
 
     /**
-     * Compile a less file to css and add to css folder
+     * Compile a scss file to css and add to css folder
      *
-     * @param string $file path to less file
+     * @param string $file path to scss file
      *
      * @return void
      */
     public function addSassStylesheet($file)
     {
-        $relPath = 'sass/' . $file;
+        $relPath = 'scss/' . $file;
         $currentTheme = $this->themeInfo->findContainingTheme($relPath);
         $home = APPLICATION_PATH . "/themes/$currentTheme/";
-        $inputFile  = $home . $relPath;
         list($fileName, ) = explode('.', $file);
-        $outputFile = $home . 'css/sass/' . $fileName . '.css';
-
-        $sass = new \SassParser(array(
-            'debug_info' => true,
-            'style'      => 'compressed',
-        ));
-        $css = $sass->toCss($inputFile);
-        $int = file_put_contents($outputFile, $css);
-
+        $outputFile = $home . 'css/scss/' . $fileName . '.css';
         $urlHelper = $this->getView()->plugin('url');
-        $this->prependStylesheet($urlHelper('home') . "themes/$currentTheme/css/sass/" . $fileName . '.css');
+
+        $scss = new \scssc();
+        $scss->setImportPaths($home . 'scss/');
+        $scss->setFormatter('scss_formatter_compressed');
+        $css = $scss->compile('@import "' . $file . '"');
+        $int = file_put_contents($outputFile, $css);
+        $this->prependStylesheet($urlHelper('home') . "themes/$currentTheme/css/scss/" . $fileName . '.css');
     }
 }

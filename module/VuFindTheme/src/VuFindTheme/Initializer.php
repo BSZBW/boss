@@ -340,8 +340,8 @@ class Initializer
             if (isset($currentThemeInfo['less'])) {
                 $resources->addLessCss($currentThemeInfo['less']);
             }
-            if (isset($currentThemeInfo['sass'])) {
-                $resources->addSassCss($currentThemeInfo['sass']);
+            if (isset($currentThemeInfo['scss'])) {
+                $resources->addSassCss($currentThemeInfo['scss']);
             }
             if (isset($currentThemeInfo['css'])) {
                 $resources->addCss($currentThemeInfo['css']);

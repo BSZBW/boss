@@ -19,7 +19,11 @@ return array(
         //'vendor/cssrefresh.js'
     ),
     'less' => array(
-        'bootstrap.less',
+        //'bootstrap.less',
+    ),
+    'scss' => array(
+        'bootstrap.scss',
+        'bootstrap-accessibility.scss',
     ),
     'favicon' => 'vufind-favicon.ico',
     'helpers' => array(
