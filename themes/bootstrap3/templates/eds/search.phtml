@@ -1,5 +1,5 @@
 <?
-  // There are no EIT-specific advanced search controls, so just load the
-  // standard advanced search layout:
-  echo $this->render('search/advanced/layout.phtml');
+  // Load standard settings from the default search results screen:
+  $this->overrideSideFacetCaption = 'Refine Results';
+  echo $this->render('search/results.phtml');
 ?>
