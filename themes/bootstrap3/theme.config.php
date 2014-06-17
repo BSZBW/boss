@@ -20,12 +20,12 @@ return array(
         //'vendor/cssrefresh.js'
     ),
     'less' => array(
-        //'core.less',
-        //'font-awesome.less'
+        'core.less',
+        'font-awesome.less'
     ),
     'scss' => array(
-        'core.scss',
-        'font-awesome.scss'
+        //'core.scss',
+        //'font-awesome.scss'
     ),
     'favicon' => 'vufind-favicon.ico',
     'helpers' => array(

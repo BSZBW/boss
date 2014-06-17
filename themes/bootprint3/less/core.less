@@ -3,7 +3,7 @@
 
 /* --- Bootstrap MODS ---*/
 body {
-  background:#619144;
+  background:@brand-primary;
   font-size:13px;
   & a,.btn-link {color:#06C}
   & a:hover,.btn-link:hover {color:#09F}
@@ -122,8 +122,12 @@ header {
       &:hover {background:@active-orange;border-color:@active-orange;}
       .badge {color:@active-orange}
     }
-    &.title {cursor:pointer}
-    [id^='side-collapse-'] &:first-child {border-radius:0 0 @border-radius-base @border-radius-base;}
+    &.title {
+      cursor:pointer;
+      &.collapsed {
+        border-radius:@border-radius-base;
+      }
+    }
   }
   &.slider-horizontal {
     margin:4px 0 10px;
@@ -133,6 +137,7 @@ header {
     }
   }
 }
+.collapse .list-group-item {border-top-left-radius:0px;border-top-right-radius:0px;}
 
 /* --- Search --- */
 .bulkActionButtons {margin-bottom:6px}

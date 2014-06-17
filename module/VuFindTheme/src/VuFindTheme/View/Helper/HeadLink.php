@@ -88,8 +88,7 @@ class HeadLink extends \Zend\View\Helper\HeadLink
     {
         $relPath = 'less/' . $file;
         $urlHelper = $this->getView()->plugin('url');
-        $themeParents = array_keys($this->themeInfo->getThemeInfo());
-        $currentTheme = $themeParents[0];
+        $currentTheme = $this->themeInfo->findContainingTheme($relPath);
         $home = APPLICATION_PATH . "/themes/$currentTheme/";
         $cssDirectory = $urlHelper('home') . "themes/$currentTheme/css/less/";
         $cacheDirectory = $home . 'less/cache/';
@@ -98,22 +97,18 @@ class HeadLink extends \Zend\View\Helper\HeadLink
 
         $time = microtime(true);
         $css = false;
-        foreach ($themeParents as $theme) {
-            try {
-                $less_files = array(
-                    APPLICATION_PATH . '/themes/' . $theme . '/' . $relPath
-                        => $cssDirectory
-                );
-                $css_file_name = \Less_Cache::Get(
-                    $less_files,
-                    array('cache_dir' => $cacheDirectory)
-                );
-                $css = file_get_contents($cacheDirectory . $css_file_name);
-                break;
-            } catch (\Exception $e) {
-            }
-        }
-        if($css === false) {
+        try {
+            $less_files = array(
+                APPLICATION_PATH . '/themes/' . $currentTheme . '/' . $relPath
+                    => $cssDirectory
+            );
+            $css_file_name = \Less_Cache::Get(
+                $less_files,
+                array('cache_dir' => $cacheDirectory)
+            );
+            $css = file_get_contents($cacheDirectory . $css_file_name);
+        } catch (\Exception $e) {
+            $themeParents = array_keys($this->themeInfo->getThemeInfo());
             foreach ($themeParents as $theme) {
                 $directories[APPLICATION_PATH . '/themes/' . $theme . '/less/']
                     = $cssDirectory;
