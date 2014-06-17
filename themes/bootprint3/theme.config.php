@@ -7,7 +7,10 @@ return array(
         //'bootprint-custom.css',
     ),
     'less' => array(
-        'bootprint-core.less'
+        //'core.less'
+    ),
+    'scss' => array(
+        'core.scss'
     ),
     'js' => array(
         'vendor/bootstrap.min.js'

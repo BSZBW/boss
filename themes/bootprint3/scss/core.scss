@@ -1,5 +1,5 @@
-@import "bootstrap-core";
 @import "variables";
+@import "bootstrap";
 
 /* --- Bootstrap MODS ---*/
 body {
@@ -13,15 +13,16 @@ body {
   margin-top:1px;
 }
 .btn:not(.btn-link):not(.btn-primary) {
-  background:@gray-lighter;
-  border:1px solid @gray-light;
+  background:$gray-lighter;
+  border:1px solid $gray-light;
 }
 .btn-primary {
-  border-color:darken(@brand-primary, 10%);
+  border-color:darken($brand-primary, 10%);
   font-weight:bold;
 }
 .container {
   background:#FFF;
+  border:2px solid #FFF;
   border-radius:5px;
   margin:18px auto;
   padding:0;
@@ -74,21 +75,30 @@ header {
   &.navbar {padding:0 5px 0 10px}
   .fa.fa-bars {font-size:21px}
   .navbar-nav > li > a {padding:12px 6px}
-  .navbar-right {margin-top:12px}
+  .navbar-right {margin-top:10px}
   #searchForm {display:none !important}
 }
 .nav.searchbox {
   display:block !important;
   margin:0 8px;
-  #searchForm {
-    & .btn-primary,& .form-control {
-      font-size:14px;
-      height:32px;
-      padding:5px 8px;
-    }
+}
+#searchForm {
+  & .btn-primary,& .form-control {
+    font-size:14px;
+    height:32px;
+    padding:5px 8px;
   }
-  @media (min-width: 751px) {
-    & .navbar-form .search-query {width:400px}
+  @media (min-width: 768px) {
+    & .search-query {width:400px}
+  }
+}
+@media (max-width: 767px) {
+  #header-collapse .navbar-right li {
+    text-align:right;
+  }
+  #searchForm_type {
+    margin-top:2px;
+    margin-bottom:2px;
   }
 }
 .breadcrumb {
@@ -100,27 +110,27 @@ header {
 }
 
 /* --- Sidebar --- */
-@active-orange: #FF9500;
+$active-orange: #FF9500;
 .sidebar {
   .list-group {margin-bottom:5px}
   .list-group-item {
     padding:7px 10px;
     &.active {
-      background:@active-orange;
-      border-color:@active-orange;
+      background:$active-orange;
+      border-color:$active-orange;
       color:#FFF;
-      &:hover {background:@active-orange;border-color:@active-orange;}
-      .badge {color:@active-orange}
+      &:hover {background:$active-orange;border-color:$active-orange;}
+      .badge {color:$active-orange}
     }
     &.title {cursor:pointer}
-    [id^='side-collapse-'] &:first-child {border-radius:0 0 @border-radius-base @border-radius-base;}
+    [id^='side-collapse-'] &:first-child {border-radius:0 0 $border-radius-base $border-radius-base;}
   }
-}
-.slider.slider-horizontal {
-  margin:4px 0 10px;
-  .slider-handle {
-    background:#619144;
-    opacity:1;
+  &.slider-horizontal {
+    margin:4px 0 10px;
+    .slider-handle {
+      background:#619144;
+      opacity:1;
+    }
   }
 }
 
@@ -128,6 +138,12 @@ header {
 .bulkActionButtons {margin-bottom:6px}
 .left {text-align:center}
 .result label.pull-left {min-width:40px}
+
+/* --- Search Home --- */
+.searchHomeContent {
+  margin:1em auto;
+  width:90%;
+}
 
 /* --- Advanced Search --- */
 #advSearchForm .search {margin:0}
@@ -150,7 +166,6 @@ header {
 }
 
 /* --- Random Items (results view) --- */
-
 ul.random {
   list-style: none;
   padding: 0;
