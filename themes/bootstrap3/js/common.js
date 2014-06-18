@@ -371,4 +371,8 @@ $(document).ready(function() {
   Lightbox.addFormCallback('emailSearch', function(x) {
     Lightbox.confirm(vufindString['bulk_email_success']);
   });
-});
+});// escape element id so that it can be used as a selector
+
+function jqEscape(myid) {
+  return String(myid).replace(/[!"#$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, "\\$&");
+}

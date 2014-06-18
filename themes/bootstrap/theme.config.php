@@ -2,7 +2,7 @@
 return array(
     'extends' => 'root',
     'less' => array(
-        'style.less' // imports screen, print
+        //'style.less' // imports screen, print
     ),
     'sass' => array(
         //'style.scss' // imports screen, print
