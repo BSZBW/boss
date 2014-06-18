@@ -21,6 +21,31 @@ function extractClassParams(str) {
   }
   return params;
 }
+function jqEscape(myid) {
+  return String(myid).replace(/[!"#$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, "\\$&");
+}
+function html_entity_decode(string, quote_style)
+{
+  var hash_map = {},
+    symbol = '',
+    tmp_str = '',
+    entity = '';
+  tmp_str = string.toString();
+
+  delete(hash_map['&']);
+  hash_map['&'] = '&amp;';
+  hash_map['>'] = '&gt;';
+  hash_map['<'] = '&lt;';
+
+  for (symbol in hash_map) {
+    entity = hash_map[symbol];
+    tmp_str = tmp_str.split(entity).join(symbol);
+  }
+  tmp_str = tmp_str.split('&#039;').join("'");
+
+  return tmp_str;
+}
+
 // Turn GET string into array
 function deparam(url) {
   var request = {};
@@ -41,6 +66,7 @@ function deparam(url) {
   return request;
 }
 
+// Sidebar
 function moreFacets(id) {
   $('.'+id).removeClass('hidden');
   $('#more-'+id).addClass('hidden');
@@ -62,8 +88,8 @@ function setupOrFacets() {
   $('.facetOR').find('.icon-check-empty').replaceWith('<input type="checkbox" onChange="updateOrFacets($(this).parent().attr(\'href\'), this)"/> ');
 }
 
-/* --- COMMON AND DEFAULT LIGHTBOX FUNCTIONS --- */
-/**
+// Lightbox
+/*
  * This function adds jQuery events to elements in the lightbox
  *
  * This is a default open action, so it runs every time changeContent
@@ -155,9 +181,8 @@ function updatePageForLogin() {
     });
   }
 }
-/**
- * This is a full handler for the login form
- */
+
+// This is a full handler for the login form
 function ajaxLogin(form) {
   Lightbox.ajax({
     url: path + '/AJAX/JSON?method=getSalt',
@@ -372,7 +397,3 @@ $(document).ready(function() {
     Lightbox.confirm(vufindString['bulk_email_success']);
   });
 });// escape element id so that it can be used as a selector
-
-function jqEscape(myid) {
-  return String(myid).replace(/[!"#$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, "\\$&");
-}
