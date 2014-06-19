@@ -111,9 +111,13 @@ header,
 	margin: 0 5px;
 }
 
+.jumbotron {
+	background-color: #fff;
+}
+
 .sidebar {
-	margin-top: 10px;
 	background: none;
+	margin-top: 10px;
 }
 
 .sidebar h4 {
@@ -333,4 +337,39 @@ a.list-group-item.active>.badge, .nav-pills>.active>a>.badge {
 
 .record table {
 	margin-top: 22px;
+}
+
+.jumbotron a,
+.jumbotron button.btn-primary {
+	background-color: #50BF9E;
+	color: #fff;
+	border: 1px solid #50BF9E;
+}
+
+.jumbotron a:hover,
+.jumbotron button.btn-primary:hover {
+	background-color: #fff;
+	color: #50BF9E;
+	border: 1px solid #50BF9E;
+	text-decoration: none;
+}
+
+.searchbox.visible-lg button.btn-primary,
+.searchbox.visible-lg a {
+	border: 1px solid #fff;
+	color: #50BF9E;
+	background-color: #fff;
+
+}
+
+.searchbox.visible-lg button.btn-primary:hover,
+.searchbox.visible-lg a:hover {
+	background-color: #50BF9E;
+	color: #fff;
+	border: 1px solid #fff;
+	text-decoration: none;
+}
+
+.searchbox.visible-lg input {
+	border: 1px solid #fff;
 }
