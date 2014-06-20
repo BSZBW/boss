@@ -51,6 +51,7 @@ header,
 }
 .navbar-form {
 	margin-top: 13px;
+	width: 80%;
 }
 
 .btn.btn-primary {
