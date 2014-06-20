@@ -328,7 +328,7 @@ class Backend implements BackendInterface
                 $an, $dbId, $authenticationToken, $sessionToken, $highlightTerms
             );
         } catch (\EbscoEdsApiException $e) {
-            if ($e->getApiErrorCode == 104) {
+            if ($e->getApiErrorCode() == 104) {
                 try {
                     $authenticationToken = $this->getAuthenticationToken(true);
                     $response = $this->client->retrieve(
@@ -597,12 +597,13 @@ class Backend implements BackendInterface
      */
     protected function createEBSCOSession()
     {
-        //If the user is not logged in, the treat them as a guest. Unless they are using IP Authentication.
-        //If IP Authentication is used, then don't treat them as a guest. 
+        // If the user is not logged in, the treat them as a guest. Unless they are
+        // using IP Authentication.
+        // If IP Authentication is used, then don't treat them as a guest.
         $guest = ($this->isAuthenticationIP()) ? 'n' : $this->isGuest();
         $container = new \Zend\Session\Container('EBSCO');
 
-        //if there is no profile passed, use the one set in the configuration file
+        // if there is no profile passed, use the one set in the configuration file
         $profile = $this->profile;
         if (null == $profile) {
             $config = $this->getServiceLocator()->get('VuFind\Config')->get('EDS');
@@ -643,7 +644,7 @@ class Backend implements BackendInterface
         return (isset($config->EBSCO_Account->ip_auth)
             && 'true' ==  $config->EBSCO_Account->ip_auth);
     }
-    
+
     /**
      * Obtain the session to use with the EDS API from cache if it exists. If not,
      * then generate a new one.
