@@ -23,8 +23,6 @@
   $this->headScript()->appendFile('vudl/config.js');
   $this->headScript()->appendFile('vudl/record.js');
   $this->headScript()->appendFile('zoomy/canvas-zoomy.js');
-  // AUDIO
-  $this->headScript()->appendFile('http://www.google.com/jsapi');
 
   // Compact header
   $this->layout()->headerType = 'record';
@@ -42,7 +40,6 @@
   }
 ?>
 <script>
-  google.load("swfobject", "2.2");
   var documentID = '<?=$this->id ?>';
   var initPage = $.parseJSON('<?=json_encode($this->outline['lists'][$this->initList][$this->initPage], JSON_HEX_APOS | JSON_HEX_AMP) ?>');
 
@@ -74,7 +71,7 @@
   <button class="btn" type="submit" name="next_x" value="1" title="<?=$this->transEsc('Next Item in Collection')?>"><?=$this->transEsc('Next Item')?> &rarr;</button>
 </form>
 <div class="vudl">
-  <div class="panel-group col-md-3" id="side-nav">
+  <div class="panel-group col-sm-3" id="side-nav">
     <div class="panel">
       <div class="panel-heading">
         <h4 class="panel-title">
@@ -124,5 +121,5 @@
       </div>
     <? endforeach; ?>
   </div>
-  <div id="view" class="col-md-9"></div>
+  <div id="view" class="col-sm-9"></div>
 </div>

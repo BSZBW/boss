@@ -1,7 +1,7 @@
 <?=$this->doctype('HTML5')?>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <html lang="<?=$this->layout()->userLang?>">
   <head>
-    <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
     <?$this->headThemeResources()?>
     <?=$this->headMeta()?>
     <?=$this->headTitle()?>
@@ -77,6 +77,7 @@
         }
       ?>
       <header role="banner" class="navbar hidden-print">
+        <a class="sr-only" href="#content">Skip to content</a>
         <?=$this->render('header.phtml')?>
       </header>
       <nav class="nav searchbox hidden-lg hidden-print">

@@ -15,7 +15,7 @@
   $this->jsTranslations()->addStrings(
     array('showTree' => 'hierarchy_show_tree', 'hideTree' => 'hierarchy_hide_tree')
   );
-  $this->inlineScript(\Zend\View\Helper\HeadScript::FILE, 'vendor/jsTree/jquery.jstree.js');
+  $this->inlineScript(\Zend\View\Helper\HeadScript::FILE, 'vendor/jsTree/jstree.min.js');
   $this->inlineScript(\Zend\View\Helper\HeadScript::FILE, 'vendor/jsTree/hierarchyTree.js');
   echo $this->inlineScript();
 ?>
@@ -24,9 +24,9 @@
     <div id="treeSelector">
       <? foreach ($hierarchyTreeList as $hierarchy => $hierarchyTitle): ?>
         <? if($activeTree == $hierarchy): ?>
-          <i class="fa fa-sitemap"></i> <?=$this->escapeHtml($hierarchyTitle)?>
+          <i class="icon-sitemap"></i> <?=$this->escapeHtml($hierarchyTitle)?>
         <? else: ?>
-          <i class="fa fa-sitemap muted"></i> <a href="<?=$this->recordLink()->getTabUrl($this->driver, 'HierarchyTree')?>?hierarchy=<?=urlencode($hierarchy)?>"><?=$this->escapeHtml($hierarchyTitle)?></a>
+          <i class="icon-sitemap muted"></i> <a href="<?=$this->recordLink()->getTabUrl($this->driver, 'HierarchyTree')?>?hierarchy=<?=urlencode($hierarchy)?>"><?=$this->escapeHtml($hierarchyTitle)?></a>
         <? endif; ?>
       <? endforeach; ?>
     </div>
@@ -34,19 +34,19 @@
   <? if ($activeTree): ?>
     <div id="hierarchyTreeHolder">
       <? if ($this->tab->searchActive()): ?>
-        <div id="treeSearch" class="form-search row">
-          <input type="text" id="treeSearchText" class="search-query col-md-6" value="">
-          <select class="col-md-3 id="treeSearchType" name="type">
+        <div id="treeSearch" class="form-inline hidden">
+          <input type="text" id="treeSearchText" class="form-control search-query" value="">
+          <select class="form-control" id="treeSearchType" name="type">
             <option value="AllFields"><?=$this->transEsc('All Fields')?></option>
             <option value="Title"><?=$this->transEsc('Title')?></option>
           </select>
           <input type="submit" class="btn" value="<?=$this->transEsc('Search') ?>"/>
-          <span id="treeSearchLoadingImg" class="hide"><i class="fa fa-spinner icon-large icon-spin"></i></span>
+          <i id="treeSearchLoadingImg" class="fa fa-spinner fa-spin hidden"></i>
         </div>
-        <div id="treeSearchNoResults" class="alert alert-error hide"><?=$this->transEsc('nohit_heading')?></div>
-        <div id="treeSearchLimitReached" class="alert alert-error hide"><?=$this->transEsc('tree_search_limit_reached_html', array('%%url%%' => $this->url('search-results'), '%%limit%%' => $this->tab->getSearchLimit()))?></div>
+        <div id="treeSearchNoResults" class="alert alert-danger hidden"><?=$this->translate('nohit_heading')?></div>
+        <div id="treeSearchLimitReached" class="alert alert-danger hidden"><?=$this->translate('tree_search_limit_reached_html', array('%%url%%' => $this->url('search-results'), '%%limit%%' => $this->tab->getSearchLimit()))?></div>
       <? endif; ?>
-      <div id="hierarchyTree" class="pad">
+      <div id="hierarchyTree">
         <input type="hidden" value="<?=$this->escapeHtml($this->driver->getUniqueId())?>" class="hiddenRecordId" />
         <input type="hidden" value="<?=$this->escapeHtml($activeTree)?>" class="hiddenHierarchyId" />
         <input type="hidden" value="<?=isset($this->treeContext) ? $this->treeContext : 'Record'?>" class="hiddenContext" />

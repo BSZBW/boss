@@ -10,8 +10,8 @@
 <h2><?=$this->transEsc("add_favorite_prefix") ?> <?=$this->escapeHtml($this->driver->getBreadcrumb())?> <?=$this->transEsc("add_favorite_suffix") ?></h2>
 <form id="edit-save-form" class="form-horizontal" method="post" action="<?=$this->recordLink()->getActionUrl($this->driver, 'Save')?>" name="saveRecord">
   <input type="hidden" name="submit" value="1" />
-  <input type="hidden" name="id" value="<?=$this->escapeHtml($this->driver->getUniqueId()) ?>" />
-  <input type="hidden" name="source" value="<?=$this->escapeHtml($this->driver->getResourceSource())?>" />
+  <input type="hidden" name="id" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueId()) ?>" />
+  <input type="hidden" name="source" value="<?=$this->escapeHtmlAttr($this->driver->getResourceSource())?>" />
   <? if (!empty($this->containingLists)): ?>
     <p><?=$this->transEsc('This item is already part of the following list/lists') ?>:
     <? foreach ($this->containingLists as $i=>$list): ?>
@@ -24,13 +24,13 @@
   this item OR if they have no lists at all and need to create a default list */?>
   <? $showLists = (!empty($this->nonContainingLists) || (empty($this->containingLists) && empty($this->nonContainingLists))); ?>
 
-  <div class="control-group">
+  <div class="form-group">
     <? if ($showLists): ?>
-        <label class="control-label" for="save_list"><?=$this->transEsc('Choose a List') ?></label>
+      <label class="col-sm-3 control-label" for="save_list"><?=$this->transEsc('Choose a List') ?></label>
     <? endif; ?>
-    <div class="controls">
+    <div class="col-sm-9">
     <? if ($showLists): ?>
-      <select class="pull-left" id="save_list" name="list">
+      <select class="form-control" id="save_list" name="list">
       <? if ($this->nonContainingLists): ?>
         <? foreach ($this->nonContainingLists as $list): ?>
           <option value="<?=$list['id'] ?>"<? if ($list['id']==$this->userList()->lastUsed()): ?> selected="selected"<? endif; ?>><?=$this->escapeHtml($list['title'])?></option>
@@ -46,22 +46,22 @@
 
   <? if ($showLists): ?>
     <? if ($this->usertags()->getMode() !== 'disabled'): ?>
-      <div class="control-group">
-        <label class="control-label" for="add_mytags"><?=$this->transEsc('Add Tags') ?></label>
-        <div class="controls">
-          <input class="input-xlarge" id="add_mytags" type="text" name="mytags" value=""/>
+      <div class="form-group">
+        <label class="col-sm-3 control-label" for="add_mytags"><?=$this->transEsc('Add Tags') ?></label>
+        <div class="col-sm-9">
+          <input class="form-control" id="add_mytags" type="text" name="mytags" value=""/>
           <span class="help-block"><?=$this->transEsc("add_tag_note") ?></span>
         </div>
       </div>
     <? endif; ?>
-    <div class="control-group">
-      <label class="control-label" for="add_notes"><?=$this->transEsc('Add a Note') ?></label>
-      <div class="controls">
-        <textarea class="input-xlarge" id="add_notes" name="notes" rows="3"></textarea>
+    <div class="form-group">
+      <label class="col-sm-3 control-label" for="add_notes"><?=$this->transEsc('Add a Note') ?></label>
+      <div class="col-sm-9">
+        <textarea class="form-control" id="add_notes" name="notes" rows="3"></textarea>
       </div>
     </div>
-    <div class="control-group">
-      <div class="controls">
+    <div class="form-group">
+      <div class="col-sm-9 col-sm-offset-3">
         <input class="btn btn-primary" type="submit" value="<?=$this->transEsc('Save to List') ?>"/>
       </div>
     </div>

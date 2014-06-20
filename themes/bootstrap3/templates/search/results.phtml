@@ -99,7 +99,7 @@
       <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', array('results' => $this->results))?>
     </form>
 
-    <div class="searchtools small text-center noprint">
+    <div class="searchtools hidden-print">
       <strong><?=$this->transEsc('Search Tools')?>:</strong>
       <i class="fa fa-bell"></i> <a href="<?=$this->results->getUrlQuery()->setViewParam('rss')?>"><?=$this->transEsc('Get RSS Feed')?></a>
       &mdash;

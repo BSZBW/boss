@@ -23,12 +23,12 @@
       <h2><?=$this->transEsc('ils_offline_title')?></h2>
       <p><strong><?=$this->transEsc('ils_offline_status')?></strong></p>
       <p><?=$this->transEsc('ils_offline_home_message')?></p>
-      <? $supportEmail = $this->escapeHtml($this->systemEmail()); ?>
+      <? $supportEmail = $this->escapeHtmlAttr($this->systemEmail()); ?>
       <p><a href="mailto:<?=$supportEmail?>"><?=$supportEmail?></a></p>
     </div>
   <? endif; ?>
-  <div class="jumbotron">
-    <?=$this->render("search/searchbox.phtml", array('searchHome' => true))?>
+  <div class="well well-lg clearfix">
+    <?=$this->render("search/searchbox.phtml")?>
   </div>
 </div>
 
@@ -36,10 +36,10 @@
 <div class="row">
   <? foreach ($facetList as $field => $details): ?>
     <? $sortedList = $this->sortFacetList($this->results, $field, $details['list'], $basicSearch); ?>
-    <div class="<?=$field=='callnumber-first' ? 'col-md-6' : 'col-md-3' ?>">
+    <div class="<?=$field=='callnumber-first' ? 'col-sm-6' : 'col-sm-3' ?>">
       <p class="lead"><?=$this->transEsc('home_browse') . ' ' . $this->transEsc($details['label'])?></p>
       <div class="row">
-        <ul class="unstyled<? if ($field == "callnumber-first"): ?> col-md-6<?endif?>">
+        <ul class="unstyled<? if ($field == "callnumber-first"): ?> col-sm-6<?endif?>">
         <? /* Special case: two columns for LC call numbers... */ ?>
         <? if ($field == "callnumber-first"): ?>
           <? $i = 0; foreach ($sortedList as $url => $value): ?>
@@ -47,7 +47,7 @@
               <li><a href="<?=$url?>"><?=$this->escapeHtml($value)?></a></li>
             <? endif; ?>
             <? if (++$i == 10): ?>
-              </ul><ul class="unstyled col-md-6">
+              </ul><ul class="unstyled col-sm-6">
             <? endif; ?>
           <? endforeach; ?>
         <? /* Special case: collections */ ?>

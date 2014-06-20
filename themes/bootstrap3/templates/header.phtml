@@ -16,7 +16,7 @@
     <ul role="navigation" class="nav navbar-nav navbar-right">
       <? if ($this->feedback()->tabEnabled()): ?>
         <li><a href="#contact_form" role="button" data-toggle="modal">
-          <i class="fa fa-envelope-alt"></i> <?=$this->transEsc("Feedback")?>
+          <i class="fa fa-envelope"></i> <?=$this->transEsc("Feedback")?>
         </a></li>
       <? endif; ?>
       <? $cart = $this->cart(); if ($cart->isActive()): ?>
@@ -33,9 +33,9 @@
         </li>
         <li id="loginOptions"<? if($account->isLoggedIn()): ?> class="hidden"<? endif ?>>
           <? if ($sessionInitiator = $account->getSessionInitiator($this->serverUrl($this->url('myresearch-home')))): ?>
-            <a href="<?=$this->escapeHtml($sessionInitiator)?>"><i class="fa fa-sign-in"></i> <?=$this->transEsc("Institutional Login")?></a>
+            <a href="<?=$this->escapeHtmlAttr($sessionInitiator)?>"><i class="fa fa-sign-in"></i> <?=$this->transEsc("Institutional Login")?></a>
           <? else: ?>
-            <a href="<?=$this->url('myresearch-home')?>" class="modal-link" title="<?=$this->transEsc("Login")?>"><i class="fa fa-sign-in"></i> <?=$this->transEsc("Login")?></a>
+            <a href="<?=$this->url('myresearch-userlogin')?>" class="modal-link" title="<?=$this->transEsc("Login")?>"><i class="fa fa-sign-in"></i> <?=$this->transEsc("Login")?></a>
           <? endif; ?>
         </li>
       <? endif; ?>
@@ -48,7 +48,7 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?=$this->transEsc("Theme")?> <b class="caret"></b></a>
           <ul class="dropdown-menu">
             <? foreach ($this->layout()->themeOptions as $current): ?>
-              <li<?=$current['selected'] ? ' class="active"' : ''?>><a href="#" onClick="document.themeForm.ui.value='<?=$this->escapeHtml($current['name'])?>';document.themeForm.submit()"><?=$this->transEsc($current['desc'])?></a></li>
+              <li<?=$current['selected'] ? ' class="active"' : ''?>><a href="#" onClick="document.themeForm.ui.value='<?=$this->escapeHtmlAttr($current['name'])?>';document.themeForm.submit()"><?=$this->transEsc($current['desc'])?></a></li>
             <? endforeach; ?>
           </ul>
         </li>

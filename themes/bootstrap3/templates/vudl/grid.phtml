@@ -35,18 +35,18 @@
   var initPage = <?=isset($this->initPage) ? $this->initPage : 0 ?>;
 </script>
 <div class="vudl container row">
-  <div class="col-md-3">
+  <div class="col-sm-3">
     <?=$this->context($this)->renderInContext('vudl/details.phtml', array())?>
   </div>
-  <div class="col-md-9">
+  <div class="col-sm-9">
     <? $index=0; foreach($this->outline['lists'] as $key=>$list): ?>
       <!-- PRE LOADING PLACEHOLDERS -->
       <? for($i=0;$i<current(array_keys($list))-1;$i++, $index++): ?>
-        <a class="col-md-3 page-grid" id="item<?=$i ?>" title="<?=$i ?>">Loading...</a>
+        <a class="col-sm-3 page-grid" id="item<?=$i ?>" title="<?=$i ?>">Loading...</a>
       <? endfor; ?>
       <!-- LOADED ITEMS -->
       <? foreach($list as $i=>$item): ?>
-        <a href="<?=$this->url('vudl-record', array('id'=>$item['id'])) ?>" class="col-md-3 page-grid" title="<?=$item['id'] ?>" id="item<?=$index?>">
+        <a href="<?=$this->url('vudl-record', array('id'=>$item['id'])) ?>" class="col-sm-3 page-grid" title="<?=$item['id'] ?>" id="item<?=$index?>">
           <? if(isset($item['thumbnail'])): ?>
             <img src="<?=$item['thumbnail'] ?>" alt="<?=$item['label'] ?>"/>
           <? else: ?>
@@ -59,7 +59,7 @@
       <!-- POST LOADING PLACEHOLDERS -->
       <? if(isset($this->outline['counts'][$key])): ?>
         <? for($i=$this->initPage+count($list);$i<$this->outline['counts'][$key];$i++, $index++): ?>
-          <a class="col-md-3 page-grid" id="item<?=$i ?>" title="<?=$i ?>">Loading...</a>
+          <a class="col-sm-3 page-grid" id="item<?=$i ?>" title="<?=$i ?>">Loading...</a>
         <? endfor; ?>
       <? endif; ?>
     <? endforeach; ?>
