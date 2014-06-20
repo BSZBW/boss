@@ -109,6 +109,7 @@ $(document).ready(function()
       }
     })
     .jstree({
+      'plugins' : [ 'search','types' ],
       'core' : {
         'data' : function (obj, cb) {
           $.ajax({
@@ -129,45 +130,29 @@ $(document).ready(function()
           "url": path + '/themes/bootstrap3/js/vendor/jsTree/themes/default/style.css'
         }
       },
-      "plugins" : [ "search","types" ],
       "search": {
         'ajax': {
           "url" : path + '/Hierarchy/SearchTree?' + $.param({
             'hierarchyID': hierarchyID,
             'type': $("#treeSearchType").val()
-          }),
-          "success": function(results) {
-            if (results["limitReached"] == true) {
-              if(typeof(baseTreeSearchFullURL) == "undefined" || baseTreeSearchFullURL == null) {
-                baseTreeSearchFullURL = $("#fullSearchLink").attr("href");
-              }
-              $("#fullSearchLink").attr("href", baseTreeSearchFullURL + "?lookfor="+ results['lookfor'] + "&filter[]=hierarchy_top_id:\"" + hierarchyID  + "\"");
-              changeLimitReachedLabel(true);
-            } else {
-              changeLimitReachedLabel(false);
-            }
-
-            var jsonNode = [];
-            $.each(results["results"], function(key, val) {
-              jsonNode.push({
-                'id': val.replace(':', '-')
-              });
-            });
-
-            $('#treeSearchLoadingImg').addClass('hidden');
-            return jsonNode;
+          }) + "&format=true",
+          'success': function(e) {
+            alert('!');
+            return [];
           }
         },
         'fuzzy': false,
-        'show_only_matches': true
+        'show_only_matches': false
       }
     });
 
   $('#treeSearch').removeClass('hidden');
   $('#treeSearchText').keyup(function (e) {
     var code = (e.keyCode ? e.keyCode : e.which);
-    if(code == 13 || $(this).val().length == 0) {
+    if(code == 13 && $(this).val().length > 0) {
       doTreeSearch();
+    } else if($(this).val().length == 0) {
+      $('#hierarchyTree').jstree(true).search('', true);
     }
   });
 });

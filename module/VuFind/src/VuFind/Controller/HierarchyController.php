@@ -105,11 +105,23 @@ class HierarchyController extends AbstractBase
         $limitReached = ($limit > 0 && count($resultIDs) > $limit);
 
         $returnArray = array(
-            "lookfor" => $lookfor,
             "limitReached" => $limitReached,
             "results" => array_slice($resultIDs, 0, $limit)
         );
-        return $this->outputJSON(json_encode($returnArray));
+        if ($this->params()->fromQuery('format', false)) {
+            return $this->outputJSON(
+                json_encode(
+                    array_map(
+                        function($op) {
+                            return str_replace(':', '-', $op);
+                        },
+                        $returnArray['results']
+                    )
+                )
+            );
+        } else {
+            return $this->outputJSON(json_encode($returnArray));
+        }
     }
 
     /**
@@ -136,7 +148,6 @@ class HierarchyController extends AbstractBase
                     $results = str_replace(
                         '%%%%VUFIND-BASE-URL%%%%', rtrim($baseUrl, '/'), $results
                     );
-
                     return $this->output($results);
                 }
             }
