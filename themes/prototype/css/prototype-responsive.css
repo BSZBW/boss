@@ -9,7 +9,7 @@
 		margin: 0 -10px;
 	}
 
-	.jumbotron {
+	.well {
 		padding: 3% 0 14% 0;
 	}
 
@@ -23,7 +23,7 @@
 	}
 
 	.searchbox .btn,
-	.jumbotron .btn {
+	.well .btn {
 		width: 42.5%;
 		display: block;
 		float: left;
@@ -36,7 +36,7 @@
 	}
 
 
-	.jumbotron .btn {
+	.well .btn {
 		width: 49%;
 		background-color: #50BF9E;
 		color: #fff;
@@ -78,7 +78,7 @@
         text-decoration: none;
 	}
 
-	.jumbotron .btn:hover {
+	.well .btn:hover {
 		background-color: #fff;
 		color: #50BF9E;
 		text-decoration: none;

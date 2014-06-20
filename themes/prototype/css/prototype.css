@@ -14,11 +14,15 @@ img {
 	max-width: 100%;
 }
 
-a {
+a,
+.btn-link {
 	color: #3e846c;
 }
 
-a:hover, a:focus {
+.btn-link:hover,
+.btn-link:focus,
+a:hover,
+a:focus{
 	color: #50bf9e;
 	text-decoration: none;
 }
@@ -112,7 +116,7 @@ header,
 	margin: 0 5px;
 }
 
-.jumbotron {
+.well {
 	background-color: #fff;
 }
 
@@ -340,15 +344,17 @@ a.list-group-item.active>.badge, .nav-pills>.active>a>.badge {
 	margin-top: 22px;
 }
 
-.jumbotron a,
-.jumbotron button.btn-primary {
+.well a,
+.well .btn-link,
+.well button.btn-primary {
 	background-color: #50BF9E;
 	color: #fff;
 	border: 1px solid #50BF9E;
 }
 
-.jumbotron a:hover,
-.jumbotron button.btn-primary:hover {
+.well a:hover,
+.well .btn-link:hover,
+.well button.btn-primary:hover {
 	background-color: #fff;
 	color: #50BF9E;
 	border: 1px solid #50BF9E;
