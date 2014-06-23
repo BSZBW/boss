@@ -197,6 +197,9 @@ var Lightbox = {
       $('#modal .modal-body').prepend('<div class="alert alert-danger">'+message+'</div>');
     }
     $('.fa-spinner').remove();
+    if (Recaptcha && Recaptcha.widget) {
+      Recaptcha.reload();
+    }
   },
 
   /***********************************/
