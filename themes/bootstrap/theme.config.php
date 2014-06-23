@@ -1,16 +1,15 @@
 <?php
 return array(
     'extends' => 'root',
-    'less' => array(
-        //'style.less' // imports screen, print
-    ),
-    'sass' => array(
-        //'style.scss' // imports screen, print
-    ),
     'css' => array(
-        'font/font-awesome.min.css',
-        'font/font-awesome-ie7.min.css',
-        'slider.css'
+        'bootstrap.min.css',
+        'bootstrap-responsive.min.css',
+        'font-awesome.css',
+        'font-awesome-ie7.min.css',
+        'slider.css',
+        'screen.css',
+        'bootstrap-custom.css',
+        'print.css:print'
     ),
     'js' => array(
         'core/jquery.min.js',
