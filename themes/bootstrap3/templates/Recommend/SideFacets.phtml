@@ -129,24 +129,29 @@ JS;
               <?=$this->escapeHtml($thisFacet['displayText'])?>
             </a>
           <? else: ?>
+            <? $addURL = $this->currentPath().$results->getUrlQuery()->addFacet($title, $thisFacet['value'], $thisFacet['operator']); ?>
             <? if ($allowExclude): ?>
               <li class="list-group-item facet<?=$thisFacet['operator'] ?><? if ($i>5): ?> <?=$moreClass ?><?endif ?>">
-                <? if($thisFacet['operator'] == 'OR'): ?>
-                  <i class="fa fa-check-empty"></i>
-                <? endif; ?>
-                <span class="badge"><?=number_format($thisFacet['count'])?>
-                <a href="<?=$this->currentPath().$results->getUrlQuery()->addFacet($title, $thisFacet['value'], 'NOT') ?>" title="<?=$this->transEsc('exclude_facet') ?>"><i class="fa fa-minus-circle"></i></a></span>
-                <a href="<?=$this->currentPath().$results->getUrlQuery()->addFacet($title, $thisFacet['value'], $thisFacet['operator'])?>">
-                  <i class="fa fa-plus"></i> <?=$this->escapeHtml($thisFacet['displayText'])?>
+            <? else: ?>
+              <a href="<?=$addURL ?> class="list-group-item facet<?=$thisFacet['operator'] ?><? if ($i>5): ?> <?=$moreClass ?><?endif ?>">
+            <? endif; ?>
+            <span class="badge">
+              <?=number_format($thisFacet['count'])?>
+              <? if ($allowExclude): ?>
+                <a href="<?=$this->currentPath().$results->getUrlQuery()->addFacet($title, $thisFacet['value'], 'NOT') ?>" title="<?=$this->transEsc('exclude_facet') ?>"><i class="fa fa-times"></i></a>
+              <? endif; ?>
+            </span>
+            <? if ($allowExclude): ?>
+              <a href="<?=$addURL ?>">
+            <? endif; ?>
+            <? if($thisFacet['operator'] == 'OR'): ?>
+              <i class="fa fa-square-o"></i>
+            <? endif; ?>
+            <?=$this->escapeHtml($thisFacet['displayText'])?>
+            <? if ($allowExclude): ?>
                 </a>
               </li>
             <? else: ?>
-              <a href="<?=$this->currentPath().$results->getUrlQuery()->addFacet($title, $thisFacet['value'], $thisFacet['operator'])?>" class="list-group-item facet<?=$thisFacet['operator'] ?><? if ($i>5): ?> <?=$moreClass ?><?endif ?>">
-                <? if($thisFacet['operator'] == 'OR'): ?>
-                  <i class="fa fa-check-empty"></i>
-                <? endif; ?>
-                <span class="badge"><?=number_format($thisFacet['count'])?></span>
-                <?=$this->escapeHtml($thisFacet['displayText'])?>
               </a>
             <? endif; ?>
           <? endif; ?>
