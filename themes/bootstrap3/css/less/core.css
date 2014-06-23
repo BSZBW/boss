@@ -5925,3 +5925,8 @@ label.list-group-item {
 .tt-suggestion p {
   margin: 0;
 }
+.twitter-typeahead {
+  background: #FFF;
+  padding: 7px 0 10px;
+  border-radius: 4px;
+}

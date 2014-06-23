@@ -114,7 +114,7 @@ header {
 .sidebar {
   .list-group {margin-bottom:5px}
   .list-group-item {
-    padding:7px 10px;
+    padding:7px 10px 6px;
     &.active {
       background:@active-orange;
       border-color:@active-orange;
@@ -129,8 +129,9 @@ header {
       }
     }
   }
-  &.slider-horizontal {
+  & .slider-container {
     margin:4px 0 10px;
+    width:95%;
     .slider-handle {
       background:#619144;
       opacity:1;
@@ -188,4 +189,14 @@ ul.random {
   &.image li img {
     margin: 0 auto;
   }
+}
+
+/* --- Twitter Typeahead --- */
+.twitter-typeahead {
+  background: #FFF;
+  padding: 7px 0 10px;
+  border-radius: @border-radius-base;
+}
+.tt-dropdown-menu {
+  margin:2px;
 }
