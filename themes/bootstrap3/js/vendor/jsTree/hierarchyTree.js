@@ -105,10 +105,10 @@ $(document).ready(function()
 
   $("#hierarchyTree")
     .bind("ready.jstree", function (event, data) {
-      var jsTreeNode = $("#hierarchyTree").jstree('select_node', recordID.replace(':', '-'));
-      jsTreeNode.parents('.jstree-closed').each(function () {
-        data.inst.open_node(this);
-      });
+      var tree = $("#hierarchyTree").jstree(true);
+      tree.select_node(recordID.replace(':', '-'));
+      tree._open_to(recordID.replace(':', '-'));
+
       if (context == "Collection") {
         getRecord(recordID.replace('-', ':'));
       }
