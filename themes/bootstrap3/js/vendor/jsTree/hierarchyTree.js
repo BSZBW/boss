@@ -1,6 +1,6 @@
 /*global hierarchySettings, html_entity_decode, jqEscape, path, vufindString*/
 
-var hierarchyID;
+var hierarchyID, recordID;
 var baseTreeSearchFullURL;
 
 function getRecord(recordID)
@@ -40,16 +40,39 @@ function changeLimitReachedLabel(display)
   }
 }
 
+var searchAjax = false;
 function doTreeSearch()
 {
   $('#treeSearchLoadingImg').removeClass('hidden');
   var keyword = $("#treeSearchText").val();
   var type = $("#treeSearchType").val();
-  if(type == 'Title') {
-    $('#hierarchyTree').jstree(true).search(keyword, true);
+  if(keyword.length == 0) {
+    $('#hierarchyTree').find('.jstree-search').removeClass('jstree-search');
+    var tree = $('#hierarchyTree').jstree(true);
+    tree.close_all();
+    tree._open_to(recordID.replace(':', '-'));
     $('#treeSearchLoadingImg').addClass('hidden');
   } else {
-    $('#hierarchyTree').jstree(true).search(keyword, false);
+    if(searchAjax) {
+      searchAjax.abort();
+    }
+    searchAjax = $.ajax({
+      "url" : path + '/Hierarchy/SearchTree?' + $.param({
+        'hierarchyID': hierarchyID,
+        'type': $("#treeSearchType").val()
+      }) + "&format=true",
+      'success': function(data) {
+        $('#hierarchyTree').find('.jstree-search').removeClass('jstree-search');
+        var tree = $('#hierarchyTree').jstree(true);
+        tree.close_all();
+        for(var i=data.results.length;i--;) {
+          var id = data.results[i].replace(':', '-');
+          $('#hierarchyTree').find('#'+id).addClass('jstree-search');
+          tree._open_to(id);
+        }
+        $('#treeSearchLoadingImg').addClass('hidden');
+      }
+    });
   }
 }
 
@@ -74,11 +97,9 @@ function buildJSONNodes(xml)
 
 $(document).ready(function()
 {
-  $('#treeSearch input[type="submit"]').click(doTreeSearch);
-
   // Code for the search button
   hierarchyID = $("#hierarchyTree").find(".hiddenHierarchyId")[0].value;
-  var recordID = $("#hierarchyTree").find(".hiddenRecordId")[0].value;
+  recordID = $("#hierarchyTree").find(".hiddenRecordId")[0].value;
   var parentElement = hierarchySettings.lightboxMode ? '#modal .modal-body' : '#hierarchyTree';
   var context = $("#hierarchyTree").find(".hiddenContext")[0].value;
 
@@ -109,7 +130,7 @@ $(document).ready(function()
       }
     })
     .jstree({
-      'plugins' : [ 'search','types' ],
+      'plugins': ['search'],
       'core' : {
         'data' : function (obj, cb) {
           $.ajax({
@@ -129,30 +150,14 @@ $(document).ready(function()
         "themes" : {
           "url": path + '/themes/bootstrap3/js/vendor/jsTree/themes/default/style.css'
         }
-      },
-      "search": {
-        'ajax': {
-          "url" : path + '/Hierarchy/SearchTree?' + $.param({
-            'hierarchyID': hierarchyID,
-            'type': $("#treeSearchType").val()
-          }) + "&format=true",
-          'success': function(e) {
-            alert('!');
-            return [];
-          }
-        },
-        'fuzzy': false,
-        'show_only_matches': false
       }
     });
 
   $('#treeSearch').removeClass('hidden');
   $('#treeSearchText').keyup(function (e) {
     var code = (e.keyCode ? e.keyCode : e.which);
-    if(code == 13 && $(this).val().length > 0) {
+    if(code == 13 || $(this).val().length == 0) {
       doTreeSearch();
-    } else if($(this).val().length == 0) {
-      $('#hierarchyTree').jstree(true).search('', true);
     }
   });
 });

@@ -84,10 +84,7 @@ class HierarchyController extends AbstractBase
             ? $config->Hierarchy->treeSearchLimit : -1;
         $resultIDs = array();
         $hierarchyID = $this->params()->fromQuery('hierarchyID');
-        $lookfor = $this->params()->fromQuery(
-            'lookfor',
-            $this->params()->fromQuery('str', '')
-        );
+        $lookfor = $this->params()->fromQuery('lookfor', '');
         $searchType = $this->params()->fromQuery('type', 'AllFields');
 
         $results = $this->getServiceLocator()
@@ -108,20 +105,7 @@ class HierarchyController extends AbstractBase
             "limitReached" => $limitReached,
             "results" => array_slice($resultIDs, 0, $limit)
         );
-        if ($this->params()->fromQuery('format', false)) {
-            return $this->outputJSON(
-                json_encode(
-                    array_map(
-                        function($op) {
-                            return str_replace(':', '-', $op);
-                        },
-                        $returnArray['results']
-                    )
-                )
-            );
-        } else {
-            return $this->outputJSON(json_encode($returnArray));
-        }
+        return $this->outputJSON(json_encode($returnArray));
     }
 
     /**
