@@ -53,6 +53,9 @@ function deparam(url) {
   for (var i = 0; i < pairs.length; i++) {
     var pair = pairs[i].split('=');
     var name = decodeURIComponent(pair[0]);
+    if(name.length == 0) {
+      continue;
+    }
     if(name.substring(name.length-2) == '[]') {
       name = name.substring(0,name.length-2);
       if(!request[name]) {
@@ -400,4 +403,4 @@ $(document).ready(function() {
   Lightbox.addFormCallback('emailSearch', function(x) {
     Lightbox.confirm(vufindString['bulk_email_success']);
   });
-});// escape element id so that it can be used as a selector
+});
