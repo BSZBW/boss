@@ -25,11 +25,7 @@ function addSearch(group, term, field)
   // Insert it
   $("#group" + group + "Holder").before(newSearch);
   // Show x
-  if($('#group'+group+' .search').length > 1) {
-    $('#group'+group+' .search .delete').removeClass('hidden');
-  } else {
-    $('#group'+group+' .search .delete').addClass('hidden');
-  }
+  $('#group'+group+' .search .delete').removeClass('hidden');
 }
 
 function deleteSearch(group, eq)
