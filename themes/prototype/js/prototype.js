@@ -25,9 +25,10 @@ var BootstrapPrototype = {
 	toggleOffCanvas: function() {
 		if ( this.container.hasClass("offcanvas-active") ) {
 			this.container.removeClass("offcanvas-active");
-			this.sidebar.css('height', 'auto');
-			this.body.css('height', 'auto');
-			this.body.css('overflow', 'scroll');
+            this.sidebar.css('height', '');
+            this.sidebar.css('overflow-y', '');
+            this.body.css('height', '');
+            this.body.css('overflow-y', '');
 		} else {
 			this.container.addClass("offcanvas-active");
 			this.sidebar.css('height', window.innerHeight);

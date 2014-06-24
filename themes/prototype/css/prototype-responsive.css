@@ -36,7 +36,8 @@
 	}
 
 
-	.well .btn {
+	.well .btn,
+	.well .btn.btn-primary {
 		width: 49%;
 		background-color: #50BF9E;
 		color: #fff;
@@ -99,7 +100,7 @@
 
 	footer {
 		background-color: #252932;
-		color: #cccecd;
+		color: #ccc;
 	}
 
 	footer .row,
@@ -116,12 +117,12 @@
 	}
 
 	footer a {
-		color: #cccecd;
+		color: #ccc;
 		font-size: 1.1em;
 	}
 
 	footer a:hover {
-		color: #cccecd;
+		color: #ccc;
 		text-decoration: none;
 	}
 
@@ -230,5 +231,17 @@
 		color: #fff;
 		text-decoration: none;
 		border: 1px solid #fff;
+	}
+
+	.well button.btn-primary {
+		background-color: #50BF9E;
+		color: #fff;
+		border: 1px solid #50BF9E;
+	}
+
+	.well button.btn-primary:hover {
+		background-color: #fff;
+		color: #50BF9E;
+		border: 1px solid #50BF9E;
 	}
 }
