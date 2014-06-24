@@ -137,14 +137,14 @@ function registerUpdateCart($form) {
         if (updated.length >= vufindString.bookbagMax) {
           msg += "<br/>" + vufindString.bookbagFull;
         }
-        $('#'+elId).data('popover').options.content = msg;
+        $('#'+elId).data('bs.popover').options.content = msg;
         $('#cartItems strong').html(updated.length);
       } else {
-        $('#'+elId).data('popover').options.content = vufindString.bulk_noitems_advice;
+        $('#'+elId).data('bs.popover').options.content = vufindString.bulk_noitems_advice;
       }
-      $('#'+elId).popover('toggle');
+      $('#'+elId).popover('show');
       if (cartNotificationTimeout !== false) {
-          clearTimeout(cartNotificationTimeout);
+        clearTimeout(cartNotificationTimeout);
       }
       cartNotificationTimeout = setTimeout(function() {
         $('#'+elId).popover('hide');
@@ -197,6 +197,7 @@ $(document).ready(function() {
     var $form = $('form[name="bulkActionForm"]');
     registerUpdateCart($form);
   }
+  $("#updateCart, #bottom_updateCart").popover({content:'', html:true, trigger:'manual'});
 
   // Setup lightbox behavior
   // Cart lightbox

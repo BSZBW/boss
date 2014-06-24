@@ -5925,6 +5925,12 @@ label.list-group-item {
 .tt-suggestion p {
   margin: 0;
 }
+.badge a {
+  color: #FFF;
+}
+.table > tbody > tr > td {
+  word-break: break-all;
+}
 .twitter-typeahead {
   background: #FFF;
   padding: 7px 0 10px;
