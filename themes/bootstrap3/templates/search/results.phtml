@@ -18,6 +18,7 @@
         'searchClassId' => $this->params->getsearchClassId(),
         'checkboxFilters' => $this->params->getCheckboxFacets(),
         'filterList' => $this->params->getFilters(),
+        'hasDefaultsApplied' => $this->params->hasDefaultsApplied(),
         'selectedShards' => $this->params->getSelectedShards()
       )
   );
@@ -27,6 +28,11 @@
     $this->layout()->breadcrumbs .= '<li class="active">' . $this->escapeHtml($this->overrideTitle) . '</li>';
   } else {
     $this->layout()->breadcrumbs .= '<li class="active">' . $this->transEsc('Search') . ': ' . $this->escapeHtml($lookfor) . '</li>';
+  }
+
+  // Disable cart if appropriate:
+  if (!$this->params->getOptions()->supportsCart()) {
+    $this->hideCartControls = true;
   }
 
   // Load Javascript dependencies into header:
