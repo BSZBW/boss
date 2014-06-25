@@ -148,6 +148,26 @@ $(document).ready(function(){
 
   setUpCheckRequest();
 
+  $('ul.recordTabs a').click(function (e) {
+    var tabid = $(this).attr('id').toLowerCase();
+    if($('#'+tabid+'-tab').length > 0) {
+      $('#record-tabs .tab-pane.active').removeClass('active');
+      $('#'+tabid+'-tab').addClass('active');
+      $('#'+tabid).tab('show');
+    } else {
+      $('#record-tabs').append('<div class="tab-pane" id="'+tabid+'-tab"><i class="fa fa-spinner fa-spin"></i> '+vufindString.loading+'...</div>');
+      $.ajax({
+        url: path + '/Record/'+id+'/AjaxTab?tab='+tabid,
+        success: function(data) {
+          $('#record-tabs .tab-pane.active').removeClass('active');
+          $('#'+tabid+'-tab').html(data).addClass('active');
+          $('#'+tabid).tab('show');
+        }
+      });
+    }
+    return false;
+  })
+
   /* --- LIGHTBOX --- */
   // Cite lightbox
   $('#cite-record').click(function() {

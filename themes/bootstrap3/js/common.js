@@ -179,8 +179,9 @@ function updatePageForLogin() {
       type:'POST',
       url:path+'/AJAX/JSON?method=get&submodule=Record&subaction=AjaxTab&id='+recordId,
       data:{tab:tab},
+      dataType :'json',
       success:function(html) {
-        recordTabs.next('.tab-container').html(html);
+        recordTabs.next('.tab-container').html(html.data);
       },
       error:function(d,e) {
         console.log(d,e); // Error reporting

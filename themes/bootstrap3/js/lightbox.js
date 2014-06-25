@@ -76,7 +76,9 @@ var Lightbox = {
    * This function cancels the previous call and creates a new one.
    */
   ajax: function(obj) {
-    this.XHR.abort();
+    if(this.XHR) {
+      this.XHR.abort();
+    }
     this.XHR = $.ajax(obj);
   },
   /**********************************/
@@ -197,7 +199,7 @@ var Lightbox = {
       $('#modal .modal-body').prepend('<div class="alert alert-danger">'+message+'</div>');
     }
     $('.fa-spinner').remove();
-    if (Recaptcha && Recaptcha.widget) {
+    if (typeof Recaptcha !== "undefined" && Recaptcha.widget) {
       Recaptcha.reload();
     }
   },
@@ -222,7 +224,7 @@ var Lightbox = {
       this.shown = true;
     }
     // Create our AJAX request, store it in case we need to cancel later
-    this.XHR = $.ajax({
+    this.ajax({
       type:'POST',
       url:url,
       data:post,

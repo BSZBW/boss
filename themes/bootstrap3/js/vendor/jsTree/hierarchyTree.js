@@ -90,18 +90,17 @@ function buildJSONNodes(xml)
 {
   var jsonNode = [];
   $(xml).children('item').each(function() {
-    var content = $(this).children('content');
-    var id = content.children("name[class='JSTreeID']");
-    var name = content.children('name[href]');
-    jsonNode.push({
-      'id': id.text().replace(':', '-'),
-      'text': name.text(),
-      'a_attr': {
-        'href': name.attr('href')
-      },
-      'type': name.attr('href').indexOf('/Collection/') < 0 ? 'record' : 'collection',
-      children: buildJSONNodes(this)
-    });
+     var content = $(this).children('content');
+     var id = content.children("name[class='JSTreeID']");
+     var name = content.children('name[href]');
+     jsonNode.push({
+       'id': id.text().replace(':', '-'),
+       'text': name.text(),
+       'a_attr': {
+         'href': name.attr('href')
+       },
+       children: buildJSONNodes(this)
+     });
   });
   return jsonNode;
 }
@@ -163,11 +162,11 @@ $(document).ready(function()
         }
       },
       'types' : {
-        'record' : {
-          'icon' : 'fa fa-file'
+        'record': {
+          'icon':'fa fa-file'
         },
-        'collection' : {
-          'icon' : 'fa fa-folder'
+        'collection': {
+          'icon':'fa fa-folder'
         }
       }
     });
