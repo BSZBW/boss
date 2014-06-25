@@ -229,8 +229,9 @@ class AbstractRecord extends AbstractBase
     public function ajaxtabAction()
     {
         $this->loadRecord();
+        $this->layout()->setTemplate('layout/lightbox');
         return $this->showTab(
-            $this->params()->fromQuery('tab', $this->getDefaultTab()),
+            $this->params()->fromPost('tab', $this->getDefaultTab()),
             true
         );
     }
@@ -681,12 +682,7 @@ class AbstractRecord extends AbstractBase
             $view->scrollData = $this->resultScroller()->getScrollData($driver);
         }
 
-        if ($ajax) {
-            $this->layout()->setTemplate('layout/lightbox');
-            $view->setTemplate('record/ajaxtab');
-        } else {
-            $view->setTemplate('record/view');
-        }
+        $view->setTemplate($ajax ? 'record/ajaxtab' : 'record/view');
         return $view;
     }
 }

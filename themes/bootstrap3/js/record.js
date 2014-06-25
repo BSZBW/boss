@@ -157,7 +157,9 @@ $(document).ready(function(){
     } else {
       $('#record-tabs').append('<div class="tab-pane" id="'+tabid+'-tab"><i class="fa fa-spinner fa-spin"></i> '+vufindString.loading+'...</div>');
       $.ajax({
-        url: path + '/Record/'+id+'/AjaxTab?tab='+tabid,
+        url: path + '/Record/'+id+'/AjaxTab',
+        type: 'POST',
+        data: {tab: tabid},
         success: function(data) {
           $('#record-tabs .tab-pane.active').removeClass('active');
           $('#'+tabid+'-tab').html(data).addClass('active');
