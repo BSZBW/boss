@@ -372,8 +372,13 @@ $(document).ready(function() {
   });
   Lightbox.addFormCallback('accountForm', function() {
     updatePageForLogin();
-    Lightbox.getByUrl(Lightbox.openingURL);
-    Lightbox.openingURL = false;
+    var params = deparam(Lightbox.openingURL);
+    if (params['subaction'] != 'Login') {
+      Lightbox.getByUrl(Lightbox.openingURL);
+      Lightbox.openingURL = false;
+    } else {
+      Lightbox.close();
+    }
   });
 
   // Help links
