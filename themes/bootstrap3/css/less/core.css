@@ -5928,6 +5928,33 @@ label.list-group-item {
 .badge a {
   color: #FFF;
 }
+.btn:hover {
+  border-color: #265680;
+}
+.slider .slider-track {
+  background: #999999;
+  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.4);
+}
+.slider .slider-track .slider-handle {
+  background: #265680;
+  background-image: none;
+  border: 1px solid #265680;
+  box-shadow: none;
+  opacity: .8;
+}
+.slider .slider-track .slider-handle:hover,
+.slider .slider-track .slider-handle:active {
+  opacity: 1;
+  background: #FFF;
+  border-color: #999999;
+}
+.slider .slider-track .slider-handle:active {
+  border-color: #265680;
+}
+.slider .slider-track .slider-selection {
+  background: #eeeeee;
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+}
 .table > tbody > tr > td {
   word-break: break-all;
 }
