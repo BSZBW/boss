@@ -229,8 +229,10 @@ class AbstractRecord extends AbstractBase
     public function ajaxtabAction()
     {
         $this->loadRecord();
+        $this->layout()->setTemplate('layout/lightbox');
         return $this->showTab(
-            $this->params()->fromPost('tab', $this->getDefaultTab()), true
+            $this->params()->fromPost('tab', $this->getDefaultTab()),
+            true
         );
     }
 

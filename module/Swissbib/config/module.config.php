@@ -224,9 +224,8 @@ return array(
             'qrCodeHolding'                  => 'Swissbib\View\Helper\QrCodeHolding',
             'holdingItemsPaging'             => 'Swissbib\View\Helper\HoldingItemsPaging',
             'filterUntranslatedInstitutions' => 'Swissbib\View\Helper\FilterUntranslatedInstitutions',
-            'configAccess'                   => 'Swissbib\View\Helper\Config'
-
-
+            'configAccess'                   => 'Swissbib\View\Helper\Config',
+            'layoutClass'                    => 'Swissbib\VuFind\View\Helper\Bootstrap3\LayoutClass'
         ),
         'factories'  => array(
             'institutionSorter'                         =>  'Swissbib\View\Helper\Factory::getInstitutionSorter',
@@ -324,12 +323,12 @@ return array(
             '|css/smoothness/jquery-ui\.css|'
         ),
         'ignore_js_assets'  => array(
-            '|jquery\.min.js|', // jquery 1.6
-            '|^jquery\.form\.js|',
-            '|jquery.metadata.js|',
-            '|^jquery.validate.min.js|',
-            '|jquery-ui/js/jquery-ui\.js|',
-            '|common\.js|',
+//            '|jquery\.min.js|', // jquery 1.6
+//            '|^jquery\.form\.js|',
+//            '|jquery.metadata.js|',
+//            '|^jquery.validate.min.js|',
+//            '|jquery-ui/js/jquery-ui\.js|',
+//            '|common\.js|',
             //has a dependency to jQuery so has to be linked after this general component
             //move it into the swissbib libs
         ),

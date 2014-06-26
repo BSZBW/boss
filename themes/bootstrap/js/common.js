@@ -317,6 +317,7 @@ $(document).ready(function() {
       return item;
     }
   });
+  $('#searchForm .search-query').css('background', '#FFF');
 
   // Checkbox select all
   $('.checkbox-select-all').change(function() {

@@ -468,12 +468,12 @@ class Record extends AbstractHelper
             // Apply prefix if found
             if (isset($link['prefix'])) {
                 $link['url'] = $link['prefix'] . $link['url'];
-            }            
+            }
             // Use URL as description if missing:
             if (!isset($link['desc'])) {
                 $link['desc'] = $link['url'];
             }
-            
+
             return $link;
         };
 

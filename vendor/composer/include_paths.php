@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    $vendorDir . '/pear-pear.php.net/File_MARC',
     $vendorDir . '/pear-pear.php.net/XML_Util',
     $vendorDir . '/pear-pear.php.net/Console_Getopt',
     $vendorDir . '/pear-pear.php.net/Structures_Graph',
@@ -13,5 +14,4 @@ return array(
     $vendorDir . '/pear-pear.php.net/PEAR',
     $vendorDir . '/pear-pear.php.net/Validate',
     $vendorDir . '/pear-pear.php.net/Validate_ISPN',
-    $vendorDir . '/pear-pear.php.net/File_MARC',
 );

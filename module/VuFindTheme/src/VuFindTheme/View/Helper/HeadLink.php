@@ -76,4 +76,79 @@ class HeadLink extends \Zend\View\Helper\HeadLink
 
         return parent::itemToString($item);
     }
+
+    /**
+     * Compile a less file to css and add to css folder
+     *
+     * @param string $file path to less file
+     *
+     * @return void
+     */
+    public function addLessStylesheet($file)
+    {
+        $relPath = 'less/' . $file;
+        $urlHelper = $this->getView()->plugin('url');
+        $currentTheme = $this->themeInfo->findContainingTheme($relPath);
+        $home = APPLICATION_PATH . "/themes/$currentTheme/";
+        $cssDirectory = $urlHelper('home') . "themes/$currentTheme/css/less/";
+        $cacheDirectory = $home . 'less/cache/';
+        list($fileName, ) = explode('.', $file);
+        $inputFile  = $home . $relPath;
+
+        $time = microtime(true);
+        $css = false;
+        try {
+            $less_files = array(
+                APPLICATION_PATH . '/themes/' . $currentTheme . '/' . $relPath
+                    => $cssDirectory
+            );
+            $css_file_name = \Less_Cache::Get(
+                $less_files,
+                array('cache_dir' => $cacheDirectory)
+            );
+            $css = file_get_contents($cacheDirectory . $css_file_name);
+        } catch (\Exception $e) {
+            $themeParents = array_keys($this->themeInfo->getThemeInfo());
+            foreach ($themeParents as $theme) {
+                $directories[APPLICATION_PATH . '/themes/' . $theme . '/less/']
+                    = $cssDirectory;
+            }
+            $parser = new \Less_Parser(array('compress' => true));
+            $parser->SetImportDirs($directories);
+            $parser->parseFile($inputFile, $cssDirectory);
+            $css = $parser->getCss();
+        }
+        //error_log($fileName . ' = ' . (microtime(true)-$time));
+        $int = file_put_contents($home . 'css/less/' . $fileName . '.css', $css);
+        $this->prependStylesheet($cssDirectory . $fileName . '.css');
+    }
+
+    /**
+     * Compile a scss file to css and add to css folder
+     *
+     * @param string $file path to scss file
+     *
+     * @return void
+     */
+    public function addSassStylesheet($file)
+    {
+        $relPath = 'scss/' . $file;
+        $themeParents = array_keys($this->themeInfo->getThemeInfo());
+        $currentTheme = $themeParents[0];
+        $home = APPLICATION_PATH . "/themes/$currentTheme/";
+        list($fileName, ) = explode('.', $file);
+        $outputFile = $home . 'css/scss/' . $fileName . '.css';
+        $urlHelper = $this->getView()->plugin('url');
+
+        $scss = new \scssc();
+        $paths = array();
+        foreach ($themeParents as $theme) {
+            $paths[] = APPLICATION_PATH . '/themes/' . $theme . '/scss/';
+        }
+        $scss->setImportPaths($paths);
+        $scss->setFormatter('scss_formatter_compressed');
+        $css = $scss->compile('@import "' . $file . '"');
+        $int = file_put_contents($outputFile, $css);
+        $this->prependStylesheet($urlHelper('home') . "themes/$currentTheme/css/scss/" . $fileName . '.css');
+    }
 }

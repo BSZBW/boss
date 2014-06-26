@@ -1,0 +1,392 @@
+@font-face {
+	font-family: OpenSans;
+	src: url(fonts/OpenSans.ttf);
+}
+
+*,
+body {
+	font-family: OpenSans;
+}
+
+body {
+	background-color: #f4f4f4;
+	margin: 0;
+}
+
+.container {
+	margin-right: 0;
+	margin-left: 0;
+	padding: 0;
+	width: 100%;
+}
+
+img {
+	max-width: 100%;
+}
+
+a,
+.btn-link {
+	color: #3e846c;
+}
+
+.btn-link:hover,
+.btn-link:focus,
+a:hover,
+a:focus{
+	color: #50bf9e;
+	text-decoration: none;
+}
+
+label {
+	font-weight: normal;
+}
+
+header,
+.label-info {
+	background-color: #50bf9e;
+	color: #fff;
+}
+
+.navbar {
+	border-radius: 0;
+	margin: 0;
+	padding: 0 6%;
+}
+
+.navbar a {
+	color: #fff;
+}
+
+.navbar-brand {
+	background: url('../images/logo_swissbib-home.png');
+	width: 150px;
+	background-size: 150px;
+	margin-bottom: 10px;
+}
+.navbar-form {
+	margin-top: 13px;
+	min-width: 69%;
+}
+
+.btn.btn-primary {
+	background: #fff;
+	color: #50BF9E;
+	border: none;
+	border-radius: 0;
+}
+
+.nav>li>a {
+	padding: 7px 5px;
+}
+
+.nav>li>a:hover, .nav>li>a:focus {
+	text-decoration: none;
+	color: #50BF9E;
+	background-color: #fff;
+	outline: none;
+	border-radius: 0;
+}
+
+.breadcrumb,
+.search-controls {
+	background-color: #3c4250;
+	color: #afb2b7;
+}
+
+.search-controls {
+	color: #fff;
+	padding: 12px;
+}
+
+.search-controls .sort,
+.search-controls .limit {
+	margin-right: 6px;
+}
+
+.search-controls .sort label,
+.search-controls .limit label {
+	display: none;
+}
+
+.search-controls .hits {
+	margin-top: 6px;
+}
+
+.row,
+.breadcrumb {
+	margin: 15px auto 0 auto;
+	width: 90%;
+}
+
+.breadcrumb {
+	display: none;
+}
+
+.fa {
+	margin: 0 5px;
+}
+
+.well {
+	background-color: #fff;
+}
+
+.sidebar {
+	background: none;
+	margin-top: 10px;
+}
+
+.sidebar h4 {
+	background-color: #3c4250;
+	color: #e8e7e5;
+	border-bottom: 1px solid #e8e7e5;
+	margin: -10px 0 0 0;
+	padding: 19px;
+}
+
+.list-group-item,
+.sidebar a {
+	background-color: #252932;
+	color: #ccc;
+}
+
+.sidebar .list-group.filters {
+	padding: 7px;
+}
+
+.sidebar .list-group,
+.sidebar ul {
+	background: #252932;
+	border-top: 1px solid #383a46;
+	border-bottom: 1px solid #1A1D22;
+	margin: 0;
+	padding: 1px;
+}
+
+.sidebar .list-group-item {
+	border: none;
+	background-color: #252932;
+}
+
+.sidebar .list-group-item {
+	font-size: 0.85em;
+	padding: 5px 15px;
+}
+
+.sidebar .list-group-item.title {
+	font-size: 1.05em;
+	padding: 10px 15px;
+}
+
+
+
+.sidebar .list-group-item:first-child {
+	border-radius: 0;
+}
+.sidebar a.list-group-item.active {
+	display: inline-block;
+}
+
+.sidebar a.list-group-item.active {
+	width: auto;
+	background: #50BF9E;
+	border: none;
+	border-radius: 0;
+	margin: 3px;
+	padding: 3px;
+}
+
+a.list-group-item:hover, a.list-group-item:focus {
+	text-decoration: none;
+	background-color: #13141b;
+}
+
+.sidebar .list-group.filters .list-group-item.title{
+	display: none;
+}
+
+a.list-group-item.active>.badge, .nav-pills>.active>a>.badge {
+	color: #428BCA;
+	background-color: #FFF;
+	margin: 0 6px;
+}
+
+.result {
+	border-bottom: 1px solid #e7e7e7;
+	padding: 3px 0 3px 0;
+}
+
+.form-control {
+	background-color: #ffffff !important;
+	color: #afafaf;
+	border-color: #c8c8c8;
+	border-radius: 0;
+}
+
+.mainbody .row,
+.tab-container {
+	background-color: #fff;
+	color: #676767;
+}
+
+
+.mainbody .row {
+	width: 100%;
+	margin: 0;
+}
+
+.mainbody .row:first-child {
+	margin-top: 15px;
+}
+
+.nav-tabs {
+	background-color: #fff;
+	padding: 2% 3%;
+	width: 100%;
+}
+
+.nav-tabs>li {
+	width: 25%;
+	max-width: 25%;
+	overflow: hidden;
+}
+
+.nav-tabs>li>a {
+	background-color: #f3f3f3;
+	color: #676767;
+	border-color: #858585;
+	margin: 0;
+	border-radius: 0;
+	border-width: 1px 0 1px 1px;
+	text-align: center;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.nav-tabs>li>a:last-child {
+	border-width: 1px 1px 1px 1px;
+}
+
+.nav-tabs>li.active>a,
+.nav-tabs>li.active>a:hover,
+.nav-tabs>li>a:hover {
+	background-color: #3c4250;
+	color: #fff;
+	border: 1px solid #3c4250;
+}
+
+.pagination {
+	min-width: 100%;
+	margin: 10px auto;
+	background-color: #50bf9e;
+	border: 1px solid #fff;
+	border-radius: 0;
+}
+
+.pagination>li>a, .pagination>li>span {
+	background-color: transparent;
+	color: #fff;
+	border-color: #f4f4f4;
+	border-width: 0 1px 0 1px;
+}
+
+.pagination>li:last-child>a, .pagination>.li:last-child>span {
+	border-radius: 0;
+	border-right: 0;
+}
+
+.pagination>li:first-child>a, .pagination>.li:first-child>span {
+	border-radius: 0;
+	border-left: 0;
+}
+
+.pagination>.active>a, .pagination>.active>span, .pagination>.active>a:hover, .pagination>.active>span:hover, .pagination>.active>a:focus, .pagination>.active>span:focus,
+.pagination>li>a:hover, .pagination>li>span:hover, .pagination>li>a:focus, .pagination>li>span:focus,.pagination>li:first-child>a, .pagination>li:first-child>span {
+	background-color: #3c4250;
+	color: #fff;
+	border-color: #f4f4f4;
+	border-radius: 0;
+}
+
+.pager {
+	text-align: left;
+	margin: 0;
+}
+
+.nav-pills {
+	padding: 0 15px;
+}
+
+.pager li,
+.nav-pills li {
+	float: right;
+}
+
+.pager li>a, .pager li>span.number-of-results {
+	display: inline-block;
+	padding: 5px 14px;
+	background: transparent;
+	border: none;
+	border-radius: 0;
+}
+
+.recordcover {
+	margin-top: 20px;
+}
+
+.record p{
+	font-size: 12px;
+}
+
+.record td,
+.record th {
+	font-size: 12px;
+	font-weight: normal;
+	vertical-align: top;
+	padding: 4px 0 4px 0;
+}
+
+.record td  {
+	padding-left: 15px;
+}
+
+.record table {
+	margin-top: 22px;
+}
+
+.well a,
+.well .btn-link,
+.well button.btn-primary {
+	background-color: #50BF9E;
+	color: #fff;
+	border: 1px solid #50BF9E;
+}
+
+.well a:hover,
+.well .btn-link:hover,
+.well button.btn-primary:hover {
+	background-color: #fff;
+	color: #50BF9E;
+	border: 1px solid #50BF9E;
+	text-decoration: none;
+}
+
+.searchbox.visible-lg button.btn-primary,
+.searchbox.visible-lg a {
+	border: 1px solid #fff;
+	color: #50BF9E;
+	background-color: #fff;
+
+}
+
+.searchbox.visible-lg button.btn-primary:hover,
+.searchbox.visible-lg a:hover {
+	background-color: #50BF9E;
+	color: #fff;
+	border: 1px solid #fff;
+	text-decoration: none;
+}
+
+.searchbox.visible-lg input {
+	border: 1px solid #fff;
+}
