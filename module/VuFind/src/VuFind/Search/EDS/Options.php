@@ -212,15 +212,6 @@ class Options extends \VuFind\Search\Base\Options
     }
 
     /**
-     * Whether or not to specify highlighting in the API
-     *
-     * @return bool
-     */
-    public function getHighlight()
-    {
-        return $this->highlight;
-    }
-    /**
      * Return the expander ids that have the default on flag set in admin
      *
      * @return array
@@ -291,7 +282,7 @@ class Options extends \VuFind\Search\Base\Options
         }
 
         // Set up facet preferences
-        if (isset($searchSettings->General->highlighting)) {
+        if (isset($searchSettings->General->include_facets)) {
             $this->includeFacets = $searchSettings->General->include_facets;
         }
 
@@ -646,7 +637,6 @@ class Options extends \VuFind\Search\Base\Options
                     'description' => $this->getLabelForCheckboxFilter(
                         'eds_expander_' . $key, $expander['Label']
                     ),
-                    'selected' =>(isset($defaultExpander[$key]))? true : false
                 );
             }
         }
@@ -705,7 +695,8 @@ class Options extends \VuFind\Search\Base\Options
             $limiters = $this->getAvailableLimiters();
             foreach ($limiters as $key => $value) {
                 if ('select' == $value['Type'] && 'y' == $value['DefaultOn']) {
-                    //only select limiters can be defaulted on limiters can be defaulted
+                    // only select limiters can be defaulted on limiters can be
+                    // defaulted
                     $val = $value['LimiterValues'][0]['Value'];
                     $this->defaultFilters[] = 'LIMIT|'.$key.':'.$val;
                 }
