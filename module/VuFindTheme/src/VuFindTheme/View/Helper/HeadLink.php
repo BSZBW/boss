@@ -106,6 +106,7 @@ class HeadLink extends \Zend\View\Helper\HeadLink
                 $less_files,
                 array('cache_dir' => $cacheDirectory)
             );
+            $css = file_get_contents($cacheDirectory . $css_file_name);
         } catch (\Exception $e) {
             $themeParents = array_keys($this->themeInfo->getThemeInfo());
             foreach ($themeParents as $theme) {
@@ -116,9 +117,9 @@ class HeadLink extends \Zend\View\Helper\HeadLink
             $parser->SetImportDirs($directories);
             $parser->parseFile($inputFile, $cssDirectory);
             $css = $parser->getCss();
-            //error_log($fileName . ' = ' . (microtime(true)-$time));
-            $int = file_put_contents($home . 'css/less/' . $fileName . '.css', $css);
         }
+        //error_log($fileName . ' = ' . (microtime(true)-$time));
+        $int = file_put_contents($home . 'css/less/' . $fileName . '.css', $css);
         $this->prependStylesheet($cssDirectory . $fileName . '.css');
     }
 
