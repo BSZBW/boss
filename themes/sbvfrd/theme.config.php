@@ -1,9 +1,8 @@
 <?php
 return array(
-    'extends' => 'bootstrap3',
+  'extends' => 'bootstrap3',
 
-    'css'	=> array(
-        'sbvfrd.css',
-    )
-
+  'css'	=> array(
+    'sbvfrd.css',
+  )
 );
