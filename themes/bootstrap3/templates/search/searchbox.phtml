@@ -91,6 +91,11 @@
               </label>
             <? endforeach; ?>
           <? endforeach; ?>
+          <? if (isset($hasDefaultsApplied) && $hasDefaultsApplied): ?>
+            <!-- this is a hidden element that flags whether or not default filters have been applied;
+                 it is intentionally unlabeled, as users are not meant to manipulate it directly. -->
+            <input class="applied-filter" id="dfApplied" type="checkbox" name="dfApplied" value="1"<?=$defaultFilterState?> />
+          <? endif; ?>
         <? endif; ?>
         <? if ($hasCheckboxFilters): ?>
           <? $i = 0; foreach ($checkboxFilters as $current): ?>

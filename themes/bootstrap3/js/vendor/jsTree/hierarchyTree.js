@@ -1,6 +1,6 @@
 /*global hierarchySettings, html_entity_decode, jqEscape, path, vufindString*/
 
-var hierarchyID;
+var hierarchyID, recordID;
 var baseTreeSearchFullURL;
 
 function getRecord(recordID)
@@ -25,9 +25,9 @@ function getRecord(recordID)
 function changeNoResultLabel(display)
 {
   if (display) {
-    $("#treeSearchNoResults").show();
+    $("#treeSearchNoResults").removeClass('hidden');
   } else {
-    $("#treeSearchNoResults").hide();
+    $("#treeSearchNoResults").addClass('hidden');
   }
 }
 
@@ -40,16 +40,49 @@ function changeLimitReachedLabel(display)
   }
 }
 
+var searchAjax = false;
 function doTreeSearch()
 {
   $('#treeSearchLoadingImg').removeClass('hidden');
   var keyword = $("#treeSearchText").val();
   var type = $("#treeSearchType").val();
-  if(type == 'Title') {
-    $('#hierarchyTree').jstree(true).search(keyword, true);
+  if(keyword.length == 0) {
+    $('#hierarchyTree').find('.jstree-search').removeClass('jstree-search');
+    var tree = $('#hierarchyTree').jstree(true);
+    tree.close_all();
+    tree._open_to(recordID.replace(':', '-'));
     $('#treeSearchLoadingImg').addClass('hidden');
   } else {
-    $('#hierarchyTree').jstree(true).search(keyword, false);
+    if(searchAjax) {
+      searchAjax.abort();
+    }
+    searchAjax = $.ajax({
+      "url" : path + '/Hierarchy/SearchTree?' + $.param({
+        'lookfor': keyword,
+        'hierarchyID': hierarchyID,
+        'type': $("#treeSearchType").val()
+      }) + "&format=true",
+      'success': function(data) {
+        if(data.results.length > 0) {
+          $('#hierarchyTree').find('.jstree-search').removeClass('jstree-search');
+          var tree = $('#hierarchyTree').jstree(true);
+          tree.close_all();
+          for(var i=data.results.length;i--;) {
+            var id = data.results[i].replace(':', '-');
+            tree._open_to(id);
+          }
+          for(var i=data.results.length;i--;) {
+            var id = data.results[i].replace(':', '-');
+            $('#hierarchyTree').find('#'+id).addClass('jstree-search');
+          }
+          changeNoResultLabel(false);
+          changeLimitReachedLabel(data.limitReached);
+        } else {
+          changeNoResultLabel(true);
+        }
+        $('#treeSearchLoadingImg').addClass('hidden');
+      }
+    });
   }
 }
 
@@ -74,20 +107,18 @@ function buildJSONNodes(xml)
 
 $(document).ready(function()
 {
-  $('#treeSearch input[type="submit"]').click(doTreeSearch);
-
   // Code for the search button
   hierarchyID = $("#hierarchyTree").find(".hiddenHierarchyId")[0].value;
-  var recordID = $("#hierarchyTree").find(".hiddenRecordId")[0].value;
+  recordID = $("#hierarchyTree").find(".hiddenRecordId")[0].value;
   var parentElement = hierarchySettings.lightboxMode ? '#modal .modal-body' : '#hierarchyTree';
   var context = $("#hierarchyTree").find(".hiddenContext")[0].value;
 
   $("#hierarchyTree")
     .bind("ready.jstree", function (event, data) {
-      var jsTreeNode = $("#hierarchyTree").jstree('select_node', recordID.replace(':', '-'));
-      jsTreeNode.parents('.jstree-closed').each(function () {
-        data.inst.open_node(this);
-      });
+      var tree = $("#hierarchyTree").jstree(true);
+      tree.select_node(recordID.replace(':', '-'));
+      tree._open_to(recordID.replace(':', '-'));
+
       if (context == "Collection") {
         getRecord(recordID.replace('-', ':'));
       }
@@ -109,6 +140,7 @@ $(document).ready(function()
       }
     })
     .jstree({
+      'plugins': ['search','types'],
       'core' : {
         'data' : function (obj, cb) {
           $.ajax({
@@ -125,45 +157,22 @@ $(document).ready(function()
             }
           })
         },
-        "themes" : {
-          "url": path + '/themes/bootstrap3/js/vendor/jsTree/themes/default/style.css'
+        'themes' : {
+          'url': path + '/themes/bootstrap3/js/vendor/jsTree/themes/default/style.css'
         }
       },
-      "plugins" : [ "search","types" ],
-      "search": {
-        'ajax': {
-          "url" : path + '/Hierarchy/SearchTree?' + $.param({
-            'hierarchyID': hierarchyID,
-            'type': $("#treeSearchType").val()
-          }),
-          "success": function(results) {
-            if (results["limitReached"] == true) {
-              if(typeof(baseTreeSearchFullURL) == "undefined" || baseTreeSearchFullURL == null) {
-                baseTreeSearchFullURL = $("#fullSearchLink").attr("href");
-              }
-              $("#fullSearchLink").attr("href", baseTreeSearchFullURL + "?lookfor="+ results['lookfor'] + "&filter[]=hierarchy_top_id:\"" + hierarchyID  + "\"");
-              changeLimitReachedLabel(true);
-            } else {
-              changeLimitReachedLabel(false);
-            }
-
-            var jsonNode = [];
-            $.each(results["results"], function(key, val) {
-              jsonNode.push({
-                'id': val.replace(':', '-')
-              });
-            });
-
-            $('#treeSearchLoadingImg').addClass('hidden');
-            return jsonNode;
-          }
+      'types' : {
+        'record': {
+          'icon':'fa fa-file'
         },
-        'fuzzy': false,
-        'show_only_matches': true
+        'collection': {
+          'icon':'fa fa-folder'
+        }
       }
     });
 
-  $('#treeSearch').removeClass('hidden');
+  $('#treeSearch').removeClass('hidden');treeSearch
+  $('#treeSearch [type=submit]').click(doTreeSearch);
   $('#treeSearchText').keyup(function (e) {
     var code = (e.keyCode ? e.keyCode : e.which);
     if(code == 13 || $(this).val().length == 0) {

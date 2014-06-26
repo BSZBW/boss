@@ -84,10 +84,7 @@ class HierarchyController extends AbstractBase
             ? $config->Hierarchy->treeSearchLimit : -1;
         $resultIDs = array();
         $hierarchyID = $this->params()->fromQuery('hierarchyID');
-        $lookfor = $this->params()->fromQuery(
-            'lookfor',
-            $this->params()->fromQuery('str', '')
-        );
+        $lookfor = $this->params()->fromQuery('lookfor', '');
         $searchType = $this->params()->fromQuery('type', 'AllFields');
 
         $results = $this->getServiceLocator()
@@ -105,7 +102,6 @@ class HierarchyController extends AbstractBase
         $limitReached = ($limit > 0 && count($resultIDs) > $limit);
 
         $returnArray = array(
-            "lookfor" => $lookfor,
             "limitReached" => $limitReached,
             "results" => array_slice($resultIDs, 0, $limit)
         );
@@ -136,7 +132,6 @@ class HierarchyController extends AbstractBase
                     $results = str_replace(
                         '%%%%VUFIND-BASE-URL%%%%', rtrim($baseUrl, '/'), $results
                     );
-
                     return $this->output($results);
                 }
             }

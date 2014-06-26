@@ -53,6 +53,9 @@ function deparam(url) {
   for (var i = 0; i < pairs.length; i++) {
     var pair = pairs[i].split('=');
     var name = decodeURIComponent(pair[0]);
+    if(name.length == 0) {
+      continue;
+    }
     if(name.substring(name.length-2) == '[]') {
       name = name.substring(0,name.length-2);
       if(!request[name]) {
@@ -131,7 +134,11 @@ function registerLightboxEvents() {
    * if it matches the title bar of the lightbox
    */
   var header = $('#modal .modal-title').html();
-  $('#modal .modal-body .lead').each(function(i,op) {
+  var contentHeader = $('#modal .modal-body .lead');
+  if(contentHeader.length == 0) {
+    contentHeader = $('#modal .modal-body h2');
+  }
+  contentHeader.each(function(i,op) {
     if (op.innerHTML == header) {
       $(op).hide();
     }
@@ -172,8 +179,9 @@ function updatePageForLogin() {
       type:'POST',
       url:path+'/AJAX/JSON?method=get&submodule=Record&subaction=AjaxTab&id='+recordId,
       data:{tab:tab},
+      dataType :'json',
       success:function(html) {
-        recordTabs.next('.tab-container').html(html);
+        recordTabs.next('.tab-container').html(html.data);
       },
       error:function(d,e) {
         console.log(d,e); // Error reporting
@@ -365,8 +373,13 @@ $(document).ready(function() {
   });
   Lightbox.addFormCallback('accountForm', function() {
     updatePageForLogin();
-    Lightbox.getByUrl(Lightbox.openingURL);
-    Lightbox.openingURL = false;
+    var params = deparam(Lightbox.openingURL);
+    if (params['subaction'] != 'Login') {
+      Lightbox.getByUrl(Lightbox.openingURL);
+      Lightbox.openingURL = false;
+    } else {
+      Lightbox.close();
+    }
   });
 
   // Help links
@@ -396,4 +409,4 @@ $(document).ready(function() {
   Lightbox.addFormCallback('emailSearch', function(x) {
     Lightbox.confirm(vufindString['bulk_email_success']);
   });
-});// escape element id so that it can be used as a selector
+});

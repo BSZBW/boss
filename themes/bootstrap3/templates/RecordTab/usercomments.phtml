@@ -7,15 +7,12 @@
   <?=$this->render('record/comments-list.phtml')?>
 </div>
 <form class="comment row" name="commentRecord" id="commentRecord" action="<?=$this->recordLink()->getActionUrl($this->driver, 'AddComment')?>" method="post">
-  <div class="col-sm-3 text-right">
-    <strong><?=$this->transEsc("Your Comment")?>:</strong>
+  <div class="col-sm-3 name">
+    <strong><?=$this->transEsc("Your Comment")?></strong>
   </div>
-  <div class="popover right col-sm-6">
-    <div class="arrow"></div>
-    <div class="popover-content">
-      <textarea id="comment" name="comment" class="span12" rows="3" required></textarea>
-      <input class="btn" data-loading-text="Submitting..." type="submit" value="<?=$this->transEsc("Add your comment")?>"/>
-    </div>
+  <div class="col-sm-9">
+    <textarea id="comment" name="comment" class="form-control" rows="3" required></textarea><br/>
+    <input class="btn" data-loading-text="<?=$this->transEsc('Submitting') ?>..." type="submit" value="<?=$this->transEsc("Add your comment")?>"/>
   </div>
   <input type="hidden" name="id" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueId())?>"/>
   <input type="hidden" name="source" value="<?=$this->escapeHtmlAttr($this->driver->getResourceSource())?>"/>

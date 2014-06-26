@@ -78,8 +78,7 @@ function addGroup(firstTerm, firstField, join)
     newGroup += ' selected';
   }
   newGroup += '>NO Terms</option>'
-    + '</select><a href="#" onClick="deleteGroup('+nextGroup+')" class="close hide" title="Remove Group">&times;</a></div><div class="span8 pull-left switch-margins row-fluid"><div class="span3 text-right"><span class="help-inline">'+searchLabel+':</span></div>'
-    + '<div class="span9"><i id="group'+nextGroup+'Holder" class="icon-plus-sign"></i> <a href="#" onClick="addSearch('+nextGroup+')">'+addSearchString+'</a></div></div></div>';
+    + '</select><a href="#" onClick="deleteGroup('+nextGroup+')" class="close hide" title="Remove Group">&times;</a></div>';
 
   $('#groupPlaceHolder').before(newGroup);
   addSearch(nextGroup, firstTerm, firstField);

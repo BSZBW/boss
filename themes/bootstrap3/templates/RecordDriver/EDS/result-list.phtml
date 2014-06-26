@@ -61,7 +61,7 @@
     </div>
     <? endif; ?>
 
-    <? if ($this->driver->getHTMLFullTextAvailability()): ?>
+    <? if ($this->driver->hasHTMLFullTextAvailable()): ?>
       <a href="<?= $this->recordLink()->getUrl($this->driver, 'fulltext') ?>#html" class="icon html fulltext _record_link">
         <?=$this->transEsc('HTML Full Text')?>
       </a>
