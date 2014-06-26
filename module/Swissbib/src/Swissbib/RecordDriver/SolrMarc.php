@@ -662,11 +662,6 @@ class SolrMarc extends VuFindSolrMarc
                 . $field['sf_u']
                 . '&scale=1';
             }
-            elseif (preg_match('/^.*\/bibliotheques\/iconographie/', $field['sf_u'])) {
-                return 'https://externalservices.swissbib.ch/services/ImageTransformer?imagePath='
-                . $field['sf_u']
-                . '&scale=1';
-            }
         } elseif ($field['union'] === 'CCSA' && $field['tag'] === '856') {
             $URL_thumb = preg_replace('/hi-res.cgi/', 'get_thumb.cgi', $field['sf_u']);
             return 'https://externalservices.swissbib.ch/services/ImageTransformer?imagePath='
