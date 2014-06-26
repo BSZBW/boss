@@ -102,23 +102,23 @@ class HeadLink extends \Zend\View\Helper\HeadLink
                 APPLICATION_PATH . '/themes/' . $currentTheme . '/' . $relPath
                     => $cssDirectory
             );
-            $css_file_name = \Less_Cache::Get(
-                $less_files,
-                array('cache_dir' => $cacheDirectory, 'compress' => true)
-            );
-            $this->prependStylesheet($cssDirectory . $css_file_name);
-        } catch (\Exception $e) {
             $themeParents = array_keys($this->themeInfo->getThemeInfo());
+            $directories = array();
             foreach ($themeParents as $theme) {
                 $directories[APPLICATION_PATH . '/themes/' . $theme . '/less/']
                     = $cssDirectory;
             }
-            $parser = new \Less_Parser(array('compress' => true));
-            $parser->SetImportDirs($directories);
-            $parser->parseFile($inputFile, $cssDirectory);
-            $css = $parser->getCss();
-            //error_log($fileName . ' = ' . (microtime(true)-$time));
-            $int = file_put_contents($home . 'css/less/' . $fileName . '.css', $css);
+            $css_file_name = \Less_Cache::Get(
+                $less_files,
+                array(
+                    'cache_dir' => $cacheDirectory,
+                    'compress' => true,
+                    'import_dirs' => $directories
+                )
+            );
+            $this->prependStylesheet($cssDirectory . $css_file_name);
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
             $this->prependStylesheet($cssDirectory . $fileName . '.css');
         }
     }
