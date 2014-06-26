@@ -108,7 +108,17 @@ class HeadLink extends \Zend\View\Helper\HeadLink
             );
             $this->prependStylesheet($cssDirectory . $css_file_name);
         } catch (\Exception $e) {
-            error_log($e);
+            $themeParents = array_keys($this->themeInfo->getThemeInfo());
+            foreach ($themeParents as $theme) {
+                $directories[APPLICATION_PATH . '/themes/' . $theme . '/less/']
+                    = $cssDirectory;
+            }
+            $parser = new \Less_Parser(array('compress' => true));
+            $parser->SetImportDirs($directories);
+            $parser->parseFile($inputFile, $cssDirectory);
+            $css = $parser->getCss();
+            //error_log($fileName . ' = ' . (microtime(true)-$time));
+            $int = file_put_contents($home . 'css/less/' . $fileName . '.css', $css);
             $this->prependStylesheet($cssDirectory . $fileName . '.css');
         }
     }
