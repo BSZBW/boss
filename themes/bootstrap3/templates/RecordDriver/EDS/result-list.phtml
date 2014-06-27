@@ -68,7 +68,7 @@
       &nbsp; &nbsp;
     <? endif; ?>
 
-    <? if ($this->driver->getPdfAvailability()): ?>
+    <? if ($this->driver->hasPdfAvailable()): ?>
       <a href="<?= $this->recordLink()->getUrl($this->driver).'/PDF'; ?>" class="icon pdf fulltext">
         <?=$this->transEsc('PDF Full Text')?>
       </a>
