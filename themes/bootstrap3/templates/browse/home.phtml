@@ -10,64 +10,64 @@
   <h2><?=$this->transEsc('Choose a Category to Begin Browsing') ?>:</h2>
 <? endif; ?>
 
-  <ul class="list-group col-sm-3<? if (!empty($this->categoryList)): ?> hidden-xs<? endif ?>" id="list1">
-  <? foreach ($this->browseOptions as $item=>$currentOption): ?>
-    <a href="<?=$this->url('browse-' . strtolower($currentOption['action'])); ?>" class="list-group-item<? if($currentOption['action'] == $this->currentAction): ?> active<? endif; ?>">
-      <?=$this->transEsc($currentOption['description']) ?>
+<ul class="list-group col-sm-3<? if (!empty($this->categoryList)): ?> hidden-xs<? endif ?>" id="list1">
+<? foreach ($this->browseOptions as $item=>$currentOption): ?>
+  <a href="<?=$this->url('browse-' . strtolower($currentOption['action'])); ?>" class="list-group-item<? if($currentOption['action'] == $this->currentAction): ?> active<? endif; ?>">
+    <?=$this->transEsc($currentOption['description']) ?>
+    <span class="pull-right"><i class="fa fa-angle-right"></i></span>
+  </a>
+<? endforeach; ?>
+</ul>
+
+<? if (!empty($this->categoryList)): ?>
+  <ul class="list-group col-sm-3<? if (!empty($this->secondaryList) || !empty($this->resultList)): ?> hidden-xs<? endif ?>" id="list2">
+  <? foreach($this->categoryList as $findby=>$category): ?>
+    <a href="<?=$BROWSE_BASE ?>?findby=<?=urlencode($findby) ?>&query_field=<?=$this->browse()->getSolrField($findby, $this->currentAction) ?>" class="list-group-item<? if ($this->findby == $findby): ?> active<? endif; ?>">
+      <?=$this->transEsc($category)/*html*/?>
       <span class="pull-right"><i class="fa fa-angle-right"></i></span>
     </a>
   <? endforeach; ?>
   </ul>
+<? endif; ?>
 
-  <? if (!empty($this->categoryList)): ?>
-    <ul class="list-group col-sm-3<? if (!empty($this->secondaryList) || !empty($this->resultList)): ?> hidden-xs<? endif ?>" id="list2">
-    <? foreach($this->categoryList as $findby=>$category): ?>
-      <a href="<?=$BROWSE_BASE ?>?findby=<?=urlencode($findby) ?>&query_field=<?=$this->browse()->getSolrField($findby, $this->currentAction) ?>" class="list-group-item<? if ($this->findby == $findby): ?> active<? endif; ?>">
-        <?=$this->transEsc($category)/*html*/?>
+<? if (!empty($this->secondaryList)): ?>
+  <ul class="list-group col-sm-3<? if (!empty($this->resultList)): ?> hidden-xs<? endif ?>" id="list3">
+  <? foreach($this->secondaryList as $secondary): ?>
+    <? $url = $BROWSE_BASE . '?findby=' . urlencode($this->findby)
+        . '&category=' . urlencode($this->category)
+        . '&query=' . urlencode($secondary['value']);
+      if ($this->facetPrefix) {
+        $url .= '&facet_prefix=' . urlencode($secondary['displayText']);
+      }
+      if ($this->secondaryParams) {
+        foreach($this->secondaryParams as $var=>$val) {
+          $url .= '&' . $var .'=' . urlencode($val);
+        }
+      }
+    ?>
+    <a href="<?=$url ?>" class="list-group-item<? if ($this->query == $secondary['value'].'' || $this->query == $secondary['value'].'*'): ?> active<? endif; ?>">
+      <?=$this->escapeHtml($secondary['displayText']) ?>
+      <? if ($this->findby != 'alphabetical'): ?>
+        <span class="badge"><?=$secondary['count'] ?></span>
+      <? else: ?>
         <span class="pull-right"><i class="fa fa-angle-right"></i></span>
-      </a>
-    <? endforeach; ?>
-    </ul>
-  <? endif; ?>
+      <? endif; ?>
+    </a>
+  <? endforeach; ?>
+  </ul>
+<? endif; ?>
 
-  <? if (!empty($this->secondaryList)): ?>
-    <ul class="list-group col-sm-3<? if (!empty($this->resultList)): ?> hidden-xs<? endif ?>" id="list3">
-    <? foreach($this->secondaryList as $secondary): ?>
-      <? $url = $BROWSE_BASE . '?findby=' . urlencode($this->findby)
-          . '&category=' . urlencode($this->category)
-          . '&query=' . urlencode($secondary['value']);
-        if ($this->facetPrefix) {
-          $url .= '&facet_prefix=' . urlencode($secondary['displayText']);
-        }
-        if ($this->secondaryParams) {
-          foreach($this->secondaryParams as $var=>$val) {
-            $url .= '&' . $var .'=' . urlencode($val);
-          }
-        }
-      ?>
-      <a href="<?=$url ?>" class="list-group-item<? if ($this->query == $secondary['value'].'' || $this->query == $secondary['value'].'*'): ?> active<? endif; ?>">
-        <?=$this->escapeHtml($secondary['displayText']) ?>
-        <? if ($this->findby != 'alphabetical'): ?>
-          <span class="badge"><?=$secondary['count'] ?></span>
-        <? else: ?>
-          <span class="pull-right"><i class="fa fa-angle-right"></i></span>
-        <? endif; ?>
-      </a>
-    <? endforeach; ?>
-    </ul>
-  <? endif; ?>
-
-  <? if (!empty($this->resultList)): ?>
-    <ul class="list-group col-sm-3" id="list4">
-    <? foreach($this->resultList as $result): ?>
-      <a href="<?=$SEARCH_BASE ?>?<?=$this->paramTitle ?><?=urlencode($result['result']) ?><? if ($this->searchParams): foreach($this->searchParams as $var=>$val): ?>&<?=$var ?>=<?=urlencode($val) ?><? endforeach;endif; ?>" class="list-group-item">
-        <?=$this->escapeHtml($result['result'])/*html*/?>
-        <span class="badge"><?=$result['count'] ?></span>
-      </a>
-    <? endforeach; ?>
-    </ul>
-  <? elseif (isset($this->query)): ?>
-    <ul class="list-group col-sm-3" id="list4">
-      <li class="list-group-item"><?=$this->transEsc('nohit_heading') ?></li>
-    </ul>
-  <? endif; ?>
+<? if (!empty($this->resultList)): ?>
+  <ul class="list-group col-sm-3" id="list4">
+  <? foreach($this->resultList as $result): ?>
+    <a class="list-group-item clearfix" href="<?=$SEARCH_BASE ?>?<?=$this->paramTitle ?><?=urlencode($result['result']) ?><? if ($this->searchParams): foreach($this->searchParams as $var=>$val): ?>&<?=$var ?>=<?=urlencode($val) ?><? endforeach;endif; ?>">
+      <p class="col-sm-9"><?=$this->escapeHtml($result['result'])?></p>
+      <span class="badge"><?=$result['count'] ?></span>
+    </a>
+  <? endforeach; ?>
+  </ul>
+<? elseif (isset($this->query)): ?>
+  <ul class="list-group col-sm-3" id="list4">
+    <li class="list-group-item"><?=$this->transEsc('nohit_heading') ?></li>
+  </ul>
+<? endif; ?>
