@@ -157,8 +157,8 @@
       ?>
       <span class="hidden-phone">
         <i class="fa fa-qrcode"></i> <a href="<?=$this->escapeHtmlAttr($QRCode);?>" class="qrcodeLink"><?=$this->transEsc('qrcode_show')?></a>
-        <div class="qrcode hide">
-          <img alt="<?=$this->transEsc('QR Code')?>" class="img-polaroid" src="<?=$this->escapeHtmlAttr($QRCode);?>"/>
+        <div class="qrcode hidden">
+          <img alt="<?=$this->transEsc('QR Code')?>" src="<?=$this->escapeHtmlAttr($QRCode);?>"/>
         </div><br/>
       </span>
     <? endif; ?>
