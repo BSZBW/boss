@@ -91,7 +91,7 @@ class HeadLink extends \Zend\View\Helper\HeadLink
         $currentTheme = $this->themeInfo->findContainingTheme($relPath);
         $home = APPLICATION_PATH . "/themes/$currentTheme/";
         $cssDirectory = $urlHelper('home') . "themes/$currentTheme/css/less/";
-        $cacheDirectory = $home . 'less/cache/';
+        $cacheDirectory = $home . 'css/less/';
         list($fileName, ) = explode('.', $file);
         $inputFile  = $home . $relPath;
 
@@ -102,25 +102,25 @@ class HeadLink extends \Zend\View\Helper\HeadLink
                 APPLICATION_PATH . '/themes/' . $currentTheme . '/' . $relPath
                     => $cssDirectory
             );
-            $css_file_name = \Less_Cache::Get(
-                $less_files,
-                array('cache_dir' => $cacheDirectory)
-            );
-            $css = file_get_contents($cacheDirectory . $css_file_name);
-        } catch (\Exception $e) {
             $themeParents = array_keys($this->themeInfo->getThemeInfo());
+            $directories = array();
             foreach ($themeParents as $theme) {
                 $directories[APPLICATION_PATH . '/themes/' . $theme . '/less/']
                     = $cssDirectory;
             }
-            $parser = new \Less_Parser(array('compress' => true));
-            $parser->SetImportDirs($directories);
-            $parser->parseFile($inputFile, $cssDirectory);
-            $css = $parser->getCss();
+            $css_file_name = \Less_Cache::Get(
+                $less_files,
+                array(
+                    'cache_dir' => $cacheDirectory,
+                    'compress' => true,
+                    'import_dirs' => $directories
+                )
+            );
+            $this->prependStylesheet($cssDirectory . $css_file_name);
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            $this->prependStylesheet($cssDirectory . $fileName . '.css');
         }
-        //error_log($fileName . ' = ' . (microtime(true)-$time));
-        $int = file_put_contents($home . 'css/less/' . $fileName . '.css', $css);
-        $this->prependStylesheet($cssDirectory . $fileName . '.css');
     }
 
     /**
