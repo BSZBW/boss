@@ -225,12 +225,12 @@
   <? $alttitle = $this->driver->getAltTitle();
   if (!empty($alttitle)): ?>
     <tr valign="top">
-        <th> $this->transEsc('Other_Title') ?>: </th>
-        <td>
-            <? foreach ($alttitle as $field): ?>
-                <?= $this->escapeHtml($field) ?><br/>
-            <? endforeach; ?>
-        </td>>
+      <th> <?=$this->transEsc('Other_Title') ?>: </th>
+      <td>
+          <? foreach ($alttitle as $field): ?>
+              <?= $this->escapeHtml($field) ?><br/>
+          <? endforeach; ?>
+      </td>
     </tr>
   <? endif; ?>
 
@@ -298,19 +298,6 @@
 <!--      </td>-->
 <!--    </tr>-->
 <!--  --><?// endif; ?>
-
-  <? /* Display alternative title */ ?>
-  <? $alttitle = $this->driver->getAltTitle();
-  if (!empty($alttitle)): ?>
-    <tr valign="top">
-        <th><?= $this->transEsc('Other_Title') ?>: </th>
-        <td>
-            <? foreach ($alttitle as $field): ?>
-                <?= $this->escapeHtml($field) ?><br/>
-            <? endforeach; ?>
-        </td>
-    </tr>
-  <? endif; ?>
 
   <? $series = $this->driver->getSeries();
   if (!empty($series)): ?>
