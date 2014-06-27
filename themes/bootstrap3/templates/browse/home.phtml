@@ -45,12 +45,12 @@
         }
       }
     ?>
-    <a href="<?=$url ?>" class="list-group-item<? if ($this->query == $secondary['value'].'' || $this->query == $secondary['value'].'*'): ?> active<? endif; ?>">
-      <?=$this->escapeHtml($secondary['displayText']) ?>
-      <? if ($this->findby != 'alphabetical'): ?>
-        <span class="badge"><?=$secondary['count'] ?></span>
-      <? else: ?>
+    <a href="<?=$url ?>" class="list-group-item clearfix<? if ($this->query == $secondary['value'].'' || $this->query == $secondary['value'].'*'): ?> active<? endif; ?>">
+      <p class="col-sm-9"><?=$this->escapeHtml($secondary['displayText']) ?></p>
+      <? if ($this->findby == 'alphabetical'): ?>
         <span class="pull-right"><i class="fa fa-angle-right"></i></span>
+      <? else: ?>
+        <span class="badge"><?=$secondary['count'] ?></span>
       <? endif; ?>
     </a>
   <? endforeach; ?>
