@@ -24,26 +24,26 @@
 <div class="<?=$this->layoutClass('mainbody')?>">
   <div class="clearfix hidden-print">
     <div class="pull-right">
-  <? if (isset($list)): ?>
-      <? if ($list->editAllowed($account->isLoggedIn())): ?>
-        <a href="<?=$this->url('editList', array('id' => $list->id)) ?>" class="btn btn-link" title="<?=$this->transEsc("edit_list")?>"><i class="fa fa-edit"></i> <?=$this->transEsc("edit_list")?></a>
-        <div class="btn-group">
-          <a class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="<?=$this->url('myresearch-deletelist') ?>?listID=<?=urlencode($list->id)?>">
-            <i class="fa fa-trash-o"></i> <?=$this->transEsc("delete_list")?>
-          </a>
-          <ul class="dropdown-menu">
-            <li><a href="<?=$this->url('myresearch-deletelist') ?>?listID=<?=urlencode($list->id)?>&amp;confirm=1"><?=$this->transEsc('Delete') ?></a></li>
-            <li><a href="#"><?=$this->transEsc('confirm_dialog_no')?></a></li>
-          </ul>
-        </div>
+      <? if (isset($list)): ?>
+        <? if ($list->editAllowed($account->isLoggedIn())): ?>
+          <a href="<?=$this->url('editList', array('id' => $list->id)) ?>" class="btn btn-link" title="<?=$this->transEsc("edit_list")?>"><i class="fa fa-edit"></i> <?=$this->transEsc("edit_list")?></a>
+          <div class="btn-group">
+            <a class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="<?=$this->url('myresearch-deletelist') ?>?listID=<?=urlencode($list->id)?>">
+              <i class="fa fa-trash-o"></i> <?=$this->transEsc("delete_list")?>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="<?=$this->url('myresearch-deletelist') ?>?listID=<?=urlencode($list->id)?>&amp;confirm=1"><?=$this->transEsc('Delete') ?></a></li>
+              <li><a href="#"><?=$this->transEsc('confirm_dialog_no')?></a></li>
+            </ul>
+          </div>
+        <? endif; ?>
+      <? elseif ($recordTotal > 0): ?>
+        <?=$this->transEsc("Showing")?>
+        <strong><?=$this->escapeHtml($this->results->getStartRecord())?></strong> - <strong><?=$this->escapeHtml($this->results->getEndRecord())?></strong>
+        <?=$this->transEsc('of')?> <strong><?=number_format($recordTotal)?></strong>
       <? endif; ?>
-  <? elseif ($recordTotal > 0): ?>
-      <?=$this->transEsc("Showing")?>
-      <strong><?=$this->escapeHtml($this->results->getStartRecord())?></strong> - <strong><?=$this->escapeHtml($this->results->getEndRecord())?></strong>
-      <?=$this->transEsc('of')?> <strong><?=number_format($recordTotal)?></strong>
-  <? endif; ?>
     </div>
-    <p class="lead pull-left"><?=$this->escapeHtml($list->title)?></p>
+    <p class="lead pull-left"><?=$this->escapeHtml($list->title ?: "Your Favorites")?></p>
   </div>
 <? if (!empty($list->description)): ?>
   <p><?=$this->escapeHtml($list->description)?></p>
