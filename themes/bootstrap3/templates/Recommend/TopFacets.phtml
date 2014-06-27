@@ -1,4 +1,5 @@
 <?
+  // TODO: This file needs love
   $topFacetSet = $this->recommend->getTopFacetSet();
   $topFacetSettings = $this->recommend->getTopFacetSettings();
 ?>
@@ -14,7 +15,7 @@
       <? if ($iter == $corner+1): ?>
         </div><div id="more-NarrowGroupHidden_<?=$this->escapeHtml($title)?>" class="row top-row">
           <span class="col-sm-12"><a href="#" onclick="moreFacets('NarrowGroupHidden_<?=$this->escapeHtml($title)?>'); return false;"><?=$this->transEsc('more') ?> ...</a></span>
-        </div><div class="row<?=$moreClass ?>">
+        </div><div class="row top-row <?=$moreClass ?>">
       <? endif; ?>
       <? /* Columns */ ?>
       <span class="col-sm-<?=floor(12/$topFacetSettings['cols'])?><? if ($iter == $corner+1) echo $moreClass ?>">
