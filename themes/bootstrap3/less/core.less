@@ -1,37 +1,5 @@
 @import "bootstrap";
 
-/* --- Blend the links in --- */
-.badge a {color:#FFF}
-
-/* --- Browse --- */
-.browse.list-group .list-group-item {
-  word-break:break-all;
-  .col-sm-9 {
-    padding:0;
-    word-break:normal;
-  }
-}
-
-/* --- Sidebar rounded corners --- */
-.sidebar {
-  & .title.collapsed {
-    cursor:pointer;
-    &.collapsed {
-      border-radius:@border-radius-base;
-    }
-  }
-  .collapse,.collapsing {
-    .list-group-item {
-      border-top-left-radius:0px;
-      border-top-right-radius:0px;
-      &[id^=more] {
-        border-bottom-left-radius:@border-radius-base;
-        border-bottom-right-radius:@border-radius-base;
-      }
-    }
-  }
-}
-
 /* --- Slider accessibility --- */
 .slider {
   .slider-track {
@@ -57,14 +25,4 @@
       box-shadow:inset 0 -1px 0 rgba(0,0,0,0.3);
     }
   }
-}
-
-/* --- Table wrapping to prevent horizontal overflow --- */
-.table > tbody > tr > td {word-break:break-all}
-
-/* --- Prevent the transparent textbox styling from Typeahead --- */
-.twitter-typeahead {
-  background: #FFF;
-  padding: 7px 0 10px;
-  border-radius: @border-radius-base;
 }

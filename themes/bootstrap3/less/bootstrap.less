@@ -7,8 +7,14 @@
 label.list-group-item {border-radius:0;font-weight:normal;margin-top:0;padding-left:35px}
 .list-group-item.title {font-weight:bold}
 #modal .modal-body > h2:first-child {display:none}
+
 /* --- Autocomplete --- */
-.twitter-typeahead .tt-hint {display:none}
+.twitter-typeahead {
+  background: #FFF;
+  padding: 7px 0 10px;
+  border-radius: @border-radius-base;
+  .tt-hint {display:none}
+}
 .tt-dropdown-menu {.list-group;margin-top:10px;}
 .tt-suggestion {
   .list-group-item;
@@ -18,3 +24,43 @@ label.list-group-item {border-radius:0;font-weight:normal;margin-top:0;padding-l
   }
   p {margin:0}
 }
+
+/* --- Badges - blend the links in --- */
+.badge a {color:#FFF}
+
+/* --- Browse --- */
+.browse.list-group .list-group-item {
+  .col-sm-9 {
+    padding:0;
+    word-break:break-all;
+  }
+  &.view-record {
+    border-top:0;
+    font-size:85%;
+    padding:2px 4px;
+    text-align:right;
+  }
+}
+
+/* --- Sidebar rounded corners --- */
+.sidebar {
+  & .title.collapsed {
+    cursor:pointer;
+    &.collapsed {
+      border-radius:@border-radius-base;
+    }
+  }
+  .collapse,.collapsing {
+    .list-group-item {
+      border-top-left-radius:0px;
+      border-top-right-radius:0px;
+      &[id^=more] {
+        border-bottom-left-radius:@border-radius-base;
+        border-bottom-right-radius:@border-radius-base;
+      }
+    }
+  }
+}
+
+/* --- Table wrapping to prevent horizontal overflow --- */
+.table > tbody > tr > td {word-break:break-all}
