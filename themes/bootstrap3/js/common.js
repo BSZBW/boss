@@ -344,7 +344,7 @@ $(document).ready(function() {
     } else {
       $(this).html(vufindString.qrcode_hide).addClass("active");
     }
-    $(this).next('.qrcode').toggle();
+    $(this).next('.qrcode').toggleClass('hidden');
     return false;
   });
 

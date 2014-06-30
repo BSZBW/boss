@@ -112,6 +112,7 @@ class HeadLink extends \Zend\View\Helper\HeadLink
                 $less_files,
                 array(
                     'cache_dir' => $cacheDirectory,
+                    'cache_method' => false,
                     'compress' => true,
                     'import_dirs' => $directories
                 )

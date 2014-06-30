@@ -1,0 +1,579 @@
+<?
+    // Set page title.
+    $this->headTitle($this->translate('Description') . ': ' . $this->driver->getBreadcrumb());
+
+    // Grab clean ISBN for convenience:
+    $isbn = $this->driver->getCleanISBN();
+
+    // Activate Syndetics Plus if necessary:
+    if ($this->syndeticsPlus()->isActive()) {
+        $this->headScript()->appendFile($this->syndeticsPlus()->getScript());
+    }
+
+    /** @var    VuFind\View\Helper\Root\Record $viewRecord */
+    /** @var    Swissbib\RecordDriver\SolrMarc $resultItem */
+    $resultItem = $this->driver;
+    $viewRecord = $this->record($resultItem);
+
+
+    $subjectVocabularies = $resultItem->getAllSubjectVocabularies(true);
+
+    /* Display Standard-IDs */
+    $isbns  = $this->driver->getISBNs();
+    $issns  = $this->driver->getISSNs();
+    $ismns  = $this->driver->getISMNs();
+    $dois   = $this->driver->getDOIs();
+    $urns   = $this->driver->getURNs();
+
+    $series = $this->driver->getSeries();
+    $recordLinks = $this->driver->getAllRecordLinks();
+?>
+<table class="table table-striped" summary="<?=$this->transEsc('Description')?>">
+
+  <? $summ = $this->driver->getSummary(); if (!empty($summ)): ?>
+    <? $contentDisplayed = true; ?>
+    <tr valign="top">
+      <th><?=$this->transEsc('Summary')?>: </th>
+      <td>
+        <? foreach ($summ as $field): ?>
+          <?=$this->escapeHtml($field)?><br/>
+        <? endforeach; ?>
+      </td>
+    </tr>
+  <? endif; ?>
+
+  <? $dateSpan = $this->driver->getDateSpan(); if (!empty($dateSpan)): ?>
+    <? $contentDisplayed = true; ?>
+    <tr valign="top">
+      <th><?=$this->transEsc('Published')?>: </th>
+      <td>
+        <? foreach ($dateSpan as $field): ?>
+          <?=$this->escapeHtml($field)?><br/>
+        <? endforeach; ?>
+      </td>
+    </tr>
+  <? endif; ?>
+
+  <? $notes = $this->driver->getGeneralNotes(); if (!empty($notes)): ?>
+    <? $contentDisplayed = true; ?>
+    <tr valign="top">
+      <th><?=$this->transEsc('Item Description')?>: </th>
+      <td>
+        <? foreach ($notes as $field): ?>
+          <?=$this->escapeHtml($field)?><br/>
+        <? endforeach; ?>
+      </td>
+    </tr>
+  <? endif; ?>
+
+  <? $physical = $this->driver->getPhysicalDescriptions(); if (!empty($physical)): ?>
+    <? $contentDisplayed = true; ?>
+    <tr valign="top">
+      <th><?=$this->transEsc('Physical Description')?>: </th>
+      <td>
+        <? foreach ($physical as $field): ?>
+          <?=$this->escapeHtml($field)?><br/>
+        <? endforeach; ?>
+      </td>
+    </tr>
+  <? endif; ?>
+
+  <? $freq = $this->driver->getPublicationFrequency(); if (!empty($freq)): ?>
+    <? $contentDisplayed = true; ?>
+    <tr valign="top">
+      <th><?=$this->transEsc('Publication Frequency')?>: </th>
+      <td>
+        <? foreach ($freq as $field): ?>
+          <?=$this->escapeHtml($field)?><br/>
+        <? endforeach; ?>
+      </td>
+    </tr>
+  <? endif; ?>
+
+  <? $playTime = $this->driver->getPlayingTimes(); if (!empty($playTime)): ?>
+    <? $contentDisplayed = true; ?>
+    <tr valign="top">
+      <th><?=$this->transEsc('Playing Time')?>: </th>
+      <td>
+        <? foreach ($playTime as $field): ?>
+          <?=$this->escapeHtml($field)?><br/>
+        <? endforeach; ?>
+      </td>
+    </tr>
+  <? endif; ?>
+
+  <? $system = $this->driver->getSystemDetails(); if (!empty($system)): ?>
+    <? $contentDisplayed = true; ?>
+    <tr valign="top">
+      <th><?=$this->transEsc('Format')?>: </th>
+      <td>
+        <? foreach ($system as $field): ?>
+          <?=$this->escapeHtml($field)?><br/>
+        <? endforeach; ?>
+      </td>
+    </tr>
+  <? endif; ?>
+
+  <? $audience = $this->driver->getTargetAudienceNotes(); if (!empty($audience)): ?>
+    <? $contentDisplayed = true; ?>
+    <tr valign="top">
+      <th><?=$this->transEsc('Audience')?>: </th>
+      <td>
+        <? foreach ($audience as $field): ?>
+          <?=$this->escapeHtml($field)?><br/>
+        <? endforeach; ?>
+      </td>
+    </tr>
+  <? endif; ?>
+
+  <? $awards = $this->driver->getAwards(); if (!empty($awards)): ?>
+    <? $contentDisplayed = true; ?>
+    <tr valign="top">
+      <th><?=$this->transEsc('Awards')?>: </th>
+      <td>
+        <? foreach ($awards as $field): ?>
+          <?=$this->escapeHtml($field)?><br/>
+        <? endforeach; ?>
+      </td>
+    </tr>
+  <? endif; ?>
+
+  <? $credits = $this->driver->getProductionCredits(); if (!empty($credits)): ?>
+    <? $contentDisplayed = true; ?>
+    <tr valign="top">
+      <th><?=$this->transEsc('Production Credits')?>: </th>
+      <td>
+        <? foreach ($credits as $field): ?>
+          <?=$this->escapeHtml($field)?><br/>
+        <? endforeach; ?>
+      </td>
+    </tr>
+  <? endif; ?>
+
+  <? $bib = $this->driver->getBibliographyNotes(); if (!empty($bib)): ?>
+    <? $contentDisplayed = true; ?>
+    <tr valign="top">
+      <th><?=$this->transEsc('Bibliography')?>: </th>
+      <td>
+        <? foreach ($bib as $field): ?>
+          <?=$this->escapeHtml($field)?><br/>
+        <? endforeach; ?>
+      </td>
+    </tr>
+  <? endif; ?>
+
+  <? $isbns = $this->driver->getISBNs(); if (!empty($isbns)): ?>
+    <? $contentDisplayed = true; ?>
+    <tr valign="top">
+      <th><?=$this->transEsc('ISBN')?>: </th>
+      <td>
+        <? foreach ($isbns as $field): ?>
+          <?=$this->escapeHtml($field)?><br/>
+        <? endforeach; ?>
+      </td>
+    </tr>
+  <? endif; ?>
+
+  <? $issns = $this->driver->getISSNs(); if (!empty($issns)): ?>
+    <? $contentDisplayed = true; ?>
+    <tr valign="top">
+      <th><?=$this->transEsc('ISSN')?>: </th>
+      <td>
+        <? foreach ($issns as $field): ?>
+          <?=$this->escapeHtml($field)?><br/>
+        <? endforeach; ?>
+      </td>
+    </tr>
+  <? endif; ?>
+
+  <? if (!empty($ismns)): ?>
+    <? $contentDisplayed = true; ?>
+    <tr valign="top">
+      <th><?= $this->transEsc('ISMN') ?>: </th>
+      <td>
+          <? foreach ($ismns as $field): ?>
+              <?= $this->escapeHtml($field) ?><br/>
+          <? endforeach; ?>
+      </td>
+    </tr>
+  <? endif; ?>
+
+  <? if (!empty($dois)): ?>
+    <? $contentDisplayed = true; ?>
+    <tr valign="top">
+      <th><?= $this->transEsc('DOI') ?>: </th>
+      <td>
+        <? foreach ($dois as $field): ?>
+            <?= $this->escapeHtml($field) ?><br/>
+        <? endforeach; ?>
+      </td>
+    </tr>
+  <? endif; ?>
+
+  <? if (!empty($urns)): ?>
+    <? $contentDisplayed = true; ?>
+    <tr valign="top">
+      <th><?= $this->transEsc('URN') ?>: </th>
+      <td>
+        <? foreach ($urns as $field): ?>
+            <?= $this->escapeHtml($field) ?><br/>
+        <? endforeach; ?>
+      </td>
+    </tr>
+  <? endif; ?>
+
+  <? $alttitle = $this->driver->getAltTitle();
+  if (!empty($alttitle)): ?>
+    <tr valign="top">
+      <th> <?=$this->transEsc('Other_Title') ?>: </th>
+      <td>
+          <? foreach ($alttitle as $field): ?>
+              <?= $this->escapeHtml($field) ?><br/>
+          <? endforeach; ?>
+      </td>
+    </tr>
+  <? endif; ?>
+
+  <? $related = $this->driver->getRelationshipNotes(); if (!empty($related)): ?>
+    <? $contentDisplayed = true; ?>
+    <tr valign="top">
+      <th><?=$this->transEsc('Related Items')?>: </th>
+      <td>
+        <? foreach ($related as $field): ?>
+          <?=$this->escapeHtml($field)?><br/>
+        <? endforeach; ?>
+      </td>
+    </tr>
+  <? endif; ?>
+
+  <? $access = $this->driver->getAccessRestrictions(); if (!empty($access)): ?>
+    <? $contentDisplayed = true; ?>
+    <tr valign="top">
+      <th><?=$this->transEsc('Access')?>: </th>
+      <td>
+        <? foreach ($access as $field): ?>
+          <?=$this->escapeHtml($field)?><br/>
+        <? endforeach; ?>
+      </td>
+    </tr>
+  <? endif; ?>
+
+  <? $findingAids = $this->driver->getFindingAids(); if (!empty($findingAids)): ?>
+    <? $contentDisplayed = true; ?>
+    <tr valign="top">
+      <th><?=$this->transEsc('Finding Aid')?>: </th>
+      <td>
+        <? foreach ($findingAids as $field): ?>
+          <?=$this->escapeHtml($field)?><br/>
+        <? endforeach; ?>
+      </td>
+    </tr>
+  <? endif; ?>
+
+  <? $authorNotes = empty($isbn) ? array() : $this->authorNotes($isbn); if (!empty($authorNotes)): ?>
+    <? $contentDisplayed = true; ?>
+    <tr valign="top">
+      <th><?=$this->transEsc('Author Notes')?>: </th>
+      <td>
+        <? foreach ($authorNotes as $provider => $list): ?>
+          <? foreach ($list as $field): ?>
+            <?=$field['Content']?><br/>
+          <? endforeach; ?>
+        <? endforeach; ?>
+      </td>
+    </tr>
+  <? endif; ?>
+
+<!--  --><?// $videoClips = empty($isbn) ? array() : $this->videoClips($isbn); if (!empty($videoClips)): ?>
+<!--    --><?// $contentDisplayed = true; ?>
+<!--    <tr valign="top">-->
+<!--      <th>--><?//=$this->transEsc('Video Clips')?><!--: </th>-->
+<!--      <td>-->
+<!--        --><?// foreach ($videoClips as $provider => $list): ?>
+<!--          --><?// foreach ($list as $field): ?>
+<!--            --><?//=$field['Content']?><!--<br/>-->
+<!--            --><?// if (isset($field['Copyright'])): ?><!----><?//=$field['Copyright']?><!--<br/>--><?// endif; ?>
+<!--          --><?// endforeach; ?>
+<!--        --><?// endforeach; ?>
+<!--      </td>-->
+<!--    </tr>-->
+<!--  --><?// endif; ?>
+
+  <? $series = $this->driver->getSeries();
+  if (!empty($series)): ?>
+    <tr valign="top">
+      <th><?= $this->transEsc('Series') ?>: </th>
+      <td>
+        <? foreach ($series as $field): ?>
+            <? if (is_array($field)): ?>
+              <? if (!empty($field['name'])): ?>
+                <?= $this->escapeHtml($field['name']) ?>
+                <? if (!empty($field['number'])): ?>
+                    <?= $this->escapeHtml($field['number']) ?>
+                <? endif; ?>
+                <br/>
+              <? endif; ?>
+            <? else: ?>
+              <?= $this->escapeHtml($field) ?> <br/>
+            <? endif; ?>
+        <? endforeach; ?>
+      </td>
+    </tr>
+  <? endif; ?>
+
+  <? $recordLinks = $this->driver->getAllRecordLinks(); ?>
+  <? if (!empty($recordLinks)): ?>
+    <? $contentDisplayed = true; ?>
+    <tr>
+      <th><?= $this->transEsc('Related Items') ?></th>
+
+      <td>
+        <? foreach ($recordLinks as $recordLink): ?>
+            <?= $this->transEsc($recordLink['title']) ?>:
+            <a href="<?= $this->recordLink()->related($recordLink['link']) ?>"><?= $this->escapeHtml($recordLink['value']) ?></a>
+            <br/>
+        <? endforeach; ?>
+      </td>
+    </tr>
+  <? endif; ?>
+
+  <? $nextTitles = $this->driver->getNewerTitles();
+  $prevTitles = $this->driver->getPreviousTitles(); ?>
+  <? if (!empty($nextTitles) or !empty($prevTitles)): ?>
+    <tr valign="top">
+      <? if (!empty($nextTitles)): ?>
+        <th><?= $this->transEsc('New Title') ?>: </th>
+        <td>
+          <? foreach ($nextTitles as $field): ?>
+              <a href="<?= $this->record($this->driver)->getLink('title', $field) ?>"><?= $this->escapeHtml($field) ?></a>
+              <br/>
+          <? endforeach; ?>
+        </td>
+      <? endif; ?>
+    </tr>
+    <tr valign="top">
+      <? if (!empty($prevTitles)): ?>
+        <th><?= $this->transEsc('Previous Title') ?>: </th>
+        <td>
+            <? foreach ($prevTitles as $field): ?>
+                <a href="<?= $this->record($this->driver)->getLink('title', $field) ?>"><?= $this->escapeHtml($field) ?></a>
+                <br/>
+            <? endforeach; ?>
+        </td>
+      <? endif; ?>
+    </tr>
+  <? endif; ?>
+
+  <?
+  $notes      = $resultItem->getGeneralNotes();
+  $freq       = $resultItem->getPublicationFrequency();
+  $contDates  = $resultItem->getContResourceDates();
+  $diss       = $resultItem->getDissertationNotes();
+  $bib        = $resultItem->getBibliographyNotes();
+  $access     = $resultItem->getAccessRestrictions();
+  $credits    = $resultItem->getProductionCredits();
+  $origtitle  = $resultItem->getOriginalTitle();
+  $perfomer   = $resultItem->getPerformerNote();
+  $awards     = $resultItem->getAwards();
+  $citenotes  = $resultItem->getCitationNotes();
+  $orignotes  = $resultItem->getOriginalVersionNotes();
+  $copynotes  = $resultItem->getCopyNotes();
+  $system     = $resultItem->getSystemDetails();
+  ?>
+  <? if (!empty($notes) or !empty($freq) or !empty($contDates) or !empty($diss) or
+      !empty($bib) or !empty($access) or !empty($credits) or !empty($awards) or
+      !empty($citenotes) or !empty($orignotes) or !empty($copynotes) or
+      !empty($origtitle) or !empty($perfomer) or !empty($system)): ?>
+    <? $contentDisplayed = true; ?>
+
+      <? /* Display general notes (field 500) */ ?>
+      <? if (!empty($notes)): ?>
+        <tr valign="top">
+          <th><?= $this->transEsc('Item Description') ?>: </th>
+          <td>
+            <? foreach ($notes as $field): ?>
+                <?= $this->escapeHtml($field) ?><br/>
+            <? endforeach; ?>
+          </td>
+        </tr>
+      <? endif; ?>
+
+      <? /* Display publication frequency (field 310) */ ?>
+      <? if (!empty($freq)): ?>
+        <tr valign="top">
+          <th><?= $this->transEsc('Publication Frequency') ?>: </th>
+          <td>
+              <? foreach ($freq as $field): ?>
+                  <?=$this->escapeHtml($field)?><br/>
+              <? endforeach; ?>
+          </td>
+        </tr>
+      <? endif; ?>
+
+      <? /* Display Dates of Publication and/or Sequential Designation (field 362) */ ?>
+      <? if (!empty($contDates)): ?>
+        <tr valign="top">
+          <th><?= $this->transEsc('Numeration') ?>: </th>
+          <td>
+              <? foreach ($contDates as $field): ?>
+                  <?= $this->escapeHtml($field)?><br>
+              <? endforeach; ?>
+          </td>
+        </tr>
+      <? endif; ?>
+
+      <? /* Display dissertation notes (field 502) */ ?>
+      <? if (!empty($diss)): ?>
+        <tr valign="top">
+          <th><?= $this->transEsc('Dissertation_Note') ?>: </th>
+          <td>
+              <? foreach ($diss as $field): ?>
+                  <?= $this->escapeHtml($field) ?><br/>
+              <? endforeach; ?>
+          </td>
+        </tr>
+      <? endif; ?>
+
+      <? /* Display bibliography notes (field 504) */ ?>
+      <? if (!empty($bib)): ?>
+        <tr valign="top">
+          <th><?= $this->transEsc('Bibliography') ?>: </th>
+          <td>
+              <? foreach ($bib as $field): ?>
+                  <?= $this->escapeHtml($field) ?><br/>
+              <? endforeach; ?>
+          </td>
+        </tr>
+      <? endif; ?>
+
+      <? /* Display access restriction notes (field 506) */ ?>
+      <? if (!empty($access)): ?>
+        <tr valign="top">
+          <th><?= $this->transEsc('Access') ?>: </th>
+          <td>
+              <? foreach ($access as $field): ?>
+                  <?= $this->escapeHtml($field) ?><br/>
+              <? endforeach; ?>
+          </td>
+        </tr>
+      <? endif; ?>
+
+      <? /* Display production credit notes (field 508) */ ?>
+      <? if (!empty($credits)): ?>
+        <tr valign="top">
+          <th><?= $this->transEsc('Production Credits') ?>: </th>
+          <td>
+              <? foreach ($credits as $field): ?>
+                  <?= $this->escapeHtml($field) ?><br/>
+              <? endforeach; ?>
+          </td>
+        </tr>
+      <? endif; ?>
+
+      <? /* Display original title (field 509) */ ?>
+      <? if (!empty($origtitle)): ?>
+        <tr valign="top">
+          <th><?= $this->transEsc('Original_Title') ?>: </th>
+          <td>
+              <? foreach ($origtitle as $field): ?>
+                  <?= $this->escapeHtml($field) ?><br/>
+              <? endforeach; ?>
+          </td>
+        </tr>
+      <? endif; ?>
+
+      <? /* Display citation / reference note (field 510) */ ?>
+      <? if (!empty($citenotes)): ?>
+        <tr valign="top">
+          <th><?= $this->transEsc('Citation_Note') ?>: </th>
+          <td>
+              <? foreach ($citenotes as $field): ?>
+                  <?= $this->escapeHtml($field) ?><br/>
+              <? endforeach; ?>
+          </td>
+        </tr>
+      <? endif; ?>
+
+      <? /* Display participant / performers note */ ?>
+      <? if (!empty($perfomer)): ?>
+        <tr valign="top">
+          <th><?= $this->transEsc('Performer') ?>: </th>
+          <td>
+              <? foreach ($perfomer as $field): ?>
+                  <?= $this->escapeHtml($field) ?><br/>
+              <? endforeach; ?>
+          </td>
+        </tr>
+      <? endif; ?>
+
+      <? /* Display original version note (field 534) */ ?>
+      <? if (!empty($orignotes)): ?>
+        <tr valign="top">
+          <th><?= $this->transEsc('Original_Version_Note') ?>: </th>
+          <td>
+              <? foreach ($orignotes as $field): ?>
+                  <?= $this->escapeHtml($field) ?><br/>
+              <? endforeach; ?>
+          </td>
+        </tr>
+      <? endif; ?>
+
+      <? /* Display copy and version identification note (fields 562 or 590) */ ?>
+      <? if (!empty($copynotes)): ?>
+        <tr valign="top">
+          <th><?= $this->transEsc('Copy_Note') ?>: </th>
+          <td>
+              <? foreach ($copynotes as $field): ?>
+                  <?= $this->escapeHtml($field) ?><br/>
+              <? endforeach; ?>
+          </td>
+        </tr>
+      <? endif; ?>
+
+      <? /* Display system information note (field 538) */ ?>
+      <? if (!empty($system)): ?>
+        <tr valign="top">
+          <th><?= $this->transEsc('Format') ?>: </th>
+          <td>
+            <? foreach ($system as $field): ?>
+                <?= $this->escapeHtml($field) ?><br/>
+            <? endforeach; ?>
+          </td>
+        </tr>
+      <? endif; ?>
+
+      <? /* Display award notes (field 586) */ ?>
+      <? if (!empty($awards)): ?>
+        <tr valign="top">
+          <th><?= $this->transEsc('Awards') ?>: </th>
+          <td>
+              <? foreach ($awards as $field): ?>
+                  <?= $this->escapeHtml($field) ?><br/>
+              <? endforeach; ?>
+          </td>
+        </tr>
+      <? endif; ?>
+  <? endif; ?>
+
+  <? if (sizeof($subjectVocabularies)): ?>
+    <tr valign="top">
+      <th><?= $this->transEsc('Subjects') ?>: </th>
+      <td>
+        <? foreach ($subjectVocabularies as $vocabulary => $fieldsData): ?>
+          <h5 class="vocabularyTitle"><?= $this->transEsc('vocabulary.' . $vocabulary, array(), $vocabulary) ?></h5>
+          <ul class="vocabularyList vocabulary<?= ucfirst($vocabulary) ?>">
+            <? foreach ($fieldsData as $fieldIndex => $fieldData): ?>
+              <? foreach ($fieldData as $fieldValues): ?>
+                <li class="type<?= $fieldIndex ?>"><?= $this->escapeHtml(implode(' > ', $fieldValues)) ?></li>
+              <? endforeach; ?>
+            <? endforeach; ?>
+           </ul>
+        <? endforeach; ?>
+      </td>
+    </tr>
+  <? endif; ?>
+
+  <? if (!isset($contentDisplayed) || !$contentDisplayed): // Avoid errors if there were no rows above ?>
+    <tr><td><?=$this->transEsc('no_description')?></td></tr>
+  <? endif; ?>
+</table>

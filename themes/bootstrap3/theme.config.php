@@ -14,10 +14,9 @@ return array(
         'vendor/bootstrap.min.js',
         'vendor/bootstrap-accessibility.min.js',
         'vendor/typeahead.js',
+        'vendor/rc4.js',
         'common.js',
         'lightbox.js',
-        'rc4.js',
-        //'vendor/cssrefresh.js'
     ),
     'less' => array(
         'core.less',
