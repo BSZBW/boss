@@ -43,9 +43,9 @@
         <?=$this->transEsc('of')?> <strong><?=number_format($recordTotal)?></strong>
       <? endif; ?>
     </div>
-    <p class="lead pull-left"><?=$this->escapeHtml($list ? $list->title : "Your Favorites")?></p>
+    <p class="lead pull-left"><?=$list ? $this->escapeHtml($list->title) : $this->transEsc("Your Favorites")?></p>
   </div>
-<? if (!empty($list->description)): ?>
+<? if ($list && !empty($list->description)): ?>
   <p><?=$this->escapeHtml($list->description)?></p>
 <? endif; ?>
   <? if ($recordTotal > 0): ?>
