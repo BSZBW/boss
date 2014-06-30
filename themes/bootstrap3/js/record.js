@@ -122,7 +122,10 @@ function registerAjaxCommentRecord() {
               type: 'POST',
               url:  url,
               data: data,
-              dataType: 'json'
+              dataType: 'json',
+              success:function() {
+                $(form).find('textarea[name="comment"]').val('');
+              }
             });
           });
           return Lightbox.get('Record', 'AddComment', data, data);
@@ -140,13 +143,45 @@ function registerAjaxCommentRecord() {
   $('.delete').click(function(){deleteRecordComment(this, $('.hiddenId').val(), $('.hiddenSource').val(), this.id.substr(13));return false;});
 }
 
-$(document).ready(function(){
-  var id = document.getElementById('record_id').value;
+function registerTabEvents() {
 
   // register the record comment form to be submitted via AJAX
   registerAjaxCommentRecord();
 
   setUpCheckRequest();
+
+  // Place a Hold
+  // Place a Storage Hold
+  $('.placehold,.placeStorageRetrievalRequest,.placeILLRequest').click(function() {
+    var parts = $(this).attr('href').split('?');
+    parts = parts[0].split('/');
+    var params = deparam($(this).attr('href'));
+    params.id = parts[parts.length-2];
+    params.hashKey = params.hashKey.split('#')[0]; // Remove #tabnav
+    return Lightbox.get('Record', parts[parts.length-1], params, {}, function(html) {
+      Lightbox.checkForError(html, Lightbox.changeContent);
+    });
+  });
+}
+
+function ajaxLoadTab(tabid) {
+  var id = $('.hiddenId')[0].value;
+  $.ajax({
+    url: path + '/Record/'+id+'/AjaxTab',
+    type: 'POST',
+    data: {tab: tabid},
+    success: function(data) {
+      $('#record-tabs .tab-pane.active').removeClass('active');
+      $('#'+tabid+'-tab').html(data).addClass('active');
+      $('#'+tabid).tab('show');
+      registerTabEvents();
+    }
+  });
+}
+
+$(document).ready(function(){
+  var id = $('.hiddenId')[0].value;
+  registerTabEvents();
 
   $('ul.recordTabs a').click(function (e) {
     var tabid = $(this).attr('id').toLowerCase();
@@ -156,16 +191,7 @@ $(document).ready(function(){
       $('#'+tabid).tab('show');
     } else {
       $('#record-tabs').append('<div class="tab-pane" id="'+tabid+'-tab"><i class="fa fa-spinner fa-spin"></i> '+vufindString.loading+'...</div>');
-      $.ajax({
-        url: path + '/Record/'+id+'/AjaxTab',
-        type: 'POST',
-        data: {tab: tabid},
-        success: function(data) {
-          $('#record-tabs .tab-pane.active').removeClass('active');
-          $('#'+tabid+'-tab').html(data).addClass('active');
-          $('#'+tabid).tab('show');
-        }
-      });
+      ajaxGetTab(tabid);
     }
     return false;
   })
@@ -180,18 +206,6 @@ $(document).ready(function(){
   $('#mail-record').click(function() {
     var params = extractClassParams(this);
     return Lightbox.get(params['controller'], 'Email', {id:id});
-  });
-  // Place a Hold
-  // Place a Storage Hold
-  $('.placehold,.placeStorageRetrievalRequest,.placeILLRequest').click(function() {
-    var parts = $(this).attr('href').split('?');
-    parts = parts[0].split('/');
-    var params = deparam($(this).attr('href'));
-    params.id = parts[parts.length-2];
-    params.hashKey = params.hashKey.split('#')[0]; // Remove #tabnav
-    return Lightbox.get('Record', parts[parts.length-1], params, {}, function(html) {
-      Lightbox.checkForError(html, Lightbox.changeContent);
-    });
   });
   // Save lightbox
   $('#save-record').click(function() {
