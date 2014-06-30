@@ -183,6 +183,7 @@ $(document).ready(function(){
   var id = $('.hiddenId')[0].value;
   registerTabEvents();
 
+  console.log();
   $('ul.recordTabs a').click(function (e) {
     var tabid = $(this).attr('id').toLowerCase();
     if($('#'+tabid+'-tab').length > 0) {
@@ -191,7 +192,7 @@ $(document).ready(function(){
       $('#'+tabid).tab('show');
     } else {
       $('#record-tabs').append('<div class="tab-pane" id="'+tabid+'-tab"><i class="fa fa-spinner fa-spin"></i> '+vufindString.loading+'...</div>');
-      ajaxGetTab(tabid);
+      ajaxLoadTab(tabid);
     }
     return false;
   })
