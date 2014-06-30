@@ -13,7 +13,7 @@
 <table class="table table-striped" summary="<?=$this->transEsc('Description')?>">
   <? $summ = $this->driver->getSummary(); if (!empty($summ)): ?>
     <? $contentDisplayed = true; ?>
-    <tr valign="top">
+    <tr>
       <th><?=$this->transEsc('Summary')?>: </th>
       <td>
         <? foreach ($summ as $field): ?>
@@ -25,7 +25,7 @@
 
   <? $dateSpan = $this->driver->getDateSpan(); if (!empty($dateSpan)): ?>
     <? $contentDisplayed = true; ?>
-    <tr valign="top">
+    <tr>
       <th><?=$this->transEsc('Published')?>: </th>
       <td>
         <? foreach ($dateSpan as $field): ?>
@@ -37,7 +37,7 @@
 
   <? $notes = $this->driver->getGeneralNotes(); if (!empty($notes)): ?>
     <? $contentDisplayed = true; ?>
-    <tr valign="top">
+    <tr>
       <th><?=$this->transEsc('Item Description')?>: </th>
       <td>
         <? foreach ($notes as $field): ?>
@@ -49,7 +49,7 @@
 
   <? $physical = $this->driver->getPhysicalDescriptions(); if (!empty($physical)): ?>
     <? $contentDisplayed = true; ?>
-    <tr valign="top">
+    <tr>
       <th><?=$this->transEsc('Physical Description')?>: </th>
       <td>
         <? foreach ($physical as $field): ?>
@@ -61,7 +61,7 @@
 
   <? $freq = $this->driver->getPublicationFrequency(); if (!empty($freq)): ?>
     <? $contentDisplayed = true; ?>
-    <tr valign="top">
+    <tr>
       <th><?=$this->transEsc('Publication Frequency')?>: </th>
       <td>
         <? foreach ($freq as $field): ?>
@@ -73,7 +73,7 @@
 
   <? $playTime = $this->driver->getPlayingTimes(); if (!empty($playTime)): ?>
     <? $contentDisplayed = true; ?>
-    <tr valign="top">
+    <tr>
       <th><?=$this->transEsc('Playing Time')?>: </th>
       <td>
         <? foreach ($playTime as $field): ?>
@@ -85,7 +85,7 @@
 
   <? $system = $this->driver->getSystemDetails(); if (!empty($system)): ?>
     <? $contentDisplayed = true; ?>
-    <tr valign="top">
+    <tr>
       <th><?=$this->transEsc('Format')?>: </th>
       <td>
         <? foreach ($system as $field): ?>
@@ -97,7 +97,7 @@
 
   <? $audience = $this->driver->getTargetAudienceNotes(); if (!empty($audience)): ?>
     <? $contentDisplayed = true; ?>
-    <tr valign="top">
+    <tr>
       <th><?=$this->transEsc('Audience')?>: </th>
       <td>
         <? foreach ($audience as $field): ?>
@@ -109,7 +109,7 @@
 
   <? $awards = $this->driver->getAwards(); if (!empty($awards)): ?>
     <? $contentDisplayed = true; ?>
-    <tr valign="top">
+    <tr>
       <th><?=$this->transEsc('Awards')?>: </th>
       <td>
         <? foreach ($awards as $field): ?>
@@ -121,7 +121,7 @@
 
   <? $credits = $this->driver->getProductionCredits(); if (!empty($credits)): ?>
     <? $contentDisplayed = true; ?>
-    <tr valign="top">
+    <tr>
       <th><?=$this->transEsc('Production Credits')?>: </th>
       <td>
         <? foreach ($credits as $field): ?>
@@ -133,7 +133,7 @@
 
   <? $bib = $this->driver->getBibliographyNotes(); if (!empty($bib)): ?>
     <? $contentDisplayed = true; ?>
-    <tr valign="top">
+    <tr>
       <th><?=$this->transEsc('Bibliography')?>: </th>
       <td>
         <? foreach ($bib as $field): ?>
@@ -145,7 +145,7 @@
 
   <? $isbns = $this->driver->getISBNs(); if (!empty($isbns)): ?>
     <? $contentDisplayed = true; ?>
-    <tr valign="top">
+    <tr>
       <th><?=$this->transEsc('ISBN')?>: </th>
       <td>
         <? foreach ($isbns as $field): ?>
@@ -157,7 +157,7 @@
 
   <? $issns = $this->driver->getISSNs(); if (!empty($issns)): ?>
     <? $contentDisplayed = true; ?>
-    <tr valign="top">
+    <tr>
       <th><?=$this->transEsc('ISSN')?>: </th>
       <td>
         <? foreach ($issns as $field): ?>
@@ -169,7 +169,7 @@
 
   <? $related = $this->driver->getRelationshipNotes(); if (!empty($related)): ?>
     <? $contentDisplayed = true; ?>
-    <tr valign="top">
+    <tr>
       <th><?=$this->transEsc('Related Items')?>: </th>
       <td>
         <? foreach ($related as $field): ?>
@@ -181,7 +181,7 @@
 
   <? $access = $this->driver->getAccessRestrictions(); if (!empty($access)): ?>
     <? $contentDisplayed = true; ?>
-    <tr valign="top">
+    <tr>
       <th><?=$this->transEsc('Access')?>: </th>
       <td>
         <? foreach ($access as $field): ?>
@@ -193,7 +193,7 @@
 
   <? $findingAids = $this->driver->getFindingAids(); if (!empty($findingAids)): ?>
     <? $contentDisplayed = true; ?>
-    <tr valign="top">
+    <tr>
       <th><?=$this->transEsc('Finding Aid')?>: </th>
       <td>
         <? foreach ($findingAids as $field): ?>
@@ -203,9 +203,21 @@
     </tr>
   <? endif; ?>
 
+  <? $publicationPlaces = $this->driver->getHierarchicalPlaceNames(); if (!empty($publicationPlaces)): ?>
+    <? $contentDisplayed = true; ?>
+    <tr>
+      <th><?=$this->transEsc('Publication_Place')?>: </th>
+      <td>
+        <? foreach ($publicationPlaces as $field): ?>
+          <?=$this->escapeHtml($field)?><br/>
+        <? endforeach; ?>
+      </td>
+    </tr>
+  <? endif; ?>
+
   <? $authorNotes = empty($isbn) ? array() : $this->authorNotes($isbn); if (!empty($authorNotes)): ?>
     <? $contentDisplayed = true; ?>
-    <tr valign="top">
+    <tr>
       <th><?=$this->transEsc('Author Notes')?>: </th>
       <td>
         <? foreach ($authorNotes as $provider => $list): ?>
@@ -217,20 +229,6 @@
     </tr>
   <? endif; ?>
 
-  <? $videoClips = empty($isbn) ? array() : $this->videoClips($isbn); if (!empty($videoClips)): ?>
-    <? $contentDisplayed = true; ?>
-    <tr valign="top">
-      <th><?=$this->transEsc('Video Clips')?>: </th>
-      <td>
-        <? foreach ($videoClips as $provider => $list): ?>
-          <? foreach ($list as $field): ?>
-            <?=$field['Content']?><br/>
-            <? if (isset($field['Copyright'])): ?><?=$field['Copyright']?><br/><? endif; ?>
-          <? endforeach; ?>
-        <? endforeach; ?>
-      </td>
-    </tr>
-  <? endif; ?>
   <? if (!isset($contentDisplayed) || !$contentDisplayed): // Avoid errors if there were no rows above ?>
     <tr><td><?=$this->transEsc('no_description')?></td></tr>
   <? endif; ?>

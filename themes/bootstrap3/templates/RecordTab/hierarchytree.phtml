@@ -16,7 +16,7 @@
     array('showTree' => 'hierarchy_show_tree', 'hideTree' => 'hierarchy_hide_tree')
   );
   $this->inlineScript(\Zend\View\Helper\HeadScript::FILE, 'vendor/jsTree/jstree.min.js');
-  $this->inlineScript(\Zend\View\Helper\HeadScript::FILE, 'vendor/jsTree/hierarchyTree.js');
+  $this->inlineScript(\Zend\View\Helper\HeadScript::FILE, 'hierarchyTree.js');
   echo $this->inlineScript();
 ?>
 <div<?=isset($this->mainTreeClass) ? ' class="' . $this->mainTreeClass . '"' : ''?>>

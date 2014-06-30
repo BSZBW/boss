@@ -8,9 +8,11 @@ body {
   & a,.btn-link {color:#06C}
   & a:hover,.btn-link:hover {color:#09F}
 }
-.badge {
-  font-size:85%;
-  margin-top:1px;
+@media (min-width: 768px) {
+  .badge {
+    font-size:85%;
+    margin-top:1px;
+  }
 }
 .btn:not(.btn-link):not(.btn-primary) {
   background:@gray-lighter;
@@ -20,15 +22,35 @@ body {
   border-color:darken(@brand-primary, 10%);
   font-weight:bold;
 }
-.container {
+header,.container,footer {
   background:#FFF;
-  border:2px solid #FFF;
-  border-radius:5px;
-  margin:18px auto;
-  padding:0;
+  margin:0 auto;
+  padding:2px;
+}
+header {
+  border-radius:5px 5px 0 0;
+  margin-top:18px;
+}
+footer {
+  border-radius:0 0 5px 5px;
+  margin-bottom:18px;
 }
 input[type=checkbox] {
   margin-top:2px;
+  margin:0 auto;
+  padding:0 2px;
+}
+header {
+  .container;
+  border-radius:5px 5px 0 0;
+  margin-top:18px;
+  padding:0 4px;
+}
+footer {
+  .container;
+  border-radius:0 0 5px 5px;
+  margin-bottom:18px;
+  padding:0 4px;
 }
 .nav > li > a {
   padding:5px 10px;
@@ -53,6 +75,12 @@ input[type=checkbox] {
       padding:4px 12px 3px 12px;
     }
   }
+  & > .active {
+    & > a, & > span, & > a:hover, & > span:hover, & > a:focus, & > span:focus {
+      background:@brand-primary;
+      border-color:@brand-primary;
+    }
+  }
 }
 .panel-heading {
   padding:0;
@@ -75,7 +103,7 @@ input[type=checkbox] {
 
 /* --- Header --- */
 header {
-  &.navbar {
+  & .navbar {
     padding:0 5px 0 10px;
     #searchForm {display:none !important}
   }
@@ -138,12 +166,6 @@ header {
       &:hover {background:@active-orange;border-color:@active-orange;}
       .badge {color:@active-orange;}
     }
-    &.title {
-      cursor:pointer;
-      &.collapsed {
-        border-radius:@border-radius-base;
-      }
-    }
   }
   & .slider-container {
     margin:4px 0 10px;
@@ -160,7 +182,6 @@ header {
     &:hover {color:@brand-danger}
   }
 }
-.collapse .list-group-item {border-top-left-radius:0px;border-top-right-radius:0px;}
 
 /* --- Search --- */
 .bulkActionButtons {margin-bottom:6px}
