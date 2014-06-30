@@ -27,6 +27,9 @@ body {
   margin:18px auto;
   padding:0;
 }
+input[type=checkbox] {
+  margin-top:2px;
+}
 .nav > li > a {
   padding:5px 10px;
 }
@@ -72,11 +75,13 @@ body {
 
 /* --- Header --- */
 header {
-  &.navbar {padding:0 5px 0 10px}
+  &.navbar {
+    padding:0 5px 0 10px;
+    #searchForm {display:none !important}
+  }
   .fa.fa-bars {font-size:21px}
   .navbar-nav > li > a {padding:12px 6px}
   .navbar-right {margin-top:10px}
-  #searchForm {display:none !important}
 }
 .nav.searchbox {
   display:block !important;
@@ -115,7 +120,15 @@ header {
 /* --- Sidebar --- */
 @active-orange: #FF9500;
 .sidebar {
-  .list-group {margin-bottom:5px}
+  .list-group {
+    margin-bottom:5px;
+    label.list-group-item {
+      padding-left:26px;
+      input[type=checkbox] {
+        margin-top:2px;
+      }
+    }
+  }
   .list-group-item {
     padding:7px 10px 6px;
     &.active {
@@ -123,7 +136,7 @@ header {
       border-color:@active-orange;
       color:#FFF;
       &:hover {background:@active-orange;border-color:@active-orange;}
-      .badge {color:@active-orange}
+      .badge {color:@active-orange;}
     }
     &.title {
       cursor:pointer;
@@ -141,12 +154,25 @@ header {
     }
   }
 }
+.sidebar .list-group-item,.top-row {
+  .badge a {
+    color:#FFF;
+    &:hover {color:@brand-danger}
+  }
+}
 .collapse .list-group-item {border-top-left-radius:0px;border-top-right-radius:0px;}
 
 /* --- Search --- */
 .bulkActionButtons {margin-bottom:6px}
 .left {text-align:center}
-.result label.pull-left {min-width:40px}
+.result {
+  label.pull-left {min-width:40px}
+  .savedLists {
+    margin:0 0 4px 0;
+    padding:4px 0 4px 6px;
+    ul {padding-left:18px;}
+  }
+}
 
 /* --- Search Home --- */
 .searchHomeContent {
@@ -203,3 +229,6 @@ ul.random {
 .tt-dropdown-menu {
   margin:2px;
 }
+
+/* --- Browse --- */
+[id^=list].list-group .col-sm-9 {margin:0}
