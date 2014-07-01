@@ -124,6 +124,7 @@ function registerAjaxCommentRecord() {
               data: data,
               dataType: 'json',
               success:function() {
+                refreshCommentList(id, recordSource);
                 $(form).find('textarea[name="comment"]').val('');
               }
             });

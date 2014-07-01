@@ -1,4 +1,4 @@
-/*global checkSaveStatuses, console, deparam, path, refreshCommentList, vufindString */
+/*global checkSaveStatuses, console, deparam, path, vufindString */
 
 var Lightbox = {
   /**
