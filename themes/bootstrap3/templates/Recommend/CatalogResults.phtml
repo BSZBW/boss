@@ -16,28 +16,28 @@
                 echo $this->transEsc('Title not available');
             }
           ?>
-          <? $summDate = $driver->getPublicationDates(); ?>
-          <? $summAuthor = $driver->getPrimaryAuthor(); ?>
-          <? if (!empty($summDate) || !empty($summAuthor)): ?>
         </a>
-            <? if (!empty($summDate)): ?>
-              <br/>
-              <span class="small author">
-                <?=$this->transEsc('Published')?>: (<?=$this->escapeHtml($summDate[0])?>)
-              </span>
-            <? endif; ?>
-            <? if (!empty($summAuthor)): ?>
-              <br/>
-              <a class="small date" href="<?=$this->record($driver)->getLink('author', $summAuthor)?>">
-                <span><?=$this->transEsc('By')?></span>
-                <?
-                $summHighlightedAuthor = $driver->getHighlightedAuthor();
-                echo !empty($summHighlightedAuthor)
-                    ? $this->highlight($summHighlightedAuthor)
-                    : $this->escapeHtml($summAuthor);
-              ?></a>
-            <? endif; ?>
+        <? $summDate = $driver->getPublicationDates(); ?>
+        <? $summAuthor = $driver->getPrimaryAuthor(); ?>
+        <? if (!empty($summDate) || !empty($summAuthor)): ?>
+          <? if (!empty($summDate)): ?>
+            <br/>
+            <span class="small author">
+              <?=$this->transEsc('Published')?>: (<?=$this->escapeHtml($summDate[0])?>)
+            </span>
           <? endif; ?>
+          <? if (!empty($summAuthor)): ?>
+            <br/>
+            <span class="small"><?=$this->transEsc('By')?></span>
+            <a class="small date" href="<?=$this->record($driver)->getLink('author', $summAuthor)?>">
+              <?
+              $summHighlightedAuthor = $driver->getHighlightedAuthor();
+              echo !empty($summHighlightedAuthor)
+                  ? $this->highlight($summHighlightedAuthor)
+                  : $this->escapeHtml($summAuthor);
+            ?></a>
+          <? endif; ?>
+        <? endif; ?>
       </li>
     <? endforeach; ?>
     <a class="list-group-item" href="<?=$this->url($searchObject->getOptions()->getSearchAction()) . $searchObject->getUrlQuery()->setLimit($searchObject->getOptions()->getDefaultLimit())?>"><?=$this->transEsc('More catalog results')?>...</a>

@@ -175,18 +175,7 @@ function updatePageForLogin() {
   var recordTabs = $('.recordTabs');
   if(!summon && recordTabs.length > 0) { // If summon, skip: about to reload anyway
     var tab = recordTabs.find('.active a').attr('id');
-    $.ajax({ // Shouldn't be cancelled, not assigned to XHR
-      type:'POST',
-      url:path+'/AJAX/JSON?method=get&submodule=Record&subaction=AjaxTab&id='+recordId,
-      data:{tab:tab},
-      dataType :'json',
-      success:function(html) {
-        recordTabs.next('.tab-container').html(html.data);
-      },
-      error:function(d,e) {
-        console.log(d,e); // Error reporting
-      }
-    });
+    ajaxLoadTab(tab);
   }
 }
 
@@ -381,6 +370,15 @@ $(document).ready(function() {
       Lightbox.close();
     }
   });
+  Lightbox.addFormCallback('emailSearch', function(x) {
+    Lightbox.confirm(vufindString['bulk_email_success']);
+  });
+  Lightbox.addFormCallback('saveRecord', function() {
+    checkSaveStatuses();
+  });
+  Lightbox.addFormCallback('bulkRecord', function() {
+    checkSaveStatuses();
+  });
 
   // Help links
   $('.help-link').click(function() {
@@ -405,8 +403,5 @@ $(document).ready(function() {
   $('.save-record').click(function() {
     var parts = this.href.split('/');
     return Lightbox.get(parts[parts.length-3],'Save',{id:$(this).attr('id')});
-  });
-  Lightbox.addFormCallback('emailSearch', function(x) {
-    Lightbox.confirm(vufindString['bulk_email_success']);
   });
 });

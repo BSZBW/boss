@@ -132,28 +132,11 @@ var Lightbox = {
       var f = Lightbox.closeStack.pop();
       f();
     }
-    // Abort requests triggered by the lightbox
     if(this.XHR) { this.XHR.abort(); }
     // Reset content so we start fresh when we open a lightbox
     $('#modal').removeData('modal');
     $('#modal').find('.modal-title').html('');
     $('#modal').find('.modal-body').html(vufindString.loading + "...");
-
-    /**
-     * Below here, we're doing content updates (sample events that affect content)
-     */
-    var recordId = $('#record_id').val();
-    var recordSource = $('.hiddenSource').val();
-
-    // Update the "Saved In" lists (add favorite, login)
-    if(typeof checkSaveStatuses === 'function') {
-      checkSaveStatuses();
-    }
-
-    // Update the comment list (add comment, login)
-    if(typeof refreshCommentList === 'function') {
-      refreshCommentList(recordId, recordSource);
-    }
   },
   /**
    * Call all the functions we need for when the modal loads
