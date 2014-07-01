@@ -91,12 +91,7 @@ class HeadLink extends \Zend\View\Helper\HeadLink
         $currentTheme = $this->themeInfo->findContainingTheme($relPath);
         $home = APPLICATION_PATH . "/themes/$currentTheme/";
         $cssDirectory = $urlHelper('home') . "themes/$currentTheme/css/less/";
-        $cacheDirectory = $home . 'css/less/';
-        list($fileName, ) = explode('.', $file);
-        $inputFile  = $home . $relPath;
 
-        $time = microtime(true);
-        $css = false;
         try {
             $less_files = array(
                 APPLICATION_PATH . '/themes/' . $currentTheme . '/' . $relPath
@@ -111,7 +106,7 @@ class HeadLink extends \Zend\View\Helper\HeadLink
             $css_file_name = \Less_Cache::Get(
                 $less_files,
                 array(
-                    'cache_dir' => $cacheDirectory,
+                    'cache_dir' => $home . 'css/less/',
                     'cache_method' => false,
                     'compress' => true,
                     'import_dirs' => $directories
@@ -120,6 +115,7 @@ class HeadLink extends \Zend\View\Helper\HeadLink
             $this->prependStylesheet($cssDirectory . $css_file_name);
         } catch (\Exception $e) {
             error_log($e->getMessage());
+            list($fileName, ) = explode('.', $file);
             $this->prependStylesheet($cssDirectory . $fileName . '.css');
         }
     }
