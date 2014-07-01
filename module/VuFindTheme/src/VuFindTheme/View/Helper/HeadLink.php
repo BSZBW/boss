@@ -116,7 +116,7 @@ class HeadLink extends \Zend\View\Helper\HeadLink
         } catch (\Exception $e) {
             error_log($e->getMessage());
             list($fileName, ) = explode('.', $file);
-            $this->prependStylesheet($cssDirectory . $fileName . '.css');
+            $this->prependStylesheet($urlHelper('home') . "themes/$currentTheme/css/" . $fileName . '.css');
         }
     }
 
