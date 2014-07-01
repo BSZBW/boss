@@ -1,5 +1,5 @@
 <? if(isset($this->useRecaptcha) && $this->useRecaptcha): ?>
-  <?=$this->inlineScript(\Zend\View\Helper\HeadScript::FILE, 'vendor/recaptcha_ajax.js') ?>
+  <?=$this->inlineScript(\Zend\View\Helper\HeadScript::FILE, 'vendor/recaptcha_ajax.js', 'SET') ?>
   <div class="form-group">
     <div class="col-sm-9 col-sm-offset-3">
       <?=$this->reCaptchaOptions ?>
