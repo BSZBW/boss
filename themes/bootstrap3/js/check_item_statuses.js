@@ -4,7 +4,6 @@ function checkItemStatuses() {
   var id = $.map($('.ajaxItem'), function(i) {
     return $(i).find('.hiddenId')[0].value;
   });
-  console.log(id);
   if (!id.length) {
     return;
   }

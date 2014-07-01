@@ -9,12 +9,12 @@
       + '<source src="'+data['mp3']+'?download=true"/>'
       + '<source src="'+data[data['master']]+'?download=true"/>';
       var audio = $('audio');
-      audio.trigger('pause').html(html).show();
+      audio.trigger('pause').html(html).removeClass('hidden');
       audio[0].load();
     }
   };
   $(document).ready(function() {
-    $('#view .nav-tabs li.opener a').hide();
+    $('#view .nav-tabs li.opener a').addClass('hidden');
   });
 </script>
 <ul class="nav nav-tabs">
