@@ -1,3 +1,7 @@
 header {
   background-color: #50BF9E;
 }
+
+.holdingsAjaxSpinner {
+	display: none;
+}
