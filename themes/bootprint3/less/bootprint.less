@@ -27,10 +27,15 @@ body {
 }
 .btn:not(.btn-danger):not(.btn-info):not(.btn-link):not(.btn-primary):not(.btn-success):not(.btn-warning) {
   background:@gray-lighter;
+  background-image:linear-gradient(#FFF, #CCC);
   border:1px solid @gray-light;
+  color:@gray-darker;
+  text-shadow:0 1px 0 #FFF;
   &:hover {
     background:@link-color;
     border:1px solid @link-color;
+    color:#FFF;
+    text-shadow:none;
   }
 }
 .btn-danger, .btn-danger:hover  {border-color:darken(@brand-danger,  10%);font-weight:bold;}
