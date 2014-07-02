@@ -6,21 +6,39 @@ body {
   font-size:13px;
   & a,.btn-link {color:#06C}
   & a:hover,.btn-link:hover {color:#09F}
+  @media (max-width: 768px) {
+    padding:6px;
+    header {
+      margin-top:0;
+    }
+    .label {
+      font-size:85%;
+    }
+  }
 }
 @media (min-width: 768px) {
   .badge {
     font-size:85%;
     margin-top:1px;
   }
+  .label {
+    padding-top:.3em;
+  }
 }
-.btn:not(.btn-link):not(.btn-primary) {
+.btn:not(.btn-danger):not(.btn-info):not(.btn-link):not(.btn-primary):not(.btn-success):not(.btn-warning) {
   background:@gray-lighter;
   border:1px solid @gray-light;
+  &:hover {
+    background:@link-color;
+    border:1px solid @link-color;
+  }
 }
-.btn-primary {
-  border-color:darken(@brand-primary, 10%);
-  font-weight:bold;
-}
+.btn-danger, .btn-danger:hover  {border-color:darken(@brand-danger,  10%);font-weight:bold;}
+.btn-info,   .btn-info:hover    {border-color:darken(@brand-info,    10%);font-weight:bold;}
+.btn-primary,.btn-primary:hover {border-color:darken(@brand-primary, 10%);font-weight:bold;}
+.btn-success,.btn-success:hover {border-color:darken(@brand-success, 10%);font-weight:bold;}
+.btn-warning,.btn-warning:hover {border-color:darken(@brand-warning, 10%);font-weight:bold;}
+h2 {margin:0 8px 8px}
 input[type=checkbox] {
   margin-top:2px;
   margin:0 auto;
@@ -74,7 +92,7 @@ input[type=checkbox] {
   background:#FFF;
   padding:0;
   .main & {
-    padding-left:4px;
+    padding:0 4px;
   }
 }
 header {
@@ -94,14 +112,24 @@ header {
         color:transparent;
       }
     }
-    .navbar-nav > li > a {padding:12px 6px}
-    .navbar-right {margin-top:12px}
+    .navbar-nav > li > a {
+      padding:12px 6px;
+      @media (max-width: 768px) {
+        padding:8px 24px;
+      }
+    }
+    .navbar-right {
+      margin-top:12px;
+      @media (max-width: 768px) {
+        margin:0;
+      }
+    }
   }
   .searchbox {
     display:block !important;
     margin:0;
     #searchForm {
-      margin:6px;
+      margin:6px 8px 8px;
       padding:0;
       & .btn-primary,& .form-control {
         font-size:14px;
@@ -163,7 +191,7 @@ footer {
     }
   }
   & .slider-container {
-    margin:4px 0 10px;
+    margin:4px auto 10px;
     width:95%;
     .slider-handle {
       background:#619144;
@@ -182,7 +210,6 @@ footer {
 .bulkActionButtons {margin-bottom:6px}
 .left {text-align:center}
 .result {
-  label.pull-left {min-width:40px}
   .savedLists {
     margin:0 0 4px 0;
     padding:4px 0 4px 6px;
