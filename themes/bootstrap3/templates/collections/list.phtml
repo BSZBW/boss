@@ -1,13 +1,11 @@
-<ul class="nav nav-list well well-small">
-<? foreach ($result as $i => $item): ?>
-  <li>
-    <a href="<?=$this->url('collection', array('id' => $item['value']))?>">
+<ul class="list-group">
+  <? foreach ($result as $i => $item): ?>
+    <a class="list-group-item" href="<?=$this->url('collection', array('id' => $item['value']))?>">
       <strong><?=$this->escapeHtml($item['displayText'])?></strong>
-      <span class="pull-right small">
+      <span class="badge">
         <?=$item['count']?> <?=$this->transEsc('items')?>
         <i class="fa fa-angle-right"></i>
       </span>
     </a>
-  </li>
-<? endforeach; ?>
+  <? endforeach; ?>
 </ul>

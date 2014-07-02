@@ -20,7 +20,7 @@ return array(
     ),
     'less' => array(
         'core.less',
-        'font-awesome.less'
+        'font-awesome/font-awesome.less'
     ),
     'scss' => array(
         //'core.scss',

@@ -49,7 +49,7 @@
 </ul>
 <? if ($this->auth()->isLoggedIn() && $this->auth()->getManager()->supportsPasswordChange()): ?>
   <h4><?=$this->transEsc('Preferences')?></h4>
-  <ul class="nav nav-list">
+  <ul class="list-group">
     <a href="<?=$this->url('myresearch-changepassword') ?>" class="list-group-item<?=$this->active == 'newpassword' ? ' active' : ''?>">
       <?=$this->transEsc('Change Password') ?>
       <span class="pull-right"><i class="fa fa-lock"></i></span>
@@ -58,7 +58,7 @@
 <? endif; ?>
 <? if ($this->userlist()->getMode() !== 'disabled' && $user = $this->auth()->isLoggedIn()): ?>
   <h4><?=$this->transEsc('Your Lists')?></h4>
-  <ul class="nav nav-list">
+  <ul class="list-group">
     <a href="<?=$this->url('myresearch-favorites')?>" class="list-group-item<?=$this->active == 'favorites' ? ' active' : ''?>">
       <?=$this->transEsc('Your Favorites')?>
       <span class="pull-right"><i class="fa fa-star"></i></span>
