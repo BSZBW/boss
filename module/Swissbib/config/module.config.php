@@ -224,8 +224,7 @@ return array(
             'qrCodeHolding'                  => 'Swissbib\View\Helper\QrCodeHolding',
             'holdingItemsPaging'             => 'Swissbib\View\Helper\HoldingItemsPaging',
             'filterUntranslatedInstitutions' => 'Swissbib\View\Helper\FilterUntranslatedInstitutions',
-            'configAccess'                   => 'Swissbib\View\Helper\Config',
-            'layoutClass'                    => 'Swissbib\VuFind\View\Helper\Bootstrap3\LayoutClass'
+            'configAccess'                   => 'Swissbib\View\Helper\Config'
         ),
         'factories'  => array(
             'institutionSorter'                         =>  'Swissbib\View\Helper\Factory::getInstitutionSorter',
