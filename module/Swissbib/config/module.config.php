@@ -151,22 +151,16 @@ return array(
             'cart'                 => 'Swissbib\Controller\CartController',
             'shibtest'             => 'Swissbib\Controller\ShibtestController',
             'ajax'                 => 'Swissbib\Controller\AjaxController',
-
-
         ),
         'factories' => array(
             'record' => 'Swissbib\Controller\Factory::getRecordController',
-
         )
     ),
     'service_manager' => array(
         'invokables' => array(
             'VuFindTheme\ResourceContainer'       => 'Swissbib\VuFind\ResourceContainer',
-            //'Swissbib\RecordDriverHoldingsHelper' => 'Swissbib\RecordDriver\Helper\Holdings',
             'Swissbib\QRCode'                     => 'Swissbib\CRCode\QrCodeService',
             'MarcFormatter'                     => 'Swissbib\XSLT\MARCFormatter'
-
-
         ),
         'factories' => array(
             'Swissbib\HoldingsHelper'                       =>  'Swissbib\RecordDriver\Helper\Factory::getHoldingsHelper',
@@ -252,10 +246,8 @@ return array(
                 'factories' => array(
                     'Solr'   => 'Swissbib\VuFind\Search\Factory\SolrDefaultBackendFactory',
                     'Summon' => 'Swissbib\VuFind\Search\Factory\SummonBackendFactory',
-//                  'WorldCat' => 'VuFind\Search\Factory\WorldCatBackendFactory',
                 )
             ),
-
             'auth'                     => array(
                 'invokables' => array(
                     'shibboleth'    => 'Swissbib\VuFind\Auth\Shibboleth',
@@ -271,8 +263,6 @@ return array(
                     'favoritefacets' => 'Swissbib\Services\Factory::getFavoriteFacets',
                 ),
             ),
-
-
             'recorddriver'             => array(
                 'factories' => array(
                     'solrmarc' => 'Swissbib\RecordDriver\Factory::getSolrMarcRecordDriver',
@@ -309,29 +299,17 @@ return array(
             ),
         )
     ),
-    //'swissbib' => array(
-    //    'ignore_assets' => array(
-    //        'blueprint/screen.css',
-    //        'jquery-ui.css'
-    //    ),
-
     'swissbib' => array(
         // The ignore patterns have to be valid regex!
         'ignore_css_assets' => array(
-            '|blueprint/screen.css|',
-            '|css/smoothness/jquery-ui\.css|'
+            //can be used to ignore assets like this:
+            //'|blueprint/screen.css|',
         ),
         'ignore_js_assets'  => array(
-//            '|jquery\.min.js|', // jquery 1.6
-//            '|^jquery\.form\.js|',
-//            '|jquery.metadata.js|',
-//            '|^jquery.validate.min.js|',
-//            '|jquery-ui/js/jquery-ui\.js|',
-//            '|common\.js|',
-            //has a dependency to jQuery so has to be linked after this general component
-            //move it into the swissbib libs
+            //can be used to ignore assets like this:
+            //'|jquery\.min.js|', // jquery 1.6
+            //'|^jquery\.form\.js|',
         ),
-
         // This section contains service manager configurations for all Swissbib
         // pluggable components:
         'plugin_managers' => array(
@@ -345,37 +323,5 @@ return array(
                 'abstract_factories' => array('Swissbib\VuFind\Search\Results\PluginFactory'),
             )
         ),
-        // Search result tabs
-        'resultTabs' => array(
-            // Active tabs for a theme
-            'themes' => array(
-                'swissbibmulti'  => array(
-                    'swissbib',
-                    'summon'
-                ),
-                'swissbibsingle' => array(
-                    'swissbib'
-                ),
-                'bootstrap' => array(
-                    'swissbib'
-                )
-
-            ),
-            // Configuration of tabs
-            'tabs'   => array(
-                'swissbib' => array(
-                    'searchClassId' => 'Solr', // VuFind searchClassId
-                    'label'         => 'tab.swissbib', // Label
-                    'type'          => 'swissbibsolr', // Key for custom templates
-                    'advSearch'     => 'search-advanced'
-                ),
-                'summon'   => array(
-                    'searchClassId' => 'Summon',
-                    'label'         => 'tab.summon',
-                    'type'          => 'summon',
-                    'advSearch'     => 'summon-advanced'
-                )
-            )
-        )
     )
 );
