@@ -7,7 +7,8 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class Theme
- * @package    Swissbib\Services
+ *
+ * @package Swissbib\Services
  */
 class Theme implements ServiceLocatorAwareInterface
 {
@@ -17,17 +18,16 @@ class Theme implements ServiceLocatorAwareInterface
      */
     protected $serviceLocator;
 
-
-
     /**
      * Set serviceManager instance
      *
-     * @param  ServiceLocatorInterface $serviceLocator
+     * @param ServiceLocatorInterface $serviceLocator
+     *
      * @return void
      */
     public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
     {
-         $this->serviceLocator = $serviceLocator;
+        $this->serviceLocator = $serviceLocator;
     }
 
     /**
@@ -40,8 +40,6 @@ class Theme implements ServiceLocatorAwareInterface
         return $this->serviceLocator;
     }
 
-
-
     /**
      * Get active theme
      *
@@ -52,8 +50,6 @@ class Theme implements ServiceLocatorAwareInterface
         return $this->getServiceLocator()->get('Vufind\Config')->get('config')->Site->theme;
     }
 
-
-
     /**
      * Get all configuration for theme tabs
      *
@@ -61,12 +57,12 @@ class Theme implements ServiceLocatorAwareInterface
      */
     public function getThemeTabsConfig()
     {
-        $theme            = $this->getTheme();
-        $tabs            = array();
-        $moduleConfig    = $this->getServiceLocator()->get('Config');
-        $tabsConfig        = $moduleConfig['swissbib']['resultTabs'];
+        $theme          = $this->getTheme();
+        $tabs           = array();
+        $moduleConfig   = $this->getServiceLocator()->get('Config');
+        $tabsConfig     = $moduleConfig['swissbib']['resultTabs'];
         $allTabs        = $tabsConfig['tabs'];
-        $themeTabs        = isset($tabsConfig['themes'][$theme]) ? $tabsConfig['themes'][$theme] : array();
+        $themeTabs      = isset($tabsConfig['themes'][$theme]) ? $tabsConfig['themes'][$theme] : array();
 
         foreach ($themeTabs as $themeTab) {
             if (isset($allTabs[$themeTab])) {
