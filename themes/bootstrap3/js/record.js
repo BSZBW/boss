@@ -124,6 +124,7 @@ function registerAjaxCommentRecord() {
               data: data,
               dataType: 'json',
               success:function() {
+                refreshCommentList(id, recordSource);
                 $(form).find('textarea[name="comment"]').val('');
               }
             });
@@ -183,7 +184,6 @@ $(document).ready(function(){
   var id = $('.hiddenId')[0].value;
   registerTabEvents();
 
-  console.log();
   $('ul.recordTabs a').click(function (e) {
     var tabid = $(this).attr('id').toLowerCase();
     if($('#'+tabid+'-tab').length > 0) {

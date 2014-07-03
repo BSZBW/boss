@@ -12,7 +12,7 @@ label.list-group-item {border-radius:0;font-weight:normal;margin-top:0;padding-l
 /* --- Autocomplete --- */
 .twitter-typeahead {
   background: #FFF;
-  padding: 7px 0 10px;
+  padding: 8px 0 10px;
   border-radius: @border-radius-base;
   .tt-hint {display:none}
 }
@@ -31,7 +31,7 @@ label.list-group-item {border-radius:0;font-weight:normal;margin-top:0;padding-l
 
 /* --- Browse --- */
 .browse.list-group .list-group-item {
-  word-break:break-all;
+  word-wrap:break-word;
   &.view-record {
     border-top:0;
     font-size:85%;
@@ -88,4 +88,4 @@ label.list-group-item {border-radius:0;font-weight:normal;margin-top:0;padding-l
 }
 
 /* --- Table wrapping to prevent horizontal overflow --- */
-.table > tbody > tr > td {word-break:break-all}
+.table {word-wrap:break-word;table-layout:fixed}

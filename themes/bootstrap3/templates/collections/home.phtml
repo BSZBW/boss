@@ -53,13 +53,11 @@
   </ul>
 <? endif; ?>
 
-<div class="pagination pagination-centered pagination-small">
-  <ul>
+<ul class="pagination">
   <? foreach ($letters as $letter): ?>
     <li<? if($letter === $from): ?> class="active"<?endif?>><a href="<?=$this->url('collections-home')?>?from=<?=urlencode($letter)?><?=$this->escapeHtmlAttr($filterString)?>"><?=$this->escapeHtml($letter)?></a></li>
   <? endforeach; ?>
-  </ul>
-</div>
+</ul>
 <?=$pageLinks ?>
 <div class="clearfix">
   <?=$this->render('collections/list.phtml')?>
