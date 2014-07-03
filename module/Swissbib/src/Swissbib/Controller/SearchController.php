@@ -11,7 +11,6 @@ use VuFind\Controller\SearchController as VuFindSearchController;
 use VuFind\Search\Results\PluginManager as VuFindSearchResultsPluginManager;
 
 use Swissbib\VuFind\Search\Results\PluginManager as SwissbibSearchResultsPluginManager;
-use Swissbib\Hierarchy\SimpleTreeGenerator;
 
 /**
  * @package       Swissbib
@@ -19,11 +18,6 @@ use Swissbib\Hierarchy\SimpleTreeGenerator;
  */
 class SearchController extends VuFindSearchController
 {
-
-    /**
-     * @var    Boolean        Forced tab key by controller
-     */
-    protected $forceTabKey = false;
 
     /**
      * @var    String[]   search targets extended by swissbib
@@ -39,8 +33,17 @@ class SearchController extends VuFindSearchController
      */
     public function homeAction()
     {
+        $allTabsConfig      = $this->getThemeTabsConfig();
+        $activeTabKey       = $this->getActiveTab();
+        $resultsFacetConfig = $this->getFacetConfig();
+        $activeTabConfig    = $allTabsConfig[$activeTabKey];
+
+        // Set default target
+        $this->searchClassId = $activeTabConfig['searchClassId'];
+
         $homeView = parent::homeAction();
 
+        $this->layout()->setVariable('searchClassId', $this->searchClassId);
         $this->layout()->setVariable('pageClass', 'template_home');
 
         return $homeView;
