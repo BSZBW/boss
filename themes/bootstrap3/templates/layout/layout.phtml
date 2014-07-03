@@ -76,49 +76,55 @@
       }
     ?>
     <header role="banner" class="hidden-print">
-      <div class="navbar">
+      <div class="container navbar">
         <a class="sr-only" href="#content">Skip to content</a>
         <?=$this->render('header.phtml')?>
       </div>
-      <nav class="nav searchbox hidden-lg hidden-print">
-        <?=$this->layout()->searchbox ?>
-      </nav>
-      <? if((!isset($this->layout()->showBreadcrumbs) || $this->layout()->showBreadcrumbs == true)
-        && !empty($this->layout()->breadcrumbs)
-        && $this->layout()->breadcrumbs !== false
-      ): ?>
-        <ul class="breadcrumb hidden-print">
-        <? if(is_array($this->layout()->breadcrumbs)): ?>
-          <? if(count($this->layout()->breadcrumbs) > 1): ?>
-            <?=$this->render('breadcrumbs/multi.phtml', array(
-                'parents' => $this->layout()->breadcrumbs,
-                'title'   => $this->layout()->title,
-                'end'     => $this->layout()->breadcrumbEnd,
-                'from'    => $this->layout()->from
-              )) ?>
+      <div class="container">
+        <nav class="nav searchbox hidden-lg hidden-print">
+          <?=$this->layout()->searchbox ?>
+        </nav>
+        <? if((!isset($this->layout()->showBreadcrumbs) || $this->layout()->showBreadcrumbs == true)
+          && !empty($this->layout()->breadcrumbs)
+          && $this->layout()->breadcrumbs !== false
+        ): ?>
+          <ul class="breadcrumb hidden-print">
+          <? if(is_array($this->layout()->breadcrumbs)): ?>
+            <? if(count($this->layout()->breadcrumbs) > 1): ?>
+              <?=$this->render('breadcrumbs/multi.phtml', array(
+                  'parents' => $this->layout()->breadcrumbs,
+                  'title'   => $this->layout()->title,
+                  'end'     => $this->layout()->breadcrumbEnd,
+                  'from'    => $this->layout()->from
+                )) ?>
+            <? else: ?>
+              <?=$this->render('breadcrumbs/default.phtml', array(
+                  'parents' => $this->layout()->breadcrumbs,
+                  'title'   => $this->layout()->title
+                )) ?>
+            <? endif; ?>
           <? else: ?>
-            <?=$this->render('breadcrumbs/default.phtml', array(
-                'parents' => $this->layout()->breadcrumbs,
-                'title'   => $this->layout()->title
-              )) ?>
+            <?=$this->layout()->breadcrumbs ?>
           <? endif; ?>
-        <? else: ?>
-          <?=$this->layout()->breadcrumbs ?>
+          </ul>
         <? endif; ?>
-        </ul>
-      <? endif; ?>
+      </div>
     </header>
-    <div class="container">
-      <div role="main" class="main row">
-        <?=$this->layout()->content?>
+    <div role="main" class="main">
+      <div class="container">
+        <div class="row">
+          <?=$this->layout()->content?>
+        </div>
       </div>
     </div>
     <footer role="contentinfo" class="hidden-print">
-      <?=$this->render('footer.phtml')?>
-      <?=$this->layout()->poweredBy ?>
+      <div class="container">
+        <?=$this->render('footer.phtml')?>
+        <?=$this->layout()->poweredBy ?>
+      </div>
     </footer>
     <!-- MODAL IN CASE WE NEED ONE -->
-    <div id="modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+    <div id="modal" class="modal fade hidden-print" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">

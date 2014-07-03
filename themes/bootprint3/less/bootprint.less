@@ -6,65 +6,52 @@ body {
   font-size:13px;
   & a,.btn-link {color:#06C}
   & a:hover,.btn-link:hover {color:#09F}
+  @media (max-width: 768px) {
+    padding:6px;
+    header {
+      margin-top:0;
+    }
+    .label {
+      font-size:85%;
+    }
+  }
 }
 @media (min-width: 768px) {
   .badge {
     font-size:85%;
     margin-top:1px;
   }
+  .label {
+    padding-top:.3em;
+  }
 }
-.btn:not(.btn-link):not(.btn-primary) {
+.btn:not(.btn-danger):not(.btn-info):not(.btn-link):not(.btn-primary):not(.btn-success):not(.btn-warning) {
   background:@gray-lighter;
+  background-image:linear-gradient(#FFF, #CCC);
   border:1px solid @gray-light;
+  color:@gray-darker;
+  text-shadow:0 1px 0 #FFF;
+  &:hover {
+    background:@link-color;
+    border:1px solid @link-color;
+    color:#FFF;
+    text-shadow:none;
+  }
 }
-.btn-primary {
-  border-color:darken(@brand-primary, 10%);
-  font-weight:bold;
-}
-header,.container,footer {
-  background:#FFF;
-  margin:0 auto;
-  padding:2px;
-}
-header {
-  border-radius:5px 5px 0 0;
-  margin-top:18px;
-}
-footer {
-  border-radius:0 0 5px 5px;
-  margin-bottom:18px;
-}
+.btn-danger, .btn-danger:hover  {border-color:darken(@brand-danger,  10%);font-weight:bold;}
+.btn-info,   .btn-info:hover    {border-color:darken(@brand-info,    10%);font-weight:bold;}
+.btn-primary,.btn-primary:hover {border-color:darken(@brand-primary, 10%);font-weight:bold;}
+.btn-success,.btn-success:hover {border-color:darken(@brand-success, 10%);font-weight:bold;}
+.btn-warning,.btn-warning:hover {border-color:darken(@brand-warning, 10%);font-weight:bold;}
+h2 {margin:0 8px 8px}
 input[type=checkbox] {
   margin-top:2px;
   margin:0 auto;
   padding:0 2px;
 }
-header {
-  &:extend(.container);
-  border-radius:5px 5px 0 0;
-  margin-top:18px;
-  padding:0 4px;
-}
-footer {
-  &:extend(.container);
-  border-radius:0 0 5px 5px;
-  margin-bottom:18px;
-  padding:0 4px;
-}
 .nav > li > a {
   padding:5px 10px;
 }
-.navbar-brand {
-  background-image:url('../../images/vufind_logo.png');
-  color:transparent;
-  height:65px;
-  margin-top:5px;
-  width:170px;
-  &:hover,&:active,&:focus {
-    color:transparent;
-  }
-}
-.navbar-form {margin:7px -7px}
 .nav-pills {display:table;margin:0 auto}
 .pagination {
   display:table;
@@ -95,50 +82,92 @@ footer {
     padding:6px 4px;
     margin:0 -4px;
   }
-  &.result:nth-child(even) {
-    background:#F0F0F0;
+  &.result {
+    &:nth-child(even) {
+      background:#F0F0F0;
+    }
+    &:last-child {
+      margin-bottom:1em;
+    }
   }
 }
 
-/* --- Header --- */
+/* --- Layout --- */
+.container {
+  background:#FFF;
+  padding:0;
+  .main & {
+    padding:0 4px;
+  }
+}
 header {
-  & .navbar {
-    padding:0 5px 0 10px;
-    #searchForm {display:none !important}
-  }
+  margin-top:18px;
   .fa.fa-bars {font-size:21px}
-  .navbar-nav > li > a {padding:12px 6px}
-  .navbar-right {margin-top:10px}
-}
-.nav.searchbox {
-  display:block !important;
-  margin:0 8px;
-}
-#searchForm {
-  & .btn-primary,& .form-control {
-    font-size:14px;
-    height:32px;
-    padding:5px 8px;
+  .navbar {
+    border-radius:5px 5px 0 0;
+    padding:0 10px;
+    #searchForm {display:none !important}
+    .navbar-brand {
+      background-image:url('../../images/vufind_logo.png');
+      color:transparent;
+      height:65px;
+      margin-top:5px;
+      width:170px;
+      &:hover,&:active,&:focus {
+        color:transparent;
+      }
+    }
+    .navbar-nav > li > a {
+      padding:12px 6px;
+      @media (max-width: 768px) {
+        padding:8px 24px;
+      }
+    }
+    .navbar-right {
+      margin-top:12px;
+      @media (max-width: 768px) {
+        margin:0;
+      }
+    }
   }
-  @media (min-width: 768px) {
-    & .search-query {width:400px}
+  .searchbox {
+    display:block !important;
+    margin:0;
+    #searchForm {
+      margin:6px 8px 8px;
+      padding:0;
+      & .btn-primary,& .form-control {
+        font-size:14px;
+        height:32px;
+        padding:5px 8px;
+      }
+      @media (min-width: 768px) {
+        & .search-query {width:400px}
+      }
+    }
   }
-}
-@media (max-width: 767px) {
-  #header-collapse .navbar-right li {
-    text-align:right;
+  @media (max-width: 767px) {
+    #header-collapse .navbar-right li {
+      text-align:right;
+    }
+    #searchForm_type {
+      margin-top:2px;
+      margin-bottom:2px;
+    }
   }
-  #searchForm_type {
-    margin-top:2px;
+  .breadcrumb {
+    border:1px solid #CCC;
+    border-radius:0;
+    border-width:1px 0;
+    font-size:12px;
     margin-bottom:2px;
   }
 }
-.breadcrumb {
-  border:1px solid #CCC;
-  border-radius:0;
-  border-width:1px 0;
-  font-size:12px;
-  margin-bottom:10px;
+footer {
+  .container {
+    border-radius:0 0 5px 5px;
+  }
+  margin-bottom:18px;
 }
 
 /* --- Record --- */
@@ -167,7 +196,7 @@ header {
     }
   }
   & .slider-container {
-    margin:4px 0 10px;
+    margin:4px auto 10px;
     width:95%;
     .slider-handle {
       background:#619144;
@@ -186,7 +215,6 @@ header {
 .bulkActionButtons {margin-bottom:6px}
 .left {text-align:center}
 .result {
-  label.pull-left {min-width:40px}
   .savedLists {
     margin:0 0 4px 0;
     padding:4px 0 4px 6px;

@@ -26,6 +26,7 @@
  * @link     http://vufind.org   Main Site
  */
 namespace VuFindTheme;
+use \Zend\Console\Console;
 
 /**
  * Class to compile LESS into CSS within a theme.
@@ -93,8 +94,10 @@ class LessCompiler
         }
         $config = include($config);
         if (!isset($config['less'])) {
+            Console::writeLine("No LESS in " . $theme);
             return;
         }
+        Console::writeLine("Processing " . $theme);
         foreach ($config['less'] as $less) {
             $this->compileFile($theme, $less);
         }
@@ -110,6 +113,13 @@ class LessCompiler
      */
     protected function compileFile($theme, $less)
     {
+        $finalOutDir = $this->basePath . '/themes/' . $theme . '/css/';
+        list($fileName, ) = explode('.', $less);
+        $finalFile = $finalOutDir . $fileName . '.css';
+
+        Console::writeLine("\tcompiling '" . $less .  "' into '" . $finalFile . "'");
+        $start = microtime(true);
+
         $directories = array();
         $info = new ThemeInfo($this->basePath . '/themes', $theme);
         foreach (array_keys($info->getThemeInfo()) as $curTheme) {
@@ -128,13 +138,12 @@ class LessCompiler
             )
         );
         $css = file_get_contents($outDir . '/' . $outFile);
-        $finalOutDir = $this->basePath . '/themes/' . $theme . '/css/';
-        list($fileName, ) = explode('.', $less);
-        $finalFile = $finalOutDir . $fileName . '.css';
         if (!is_dir(dirname($finalFile))) {
             mkdir(dirname($finalFile));
         }
         file_put_contents($finalFile, $this->makeRelative($css, $less));
+
+        Console::writeLine("\t\t" . (microtime(true)-$start) . ' sec');
     }
 
     /**
