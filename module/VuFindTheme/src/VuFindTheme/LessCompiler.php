@@ -124,7 +124,7 @@ class LessCompiler
         $info = new ThemeInfo($this->basePath . '/themes', $theme);
         foreach (array_keys($info->getThemeInfo()) as $curTheme) {
             $directories["{$this->basePath}/themes/$curTheme/less/"]
-                = $this->fakePath . "themes/$curTheme/css/";
+                = $this->fakePath . "themes/$curTheme/css/less";
         }
         $lessDir = $this->basePath . '/themes/' . $theme . '/less/';
         $outDir = sys_get_temp_dir();
@@ -153,11 +153,14 @@ class LessCompiler
      * @param string $less Relative LESS filename
      *
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function makeRelative($css, $less)
     {
         // Figure out how deep the LESS file is nested -- this will
-        // affect our relative path.
+        // affect our relative path. Note: we don't actually need
+        // to use $matches for anything, but some versions of PHP
+        // seem to be unhappy if we omit the parameter.
         $depth = preg_match_all('|/|', $less, $matches);
         $relPath = '../../../';
         for ($i = 0; $i < $depth; $i++) {

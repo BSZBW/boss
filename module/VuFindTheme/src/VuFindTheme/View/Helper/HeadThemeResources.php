@@ -74,8 +74,9 @@ class HeadThemeResources extends \Zend\View\Helper\AbstractHelper
             $headMeta()->appendName('Generator', $generator);
         }
 
-
+        // Convenient shortcut to view helper:
         $headLink = $this->getView()->plugin('headlink');
+
         // Load CSS (make sure we prepend them in the appropriate order; theme
         // resources should load before extras added by individual templates):
         foreach (array_reverse($this->container->getCss()) as $current) {

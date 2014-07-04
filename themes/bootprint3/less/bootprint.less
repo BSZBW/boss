@@ -27,7 +27,7 @@ body {
 }
 .btn:not(.btn-danger):not(.btn-info):not(.btn-link):not(.btn-primary):not(.btn-success):not(.btn-warning) {
   background:@gray-lighter;
-  background-image:linear-gradient(#FFF, #CCC);
+  background-image:linear-gradient(#FFF, @nav-tabs-border-color);
   border:1px solid @gray-light;
   color:@gray-darker;
   text-shadow:0 1px 0 #FFF;
@@ -38,11 +38,11 @@ body {
     text-shadow:none;
   }
 }
-.btn-danger, .btn-danger:hover  {border-color:darken(@brand-danger,  10%);font-weight:bold;}
-.btn-info,   .btn-info:hover    {border-color:darken(@brand-info,    10%);font-weight:bold;}
-.btn-primary,.btn-primary:hover {border-color:darken(@brand-primary, 10%);font-weight:bold;}
-.btn-success,.btn-success:hover {border-color:darken(@brand-success, 10%);font-weight:bold;}
-.btn-warning,.btn-warning:hover {border-color:darken(@brand-warning, 10%);font-weight:bold;}
+.btn-danger, .btn-danger:hover  {border-color:darken(@brand-danger,  12%);font-weight:bold;}
+.btn-info,   .btn-info:hover    {border-color:darken(@brand-info,    12%);font-weight:bold;}
+.btn-primary,.btn-primary:hover {border-color:darken(@brand-primary, 12%);font-weight:bold;}
+.btn-success,.btn-success:hover {border-color:darken(@brand-success, 12%);font-weight:bold;}
+.btn-warning,.btn-warning:hover {border-color:darken(@brand-warning, 12%);font-weight:bold;}
 h2 {margin:0 8px 8px}
 input[type=checkbox] {
   margin-top:2px;
@@ -84,21 +84,23 @@ input[type=checkbox] {
   }
   &.result {
     &:nth-child(even) {
-      background:#F0F0F0;
+      background:@gray-lighter;
     }
     &:last-child {
       margin-bottom:1em;
     }
   }
 }
+.tab-content {
+  padding: 6px 8px;
+  border: 1px solid @nav-tabs-border-color;
+  border-top: 0;
+}
 
 /* --- Layout --- */
 .container {
   background:#FFF;
   padding:0;
-  .main & {
-    padding:0 4px;
-  }
 }
 header {
   margin-top:18px;
@@ -133,18 +135,6 @@ header {
   .searchbox {
     display:block !important;
     margin:0;
-    #searchForm {
-      margin:6px 8px 8px;
-      padding:0;
-      & .btn-primary,& .form-control {
-        font-size:14px;
-        height:32px;
-        padding:5px 8px;
-      }
-      @media (min-width: 768px) {
-        & .search-query {width:400px}
-      }
-    }
   }
   @media (max-width: 767px) {
     #header-collapse .navbar-right li {
@@ -163,15 +153,81 @@ header {
     margin-bottom:2px;
   }
 }
+[name=searchForm] {
+  margin:6px 8px 8px;
+  padding:0;
+  & .btn-primary,& .form-control {
+    font-size:14px;
+    height:32px;
+    padding:5px 8px;
+  }
+  .search-query {
+    @media (min-width: 768px) {
+      width:400px;
+    }
+  }
+  .nav-tabs {
+    border-bottom:0;
+    li {
+      a {
+        margin-bottom:-1px;
+        border-bottom:0;
+        padding-bottom:6px;
+        &:hover {
+          background:none;
+          border-color:transparent;
+          text-decoration:underline;
+        }
+      }
+      &.active a,&.active a:hover {
+        background:#FFF;
+        border-color:@brand-primary;
+        border-bottom:0;
+        text-decoration:none;
+        z-index:5;
+      }
+    }
+  }
+}
+.main {
+  .container {
+    padding:0 4px 18px;
+  }
+}
 footer {
+  margin-bottom:36px;
   .container {
     border-radius:0 0 5px 5px;
+    border-top:1px solid @nav-tabs-border-color;
+    padding-top:18px;
   }
-  margin-bottom:18px;
+  hr {display:none}
+  p {margin:0}
+  ul {padding-left:30px}
 }
 
 /* --- Record --- */
 #hierarchyRecord {background:#FFF}
+
+/* --- Search --- */
+.bulkActionButtons {margin-bottom:6px}
+.left {text-align:center}
+.result {
+  .savedLists {
+    margin:0 0 4px 0;
+    padding:4px 0 4px 6px;
+    ul {padding-left:18px;}
+  }
+}
+
+/* --- Search Home --- */
+.searchHomeContent {
+  margin:1em auto;
+  width:90%;
+}
+
+/* --- Advanced Search --- */
+#advSearchForm .search {margin:0}
 
 /* --- Sidebar --- */
 @active-orange: #FF9500;
@@ -210,26 +266,6 @@ footer {
     &:hover {color:@brand-danger}
   }
 }
-
-/* --- Search --- */
-.bulkActionButtons {margin-bottom:6px}
-.left {text-align:center}
-.result {
-  .savedLists {
-    margin:0 0 4px 0;
-    padding:4px 0 4px 6px;
-    ul {padding-left:18px;}
-  }
-}
-
-/* --- Search Home --- */
-.searchHomeContent {
-  margin:1em auto;
-  width:90%;
-}
-
-/* --- Advanced Search --- */
-#advSearchForm .search {margin:0}
 
 /* --- Captcha --- */
 #custom_recaptcha_widget {
