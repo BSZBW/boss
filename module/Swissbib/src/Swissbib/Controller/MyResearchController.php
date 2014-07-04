@@ -141,58 +141,13 @@ class MyResearchController extends VuFindMyResearchController
 
 
     /**
-     * Wrapper for parent
-     *
-     * @return mixed|HttpResponse|ViewModel
-     */
-    public function confirmAction()
-    {
-        $viewModel = parent::confirmAction();
-
-        return $this->wrapWithContentLayout($viewModel, 'myresearch/confirm');
-    }
-
-
-
-    /**
-     * Wrapper for parent
-     *
-     * @return mixed|HttpResponse|ViewModel
-     */
-    public function editAction()
-    {
-        $viewModel = parent::editAction();
-
-        return $this->wrapWithContentLayout($viewModel, 'myresearch/edit');
-    }
-
-
-    /**
-     *
      * creates View snippet to provide users more information about the multi accounts in swissbib
      *
      * @return ViewModel
      */
     public function backgroundaccountsAction()
     {
-
         return $this->createViewModel();
-
-
-    }
-
-
-
-    /**
-     * Wrapper for parent
-     *
-     * @return mixed|HttpResponse|ViewModel
-     */
-    public function editlistAction()
-    {
-        $viewModel = parent::editlistAction();
-
-        return $this->wrapWithContentLayout($viewModel, 'myresearch/editlist');
     }
 
 
@@ -205,7 +160,6 @@ class MyResearchController extends VuFindMyResearchController
      */
     public function mylistAction()
     {
-
         // Check for "delete item" request; parameter may be in GET or POST depending
         // on calling context.
         $deleteId = $this->params()->fromPost(
@@ -256,7 +210,6 @@ class MyResearchController extends VuFindMyResearchController
             $currentURL = $this->getRequest()->getRequestUri();
             $this->getSearchMemory()->rememberSearch($currentURL);
 
-
             return $this->createViewModel(
                 array('params' => $params, 'results' => $results)
             );
@@ -272,39 +225,6 @@ class MyResearchController extends VuFindMyResearchController
 
             return $this->redirect()->toUrl($target);
         }
-
-
-    }
-
-
-
-    /**
-     * Wrap view in basic content template
-     *
-     * @todo    Improve/generalize
-     * @param ViewModel $viewModel
-     * @param bool      $template
-     * @return ViewModel|HttpResponse;
-     */
-    protected function wrapWithContentLayout($viewModel, $template = false)
-    {
-        if ($viewModel instanceof HttpResponse) {
-            return $viewModel;
-        }
-        if ($viewModel->getTemplate() === 'myresearch/login') {
-            return $viewModel;
-        }
-
-        $layout    = $this->createViewModel();
-
-        if ($template) {
-            $viewModel->setTemplate($template);
-        }
-
-        $layout->setTemplate('layout/content');
-        $layout->addChild($viewModel, 'content');
-
-        return $layout;
     }
 
 
@@ -326,29 +246,16 @@ class MyResearchController extends VuFindMyResearchController
      */
     protected function getSessionInitiator()
     {
-
-        //$bag  = array();
-       //foreach($this->getRequest()->getServer() as $key => $value) {
-        //    $bag[$key] = $value;
-        //}
-
         $uri = $this->getRequest()->getUri();
         $base = sprintf('%s://%s', $uri->getScheme(), $uri->getHost());
         $baseEscaped =  str_replace("/","\/",$base);
 
-        $tReferrer = $this->getRequest()->getServer()->get('HTTP_REFERER');
         if (preg_match("/$baseEscaped/",$this->getRequest()->getServer()->get('HTTP_REFERER')) == 0) {
-
             $url = $this->getServerUrl('myresearch-home');
             return $this->getAuthManager()->getSessionInitiator($url);
-
         } else {
-
             return false;
         }
-
-
-
     }
 
 
@@ -361,7 +268,6 @@ class MyResearchController extends VuFindMyResearchController
      */
     public function loginAction()
     {
-
         //we need to differantiate between Shibboleh and not Shibboleth authentication mechanisms
         //in case of Shibboleth we will get a problem with HTTP_Referer after successful authentication at IDP
         //because then the Referer points to the IDP address instead of a valid VuFind resource (often something like save a record in various contexts)
@@ -374,7 +280,6 @@ class MyResearchController extends VuFindMyResearchController
             $tURL = $this->getRequest()->getServer()->get('HTTP_REFERER');
             $followup->url = $tURL;
         }
-
 
         // If this authentication method doesn't use a VuFind-generated login
         // form, force it through:
@@ -401,6 +306,7 @@ class MyResearchController extends VuFindMyResearchController
         // Make request available to view for form updating:
         $view = $this->createViewModel();
         $view->request = $this->getRequest()->getPost();
+
         return $view;
     }
 
@@ -465,8 +371,5 @@ class MyResearchController extends VuFindMyResearchController
         // If we got this far, we want to store the referer:
         $this->followup()->store(array(), $referer);
     }
-
-
-
 
 }
