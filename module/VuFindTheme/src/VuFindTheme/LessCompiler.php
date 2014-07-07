@@ -26,6 +26,7 @@
  * @link     http://vufind.org   Main Site
  */
 namespace VuFindTheme;
+use \Zend\Console\Console;
 
 /**
  * Class to compile LESS into CSS within a theme.
@@ -93,8 +94,10 @@ class LessCompiler
         }
         $config = include($config);
         if (!isset($config['less'])) {
+            Console::writeLine("No LESS in " . $theme);
             return;
         }
+        Console::writeLine("Processing " . $theme);
         foreach ($config['less'] as $less) {
             $this->compileFile($theme, $less);
         }
@@ -110,11 +113,18 @@ class LessCompiler
      */
     protected function compileFile($theme, $less)
     {
+        $finalOutDir = $this->basePath . '/themes/' . $theme . '/css/';
+        list($fileName, ) = explode('.', $less);
+        $finalFile = $finalOutDir . $fileName . '.css';
+
+        Console::writeLine("\tcompiling '" . $less .  "' into '" . $finalFile . "'");
+        $start = microtime(true);
+
         $directories = array();
         $info = new ThemeInfo($this->basePath . '/themes', $theme);
         foreach (array_keys($info->getThemeInfo()) as $curTheme) {
             $directories["{$this->basePath}/themes/$curTheme/less/"]
-                = $this->fakePath . "themes/$curTheme/css/";
+                = $this->fakePath . "themes/$curTheme/css/less";
         }
         $lessDir = $this->basePath . '/themes/' . $theme . '/less/';
         $outDir = sys_get_temp_dir();
@@ -128,13 +138,12 @@ class LessCompiler
             )
         );
         $css = file_get_contents($outDir . '/' . $outFile);
-        $finalOutDir = $this->basePath . '/themes/' . $theme . '/css/';
-        list($fileName, ) = explode('.', $less);
-        $finalFile = $finalOutDir . $fileName . '.css';
         if (!is_dir(dirname($finalFile))) {
             mkdir(dirname($finalFile));
         }
         file_put_contents($finalFile, $this->makeRelative($css, $less));
+
+        Console::writeLine("\t\t" . (microtime(true)-$start) . ' sec');
     }
 
     /**
@@ -144,11 +153,14 @@ class LessCompiler
      * @param string $less Relative LESS filename
      *
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function makeRelative($css, $less)
     {
         // Figure out how deep the LESS file is nested -- this will
-        // affect our relative path.
+        // affect our relative path. Note: we don't actually need
+        // to use $matches for anything, but some versions of PHP
+        // seem to be unhappy if we omit the parameter.
         $depth = preg_match_all('|/|', $less, $matches);
         $relPath = '../../../';
         for ($i = 0; $i < $depth; $i++) {

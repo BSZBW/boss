@@ -23,6 +23,7 @@
 
 <div class="<?=$this->layoutClass('mainbody')?>">
   <div class="clearfix hidden-print">
+    <p class="lead pull-left"><?=$list ? $this->escapeHtml($list->title) : $this->transEsc("Your Favorites")?></p>
     <div class="pull-right">
       <? if (isset($list)): ?>
         <? if ($list->editAllowed($account->isLoggedIn())): ?>
@@ -43,7 +44,6 @@
         <?=$this->transEsc('of')?> <strong><?=number_format($recordTotal)?></strong>
       <? endif; ?>
     </div>
-    <p class="lead pull-left"><?=$list ? $this->escapeHtml($list->title) : $this->transEsc("Your Favorites")?></p>
   </div>
 <? if ($list && !empty($list->description)): ?>
   <p><?=$this->escapeHtml($list->description)?></p>

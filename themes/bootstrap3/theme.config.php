@@ -3,9 +3,10 @@ return array(
     'extends' => 'root',
     'css' => array(
         //'bootstrap.min.css',
-        //'font-awesome.min.css',
         //'bootstrap-accessibility.css',
         //'bootstrap-custom.css',
+        'compiled.css',
+        'font-awesome/font-awesome.css',
         'print.css:print',
         'slider.css',
     ),
@@ -19,11 +20,11 @@ return array(
         'lightbox.js',
     ),
     'less' => array(
-        'core.less',
-        'font-awesome/font-awesome.less'
+        //'compiled.less',
+        //'font-awesome/font-awesome.less'
     ),
     'scss' => array(
-        //'core.scss',
+        //'compiled.scss',
         //'font-awesome.scss'
     ),
     'favicon' => 'vufind-favicon.ico',

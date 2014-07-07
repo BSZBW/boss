@@ -3,15 +3,17 @@ return array(
     'extends' => 'bootstrap3',
     'css' => array(
         //'bootstrap.min.css',
-        //'icons.css',
         //'bootprint-custom.css',
+        'compiled.css',
+        'icons.css'
     ),
     'less' => array(
-        'core.less',
-        'icons.less'
+        //'compiled.less',
+        //'icons.less'
     ),
     'scss' => array(
-        //'core.scss'
+        //'compiled.scss',
+        //'icons.scss'
     ),
     'js' => array(
         'vendor/bootstrap.min.js'
