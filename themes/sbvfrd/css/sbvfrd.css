@@ -6,6 +6,11 @@ header {
   display: none;
 }
 
+div.memorize  {
+  margin: auto;
+  margin-top: 25px;
+}
+
 .icon_notepad_add {
   display: block;
   font-size: 0;
@@ -19,13 +24,13 @@ header {
 }
 
 .icon_show span {
-	padding-left:19px;
-	background-image:url(../images/icon_show.gif);
-	background-position:0 2px;
-	background-repeat:no-repeat;
+  padding-left: 19px;
+  background-image: url(../images/icon_show.gif);
+  background-position: 0 2px;
+  background-repeat: no-repeat;
 }
 
-@media(max-width:767px) {
+@media (max-width: 767px) {
   .result label {
     width: 100%;
     background-color: #13141b;
@@ -33,13 +38,13 @@ header {
   }
 
   .no-gutter {
-    padding-left:0;
-    padding-right:0;
+    padding-left: 0;
+    padding-right: 0;
   }
 
   .gutter-1 {
-    padding-left:1px;
-    padding-right:1px;
+    padding-left: 1px;
+    padding-right: 1px;
   }
 
   .dropdown-menu > li > a {
@@ -61,9 +66,9 @@ header {
   }
 
   .icon_show {
-  	background-image:url(../images/icon_show.gif);
-  	background-position:8px 8px;
-  	background-repeat:no-repeat;
+    background-image: url(../images/icon_show.gif);
+    background-position: 8px 8px;
+    background-repeat: no-repeat;
     height: 30px;
     width: 30px;
   }

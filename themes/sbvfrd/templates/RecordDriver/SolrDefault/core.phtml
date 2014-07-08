@@ -1,4 +1,9 @@
 <div class="row" vocab="http://schema.org/" resource="#record" typeof="<?=$this->driver->getSchemaOrgFormats()?> Product">
+  <div class="col-sm-12">
+    <h3 property="name"><?=$this->escapeHtml($this->driver->getShortTitle() . ' ' . $this->driver->getSubtitle() . ' ' . $this->driver->getTitleSection())?></h3>
+    <hr />
+  </div>
+
   <div class="col-sm-3">
     <div class="text-center">
       <? /* Display thumbnail if appropriate: */ ?>
@@ -21,10 +26,20 @@
     </div>
 
     <?=$this->record($this->driver)->getPreviews()?>
+
+    <? $theme = $this->configAccess()->Site->theme; ?>
+    <div class="memorize">
+      <a title="<?= $this->transEsc('memorizelistadd') ?>" class="memorize btn btn-default" href="<?= $memorizeLink ?>">
+        <img src="<?= $this->basePath('themes/' . urlencode($theme) . '/images/icon_notepad_add.gif') ?>">
+      </a>
+    </div>
   </div>
 
   <div class="col-sm-9">
-    <h3 property="name"><?=$this->escapeHtml($this->driver->getShortTitle() . ' ' . $this->driver->getSubtitle() . ' ' . $this->driver->getTitleSection())?></h3>
+    <? $subtitle = $this->record($this->driver)->getSubtitle($this->driver->getTitleStatement(true)) ?>
+    <? if (isset($subtitle)): ?>
+      <h4><?= $this->escapeHtml($subtitle) ?></h4>
+    <? endif; ?>
 
     <? $summary = $this->driver->getSummary(); $summary = isset($summary[0]) ? $summary[0] : false; ?>
     <? if ($summary): ?>
@@ -274,6 +289,25 @@
           </td>
         </tr>
       <? endif; ?>
+
+      <?
+         $showFRBR = $this->configAccess()->Site->displayFrbr;
+         $groupID              = $this->driver->getGroup(true);
+      ?>
+      <?php if (!empty($showFRBR) && $showFRBR && !empty($groupID)) : ?>
+       <tr>
+         <th></th>
+         <td>
+           <a href="<?=
+            $this->url('search-results') . '?lookfor=' . $groupID . "&type=FRBR"
+            . "&sort=publishDateSort+desc" ?>"
+               class="btn btn-default icon_show" title="<?= $this->transEsc('FRBR_Button') ?>">
+                <span class="hidden-xs"><?= $this->transEsc('FRBR_Button') ?></span>
+            </a>
+         </td>
+       </tr>
+      <?php endif; ?>
+
     </table>
     <?/* End Main Details */?>
   </div>
