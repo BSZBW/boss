@@ -4,117 +4,111 @@
  */
 swissbib.HoldingFavorites = {
 
-	/**
-	 * @var {String}
-	 */
-	baseUrl: '/MyResearch/Favorites',
+  /**
+   * @var {String}
+   */
+  baseUrl: '/MyResearch/Favorites',
 
 
+  /**
+   * Initialize record
+   *
+   */
+  initRecord: function () {
+    this.baseUrl = window.path + this.baseUrl;
 
-	/**
-	 * Initialize record
-	 *
-	 */
-	initRecord: function() {
-		this.baseUrl = window.path + this.baseUrl;
-
-		this.setupClickHandlers();
-	},
-
+    this.setupClickHandlers();
+  },
 
 
-	/**
-	 * Setup click handlers for add and remove of favorite institutions
-	 *
-	 */
-	setupClickHandlers: function() {
-		var that = this, allMiniActions, notFavorised,
-			favoriteInstitutionCodes = this.getFavoriteInstitutionCodes();
+  /**
+   * Setup click handlers for add and remove of favorite institutions
+   *
+   */
+  setupClickHandlers: function () {
+    var that = this, allMiniActions, notFavorised,
+        favoriteInstitutionCodes = this.getFavoriteInstitutionCodes();
 
-		$.each(favoriteInstitutionCodes, function(index, institutionCode){
-			$('.miniactions-' + institutionCode).find('.institutionFavorite')
-					.addClass('miniaction_favorite_remove')
-					.click($.proxy(that.onRemoveFavoriteIconClick, that))
-					.data('favorised', true);
-		});
+    $.each(favoriteInstitutionCodes, function (index, institutionCode) {
+      $('.miniactions-' + institutionCode).find('.institutionFavorite')
+          .addClass('miniaction_favorite_remove')
+          .click($.proxy(that.onRemoveFavoriteIconClick, that))
+          .data('favorised', true);
+    });
 
-		allMiniActions = $('#tab-holdings').find('.miniactions');
-		notFavorised = $.grep(allMiniActions, function(node, index){
-			return $(node).find('.institutionFavorite').data('favorised') !== true;
-		});
+    allMiniActions = $('#tab-holdings').find('.miniactions');
+    notFavorised = $.grep(allMiniActions, function (node, index) {
+      return $(node).find('.institutionFavorite').data('favorised') !== true;
+    });
 
-		$(notFavorised).find('.institutionFavorite')
-				.addClass('miniaction_favorite_add')
-				.click($.proxy(this.onAddFavoriteIconClick, this));
-	},
-
-
-
-	/**
-	 * Handle remove click
-	 *
-	 * @param	{Object}	event
-	 */
-	onRemoveFavoriteIconClick: function(event) {
-		var institutionBox 		= $(event.target).parents('.institutionBox').get(0),
-			institutionCode		= institutionBox.id.split('-')[3];
-
-		this.updateFavorite(institutionCode, 'delete');
-	},
+    $(notFavorised).find('.institutionFavorite')
+        .addClass('miniaction_favorite_add')
+        .click($.proxy(this.onAddFavoriteIconClick, this));
+  },
 
 
+  /**
+   * Handle remove click
+   *
+   * @param  {Object}  event
+   */
+  onRemoveFavoriteIconClick: function (event) {
+    var institutionBox = $(event.target).parents('.institutionBox').get(0),
+        institutionCode = institutionBox.id.split('-')[3];
 
-	/**
-	 * Handle add click
-	 *
-	 * @param	{Object}	event
-	 */
-	onAddFavoriteIconClick: function(event) {
-		var institutionBox 		= $(event.target).parents('.institutionBox').get(0),
-			institutionCode		= institutionBox.id.split('-')[3];
-
-		this.updateFavorite(institutionCode, 'add');
-	},
-
+    this.updateFavorite(institutionCode, 'delete');
+  },
 
 
-	/**
-	 * Send favorite update request (add or delete) for institution
-	 *
-	 * @param	{String}	institutionCode
-	 * @param	{String}	action
-	 * @param	{Function}	[callback]
-	 */
-	updateFavorite: function(institutionCode, action, callback) {
-		var url	= this.baseUrl + '/' + action,
-			data= {
-				institution: institutionCode
-			},
-			success	= function(response){
-						if(callback) {
-							callback(institutionCode, action, response);
-						} else {
-							$('body').mask(vufindString.favoriteReload);
-							location.reload();
-						}
-					};
+  /**
+   * Handle add click
+   *
+   * @param  {Object}  event
+   */
+  onAddFavoriteIconClick: function (event) {
+    var institutionBox = $(event.target).parents('.institutionBox').get(0),
+        institutionCode = institutionBox.id.split('-')[3];
 
-		$.post(url, data, success);
-	},
+    this.updateFavorite(institutionCode, 'add');
+  },
 
 
+  /**
+   * Send favorite update request (add or delete) for institution
+   *
+   * @param  {String}  institutionCode
+   * @param  {String}  action
+   * @param  {Function}  [callback]
+   */
+  updateFavorite: function (institutionCode, action, callback) {
+    var url = this.baseUrl + '/' + action,
+        data = {
+          institution: institutionCode
+        },
+        success = function (response) {
+          if (callback) {
+            callback(institutionCode, action, response);
+          } else {
+            $('body').mask(vufindString.favoriteReload);
+            location.reload();
+          }
+        };
 
-	/**
-	 * Get codes of favorite institutions (in favorite box)
-	 *
-	 * @returns {String[]}
-	 */
-	getFavoriteInstitutionCodes: function() {
-		var favoriteTogglers = $('#holdings-favorite').find('.institutionToggler');
+    $.post(url, data, success);
+  },
 
-		return $.map(favoriteTogglers, function(node, index){
-			return $(node).attr('id').split('-').pop();
-		});
-	}
+
+  /**
+   * Get codes of favorite institutions (in favorite box)
+   *
+   * @returns {String[]}
+   */
+  getFavoriteInstitutionCodes: function () {
+    var favoriteTogglers = $('#holdings-favorite').find('.institutionToggler');
+
+    return $.map(favoriteTogglers, function (node, index) {
+      return $(node).attr('id').split('-').pop();
+    });
+  }
 
 };
