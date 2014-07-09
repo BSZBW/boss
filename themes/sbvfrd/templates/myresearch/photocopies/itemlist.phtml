@@ -1,0 +1,47 @@
+<?php /** @var Array[] $photoCopies */ ?>
+
+<table id="photocopies-table" class="table table-striped">
+  <thead>
+  <tr>
+    <th>&nbsp;</th>
+    <th><?= $this->transEsc('Title') ?></th>
+    <th><?= $this->transEsc('Created') ?></th>
+    <th><?= $this->transEsc('Status') ?></th>
+    <th><?= $this->transEsc('Place of Delivery') ?></th>
+    <th><?= $this->transEsc('Library') ?></th>
+    <th><?= $this->transEsc('Call Number') ?></th>
+    <th><?= $this->transEsc('Note') ?></th>
+  </tr>
+  </thead>
+  <tbody>
+  <?php foreach ($photoCopies as $index => $photoCopy): ?>
+    <?php
+    $addTitleItems = array();
+
+    if (!empty($photoCopy['author'])) {
+      $addTitleItems[] = $photoCopy['author'];
+    }
+    if (!empty($photoCopy['title2'])) {
+      $addTitleItems[] = $photoCopy['title2'];
+    }
+    if (!empty($photoCopy['pages'])) {
+      $addTitleItems[] = $photoCopy['pages'];
+    }
+    $addTitle = implode(', ', $addTitleItems);
+    ?>
+    <tr id="photocopy-<?= intval($photoCopy['sequence']) ?>">
+      <td><?= $index + 1 ?></td>
+      <td>
+        <?= $this->escapeHtml($photoCopy['title']) ?>
+        <?= $this->escapeHtml($addTitle) ?>
+      </td>
+      <td><?= $this->escapeHtml($photoCopy['dateOpen']) ?></td>
+      <td><?= $this->transEsc($photoCopy['status']) ?></td>
+      <td><?= $this->transEsc($photoCopy['pickup']) ?></td>
+      <td><?= $this->escapeHtml($photoCopy['library']) ?></td>
+      <td><?= $this->escapeHtml($photoCopy['callNumber']) ?></td>
+      <td><?= $this->escapeHtml($photoCopy['note1'] . ' ' . $photoCopy['note2']) ?></td>
+    </tr>
+  <?php endforeach; ?>
+  </tbody>
+</table>

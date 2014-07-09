@@ -35,6 +35,14 @@
       <?=$this->transEsc('Fines')?>
       <span class="pull-right"><i class="fa fa-usd"></i></span>
     </a>
+    <a href="<?=$this->url('myresearch-photocopies')?>" class="list-group-item<?=$this->active == 'photocopies' ? ' active' : ''?>">
+      <?=$this->transEsc('Photocopies')?>
+      <span class="pull-right"><i class="fa fa-usd"></i></span>
+    </a>
+    <a href="<?=$this->url('myresearch-bookings')?>" class="list-group-item<?=$this->active == 'bookings' ? ' active' : ''?>">
+      <?=$this->transEsc('Bookings')?>
+      <span class="pull-right"><i class="fa fa-usd"></i></span>
+    </a>
     <a href="<?=$this->url('myresearch-profile')?>" class="list-group-item<?=$this->active == 'profile' ? ' active' : ''?>">
       <?=$this->transEsc('Profile')?>
       <span class="pull-right"><i class="fa fa-user"></i></span>
