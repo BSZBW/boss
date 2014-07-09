@@ -1,6 +1,6 @@
 <?php
 /**
- * Author Notes view helper
+ * Syndetics excerpt content loader.
  *
  * PHP version 5
  *
@@ -20,75 +20,63 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * @category VuFind2
- * @package  View_Helpers
+ * @package  Content
  * @author   Demian Katz <demian.katz@villanova.edu>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org/wiki/vufind2:developer_manual Wiki
  */
-namespace VuFind\View\Helper\Root;
+namespace VuFind\Content\Excerpts;
 
 /**
- * Author Notes view helper
+ * Syndetics excerpt content loader.
  *
  * @category VuFind2
- * @package  View_Helpers
+ * @package  Content
  * @author   Demian Katz <demian.katz@villanova.edu>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org/wiki/vufind2:developer_manual Wiki
  */
-class AuthorNotes extends AbstractSyndetics
+class Syndetics extends \VuFind\Content\AbstractSyndetics
 {
     /**
-     * Do the actual work of loading the notes.
-     *
-     * @param string $isbn ISBN of book to find notes for
-     *
-     * @return array
-     */
-    public function __invoke($isbn)
-    {
-        $providers = isset($this->config->Content->authorNotes)
-            ? $this->config->Content->authorNotes : '';
-        return $this->getResults($isbn, $providers);
-    }
-
-    /**
      * This method is responsible for connecting to Syndetics and abstracting
-     * author notes.
+     * excerpts.
      *
-     * It first queries the master url for the ISBN entry seeking a note URL.
-     * If a note URL is found, the script will then use HTTP request to
-     * retrieve the script. The script will then parse the note according to
+     * It first queries the master url for the ISBN entry seeking an excerpt URL.
+     * If an excerpt URL is found, the script will then use HTTP request to
+     * retrieve the script. The script will then parse the excerpt according to
      * US MARC (I believe). It will provide a link to the URL master HTML page
      * for more information.
      * Configuration:  Sources are processed in order - refer to $sourceList.
      *
-     * @param string $id     Client access key
-     * @param bool   $s_plus Are we operating in Syndetics Plus mode?
+     * @param string            $key     API key
+     * @param \VuFind\Code\ISBN $isbnObj ISBN object
      *
      * @throws \Exception
-     * @return array     Returns array with author note data.
+     * @return array     Returns array with excerpt data.
      * @author Joel Timothy Norman <joel.t.norman@wmich.edu>
      * @author Andrew Nagy <vufind-tech@lists.sourceforge.net>
      */
-    protected function loadSyndetics($id, $s_plus=false)
+    public function loadByIsbn($key, \VuFind\Code\ISBN $isbnObj)
     {
+        // List of syndetic excerpts
         $sourceList = array(
-            'ANOTES' => array(
-                'title' => 'Author Notes',
-                'file' => 'ANOTES.XML',
-                'div' => '<div id="syn_anotes"></div>'
+            'DBCHAPTER' => array(
+                'title' => 'First Chapter or Excerpt',
+                'file' => 'DBCHAPTER.XML',
+                'div' => '<div id="syn_dbchapter"></div>'
             )
         );
 
-        // Initialize return value
-        $anotes = array();
+        // Initialize return value:
+        $excerpt = array();
 
-        // Find out if there are any notes
-        $url = $this->getSyndeticsUrl($id);
+        // Find out if there are any excerpts
+        $isbn = $this->getIsbn10($isbnObj);
+        $url = $this->getIsbnUrl($isbn, $key);
         $result = $this->getHttpClient($url)->send();
         if (!$result->isSuccess()) {
-            return $anotes;
+            return $excerpt;
         }
 
         // Test XML Response
@@ -100,8 +88,8 @@ class AuthorNotes extends AbstractSyndetics
         foreach ($sourceList as $source => $sourceInfo) {
             $nodes = $xmldoc->getElementsByTagName($source);
             if ($nodes->length) {
-                // Load notes
-                $url = $this->getSyndeticsUrl($id, $sourceInfo['file']);
+                // Load excerpts
+                $url = $this->getIsbnUrl($isbn, $key, $sourceInfo['file']);
                 $result2 = $this->getHttpClient($url)->send();
                 if (!$result2->isSuccess()) {
                     continue;
@@ -115,54 +103,49 @@ class AuthorNotes extends AbstractSyndetics
 
                 // If we have syndetics plus, we don't actually want the content
                 // we'll just stick in the relevant div
-                if ($s_plus) {
-                    $anotes[$i]['Content'] = $sourceInfo['div'];
+                if ($this->usePlus) {
+                    $excerpt[$i]['Content'] = $sourceInfo['div'];
                 } else {
-                    // Get the marc field for author notes (980)
-                    $nodes = $xmldoc2->GetElementsbyTagName("Fld980");
+                    // Get the marc field for excerpts (520)
+                    $nodes = $xmldoc2->GetElementsbyTagName("Fld520");
                     if (!$nodes->length) {
-                        // Skip fields with missing text
+                        // Skip excerpts with missing text
                         continue;
                     }
-                    // Decode the content and strip unwanted <a> tags:
-                    $anotes[$i]['Content'] = preg_replace(
-                        '/<a>|<a [^>]*>|<\/a>/', '',
-                        html_entity_decode($xmldoc2->saveXML($nodes->item(0)))
-                    );
+                    $excerpt[$i]['Content']
+                        = html_entity_decode($xmldoc2->saveXML($nodes->item(0)));
 
-                    /*
                     // Get the marc field for copyright (997)
                     $nodes = $xmldoc->GetElementsbyTagName("Fld997");
                     if ($nodes->length) {
-                        $anotes[$i]['Copyright'] = html_entity_decode(
+                        $excerpt[$i]['Copyright'] = html_entity_decode(
                             $xmldoc2->saveXML($nodes->item(0))
                         );
                     } else {
-                        $anotes[$i]['Copyright'] = null;
+                        $excerpt[$i]['Copyright'] = null;
                     }
 
-                    if ($anotes[$i]['Copyright']) {  //stop duplicate copyrights
+                    if ($excerpt[$i]['Copyright']) {  //stop duplicate copyrights
                         $location = strripos(
-                            $anotes[0]['Content'], $anotes[0]['Copyright']
+                            $excerpt[0]['Content'], $excerpt[0]['Copyright']
                         );
                         if ($location > 0) {
-                            $anotes[$i]['Content']
-                                = substr($anotes[0]['Content'], 0, $location);
+                            $excerpt[$i]['Content']
+                                = substr($excerpt[0]['Content'], 0, $location);
                         }
                     }
-                     */
                 }
 
                 // change the xml to actual title:
-                $anotes[$i]['Source'] = $sourceInfo['title'];
+                $excerpt[$i]['Source'] = $sourceInfo['title'];
 
-                $anotes[$i]['ISBN'] = $this->getIsbn10(); //show more link
-                $anotes[$i]['username'] = $id;
+                $excerpt[$i]['ISBN'] = $isbn;
+                $excerpt[$i]['username'] = $key;
 
                 $i++;
             }
         }
 
-        return $anotes;
+        return $excerpt;
     }
 }
