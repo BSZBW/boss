@@ -1,0 +1,79 @@
+<?php
+
+/** @var  Swissbib\RecordDriver\Summon $resultItem */
+/** @var  Swissbib\View\Helper\Record $viewRecord */
+
+$resultItem = $this->driver;
+$viewRecord = $this->record($this->driver);
+
+$memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
+$detailLink = $this->recordLink()->getUrl($resultItem);
+$thumbnail = $this->escapeHtml($viewRecord->getThumbnail('small'));
+$thumbnailSrc = $thumbnail ? $thumbnail : $this->url('cover-unavailable');
+
+$link360 = $resultItem->getLink();
+$openURL = $resultItem->getOpenURL();
+$linkSFX = $this->openUrl($openURL);
+$linkSFX_param = 'title = "' . $this->transEsc('articles.linkSFX') . '" target="_blank"';
+$linkSFX = str_replace("<a ", "<a $linkSFX_param ", $linkSFX);
+
+$TITLE = $this->escapeHtml($this->removeHighlight($resultItem->getShortTitle()));
+$AUTHOR = $this->highlight($resultItem->getAuthor());
+$edition = $resultItem->getEdition();
+$publicationDate = $this->publicationDateSummon($resultItem->getPublicationDates());
+$CONTAINER = $this->highlight($this->transEsc($resultItem->getContainerTitle()));
+if ($CONTAINER) {
+  $CONTAINER .= '. - ' . $resultItem->getContainerReference();
+}
+
+?>
+<tr>
+  <!-- Column 1: Index -->
+  <td class="small center nodivider"><?= $this->recordIndex ?></td>
+  <!-- Column 2: Memo list -->
+  <td class="nodivider">
+    <a href="<?= $memorizeLink ?>" class="icon_notepad_add" title="<?= $this->transEsc('memorizelistadd') ?>"></a>
+  </td>
+  <!-- Column 3: Teaser-image / Thumbnail -->
+  <td class="right nodivider">
+    <a href="<?= $detailLink ?>" title="<?= $TITLE ?>">
+      <img src="<?= $thumbnailSrc ?>" alt="<?= $TITLE ?>" class="dropshadow"/>
+    </a>
+  </td>
+  <!-- Column 4/5 : Title and author details -->
+  <td>
+    <h3><a href="<?= $detailLink ?>" title="<?= $TITLE ?>" class="color singleLink"><?= $TITLE ?></a></h3>
+    <!-- meta -->
+    <div class="meta">
+      <h6><?= $this->transEsc('Author') ?>:</h6>
+      <span><?= $AUTHOR ?></span><br/>
+    </div>
+    <?php if ($CONTAINER): ?>
+      <div class="meta">
+        <h6><?= $this->transEsc('note_773') ?>:</h6>
+        <span><?= $CONTAINER ?></span>
+      </div>
+    <?php endif; ?>
+    <div class="meta">
+      <h6><?= $this->transEsc('Year') ?>:</h6>
+      <span><?= $this->escapeHtml($publicationDate) ?></span>
+      <?php if ($edition): ?>
+        <h6><?= $this->transEsc('Edition') ?>:</h6>
+        <span><?= $this->escapeHtml($edition) ?></span>
+      <?php endif; ?>
+    </div>
+    <!-- format -->
+    <div class="format">
+      <?= $viewRecord->getFormatList() ?>
+    </div>
+  </td>
+  <td colspan="2" class="no-print">
+		<span>
+			<a title="<?= $this->transEsc('articles.link360') ?>" class="linkbutton primary icon_link_primary"
+         target="_blank" href="<?= $link360 ?>">
+        <span>get&#160;it</span></a>
+		</span>
+    <br/><br/>
+    <span><?= $linkSFX ?></span>
+  </td>
+</tr>
