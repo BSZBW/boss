@@ -40,7 +40,9 @@ class FavoritesController extends BaseController
 
         //facetquery   ->>> facet.query=institution:z01
 
-        return new ViewModel($data);
+      $viewModel = new ViewModel($data);
+      $viewModel->setTemplate('myresearch/favorites');
+      return $viewModel;
     }
 
 

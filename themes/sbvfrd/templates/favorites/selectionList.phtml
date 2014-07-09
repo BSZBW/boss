@@ -1,0 +1,36 @@
+<?php
+/** @var Array $userInstitutions */
+/** @var Array[] $userInstitutionsList */
+?>
+<h3><?= $this->transEsc('mylibraries') ?></h3>
+
+<table class="table table-striped" id="favorites-table">
+
+  <?php foreach ($userInstitutionsList as $groupCode => $groupInstitutions): ?>
+
+    <tr>
+        <td colspan="2">
+            <strong><?= $this->escapeHtml($this->zendTranslate($groupCode, 'group')) ?></strong>
+        </td>
+    </tr>
+
+    <?php foreach ($groupInstitutions as $institutionCode): ?>
+
+    <tr>
+      <td class="nodivider">
+        <?= $this->escapeHtml($this->zendTranslate($institutionCode, 'institution')) ?>
+        <a href="<?= $this->escapeHtml($this->zendTranslate($institutionCode, 'bibinfo')) ?>"
+           class="externallink" title="<?= $this->transEsc('Library_Information') ?>" target="_blank"></a>
+      </td>
+      <td>
+        <a href="#" class="btn btn-default btn-xs linkbutton icon_delete deleteFavoriteInstitution"
+           title="<?= $this->transEsc('mylibraries.remove') ?>"
+           data-institution="<?= $institutionCode ?>"><span><?= $this->transEsc('Delete') ?></span></a>
+      </td>
+    </tr>
+
+    <?php endforeach; ?>
+
+  <?php endforeach; ?>
+
+</table>

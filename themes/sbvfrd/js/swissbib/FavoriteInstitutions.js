@@ -61,9 +61,22 @@ swissbib.FavoriteInstitutions = {
 
     this.autocompleteValues = sourceData;
 
-    $('#query').autocomplete({
-      source: $.proxy(this.autocompleteMatcher, this),
-      select: $.proxy(this.onInstitutionSelect, this)
+    var autocompleterEngine = new Bloodhound({
+      name: 'favorites',
+      local: sourceData,
+      datumTokenizer: function(d) {
+         return Bloodhound.tokenizers.whitespace(d.label);
+       },
+       queryTokenizer: Bloodhound.tokenizers.whitespace
+    });
+
+    $('#query').bind('typeahead:selected', $.proxy(this.onInstitutionSelect, this));
+
+    autocompleterEngine.initialize();
+
+    $('#query').typeahead(null, {
+      displayKey: 'label',
+      source: autocompleterEngine.ttAdapter()
     });
   },
 
@@ -142,9 +155,9 @@ swissbib.FavoriteInstitutions = {
    * @param  {Object}  event
    * @param  {Object}  ui
    */
-  onInstitutionSelect: function (event, ui) {
+  onInstitutionSelect: function (obj, datum, name) {
     this.clearSearchField();
-    this.addInstitution(ui.item.value);
+    this.addInstitution(datum.value);
 
     return false;
   },
