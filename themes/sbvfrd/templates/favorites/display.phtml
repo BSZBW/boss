@@ -1,0 +1,58 @@
+<?php
+/** @var Array $autocompleterData */
+
+$this->headTitle($this->translate('mylibraries'));
+?>
+<?php
+
+$isLoggedIn = !!$this->auth()->isLoggedIn();
+
+?>
+  <!-- begin: col3 (content) -->
+  <div class="col-sm-9">
+    <h3><?= $this->transEsc('mylibraries.add') ?></h3>
+    <div class="panel panel-default">
+
+      <form class="form-horizontal panel-body">
+        <fieldset class="form-group">
+          <label for="query" class="col-sm-2 control-label"><?= $this->transEsc('Library') ?></label>
+          <div class="col-sm-10">
+            <input type="text" id="query" class="form-control"/>
+          </div>
+        </fieldset>
+
+        <div class="status information">
+          <h4><?= $this->transEsc('mylibraries.title') ?></h4>
+          <ul class="list">
+            <li><?= $this->transEsc('mylibraries.text.1') ?>.</li>
+            <li><?= $this->transEsc('mylibraries.text.2') ?>.</li>
+          </ul>
+          <?php if ($isLoggedIn): ?>
+            <!--   keine Anzeige -->
+          <?php else: ?>
+            <p><strong><?= $this->transEsc('mylibraries.login') ?></strong></p>
+          <?php endif ?>
+        </div>
+      </form>
+    </div>
+
+    <div id="user-favorites">
+      <?= $this->render('favorites/selectionList') ?>
+    </div>
+  </div>
+  <!-- end: col3 (content) -->
+
+  <?php if ($isLoggedIn): ?>
+    <?= $this->myResearchSideBar('libraries', $this->location); ?>
+  <?php else: ?>
+    <div class="col-sm-3 sidebar hidden-print">
+    </div>
+  <?php endif ?>
+
+  <script type="text/javascript">
+    jQuery(function () {
+      swissbib.FavoriteInstitutions.init(<?=json_encode($autocompleterData)?>);
+    });
+  </script>
+
+<?php /** $this->inlineScript()->appendFile("sbfavorites.js");*/ ?>
