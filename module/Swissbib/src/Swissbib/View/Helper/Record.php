@@ -15,7 +15,7 @@ class Record extends VuFindRecord
 
 
         $allParams = array('localunions' => array(), 'localtags'  => array(), 'indicators' => array(), 'subfields' => array());
-        $diffarray =  array_merge(array_diff_key($allParams, $params),$params);
+        $diffarray =  array_merge(array_diff_key($allParams, $params), $params);
         $diffArrayInCorrectOrder = array('localunions' => $diffarray['localunions'],'localtags' => $diffarray['localtags'], 'indicators' => $diffarray['indicators'], 'subfields' => $diffarray['subfields']);
 
         return  $this->driver->tryMethod('getLocalValues',$diffArrayInCorrectOrder);

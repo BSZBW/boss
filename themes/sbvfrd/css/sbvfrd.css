@@ -3,5 +3,73 @@ header {
 }
 
 .holdingsAjaxSpinner {
-	display: none;
+  display: none;
+}
+
+div.memorize  {
+  margin: auto;
+  margin-top: 25px;
+}
+
+.icon_notepad_add {
+  display: block;
+  font-size: 0;
+  line-height: 0;
+  text-indent: -1000px;
+  width: 30px;
+  height: 30px;
+  background-image: url(../images/icon_notepad_add.gif);
+  background-position: 0 -1px;
+  background-repeat: no-repeat;
+}
+
+.icon_show span {
+  padding-left: 19px;
+  background-image: url(../images/icon_show.gif);
+  background-position: 0 2px;
+  background-repeat: no-repeat;
+}
+
+@media (max-width: 767px) {
+  .result label {
+    width: 100%;
+    background-color: #13141b;
+    color: #fff;
+  }
+
+  .no-gutter {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .gutter-1 {
+    padding-left: 1px;
+    padding-right: 1px;
+  }
+
+  .dropdown-menu > li > a {
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .dropdown-menu {
+    width: 100%;
+  }
+
+  .btn-frbr {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .btn-frbr > span {
+    text-overflow: ellipsis;
+  }
+
+  .icon_show {
+    background-image: url(../images/icon_show.gif);
+    background-position: 8px 8px;
+    background-repeat: no-repeat;
+    height: 30px;
+    width: 30px;
+  }
 }
