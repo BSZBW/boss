@@ -36,7 +36,8 @@ swissbib.HoldingFavorites = {
           .data('favorised', true);
     });
 
-    allMiniActions = $('#tab-holdings').find('.miniactions');
+    allMiniActions = $('#holdings-tab').find('.miniactions');
+
     notFavorised = $.grep(allMiniActions, function (node, index) {
       return $(node).find('.institutionFavorite').data('favorised') !== true;
     });
