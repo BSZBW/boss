@@ -93,6 +93,26 @@ return array(
                     )
                 )
             ),
+            'myresearch-photocopies' => array( // Override vufind favorites route. Rename to Lists
+              'type'    => 'literal',
+              'options' => array(
+                'route'    => '/MyResearch/Photocopies',
+                'defaults' => array(
+                  'controller' => 'my-research',
+                  'action'     => 'photocopies'
+                )
+              )
+            ),
+            'myresearch-bookings' => array( // Override vufind favorites route. Rename to Lists
+              'type'    => 'literal',
+              'options' => array(
+                'route'    => '/MyResearch/Bookings',
+                'defaults' => array(
+                  'controller' => 'my-research',
+                  'action'     => 'bookings'
+                )
+              )
+            ),
         )
     ),
     'console' => array(

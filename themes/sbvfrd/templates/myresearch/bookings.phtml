@@ -1,0 +1,24 @@
+<?
+// Set up page title:
+$this->headTitle($this->translate('Bookings'));
+
+// Set up breadcrumbs:
+$this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Bookings') . '</li>';
+?>
+
+<div class="<?= $this->layoutClass('mainbody') ?>">
+  <h2><?= $this->transEsc('Bookings') ?></h2>
+  <?= $this->flashmessages(); ?>
+
+  <?php if( sizeof($this->bookings) ): ?>
+    <p><?=$this->transEsc('Your bookings') ?></p>
+    <?=$this->render('myresearch/bookings/itemlist.phtml')?>
+  <?php else: ?>
+    <p><?=$this->transEsc('No bookings') ?></p>
+  <?php endif; ?>
+
+</div>
+
+<div class="<?= $this->layoutClass('sidebar') ?>">
+  <?= $this->context($this)->renderInContext("myresearch/menu.phtml", array('active' => 'bookings')) ?>
+</div>
