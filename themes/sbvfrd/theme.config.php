@@ -7,7 +7,6 @@ return array(
     ),
 
     'js' => array(
-//      'jquery/jquery-1.10.1.min.js',
         'jquery/ui/jquery-ui.min.js',
 //
         'lib/jstorage.min.js', //used for favorites - there is still some amount of JS code inline of the page -> Todo: Refactoring in upcoming Sprints
