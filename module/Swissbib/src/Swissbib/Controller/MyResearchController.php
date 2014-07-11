@@ -96,8 +96,9 @@ class MyResearchController extends VuFindMyResearchController
      */
     public function settingsAction()
     {
-        $account = $this->getAuthManager();
-        if ($account->isLoggedIn() == false) {
+      $account = $this->getAuthManager();
+
+      if ($account->isLoggedIn() == false) {
             return $this->forceLogin();
         }
 
@@ -105,11 +106,13 @@ class MyResearchController extends VuFindMyResearchController
         $user = $this->getUser();
 
         if ($this->getRequest()->isPost()) {
-            $language    = $this->params()->fromPost('language');
-            $maxHits    = $this->params()->fromPost('max_hits');
+            $language     = $this->params()->fromPost('language');
+            $maxHits      = $this->params()->fromPost('max_hits');
+            $defaultSort  = $this->params()->fromPost('default_sort');
 
             $user->language = trim($language);
             $user->max_hits = intval($maxHits);
+            $user->default_sort = trim($defaultSort);
 
             $user->save();
 
@@ -120,21 +123,29 @@ class MyResearchController extends VuFindMyResearchController
             return $this->redirect()->toRoute('myresearch-settings');
         }
 
-        $language    = $user->language;
-        $maxHits    = $user->max_hits;
+        $serviceLocator    = $this->event->getApplication()->getServiceManager();
+
+        /** @var Options $searchOptions */
+        $searchOptions =  $serviceLocator->get('Swissbib\SearchOptionsPluginManager')->get('Solr'); //@todo possible options of Solr-Target are taken. But each target should have its own options
+
+        $language     = $user->language;
+        $maxHits      = $user->max_hits;
+        $defaultSort  = $user->default_sort;
 
         return new ViewModel(array(
                                  'max_hits'        => $maxHits,
                                  'language'        => $language,
+                                 'default_sort'    => $defaultSort,
                                  'optsLanguage'    => array(
                                     'de' => 'Deutsch',
                                     'en' => 'English',
                                     'fr' => 'Francais',
                                     'it' => 'Italiano'
-                                ),
+                                  ),
                                  'optsMaxHits'    => array(
                                      10, 20, 40, 60, 80, 100
-                                 )
+                                 ),
+                                 'optsDefaultSort' => $searchOptions->getSortOptions()
                             ));
     }
 
@@ -248,9 +259,9 @@ class MyResearchController extends VuFindMyResearchController
     {
         $uri = $this->getRequest()->getUri();
         $base = sprintf('%s://%s', $uri->getScheme(), $uri->getHost());
-        $baseEscaped =  str_replace("/","\/",$base);
+        $baseEscaped =  str_replace("/", "\/", $base);
 
-        if (preg_match("/$baseEscaped/",$this->getRequest()->getServer()->get('HTTP_REFERER')) == 0) {
+        if (preg_match("/$baseEscaped/", $this->getRequest()->getServer()->get('HTTP_REFERER')) == 0) {
             $url = $this->getServerUrl('myresearch-home');
             return $this->getAuthManager()->getSessionInitiator($url);
         } else {
@@ -349,7 +360,7 @@ class MyResearchController extends VuFindMyResearchController
             //test.swissbib.ch || sb-vf1.swissbib.unibas.ch ..
             //these links could be defined via configuration once the "Bestellvorgang" - seems to be a monster -  is stable (I guess this won't happen in the future...)
             $matches = array_filter(array("/swissbib\.?.*?\.ch/","/localhost/"), function ($pattern) use ($scheme) {
-                $matched = preg_match($pattern,$scheme);
+                $matched = preg_match($pattern, $scheme);
                 return $matched == 1 ? true : false;
             });
             if (count($matches) == 0) {
