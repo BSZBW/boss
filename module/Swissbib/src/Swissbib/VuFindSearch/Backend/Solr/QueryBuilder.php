@@ -46,15 +46,15 @@ class QueryBuilder extends VFBuilder {
     {
         parent::__construct($specs);
 
-        if (array_key_exists("allfields",$this->specs) && array_key_exists("DismaxFields",  $this->specs["allfields"]->toArray())) {
+        if (array_key_exists("allfields", $this->specs) && array_key_exists("DismaxFields",  $this->specs["allfields"]->toArray())) {
             $tempArray = $this->specs["allfields"]->toArray();
             $this->disMaxSearchFields = $tempArray["DismaxFields"];
         }
 
         $this->disMaxSearchFields = array_map(function($item) {
 
-            if (strpos($item,"^") > 0) {
-                return substr($item,0,strpos($item,"^")  );
+            if (strpos($item, "^") > 0) {
+                return substr($item, 0, strpos($item, "^")  );
 
             } else {
                 return $item;
@@ -76,16 +76,16 @@ class QueryBuilder extends VFBuilder {
 
         $alreadyPrepared = parent::prepareForLuceneSyntax($input);
 
-        preg_match_all("/(?P<name>\w+?:|[ ]:)/",$input,$matches);
+        preg_match_all("/(?P<name>\w+?:|[ ]:)/", $input, $matches);
 
         if (count($matches["name"] > 0) ) {
 
             foreach ($matches["name"] as $fieldNameWithColon) {
 
-                $fieldNameNoColon = substr($fieldNameWithColon, 0, strpos($fieldNameWithColon,":"));
+                $fieldNameNoColon = substr($fieldNameWithColon, 0, strpos($fieldNameWithColon, ":"));
 
-                if (!in_array($fieldNameNoColon,$this->disMaxSearchFields)) {
-                    $alreadyPrepared = str_replace($fieldNameWithColon,$fieldNameNoColon . " ",$alreadyPrepared);
+                if (!in_array($fieldNameNoColon, $this->disMaxSearchFields)) {
+                    $alreadyPrepared = str_replace($fieldNameWithColon, $fieldNameNoColon . " ", $alreadyPrepared);
                 }
             };
 

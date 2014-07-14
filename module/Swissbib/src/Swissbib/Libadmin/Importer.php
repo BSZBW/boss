@@ -494,7 +494,7 @@ class Importer implements ServiceLocatorAwareInterface
 
             $filenamePrefix = "libadmin";
             if (isset($this->configPath)) {
-                $partsOfConfigPath = explode('/',$this->configPath);
+                $partsOfConfigPath = explode('/', $this->configPath);
                 $filenamePrefix = $partsOfConfigPath[0];
             }
 

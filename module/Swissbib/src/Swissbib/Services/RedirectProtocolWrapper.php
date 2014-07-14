@@ -55,7 +55,7 @@ class RedirectProtocolWrapper {
         if (!empty ($wrapper)) {
 
             //& has to be escaped otherwise the wrapper service isn't able to group parts of the QUERY_STRING correctly
-            $url = preg_replace("/&/","ESCAPED_AND_PERCENT",$url);
+            $url = preg_replace("/&/", "ESCAPED_AND_PERCENT", $url);
             $url = $this->vfConfig->Content->redirectProtocolWrapper . "?" . "targetURL=" . $url ;
 
         }

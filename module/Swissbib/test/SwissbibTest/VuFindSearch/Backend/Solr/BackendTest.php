@@ -53,11 +53,11 @@ class BackendTest extends PHPUnit_Framework_TestCase
     {
         $connector  = $this->getConnector('admin');
         $paramBag   = new ParamBag();
-        $paramBag->set('action',array('status'));
-        $paramBag->set('wt',array('json'));
+        $paramBag->set('action', array('status'));
+        $paramBag->set('wt', array('json'));
 
         $response       = $connector->search($paramBag);
-        $responseArray  = json_decode($response,true);
+        $responseArray  = json_decode($response, true);
 
         $this->assertTrue(array_key_exists('sb-biblio', $responseArray['status']), 'Connection to Solr-Core sb-biblio failed.');
     }
@@ -70,9 +70,9 @@ class BackendTest extends PHPUnit_Framework_TestCase
     public function testResponseDataAmountMoreThanZero()
     {
         $backend    = new Backend($this->getConnector('select'));
-        $result     = $backend->search(new Query(),0,100,$this->getParamBag());
+        $result     = $backend->search(new Query(), 0, 100, $this->getParamBag());
 
-        $this->assertTrue(0 < count($result->getRecords()),'Number of found Records is more than zero.');
+        $this->assertTrue(0 < count($result->getRecords()), 'Number of found Records is more than zero.');
     }
 
 
@@ -84,9 +84,9 @@ class BackendTest extends PHPUnit_Framework_TestCase
     {
         $backend    = new Backend($this->getConnector('select'));
         $limit      = 5;
-        $result     = $backend->search(new Query(),0,$limit,$this->getParamBag());
+        $result     = $backend->search(new Query(), 0, $limit, $this->getParamBag());
 
-        $this->lessThanOrEqual(count($result->getRecords()),$limit,'Number of found Records is less or equal to Limit.');
+        $this->lessThanOrEqual(count($result->getRecords()), $limit, 'Number of found Records is less or equal to Limit.');
     }
 
 
@@ -97,7 +97,7 @@ class BackendTest extends PHPUnit_Framework_TestCase
     public function testResponseDataFormat()
     {
         $backend    = new Backend($this->getConnector('select'));
-        $result     = $backend->search(new Query(),0,100,$this->getParamBag());
+        $result     = $backend->search(new Query(), 0, 100, $this->getParamBag());
 
         $this->assertTrue($result instanceof RecordCollection, 'Response is of Type Json\RecordCollection.');
     }
@@ -118,7 +118,7 @@ class BackendTest extends PHPUnit_Framework_TestCase
             $handlerMap = new HandlerMap(array('select' => array('fallback' => true)));
         }
 
-        return new Connector($url,$handlerMap);
+        return new Connector($url, $handlerMap);
     }
 
 
@@ -130,9 +130,9 @@ class BackendTest extends PHPUnit_Framework_TestCase
     {
         $paramBag     = new ParamBag();
 
-        $paramBag->set('q',array('a'));
-        $paramBag->set('qf',array('title_short title_sub author series journals topic fulltext'));
-        $paramBag->set('qt',array('edismax'));
+        $paramBag->set('q', array('a'));
+        $paramBag->set('qf', array('title_short title_sub author series journals topic fulltext'));
+        $paramBag->set('qt', array('edismax'));
 
         return $paramBag;
     }

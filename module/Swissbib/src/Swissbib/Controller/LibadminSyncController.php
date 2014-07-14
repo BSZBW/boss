@@ -76,7 +76,7 @@ class LibadminSyncController extends AbstractActionController
         $verbose    = $request->getParam('verbose', false) || $request->getParam('v', false);
         $showResult = $request->getParam('result', false) || $request->getParam('r', false);
         //$dryRun     = $request->getParam('dry', false) || $request->getParam('d', false);
-        $path     = $request->getParam('path','mapportal/green.json');
+        $path     = $request->getParam('path', 'mapportal/green.json');
 
         /** @var Importer $importer */
         try {
