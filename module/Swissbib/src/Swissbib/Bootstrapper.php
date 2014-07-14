@@ -355,14 +355,16 @@ class Bootstrapper
       $authManager    = $serviceLocator->get('VuFind\AuthManager');
 
       if ($authManager->isLoggedIn()) {
-          $userDefaultSort = $authManager->isLoggedIn()->default_sort;
+        $userDefaultSort = unserialize($authManager->isLoggedIn()->default_sort);
+        $tab = $this->getActiveTab();
+        $userDefaultSort = $userDefaultSort[$this->getActiveTab()];
 
-          if ($userDefaultSort !== "") {
-              /** @var Options $searchOptions */
-              $searchOptions =  $serviceLocator->get('Swissbib\SearchResultsPluginManager')->get($this->getActiveTab())->getOptions();
+        if ($userDefaultSort !== "") {
+            /** @var Options $searchOptions */
+            $searchOptions =  $serviceLocator->get('Swissbib\SearchResultsPluginManager')->get($this->getActiveTab())->getOptions();
 
-              $searchOptions->setDefaultSort($userDefaultSort);
-          }
+            $searchOptions->setDefaultSort($userDefaultSort);
+        }
       }
     }
 

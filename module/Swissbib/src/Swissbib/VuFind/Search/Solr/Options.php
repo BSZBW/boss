@@ -23,7 +23,8 @@ class Options extends VuFindSolrOptions
     /**
      * @param String    $sort
      */
-    public function setDefaultSort($defaultSort) {
+    public function setDefaultSort($defaultSort)
+    {
         $this->defaultSort = $defaultSort;
     }
 }
