@@ -37,7 +37,7 @@ $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') .
     </div>
     <? foreach($this->defaultSort as $defaultSort): ?>
         <div class="form-group">
-          <label class="col-sm-3 control-label" for="defaultSort"><?=$this->transEsc('Default_Sort') . ( $defaultSort['label'] ?  ' ' . $this->transEsc($defaultSort['label']) : '') ?>:</label>
+          <label class="col-sm-3 control-label" for="defaultSort"><?=$this->transEsc('preferences.default_sort') . ( $defaultSort['label'] ?  ' ' . $this->transEsc($defaultSort['label']) : '') ?>:</label>
           <div class="col-sm-3">
             <select id="defaultSort" name="default_sort[<?= $defaultSort['engine'] ?>]" class="form-control">
               <? foreach ($defaultSort['options'] as $defaultSortValue => $defaultSortLabel): ?>
