@@ -35,18 +35,27 @@ use VuFind\Search\Summon\Options as VFSummonOptions;
 
 class Options extends VFSummonOptions
 {
-    /**
-     * Set default limit
-     *
-     * @param    Integer        $limit
-     */
-    public function setDefaultLimit($limit)
-    {
-        $maxLimit = max($this->getLimitOptions());
-        if ($limit > $maxLimit) {
-            $this->defaultLimit = $maxLimit;
-        } else {
-            $this->defaultLimit = intval($limit);
-        }
+  /**
+   * Set default limit
+   *
+   * @param    Integer $limit
+   */
+  public function setDefaultLimit($limit)
+  {
+    $maxLimit = max($this->getLimitOptions());
+    if ($limit > $maxLimit) {
+      $this->defaultLimit = $maxLimit;
+    } else {
+      $this->defaultLimit = intval($limit);
     }
+  }
+
+
+  /**
+   * @param String    $defaultSort
+   */
+  public function setDefaultSort($defaultSort)
+  {
+    $this->defaultSort = $defaultSort;
+  }
 }
