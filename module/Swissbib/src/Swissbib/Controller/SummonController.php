@@ -81,4 +81,28 @@ class SummonController extends VuFindSummonController
         $results->restoreServiceLocator($this->getServiceLocator());
         return $results;
     }
+
+
+
+    /**
+     * Get results manager
+     * If target is extended, get a customized manager
+     * @todo  Same method as in Swissbib/Controller/SearchController. Extract!
+     * @return    VuFindSearchResultsPluginManager|SwissbibSearchResultsPluginManager
+     */
+    protected function getResultsManager()
+    {
+        if (!isset($this->extendedTargets)) {
+            $mainConfig = $this->getServiceLocator()->get('Vufind\Config')->get('config');
+            $extendedTargetsSearchClassList = $mainConfig->SwissbibSearchExtensions->extendedTargets;
+
+            $this->extendedTargets = array_map('trim', explode(',', $extendedTargetsSearchClassList));
+        }
+
+        if (in_array($this->searchClassId, $this->extendedTargets)) {
+            return $this->getServiceLocator()->get('Swissbib\SearchResultsPluginManager');
+        }
+
+        return parent::getResultsManager();
+    }
 }

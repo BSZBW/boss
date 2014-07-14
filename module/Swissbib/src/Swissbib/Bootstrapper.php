@@ -343,7 +343,37 @@ class Bootstrapper
         }
     }
 
-    protected function getActiveTab() {
+
+
+  /**
+   *  Add user defined default sort for search
+   */
+  protected function initDefaultSort() {
+      /** @var ServiceManager $serviceLocator */
+      $serviceLocator    = $this->event->getApplication()->getServiceManager();
+      /** @var Manager $authManager */
+      $authManager    = $serviceLocator->get('VuFind\AuthManager');
+
+      if ($authManager->isLoggedIn()) {
+        $userDefaultSort = unserialize($authManager->isLoggedIn()->default_sort);
+        $tab = $this->getActiveTab();
+        $userDefaultSort = $userDefaultSort[$this->getActiveTab()];
+
+        if ($userDefaultSort !== "") {
+            /** @var Options $searchOptions */
+            $searchOptions =  $serviceLocator->get('Swissbib\SearchResultsPluginManager')->get($this->getActiveTab())->getOptions();
+
+            $searchOptions->setDefaultSort($userDefaultSort);
+        }
+      }
+    }
+
+
+
+  /**
+   * @return String
+   */
+  protected function getActiveTab() {
         if (strpos($this->application->getRequest()->getRequestUri(), '/Summon/') !== false) {
             return 'Summon';
         } else {
