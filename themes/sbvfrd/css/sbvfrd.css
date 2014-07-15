@@ -73,3 +73,16 @@ div.memorize  {
     width: 30px;
   }
 }
+
+.nav > li > a {
+  padding: 0;
+}
+
+.nav > li.active {
+  background-color: #265680;
+  border-color: #265680;
+}
+
+.nav > li.active > a {
+  color: #fff;
+}
