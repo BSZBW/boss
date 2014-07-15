@@ -1,0 +1,113 @@
+<h1>Suchen</h1>
+
+<h3>Kombinieren</h3>
+
+<table class="table table-striped">
+    <tbody>
+    <tr>
+        <td><i>joyce ulysses</i></td>
+        <td>Beide Begriffe kommen vor</td>
+    </tr>
+    <tr>
+        <td><i>joyce AND ulysses</i></td>
+        <td>Beide Begriffe kommen im selben Feld vor</td>
+    </tr>
+    <tr>
+        <td><i>joyce OR ulysses</i></td>
+        <td>Einer der beiden Begriffe kommt vor</td>
+    </tr>
+    <tr>
+        <td><i>joyce NOT ulysses</i></td>
+        <td><i>joyce</i> kommt vor, nicht aber <i>ulysses</i></td>
+    </tr>
+    <tr>
+        <td>Komplexere Kombinationen</td>
+        <td>Siehe <a href="<?= $this->url('help-page', array('topic' => 'Advanced')) ?>">Hilfe - Erweiterte Suche</a>.
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<h3>Phrasensuche mit Anführungszeichen</h3>
+
+<table class="table table-striped">
+    <tbody>
+    <tr>
+        <td><i>"street art"</i></td>
+        <td>Die beiden Wörter müssen direkt hintereinander stehen.</td>
+    </tr>
+    <tr>
+        <td><i>"street art"~5</i></td>
+        <td>Die beiden Wörter müssen innerhalb von 5 Wörtern Abstand vorkommen.</td>
+    </tr>
+      <tr>
+        <td><i>"PZB E 62 2:6"</i></td>
+        <td>Signatur</td>
+    </tr>
+    </tbody>
+</table>
+
+<h3>Platzhalter</h3>
+
+<table class="table table-striped">
+    <tbody>
+    <tr>
+        <td rowspan="2">*</td>
+        <td rowspan="2">ersetzt beliebig viele Zeichen</td>
+        <td><i>cultur*</i></td>
+        <td>culture, cultura, cultural, culturally etc.</td>
+    </tr>
+    <tr>
+        <td><i>Fr*ib*urg</i></td>
+        <td>Fribourg, Freiburg etc.</td>
+    </tr>
+       <tr>
+        <td rowspan="2">?</td>
+        <td rowspan="2">ersetzt genau ein Zeichen</td>
+        <td><i>wom?n</i></td>
+        <td>woman, women etc.</td>
+    </tr>
+    <tr>
+        <td><i>Lind??ist</i></td>
+        <td>Lindquist, Lindkvist, Lindqvist ecc.</td>
+    </tr>
+    <tr>
+        <td>~</td>
+        <td>wenn Sie die genaue<br/>Schreibweise nicht kennen</td>
+        <td><i>Tschaikowski~</i></td>
+        <td>Tschaikowski, Tchaïkovski, Čajkovskij etc.</td>
+    </tr>
+    </tbody>
+</table>
+
+
+<h2>Trefferliste</h2>
+<h3>Suche verfeinern</h3>
+<p>Benutzen Sie die Filter in der linken Spalte Ihrer Trefferliste oder die <i>Erweiterte Suche</i>.</p>
+
+<h3>Suche wiederholen oder speichern</h3>
+<ul class="list">
+    <li>Klick auf <i>Artikel &amp; mehr</i> führt Ihre Suche im Bestand von <a
+            href="http://www.serialssolutions.com/en/services/summon/content" target="_blank">Summon</a> aus.
+    </li>
+    <li><a href="<?= $this->url('search-history') ?>">My swissbib - Gespeicherte Suchen</a></li>
+</ul>
+
+<!--
+<h3>Neue Einträge zu Ihrer Suche per Feed gemeldet bekommen</h3>
+<p><img src="<?= $this->basePath('themes/swissbib/css/themes/orange/img/icon_pagefunctions_rss.gif') ?>"
+        alt="Neue Einträge zu dieser Suche per Feed gemeldet bekommen"> Feed abonnieren</p>
+-->
+
+<h2>Link zum Volltext</h2>
+<p>Der Zugang zum Volltext funktioniert oft nur aus dem Netz der Universität, die den Inhalt lizenziert hat. Melden Sie sich deshalb über VPN an, wenn Sie sich nicht auf dem Campus befinden.</p>
+
+<h3>Artikel &amp; mehr</h3>
+<ul class="list">
+    <li><img src="<?= $this->basePath('themes/swissbibmulti/images/HelpPage/getit.png') ?>" alt="Link zum  Volltext"> =
+        Link zum Volltext
+    </li>
+    <li><img src="<?= $this->basePath('themes/swissbib/images/sfx.gif') ?>" alt="Link zu SFX Services"> = Link zum
+        Volltext, Artikelbestellung, Bestandesnachweis Schweiz
+    </li>
+</ul>
