@@ -9,7 +9,7 @@ alter table user modify username VARCHAR(200);
 
 -- You have to do it by yourself because it's part of VuFind DBMS schema (no swissbib extension)
 -- ALTER TABLE `user` ADD `verify_hash` varchar(42) NOT NULL DEFAULT '';
---`sb_nickname` text NOT NULL, seems to be a column created in the beginnings of our development
+-- `sb_nickname` text NOT NULL, seems to be a column created in the beginnings of our development
 -- delete it with
 -- ALTER TABLE `user` DROP COLUMN `sb_nickname`;
 
