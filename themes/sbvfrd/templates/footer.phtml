@@ -20,8 +20,7 @@
 </div>
 <div class="col-sm-4"><p><strong><?=$this->transEsc('Need Help?')?></strong></p>
 <ul>
-  <li><a href="<?= $this->url('help-page', array('topic' => 'chb_about')); ?>"><?= $this->transEsc('menu.service.information') ?></a></li>
-  <li><a href="<?= $this->url('help-page', array('topic' => 'chb_3steps')); ?>"><?= $this->transEsc('helppage') ?></a></a></li>
+  <?= $this->render('HelpPage/menulinks') ?>
 <!--  <li><a href="--><?//=$this->url('help-home')?><!--?topic=search" class="help-link" title="--><?//=$this->transEsc('Search Tips')?><!--">--><?//=$this->transEsc('Search Tips')?><!--</a></li>-->
   <li><a href="#"><?=$this->transEsc('Ask a Librarian')?></a></li>
   <li><a href="#"><?=$this->transEsc('FAQs')?></a></li>
