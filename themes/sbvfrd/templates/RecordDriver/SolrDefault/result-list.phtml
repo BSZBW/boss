@@ -211,7 +211,7 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
     <?=$this->record($this->driver)->getPreviews()?>
   </div>
 
-  <div class="col-xs-1 col-md-2">
+  <div class="col-xs-1 col-md-2 hidden-print">
     <div class="btn-group-vertical">
       <? /* Display qrcode if appropriate: */ ?>
         <? if ($QRCode = $this->record($this->driver)->getQRCode("results")): ?>
