@@ -1,6 +1,6 @@
 <h1>Save</h1>
 
-<table>
+<table class="table table-striped">
 	<tbody>
 	<tr>
         <td><img src="<?= $this->basePath('themes/swissbibmulti/css/img/icon_notepad_add.gif') ?>"
@@ -55,19 +55,21 @@
 
 <h2>Order</h2>
 
-<div class="floatbox">
-          
-     <a href="<?= $this->basePath('themes/swissbibmulti/images/HelpPage/en/order.png') ?>" class="help">
-     <img class="image magnify" src="<?= $this->basePath('themes/swissbibmulti/images/HelpPage/en/order_small.png') ?>" alt="Zoom"> 
-     </a>
-    
-<ul class="list">
-	<li>Click on the title.</li>
-	<li>Choose a library.</li>
-	<li>Click <i>Log in</i> below the library's name.</li> 
-	<li>Click <i>Order</i> or <i>Order copy</i>.</li>
-	<li>If you don't see these options the work can't be ordered online. A click on the Icon <img src="<?= $this->basePath('themes/swissbibmulti/css/img/icon_link-external.gif') ?>" alt="Library Info"> under Location shows you the opening times and address of the library.</li>
-</ul>
-    </div>
+<div class="row">
+  <div class="col-sm-6">
+    <a href="<?= $this->basePath('themes/swissbibmulti/images/HelpPage/en/order.png') ?>" class="help">
+      <img class="img-responsive" src="<?= $this->basePath('themes/swissbibmulti/images/HelpPage/en/order_small.png') ?>" alt="Zoom">
+    </a>
+  </div>
+  <div class="col-sm-6">
+    <ul class="list">
+      <li>Click on the title.</li>
+      <li>Choose a library.</li>
+      <li>Click <i>Log in</i> below the library's name.</li>
+      <li>Click <i>Order</i> or <i>Order copy</i>.</li>
+      <li>If you don't see these options the work can't be ordered online. A click on the Icon <img src="<?= $this->basePath('themes/swissbibmulti/css/img/icon_link-external.gif') ?>" alt="Library Info"> under Location shows you the opening times and address of the library.</li>
+    </ul>
+  </div>
+</div>
 
 
