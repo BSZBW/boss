@@ -1,0 +1,17 @@
+<div id="nav_<?= $nr ?>" class="group">
+  <h3><?= $group['label'][$this->layout()->userLang] ?></h3>
+
+  <div class="institutions">
+    <? foreach ($institutions as $institution): ?>
+      <? if ($institution['is_favorite']): ?>
+        <?=
+        $this->render(
+            'libraries/institution',
+            array(
+                'institution' => $institution
+            )
+        ) ?>
+      <? endif; ?>
+    <? endforeach; ?>
+  </div>
+</div>

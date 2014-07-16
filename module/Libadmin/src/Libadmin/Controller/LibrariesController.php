@@ -20,8 +20,9 @@ class LibrariesController extends AbstractActionController
 
         $viewModel->setTemplate('libraries/content');
         $viewModel->groupedInstitutions = $institutionLoader->getGroupedInstitutions();
-
+        $requestVars = $this->getRequest()->getQuery()->toArray();
         $this->layout()->setVariable('pageClass', 'template_page');
+        $viewModel->isPreview = $requestVars['preview'] == 1;
 
         return $viewModel;
     }

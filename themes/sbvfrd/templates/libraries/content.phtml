@@ -1,0 +1,42 @@
+<div class="<?=$this->layoutClass('mainbody')?>" id="libraryList">
+    <? $i = 0; ?>
+    <? foreach ($this->groupedInstitutions as $institutionGroup): ?>
+        <?=
+        $this->render(
+            'libraries/group',
+            array(
+                 'group'        => $institutionGroup['group'],
+                 'institutions' => $institutionGroup['institutions'],
+                 'nr'           => $i++
+            )
+        ) ?>
+    <? endforeach; ?>
+</div>
+<div class="<?=$this->layoutClass('sidebar')?> hidden-xs">
+  <div id="libraryListSidebar" class="affix" role="complementary">
+    <ul class="list-group nav sidenav">
+      <? $arrayLength = count($this->groupedInstitutions);
+      for ($i = 0; $i < $arrayLength; $i++): ?>
+        <li class="list-group-item title">
+          <a href="#nav_<?= $i ?>"><?= $this->groupedInstitutions[$i]['group']['label'][$this->layout()->userLang] ?></a>
+          <? if (is_array($this->groupedInstitutions[$i]['institutions']) && $isPreview === true) : ?>
+            <ul class="list-group nav">
+              <? $subArrayLength = count($this->groupedInstitutions[$i]['institutions']);
+              for ($j = 0; $j < $subArrayLength; $j++): ?>
+                <li class="list-group-item">
+                  <a href="#inst_<?=$this->groupedInstitutions[$i]['institutions'][$j]['id'] ?>">
+                    <?= $this->groupedInstitutions[$i]['institutions'][$j]['label'][$this->layout()->userLang] ?>
+                  </a>
+                </li>
+              <? endfor; ?>
+            </ul>
+          <? endif; ?>
+        </li>
+      <? endfor; ?>
+    </ul>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $('body').scrollspy({target: '#libraryListSidebar'});
+</script>
