@@ -43,7 +43,6 @@ return array(
         'swissbib/Account.js',
         'swissbib/Settings.js',
 
-        'blueprint/commonFromBluePrint.js',
         'blueprint/lightbox.js',
         'blueprint/bulk_actions.js',
     ),
