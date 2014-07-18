@@ -356,7 +356,6 @@ class Bootstrapper
 
       if ($authManager->isLoggedIn()) {
         $userDefaultSort = unserialize($authManager->isLoggedIn()->default_sort);
-        $tab = $this->getActiveTab();
         $userDefaultSort = $userDefaultSort[$this->getActiveTab()];
 
         if ($userDefaultSort !== "") {
