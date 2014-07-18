@@ -40,7 +40,7 @@ class InstitutionLoader
     {
         $filePath   = $this->cacheDir . '/' . $this->cacheFile;
         $cacheData  = file_exists($filePath) ? file_get_contents($filePath) : '';
-        $jsonData   = json_decode($cacheData,true);
+        $jsonData   = json_decode($cacheData, true);
 
         if (empty($jsonData['data'])) throw new ErrorException("No valid library data supplied.");
 
