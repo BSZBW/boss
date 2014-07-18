@@ -56,11 +56,6 @@ class SummonController extends VuFindSummonController
         $cache = $this->getServiceLocator()->get('VuFind\CacheManager')
                 ->getCache('object');
 
-        $tresults = $this->getResultsManager()->get('Summon');
-        $tparams  = $tresults->getParams();
-        $tOptions =  $tparams->getOptions();
-
-
         if (!($results = $cache->getItem('summonSearchAdvancedFacets'))) {
             $results = $this->getResultsManager()->get('Summon');
             $params  = $results->getParams();
@@ -79,6 +74,7 @@ class SummonController extends VuFindSummonController
         // Restore the real service locator to the object (it was lost during
         // serialization):
         $results->restoreServiceLocator($this->getServiceLocator());
+
         return $results;
     }
 
