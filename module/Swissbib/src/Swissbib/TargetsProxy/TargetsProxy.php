@@ -19,7 +19,6 @@ use Zend\Log\Logger as ZendLogger;
  */
 class TargetsProxy implements ServiceLocatorAwareInterface
 {
-
     /**
      * @var ServiceLocator
      */
@@ -28,7 +27,7 @@ class TargetsProxy implements ServiceLocatorAwareInterface
     /**
      * @var string
      */
-    protected $searchClass    = 'Summon';
+    protected $searchClass = 'Summon';
     /**
      * @var Config
      */
@@ -44,16 +43,15 @@ class TargetsProxy implements ServiceLocatorAwareInterface
      */
     protected $clientUri;
 
+    /**
+     * @var    Boolean|String
+     */
+    protected $targetKey = false;
 
     /**
      * @var    Boolean|String
      */
-    protected $targetKey    = false;
-
-    /**
-     * @var    Boolean|String
-     */
-    protected $targetApiKey    = false;
+    protected $targetApiKey = false;
 
     /**
      * @var    Boolean|String
@@ -62,50 +60,36 @@ class TargetsProxy implements ServiceLocatorAwareInterface
 
     protected $logger;
 
-
-
     /**
      * Initialize proxy with config
      *
      * @param    Config    $config
      */
-    public function __construct(Config $config,ZendLogger $logger, Request $request )
+    public function __construct(Config $config, ZendLogger $logger, Request $request)
     {
-        $this->config   = $config;
-        $this->logger   = $logger;
+        $this->config = $config;
+        $this->logger = $logger;
         $trustedProxies = explode(',', $this->config->get('TrustedProxy')->get('loadbalancer'));
 
         // Populate client info properties from request
-        $RemoteAddress    = new RemoteAddress();
+        $RemoteAddress = new RemoteAddress();
         $RemoteAddress->setUseProxy();
         $RemoteAddress->setTrustedProxies($trustedProxies);
-        $ipAddress        = $RemoteAddress->getIpAddress();
-        $this->clientIp    = array(
-            'IPv4'    => $ipAddress,            // i.e.: aaa.bbb.ccc.ddd - standard dotted format
+
+        $ipAddress = $RemoteAddress->getIpAddress();
+        $this->clientIp = array(
+            'IPv4' => $ipAddress, // i.e.: aaa.bbb.ccc.ddd - standard dotted format
         );
-        $Request    = new Request();
-        $this->clientUri= $Request->getUri();
 
-
-        //todo: make it configurable in case you want logging of headers
-
-        //foreach ($_SERVER as $key => $value) {
-        //    $this->logger->debug("_SERVER_KEY: " . " . $key => " . $value);
-        //}
-
-        //foreach($request->getHeaders() as $header) {
-
-            //now log the headers -> todo: read the manual rlated to ZF2 headers (there are different header types...)
-
-
-        //}
-
+        $Request = new Request();
+        $this->clientUri = $Request->getUri();
     }
 
     /**
      * @param string $className
      */
-    public function setSearchClass($className = 'Summon') {
+    public function setSearchClass($className = 'Summon')
+    {
         $this->searchClass    = $className;
     }
 
@@ -161,40 +145,6 @@ class TargetsProxy implements ServiceLocatorAwareInterface
         return $this->config;
     }
 
-
-
-    /**
-     * Check whether an IP address matches the given IP pattern
-     *
-     * @param    String        $ipAddress
-     * @param    String        $allowPatterns        List of allow-patterns, possible types: IP / IP wildcard / IP mask / IP section
-     * @return    Boolean
-     */
-    private function isMatchingIp($ipAddress, $allowPatterns)
-    {
-        try {
-            /**
-             * @var    \Swissbib\TargetsProxy\IpMatcher    $IpMatcher
-             */
-            $IpMatcher        = $this->getServiceLocator()->get('Swissbib\TargetsProxy\IpMatcher');
-            $allowPatterns    = explode(',', $allowPatterns);
-            $matches        = $IpMatcher->isMatching($ipAddress, $allowPatterns);
-
-        } catch (\Exception $e) {
-            // handle exceptions
-            echo "- Fatal error\n";
-            echo "- Stopped with exception: " . get_class($e) . "\n";
-            echo "====================================================================\n";
-            echo $e->getMessage() . "\n";
-            echo $e->getPrevious()->getMessage() . "\n";
-
-            return false;
-        }
-
-        return $matches;
-    }
-
-
     /**
      * Get target to be used for the client's IP range + sub domain
      *
@@ -204,59 +154,70 @@ class TargetsProxy implements ServiceLocatorAwareInterface
      */
     public function detectTarget($overrideIP = '', $overrideHost = '')
     {
-        $this->targetKey    = false;    // Key of detected target config
-        $this->targetApiId    = false;
-        $this->targetApiKey    = false;
+        $this->targetKey = false;    // Key of detected target config
+        $this->targetApiId = false;
+        $this->targetApiKey = false;
 
-        $targetKeys    = explode(',', $this->config->get('TargetsProxy')->get('targetKeys' . $this->searchClass));
-            // Check whether the current IP address matches against any of the configured targets' IP / sub domain patterns
-        $ipAddress    = !empty($overrideIP) ? $overrideIP : $this->getClientIpV4();
-        if( empty($overrideHost) ) {
-            $url        = $this->getClientUrl();
+        $targetKeys = explode(',', $this->config->get('TargetsProxy')->get('targetKeys' . $this->searchClass));
+        // Check whether the current IP address matches against any of the configured targets' IP / sub domain patterns
+        $ipAddress = !empty($overrideIP) ? $overrideIP : $this->getClientIpV4();
+
+        if (empty($overrideHost))
+        {
+            $url = $this->getClientUrl();
         } else {
-            $url        = new \Zend\Uri\Http();
+            $url = new \Zend\Uri\Http();
             $url->setHost($overrideHost);
         }
 
-        $IpMatcher    = new IpMatcher();
-        $UrlMatcher    = new UrlMatcher();
+        $IpMatcher = new IpMatcher();
+        $UrlMatcher = new UrlMatcher();
 
-        foreach($targetKeys as $targetKey) {
-            $isMatchingIP    = false;
-            $isMatchingUrl    = false;
+        foreach ($targetKeys as $targetKey)
+        {
+            $isMatchingIP = false;
+            $isMatchingUrl = false;
 
             /** @var    \Zend\Config\Config    $targetConfig */
-            $targetConfig    = $this->config->get($targetKey);
-            $patternsIP        = '';
-            $patternsURL    = '';
+            $targetConfig = $this->config->get($targetKey);
+            $patternsIP = '';
+            $patternsURL = '';
 
                 // Check match of IP address if any pattern configured.
                 // If match is found, set corresponding keys and continue matching
-            if ($targetConfig->offsetExists('patterns_ip')) {
-                $patternsIP    = $targetConfig->get('patterns_ip');
-                if( !empty($patternsIP) ) {
-                    $targetPatternsIp    = explode(',', $patternsIP);
-                    $isMatchingIP    = $IpMatcher->isMatching($ipAddress, $targetPatternsIp);
-                    if ( $isMatchingIP === true ) {
+            if ($targetConfig->offsetExists('patterns_ip'))
+            {
+                $patternsIP = $targetConfig->get('patterns_ip');
+                if (!empty($patternsIP))
+                {
+                    $targetPatternsIp = explode(',', $patternsIP);
+                    $isMatchingIP = $IpMatcher->isMatching($ipAddress, $targetPatternsIp);
+
+                    if ($isMatchingIP === true) {
                         $this->setConfigKeys($targetKey);
                     }
                 }
             }
-                // Check match of URL hostname if any pattern configured.
-                // If match is found, set corresponding keys and exit immediately
-            if ($targetConfig->offsetExists('patterns_url')) {
-                $patternsURL    = $targetConfig->get('patterns_url');
-                if( !empty($patternsURL) ) {
-                    $targetPatternsUrl    = explode(',', $patternsURL);
-                    $isMatchingUrl        = $UrlMatcher->isMatching($url->getHost(), $targetPatternsUrl);
-                    if ( $isMatchingUrl === true ) {
+
+            // Check match of URL hostname if any pattern configured.
+            // If match is found, set corresponding keys and exit immediately
+            if ($targetConfig->offsetExists('patterns_url'))
+            {
+                $patternsURL = $targetConfig->get('patterns_url');
+                if (!empty($patternsURL))
+                {
+                    $targetPatternsUrl = explode(',', $patternsURL);
+                    $isMatchingUrl = $UrlMatcher->isMatching($url->getHost(), $targetPatternsUrl);
+                    if ($isMatchingUrl === true)
+                    {
                         $this->setConfigKeys($targetKey);
                         return true;
                     }
                 }
             }
         }
-        return ( $this->targetKey != ""  ? true : false );
+
+        return ($this->targetKey != ""  ? true : false);
     }
 
     /**
@@ -269,8 +230,8 @@ class TargetsProxy implements ServiceLocatorAwareInterface
     {
         $this->targetKey = $targetKey;
         $vfConfig = $this->serviceLocator->get('VuFind\Config')->get('config')->toArray();
-        $this->targetApiId    = $vfConfig[$this->targetKey]['apiId'];
-        $this->targetApiKey    = $vfConfig[$this->targetKey]['apiKey'];
+        $this->targetApiId = $vfConfig[$this->targetKey]['apiId'];
+        $this->targetApiKey = $vfConfig[$this->targetKey]['apiKey'];
     }
 
 
@@ -299,5 +260,4 @@ class TargetsProxy implements ServiceLocatorAwareInterface
     {
         return $this->targetApiId;
     }
-
 }
