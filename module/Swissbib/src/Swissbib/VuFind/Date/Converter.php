@@ -12,11 +12,8 @@ namespace Swissbib\VuFind\Date;
 use VuFind\Date\Converter as VFConverter;
 use DateTime, VuFind\Exception\Date as DateException;
 
-
-class Converter extends VFConverter{
-
-
-
+class Converter extends VFConverter
+{
     /**
      * Generic method for conversion of a time / date string
      *
@@ -27,9 +24,15 @@ class Converter extends VFConverter{
      * @throws DateException
      * @return string               A re-formated time string
      */
-    public  function convert($inputFormat, $outputFormat, $dateString)
+    public function convert($inputFormat, $outputFormat, $dateString)
     {
-        $errors = "Date/time problem: Details: ";
+        // default return format of DateTime::getLastErrors()
+        $getErrors = array(
+            'warning_count' => 0,
+            'warnings' => array(),
+            'error_count' => 0,
+            'errors' => array()
+        );
 
         // For compatibility with PHP 5.2.x, we have to restrict the input formats
         // to a fixed list...  but we'll check to see if we have access to PHP 5.3.x
@@ -49,9 +52,6 @@ class Converter extends VFConverter{
                 $regEx = '/0*([0-9]+)(-|\/)0*([0-9]+)(-|\/)0*([0-9]+)/';
                 $dateString = trim(preg_replace($regEx, '$1/$3/$5', $dateString));
             }
-            $getErrors = array(
-                'warning_count' => 0, 'error_count' => 0, 'errors' => array()
-            );
             try {
                 $date = new DateTime($dateString);
             } catch (\Exception $e) {
@@ -79,20 +79,6 @@ class Converter extends VFConverter{
             //e.g.: http://alephtest.unibas.ch:1891/rest-dlf/patron/B219684/circulationActions/loans/?view=full
             //<z30-inventory-number-date>00000000</z30-inventory-number-date>
             return DateTime::createFromFormat('yymd', '19000101');
-
-            //if (is_array($getErrors['errors']) && $getErrors['error_count'] > 0) {
-            //    foreach ($getErrors['errors'] as $error) {
-            //        $errors .= $error . " ";
-            //    }
-            //} else if (is_array($getErrors['warnings'])) {
-            //    foreach ($getErrors['warnings'] as $warning) {
-            //        $errors .= $warning . " ";
-            //    }
-            //}
-
-            //throw new DateException($errors);
         }
     }
-
-
 }

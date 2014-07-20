@@ -18,7 +18,7 @@ class Record extends VuFindRecord
         $diffarray =  array_merge(array_diff_key($allParams, $params), $params);
         $diffArrayInCorrectOrder = array('localunions' => $diffarray['localunions'],'localtags' => $diffarray['localtags'], 'indicators' => $diffarray['indicators'], 'subfields' => $diffarray['subfields']);
 
-        return  $this->driver->tryMethod('getLocalValues',$diffArrayInCorrectOrder);
+        return  $this->driver->tryMethod('getLocalValues', $diffArrayInCorrectOrder);
 
 
     }
@@ -52,7 +52,7 @@ class Record extends VuFindRecord
         $collectedArrays = array();
 
         foreach ($urlArray as $url) {
-            if (!array_key_exists($url['url'],$uniqueURLs)) {
+            if (!array_key_exists($url['url'], $uniqueURLs)) {
                 $uniqueURLs[$url['url']] = "";
                 $collectedArrays[] = $url;
             }
@@ -103,15 +103,15 @@ class Record extends VuFindRecord
         if (empty($globalRestrictions)) {
             //fetch 'all' the links you can find in 856 / 956
             $urls = $this->driver->tryMethod('getURLs');
-            $collectedLinks = array_merge($collectedLinks,$urls);
+            $collectedLinks = array_merge($collectedLinks, $urls);
         } else {
 
             $allParamsGlobalTags = array('globalunions' => array(), 'tags'  => array());
-            $diffarray =  array_merge(array_diff_key($allParamsGlobalTags, $globalRestrictions),$globalRestrictions);
-            $diffArrayInCorrectOrder = array('globalunions' => $diffarray['globalunions'],'tags' => $diffarray['tags']);
+            $diffarray =  array_merge(array_diff_key($allParamsGlobalTags, $globalRestrictions), $globalRestrictions);
+            $diffArrayInCorrectOrder = array('globalunions' => $diffarray['globalunions'], 'tags' => $diffarray['tags']);
 
-            $urls =  $this->driver->tryMethod('getExtendedURLs',$diffArrayInCorrectOrder);
-            $collectedLinks = array_merge($collectedLinks,$urls);
+            $urls =  $this->driver->tryMethod('getExtendedURLs', $diffArrayInCorrectOrder);
+            $collectedLinks = array_merge($collectedLinks, $urls);
 
         }
 
@@ -272,8 +272,8 @@ class Record extends VuFindRecord
                 $urlHelper = $this->getView()->plugin('url');
                 $urlSrc = $urlHelper('cover-show');
                 //sometimes our app is not the root domain
-                $position =  strpos($urlSrc,'/Cover');
-                return  $this->config->Content->externalResourcesServer . substr($urlSrc,$position) .  '?' . http_build_query($thumb);
+                $position =  strpos($urlSrc, '/Cover');
+                return  $this->config->Content->externalResourcesServer . substr($urlSrc, $position) .  '?' . http_build_query($thumb);
 
             } else {
 

@@ -73,3 +73,33 @@ div.memorize  {
     width: 30px;
   }
 }
+
+.affix .nav > li > a {
+  padding: 0;
+}
+
+.affix .nav > li.active {
+  background-color: #265680;
+  border-color: #265680;
+}
+
+.affix .nav > li.active > a {
+  color: #fff;
+}
+
+.affix .nav > li > ul {
+  display: none;
+}
+
+.affix .nav > li > ul > li > a {
+  font-size: 10px;
+}
+
+.affix .nav > li.active > ul {
+  display: block;
+}
+
+#libraryListSidebar {
+  max-height: 100%;
+  overflow-y: auto;
+}

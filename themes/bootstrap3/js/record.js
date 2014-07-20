@@ -3,7 +3,6 @@
 /**
  * Functions and event handlers specific to record pages.
  */
-
 function checkRequestIsValid(element, requestURL, requestType, blockedClass) {
   var recordId = requestURL.match(/\/Record\/([^\/]+)\//)[1];
   var vars = {}, hash;
@@ -116,7 +115,6 @@ function registerAjaxCommentRecord() {
           refreshCommentList(id, recordSource);
           $(form).find('textarea[name="comment"]').val('');
         } else if (response.status == 'NEED_AUTH') {
-          data['loggingin'] = true;
           Lightbox.addCloseAction(function() {
             $.ajax({
               type: 'POST',
@@ -176,6 +174,9 @@ function ajaxLoadTab(tabid) {
       $('#'+tabid+'-tab').html(data).addClass('active');
       $('#'+tabid).tab('show');
       registerTabEvents();
+      if(typeof syn_get_widget === "function") {
+        syn_get_widget();
+      }
     }
   });
 }
@@ -185,6 +186,10 @@ $(document).ready(function(){
   registerTabEvents();
 
   $('ul.recordTabs a').click(function (e) {
+    if($(this).parents('li.active').length > 0) {
+      window.location.href = $(this).attr('href');
+      return;
+    }
     var tabid = $(this).attr('id').toLowerCase();
     if($('#'+tabid+'-tab').length > 0) {
       $('#record-tabs .tab-pane.active').removeClass('active');
@@ -192,6 +197,8 @@ $(document).ready(function(){
       $('#'+tabid).tab('show');
     } else {
       $('#record-tabs').append('<div class="tab-pane" id="'+tabid+'-tab"><i class="fa fa-spinner fa-spin"></i> '+vufindString.loading+'...</div>');
+      $('#record-tabs .tab-pane.active').removeClass('active');
+      $('#'+tabid+'-tab').addClass('active');
       ajaxLoadTab(tabid);
     }
     return false;

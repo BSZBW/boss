@@ -18,4 +18,13 @@ class Options extends VuFindSolrOptions
     {
         $this->defaultLimit = intval($limit);
     }
+
+
+    /**
+     * @param String    $sort
+     */
+    public function setDefaultSort($defaultSort)
+    {
+        $this->defaultSort = $defaultSort;
+    }
 }

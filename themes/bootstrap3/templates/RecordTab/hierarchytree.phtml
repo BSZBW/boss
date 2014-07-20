@@ -24,9 +24,9 @@
     <div id="treeSelector">
       <? foreach ($hierarchyTreeList as $hierarchy => $hierarchyTitle): ?>
         <? if($activeTree == $hierarchy): ?>
-          <i class="icon-sitemap"></i> <?=$this->escapeHtml($hierarchyTitle)?>
+          <i class="fa-sitemap"></i> <?=$this->escapeHtml($hierarchyTitle)?>
         <? else: ?>
-          <i class="icon-sitemap muted"></i> <a href="<?=$this->recordLink()->getTabUrl($this->driver, 'HierarchyTree')?>?hierarchy=<?=urlencode($hierarchy)?>"><?=$this->escapeHtml($hierarchyTitle)?></a>
+          <i class="fa-sitemap text-muted"></i> <a href="<?=$this->recordLink()->getTabUrl($this->driver, 'HierarchyTree')?>?hierarchy=<?=urlencode($hierarchy)?>"><?=$this->escapeHtml($hierarchyTitle)?></a>
         <? endif; ?>
       <? endforeach; ?>
     </div>
@@ -40,7 +40,7 @@
             <option value="AllFields"><?=$this->transEsc('All Fields')?></option>
             <option value="Title"><?=$this->transEsc('Title')?></option>
           </select>
-          <input type="submit" class="btn" value="<?=$this->transEsc('Search') ?>"/>
+          <input type="submit" class="btn btn-default" value="<?=$this->transEsc('Search') ?>"/>
           <i id="treeSearchLoadingImg" class="fa fa-spinner fa-spin hidden"></i>
         </div>
         <div id="treeSearchNoResults" class="alert alert-danger hidden"><?=$this->translate('nohit_heading')?></div>

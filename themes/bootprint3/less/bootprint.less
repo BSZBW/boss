@@ -1,4 +1,6 @@
+@import "bootstrap";
 @import "variables";
+@import "icons";
 
 /* --- Bootstrap MODS ---*/
 body {
@@ -25,17 +27,19 @@ body {
     padding-top:.3em;
   }
 }
-.btn:not(.btn-danger):not(.btn-info):not(.btn-link):not(.btn-primary):not(.btn-success):not(.btn-warning) {
-  background:@gray-lighter;
-  background-image:linear-gradient(#FFF, @nav-tabs-border-color);
-  border:1px solid @gray-light;
-  color:@gray-darker;
-  text-shadow:0 1px 0 #FFF;
-  &:hover {
-    background:@link-color;
-    border:1px solid @link-color;
-    color:#FFF;
-    text-shadow:none;
+.btn {
+  padding:3px 5px 2px;
+  &.btn-default {
+    background:@gray-lighter;
+    background-image:linear-gradient(#FFF, @nav-tabs-border-color);
+    border:1px solid @gray-light;
+    color:@gray-darker;
+    text-shadow:0 1px 0 #FFF;
+    &:hover {
+      border:1px solid @gray-dark;
+      color:@gray-darker;
+      text-shadow:none;
+    }
   }
 }
 .btn-danger, .btn-danger:hover  {border-color:darken(@brand-danger,  12%);font-weight:bold;}
@@ -90,6 +94,7 @@ input[type=checkbox] {
       margin-bottom:1em;
     }
   }
+  & > p {padding:0 1em;}
 }
 .tab-content {
   padding: 6px 8px;
@@ -134,7 +139,15 @@ header {
   }
   .searchbox {
     display:block !important;
-    margin:0;
+    .nav-tabs {
+      padding:0 6px;
+    }
+    .tab-content {
+      border:0;
+      .navbar-text {
+        margin:5px 10px 5px 0;
+      }
+    }
   }
   @media (max-width: 767px) {
     #header-collapse .navbar-right li {
@@ -152,6 +165,9 @@ header {
     font-size:12px;
     margin-bottom:2px;
   }
+}
+#searchForm_lookfor {
+  border-color:@brand-primary;
 }
 [name=searchForm] {
   margin:6px 8px 8px;
@@ -207,9 +223,17 @@ footer {
 }
 
 /* --- Record --- */
+#commentList {
+  .comment {
+    &:nth-child(even) {
+      background:@gray-lighter;
+    }
+  }
+}
 #hierarchyRecord {background:#FFF}
 
 /* --- Search --- */
+.alert {padding:8px}
 .bulkActionButtons {margin-bottom:6px}
 .left {text-align:center}
 .result {
@@ -217,6 +241,13 @@ footer {
     margin:0 0 4px 0;
     padding:4px 0 4px 6px;
     ul {padding-left:18px;}
+  }
+}
+.search-controls {
+  label {text-align:left}
+  @media (max-width:767px) {
+    margin:4px -4px;
+    padding:4px 0;
   }
 }
 

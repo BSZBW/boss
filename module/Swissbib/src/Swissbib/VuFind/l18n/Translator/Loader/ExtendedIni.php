@@ -63,7 +63,7 @@ class ExtendedIni extends VFExtendedIni
     public function __construct($pathStack = array(), $fallbackLocale = null)
     {
 
-        parent::__construct($pathStack,$fallbackLocale);
+        parent::__construct($pathStack, $fallbackLocale);
 
     }
 

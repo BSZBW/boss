@@ -3,7 +3,7 @@
     $this->headTitle($this->translate('Interlibrary Loan Requests'));
 
     // Set up breadcrumbs:
-    $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a> <span class="divider">&gt;</span></li>'
+    $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li>'
         . '<li class="active">' . $this->transEsc('Interlibrary Loan Requests') . '</li>';
 ?>
 
@@ -122,7 +122,7 @@
           <? if (isset($this->cancelResults['items'])): ?>
             <? foreach ($this->cancelResults['items'] as $itemId=>$cancelResult): ?>
               <? if ($itemId == $ilsDetails['item_id'] && $cancelResult['success'] == false): ?>
-                <div class="alert alert-error"><?=$this->transEsc($cancelResult['status']) ?><? if ($cancelResult['sysMessage']) echo ' : ' . $this->transEsc($cancelResult['sysMessage']); ?></div>
+                <div class="alert alert-danger"><?=$this->transEsc($cancelResult['status']) ?><? if ($cancelResult['sysMessage']) echo ' : ' . $this->transEsc($cancelResult['sysMessage']); ?></div>
               <? endif; ?>
             <? endforeach; ?>
           <? endif; ?>

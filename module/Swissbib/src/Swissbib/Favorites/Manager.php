@@ -87,7 +87,6 @@ class Manager
      */
     public function saveUserInstitutions(array $institutionCodes)
     {
-        $test = $this->authManager->isLoggedIn();
         $this->authManager->isLoggedIn() !== false ? $this->saveInDatabase($institutionCodes) : $this->saveInSession($institutionCodes);
     }
 

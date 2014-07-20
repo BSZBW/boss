@@ -105,7 +105,7 @@ class SolrMarc extends VuFindSolrMarc
                                 $searchSettings = null, $protocolWrapper
     ) {
 
-        parent::__construct($mainConfig,$recordConfig, $searchSettings);
+        parent::__construct($mainConfig, $recordConfig, $searchSettings);
 
         $this->protocolWrapper = $protocolWrapper;
 
@@ -399,9 +399,9 @@ class SolrMarc extends VuFindSolrMarc
         $tFieldsToCheck = array();
         if (!empty($tags)) {
             foreach($tags as $tag) {
-                if (strcmp($tag,'856') == 0) {
+                if (strcmp($tag, '856') == 0) {
                     $tFieldsToCheck['856'] = array('u','3');
-                } elseif (strcmp($tag,'956') == 0) {
+                } elseif (strcmp($tag, '956') == 0) {
                     $tFieldsToCheck['956'] = array('u','y','B');
                 }
             }
@@ -424,7 +424,7 @@ class SolrMarc extends VuFindSolrMarc
 
                         $tagDataField = $url->getTag();
 
-                        if (strcmp($tagDataField,'856') == 0) {
+                        if (strcmp($tagDataField, '856') == 0) {
 
                             $descSubField = $url->getSubField('3');
 
@@ -1521,7 +1521,7 @@ class SolrMarc extends VuFindSolrMarc
 
     public function getOnlineStatus()
     {
-        $filter = array_key_exists('filter_str_mv',$this->fields) ? $this->fields['filter_str_mv'] : array();
+        $filter = array_key_exists('filter_str_mv', $this->fields) ? $this->fields['filter_str_mv'] : array();
         return in_array('ONL', $filter)  ? true : false;
     }
 

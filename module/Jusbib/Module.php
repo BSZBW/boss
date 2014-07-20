@@ -39,8 +39,8 @@ class Module implements Autoloadable, Configurable
     {
 
         //we want to use the classmap mechanism if we are not in development mode
-        if (strcmp(APPLICATION_ENV,'development') != 0) {
-            preg_match('/(.*?)module/',__DIR__,$matches);
+        if (strcmp(APPLICATION_ENV, 'development') != 0) {
+            preg_match('/(.*?)module/', __DIR__, $matches);
 
             return array(
                 'Zend\Loader\ClassMapAutoloader' => array(

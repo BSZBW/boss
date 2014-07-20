@@ -1,7 +1,7 @@
 <div class="<?=$this->driver->supportsAjaxStatus()?'ajaxItem ':''?>col-xs-11">
   <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID())?>" class="hiddenId" />
   <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getResourceSource())?>" class="hiddenSource" />
-  <div class="col-xs-2 left">
+  <div class="col-sm-2 col-xs-3 left">
     <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title">
       <? if ($summThumb = $this->record($this->driver)->getThumbnail()): ?>
         <img src="<?=$this->escapeHtmlAttr($summThumb)?>" alt="<?=$this->transEsc('Cover Image')?>"/>
@@ -10,7 +10,7 @@
       <? endif; ?>
     </a>
   </div>
-  <div class="col-xs-6 middle">
+  <div class="col-sm-7 col-xs-6 middle">
     <div>
       <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title">
       <?
@@ -142,7 +142,7 @@
 
     <? if (!$openUrlActive && empty($urls) && $this->driver->supportsAjaxStatus()): ?>
       <span class="status ajax-availability hidden">
-        <span class="label"><?=$this->transEsc('Loading')?>...</span>
+        <span class="label label-default"><?=$this->transEsc('Loading')?>...</span>
       </span>
     <? endif; ?>
     <?=$this->record($this->driver)->getPreviews()?>
@@ -155,7 +155,7 @@
         // Add JS Variables for QrCode
         $this->jsTranslations()->addStrings(array('qrcode_hide' => 'qrcode_hide', 'qrcode_show' => 'qrcode_show'));
       ?>
-      <span class="hidden-phone">
+      <span class="hidden-xs">
         <i class="fa fa-qrcode"></i> <a href="<?=$this->escapeHtmlAttr($QRCode);?>" class="qrcodeLink"><?=$this->transEsc('qrcode_show')?></a>
         <div class="qrcode hidden">
           <img alt="<?=$this->transEsc('QR Code')?>" src="<?=$this->escapeHtmlAttr($QRCode);?>"/>
@@ -168,7 +168,7 @@
       <i class="fa fa-heart"></i> <a href="<?=$this->recordLink()->getActionUrl($this->driver, 'Save')?>" class="save-record modal-link" id="<?=$this->driver->getUniqueId() ?>" title="<?=$this->transEsc('Add to favorites')?>"><?=$this->transEsc('Add to favorites')?></a><br/>
 
       <? /* Saved lists */ ?>
-      <div class="savedLists alert alert-info hide">
+      <div class="savedLists alert alert-info hidden">
         <strong><?=$this->transEsc("Saved in")?>:</strong>
       </div>
     <? endif; ?>
