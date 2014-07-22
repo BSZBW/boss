@@ -31,6 +31,7 @@
 
 namespace Swissbib\View\Helper\Swissbib;
 use Zend\ServiceManager\ServiceManager;
+use Swissbib\VuFind\View\Helper\Root\Auth;
 
 
 /**
@@ -89,6 +90,19 @@ class Factory
         );
 
     }
+
+    /**
+     * Construct the Auth helper as an extension of the VuFind Core Auth helper
+     *
+     * @param ServiceManager $sm Service manager.
+     *
+     * @return Auth
+     */
+    public static function getAuth(ServiceManager $sm)
+    {
+        return new Auth($sm->getServiceLocator()->get('VuFind\AuthManager'));
+    }
+
 
 
 }
