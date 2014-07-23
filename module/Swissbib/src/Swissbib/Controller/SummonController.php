@@ -17,8 +17,9 @@ class SummonController extends VuFindSummonController
      * @param    Boolean        $savedSearch
      * @return    Array
      */
-    protected function getDateRangeSettings($savedSearch = false)
-    {
+    protected function getDateRangeSettings($savedSearch = false, $config = 'facets',
+      $filter = array()
+    ) {
         // Default to blank strings:
         $from = $to = '';
 

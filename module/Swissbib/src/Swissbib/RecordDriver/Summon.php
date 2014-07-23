@@ -33,7 +33,6 @@
 namespace Swissbib\RecordDriver;
 
 use VuFind\RecordDriver\Summon as VuFindSummon;
-use Swissbib\RecordDriver\Helper\Holdings as HoldingsHelper;
 
 /**
  * Enhancement for swissbib Summon records
@@ -43,21 +42,8 @@ use Swissbib\RecordDriver\Helper\Holdings as HoldingsHelper;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://www.swissbib.org
  */
-class Summon extends VuFindSummon
+class Summon extends VuFindSummon implements SwissbibRecordDriver
 {
-
-    /**
-     * @param    String $fieldName
-     * @param    String $fallbackValue
-     *
-     * @return    String
-     */
-    private function getField($fieldName, $fallbackValue = '')
-    {
-        return array_key_exists($fieldName, $this->fields) ? $this->fields[$fieldName] : $fallbackValue;
-    }
-
-
 
     /**
      * @return    String    Author name(s)
@@ -69,18 +55,6 @@ class Summon extends VuFindSummon
         return is_array($author) ? implode('; ', $author) : $author;
     }
 
-
-
-    /**
-     * @return    Array
-     */
-    private function getLinkModel()
-    {
-        return $this->getField('LinkModel');
-    }
-
-
-
     /**
      * @return    Array
      */
@@ -88,8 +62,6 @@ class Summon extends VuFindSummon
     {
         return $this->getField('URI');
     }
-
-
 
     /**
      * @return string ??
@@ -100,8 +72,6 @@ class Summon extends VuFindSummon
         return $this->getField('link');
     }
 
-
-
     /**
      * @return    Boolean
      */
@@ -110,8 +80,6 @@ class Summon extends VuFindSummon
         return in_array('DirectLink', $this->getLinkModel());
     }
 
-
-
     /**
      * @return    Boolean
      */
@@ -119,8 +87,6 @@ class Summon extends VuFindSummon
     {
         return 1 === intval($this->getField('hasFullText'));
     }
-
-
 
     /**
      * @return  string
@@ -146,8 +112,6 @@ class Summon extends VuFindSummon
         return $imprint;
     }
 
-
-
     /**
      * @return  string
      */
@@ -165,8 +129,6 @@ class Summon extends VuFindSummon
         return $ret;
     }
 
-
-
     /**
      * @return string
      */
@@ -181,29 +143,13 @@ class Summon extends VuFindSummon
         return $ret;
     }
 
-
-
     /**
-     * @todo    implement
-     * @return    array
-     */
-    public function getAllSubjectVocabularies()
-    {
-        return array();
-    }
-
-
-
-    /**
-     * @todo    implement
      * @return string
      */
     public function getAltTitle()
     {
         return '';
     }
-
-
 
     /**
      * @override
@@ -216,4 +162,132 @@ class Summon extends VuFindSummon
         return $solrDefaultAdapter->getCitationFormats();
     }
 
+    /**
+     * Get structured subject vocabularies from predefined fields
+     * Extended version of getAllSubjectHeadings()
+     *
+     * $fieldIndexes contains keys of fields to check
+     * $vocabConfigs contains checks for vocabulary detection
+     *
+     * $vocabConfigs:
+     * - ind: Value for indicator 2 in tag
+     * - field: sub field 2 in tag
+     * - fieldsOnly: Only check for given field indexes
+     * - detect: The vocabulary key is defined in sub field 2.
+     *      Don't use the key in the config (only used for local)
+     *
+     * Expected result:
+     * [
+     *        gnd => [
+     *            600 => [{},{},{},...]
+     *            610 => [{},{},{},...]
+     *            620 => [{},{},{},...]
+     *        ],
+     *    rero => [
+     *            600 => [{},{},{},...]
+     *            610 => [{},{},{},...]
+     *            620 => [{},{},{},...]
+     *        ]
+     * ]
+     * {} is an assoc array which contains the field data
+     *
+     * @param boolean $ignoreControlFields Ignore control fields 0 and 2
+     *
+     * @return array
+     */
+    public function getAllSubjectVocabularies($ignoreControlFields = false)
+    {
+        return array();
+    }
+
+    /**
+     * Get raw formats as provided by the basic driver
+     * Wrap for getFormats() because it's overwritten in this driver
+     *
+     * @return string[]
+     */
+    public function getFormatsRaw()
+    {
+        // TODO: Implement getFormatsRaw() method.
+    }
+
+    /**
+     * get Cartographic Mathematical Data
+     *
+     * @return string
+     */
+    public function getCartMathData()
+    {
+        // TODO: Implement getCartMathData() method.
+    }
+
+    /**
+     * get group-id from solr-field to display FRBR-Button
+     *
+     * @return string|number
+     */
+    public function getGroup()
+    {
+        // TODO: Implement getGroup() method.
+    }
+
+    /**
+     * Get host item entry
+     *
+     * @return array
+     */
+    public function getHostItemEntry()
+    {
+        // TODO: Implement getHostItemEntry() method.
+    }
+
+    /**
+     * Get unions
+     *
+     * @return string
+     */
+    public function getUnions()
+    {
+        // TODO: Implement getUnions() method.
+    }
+
+    /**
+     * Get online status
+     *
+     * @return boolean
+     */
+    public function getOnlineStatus()
+    {
+        // TODO: Implement getOnlineStatus() method.
+    }
+
+    /**
+     * Returns the corporation names
+     *
+     * @param boolean $asString
+     * @return  array|string
+     */
+    public function getCorporationNames($asString = true)
+    {
+        return $asString ? '' : array();
+    }
+
+    /**
+     * @param    String $fieldName
+     * @param    String $fallbackValue
+     *
+     * @return    String
+     */
+    private function getField($fieldName, $fallbackValue = '')
+    {
+        return array_key_exists($fieldName, $this->fields) ? $this->fields[$fieldName] : $fallbackValue;
+    }
+
+    /**
+     * @return    Array
+     */
+    private function getLinkModel()
+    {
+        return $this->getField('LinkModel');
+    }
 }

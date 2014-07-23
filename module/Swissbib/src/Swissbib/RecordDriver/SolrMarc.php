@@ -49,7 +49,7 @@ use Swissbib\RecordDriver\Helper\Holdings as HoldingsHelper;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://www.swissbib.org
  */
-class SolrMarc extends VuFindSolrMarc
+class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
 {
 
     /**
@@ -1518,7 +1518,6 @@ class SolrMarc extends VuFindSolrMarc
      *
      * @return Boolean
      */
-
     public function getOnlineStatus()
     {
         $filter = array_key_exists('filter_str_mv', $this->fields) ? $this->fields['filter_str_mv'] : array();
