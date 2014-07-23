@@ -136,4 +136,9 @@ interface SwissbibRecordDriver
      * @return  array|string
      */
     public function getCorporationNames($asString = true);
+
+    /**
+     * @return boolean
+     */
+    public function displayHoldings();
 }

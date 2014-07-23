@@ -582,7 +582,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
      * @return string
      */
 
-    public function getThumbnail_956_1()
+    protected function getThumbnail_956_1()
     {
         $thumbnailURL = null;
 
@@ -648,7 +648,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
      * @return string
      */
 
-    public function getThumbnail_856_1()
+    protected function getThumbnail_856_1()
     {
         $field = $this->get950();
         if ($field['union'] === 'RERO' && $field['tag'] === '856') {
@@ -683,7 +683,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
      * @return string
      */
 
-    public function getThumbnail_erara()
+    protected function getThumbnail_erara()
     {
         $field = $this->getDOIs();
         if (preg_match('/^.*e-rara/', $field['0'])) {
@@ -702,7 +702,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
      * @return array
      *
      */
-    public function get956()
+    protected function get956()
     {
         return $this->getMarcSubFieldMap(956, array(
             'B' => 'union',
@@ -724,7 +724,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
      * @return array
      *
      */
-    public function get950()
+    protected function get950()
     {
         return $this->getMarcSubFieldMap(950, array(
             'B' => 'union',
@@ -741,7 +741,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
      *
      * @return    String[]
      */
-    public function getFormatsTranslated()
+    protected function getFormatsTranslated()
     {
         $formats = $this->getFormatsRaw();
         $translator = $this->getTranslator();
@@ -2217,4 +2217,12 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
         return $solrDefaultAdapter->getCitationFormats();
     }
 
+
+    /**
+     * @return boolean
+     */
+    public function displayHoldings()
+    {
+        return true;
+    }
 }
