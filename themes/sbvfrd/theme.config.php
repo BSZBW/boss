@@ -5,6 +5,8 @@ return array(
     'css' => array(
         'sbvfrd.css',
         'sbvfrd_lg.css',
+        'sbvfrd_md.css',
+        'sbvfrd_xs.css',
         'search_home.css'
     ),
 

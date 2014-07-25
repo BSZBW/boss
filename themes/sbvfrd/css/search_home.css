@@ -1,8 +1,10 @@
-
-
 .searchHomeContent .well,
 .searchHomeContent > [class^=col-] > .row {
   background-color: #F7F7F7;
+}
+
+.searchHomeContent .well {
+  margin-top: 30px;
 }
 
 .searchHomeContent > [class^=col-] {
@@ -21,4 +23,16 @@
   margin: 15px;
   border: 1px solid #e3e3e3;
   border-radius: 6px;
+}
+
+
+/* medium part */
+@media (min-width: 992px) {
+  .searchHomeContent .btn-primary {
+    margin-left: 30px;
+  }
+
+  .btn-primary, .btn-link {
+    min-width: 127px;
+  }
 }
