@@ -4,6 +4,8 @@ return array(
 
     'css' => array(
         'sbvfrd.css',
+        'sbvfrd_lg.css',
+        'search_home.css'
     ),
 
     'js' => array(

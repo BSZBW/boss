@@ -1,0 +1,24 @@
+
+
+.searchHomeContent .well,
+.searchHomeContent > [class^=col-] > .row {
+  background-color: #F7F7F7;
+}
+
+.searchHomeContent > [class^=col-] {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.searchHomeContent .lead {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 600; /* semibold */
+  color: #3c4250;
+  font-size: 20px;
+}
+
+.searchHomeContent > [class^=col-] > .row {
+  margin: 15px;
+  border: 1px solid #e3e3e3;
+  border-radius: 6px;
+}
