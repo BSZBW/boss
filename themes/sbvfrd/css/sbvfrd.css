@@ -26,6 +26,34 @@ header a {
   margin-bottom: 5px;
 }
 
+.nav.nav-tabs li.active a {
+  border-bottom-color: #ddd;
+}
+
+ /*triangle under the tab*/
+.nav.nav-tabs li.active:after {
+  content: '';
+  border: 9px solid transparent;
+  width: 0;
+  height: 0;
+  border-top-color: #fff;
+  position: absolute;
+  top: 80%;
+  left: 44%;
+}
+
+/*triangle under the tab*/
+.nav.nav-tabs li.active a:after {
+  content: '';
+  border: 10px solid transparent;
+  width: 0;
+  height: 0;
+  border-top-color: #ddd;
+  position: absolute;
+  top: 99%;
+  left: 44%;
+}
+
 .nav.nav-tabs > li > a {
   font-family: 'Open Sans', sans-serif;
   font-weight: 600;
