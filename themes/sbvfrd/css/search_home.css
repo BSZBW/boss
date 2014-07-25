@@ -25,6 +25,25 @@
   border-radius: 6px;
 }
 
+.searchHomeContent .swissbibCustom > .row {
+  padding: 0 0 33px 28px;
+  min-height: 301px;
+  max-height: 301px;
+}
+
+.searchHomeContent .swissbibCustom > .row > p {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  color: #3c4250;
+  padding-right: 28px;
+}
+
+.searchHomeContent .swissbibCustom > .row > .btn {
+  margin-left: 0;
+  position: absolute;
+  bottom: 33px;
+}
+
 
 /* medium part */
 @media (min-width: 992px) {
