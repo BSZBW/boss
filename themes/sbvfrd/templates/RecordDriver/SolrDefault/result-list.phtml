@@ -1,5 +1,5 @@
 <?php
-/** @var    Swissbib\RecordDriver\SolrMarc $resultItem */
+/** @var    Swissbib\RecordDriver\SolrMarc $record */
 /** @var    VuFind\View\Helper\Root\Record $viewRecord */
 $record = $this->driver;
 $viewRecord = $this->record($this->driver);
@@ -260,9 +260,10 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
         </a>
       <? endif; ?>
 
-      <?= $this->render('search/results/available.phtml') ?>
-
-      <?= $this->render('search/results/libraries.phtml') ?>
+      <? if ($this->driver->displayHoldings()): ?>
+        <?= $this->render('search/results/available.phtml') ?>
+        <?= $this->render('search/results/libraries.phtml') ?>
+      <? endif; ?>
 
       <? if ($this->isFavoriteInstitution($record->getInstitutions())): ?>
           <img src="<?= $this->basePath('themes/swissbib/images/icon_favorit_library.gif') ?>"
