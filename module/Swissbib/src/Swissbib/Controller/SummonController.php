@@ -122,7 +122,7 @@ class SummonController extends VuFindSummonController
      * @param string $initMethod Name of params method to use to request facets
      * @param string $cacheName  Cache key for facet data
      *
-     * @return \VuFind\Search\Solr\Results
+     * @return \VuFind\Search\Summon\Results
      */
     protected function getFacetResults($initMethod, $cacheName)
     {
