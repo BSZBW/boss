@@ -1,0 +1,28 @@
+@media (min-width: 768px) {
+  header .form-control {
+    min-width: 721px;
+    max-width: 721px;
+  }
+
+  header .searchbox {
+    margin-left: -13px;
+  }
+
+  header .btn {
+    margin-top: 10px;
+    margin-bottom: 7px;
+  }
+
+  .container > .navbar-header {
+    margin-left: 0;
+    margin-right: -15px;
+  }
+
+  .navbar {
+    margin-bottom: 0;
+  }
+
+  .breadcrumb {
+    display: none;
+  }
+}

@@ -1,0 +1,23 @@
+@media (min-width: 1200px) {
+  .container {
+    width: 1140px;
+  }
+
+  header .navbar-collapse {
+    width: 1140px;
+  }
+
+  header .form-control {
+    max-width: 400px;
+    min-width: 296px;
+  }
+
+  .breadcrumb {
+    display: block;
+  }
+
+  .container > .navbar-header {
+    margin-left: -15px;
+    margin-right: -15px;
+  }
+}

@@ -1,0 +1,54 @@
+.searchHomeContent .well,
+.searchHomeContent > [class^=col-] > .row {
+  background-color: #F7F7F7;
+}
+
+.searchHomeContent .well {
+  margin-top: 30px;
+}
+
+.searchHomeContent > [class^=col-] {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.searchHomeContent .lead {
+  font-weight: 600; /* semibold */
+  color: #3c4250;
+  font-size: 20px;
+}
+
+.searchHomeContent > [class^=col-] > .row {
+  margin: 15px;
+  border: 1px solid #e3e3e3;
+  border-radius: 6px;
+}
+
+.searchHomeContent .swissbibCustom > .row {
+  padding: 0 0 33px 28px;
+  min-height: 301px;
+  max-height: 301px;
+}
+
+.searchHomeContent .swissbibCustom > .row > p {
+  color: #3c4250;
+  padding-right: 28px;
+}
+
+.searchHomeContent .swissbibCustom > .row > .btn {
+  margin-left: 0;
+  position: absolute;
+  bottom: 33px;
+}
+
+
+/* medium part */
+@media (min-width: 992px) {
+  .searchHomeContent .btn-primary {
+    margin-left: 30px;
+  }
+
+  .btn-primary, .btn-link {
+    min-width: 127px;
+  }
+}
