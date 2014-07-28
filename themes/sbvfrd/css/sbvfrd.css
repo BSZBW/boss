@@ -14,16 +14,8 @@ h1 { font-size: 26px; }
 h2 { font-size: 20px; color: #106ca0; }
 h4 { color: #106ca0; }
 
-header {
-  background-color: #50BF9E;
-}
-
-header a {
-  color: #fff;
-}
 
 /* Tab Navigation */
-
 .nav.nav-tabs {
   border-bottom: 0;
   margin-bottom: 5px;
@@ -32,6 +24,7 @@ header a {
 .nav.nav-tabs li.active a {
   border-bottom-color: #ddd;
 }
+
 
  /*triangle under the tab*/
 .nav.nav-tabs li.active:after {
@@ -68,8 +61,8 @@ header a {
   color: #3c4250;
 }
 
-/* well stuff */
 
+/* well stuff */
 .well-lg {
   padding: 19px 13px;
 }
@@ -81,7 +74,6 @@ header a {
 
 
 /* btn styles */
-
 .btn-primary, .btn-link, .btn-primary:hover, .btn-link:hover {
   color: #fff;
   background-color: #3c4250;
@@ -90,13 +82,31 @@ header a {
   text-decoration: none;
 }
 
+
+/* header */
+header {
+  background-color: #50BF9E;
+}
+
+header a {
+  color: #fff;
+}
+
+.navbar-brand {
+  text-indent: -9999px;
+  height: 44px;
+  width: 138px;
+  background: transparent url(../images/logo.png) no-repeat 0 0;
+}
+
+
 /* form controls (bootstrap fixes) */
 .navbar-form .form-control {
   display: inline-block;
 }
 
-/* misc */
 
+/* misc */
 .holdingsAjaxSpinner {
   display: none;
 }
