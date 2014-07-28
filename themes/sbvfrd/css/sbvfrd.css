@@ -1,15 +1,18 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans);
 
-h1, h2, h3, h4 {
+* {
   font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+}
+
+h1, h2, h3, h4 {
   font-weight: 600; /* semibold */
   color: #3c4250;
 }
 
 h1 { font-size: 26px; }
 h2 { font-size: 20px; color: #106ca0; }
-h3 { font-size: 14px; }
-h4 { font-size: 14px; color: #106ca0; }
+h4 { color: #106ca0; }
 
 header {
   background-color: #50BF9E;
@@ -55,9 +58,7 @@ header a {
 }
 
 .nav.nav-tabs > li > a {
-  font-family: 'Open Sans', sans-serif;
   font-weight: 600;
-  font-size: 14px;
   color: #106ca0;
   padding: 5px 15px;
   margin-bottom: 5px;
@@ -79,12 +80,9 @@ header a {
 }
 
 
-
 /* btn styles */
 
 .btn-primary, .btn-link, .btn-primary:hover, .btn-link:hover {
-  font-family: 'Open Sans', sans-serif;
-  font-size: 14px;
   color: #fff;
   background-color: #3c4250;
   border-color: #3c4250;
@@ -92,8 +90,12 @@ header a {
   text-decoration: none;
 }
 
+/* form controls (bootstrap fixes) */
+.navbar-form .form-control {
+  display: inline-block;
+}
 
-
+/* misc */
 
 .holdingsAjaxSpinner {
   display: none;

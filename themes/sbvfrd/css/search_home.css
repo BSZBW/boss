@@ -13,7 +13,6 @@
 }
 
 .searchHomeContent .lead {
-  font-family: 'Open Sans', sans-serif;
   font-weight: 600; /* semibold */
   color: #3c4250;
   font-size: 20px;
@@ -32,8 +31,6 @@
 }
 
 .searchHomeContent .swissbibCustom > .row > p {
-  font-family: 'Open Sans', sans-serif;
-  font-size: 14px;
   color: #3c4250;
   padding-right: 28px;
 }
