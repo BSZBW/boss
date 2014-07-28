@@ -1,10 +1,23 @@
 @media (min-width: 992px) {
   .form-control {
-    max-width: 721px;
+    max-width: 722px;
   }
 
   header .form-control {
-    max-width: 400px;
-    min-width: 296px;
+    min-width: 957px;
+    max-width: 957px;
+  }
+
+  header .searchbox {
+    margin-left: -31px;
+  }
+
+  header .btn {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .container > .navbar-header {
+    margin-left: -15px;
   }
 }

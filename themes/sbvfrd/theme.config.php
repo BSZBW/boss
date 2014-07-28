@@ -4,9 +4,10 @@ return array(
 
     'css' => array(
         'sbvfrd.css',
-        'sbvfrd_lg.css',
-        'sbvfrd_md.css',
         'sbvfrd_xs.css',
+        'sbvfrd_sm.css',
+        'sbvfrd_md.css',
+        'sbvfrd_lg.css',
         'search_home.css'
     ),
 
