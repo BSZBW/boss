@@ -102,4 +102,54 @@ class SummonController extends VuFindSummonController
 
         return parent::getResultsManager();
     }
+
+
+
+    /**
+     * @return void|\VuFind\Search\Summon\Results
+     */
+    protected function getHomePageFacets()
+    {
+        return $this->getFacetResults('initHomePageFacets', 'summonSearchHomeFacets');
+    }
+
+
+
+    /**
+     * Return a Search Results object containing requested facet information.  This
+     * data may come from the cache.
+     *
+     * @param string $initMethod Name of params method to use to request facets
+     * @param string $cacheName  Cache key for facet data
+     *
+     * @return \VuFind\Search\Summon\Results
+     */
+    protected function getFacetResults($initMethod, $cacheName)
+    {
+        // Check if we have facet results cached, and build them if we don't.
+        $cache = $this->getServiceLocator()->get('VuFind\CacheManager')
+            ->getCache('object');
+        if (!($results = $cache->getItem($cacheName))) {
+            // Use advanced facet settings to get summary facets on the front page;
+            // we may want to make this more flexible later.  Also keep in mind that
+            // the template is currently looking for certain hard-coded fields; this
+            // should also be made smarter.
+            $results = $this->getResultsManager()->get('Summon');
+            $params = $results->getParams();
+            $params->$initMethod();
+
+            // We only care about facet lists, so don't get any results (this helps
+            // prevent problems with serialized File_MARC objects in the cache):
+            $params->setLimit(0);
+
+            $results->getResults();                     // force processing for cache
+
+            $cache->setItem($cacheName, $results);
+        }
+
+        // Restore the real service locator to the object (it was lost during
+        // serialization):
+        $results->restoreServiceLocator($this->getServiceLocator());
+        return $results;
+    }
 }

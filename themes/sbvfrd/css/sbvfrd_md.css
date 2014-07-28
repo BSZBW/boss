@@ -1,0 +1,10 @@
+@media (min-width: 992px) {
+  .form-control {
+    max-width: 721px;
+  }
+
+  header .form-control {
+    max-width: 400px;
+    min-width: 296px;
+  }
+}
