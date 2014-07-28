@@ -143,4 +143,14 @@ class Params extends VFSummonParams
         return parent::buildDateRangeFilter($field, $from, $to);
     }
 
+    /**
+     *
+     */
+    public function initHomePageFacets()
+    {
+        // Load Advanced settings if HomePage settings are missing (legacy support):
+        if (!$this->initFacetList('HomePage', 'HomePage_Settings', 'Summon')) {
+            $this->initAdvancedFacets();
+        }
+    }
 }
