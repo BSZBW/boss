@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Open+Sans);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,700);
 
 * {
   font-family: 'Open Sans', sans-serif;
@@ -13,6 +13,9 @@ h1, h2, h3, h4 {
 h1 { font-size: 26px; }
 h2 { font-size: 20px; color: #106ca0; }
 h4 { color: #106ca0; }
+
+a { color: #106CA0; }
+a:hover { color: #3C4250; text-decoration: none; }
 
 
 /* Tab Navigation */
@@ -63,6 +66,7 @@ header .nav.nav-tabs > li > a {
 
 header .nav.nav-tabs > li > a:hover {
   color: #106ca0;
+    text-decoration: none;
 }
 
 .nav.nav-tabs > li.active > a,
@@ -213,4 +217,23 @@ div.memorize  {
 #libraryListSidebar {
   max-height: 100%;
   overflow-y: auto;
+}
+
+footer p strong {
+  color: #3C4250;
+}
+
+footer ul {
+  list-style: none;
+  padding: 0;
+}
+
+footer hr {
+  margin-top: 42px;
+  margin-bottom: 42px;
+}
+
+footer .container > div {
+  margin-left: -15px;
+  margin-right: -15px;
 }
