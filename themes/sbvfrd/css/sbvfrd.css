@@ -66,7 +66,7 @@ header .nav.nav-tabs > li > a {
 
 header .nav.nav-tabs > li > a:hover {
   color: #106ca0;
-    text-decoration: none;
+  text-decoration: none;
 }
 
 .nav.nav-tabs > li.active > a,
