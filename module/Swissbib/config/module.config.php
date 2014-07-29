@@ -269,6 +269,9 @@ return array(
                 )
             ),
             'auth'                     => array(
+                'factories' => array(
+                    'shibbolethmock' => 'Swissbib\VuFind\Auth\Factory::getShibMock',
+                ),
                 'invokables' => array(
                     'shibboleth'    => 'Swissbib\VuFind\Auth\Shibboleth',
                 ),

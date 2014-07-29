@@ -58,7 +58,9 @@ return array(
             'flashmessages' => 'Swissbib\View\Helper\Swissbib\Factory::getFlashMessages',
             'citation' => 'Swissbib\View\Helper\Swissbib\Factory::getCitation',
             'recordlink' => 'Swissbib\View\Helper\Swissbib\Factory::getRecordLink',
-            'getextendedlastsearchlink' => 'Swissbib\View\Helper\Swissbib\Factory::getExtendedLastSearchLink'
+            'getextendedlastsearchlink' => 'Swissbib\View\Helper\Swissbib\Factory::getExtendedLastSearchLink',
+            'auth' => 'Swissbib\View\Helper\Swissbib\Factory::getAuth',
+
         )
     )
 );
