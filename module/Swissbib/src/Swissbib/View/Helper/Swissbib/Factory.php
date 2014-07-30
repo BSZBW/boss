@@ -30,6 +30,7 @@
 
 
 namespace Swissbib\View\Helper\Swissbib;
+use Swissbib\View\Helper\LayoutClass;
 use Zend\ServiceManager\ServiceManager;
 use Swissbib\VuFind\View\Helper\Root\Auth;
 
@@ -103,6 +104,15 @@ class Factory
         return new Auth($sm->getServiceLocator()->get('VuFind\AuthManager'));
     }
 
+    /**
+     * @param ServiceManager $sm
+     * @return LayoutClass
+     */
+    public static function getLayoutClass(ServiceManager $sm) {
+        $config = $sm->getServiceLocator()->get('VuFind\Config')->get('config');
+        $left = !isset($config->Site->sidebarOnLeft)
+            ? false : $config->Site->sidebarOnLeft;
 
-
+        return new LayoutClass($left);
+    }
 }
