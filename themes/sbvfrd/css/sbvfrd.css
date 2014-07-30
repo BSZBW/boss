@@ -96,6 +96,15 @@ header .nav.nav-tabs > li > a:hover {
 }
 
 
+/* lists */
+a.list-group-item.active,
+a.list-group-item.active:hover,
+a.list-group-item.active:focus {
+  background-color: #3C4250;
+  border-color: #3C4250;
+}
+
+
 /* header */
 header {
   background-color: #50BF9E;
@@ -142,6 +151,13 @@ header .breadcrumb > li > a {
   color: #3c4250;
   padding: 0 15px;
   font-weight: normal;
+}
+
+
+/* sidebar */
+.sidebar h4 {
+  color: #3C4250;
+  font-size: 24px;
 }
 
 
@@ -219,6 +235,8 @@ div.memorize  {
   overflow-y: auto;
 }
 
+
+/* footer */
 footer p strong {
   color: #3C4250;
 }
