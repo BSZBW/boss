@@ -7,9 +7,18 @@
     width: 1140px;
   }
 
+  .well .form-control {
+    min-width: 701px;
+    max-width: 701px;
+  }
+
   header .form-control {
     max-width: 400px;
     min-width: 296px;
+  }
+
+  .navbar-form .checkbox {
+    display: block;
   }
 
   .breadcrumb {

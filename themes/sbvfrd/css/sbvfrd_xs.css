@@ -1,7 +1,21 @@
 @media (max-width: 767px) {
+  header .btn {
+    margin-top: 10px;
+    margin-bottom: 7px;
+  }
+
+  .row {
+    margin-right: 0;
+    margin-left: 0;
+  }
+
   .container > .navbar-header {
    margin-left: 0;
    margin-right: 0;
+  }
+
+  .navbar {
+    margin-bottom: 0;
   }
 
   .navbar-toggle {
@@ -12,11 +26,19 @@
     padding: 5px 7px;
   }
 
+  .breadcrumb {
+    display: none;
+  }
+
   .searchHomeContent .well,
   .searchHomeContent > [class^=col-] {
     margin: 15px 10px 10px 15px;
   }
 
+  .searchHomeContent.row {
+    margin-right: -15px;
+    margin-left: -15px;
+  }
 
   .result label {
     width: 100%;

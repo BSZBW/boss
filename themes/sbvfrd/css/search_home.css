@@ -24,18 +24,23 @@
   border-radius: 6px;
 }
 
-.searchHomeContent .swissbibCustom > .row {
+.searchHomeContent > [class^=col-] > .row {
   padding: 0 0 33px 28px;
   min-height: 301px;
   max-height: 301px;
 }
 
-.searchHomeContent .swissbibCustom > .row > p {
+.searchHomeContent > [class^=col-] > .row > h2,
+.searchHomeContent > [class^=col-] > .row > ul {
+  padding: 0;
+}
+
+.searchHomeContent [class^=col-] > .row > p {
   color: #3c4250;
   padding-right: 28px;
 }
 
-.searchHomeContent .swissbibCustom > .row > .btn {
+.searchHomeContent [class^=col-] > .row > .btn {
   margin-left: 0;
   position: absolute;
   bottom: 33px;
