@@ -1,9 +1,8 @@
 /* general search control styling */
-
 .search-controls {
   padding-bottom: 10px;
   margin-top: 10px;
-  margin-bottom: 30px;
+  margin-bottom: 17px;
   border-bottom: 1px solid #ccc;
   overflow-x: hidden;
 }

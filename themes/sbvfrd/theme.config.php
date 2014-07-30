@@ -9,7 +9,8 @@ return array(
         'sbvfrd_md.css',
         'sbvfrd_lg.css',
         'search_home.css',
-        'search_controls.css'
+        'search_controls.css',
+        'results.css'
     ),
 
     'js' => array(
