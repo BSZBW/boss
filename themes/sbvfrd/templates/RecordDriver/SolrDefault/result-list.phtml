@@ -63,24 +63,24 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
             <? foreach ($hostitems as $hostitem): ?>
                 <span class="hidden-xs label"><strong><?= $this->transEsc('note_773') ?>:</strong></span>
                 <? $text = array_key_exists('related', $hostitem) ? $hostitem['title'] . ', ' . $hostitem['related'] : $hostitem['title'] ?>
-                <span><?= $this->escapeHtml($text) ?></span>
+                <span><?= $this->escapeHtml($text) ?></span><br />
             <? endforeach; ?>
         <? endif; ?>
         <span class="hidden-xs label"><strong><?= $this->transEsc('Year') ?>:</strong></span>
-        <span><?= $this->escapeHtml($publicationDate) ?></span>
+        <span><?= $this->escapeHtml($publicationDate) ?></span><br />
         <? if ($edition): ?>
              <span class="hidden-xs label"><strong><?= $this->transEsc('Edition') ?>:</strong></span>
-             <span><?= $this->escapeHtml($edition) ?></span>
+             <span><?= $this->escapeHtml($edition) ?></span><br />
         <? endif; ?>
         <? if ($responsible): ?>
             <span class="hidden-xs label"><strong><?= $this->transEsc('Author') ?>:</strong></span>
             <span>
-                <?= $this->escapeHtml($responsible) ?>
-            </span>
+               <?= $this->escapeHtml($responsible) ?>
+            </span><br />
         <? endif; ?>
 
         <? if($this->driver->isCollection()): ?>
-            <?=implode('', $this->driver->getSummary()); ?>
+            <?=implode('<br>', $this->driver->getSummary()); ?>
         <? else: ?>
             <? $summAuthor = $this->driver->getPrimaryAuthor(); ?>
             <? if (!empty($summAuthor)): ?>
@@ -96,18 +96,18 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
 
             <? $journalTitle = $this->driver->getContainerTitle(); $summDate = $this->driver->getPublicationDates(); ?>
             <? if (!empty($journalTitle)): ?>
-                <?=!empty($summAuthor) ? '' : ''?>
+                <?=!empty($summAuthor) ? '<br />' : ''?>
                     <span class="hidden-xs label">
                      <strong><?=/* TODO: handle highlighting more elegantly here */ $this->transEsc('Published in') ?></strong>
                     </span>
                     <?= ' <a href="' . $this->record($this->driver)->getLink('journaltitle', str_replace(array('{{{{START_HILITE}}}}', '{{{{END_HILITE}}}}'), '', $journalTitle)) . '">' . $this->highlight($journalTitle) . '</a>';?>
                     <?=!empty($summDate) ? ' (' . $this->escapeHtml($summDate[0]) . ')' : ''?>
             <? elseif (!empty($summDate)): ?>
-            <?=!empty($summAuthor) ? '' : ''?>
+            <?=!empty($summAuthor) ? '<br />' : ''?>
                 <span class="hidden-xs label">
                     <strong><?=$this->transEsc('Published')?> </strong>
                 </span>
-                <?=$this->escapeHtml($summDate[0])?>
+                <?=$this->escapeHtml($summDate[0])?><br />
             <? endif; ?>
 
             <? $summInCollection = $this->driver->getContainingCollections(); ?>
@@ -168,7 +168,7 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
       <? if ($this->driver->supportsAjaxStatus()): ?>
         <strong class="hideIfDetailed"><?=$this->transEsc('Call Number')?>:</strong>
         <span class="callnumber ajax-availability hidden">
-          <?=$this->transEsc('Loading')?>...
+          <?=$this->transEsc('Loading')?>...<br/>
         </span>
         <strong><?=$this->transEsc('Located')?>:</strong>
         <span class="location ajax-availability hidden">
