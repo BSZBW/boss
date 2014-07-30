@@ -24,4 +24,9 @@
   .container > .navbar-header {
     margin-left: -15px;
   }
+
+  .well .form-control {
+    min-width: 588px;
+    max-width: 588px;
+  }
 }
