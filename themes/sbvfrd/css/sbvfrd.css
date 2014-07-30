@@ -14,7 +14,7 @@ h1 { font-size: 26px; }
 h2 { font-size: 20px; color: #106ca0; }
 h4 { color: #106ca0; }
 
-a { color: #106CA0; }
+a { color: #106CA0; text-decoration: none; }
 a:hover { color: #3C4250; text-decoration: none; }
 
 

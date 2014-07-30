@@ -33,6 +33,47 @@
   overflow-x: hidden;
 }
 
+.row.result h2 {
+  margin-top: 0;
+}
+
+.row.result h2 > a {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.row.result a {
+  text-decoration: none;
+}
+
+.row.result h3 {
+  font-size: 14px;
+  margin-top: 0;
+}
+
+.row.result .meta span,
+.row.result .meta a {
+  padding: 5px 4px 5px 0;
+  font-size: 12px;
+}
+
+.row.result .meta .label {
+  display: block;
+  color: #3c4250;
+  text-align: left;
+  margin-top: 4px;
+  font-size: 13px;
+}
+
+.row.result .meta span {
+  margin-right: 20px;
+}
+
+.row.result .snippet {
+  font-size: 13px;
+  padding: 4px 0;
+}
+
 @media (min-width: 992px) {
   .row.result > .col-xs-11 {
     width: 98%;
