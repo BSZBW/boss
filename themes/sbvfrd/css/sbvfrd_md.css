@@ -17,6 +17,10 @@
     margin-bottom: 10px;
   }
 
+  .breadcrumb {
+    display: none;
+  }
+
   .container > .navbar-header {
     margin-left: -15px;
   }
