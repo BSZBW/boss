@@ -8,7 +8,9 @@ return array(
         'sbvfrd_sm.css',
         'sbvfrd_md.css',
         'sbvfrd_lg.css',
-        'search_home.css'
+        'search_home.css',
+        'search_controls.css',
+        'results.css'
     ),
 
     'js' => array(
@@ -60,7 +62,7 @@ return array(
             'recordlink' => 'Swissbib\View\Helper\Swissbib\Factory::getRecordLink',
             'getextendedlastsearchlink' => 'Swissbib\View\Helper\Swissbib\Factory::getExtendedLastSearchLink',
             'auth' => 'Swissbib\View\Helper\Swissbib\Factory::getAuth',
-
+            'layoutClass' => 'Swissbib\View\Helper\Swissbib\Factory::getLayoutClass',
         )
     )
 );

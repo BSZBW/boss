@@ -3,6 +3,11 @@
     width: 1140px;
   }
 
+  .main > .container > .row {
+    margin-right: -15px;
+    margin-left: -15px;
+  }
+
   header .navbar-collapse {
     width: 1140px;
   }

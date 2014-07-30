@@ -12,7 +12,7 @@ $retrosURL       = (is_array($urldisplay['urls']) && count($urldisplay['urls']) 
 
 <? if ($amountHoldings === 1): ?>
     <button class="btn btn btn-default dropdown-toggle" type="button" id="dropdownLibraries" data-toggle="dropdown">
-      <span class="hidden-xs">1 <?= $this->transEsc('result.library') ?></span>
+      <span class="hidden-xs"><i class="fa fa-fw"><strong>1</strong></i><?= $this->transEsc('result.library') ?></span>
       <span class="caret"></span>
     </button>
     <? if (in_array('RETROS', $urldisplay['unions'])): ?>
@@ -26,7 +26,7 @@ $retrosURL       = (is_array($urldisplay['urls']) && count($urldisplay['urls']) 
 
 <? elseif ($amountHoldings > 1): ?>
   <button class="btn btn btn-default dropdown-toggle" type="button" id="dropdownLibraries" data-toggle="dropdown">
-    <span class="hidden-xs"><?= $amountHoldings ?> <?= $this->transEsc('result.libraries') ?></span>
+    <span class="hidden-xs"><i class="fa fa-fw"><strong><?= $amountHoldings ?></strong></i><?= $this->transEsc('result.libraries') ?></span>
     <span class="caret"></span>
   </button>
     <? if (in_array('RETROS', $urldisplay['unions'])): ?>
