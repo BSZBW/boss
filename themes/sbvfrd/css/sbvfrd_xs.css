@@ -4,6 +4,11 @@
     margin-bottom: 7px;
   }
 
+  .row {
+    margin-right: 0;
+    margin-left: 0;
+  }
+
   .container > .navbar-header {
    margin-left: 0;
    margin-right: 0;
@@ -30,6 +35,10 @@
     margin: 15px 10px 10px 15px;
   }
 
+  .searchHomeContent.row {
+    margin-right: -15px;
+    margin-left: -15px;
+  }
 
   .result label {
     width: 100%;
