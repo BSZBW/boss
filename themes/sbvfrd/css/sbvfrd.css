@@ -5,6 +5,10 @@
   font-size: 14px;
 }
 
+body {
+  color: #3C4250;
+}
+
 h1, h2, h3, h4 {
   font-weight: 600; /* semibold */
   color: #3c4250;
@@ -12,6 +16,7 @@ h1, h2, h3, h4 {
 
 h1 { font-size: 26px; }
 h2 { font-size: 20px; color: #106ca0; }
+h3 { margin-top: 10px; }
 h4 { color: #106ca0; }
 
 a { color: #106CA0; }
@@ -19,18 +24,21 @@ a:hover { color: #3C4250; text-decoration: none; }
 
 
 /* Tab Navigation */
-.nav.nav-tabs {
+.searchHomeContent .nav.nav-tabs,
+header .nav.nav-tabs {
   border-bottom: 0;
   margin-bottom: 5px;
 }
 
-.nav.nav-tabs li.active a {
+.searchHomeContent .nav.nav-tabs li.active a,
+header .nav.nav-tabs li.active a {
   border-bottom-color: #ddd;
 }
 
 
  /*triangle under the tab*/
-.nav.nav-tabs li.active:after {
+.searchHomeContent .nav.nav-tabs li.active:after,
+header .nav.nav-tabs li.active:after{
   content: '';
   border: 9px solid transparent;
   width: 0;
@@ -42,7 +50,8 @@ a:hover { color: #3C4250; text-decoration: none; }
 }
 
 /*triangle under the tab*/
-.nav.nav-tabs li.active a:after {
+.searchHomeContent .nav.nav-tabs li.active a:after,
+header .nav.nav-tabs li.active a:after {
   content: '';
   border: 10px solid transparent;
   width: 0;
@@ -53,7 +62,8 @@ a:hover { color: #3C4250; text-decoration: none; }
   left: 44%;
 }
 
-.nav.nav-tabs > li > a {
+.searchHomeContent .nav.nav-tabs > li > a,
+header .nav.nav-tabs > li > a {
   font-weight: 600;
   color: #106ca0;
   padding: 5px 15px;
@@ -69,8 +79,10 @@ header .nav.nav-tabs > li > a:hover {
   text-decoration: none;
 }
 
-.nav.nav-tabs > li.active > a,
-.nav.nav-tabs > li.active > a:hover {
+.searchHomeContent .nav.nav-tabs > li.active > a,
+.searchHomeContent .nav.nav-tabs > li.active > a:hover,
+header .nav.nav-tabs > li.active > a,
+header .nav.nav-tabs > li.active > a:hover {
   color: #3c4250;
 }
 
@@ -87,10 +99,12 @@ header .nav.nav-tabs > li > a:hover {
 
 
 /* btn styles */
-.btn-primary, .btn-link, .btn-primary:hover, .btn-link:hover {
+.btn-primary, .btn-link, .btn-primary:hover, .btn-link:hover,
+.pager li > a, .pager li > span,
+.pager li > a:hover, .pager li > a:focus {
   color: #fff;
-  background-color: #3c4250;
-  border-color: #3c4250;
+  background-color: #3C4250;
+  border-color: #3C4250;
   border-radius: 4px;
   text-decoration: none;
 }
@@ -102,6 +116,85 @@ a.list-group-item.active:hover,
 a.list-group-item.active:focus {
   background-color: #3C4250;
   border-color: #3C4250;
+}
+
+
+/* tables */
+.table > thead > tr > th {
+  background: #3C4250;
+  font-weight: 600;
+  color: #fff;
+  border: none;
+  border-right: 1px solid #222;
+}
+
+.table > thead > tr > td,
+.table > tbody > tr > td,
+.table > tfoot > tr > td {
+  border: none;
+  border-right: 1px solid #DDD;
+}
+
+.table > thead > tr > th:last-child,
+.table > thead > tr > td:last-child,
+.table > tbody > tr > td:last-child,
+.table > tfoot > tr > td:last-child {
+  border-right: none;
+}
+
+
+/* record */
+#details-tab .table > thead > tr > th,
+#details-tab .table > tbody > tr > th,
+#details-tab .table > tfoot > tr > th,
+#details-tab .table > thead > tr > td,
+#details-tab .table > tbody > tr > td,
+#details-tab .table > tfoot > tr > td,
+#description-tab .table > thead > tr > th,
+#description-tab .table > tbody > tr > th,
+#description-tab .table > tfoot > tr > th,
+#description-tab .table > thead > tr > td,
+#description-tab .table > tbody > tr > td,
+#description-tab .table > tfoot > tr > td,
+.record .table > thead > tr > th,
+.record .table > tbody > tr > th,
+.record .table > tfoot > tr > th,
+.record .table > thead > tr > td,
+.record .table > tbody > tr > td,
+.record .table > tfoot > tr > td {
+  border: none;
+}
+
+#details-tab .table > thead > tr > th,
+#details-tab .table > tbody > tr > th,
+#details-tab .table > tfoot > tr > th,
+#description-tab .table > thead > tr > th,
+#description-tab .table > tbody > tr > th,
+#description-tab .table > tfoot > tr > th,
+.record .table > thead > tr > th,
+.record .table > tbody > tr > th,
+.record .table > tfoot > tr > th {
+  border-right: 1px solid #DDD;
+  font-weight: 600;
+}
+
+.pager > li:first-child > a, .pager > li:first-child > span {
+  float: left;
+}
+
+.pager > li:last-child > a, .pager > li:last-child > span {
+  float: right;
+}
+
+.pager {
+  margin-top: 0;
+  padding: 20px 0;
+  border-bottom: 1px solid #EEE;
+}
+
+
+.pager span {
+  font-weight: 600;
 }
 
 
@@ -131,13 +224,11 @@ header .navbar-collapse {
 }
 
 header .breadcrumb {
-  margin-left: -15px;
-  margin-right: -15px;
   background-color: #fff;
 }
 
 header .breadcrumb > li {
-  color: #3c4250;
+  color: #3C4250;
   font-weight: 600;
 }
 
@@ -148,7 +239,7 @@ header .breadcrumb > li > a {
 
 .breadcrumb > li + li:before {
   content : "|";
-  color: #3c4250;
+  color: #3C4250;
   padding: 0 15px;
   font-weight: normal;
 }
@@ -233,6 +324,22 @@ div.memorize  {
 #libraryListSidebar {
   max-height: 100%;
   overflow-y: auto;
+}
+
+
+/* holdings tab */
+#holdings-tab ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+#holdings-tab .institutionBox h4 {
+  cursor: pointer;
+}
+
+#holdings-tab h3 {
+  border-bottom: 1px solid #CCC;
+  padding-bottom: 5px;
 }
 
 

@@ -164,7 +164,7 @@ class Results extends VuFindSolrResults
         $facetListItems = array_values($facetListItems);
 
         return array(
-            'userInstitutions' => array(
+            'institution' => array(
                 'label'    => 'mylibraries',
                 'field'    => 'institution',
                 'list'    => $facetListItems
