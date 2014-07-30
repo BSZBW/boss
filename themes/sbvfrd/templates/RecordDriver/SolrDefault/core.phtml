@@ -32,7 +32,7 @@
   <div class="col-sm-8">
     <? $subtitle = $this->record($this->driver)->getSubtitle($this->driver->getTitleStatement(true)) ?>
     <? if (isset($subtitle)): ?>
-      <h4><?= $this->escapeHtml($subtitle) ?></h4>
+      <h4 class="resultViewSubTitle"><?= $this->escapeHtml($subtitle) ?></h4>
     <? endif; ?>
 
     <? $summary = $this->driver->getSummary(); $summary = isset($summary[0]) ? $summary[0] : false; ?>
