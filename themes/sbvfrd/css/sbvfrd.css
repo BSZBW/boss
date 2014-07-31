@@ -19,7 +19,11 @@ h2 { font-size: 20px; color: #106ca0; }
 h3 { margin-top: 10px; }
 h4 { color: #106ca0; }
 
-a { color: #106CA0; }
+h4.resultViewSubTitle {
+  margin-top: 0;
+}
+
+a { color: #106CA0; text-decoration: none; }
 a:hover { color: #3C4250; text-decoration: none; }
 
 

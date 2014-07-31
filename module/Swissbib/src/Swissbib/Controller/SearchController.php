@@ -48,6 +48,7 @@ class SearchController extends VuFindSearchController
 
         $this->layout()->setVariable('resultViewParams', $resultViewModel->getVariable('params'));
         $resultViewModel->setVariable('facetsConfig', $resultsFacetConfig);
+        $resultViewModel->setVariable('htmlLayoutClass', 'resultView');
 
         return $resultViewModel;
     }

@@ -24,7 +24,7 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
   <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID())?>" class="hiddenId" />
   <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getResourceSource())?>" class="hiddenSource" />
 
-  <div class="col-xs-3 col-md-2 no-gutter">
+  <div class="col-xs-3 col-sm-3 col-md-2 no-gutter">
     <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title img-responsive">
       <? if ($summThumb = $this->record($this->driver)->getThumbnail()): ?>
         <img src="<?=$this->escapeHtmlAttr($summThumb)?>" alt="<?=$this->transEsc('Cover Image')?>"/>
@@ -34,8 +34,8 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
     </a>
   </div>
 
-  <div class="col-xs-7 col-md-8">
-    <div>
+  <div class="col-xs-7 col-sm-8 col-md-7">
+    <h2>
       <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title">
       <?
         $summHighlightedTitle = $this->driver->getHighlightedTitle();
@@ -49,62 +49,92 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
         }
       ?>
       </a>
-    </div>
+    </h2>
 
     <!-- Untertitel und Verfasserangabe -->
-    <div class="meta">
+    <h3>
        <? if (isset($subtitle)): ?>
         <?= $this->escapeHtml($subtitle) ?>
        <? endif; ?>
-    </div>
+    </h3>
 
-    <div>
-      <? if($this->driver->isCollection()): ?>
-        <?=implode('<br>', $this->driver->getSummary()); ?>
-      <? else: ?>
-        <? $summAuthor = $this->driver->getPrimaryAuthor(); ?>
-        <? if (!empty($summAuthor)): ?>
-        <span class="hidden-xs"><strong><?=$this->transEsc('Author')?>:</strong></span>
-        <a href="<?=$this->record($this->driver)->getLink('author', $summAuthor)?>"><?
-          $summHighlightedAuthor = $this->driver->getHighlightedAuthor();
-          echo !empty($summHighlightedAuthor)
-              ? $this->highlight($summHighlightedAuthor)
-              : $this->escapeHtml($summAuthor);
-          ?>
-        </a>
+    <div class="meta">
+        <? if ($hostitems): ?>
+            <? foreach ($hostitems as $hostitem): ?>
+                <span class="hidden-xs label"><strong><?= $this->transEsc('note_773') ?>:</strong></span>
+                <? $text = array_key_exists('related', $hostitem) ? $hostitem['title'] . ', ' . $hostitem['related'] : $hostitem['title'] ?>
+                <span><?= $this->escapeHtml($text) ?></span><br />
+            <? endforeach; ?>
+        <? endif; ?>
+        <span class="hidden-xs label"><strong><?= $this->transEsc('Year') ?>:</strong></span>
+        <span><?= $this->escapeHtml($publicationDate) ?></span><br />
+        <? if ($edition): ?>
+             <span class="hidden-xs label"><strong><?= $this->transEsc('Edition') ?>:</strong></span>
+             <span><?= $this->escapeHtml($edition) ?></span><br />
+        <? endif; ?>
+        <? if ($responsible): ?>
+            <span class="hidden-xs label"><strong><?= $this->transEsc('Author') ?>:</strong></span>
+            <span>
+               <?= $this->escapeHtml($responsible) ?>
+            </span><br />
         <? endif; ?>
 
-        <? $journalTitle = $this->driver->getContainerTitle(); $summDate = $this->driver->getPublicationDates(); ?>
-        <? if (!empty($journalTitle)): ?>
-        <?=!empty($summAuthor) ? '<br />' : ''?>
-        <strong><?=/* TODO: handle highlighting more elegantly here */ $this->transEsc('Published in') ?></strong> <?= ' <a href="' . $this->record($this->driver)->getLink('journaltitle', str_replace(array('{{{{START_HILITE}}}}', '{{{{END_HILITE}}}}'), '', $journalTitle)) . '">' . $this->highlight($journalTitle) . '</a>';?>
-        <?=!empty($summDate) ? ' (' . $this->escapeHtml($summDate[0]) . ')' : ''?>
-      <? elseif (!empty($summDate)): ?>
-        <?=!empty($summAuthor) ? '<br />' : ''?>
-        <strong><?=$this->transEsc('Published')?> </strong> <?=$this->escapeHtml($summDate[0])?>
-      <? endif; ?>
+        <? if($this->driver->isCollection()): ?>
+            <?=implode('<br>', $this->driver->getSummary()); ?>
+        <? else: ?>
+            <? $summAuthor = $this->driver->getPrimaryAuthor(); ?>
+            <? if (!empty($summAuthor)): ?>
+                <span class="hidden-xs label"><strong><?=$this->transEsc('Author')?>:</strong></span>
+                <a href="<?=$this->record($this->driver)->getLink('author', $summAuthor)?>"><?
+                    $summHighlightedAuthor = $this->driver->getHighlightedAuthor();
+                    echo !empty($summHighlightedAuthor)
+                         ? $this->highlight($summHighlightedAuthor)
+                         : $this->escapeHtml($summAuthor);
+                    ?>
+                </a>
+            <? endif; ?>
 
-        <? $summInCollection = $this->driver->getContainingCollections(); ?>
-        <? if (!empty($summInCollection)): ?>
-        <? foreach ($summInCollection as $collId => $collText): ?>
-          <div>
-            <b><?=$this->transEsc("in_collection_label")?></b>
-            <a class="collectionLinkText" href="<?=$this->url('collection', array('id' => $collId))?>?recordID=<?=urlencode($this->driver->getUniqueID())?>">
-              <?=$this->escapeHtml($collText)?>
-            </a>
-          </div>
-        <? endforeach; ?>
-      <? endif; ?>
-      <? endif; ?>
+            <? $journalTitle = $this->driver->getContainerTitle(); $summDate = $this->driver->getPublicationDates(); ?>
+            <? if (!empty($journalTitle)): ?>
+                <?=!empty($summAuthor) ? '<br />' : ''?>
+                    <span class="hidden-xs label">
+                     <strong><?=/* TODO: handle highlighting more elegantly here */ $this->transEsc('Published in') ?></strong>
+                    </span>
+                    <?= ' <a href="' . $this->record($this->driver)->getLink('journaltitle', str_replace(array('{{{{START_HILITE}}}}', '{{{{END_HILITE}}}}'), '', $journalTitle)) . '">' . $this->highlight($journalTitle) . '</a>';?>
+                    <?=!empty($summDate) ? ' (' . $this->escapeHtml($summDate[0]) . ')' : ''?>
+            <? elseif (!empty($summDate)): ?>
+            <?=!empty($summAuthor) ? '<br />' : ''?>
+                <span class="hidden-xs label">
+                    <strong><?=$this->transEsc('Published')?> </strong>
+                </span>
+                <?=$this->escapeHtml($summDate[0])?><br />
+            <? endif; ?>
+
+            <? $summInCollection = $this->driver->getContainingCollections(); ?>
+            <? if (!empty($summInCollection)): ?>
+                <? foreach ($summInCollection as $collId => $collText): ?>
+                    <div>
+                        <b><?=$this->transEsc("in_collection_label")?></b>
+                        <a class="collectionLinkText" href="<?=$this->url('collection', array('id' => $collId))?>?recordID=<?=urlencode($this->driver->getUniqueID())?>">
+                            <?=$this->escapeHtml($collText)?>
+                        </a>
+                    </div>
+               <? endforeach; ?>
+            <? endif; ?>
+        <? endif; ?>
     </div>
 
     <? if(!$this->driver->isCollection()): ?>
       <? if ($snippet = $this->driver->getHighlightedSnippet()): ?>
         <? if (!empty($snippet['caption'])): ?>
-          <strong><?=$this->transEsc($snippet['caption']) ?>:</strong> ';
+          <div class="caption">
+              <strong><?=$this->transEsc($snippet['caption']) ?>:</strong> ';
+          </div>
         <? endif; ?>
         <? if (!empty($snippet['snippet'])): ?>
-          <span class="quotestart">&#8220;</span>...<?=$this->highlight($snippet['snippet']) ?>...<span class="quoteend">&#8221;</span><br/>
+          <div class="snippet">
+              <span class="quotestart">&#8220;</span>...<?=$this->highlight($snippet['snippet']) ?>...<span class="quoteend">&#8221;</span><br/>
+          </div>
         <? endif; ?>
       <? endif; ?>
     <? endif; ?>
@@ -152,29 +182,6 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
       <? endif; ?>
     </div>
 
-    <div class="meta">
-      <? if ($hostitems): ?>
-         <? foreach ($hostitems as $hostitem): ?>
-             <span class="hidden-xs"><strong><?= $this->transEsc('note_773') ?>:</strong></span>
-             <? $text = array_key_exists('related', $hostitem) ? $hostitem['title'] . ', ' . $hostitem['related'] : $hostitem['title'] ?>
-             <span><?= $this->escapeHtml($text) ?></span><br/>
-         <? endforeach; ?>
-      <? endif; ?>
-      <span class="hidden-xs"><strong><?= $this->transEsc('Year') ?>:</strong></span>
-      <span><?= $this->escapeHtml($publicationDate) ?></span><br />
-      <? if ($edition): ?>
-         <span class="hidden-xs"><strong><?= $this->transEsc('Edition') ?>:</strong></span>
-         <span><?= $this->escapeHtml($edition) ?></span><br />
-      <? endif; ?>
-
-      <? if ($responsible): ?>
-          <span class="hidden-xs"><strong><?= $this->transEsc('Author') ?>:</strong></span>
-          <span>
-              <?= $this->escapeHtml($responsible) ?>
-          </span><br/>
-      <? endif; ?>
-     </div>
-
     <? /* We need to find out if we're supposed to display an OpenURL link ($openUrlActive),
           but even if we don't plan to display the link, we still want to get the $openUrl
           value for use in generating a COinS (Z3988) tag -- see bottom of file.
@@ -206,12 +213,10 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
       </span>
     <? endif; ?>
 
-    <?= $viewRecord->getFormatList() ?>
-
     <?=$this->record($this->driver)->getPreviews()?>
   </div>
 
-  <div class="col-xs-1 col-md-2 hidden-print">
+  <div class="col-xs-1 col-md-3 hidden-print">
     <div class="btn-group-vertical">
       <? /* Display qrcode if appropriate: */ ?>
         <? if ($QRCode = $this->record($this->driver)->getQRCode("results")): ?>
@@ -230,7 +235,10 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
         <? if ($this->userlist()->getMode() !== 'disabled'): ?>
           <? /* Add to favorites */ ?>
     <!--      <i class="fa fa-heart"></i> <a href="--><?//=$this->recordLink()->getActionUrl($this->driver, 'Save')?><!--" class="save-record modal-link" id="--><?//=$this->driver->getUniqueId() ?><!--" title="--><?//=$this->transEsc('Add to favorites')?><!--">--><?//=$this->transEsc('Add to favorites')?><!--</a><br/>-->
-          <a href="<?= $this->recordLink()->getActionUrl($this->driver, 'Save'); ?>" class="btn btn-default icon_notepad_add" title="<?= $this->transEsc('memorizelistadd') ?>"></a>
+          <a href="<?= $this->recordLink()->getActionUrl($this->driver, 'Save'); ?>" class="btn btn-default" title="<?= $this->transEsc('memorizelistadd') ?>">
+              <i class="fa fa-heart"></i>
+              <?= $this->transEsc('memorizelistadd') ?>
+          </a>
           <? /* Saved lists */ ?>
           <div class="savedLists alert alert-info hidden">
             <strong><?=$this->transEsc("Saved in")?>:</strong>
@@ -244,18 +252,19 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
 
               <a class="btn btn-default" href="<?=$this->recordLink()->getTabUrl($this->driver, 'HierarchyTree')?>?hierarchy=<?=urlencode($hierarchyID)?>#tabnav" title="<?=$this->transEsc('hierarchy_tree')?>">
                 <i class="fa fa-sitemap"></i>
-               <span class="hidden-xs"> <?=$this->transEsc('hierarchy_view_context')?>
-                <? if (count($trees) > 1): ?>:
-                  <?=$this->escapeHtml($hierarchyTitle)?>
-                <? endif; ?>
-               </span>
+                <span class="hidden-xs"> <?=$this->transEsc('hierarchy_view_context')?>
+                    <? if (count($trees) > 1): ?>:
+                      <?=$this->escapeHtml($hierarchyTitle)?>
+                    <? endif; ?>
+                </span>
               </a>
           <? endforeach; ?>
       <? endif; ?>
 
       <? if (!empty($showFRBR) && $showFRBR && !empty($groupID) && !strcmp($results->getParams()->getSearchHandler(), 'FRBR') == 0) : ?>
         <a href="<?= $this->url('search-results') . '?lookfor=' . $groupID . "&type=FRBR&limit=" . $results->getParams()->getLimit() . "&sort=publishDateSort+desc" ?>"
-              class="btn-frbr btn btn-default icon_show" title="<?= $this->transEsc('FRBR_Button') ?>">
+              class="btn-frbr btn btn-default" title="<?= $this->transEsc('FRBR_Button') ?>">
+          <i class="fa fa-eye"></i>
           <span class="hidden-xs"><?= $this->transEsc('FRBR_Button') ?></span>
         </a>
       <? endif; ?>
