@@ -799,7 +799,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
     public function getFormatsOpenUrl()
     {
         $formats = $this->getFormatsRaw();
-        $found = false;
+        $found = "false";
         $mapping = array(
             'BK010000' => 'Article',
             'BK010300' => 'Article',
@@ -823,7 +823,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
                 // Test for begin of string
                 if (stristr($rawFormat, $pattern)) {
                     $formats[] = $targetFormat;
-                    $found = true;
+                    $found = "true";
                     break 2; // Stop both loops
                 }
             }
