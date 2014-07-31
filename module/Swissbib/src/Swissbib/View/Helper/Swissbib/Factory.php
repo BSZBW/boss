@@ -31,6 +31,7 @@
 
 namespace Swissbib\View\Helper\Swissbib;
 use Swissbib\View\Helper\LayoutClass;
+use VuFind\View\Helper\Root\SearchTabs;
 use Zend\ServiceManager\ServiceManager;
 use Swissbib\VuFind\View\Helper\Root\Auth;
 
@@ -114,5 +115,22 @@ class Factory
             ? false : $config->Site->sidebarOnLeft;
 
         return new LayoutClass($left);
+    }
+
+    /**
+     * @param ServiceManager $sm
+     *
+     * @return SearchTabs
+     */
+    public static function getSearchTabs(ServiceManager $sm)
+    {
+        $config = $sm->getServiceLocator()->get('VuFind\Config')->get('config');
+        $config = isset($config->SearchTabs) ? $config->SearchTabs->toArray() : array();
+
+        return new SearchTabs(
+            $sm->getServiceLocator()->get('Swissbib\SearchResultsPluginManager'),
+            $config,
+            $sm->get('url')
+        );
     }
 }

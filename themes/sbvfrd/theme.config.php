@@ -17,6 +17,7 @@ return array(
         'jquery/ui/jquery-ui.min.js',
 //
         'lib/jstorage.min.js', //used for favorites - there is still some amount of JS code inline of the page -> Todo: Refactoring in upcoming Sprints
+        'lib/handlebars.js',
 
         'jquery/plugin/jquery-migrate-1.2.1.js',
         'jquery/plugin/jquery.easing.js',
@@ -63,6 +64,7 @@ return array(
             'getextendedlastsearchlink' => 'Swissbib\View\Helper\Swissbib\Factory::getExtendedLastSearchLink',
             'auth' => 'Swissbib\View\Helper\Swissbib\Factory::getAuth',
             'layoutClass' => 'Swissbib\View\Helper\Swissbib\Factory::getLayoutClass',
+            'searchtabs' => 'Swissbib\View\Helper\Swissbib\Factory::getSearchTabs',
         )
     )
 );
