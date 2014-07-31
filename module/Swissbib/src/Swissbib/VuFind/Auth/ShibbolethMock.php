@@ -71,8 +71,6 @@ class ShibbolethMock extends AbstractBase
         $this->setCatalog($connection);
     }
 
-
-
     /**
      * Attempt to authenticate the current user.  Throws exception if login fails.
      *
@@ -117,7 +115,6 @@ class ShibbolethMock extends AbstractBase
         return $this->catalog;
     }
 
-
     /**
      * Check that the user's password matches the provided value.
      *
@@ -146,13 +143,15 @@ class ShibbolethMock extends AbstractBase
         return $password == $userRow->password;
     }
 
+    /**
+    * @return bool
+    */
     protected function passwordHashingEnabled()
     {
         $config = $this->getConfig();
         return isset($config->Authentication->hash_passwords)
             ? $config->Authentication->hash_passwords : false;
     }
-
 
     /**
      * Get login targets (ILS drivers/source ID's)
