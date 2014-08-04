@@ -22,6 +22,15 @@
         <span class="pull-right"><i class="fa fa-heart"></i></span>
     </a>
 
+    <? if ($user = $this->auth()->isLoggedIn()): ?>
+      <a href="<?=$this->url('myresearch-logout')?>" class="list-group-item">
+        <?=$this->transEsc("Log Out")?>
+        <span class="pull-right"><i class="fa fa-sign-out"></i></span>
+      </a>
+    <? endif; ?>
+</ul>
+
+<ul class="list-group">
   <? if ($this->auth()->isLoggedIn() && true
       /* @todo " && false" for development of swissbib green " && true" for swissbib orange, must be removed after development!,
     it should be possible to have swissbib green and orange in this template together! yay:) */): ?>
@@ -70,13 +79,6 @@
           </a>
       </div>
     <? endforeach; ?>
-  <? endif; ?>
-
-  <? if ($user = $this->auth()->isLoggedIn()): ?>
-    <a href="<?=$this->url('myresearch-logout')?>" class="list-group-item">
-      <?=$this->transEsc("Log Out")?>
-      <span class="pull-right"><i class="fa fa-sign-out"></i></span>
-    </a>
   <? endif; ?>
 </ul>
 
