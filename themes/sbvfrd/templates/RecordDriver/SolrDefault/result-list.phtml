@@ -25,11 +25,11 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
   <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getResourceSource())?>" class="hiddenSource" />
 
   <div class="col-xs-3 col-sm-3 col-md-2 no-gutter">
-    <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title img-responsive">
+    <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="img-responsive">
       <? if ($summThumb = $this->record($this->driver)->getThumbnail()): ?>
-        <img src="<?=$this->escapeHtmlAttr($summThumb)?>" alt="<?=$this->transEsc('Cover Image')?>"/>
+        <img class="recordcover" src="<?=$this->escapeHtmlAttr($summThumb)?>" alt="<?=$this->transEsc('Cover Image')?>"/>
       <? else: ?>
-        <img src="<?=$this->url('cover-unavailable')?>" alt="<?=$this->transEsc('No Cover Image')?>"/>
+        <img class="recordcover" src="<?=$this->url('cover-unavailable')?>" alt="<?=$this->transEsc('No Cover Image')?>"/>
       <? endif; ?>
     </a>
   </div>
