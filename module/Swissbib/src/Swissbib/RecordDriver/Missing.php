@@ -3,7 +3,7 @@ namespace Swissbib\RecordDriver;
 
 use \VuFind\RecordDriver\Missing as VFMissing;
 
-class Missing extends VFMissing
+class Missing extends VFMissing implements SwissbibRecordDriver
 {
 
     /**
@@ -14,7 +14,11 @@ class Missing extends VFMissing
      */
     public function getTitle()
     {
-        $title = parent::getTitle();
+        try {
+            $title = parent::getTitle();
+        } catch (\Exception $e ) {
+            $title = $this->translate('Title not available');
+        }
 
         if (is_array($title)) {
             $title = reset($title);
@@ -99,4 +103,78 @@ class Missing extends VFMissing
         return parent::getFormats();
     }
 
+    /**
+     * Get alternative title
+     *
+     * @return array
+     */
+    public function getAltTitle()
+    {
+        // TODO: Implement getAltTitle() method.
+    }
+
+    /**
+     * get Cartographic Mathematical Data
+     *
+     * @return string
+     */
+    public function getCartMathData()
+    {
+        // TODO: Implement getCartMathData() method.
+    }
+
+    /**
+     * Get structured subject vocabularies from predefined fields
+     * Extended version of getAllSubjectHeadings()
+     *
+     * $fieldIndexes contains keys of fields to check
+     * $vocabConfigs contains checks for vocabulary detection
+     *
+     * $vocabConfigs:
+     * - ind: Value for indicator 2 in tag
+     * - field: sub field 2 in tag
+     * - fieldsOnly: Only check for given field indexes
+     * - detect: The vocabulary key is defined in sub field 2.
+     *      Don't use the key in the config (only used for local)
+     *
+     * Expected result:
+     * [
+     *        gnd => [
+     *            600 => [{},{},{},...]
+     *            610 => [{},{},{},...]
+     *            620 => [{},{},{},...]
+     *        ],
+     *    rero => [
+     *            600 => [{},{},{},...]
+     *            610 => [{},{},{},...]
+     *            620 => [{},{},{},...]
+     *        ]
+     * ]
+     * {} is an assoc array which contains the field data
+     *
+     * @param boolean $ignoreControlFields Ignore control fields 0 and 2
+     *
+     * @return array
+     */
+    public function getAllSubjectVocabularies($ignoreControlFields = false)
+    {
+        // TODO: Implement getAllSubjectVocabularies() method.
+    }
+
+    /**
+     * @return boolean
+     */
+    public function displayHoldings()
+    {
+        // TODO: Implement displayHoldings() method.
+    }
+
+    /**
+     * @return  string
+     */
+    public function getUniqueID() {
+        $uniqueID = parent::getUniqueID();
+
+        return empty($uniqueID) ? '' : $uniqueID;
+    }
 }
