@@ -1,0 +1,22 @@
+<? $entry = $classification['entry']; ?>
+<ul>
+  <li>
+    <a>
+      <ins>&nbsp;</ins>
+      <input type="hidden" value="<?= $facetKey ?>:&quot;<?= $entry['queryValue'] ?>&quot;">
+      <?= $entry['value'] ?> <?= $this->transEsc($entry['value']) ?> (<?= $entry['count'] ?> <?= $this->transEsc('Showing') ?>)
+    </a>
+    <? if (count($classification['children']) > 0) {
+      foreach ($classification['children'] as $child) {
+        echo $this->render(
+          'search/advanced/classificationTreeItem',
+          array(
+            'classification' => $child,
+            'facetKey'       => $facetKey
+          )
+        );
+      }
+    }
+    ?>
+  </li>
+</ul>
