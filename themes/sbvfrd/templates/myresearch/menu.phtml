@@ -31,9 +31,7 @@
 </ul>
 
 <ul class="list-group">
-  <? if ($this->auth()->isLoggedIn() && true
-      /* @todo " && false" for development of swissbib green " && true" for swissbib orange, must be removed after development!,
-    it should be possible to have swissbib green and orange in this template together! yay:) */): ?>
+  <? if ($this->auth()->isLoggedIn()): ?>
     <? foreach ($this->auth()->getLoginTargets() as $target): ?>
       <a class="list-group-item title collapsed" data-toggle="collapse" href="#collapse<?= $target ?>">
         <?= $this->transEsc($target); ?>
