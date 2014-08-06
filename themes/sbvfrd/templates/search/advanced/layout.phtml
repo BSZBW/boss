@@ -41,7 +41,7 @@
 ?>
 
 <?= $this->render('search/advanced/templates-handlebars') ?>
-
+<? $this->searchType = 'advanced' ?>
 <?= $this->render('search/searchTabs'); ?>
 <?=$this->flashmessages()?>
 <form role="search" name="searchForm" id="advSearchForm" method="get" action="<?=$this->url($this->options->getSearchAction())?>">
