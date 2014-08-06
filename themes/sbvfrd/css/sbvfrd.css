@@ -152,37 +152,12 @@ a.list-group-item.active:focus {
 }
 
 
-/* record */
-#details-tab .table > thead > tr > th,
-#details-tab .table > tbody > tr > th,
-#details-tab .table > tfoot > tr > th,
-#details-tab .table > thead > tr > td,
-#details-tab .table > tbody > tr > td,
-#details-tab .table > tfoot > tr > td,
-#description-tab .table > thead > tr > th,
-#description-tab .table > tbody > tr > th,
-#description-tab .table > tfoot > tr > th,
-#description-tab .table > thead > tr > td,
-#description-tab .table > tbody > tr > td,
-#description-tab .table > tfoot > tr > td,
-.record .table > thead > tr > th,
-.record .table > tbody > tr > th,
-.record .table > tfoot > tr > th,
-.record .table > thead > tr > td,
-.record .table > tbody > tr > td,
-.record .table > tfoot > tr > td {
+/* table */
+.table > tbody > tr > th {
   border: none;
 }
 
-#details-tab .table > thead > tr > th,
-#details-tab .table > tbody > tr > th,
-#details-tab .table > tfoot > tr > th,
-#description-tab .table > thead > tr > th,
-#description-tab .table > tbody > tr > th,
-#description-tab .table > tfoot > tr > th,
-.record .table > thead > tr > th,
-.record .table > tbody > tr > th,
-.record .table > tfoot > tr > th {
+.table > tbody > tr > th {
   border-right: 1px solid #DDD;
   font-weight: 600;
 }

@@ -1,11 +1,14 @@
 <table class="table table-striped">
-  <tr>
-    <th width="20%"><?=$this->transEsc("history_time")?></th>
-    <th><?=$this->transEsc("history_search")?></th>
-    <th><?=$this->transEsc("history_limits")?></th>
-    <th><?=$this->transEsc("history_results")?></th>
-    <th><?=$this->transEsc($this->showSaved ? "history_delete" : "history_save")?></th>
-  </tr>
+  <thead>
+    <tr>
+        <th width="20%"><?=$this->transEsc("history_time")?></th>
+        <th><?=$this->transEsc("history_search")?></th>
+        <th><?=$this->transEsc("history_limits")?></th>
+        <th><?=$this->transEsc("history_results")?></th>
+        <th><?=$this->transEsc($this->showSaved ? "history_delete" : "history_save")?></th>
+    </tr>
+  </thead>
+  <tbody>
   <? foreach (($this->showSaved ? array_reverse($this->saved) : array_reverse($this->unsaved)) as $iteration => $info): ?>
     <tr class="<?=$iteration % 2 == 1 ? 'even' : 'odd'?>row">
       <td><?=$this->escapeHtml($this->dateTime()->convertToDisplayDateAndTime("U", $info->getStartTime()))?></td>
@@ -37,4 +40,5 @@
       </td>
     </tr>
   <? endforeach; ?>
+  </tbody>
 </table>
