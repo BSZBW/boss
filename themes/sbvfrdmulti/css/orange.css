@@ -1,3 +1,7 @@
 header {
   background-color: #FF8E28;
 }
+
+.row.result i {
+  color: #FF8E28;
+}
