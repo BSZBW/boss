@@ -169,7 +169,6 @@ swissbib.FavoriteInstitutions = {
   onInstitutionSelect: function (obj, datum, name) {
     this.clearSearchField();
     this.addInstitution(datum.value);
-    console.log(datum.value);
 
     return false;
   },
