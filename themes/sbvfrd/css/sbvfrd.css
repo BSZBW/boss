@@ -121,7 +121,7 @@ header .nav.nav-tabs > li.active > a:hover {
 
 
 /* btn styles */
-.btn-primary, .btn-link, .btn-primary:hover, .btn-link:hover, .btn-default, .btn-default:hover,
+.btn-primary, .btn-link, .btn-primary:hover, .btn-link:hover,
 .pager li > a, .pager li > span,
 .pager li > a:hover, .pager li > a:focus {
   color: #fff;
