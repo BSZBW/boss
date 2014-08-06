@@ -49,7 +49,7 @@
   <? endif; ?>
   <?=$this->flashmessages()?>
   <div class="hidden-print search-controls clearfix row">
-    <div class="col-lg-8 col-md-7 col-sm-6">
+    <div class="col-lg-8 col-md-7 col-sm-7">
       <? if ($recordTotal > 0): ?>
         <?=$this->transEsc("Showing")?>
         <strong><?=$this->localizedNumber($this->results->getStartRecord())?></strong> - <strong><?=$this->localizedNumber($this->results->getEndRecord())?></strong>
@@ -70,7 +70,7 @@
     </div>
 
     <? if ($recordTotal > 0): ?>
-      <div class="col-lg-4 col-md-5 col-sm-6 text-right">
+      <div class="col-lg-4 col-md-5 col-sm-5 text-right">
         <?=$this->render('search/controls/limit.phtml')?>
         <?=$this->render('search/controls/sort.phtml')?>
         <?=$this->render('search/controls/view.phtml')?>

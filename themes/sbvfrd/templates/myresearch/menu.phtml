@@ -33,10 +33,12 @@
 <ul class="list-group">
   <? if ($this->auth()->isLoggedIn()): ?>
     <? foreach ($this->auth()->getLoginTargets() as $target): ?>
+      <? $class = in_array($this->active, array('checkedout', 'holds', 'storageRetrievalRequests', 'ILLRequests', 'fines', 'photocopies', 'bookings', 'profile')) ?
+          'collapse in' : 'collapse'; ?>
       <a class="list-group-item title collapsed" data-toggle="collapse" href="#collapse<?= $target ?>">
         <?= $this->transEsc($target); ?>
       </a>
-      <div class="collapse" id="collapse<?= $target ?>">
+      <div class="<?= $class ?>" id="collapse<?= $target ?>">
           <a href="<?=$this->url('myresearch-checkedout')?>" class="list-group-item<?=$this->active == 'checkedout' ? ' active' : ''?>">
             <?=$this->transEsc('Checked Out Items')?>
             <span class="pull-right"><i class="fa fa-book"></i></span>

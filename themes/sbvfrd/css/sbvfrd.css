@@ -28,6 +28,14 @@ a:hover { color: #3C4250; text-decoration: none; }
 
 
 /* Tab Navigation */
+header {
+  min-height: 87px;
+}
+
+header ul[role="navigation"] {
+  margin-top: 20px;
+}
+
 .searchHomeContent .nav.nav-tabs,
 header .nav.nav-tabs {
   border-bottom: 0;
@@ -37,6 +45,16 @@ header .nav.nav-tabs {
 .searchHomeContent .nav.nav-tabs li.active a,
 header .nav.nav-tabs li.active a {
   border-bottom-color: #ddd;
+}
+
+header .nav > li > a:hover,
+header .nav > li > a:focus,
+header .nav .open > a,
+header .nav .open > a:focus,
+header .nav .open > a:hover {
+  background-color: transparent;
+  color: #fff;
+  font-weight: 600;
 }
 
 
@@ -103,7 +121,7 @@ header .nav.nav-tabs > li.active > a:hover {
 
 
 /* btn styles */
-.btn-primary, .btn-link, .btn-primary:hover, .btn-link:hover,
+.btn-primary, .btn-link, .btn-primary:hover, .btn-link:hover, .btn-default, .btn-default:hover,
 .pager li > a, .pager li > span,
 .pager li > a:hover, .pager li > a:focus {
   color: #fff;
@@ -193,9 +211,9 @@ header a {
 
 .navbar-brand {
   text-indent: -9999px;
-  height: 44px;
+  height: 87px;
   width: 138px;
-  background: transparent url(../images/logo.png) no-repeat 0 0;
+  background: transparent url(../images/logo.png) no-repeat 0 20px;
 }
 
 .container > .navbar-header {

@@ -22,7 +22,17 @@ class LayoutClass extends \VuFind\View\Helper\Bootstrap3\LayoutClass {
      * @return  string
      */
     public function __invoke($class) {
-        $classString = parent::__invoke($class);
+        $classString = '';
+
+        switch ($class) {
+        case 'mainbody':
+            $classString.= $this->left ? 'col-md-9 col-md-push-3' : 'col-md-9';
+        break;
+        case 'sidebar':
+            $classString.= $this->left
+                ? 'sidebar col-md-3 col-md-pull-9 hidden-print'
+                : 'sidebar col-md-3 hidden-print';
+        }
 
         $htmlLayoutClass = $this->getView()->htmlLayoutClass;
 
