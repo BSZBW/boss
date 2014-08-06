@@ -50,34 +50,45 @@ swissbib.FavoriteInstitutions = {
    * @param  {Object}  availableInstitutions
    */
   installAutocomplete: function (availableInstitutions) {
-    var sourceData = [];
-
-    $.each(availableInstitutions, function (key, value) {
-      sourceData.push({
-        value: key,
-        label: value
-      })
-    });
-
-    this.autocompleteValues = sourceData;
-
-    var autocompleterEngine = new Bloodhound({
-      name: 'favorites',
-      local: sourceData,
-      datumTokenizer: function(d) {
-         return Bloodhound.tokenizers.whitespace(d.label);
-       },
-       queryTokenizer: Bloodhound.tokenizers.whitespace
-    });
-
     $('#query').bind('typeahead:selected', $.proxy(this.onInstitutionSelect, this));
-
-    autocompleterEngine.initialize();
-
-    $('#query').typeahead(null, {
+    $('#query').typeahead({
+      hint: true,
+      highlight: true,
+      minLength: 1,
+    }, {
       displayKey: 'label',
-      source: autocompleterEngine.ttAdapter()
+      source: swissbib.FavoriteInstitutions.substringMatcher(availableInstitutions),
     });
+  },
+
+
+  /**
+   *
+   * @param {Object}
+   * @returns {Function} findMatches
+   */
+  substringMatcher: function (strs) {
+    return function findMatches(q, cb) {
+      var matches, substrRegex;
+
+      // an array that will be populated with substring matches
+      matches = [];
+
+      // regex used to determine if a string contains the substring `q`
+      substrRegex = new RegExp(q, 'i');
+
+      // iterate through the pool of strings and for any string that
+      // contains the substring `q`, add it to the `matches` array
+      $.each(strs, function (i, str) {
+        if (substrRegex.test(str)) {
+          // the typeahead jQuery plugin expects suggestions to a
+          // JavaScript object, refer to typeahead docs for more info
+          matches.push({ label: str, value: i });
+        }
+      });
+
+      cb(matches);
+    };
   },
 
 
@@ -158,6 +169,7 @@ swissbib.FavoriteInstitutions = {
   onInstitutionSelect: function (obj, datum, name) {
     this.clearSearchField();
     this.addInstitution(datum.value);
+    console.log(datum.value);
 
     return false;
   },
