@@ -42,16 +42,7 @@
 
 <?= $this->render('search/advanced/templates-handlebars') ?>
 
-<? $searchTabs = $this->searchtabs($this->searchClassId, $this->lookfor, $this->searchIndex, 'advanced'); ?>
-<? if (count($searchTabs) > 0): ?>
-    <ul class="nav nav-tabs">
-        <? foreach ($searchTabs as $tab): ?>
-            <li<?=$tab['selected'] ? ' class="active"' : ''?>>
-                <a href="<?=$tab['selected'] ? '' : $this->escapeHtmlAttr($tab['url'])?>"><?=$this->transEsc($tab['label']); ?></a>
-            </li>
-        <? endforeach; ?>
-    </ul>
-<? endif; ?>
+<?= $this->render('search/searchTabs'); ?>
 <?=$this->flashmessages()?>
 <form role="search" name="searchForm" id="advSearchForm" method="get" action="<?=$this->url($this->options->getSearchAction())?>">
   <div class="<?=$this->layoutClass('mainbody')?>">

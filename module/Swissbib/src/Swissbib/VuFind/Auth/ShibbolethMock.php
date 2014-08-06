@@ -161,7 +161,8 @@ class ShibbolethMock extends AbstractBase
      */
     public function getLoginTargets()
     {
-        return $this->getCatalog()->getLoginDrivers();
+        return is_callable($this->getCatalog(), 'getLoginDrivers') ?
+            $this->getCatalog()->getLoginDrivers() : array();
     }
 
 

@@ -28,19 +28,28 @@ swissbib.AdvancedSearch = {
    */
   initJsTree: function () {
     jQuery(".classification-tree").jstree({
-      "plugins": [ "themes", "html_data", "ui" ],
-      "themes": {
-        "url": path + '/themes/blueprint/js/jsTree/themes/vufind/style.css',
-        "icons": false
+      'plugins': ['search','types'],
+      'core' : {
+        'themes' : {
+          'url': path + '/themes/bootstrap3/js/vendor/jsTree/themes/default/style.css'
+        }
+      },
+      'types' : {
+        'record': {
+          'icon':'fa fa-file'
+        },
+        'collection': {
+          'icon':'fa fa-folder'
+        }
       }
-    })
-        .bind("select_node.jstree", function (event, data) {
-          data.rslt.obj.toggleClass("selected");
-          data.rslt.obj.hasClass("selected") ? data.rslt.obj.children("input").attr("name", "filter[]") : data.rslt.obj.children("input").removeAttr("name");
-          if (swissbib.AdvancedSearch.catTreeAutoSend) {
-            swissbib.AdvancedSearch.sendForm(data.rslt.obj);
-          }
-        });
+    }).bind("select_node.jstree", function (event, data) {
+      var el = jQuery('#' + data.selected[0]);
+
+      el.toggleClass("selected");
+      el.hasClass("selected") ? el.find("input").attr("name", "filter[]") : el.find("input").removeAttr("name");
+
+      if (swissbib.AdvancedSearch.catTreeAutoSend)  swissbib.AdvancedSearch.sendForm(el);
+    });
   },
 
 
