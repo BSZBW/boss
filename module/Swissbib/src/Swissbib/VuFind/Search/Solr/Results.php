@@ -183,11 +183,15 @@ class Results extends VuFindSolrResults
      */
     public function getFacetList($filter = null)
     {
-        $facetList                 = parent::getFacetList($filter);
-        $userInstitutionFacets    = $this->getSpecialFacets();
+        $facetList     = parent::getFacetList($filter);
+        $specialFacets = array();
+
+        if( in_array('mylibraries', $filter)) {
+          $specialFacets = $this->getSpecialFacets();
+        }
 
             // Prepend special facets
-        $facetList = $userInstitutionFacets + $facetList;
+        $facetList = $specialFacets + $facetList;
 
         return $facetList;
     }
