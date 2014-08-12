@@ -316,6 +316,24 @@ class MyResearchController extends VuFindMyResearchController
   }
 
   /**
+   * User login action -- clear any previous follow-up information prior to
+   * triggering a login process. This is used for explicit login links within
+   * the UI to differentiate them from contextual login links that are triggered
+   * by attempting to access protected actions.
+   *
+   * @return mixed
+   */
+  public function userloginAction()
+  {
+      $forward = parent::userloginAction();
+      if ($this->inLightbox()) {
+          $this->clearFollowupUrl();
+      }
+
+      return $forward;
+  }
+
+  /**
    * Store a referer (if appropriate) to keep post-login redirect pointing
    * to an appropriate location.
    *
