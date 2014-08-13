@@ -130,4 +130,8 @@
     -most-transition: right .3s ease-in;
     transition: right .3s ease-in;
   }
+
+  a[href*="/Advanced"] {
+    display: none;
+  }
 }
