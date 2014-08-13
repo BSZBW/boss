@@ -30,18 +30,26 @@
   .searchHomeContent.row {
     margin-right: -15px;
   }
+}
 
+
+@media (min-width: 768px) and (max-width: 992px) {
+
+  /* off canvas implementation */
   #sidebar-offcanvas-trigger {
     height: 40px;
-    width: 6%;
+    width: 13%;
     max-width: 40px;
     position: fixed;
     top: 32%;
-    right: 15px;
+    right: 0;
     border: 1px solid #3C4250;
     background-color: #f5f5f5;
     opacity: .5;
-    cursor: pointer;
+  }
+
+  #sidebar-offcanvas-trigger.offcanvas-active {
+    right: 50%;
   }
 
   #sidebar-offcanvas-trigger:hover {
@@ -49,6 +57,33 @@
   }
 
   .sidebar {
-    display: none;
+    right: -50%;
+    width: 50%;
+    position: fixed;
+    top: 0;
+    height: 100%;
+    padding: 0;
+  }
+
+  .sidebar.offcanvas-active {
+    right: 0;
+  }
+
+  body.offcanvas-active {
+    right: 50%;
+    overflow-x: visible;
+    overflow-y: visible;
+  }
+
+  body {
+    position: relative;
+    right: 0;
+    overflow-x: hidden;
+  }
+
+  .sidebar, body, #sidebar-offcanvas-trigger {
+    -webkit-transition: right .3s ease-in;
+    -most-transition: right .3s ease-in;
+    transition: right .3s ease-in;
   }
 }
