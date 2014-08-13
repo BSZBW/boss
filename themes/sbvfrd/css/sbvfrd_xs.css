@@ -131,7 +131,7 @@
     transition: right .3s ease-in;
   }
 
-  a[href*="/Advanced"] {
+  a.advancedSearchLink {
     display: none;
   }
 }
