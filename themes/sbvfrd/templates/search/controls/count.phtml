@@ -1,0 +1,19 @@
+<div class="hidden-sm hidden-xs">
+    <?=$this->transEsc("Showing")?>
+    <strong><?=$this->localizedNumber($this->results->getStartRecord())?></strong> - <strong><?=$this->localizedNumber($this->results->getEndRecord())?></strong>
+    <? if (!isset($this->skipTotalCount)): ?>
+      <?=$this->transEsc('of')?> <strong><?=$this->localizedNumber($this->recordTotal)?></strong>
+    <? endif; ?>
+    <? if (isset($this->overrideSearchHeading)): ?>
+      <?=$this->overrideSearchHeading?>
+    <? elseif ($this->params->getSearchType() == 'basic'): ?>
+      <?=$this->transEsc('for search')?>: <strong>'<?=$this->escapeHtml($this->lookfor)?>'</strong>,
+    <? endif; ?>
+    <? if ($qtime = $this->results->getQuerySpeed()): ?>
+      <?=$this->transEsc('query time')?>: <?=$this->localizedNumber($qtime, 2).$this->transEsc('seconds_abbrev')?>
+    <? endif; ?>
+</div>
+
+<div class="hidden-md hidden-lg">
+    <strong><?=$this->localizedNumber($this->recordTotal)?></strong> <?=$this->transEsc("Results")?>
+</div>
