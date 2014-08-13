@@ -50,6 +50,7 @@ return array(
         'swissbib/FavoriteInstitutions.js',
         'swissbib/Account.js',
         'swissbib/Settings.js',
+        'swissbib/OffCanvas.js',
 
         'blueprint/lightbox.js',
         'blueprint/bulk_actions.js',
