@@ -117,6 +117,7 @@ return array(
     ),
     'console' => array(
         'router' => array(
+            'router_class'  => '',
             'routes' => array(
                 'libadmin-sync' => array(
                     'options' => array(
