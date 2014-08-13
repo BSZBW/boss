@@ -25,4 +25,8 @@
     min-width: 588px;
     max-width: 588px;
   }
+
+  #sidebar-offcanvas-trigger {
+    display: none;
+  }
 }
