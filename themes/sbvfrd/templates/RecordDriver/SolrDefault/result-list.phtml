@@ -24,14 +24,14 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
   <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID())?>" class="hiddenId" />
   <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getResourceSource())?>" class="hiddenSource" />
 
-  <div class="col-xs-3 col-sm-3 col-md-2 no-gutter">
+  <div class="hidden-xs col-sm-3 col-md-2 no-gutter">
     <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="img-responsive">
         <img class="recordcover" src="<?= $thumbnailSrc ?>"/>
     </a>
   </div>
 
   <!-- Kurztitel (vorher class="col-xs-7 col-sm-8 col-md-7" -->
-  <div class="col-xs-7 col-sm-8 col-md-7">
+  <div class="col-xs-10 col-sm-8 col-md-7">
     <div>
         <h2>
             <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title" title="<?= $this->escapeHtml($shortTitle) ?>">
