@@ -796,7 +796,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
     public function getFormatsOpenUrl()
     {
         $formats = $this->getFormatsRaw();
-        $found = "false";
+        $found = false;
         $mapping = array(
             'BK010000' => 'Article',
             'BK010300' => 'Article',
@@ -827,7 +827,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
         }
 
         // Fallback: Book
-        if (!$found) {
+        if ($found == false) {
             $formats[] = 'Book';
         }
 
