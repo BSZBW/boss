@@ -46,6 +46,10 @@
   text-decoration: none;
 }
 
+.row.result > label {
+  display: none;
+}
+
 .row.result h3 {
   font-size: 14px;
   margin-top: 0;
