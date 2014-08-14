@@ -15,10 +15,10 @@ class Record extends VuFindRecord
 
 
         $allParams = array('localunions' => array(), 'localtags'  => array(), 'indicators' => array(), 'subfields' => array());
-        $diffarray =  array_merge(array_diff_key($allParams, $params), $params);
+        $diffarray =  array_merge(array_diff_key($allParams, $params),$params);
         $diffArrayInCorrectOrder = array('localunions' => $diffarray['localunions'],'localtags' => $diffarray['localtags'], 'indicators' => $diffarray['indicators'], 'subfields' => $diffarray['subfields']);
 
-        return  $this->driver->tryMethod('getLocalValues', $diffArrayInCorrectOrder);
+        return  $this->driver->tryMethod('getLocalValues',$diffArrayInCorrectOrder);
 
 
     }
@@ -52,7 +52,7 @@ class Record extends VuFindRecord
         $collectedArrays = array();
 
         foreach ($urlArray as $url) {
-            if (!array_key_exists($url['url'], $uniqueURLs)) {
+            if (!array_key_exists($url['url'],$uniqueURLs)) {
                 $uniqueURLs[$url['url']] = "";
                 $collectedArrays[] = $url;
             }
@@ -103,15 +103,15 @@ class Record extends VuFindRecord
         if (empty($globalRestrictions)) {
             //fetch 'all' the links you can find in 856 / 956
             $urls = $this->driver->tryMethod('getURLs');
-            $collectedLinks = array_merge($collectedLinks, $urls);
+            $collectedLinks = array_merge($collectedLinks,$urls);
         } else {
 
             $allParamsGlobalTags = array('globalunions' => array(), 'tags'  => array());
-            $diffarray =  array_merge(array_diff_key($allParamsGlobalTags, $globalRestrictions), $globalRestrictions);
-            $diffArrayInCorrectOrder = array('globalunions' => $diffarray['globalunions'], 'tags' => $diffarray['tags']);
+            $diffarray =  array_merge(array_diff_key($allParamsGlobalTags, $globalRestrictions),$globalRestrictions);
+            $diffArrayInCorrectOrder = array('globalunions' => $diffarray['globalunions'],'tags' => $diffarray['tags']);
 
-            $urls =  $this->driver->tryMethod('getExtendedURLs', $diffArrayInCorrectOrder);
-            $collectedLinks = array_merge($collectedLinks, $urls);
+            $urls =  $this->driver->tryMethod('getExtendedURLs',$diffArrayInCorrectOrder);
+            $collectedLinks = array_merge($collectedLinks,$urls);
 
         }
 
@@ -182,26 +182,59 @@ class Record extends VuFindRecord
 
     public function getSubtitle($titleStatement)
     {
-        if (isset($titleStatement['parts_name'])) {
-            $parts_name           = is_array($titleStatement['parts_name']) ? implode('. ', $titleStatement['parts_name']) : $titleStatement['parts_name'];
+        if (isset($titleStatement['1parts_amount'])) {
+            $parts_amount        = is_array($titleStatement['parts_amount']) ? implode('. ', $titleStatement['parts_amount']) : $titleStatement['parts_amount'];
         }
+
+        if (isset($titleStatement['1parts_name'])) {
+            $keys = array_keys($titleStatement);
+            foreach ($keys as $key) {
+                if (preg_match('/^[0-9]parts_name/', $key)) {
+                    $parts_name[] = $titleStatement[$key];
+                }
+            }
+            $parts_name = implode('. ', $parts_name);
+        }
+
+        if (isset($titleStatement['1parts_amount'])) {
+            $keys = array_keys($titleStatement);
+            foreach ($keys as $key) {
+                if (preg_match('/^[0-9]parts_amount/', $key)) {
+                    $parts_amount[] = $titleStatement[$key];
+                }
+            }
+            $parts_amount = implode('. ', $parts_amount);
+        }
+
+        if ($parts_amount || $parts_name) {
+            if ($parts_amount && $parts_name) {
+                $parts = $parts_amount . '. ' . $parts_name;
+            }
+            elseif ($parts_amount) {
+                $parts = $parts_amount;
+            }
+            elseif ($parts_name) {
+                $parts = $parts_name;
+            }
+        }
+
         if (isset($titleStatement['title_remainder'])) {
             $title_remainder      = $titleStatement['title_remainder'];
         }
 
-        if (!empty($title_remainder) && empty($parts_name))
+        if (!empty($title_remainder) && empty($parts))
         {
             return $title_remainder;
         }
 
-        elseif (!empty($title_remainder) && !empty($parts_name))
+        elseif (!empty($title_remainder) && !empty($parts))
         {
-            return $title_remainder . '. ' . $parts_name;
+            return $parts . '. ' . $title_remainder;
         }
 
-        elseif (empty($title_remainder) && !empty($parts_name))
+        elseif (empty($title_remainder) && !empty($parts))
         {
-            return $parts_name;
+            return $parts;
         }
     }
 
@@ -272,8 +305,8 @@ class Record extends VuFindRecord
                 $urlHelper = $this->getView()->plugin('url');
                 $urlSrc = $urlHelper('cover-show');
                 //sometimes our app is not the root domain
-                $position =  strpos($urlSrc, '/Cover');
-                return  $this->config->Content->externalResourcesServer . substr($urlSrc, $position) .  '?' . http_build_query($thumb);
+                $position =  strpos($urlSrc,'/Cover');
+                return  $this->config->Content->externalResourcesServer . substr($urlSrc,$position) .  '?' . http_build_query($thumb);
 
             } else {
 

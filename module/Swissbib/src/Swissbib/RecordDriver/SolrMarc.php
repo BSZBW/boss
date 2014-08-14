@@ -49,7 +49,7 @@ use Swissbib\RecordDriver\Helper\Holdings as HoldingsHelper;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://www.swissbib.org
  */
-class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
+class SolrMarc extends VuFindSolrMarc
 {
 
     /**
@@ -105,7 +105,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
                                 $searchSettings = null, $protocolWrapper
     ) {
 
-        parent::__construct($mainConfig, $recordConfig, $searchSettings);
+        parent::__construct($mainConfig,$recordConfig, $searchSettings);
 
         $this->protocolWrapper = $protocolWrapper;
 
@@ -120,7 +120,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
      * @see        getFormats()
      * @return    String
      */
-    public function getOpenURL()
+    public function getOpenURL($view)
     {
         // get the coinsID from config.ini or default to swissbib.ch
         $coinsID = $this->mainConfig->OpenURL->rfr_id;
@@ -129,7 +129,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
         }
 
         // Get a representative publication date, using the view helper:
-        $pubDate = $this->getServiceLocator()->get('viewrenderer')->publicationDateMarc($this->getPublicationDates());
+        $pubDate = $view->publicationDateMarc($this->getPublicationDates());
 
         // Start an array of OpenURL parameters:
         $params = array(
@@ -399,9 +399,9 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
         $tFieldsToCheck = array();
         if (!empty($tags)) {
             foreach($tags as $tag) {
-                if (strcmp($tag, '856') == 0) {
+                if (strcmp($tag,'856') == 0) {
                     $tFieldsToCheck['856'] = array('u','3');
-                } elseif (strcmp($tag, '956') == 0) {
+                } elseif (strcmp($tag,'956') == 0) {
                     $tFieldsToCheck['956'] = array('u','y','B');
                 }
             }
@@ -424,7 +424,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
 
                         $tagDataField = $url->getTag();
 
-                        if (strcmp($tagDataField, '856') == 0) {
+                        if (strcmp($tagDataField,'856') == 0) {
 
                             $descSubField = $url->getSubField('3');
 
@@ -582,7 +582,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
      * @return string
      */
 
-    protected function getThumbnail_956_1()
+    public function getThumbnail_956_1()
     {
         $thumbnailURL = null;
 
@@ -648,7 +648,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
      * @return string
      */
 
-    protected function getThumbnail_856_1()
+    public function getThumbnail_856_1()
     {
         $field = $this->get950();
         if ($field['union'] === 'RERO' && $field['tag'] === '856') {
@@ -683,7 +683,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
      * @return string
      */
 
-    protected function getThumbnail_erara()
+    public function getThumbnail_erara()
     {
         $field = $this->getDOIs();
         if (preg_match('/^.*e-rara/', $field['0'])) {
@@ -702,7 +702,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
      * @return array
      *
      */
-    protected function get956()
+    public function get956()
     {
         return $this->getMarcSubFieldMap(956, array(
             'B' => 'union',
@@ -724,7 +724,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
      * @return array
      *
      */
-    protected function get950()
+    public function get950()
     {
         return $this->getMarcSubFieldMap(950, array(
             'B' => 'union',
@@ -741,7 +741,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
      *
      * @return    String[]
      */
-    protected function getFormatsTranslated()
+    public function getFormatsTranslated()
     {
         $formats = $this->getFormatsRaw();
         $translator = $this->getTranslator();
@@ -799,7 +799,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
     public function getFormatsOpenUrl()
     {
         $formats = $this->getFormatsRaw();
-        $found = "false";
+        $found = false;
         $mapping = array(
             'BK010000' => 'Article',
             'BK010300' => 'Article',
@@ -823,7 +823,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
                 // Test for begin of string
                 if (stristr($rawFormat, $pattern)) {
                     $formats[] = $targetFormat;
-                    $found = "true";
+                    $found = true;
                     break 2; // Stop both loops
                 }
             }
@@ -1335,7 +1335,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
         );
         $fieldMapping = array(
             'a' => 'a',
-            'b' => 'b',
+            '_b' => 'b',
             'c' => 'c',
             'd' => 'd',
             'e' => 'e',
@@ -1343,10 +1343,10 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
             'g' => 'g',
             'h' => 'h',
             't' => 't',
-            'v' => 'v',
-            'x' => 'x',
-            'y' => 'y',
-            'z' => 'z'
+            '_v' => 'v',
+            '_x' => 'x',
+            '_y' => 'y',
+            '_z' => 'z'
         );
 
         // Add control fields to mapping list
@@ -1407,6 +1407,30 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
         return $subjectVocabularies;
     }
 
+
+    /**
+     * Get hierarchical place names
+     *
+     * @return Array
+     */
+
+    public function getHierarchicalPlaceNames()
+    {
+        $placeNames = array();
+        if ($fields = $this->marcRecord->getFields('752')) {
+            foreach ($fields as $field) {
+                $subfields = $field->getSubfields();
+                $current = array();
+                foreach ($subfields as $subfield) {
+                    if (!is_numeric($subfield->getCode())) {
+                        $current[] = $subfield->getData();
+                    }
+                }
+                $placeNames[] = implode(' -- ', $current);
+            }
+        }
+        return $placeNames;
+    }
 
     /**
      * Get host item entry
@@ -1472,7 +1496,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
     public function getPhysicalDescriptions($asStrings = true)
     {
         $descriptions = $this->getMarcSubFieldMaps(300, array(
-            '_a' => 'extent',
+            '_a' => 'extent', // Aufgrund von Meldung von Chantal, habe ich als Quick-Fix das Unterfeld "a" von repeatable auf non-repeatable gestellt. Die Anpassung steht in Zusammenhang mit Olivers Anpassung an "getMappedFieldData"
             'b' => 'details',
             '_c' => 'dimensions',
             'd' => 'material_single',
@@ -1518,9 +1542,10 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
      *
      * @return Boolean
      */
+
     public function getOnlineStatus()
     {
-        $filter = array_key_exists('filter_str_mv', $this->fields) ? $this->fields['filter_str_mv'] : array();
+        $filter = array_key_exists('filter_str_mv',$this->fields) ? $this->fields['filter_str_mv'] : array();
         return in_array('ONL', $filter)  ? true : false;
     }
 
@@ -1697,10 +1722,11 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
                 $subFields = $field->getSubfields((string)$code);
 
                 if (sizeof($subFields)) {
-                    $subFieldValues[$name] = array();
-
+                    //$subFieldValues[$name] = array();
+                    $i = 1;
                     foreach ($subFields as $subField) {
-                        $subFieldValues[$name][] = $subField->getData();
+                        $subFieldValues[$i . $name] = $subField->getData();
+                        $i++;
                     }
                 }
             } else { // Normal single field
@@ -2217,12 +2243,4 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
         return $solrDefaultAdapter->getCitationFormats();
     }
 
-
-    /**
-     * @return boolean
-     */
-    public function displayHoldings()
-    {
-        return true;
-    }
 }
