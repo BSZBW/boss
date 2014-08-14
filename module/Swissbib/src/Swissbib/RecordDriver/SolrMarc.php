@@ -104,12 +104,9 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
     public function __construct($mainConfig = null, $recordConfig = null,
                                 $searchSettings = null, $protocolWrapper
     ) {
-
         parent::__construct($mainConfig, $recordConfig, $searchSettings);
 
         $this->protocolWrapper = $protocolWrapper;
-
-
     }
 
 
@@ -823,7 +820,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
                 // Test for begin of string
                 if (stristr($rawFormat, $pattern)) {
                     $formats[] = $targetFormat;
-                    $found = "true";
+                    $found = true;
                     break 2; // Stop both loops
                 }
             }
