@@ -49,7 +49,7 @@ use Swissbib\RecordDriver\Helper\Holdings as HoldingsHelper;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://www.swissbib.org
  */
-class SolrMarc extends VuFindSolrMarc
+class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
 {
 
     /**
@@ -104,12 +104,9 @@ class SolrMarc extends VuFindSolrMarc
     public function __construct($mainConfig = null, $recordConfig = null,
                                 $searchSettings = null, $protocolWrapper
     ) {
-
-        parent::__construct($mainConfig,$recordConfig, $searchSettings);
+        parent::__construct($mainConfig, $recordConfig, $searchSettings);
 
         $this->protocolWrapper = $protocolWrapper;
-
-
     }
 
 
@@ -120,7 +117,7 @@ class SolrMarc extends VuFindSolrMarc
      * @see        getFormats()
      * @return    String
      */
-    public function getOpenURL($view)
+    public function getOpenURL()
     {
         // get the coinsID from config.ini or default to swissbib.ch
         $coinsID = $this->mainConfig->OpenURL->rfr_id;
@@ -129,7 +126,7 @@ class SolrMarc extends VuFindSolrMarc
         }
 
         // Get a representative publication date, using the view helper:
-        $pubDate = $view->publicationDateMarc($this->getPublicationDates());
+        $pubDate = $this->getServiceLocator()->get('viewrenderer')->publicationDateMarc($this->getPublicationDates());
 
         // Start an array of OpenURL parameters:
         $params = array(
@@ -582,7 +579,7 @@ class SolrMarc extends VuFindSolrMarc
      * @return string
      */
 
-    public function getThumbnail_956_1()
+    protected function getThumbnail_956_1()
     {
         $thumbnailURL = null;
 
@@ -648,7 +645,7 @@ class SolrMarc extends VuFindSolrMarc
      * @return string
      */
 
-    public function getThumbnail_856_1()
+    protected function getThumbnail_856_1()
     {
         $field = $this->get950();
         if ($field['union'] === 'RERO' && $field['tag'] === '856') {
@@ -683,7 +680,7 @@ class SolrMarc extends VuFindSolrMarc
      * @return string
      */
 
-    public function getThumbnail_erara()
+    protected function getThumbnail_erara()
     {
         $field = $this->getDOIs();
         if (preg_match('/^.*e-rara/', $field['0'])) {
@@ -702,7 +699,7 @@ class SolrMarc extends VuFindSolrMarc
      * @return array
      *
      */
-    public function get956()
+    protected function get956()
     {
         return $this->getMarcSubFieldMap(956, array(
             'B' => 'union',
@@ -724,7 +721,7 @@ class SolrMarc extends VuFindSolrMarc
      * @return array
      *
      */
-    public function get950()
+    protected function get950()
     {
         return $this->getMarcSubFieldMap(950, array(
             'B' => 'union',
@@ -741,7 +738,7 @@ class SolrMarc extends VuFindSolrMarc
      *
      * @return    String[]
      */
-    public function getFormatsTranslated()
+    protected function getFormatsTranslated()
     {
         $formats = $this->getFormatsRaw();
         $translator = $this->getTranslator();
@@ -2218,4 +2215,12 @@ class SolrMarc extends VuFindSolrMarc
         return $solrDefaultAdapter->getCitationFormats();
     }
 
+
+    /**
+     * @return boolean
+     */
+    public function displayHoldings()
+    {
+        return true;
+    }
 }

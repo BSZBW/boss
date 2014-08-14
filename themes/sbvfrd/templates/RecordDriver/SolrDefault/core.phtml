@@ -3,7 +3,7 @@
     <h3 property="name"><?=$this->escapeHtml($this->driver->getShortTitle() . ' ' . $this->driver->getSubtitle() . ' ' . $this->driver->getTitleSection())?></h3>
   </div>
 
-  <div class="col-sm-4">
+  <div class="col-sm-4 hidden-xs">
     <div class="text-center">
       <? /* Display thumbnail if appropriate: */ ?>
       <? $mediumThumb = $this->record($this->driver)->getThumbnail('medium'); $largeThumb = $this->record($this->driver)->getThumbnail('large'); ?>
@@ -29,7 +29,7 @@
     <? $theme = $this->configAccess()->Site->theme; ?>
   </div>
 
-  <div class="col-sm-8">
+  <div class="col-sm-8 col-xs-12">
     <? $subtitle = $this->record($this->driver)->getSubtitle($this->driver->getTitleStatement(true)) ?>
     <? if (isset($subtitle)): ?>
       <h4 class="resultViewSubTitle"><?= $this->escapeHtml($subtitle) ?></h4>

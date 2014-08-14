@@ -32,7 +32,7 @@
 <div class="row result<? if($this->driver->supportsAjaxStatus()): ?> ajaxItem<? endif ?>">
   <label class="pull-left"><?=$this->record($this->driver)->getCheckbox() ?></label>
   <input type="hidden" value="<?=$id ?>" class="hiddenId"/>
-  <div class="col-xs-2 left no-gutter">
+  <div class="col-sm-2 hidden-xs left no-gutter">
     <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title img-responsive">
       <? if ($summThumb = $this->record($this->driver)->getThumbnail()): ?>
         <img src="<?=$this->escapeHtmlAttr($summThumb)?>" alt="<?=$this->transEsc('Cover Image')?>"/>
@@ -41,7 +41,7 @@
       <? endif; ?>
     </a>
   </div>
-  <div class="col-xs-6 middle">
+  <div class="col-sm-6 col-xs-10 middle">
     <div class="resultItemLine1">
       <a href="<?=$this->recordLink()->getUrl($this->driver)?>">
       <?
