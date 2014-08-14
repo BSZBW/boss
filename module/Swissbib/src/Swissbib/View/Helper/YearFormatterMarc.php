@@ -26,7 +26,7 @@ class YearFormatterMarc extends AbstractHelper
             return '';
         }
 
-        if (is_array($publicationDate) || sizeof($publicationDate) == 1) {
+        if (is_array($publicationDate) && sizeof($publicationDate) == 1) {
             return $publicationDate[0];
         }
 
