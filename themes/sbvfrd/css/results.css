@@ -73,6 +73,14 @@
   padding: 4px 0;
 }
 
+.searchtools a:after{
+  content: "\2014" /*&mdash;*/
+}
+
+.searchtools a:last-child:after {
+  content: '';
+}
+
 @media (min-width: 992px) {
   .row.result > .col-xs-11 {
     width: 98%;
