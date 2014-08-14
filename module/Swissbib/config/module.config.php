@@ -207,6 +207,7 @@ return array(
             'Swissbib\Logger'                               =>  'Swissbib\Services\Factory::getSwissbibLogger',
             'Swissbib\RecordDriver\SolrDefaultAdapter'      =>  'Swissbib\RecordDriver\Factory::getSolrDefaultAdapter',
             'VuFind\Translator'                             =>  'Swissbib\Services\Factory::getTranslator',
+            'VuFind\Export'                                 =>  'Swissbib\Services\Factory::getExport',
 
             'Swissbib\Hierarchy\SimpleTreeGenerator'        =>  'Swissbib\Hierarchy\Factory::getSimpleTreeGenerator',
             'Swissbib\Hierarchy\MultiTreeGenerator'         =>  'Swissbib\Hierarchy\Factory::getMultiTreeGenerator'
