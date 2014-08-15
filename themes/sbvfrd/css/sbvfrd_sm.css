@@ -81,9 +81,11 @@
     overflow-x: hidden;
   }
 
-  .sidebar, body, #sidebar-offcanvas-trigger {
+  .sidebar.transition,
+  body,
+  #sidebar-offcanvas-trigger {
     -webkit-transition: right .3s ease-in;
-    -most-transition: right .3s ease-in;
+    -moz-transition: right .3s ease-in;
     transition: right .3s ease-in;
   }
 }

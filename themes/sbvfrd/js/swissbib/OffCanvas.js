@@ -1,12 +1,22 @@
+/**
+ *
+ * @type {{sidebar: null, button: null, body: null, init: init, initOffCanvas: initOffCanvas, toggleOffCanvas: toggleOffCanvas, enableTransition: enableTransition}}
+ */
 var OffCanvas = {
   sidebar: null,
   button: null,
   body: null,
 
+  /**
+   * Initialize Off-Canvas handling
+   */
   init: function () {
     this.initOffCanvas();
   },
 
+  /**
+   *
+   */
   initOffCanvas: function () {
     this.sidebar = $(".sidebar");
     this.button = $("button#sidebar-offcanvas-trigger");
@@ -23,7 +33,12 @@ var OffCanvas = {
     }
   },
 
+  /**
+   * Toggle Off Canvas
+   */
   toggleOffCanvas: function () {
+    this.enableTransition();
+
     if (this.body.hasClass("offcanvas-active")) {
       this.body.removeClass("offcanvas-active");
       this.button.removeClass("offcanvas-active");
@@ -41,6 +56,16 @@ var OffCanvas = {
       this.body.css('height', window.innerHeight);
       this.body.css('overflow-y', 'hidden');
     }
+  },
+
+  /**
+   * Workaround to prevent transition on orientation change
+   */
+  enableTransition: function() {
+    this.sidebar.addClass('transition');
+    setTimeout(function() {
+      $('.sidebar').removeClass('transition');
+    }, 400);
   }
 };
 
