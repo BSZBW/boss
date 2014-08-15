@@ -1,19 +1,24 @@
 <?php
 
 /** @var    \Swissbib\RecordDriver\SolrMarc $driver */
-$institutions = $driver->getInstitutions();
-$institutions = $this->filterUntranslatedInstitutions($institutions);
+$institutions = $driver->getInstitutions(true);
+$institutions = $this->filterUntranslatedInstitutions($institutions, true);
 
 if (sizeof($institutions) > 1) {
-  $institutions = $this->institutionSorter()->sortInstitutions($institutions);
+  $institutions = $this->institutionSorter()->sortInstitutions($institutions, true);
 }
 
 ?>
 <?php if (count($institutions) > 0): ?>
   <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownLibraries">
-    <?php foreach ($institutions as $institutionCode): ?>
+    <?php foreach ($institutions as $institution): ?>
+      <?
+        $institutionCode = $institution['institution'];
+        $groupCode  = $institution['group'];
+        $anchor = 'holding-institution-' . $groupCode . '-' .$institutionCode;
+      ?>
       <li role="presentation">
-        <a role="menuitem" href="<?= $this->recordLink()->getUrl($driver) ?>?expandlib=<?= $institutionCode ?>#holding-institution-<?=$institutionCode?>">
+        <a role="menuitem" href="<?= $this->recordLink()->getUrl($driver) ?>?expandlib=<?= $institutionCode ?>#<?= $anchor ?>">
           <?= $this->escapeHtml($this->zendTranslate($institutionCode, 'institution')); ?>
         </a>
       </li>

@@ -1232,12 +1232,21 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
      *
     * @return    String[]
     */
-    public function getInstitutions()
+    public function getInstitutions($extended = false)
     {
         $institutions = array();
 
         if (isset($this->fields['institution']) && is_array($this->fields['institution'])) {
             $institutions = $this->fields['institution'];
+
+            if ($extended) {
+                foreach($institutions as $key => $institution) {
+                    $institutions[$key] = array(
+                        'institution' => $institution,
+                        'group' => $this->getHoldingsHelper()->getGroup($institution)
+                    );
+                }
+            }
         }
 
         return $institutions;

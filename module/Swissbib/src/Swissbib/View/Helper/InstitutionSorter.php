@@ -35,7 +35,7 @@ class InstitutionSorter extends AbstractHelper
      * @param    Array    $institutions
      * @return    Array
      */
-    public function sortInstitutions(array $institutions)
+    public function sortInstitutions(array $institutions, $extended = false)
     {
         $sorted         = array();
         $missingCounter = 2000;
@@ -46,7 +46,7 @@ class InstitutionSorter extends AbstractHelper
         }
 
         foreach ($institutions as $institution) {
-            $institutionKey = $institution;
+            $institutionKey = $extended ? $institution['institution'] : $institution;
             $pos    = isset($this->institutions[$institutionKey]) ? $this->institutions[$institutionKey] : $missingCounter++;
             $sorted[$pos] = $institution;
         }
