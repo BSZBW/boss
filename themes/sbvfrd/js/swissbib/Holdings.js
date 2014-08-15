@@ -30,6 +30,7 @@ swissbib.Holdings = {
    * @param  {Event}    event
    */
   onInstitutionClick: function (idRecord, event) {
+    console.log(idRecord, 'clicked');
     var isLoaded = !!$.data(event.target, 'loaded'),
         dataParts, groupCode, institutionCode;
 

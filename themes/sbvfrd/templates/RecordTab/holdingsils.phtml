@@ -39,6 +39,11 @@ $this->headTitle($this->translate('Holdings') . ': ' . $this->driver->getBreadcr
             if (jQuery.cookie(cookieName) && jQuery.cookie(cookieName) != "expanded") {
               toggleButton.click();
             }
+
+            var institutionToggleButton = $('#holding-institution-<?=$expandOnLoad?>-<?=$expandLib?>');
+            if (institutionToggleButton) {
+                institutionToggleButton.click();
+            }
           });
         </script>
       <? endif; ?>
@@ -70,7 +75,7 @@ $this->headTitle($this->translate('Holdings') . ': ' . $this->driver->getBreadcr
                 </ul>
               <? endif; ?>
 
-              <div class="holding-institution-<?= $groupCode ?>-<?= $institutionCode ?>">
+              <div class="holding-institution-<?= $groupCode ?>-<?= $institutionCode ?>" id="holding-institution-<?= $institutionCode ?>">
                 <div class="holdingsAjaxSpinner holding-ajax-spinner-<?= $institutionCode ?>">
                   <span class="spinner"></span>
                   <span>Loading...</span>

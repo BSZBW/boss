@@ -16,13 +16,14 @@ class FilterUntranslatedInstitutions extends AbstractTranslatorHelper
      * @param    String[]    $institutionCodes
      * @return    String[]
      */
-    public function __invoke($institutionCodes)
+    public function __invoke($institutionCodes, $extended = false)
     {
         $filtered = array();
 
             // Filter not translated institutions
         foreach ($institutionCodes as $institutionCode) {
-            if ($institutionCode !== $this->translator->translate($institutionCode, 'institution')) {
+            $institutionLabel = $extended ? $institutionCode['institution'] : $institutionCode;
+            if ($institutionLabel !== $this->translator->translate($institutionLabel, 'institution')) {
                 $filtered[] = $institutionCode;
             }
         }
