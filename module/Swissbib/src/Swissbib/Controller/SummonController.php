@@ -79,6 +79,35 @@ class SummonController extends VuFindSummonController
         return $results;
     }
 
+    /**
+     * @return mixed|\Zend\View\Model\ViewModel
+     * add information about external IP to view
+     * @todo not yet implemented, doesn't work the way shown below
+     */
+
+    /**
+    public function resultsAction() {
+
+        $view = $this->createViewModel();
+
+        // Handle saved search requests:
+        $savedId = $this->params()->fromQuery('saved', false);
+        if ($savedId !== false) {
+            return $this->redirectToSavedSearch($savedId);
+        }
+
+        $results = $this->getResultsManager()->get($this->searchClassId);
+        $params = $results->getParams();
+
+        // Enable recommendations unless explicitly told to disable them:
+        $noRecommend = $this->params()->fromQuery('noRecommend', false);
+        $params->recommendationsEnabled(!$noRecommend);
+        $params->external = $this->isRestrictedTarget();
+
+        return parent::resultsAction();
+
+    }
+     * /
 
 
     /**
@@ -151,5 +180,21 @@ class SummonController extends VuFindSummonController
         // serialization):
         $results->restoreServiceLocator($this->getServiceLocator());
         return $results;
+    }
+
+    /**
+     * Checks if client IP is inside Basel / Berne universities (configurable)
+     * used to bring information to the view
+     * @todo add to view model (in method resultsAction()?)
+     * @todo add information to view template on summon tab
+     * functionality from sbvf2 (mid august 2014)
+     */
+    protected function isRestrictedTarget()
+    {
+    // check if client is inside Basel / Berne universities
+    $external = false;
+    $targetsProxy = $this->serviceLocator->get('Swissbib\TargetsProxy\TargetsProxy');
+    $external = $targetsProxy->detectTarget() === false ? true : false;
+    return $external;
     }
 }
