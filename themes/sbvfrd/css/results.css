@@ -46,6 +46,10 @@
   text-decoration: none;
 }
 
+.resultView .row.result > label {
+  display: none;
+}
+
 .row.result h3 {
   font-size: 14px;
   margin-top: 0;
@@ -71,6 +75,14 @@
 .row.result .snippet {
   font-size: 13px;
   padding: 4px 0;
+}
+
+.searchtools a:after{
+  content: "\2014" /*&mdash;*/
+}
+
+.searchtools a:last-child:after {
+  content: '';
 }
 
 @media (min-width: 992px) {
