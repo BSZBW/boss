@@ -320,4 +320,16 @@ class Record extends VuFindRecord
         return $thumb;
     }
 
+
+    /**
+     * @param string $tab
+     * @return string
+     */
+    public function getTabVisibility($tab) {
+        if (isset($this->config->RecordTabVisiblity->$tab)) {
+            return $this->config->RecordTabVisiblity->$tab;
+        };
+
+        return '';
+    }
 }

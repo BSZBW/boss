@@ -65,6 +65,7 @@
         $tab_classes = array();
         if ($isCurrent) $tab_classes[] = 'active';
         if (!$obj->isVisible()) $tab_classes[] = 'hidden';
+        $tab_classes[] = $this->record($this->driver)->getTabVisibility($tab);
       ?>
 
       <li<?=count($tab_classes) > 0 ? ' class="' . implode(' ', $tab_classes) . '"' : ''?>>
@@ -84,9 +85,5 @@
 </div>
 
 <div class="<?=$this->layoutClass('sidebar')?>">
-<!--  --><?// foreach ($this->related()->getList($this->driver) as $current): ?>
-<!--    --><?//=$this->related()->render($current)?>
-<!--  --><?// endforeach; ?>
-
   <?=$this->render('record/sidebar/sidebar');?>
 </div>
