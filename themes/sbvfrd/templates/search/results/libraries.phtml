@@ -13,7 +13,7 @@ if (sizeof($institutions) > 1) {
   <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownLibraries">
     <?php foreach ($institutions as $institutionCode): ?>
       <li role="presentation">
-        <a role="menuitem" href="<?= $this->recordLink()->getUrl($driver) ?>?expandlib=<?= $institutionCode ?>#tab-holdings">
+        <a role="menuitem" href="<?= $this->recordLink()->getUrl($driver) ?>?expandlib=<?= $institutionCode ?>#holding-institution-<?=$institutionCode?>">
           <?= $this->escapeHtml($this->zendTranslate($institutionCode, 'institution')); ?>
         </a>
       </li>
