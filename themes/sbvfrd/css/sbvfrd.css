@@ -344,6 +344,22 @@ div.memorize  {
   padding-bottom: 5px;
 }
 
+ul[aria-labelledby=dropdownLibraries] {
+  position: fixed;
+  max-height: 80%;
+  max-width: 80%;
+  top: 10%;
+  left: 10%;
+  overflow-y: scroll;
+}
+
+ul[aria-labelledby=dropdownLibraries] > li > a {
+   overflow-x: hidden;
+   white-space: normal;
+   border-bottom: 1px solid #ddd;
+   padding: 10px 10px;
+ }
+
 
 /* footer */
 footer p strong {
