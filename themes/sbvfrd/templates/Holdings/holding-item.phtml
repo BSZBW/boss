@@ -32,6 +32,6 @@ if (isset($item['locationMap']) && $item['locationMap']) {
     <?php endif; ?>
   </td>
   <td><?= $this->escapeHtml($item['signature']) ?></td>
-  <td class="hidden-xs hidden-sm"><?= $this->qrCodeHolding($item, $recordTitle) ?></td>
+  <td class="visible-lg"><?= $this->qrCodeHolding($item, $recordTitle) ?></td>
   <td><?= $this->escapeHtml($description) ?></td>
 </tr>
