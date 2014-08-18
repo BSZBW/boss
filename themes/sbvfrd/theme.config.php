@@ -40,7 +40,6 @@ return array(
         'swissbib-jq-plugins/tabbed.js',
         'swissbib-jq-plugins/enhancedsearch.js',
         'swissbib-jq-plugins/extended.ui.autocomplete.js',
-        '../themes/bootstrap3/js/vendor/jsTree/jstree.min.js',
 
         'swissbib/swissbib.js',
 
@@ -51,9 +50,6 @@ return array(
         'swissbib/Account.js',
         'swissbib/Settings.js',
         'swissbib/OffCanvas.js',
-
-        'blueprint/lightbox.js',
-        'blueprint/bulk_actions.js',
     ),
 
     'helpers' => array(
