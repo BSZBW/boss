@@ -246,6 +246,19 @@ header .breadcrumb > li > a {
   font-weight: normal;
 }
 
+ul[aria-labelledby=dropdownLibraries] > li > a {
+   border-bottom: 1px solid #ddd;
+   padding: 10px 10px;
+}
+
+ul[aria-labelledby=dropdownLibraries] > li:last-child > a {
+   border-bottom: none;
+}
+
+ul[aria-labelledby=dropdownLibraries] {
+  max-height: 50%;
+  overflow-y: scroll;
+}
 
 /* sidebar */
 .sidebar h4 {
@@ -343,7 +356,6 @@ div.memorize  {
   border-bottom: 1px solid #CCC;
   padding-bottom: 5px;
 }
-
 
 /* footer */
 footer p strong {

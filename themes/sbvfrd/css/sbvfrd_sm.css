@@ -30,6 +30,11 @@
   .searchHomeContent.row {
     margin-right: -15px;
   }
+
+  ul[aria-labelledby=dropdownLibraries] {
+    max-height: 288px;
+    overflow-y: scroll;
+  }
 }
 
 
