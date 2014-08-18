@@ -35,6 +35,13 @@
     max-height: 288px;
     overflow-y: scroll;
   }
+
+  #hierarchyTree a.jstree-anchor {
+    padding-left: 40px;
+    text-indent: -40px;
+    white-space: normal;
+    height: auto;
+  }
 }
 
 

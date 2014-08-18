@@ -29,4 +29,9 @@
   #sidebar-offcanvas-trigger {
     display: none;
   }
+
+  #hierarchyTree a.jstree-anchor {
+    padding-left: 35px;
+    text-indent: -27px;
+  }
 }
