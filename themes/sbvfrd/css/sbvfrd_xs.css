@@ -72,16 +72,20 @@
     width: 30px;
   }
 
-  ul[aria-labelledby=dropdownLibraries] {
-    position: fixed;
-    max-height: 80%;
-    max-width: 80%;
-    top: 10%;
-    left: 10%;
-    overflow-y: scroll;
+  ul.dropdown-menu {
+    width: 200%;
   }
 
-  ul[aria-labelledby=dropdownLibraries] > li > a {
+  ul[aria-labelledby=dropdownLibraries] {
+     position: fixed;
+     max-height: 80%;
+     max-width: 80%;
+     top: 10%;
+     left: 10%;
+     overflow-y: scroll;
+  }
+
+  ul.dropdown-menu > li > a {
      overflow-x: hidden;
      white-space: normal;
      border-bottom: 1px solid #ddd;

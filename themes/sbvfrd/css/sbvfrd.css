@@ -246,12 +246,12 @@ header .breadcrumb > li > a {
   font-weight: normal;
 }
 
-ul[aria-labelledby=dropdownLibraries] > li > a {
+ul.dropdown-menu > li > a {
    border-bottom: 1px solid #ddd;
    padding: 10px 10px;
 }
 
-ul[aria-labelledby=dropdownLibraries] > li:last-child > a {
+ul.dropdown-menu > li:last-child > a {
    border-bottom: none;
 }
 
