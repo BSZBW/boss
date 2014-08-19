@@ -40,6 +40,7 @@ return array(
         'swissbib-jq-plugins/tabbed.js',
         'swissbib-jq-plugins/enhancedsearch.js',
         'swissbib-jq-plugins/extended.ui.autocomplete.js',
+        '../themes/bootstrap3/js/vendor/jsTree/jstree.min.js',
 
         'swissbib/swissbib.js',
 

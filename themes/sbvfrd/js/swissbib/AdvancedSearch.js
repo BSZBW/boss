@@ -31,7 +31,7 @@ swissbib.AdvancedSearch = {
       'plugins': ['search','types'],
       'core' : {
         'themes' : {
-          'url': path + '/themes/bootstrap3/js/vendor/jsTree/themes/default/style.css'
+          'url': path + '/themes/sbvfrd/js/vendor/jsTree/themes/default/style.css'
         }
       },
       'types' : {
