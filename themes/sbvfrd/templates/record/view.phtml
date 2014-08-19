@@ -82,6 +82,16 @@
   </div>
 
   <span class="Z3988" title="<?=$this->escapeHtmlAttr($this->driver->getOpenURL())?>"></span>
+
+  <script type="text/javascript">
+      $(document).ready(function () {
+        var jsTree = $('#hierarchyTree');
+        if (jsTree) {
+          var url = path + '/themes/sbvfrd/js/vendor/jsTree/themes/swissbib/style.css';
+          $('head').append('<link rel="stylesheet" href="' + url + '" type="text/css" />');
+        }
+      });
+  </script>
 </div>
 
 <div class="<?=$this->layoutClass('sidebar')?>">
