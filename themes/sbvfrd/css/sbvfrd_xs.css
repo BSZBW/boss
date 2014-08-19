@@ -88,7 +88,6 @@
   ul.dropdown-menu > li > a {
      overflow-x: hidden;
      white-space: normal;
-     border-bottom: 1px solid #ddd;
      padding: 10px 10px;
   }
 

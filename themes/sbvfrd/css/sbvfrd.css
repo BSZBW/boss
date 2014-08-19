@@ -247,12 +247,12 @@ header .breadcrumb > li > a {
 }
 
 ul.dropdown-menu > li > a {
-   border-bottom: 1px solid #ddd;
+   border-top: 1px solid #ddd;
    padding: 10px 10px;
 }
 
-ul.dropdown-menu > li:last-child > a {
-   border-bottom: none;
+ul.dropdown-menu > li:first-child > a {
+   border-top: none;
 }
 
 ul[aria-labelledby=dropdownLibraries] {
