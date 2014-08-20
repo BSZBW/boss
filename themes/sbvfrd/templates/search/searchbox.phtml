@@ -30,20 +30,24 @@
 <? else: ?>
   <form role="search" class="navbar-form navbar-left" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" id="searchForm" autocomplete="off">
     <?= $this->render('search/searchTabs'); ?>
-    <input class="form-control search-query<? if($this->searchbox()->autocompleteEnabled($this->searchClassId)):?> autocomplete searcher:<?=$this->escapeHtmlAttr($this->searchClassId) ?><? endif ?>" id="searchForm_lookfor" type="text" name="lookfor" value="<?=$this->escapeHtmlAttr($this->lookfor)?>"/>
-    <? if ($handlerCount > 1): ?>
-      <select class="form-control" id="searchForm_type" name="type" data-native-menu="false">
-        <? foreach ($handlers as $handler): ?>
-          <option value="<?=$this->escapeHtmlAttr($handler['value'])?>"<?=$handler['selected'] ? ' selected="selected"' : ''?>><?=$handler['indent'] ? '-- ' : ''?><?=$this->transEsc($handler['label'])?></option>
-        <? endforeach; ?>
-      </select>
-    <? elseif ($handlerCount == 1): ?>
-      <input type="hidden" name="type" value="<?=$this->escapeHtmlAttr($handlers[0]['value'])?>" />
-    <? endif; ?>
-    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> <?=$this->transEsc("Find")?></button>
-    <? if ($advSearch): ?>
-      <a href="<?=$this->url($advSearch)?>" class="btn btn-link advancedSearchLink"><?=$this->transEsc("Advanced")?></a>
-    <? endif; ?>
+    <div class="input-group">
+        <input class="form-control search-query<? if($this->searchbox()->autocompleteEnabled($this->searchClassId)):?> autocomplete searcher:<?=$this->escapeHtmlAttr($this->searchClassId) ?><? endif ?>" id="searchForm_lookfor" type="text" name="lookfor" value="<?=$this->escapeHtmlAttr($this->lookfor)?>"/>
+        <span class="input-group-btn">
+           <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+            <? if ($advSearch): ?>
+              <a href="<?=$this->url($advSearch)?>" class="btn btn-link advancedSearchLink"><?=$this->transEsc("Advanced")?></a>
+            <? endif; ?>
+        </span>
+        <? if ($handlerCount > 1): ?>
+            <select class="form-control" id="searchForm_type" name="type" data-native-menu="false">
+                <? foreach ($handlers as $handler): ?>
+                    <option value="<?=$this->escapeHtmlAttr($handler['value'])?>"<?=$handler['selected'] ? ' selected="selected"' : ''?>><?=$handler['indent'] ? '-- ' : ''?><?=$this->transEsc($handler['label'])?></option>
+                <? endforeach; ?>
+            </select>
+        <? elseif ($handlerCount == 1): ?>
+            <input type="hidden" name="type" value="<?=$this->escapeHtmlAttr($handlers[0]['value'])?>" />
+        <? endif; ?>
+    </div>
 
     <? $shards = $options->getShards(); if ($options->showShardCheckboxes() && !empty($shards)): ?>
       <?

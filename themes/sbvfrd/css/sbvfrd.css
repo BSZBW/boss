@@ -15,21 +15,24 @@ h1, h2, h3, h4 {
 }
 
 h1 { font-size: 26px; }
-h2 { font-size: 20px; color: #106ca0; }
+h2 { font-size: 20px; color: #373737; }
 h3 { margin-top: 10px; }
-h4 { color: #106ca0; }
+h4 { color: #373737; }
 
 h4.resultViewSubTitle {
   margin-top: 0;
 }
 
-a { color: #106CA0; text-decoration: none; }
-a:hover { color: #3C4250; text-decoration: none; }
+a { color: #0d785b; text-decoration: none; }
+a:hover { color: #0d785b; text-decoration: none; }
 
+.input-group-addon, .input-group-btn {
+  width: 0;
+}
 
 /* Tab Navigation */
 header {
-  min-height: 87px;
+  min-height: 170px;
 }
 
 header ul[role="navigation"] {
@@ -97,7 +100,7 @@ header .nav.nav-tabs > li > a {
 }
 
 header .nav.nav-tabs > li > a:hover {
-  color: #106ca0;
+  color: #fff;
   text-decoration: none;
 }
 
@@ -121,16 +124,28 @@ header .nav.nav-tabs > li.active > a:hover {
 
 
 /* btn styles */
-.btn-primary, .btn-link, .btn-primary:hover, .btn-link:hover,
+.btn-primary,
 .pager li > a, .pager li > span,
 .pager li > a:hover, .pager li > a:focus {
   color: #fff;
-  background-color: #3C4250;
-  border-color: #3C4250;
-  border-radius: 4px;
+  background-color: #0d785b;
+  border-color: #0d785b;
+  border-radius: 2px;
   text-decoration: none;
 }
 
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:focus {
+  background-color: #fff;
+  border-color: #fff;
+  color: #0d785b;
+}
+
+.btn-link {
+  background-color: transparent;
+  color: #fff;
+}
 
 /* lists */
 .list-group-item {
@@ -211,9 +226,9 @@ header a {
 
 .navbar-brand {
   text-indent: -9999px;
-  height: 87px;
-  width: 138px;
-  background: transparent url(../images/logo.png) no-repeat 0 20px;
+  height: 170px;
+  width: 240px;
+  background: transparent url(../images/logo2.png) no-repeat 0 20px;
 }
 
 .container > .navbar-header {
