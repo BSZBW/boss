@@ -23,14 +23,40 @@ h4.resultViewSubTitle {
   margin-top: 0;
 }
 
-a { color: #0d785b; text-decoration: none; }
-a:hover { color: #0d785b; text-decoration: none; }
+a, .btn-link { color: #0d785b; text-decoration: none; }
+a:hover, .btn-link:hover { color: #0d785b; text-decoration: none; }
+a:before {content: "\00BB"; margin-right: 5px}
+p > a:before {content: ""; margin-right: 0}
+.btn-link {font-weight: bold;}
+
+/* btn styles */
+.btn-primary,
+.pager li > a, .pager li > span,
+.pager li > a:hover, .pager li > a:focus {
+  color: #fff;
+  background-color: #0d785b;
+  border-color: #0d785b;
+  border-radius: 2px;
+  text-decoration: none;
+}
+
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:focus {
+  background-color: #fff;
+  border-color: #fff;
+  color: #0d785b;
+}
+
+a.btn-link:before {
+  font-weight: bold;
+}
 
 .input-group-addon, .input-group-btn {
   width: 0;
 }
 
-/* Tab Navigation */
+/* Header */
 header {
   min-height: 170px;
 }
@@ -39,6 +65,17 @@ header ul[role="navigation"] {
   margin-top: 20px;
 }
 
+header .btn-link {
+  background-color: transparent;
+  color: #fff;
+}
+
+header .btn-link:hover {
+  text-decoration: none;
+  color: #fff;
+}
+
+/* Tab Navigation */
 .searchHomeContent .nav.nav-tabs,
 header .nav.nav-tabs {
   border-bottom: 0;
@@ -120,31 +157,6 @@ header .nav.nav-tabs > li.active > a:hover {
 .well .navbar-form,
 .well .navbar-form .form-control {
   width: 100%;
-}
-
-
-/* btn styles */
-.btn-primary,
-.pager li > a, .pager li > span,
-.pager li > a:hover, .pager li > a:focus {
-  color: #fff;
-  background-color: #0d785b;
-  border-color: #0d785b;
-  border-radius: 2px;
-  text-decoration: none;
-}
-
-.btn-primary:hover,
-.btn-primary:active,
-.btn-primary:focus {
-  background-color: #fff;
-  border-color: #fff;
-  color: #0d785b;
-}
-
-.btn-link {
-  background-color: transparent;
-  color: #fff;
 }
 
 /* lists */
