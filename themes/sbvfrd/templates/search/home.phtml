@@ -2,6 +2,8 @@
   // Set page title.
   $this->headTitle($this->translate('Search Home'));
 
+//$this->layout()->searchbox = true;
+
   // Set default value if necessary:
   if (!isset($this->searchClassId)) {
     $this->searchClassId = 'Solr';
@@ -13,6 +15,10 @@
   $advSearch = $options->getAdvancedSearchAction();
 
   $this->layout()->breadcrumbs = false;
+
+  if (!isset($this->layout()->searchbox)) {
+    $this->layout()->searchbox = $this->render('search/searchbox.phtml');
+  }
 ?>
 <div class="searchHomeContent">
   <? if ($this->ils()->getOfflineMode() == "ils-offline"): ?>
