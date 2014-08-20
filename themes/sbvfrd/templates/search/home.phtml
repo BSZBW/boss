@@ -2,9 +2,6 @@
   // Set page title.
   $this->headTitle($this->translate('Search Home'));
 
-  // Disable top search box -- this page has a special layout.
-  $this->layout()->searchbox = false;
-
   // Set default value if necessary:
   if (!isset($this->searchClassId)) {
     $this->searchClassId = 'Solr';
@@ -27,9 +24,6 @@
       <p><a href="mailto:<?=$supportEmail?>"><?=$supportEmail?></a></p>
     </div>
   <? endif; ?>
-  <div class="well well-lg clearfix">
-    <?=$this->render("search/searchbox.phtml")?>
-  </div>
 </div>
 
 <div class="row searchHomeContent">
