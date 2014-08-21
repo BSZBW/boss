@@ -1,0 +1,108 @@
+<?php
+
+/** @var  Swissbib\RecordDriver\SolrMarc $record */
+$record = $this->driver;
+$holdings = $record->getHoldingsStructure();
+
+// Copy favorites to own container
+$holdings = $this->extractFavoriteInstitutionsForHoldings($holdings);
+
+// Set page title.
+$this->headTitle($this->translate('Holdings') . ': ' . $this->driver->getBreadcrumb());
+
+?>
+<? if ($holdings): ?>
+
+  <? foreach ($holdings as $groupCode => $group): ?>
+    <!-- begin: innerbox <?= $groupCode ?> -->
+    <div class="innerbox grey holdingsBox" id="holdings-<?= $groupCode ?>">
+      <?
+      $expandLib = isset($_GET['expandlib']) ? $_GET['expandlib'] : '';
+      $expandedOrCollapsedClass = 'collapsed';
+      $expandOnLoad = '';
+      if (isset($group['institutions']) && sizeof($group['institutions'])) {
+        foreach ($group['institutions'] as $institutionSysCode => $institution) {
+          if ($institutionSysCode == $expandLib) {
+            $expandedOrCollapsedClass = 'expanded';
+            $expandOnLoad = $groupCode;
+          }
+        }
+      }
+      ?>
+
+      <? if ($expandOnLoad != ''): ?>
+        <script type="text/javascript">
+          // On DOM-ready: expand selected library even if it's collapsed via cookie
+          $(document).ready(function () {
+            var toggleButton = $('#library_toggler_<?=$expandOnLoad?>').get(0),
+                cookieName = encodeURI("toggler_" + jQuery(toggleButton).attr("id"));
+            if (jQuery.cookie(cookieName) && jQuery.cookie(cookieName) != "expanded") {
+              toggleButton.click();
+            }
+
+            var institutionToggleButton = $('#holding-institution-<?=$expandOnLoad?>-<?=$expandLib?>');
+            if (institutionToggleButton) {
+                institutionToggleButton.click();
+            }
+          });
+        </script>
+      <? endif; ?>
+
+      <h3 class="toggler persist <?= $expandedOrCollapsedClass ?>" id="holding-group-<?= $groupCode ?>">
+        <? if (is_array($group['label'])): ?>
+          <? $group['label'] = implode('', array_unique($group['label'])); ?>
+        <? endif; ?>
+        <span><?= $this->zendTranslate($group['label'], 'group') ?></span>
+      </h3>
+
+      <div class="holding-group-<?= $groupCode ?>">
+
+        <div class="innerbox">
+          <? foreach ($group['institutions'] as $institutionCode => $institution): ?>
+            <div class="institutionBox institution-<?= $institutionCode ?>-box"
+                 id="holding-institution-<?= $groupCode ?>-<?= $institutionCode ?>-box">
+              <h4 id="holding-institution-<?= $groupCode ?>-<?= $institutionCode ?>" class="toggler institutionToggler">
+                <?= $this->escapeHtml($this->zendTranslate($institution['label'], 'institution')) ?>
+              </h4>
+
+              <? if ($this->institutionDefinedAsFavorite()->isInstitutionDefinedAsFavorite($institutionCode)): ?>
+                <ul class="miniactions miniactions-<?= $institutionCode ?>">
+                  <li class="institutionFavorite">
+                    <? $favoriteLabel = isset($institution['favorite']) ? 'mylibraries.remove' : 'mylibraries.add'; ?>
+                    <a href="javascript:void(0)"
+                       title="<?= $this->transEsc($favoriteLabel) ?>"><?= $this->transEsc($favoriteLabel) ?></a>
+                  </li>
+                </ul>
+              <? endif; ?>
+
+              <div class="holding-institution-<?= $groupCode ?>-<?= $institutionCode ?>" id="holding-institution-<?= $institutionCode ?>">
+                <div class="holdingsAjaxSpinner holding-ajax-spinner-<?= $institutionCode ?>">
+                  <span class="spinner"></span>
+                  <span>Loading...</span>
+                </div>
+              </div>
+            </div>
+          <? endforeach; ?>
+
+        </div>
+      </div>
+    </div>
+    <!-- end: innerbox <?= $groupCode ?> -->
+
+  <? endforeach; ?>
+
+  <div id="holdings-items-popup" style="display:none">
+    Loading...
+  </div>
+
+  <script type="text/javascript">
+    swissbib.Holdings.initRecord('<?=$record->getUniqueID()?>');
+    swissbib.HoldingFavorites.initRecord('<?=$record->getUniqueID()?>');
+    vufindString.favoriteReload = '<?=$this->transEsc('mylibraries.reload')?>';
+  </script>
+
+<? else: ?>
+
+  <?= $this->render('RecordTab/holdingils-noholdings') ?>
+
+<? endif; ?>

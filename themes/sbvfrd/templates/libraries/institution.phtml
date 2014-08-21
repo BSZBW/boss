@@ -1,0 +1,35 @@
+<div class="institution" id="inst_<?= $institution['id'] ?>">
+  <h4>
+    <?= $institution['label'][$this->layout()->userLang] ?>
+  </h4>
+  <address>
+    <? if (!empty($institution['address'])): ?>
+      <p><?= $institution['address'] ?></p>
+    <? endif; ?>
+    <? if (!empty($institution['city']) && !empty($institution['zip'])): ?>
+      <? $canton = !empty($institution['canton']) ? ' (' . strtoupper($institution['canton']) . ')' : ''; ?>
+      <p><?= $institution['zip'] . ' ' . $institution['city'] . $canton ?></p>
+    <? endif; ?>
+    <? if (!empty($institution['email'])): ?>
+      <p><a href="mailto:<?= $institution['email'] ?>"><?= $this->transEsc('Email') ?></a></p>
+    <? endif; ?>
+    <p><b><?= $this->transEsc('library.code') ?>
+        :</b> <?= $institution['bib_code'] ?><?= !empty($institution['isil']) ? '; <b>ISIL: </b>' . $institution['isil'] : '' ?>
+    </p>
+  </address>
+  <div>
+    <ul class="list">
+      <? if (!empty($institution['url']) && is_array($institution['url'])): ?>
+        <? $url = $institution['url'][$this->layout()->userLang]; ?>
+        <li><a href="<?= $url ?>" class="color"
+               target="_blank"><?= $this->transEsc('Library_Information') ?></a></li>
+      <? endif; ?>
+      <? if (!empty($institution['website'])): ?>
+        <li><a href="<?= $institution['website'] ?>" class="color"
+               target="_blank"><?= $this->transEsc('libraries.website') ?></a></li>
+      <? endif; ?>
+      <li><a href='/Search/Results?type=AllFields&filter[]=institution%3A"<?= $institution['bib_code'] ?>"'
+             class='color'><?= $this->transEsc('hold_backlink') ?></a></li>
+    </ul>
+  </div>
+</div>

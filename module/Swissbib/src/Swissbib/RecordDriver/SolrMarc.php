@@ -49,7 +49,7 @@ use Swissbib\RecordDriver\Helper\Holdings as HoldingsHelper;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://www.swissbib.org
  */
-class SolrMarc extends VuFindSolrMarc
+class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
 {
 
     /**
@@ -104,12 +104,9 @@ class SolrMarc extends VuFindSolrMarc
     public function __construct($mainConfig = null, $recordConfig = null,
                                 $searchSettings = null, $protocolWrapper
     ) {
-
-        parent::__construct($mainConfig,$recordConfig, $searchSettings);
+        parent::__construct($mainConfig, $recordConfig, $searchSettings);
 
         $this->protocolWrapper = $protocolWrapper;
-
-
     }
 
 
@@ -120,7 +117,7 @@ class SolrMarc extends VuFindSolrMarc
      * @see        getFormats()
      * @return    String
      */
-    public function getOpenURL($view)
+    public function getOpenURL()
     {
         // get the coinsID from config.ini or default to swissbib.ch
         $coinsID = $this->mainConfig->OpenURL->rfr_id;
@@ -129,7 +126,7 @@ class SolrMarc extends VuFindSolrMarc
         }
 
         // Get a representative publication date, using the view helper:
-        $pubDate = $view->publicationDateMarc($this->getPublicationDates());
+        $pubDate = $this->getServiceLocator()->get('viewrenderer')->publicationDateMarc($this->getPublicationDates());
 
         // Start an array of OpenURL parameters:
         $params = array(
@@ -399,9 +396,9 @@ class SolrMarc extends VuFindSolrMarc
         $tFieldsToCheck = array();
         if (!empty($tags)) {
             foreach($tags as $tag) {
-                if (strcmp($tag,'856') == 0) {
+                if (strcmp($tag, '856') == 0) {
                     $tFieldsToCheck['856'] = array('u','3');
-                } elseif (strcmp($tag,'956') == 0) {
+                } elseif (strcmp($tag, '956') == 0) {
                     $tFieldsToCheck['956'] = array('u','y','B');
                 }
             }
@@ -424,7 +421,7 @@ class SolrMarc extends VuFindSolrMarc
 
                         $tagDataField = $url->getTag();
 
-                        if (strcmp($tagDataField,'856') == 0) {
+                        if (strcmp($tagDataField, '856') == 0) {
 
                             $descSubField = $url->getSubField('3');
 
@@ -582,7 +579,7 @@ class SolrMarc extends VuFindSolrMarc
      * @return string
      */
 
-    public function getThumbnail_956_1()
+    protected function getThumbnail_956_1()
     {
         $thumbnailURL = null;
 
@@ -648,12 +645,17 @@ class SolrMarc extends VuFindSolrMarc
      * @return string
      */
 
-    public function getThumbnail_856_1()
+    protected function getThumbnail_856_1()
     {
         $field = $this->get950();
         if ($field['union'] === 'RERO' && $field['tag'] === '856') {
             if (preg_match('/^.*v_bcu\/media\/images/', $field['sf_u'])) {
                 return 'https://externalservices.swissbib.ch/services/ImageTransformer?imagePath='
+                . $field['sf_u']
+                . '&scale=1';
+            } elseif (preg_match('/^.*bibliotheques\/iconographie/', $field['sf_u'])) {
+                return 'https://externalservices.swissbib.ch/services/ImageTransformer?imagePath='
+                /*return 'https://externalservices.swissbib.ch/services/ProtocolWrapper?targetURL='*/
                 . $field['sf_u']
                 . '&scale=1';
             }
@@ -678,7 +680,7 @@ class SolrMarc extends VuFindSolrMarc
      * @return string
      */
 
-    public function getThumbnail_erara()
+    protected function getThumbnail_erara()
     {
         $field = $this->getDOIs();
         if (preg_match('/^.*e-rara/', $field['0'])) {
@@ -697,7 +699,7 @@ class SolrMarc extends VuFindSolrMarc
      * @return array
      *
      */
-    public function get956()
+    protected function get956()
     {
         return $this->getMarcSubFieldMap(956, array(
             'B' => 'union',
@@ -719,7 +721,7 @@ class SolrMarc extends VuFindSolrMarc
      * @return array
      *
      */
-    public function get950()
+    protected function get950()
     {
         return $this->getMarcSubFieldMap(950, array(
             'B' => 'union',
@@ -736,7 +738,7 @@ class SolrMarc extends VuFindSolrMarc
      *
      * @return    String[]
      */
-    public function getFormatsTranslated()
+    protected function getFormatsTranslated()
     {
         $formats = $this->getFormatsRaw();
         $translator = $this->getTranslator();
@@ -825,7 +827,7 @@ class SolrMarc extends VuFindSolrMarc
         }
 
         // Fallback: Book
-        if (!$found) {
+        if ($found == false) {
             $formats[] = 'Book';
         }
 
@@ -1230,12 +1232,21 @@ class SolrMarc extends VuFindSolrMarc
      *
     * @return    String[]
     */
-    public function getInstitutions()
+    public function getInstitutions($extended = false)
     {
         $institutions = array();
 
         if (isset($this->fields['institution']) && is_array($this->fields['institution'])) {
             $institutions = $this->fields['institution'];
+
+            if ($extended) {
+                foreach($institutions as $key => $institution) {
+                    $institutions[$key] = array(
+                        'institution' => $institution,
+                        'group' => $this->getHoldingsHelper()->getGroup($institution)
+                    );
+                }
+            }
         }
 
         return $institutions;
@@ -1330,7 +1341,7 @@ class SolrMarc extends VuFindSolrMarc
         );
         $fieldMapping = array(
             'a' => 'a',
-            'b' => 'b',
+            '_b' => 'b',
             'c' => 'c',
             'd' => 'd',
             'e' => 'e',
@@ -1338,10 +1349,10 @@ class SolrMarc extends VuFindSolrMarc
             'g' => 'g',
             'h' => 'h',
             't' => 't',
-            'v' => 'v',
-            'x' => 'x',
-            'y' => 'y',
-            'z' => 'z'
+            '_v' => 'v',
+            '_x' => 'x',
+            '_y' => 'y',
+            '_z' => 'z'
         );
 
         // Add control fields to mapping list
@@ -1401,7 +1412,6 @@ class SolrMarc extends VuFindSolrMarc
 
         return $subjectVocabularies;
     }
-
 
     /**
      * Get host item entry
@@ -1516,7 +1526,7 @@ class SolrMarc extends VuFindSolrMarc
 
     public function getOnlineStatus()
     {
-        $filter = array_key_exists('filter_str_mv',$this->fields) ? $this->fields['filter_str_mv'] : array();
+        $filter = array_key_exists('filter_str_mv', $this->fields) ? $this->fields['filter_str_mv'] : array();
         return in_array('ONL', $filter)  ? true : false;
     }
 
@@ -1693,10 +1703,11 @@ class SolrMarc extends VuFindSolrMarc
                 $subFields = $field->getSubfields((string)$code);
 
                 if (sizeof($subFields)) {
-                    $subFieldValues[$name] = array();
-
+                    //$subFieldValues[$name] = array();
+                    $i = 1;
                     foreach ($subFields as $subField) {
-                        $subFieldValues[$name][] = $subField->getData();
+                        $subFieldValues[$i . $name] = $subField->getData();
+                        $i++;
                     }
                 }
             } else { // Normal single field
@@ -2025,6 +2036,81 @@ class SolrMarc extends VuFindSolrMarc
         return isset($this->fields['time_indexed']) ? $this->fields['time_indexed'] : '';
     }
 
+    /**
+     * Get all record links related to the current record. Each link is returned as
+     * array.
+     * Format:
+     * array(
+     *        array(
+     *               'title' => label_for_title
+     *               'value' => link_name
+     *               'link'  => link_URI
+     *        ),
+     *        ...
+     * )
+     *
+     * @todo osc: remove this method as soon as the pull request https://github.com/vufind-org/vufind/pull/165 is accepted
+     *
+     * @return null|array
+     */
+    public function getAllRecordLinks()
+    {
+        // Load configurations:
+        $fieldsNames = isset($this->mainConfig->Record->marc_links)
+            ? explode(',', $this->mainConfig->Record->marc_links) : array();
+        $useVisibilityIndicator
+            = isset($this->mainConfig->Record->marc_links_use_visibility_indicator)
+            ? $this->mainConfig->Record->marc_links_use_visibility_indicator : true;
+
+        $retVal = array();
+        foreach ($fieldsNames as $value) {
+            $value = trim($value);
+            $fields = $this->marcRecord->getFields($value);
+            if (!empty($fields)) {
+                foreach ($fields as $field) {
+                    // Check to see if we should display at all
+                    if ($useVisibilityIndicator) {
+                        $visibilityIndicator = $field->getIndicator('1');
+                        if ($visibilityIndicator == '1') {
+                            continue;
+                        }
+                    }
+
+                    // Normalize blank relationship indicator to 0:
+                    $relationshipIndicator = $field->getIndicator('2');
+                    if ($relationshipIndicator == ' ') {
+                        $relationshipIndicator = '0';
+                    }
+
+                    // Assign notes based on the relationship type
+                    switch ($value) {
+                        case '780':
+                            if (in_array($relationshipIndicator, range('0', '7'))) {
+                                $value .= '_' . $relationshipIndicator;
+                            }
+                            break;
+                        case '785':
+                            if (in_array($relationshipIndicator, range('0', '8'))) {
+                                $value .= '_' . $relationshipIndicator;
+                            }
+                            break;
+                    }
+
+                    // Get data for field
+                    $tmp = $this->getFieldData($field, $value);
+                    if (is_array($tmp)) {
+                        $retVal[] = $tmp;
+                    }
+                }
+            }
+        }
+        if (empty($retVal)) {
+            $retVal = null;
+        }
+        return $retVal;
+    }
+
+
 
     /**
      *
@@ -2138,4 +2224,12 @@ class SolrMarc extends VuFindSolrMarc
         return $solrDefaultAdapter->getCitationFormats();
     }
 
+
+    /**
+     * @return boolean
+     */
+    public function displayHoldings()
+    {
+        return true;
+    }
 }

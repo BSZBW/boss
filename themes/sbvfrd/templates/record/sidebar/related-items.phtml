@@ -1,0 +1,44 @@
+<?php /* Display and link to related items (field configured in config_base.ini -> marc_links) */ ?>
+<?php $recordLinks = $this->driver->getAllRecordLinks(); ?>
+<?php if (!empty($recordLinks)): ?>
+    <?php $contentDisplayed = true; ?>
+
+    <h4><?=$this->transEsc('Related Items')?></h4>
+    <ul class="list-group">
+        <?php foreach ($recordLinks as $recordLink): ?>
+            <li class="list-group-item">
+                <a href="<?= $this->recordLink()->related($recordLink['link']) ?>" title="<?= $this->transEsc($recordLink['title']) ?>: <?= $this->escapeHtml($recordLink['value']) ?>">
+                    <?= $this->transEsc($recordLink['title']) ?>: <?= $this->escapeHtml($recordLink['value']) ?>
+                </a>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>
+
+<?php /* This section is only valid when the above links do not exist */ ?>
+<?php $nextTitles = $this->driver->getNewerTitles();
+$prevTitles = $this->driver->getPreviousTitles(); ?>
+<?php if (!empty($nextTitles) or !empty($prevTitles)): ?>
+    <?php $contentDisplayed = true; ?>
+
+        <?php if (!empty($nextTitles)): ?>
+            <h4><?= $this->transEsc('New Title') ?></h4>
+            <ul class="list-group">
+                <?php foreach ($nextTitles as $field): ?>
+                    <li class="list-group-item">
+                        <a href="<?= $this->record($this->driver)->getLink('title', $field) ?>" title="<?= $this->escapeHtml($field) ?>"><?= $this->escapeHtml($field) ?></a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
+        <?php if (!empty($prevTitles)): ?>
+            <h4><?= $this->transEsc('Previous Title') ?></h4>
+            <ul class="list-group">
+                <?php foreach ($prevTitles as $field): ?>
+                    <li class="list-group-item">
+                        <a href="<?= $this->record($this->driver)->getLink('title', $field) ?>" title="<?= $this->escapeHtml($field) ?>"><?= $this->escapeHtml($field) ?></a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
+<?php endif; ?>

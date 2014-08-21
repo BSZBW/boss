@@ -1,0 +1,247 @@
+@media screen and (max-width: 767px) {
+
+	.main {
+		margin: 0;
+		width: 100%;
+	}
+
+	.mainbody {
+		margin: 0 -10px;
+	}
+
+	.well {
+		padding: 3% 0 14% 0;
+	}
+
+	.searchbox {
+		padding: 3% 0;
+	}
+
+	.searchbox>form {
+		margin: 0;
+		padding: 0;
+	}
+
+	.searchbox .btn,
+	.well .btn {
+		width: 42.5%;
+		display: block;
+		float: left;
+		margin: 1% 0.3%;
+		background-color: #fff;
+		color: #50bf9e;
+		border: none;
+		box-sizing: border-box;
+		line-height: 2;
+	}
+
+
+	.well .btn,
+	.well .btn.btn-primary {
+		width: 49%;
+		background-color: #50BF9E;
+		color: #fff;
+		border: 1px solid #50BF9E;
+	}
+
+	#toggle-sidebar-offcanvas {
+		width: 40px;
+		height: 40px;
+		margin: 1% 0.3% 1% 0;
+		border: none;
+		box-sizing: border-box;
+		border-radius: 0;
+		overflow: visible;
+		float: right;
+	}
+
+
+	#toggle-sidebar-offcanvas span {
+		background-color: #50bf9e;
+		width: 20px;
+	}
+
+	#toggle-sidebar-offcanvas span:first-child {
+		margin-top: 1%;
+	}
+
+	#toggle-sidebar-offcanvas span:first-child {
+		margin-bottom: 2%;
+	}
+
+	#toggle-sidebar-offcanvas:hover span {
+		background-color: #fff;
+	}
+
+	.searchbox .btn:hover {
+		background-color: #50bf9e;
+		color: #fff;
+        text-decoration: none;
+	}
+
+	.well .btn:hover {
+		background-color: #fff;
+		color: #50BF9E;
+		text-decoration: none;
+	}
+
+	.row {
+		margin: 0;
+		width: 100%;
+	}
+
+	.result .left {
+		display: none;
+	}
+
+	.result .pull-left {
+		display: none;
+	}
+
+	footer {
+		background-color: #252932;
+		color: #ccc;
+	}
+
+	footer .row,
+	footer ul {
+		margin: 0;
+		padding: 0;
+		width: 100%;
+	}
+
+	footer .row>div {
+		margin: 0;
+		padding: 0;
+		width: 100%;
+	}
+
+	footer a {
+		color: #ccc;
+		font-size: 1.1em;
+	}
+
+	footer a:hover {
+		color: #ccc;
+		text-decoration: none;
+	}
+
+	footer p {
+		font-size: 1.2em;
+		padding: 10px 15px;
+	}
+
+	footer li {
+		list-style: none;
+		width: 100%;
+	}
+
+	footer li>a {
+		display: inline-block;
+		width: inherit;
+		padding: 2% 6%;
+		height: 100%;
+	}
+
+	footer li:hover {
+		background-color: #50bf9e;
+	}
+
+	.sidebar {
+		right: -80%;
+		width: 80%;
+		position: absolute;
+		top: 0;
+		height: 100%;
+		background-color: #F7F7F7;
+		padding: 0;
+	}
+
+	.container.offcanvas-active {
+		right: 80%;
+		overflow-x: visible;
+		overflow-y: visible;
+	}
+
+	.container {
+		position: relative;
+		right: 0;
+		-webkit-transition: right .3s ease-in;
+		-most-transition: right .3s ease-in;
+		transition: right .3s ease-in;
+		overflow-x: hidden;
+		overflow-y: hidden;
+	}
+
+	.searchtools {
+		padding: 0;
+		margin: 0;
+	}
+
+	.searchtools a {
+		display: block;
+		height: 100%;
+		width: 33%;
+		float: left;
+		padding: 10px 5px;
+	}
+	.searchtools a:hover {
+		background-color: #fff;
+	}
+
+	.searchtools a span {
+		display: none;
+	}
+
+	.searchtools strong {
+		display: none;
+	}
+}
+
+@media screen and (min-width: 768px) {
+
+	.searchbox {
+		margin: 0 auto;
+		width: 90%;
+	}
+
+	nav .navbar-form {
+		width: 90%;
+	}
+
+	header .navbar-form {
+		width: 60%;
+	}
+
+    .navbar-form .form-control {
+        width: 60%;
+    }
+
+	.navbar-form a,
+	.navbar-form button.btn-primary {
+		background-color: #fff;
+		color: #50BF9E;
+		text-decoration: none;
+		border: 1px solid #fff;
+	}
+
+	.navbar-form a:hover,
+	.navbar-form button.btn-primary:hover {
+		background-color: #50BF9E;
+		color: #fff;
+		text-decoration: none;
+		border: 1px solid #fff;
+	}
+
+	.well button.btn-primary {
+		background-color: #50BF9E;
+		color: #fff;
+		border: 1px solid #50BF9E;
+	}
+
+	.well button.btn-primary:hover {
+		background-color: #fff;
+		color: #50BF9E;
+		border: 1px solid #50BF9E;
+	}
+}

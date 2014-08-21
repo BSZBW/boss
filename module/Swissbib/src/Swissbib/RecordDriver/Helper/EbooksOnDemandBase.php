@@ -123,12 +123,12 @@ abstract class EbooksOnDemandBase extends CustomizedMethods
     protected function isYearInRange($institutionCode, $yearArray)
     {
         $dateType = array_shift($yearArray);
-        preg_replace('/\D/','9',$yearArray);
+        preg_replace('/\D/', '9', $yearArray);
         $year1                        = intval($yearArray[0]);
         $year2                        = intval($yearArray[1]);
         $noSecondYear = 'se';
 
-        if ( stripos($noSecondYear,$dateType) !== false )
+        if ( stripos($noSecondYear, $dateType) !== false )
         {
             $year = $year1;
         }

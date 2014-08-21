@@ -185,4 +185,15 @@ class Factory
     }
 
 
+    /**
+     * @param   ServiceManager      $sm
+     * @return  \Swissbib\Export
+     */
+    public static function getExport(ServiceManager $sm)
+    {
+        return new \Swissbib\Export(
+            $sm->get('VuFind\Config')->get('config'),
+            $sm->get('VuFind\Config')->get('export')
+        );
+    }
 }

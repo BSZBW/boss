@@ -3,7 +3,7 @@
    but even if we don't plan to display the link, we still want to get the $openUrl
    value for use in generating a COinS (Z3988) tag -- see bottom of file.
 */
-$openUrl = $this->driver->getOpenURL();
+$openUrl = $this->driver->getOpenURL($this);
 $openUrlActive = $this->driver->openURLActive('results');
 $urls = $this->record($this->driver)->getLinkDetails();
 ?>

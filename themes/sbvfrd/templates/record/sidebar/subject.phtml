@@ -1,0 +1,36 @@
+<?php
+
+$subjectHeadings  = $this->driver->getAllSubjectVocabularies(true);
+$gndHeadings      = isset($subjectHeadings['gnd']) ? $subjectHeadings['gnd'] : array();
+
+if (!$gndHeadings) {
+  return '';
+}
+
+?>
+<h4><?=$this->transEsc('Related Subjects')?></h4>
+<ul class="list-group">
+  <?php foreach ($gndHeadings as $fieldIndex => $fieldData): ?>
+    <?php foreach ($fieldData as $fieldValues): ?>
+      <li class="list-group-item">
+        <?php
+          $urlValues  = array();
+
+            // Add quotes if required
+          foreach ($fieldValues as $fieldValue) {
+            if (strpos($fieldValue, ' ') !== false) {
+              $urlValues[] = '"' . addslashes($fieldValue) . '"';
+            } else {
+              $urlValues[] = $fieldValue;
+            }
+          }
+
+          $lookFor    = implode(' ', $urlValues);
+          $searchUrl  = $this->url('search-results') . '?lookfor=' . urlencode($lookFor) . '&amp;type=Subject';
+
+          echo '<a href="' . $searchUrl . '" title="' . $this->escapeHtml(implode(' > ', $fieldValues)) . '">' . $this->escapeHtml(implode(' > ', $fieldValues)) . '</a>';
+        ?>
+      </li>
+    <?php endforeach; ?>
+  <?php endforeach; ?>
+</ul>

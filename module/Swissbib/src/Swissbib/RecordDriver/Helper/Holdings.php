@@ -1211,7 +1211,7 @@ class Holdings
      * @param    String $institutionCode
      * @return    String
      */
-    protected function getGroup($institutionCode)
+    public function getGroup($institutionCode)
     {
         return isset($this->institution2group[$institutionCode]) ? $this->institution2group[$institutionCode] : 'unknown';
     }

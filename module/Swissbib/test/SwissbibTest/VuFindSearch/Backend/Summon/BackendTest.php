@@ -30,7 +30,7 @@ class BackendTest extends PHPUnit_Framework_TestCase
         $iniReader  = new Ini();
         $config     = new Config($iniReader->fromFile('../../../local/config/vufind/config.ini'));
 
-        $this->connector = new Connector($config->get('Summon')->get('apiId'),$config->get('Summon')->get('apiKey'));
+        $this->connector = new Connector($config->get('Summon')->get('apiId'), $config->get('Summon')->get('apiKey'));
     }
 
 
@@ -46,7 +46,7 @@ class BackendTest extends PHPUnit_Framework_TestCase
             $this->fail("An error occured during the request.");
         }
 
-        $this->assertTrue(!array_key_exists('errors',$result), "An error occured during the request.");
+        $this->assertTrue(!array_key_exists('errors', $result), "An error occured during the request.");
     }
 
 

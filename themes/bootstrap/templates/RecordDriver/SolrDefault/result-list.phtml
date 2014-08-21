@@ -2,11 +2,11 @@
   <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID())?>" class="hiddenId" />
   <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getResourceSource())?>" class="hiddenSource" />
   <div class="span2 left">
-    <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title">
+    <a href="<?=$this->recordLink()->getUrl($this->driver)?>">
       <? if ($summThumb = $this->record($this->driver)->getThumbnail()): ?>
-        <img src="<?=$this->escapeHtmlAttr($summThumb)?>" alt="<?=$this->transEsc('Cover Image')?>"/>
+        <img class="recordcover" src="<?=$this->escapeHtmlAttr($summThumb)?>" alt="<?=$this->transEsc('Cover Image')?>"/>
       <? else: ?>
-        <img src="<?=$this->url('cover-unavailable')?>" alt="<?=$this->transEsc('No Cover Image')?>"/>
+        <img class="recordcover" src="<?=$this->url('cover-unavailable')?>" alt="<?=$this->transEsc('No Cover Image')?>"/>
       <? endif; ?>
     </a>
   </div>
@@ -75,11 +75,11 @@
          <? endif; ?>
         <br/>
       <? endif; ?>
-      
+
       <?
       /* Display information on duplicate records if available */
       $dedupData = $this->driver->getDedupData();
-      if ($dedupData): ?> 
+      if ($dedupData): ?>
       <div class="dedupInformation">
       <?
         $i = 0;
@@ -100,7 +100,7 @@
         }?>
       </div>
       <? endif; ?>
-      
+
       <div class="callnumAndLocation ajax-availability hide">
         <? if ($this->driver->supportsAjaxStatus()): ?>
           <strong class="hideIfDetailed"><?=$this->transEsc('Call Number')?>:</strong>
@@ -123,7 +123,9 @@
             but even if we don't plan to display the link, we still want to get the $openUrl
             value for use in generating a COinS (Z3988) tag -- see bottom of file.
           */
-        $openUrl = $this->driver->getOpenURL();
+
+        /* @TODO: We have to refactor the getOpenURL method to not use the $view parameter, otherwise we have to overwrite this template like I did now  */
+        $openUrl = $this->driver->getOpenURL($this);
         $openUrlActive = $this->driver->openURLActive('results');
         $urls = $this->record($this->driver)->getLinkDetails();
         if ($openUrlActive || !empty($urls)): ?>
@@ -141,7 +143,7 @@
       <? endif; ?>
 
       <?=str_replace('class="', 'class="label label-info ', $this->record($this->driver)->getFormatList())?>
-      
+
       <? if (!$openUrlActive && empty($urls) && $this->driver->supportsAjaxStatus()): ?>
         <span class="status ajax-availability small hide">
           <span class="label"><?=$this->transEsc('Loading')?>...</span>

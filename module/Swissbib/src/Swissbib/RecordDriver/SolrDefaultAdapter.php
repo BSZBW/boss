@@ -58,7 +58,7 @@ class SolrDefaultAdapter {
         if (isset($this->mainConfig->Record->citation_formats)
             && !empty($this->mainConfig->Record->citation_formats)
         ){
-            return explode(",",$this->mainConfig->Record->citation_formats);
+            return explode(",", $this->mainConfig->Record->citation_formats);
         } else {
             return array();
         }

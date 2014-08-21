@@ -44,7 +44,7 @@ class Shibboleth extends  VuFindShib{
     {
         // Check if username is set.
         $shib = $this->getConfig()->Shibboleth;
-        $usernameAlternatives = explode("##",$shib->username);
+        $usernameAlternatives = explode("##", $shib->username);
         $username = "";
         foreach ($usernameAlternatives as $usernameAlternative) {
             $username = $request->getServer()->get($usernameAlternative);
@@ -62,7 +62,7 @@ class Shibboleth extends  VuFindShib{
         // Check if required attributes match up (so far not used in swissbib:
         foreach ($this->getRequiredAttributes() as $key => $value) {
 
-            $valueAlternatives = explode("##",$value);
+            $valueAlternatives = explode("##", $value);
             $found = false;
             foreach($valueAlternatives as $valuetest) {
                 if (preg_match('/'. $valuetest .'/', $request->getServer()->get($key))) {
@@ -90,7 +90,7 @@ class Shibboleth extends  VuFindShib{
         foreach ($attribsToCheck as $attribute) {
             if (isset($shib->$attribute)) {
 
-                $tattrAlternatives = explode("##",$shib->$attribute);
+                $tattrAlternatives = explode("##", $shib->$attribute);
                 $attvalue = "";
                 foreach ($tattrAlternatives as $aAlternative) {
                     $tvar = $request->getServer()->get($aAlternative);

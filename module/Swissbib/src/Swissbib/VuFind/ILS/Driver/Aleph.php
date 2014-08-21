@@ -392,12 +392,14 @@ class Aleph extends VuFindDriver
      */
     protected function getMyTransactionsResponse(array $user, $history = false)
     {
-        $userId    = $user['id'];
-        $transList = array();
-        $params    = array("view" => "full");
-        if ($history) {
+        $userId = $user['id'];
+        $params = array("view" => "full");
+
+        if ($history)
+        {
             $params["type"] = "history";
         }
+
         $xml = $this->doRestDLFRequest(
             array('patron', $userId, 'circulationActions', 'loans'), $params
         );
@@ -588,6 +590,7 @@ class Aleph extends VuFindDriver
             'return'        => 'z36-returned-date',
             'renewals'        => 'z36-no-renewal',
             'library'        => 'z30-sub-library',
+            'librarycode'    => 'z36-sub-library-code',
             'callnum'        => 'z30-call-no',
             'renew_info'    => 'renew-info'
         );

@@ -175,12 +175,19 @@
 
     <? $recordLinks = $this->driver->getAllRecordLinks(); if (!empty($recordLinks)): ?>
       <tr valign="top">
-        <th><?=$this->transEsc('Related Items')?></th>
+        <th><?=$this->transEsc('Related Items')?>:</th>
         <td>
           <? foreach ($recordLinks as $recordLink): ?>
             <?=$this->transEsc($recordLink['title'])?>:
             <a href="<?=$this->recordLink()->related($recordLink['link'])?>"><?=$this->escapeHtml($recordLink['value'])?></a><br />
           <? endforeach; ?>
+          <? /* if we have record links, display relevant explanatory notes */
+            $related = $this->driver->getRelationshipNotes();
+            if (!empty($related)): ?>
+              <? foreach ($related as $field): ?>
+                <?=$this->escapeHtml($field)?><br/>
+              <? endforeach; ?>
+          <? endif; ?>
         </td>
       </tr>
     <? endif; ?>
@@ -238,6 +245,10 @@
     </div>
   <? endif; ?>
 
+    <? // if you have a preview tab but want to move or remove the preview link
+       // from this area of the record view, this can be split into
+       // getPreviewData() (should stay here) and
+       // getPreviewLink() (can go in your desired tab) ?>
   <?=$this->record($this->driver)->getPreviews()?>
 </div>
 

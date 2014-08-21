@@ -67,9 +67,9 @@ class SimpleTreeGenerator {
         $sorted = array();
 
         foreach ($arrayList as $classification) {
-            preg_match_all("/[0-9]/",$classification['value'],$out,PREG_OFFSET_CAPTURE );
+            preg_match_all("/[0-9]/", $classification['value'], $out, PREG_OFFSET_CAPTURE );
             $lastMatch = end($out[0]);
-            $key = substr($classification['value'],0,$lastMatch[1]+1);
+            $key = substr($classification['value'], 0, $lastMatch[1]+1);
 
             if (!isset($sorted[$key])) {
                 $sorted[$key] = $classification;

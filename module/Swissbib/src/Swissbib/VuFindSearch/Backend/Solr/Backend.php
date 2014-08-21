@@ -81,7 +81,7 @@ class Backend extends VuFindSearchBackend {
 
         //it was necessary to overwrite this function before Refactoring of Spellchecking
         //I will leave it because it might be possible that we need our own backend later
-        return parent::search($query,$offset,$limit,$params);
+        return parent::search($query, $offset, $limit, $params);
     }
 
 

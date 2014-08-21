@@ -1,0 +1,103 @@
+<h1>Ricerca</h1>
+
+<h3>Combinare più termini</h3>
+
+<table class="table table-striped">
+    <tbody>
+    <tr>
+        <td><i>joyce ulysses</i></td>
+        <td>Entrambi i termini sono presenti</td>
+    </tr>
+      <tr>
+        <td><i>joyce AND ulysses</i></td>
+        <td>Entrambi i termini sono presenti nello stesso campo</td>
+    </tr>  
+    <tr>
+        <td><i>joyce OR ulysses</i></td>
+        <td>Uno dei termini é presente</td>
+    </tr>  
+    <tr>
+        <td><i>joyce NOT ulysses</i></td>
+        <td><i>joyce</i> é presente, ma no <i>ulysses</i></td>
+    </tr>
+    <tr>
+        <td>Per le ricerche più complessi</td>
+        <td>Vedi <a href="<?=$this->url('help-page', array('topic' => 'Advanced'))?>">Guida - Ricerca avanzata</a>.</td>
+    </tr>
+    </tbody>
+</table>
+
+<h3>Ricerca per frase o locuzione tramite virgolette</h3>
+
+<table class="table table-striped">
+    <tbody>
+    <tr>
+        <td><i>"street art"</i></td>
+        <td>I termini devono apparire nello stesso identico ordine.</td>
+        </tr>
+    <tr>
+        <td><i>"street art"~5</i></td>
+        <td>Entrambi i termini devono essere presenti entro un intervallo di 5 parole.</td>
+           </tr>
+      <tr>
+        <td><i>"PZB E 62 2:6"</i></td>
+        <td>Segnature</td>
+    </tr>
+    </tbody>
+</table>
+
+<h3>Segni di troncamento</h3>
+<table class="table table-striped">
+    <tbody>
+    <tr>
+        <td rowspan="2">*</td>
+        <td rowspan="2">sostituisce un numero qualsiasi<br/>di caratteri</td>
+        <td><i>cultur*</i></td>
+        <td>culture, cultura, cultural, culturally ecc.</td>
+    </tr>
+     <tr>
+        <td><i>Fr*ib*urg</i></td>
+        <td>Fribourg, Freiburg etc.</td>
+    </tr>
+    <tr>
+        <td rowspan="2">?</td>
+        <td rowspan="2">sostituisce un singolo carattere</td>
+        <td><i>wom?n</i></td>
+        <td>woman, women ecc.</td>
+    </tr>
+    <tr>
+        <td><i>Lind??ist</i></td>
+        <td>Lindquist, Lindkvist, Lindqvist ecc.</td>
+    </tr>
+    <tr>
+        <td>~</td>
+        <td>ricerca approssimativa</td>
+        <td><i>Tschaikowski~</i></td>
+        <td>Tschaikowski, Tchaïkovski, Čajkovskij ecc.</td>
+         </tr>
+       </tbody>
+</table>
+
+<h2>Elenco dei risultati</h2>
+<h3>Affinare la ricerca</h3>
+<p>Usa i filtri nella colonna a sinistra dall'elenco dei risultati oppure la <i>Ricerca avanzata</i>.</p>
+
+<h3>Ripeti o salva la ricerca</h3>
+             <ul class="list">
+          <li><a href="<?=$this->url('search-history')?>">My swissbib - Ricerche salvate</a></li>
+         <li>Cliccando su <i>Articoli & più</i> puoi ripetere la tua ricerca in <a href="http://www.serialssolutions.com/en/services/summon/content" target="_blank">Summon</a>.</li>
+  	</ul>
+
+<!--
+  	<h3>Essere notificato quando nuovi documenti corrispondono alla tua ricerca</h3>
+<p><img src="<?= $this->basePath('themes/swissbib/css/themes/orange/img/icon_pagefunctions_rss.gif') ?>" alt="Feed RSS"> Abonnarsi</p> 
+-->
+
+<h2>Testo integrale</h2>
+<p>L'accesso diretto al testo integrale spesso funziona solo all'interno della rete di un'università che possieda una sottoscrizione per i contenuti. Effettua il login tramite VPN se non ti trovi in una sede universitaria.</p>
+
+<h3>Articoli &amp; più</h3>
+<ul class="list">
+      	<li><i>get it</i> = link per visionare il testo integrale</li>
+	<li><img src="<?= $this->basePath('themes/swissbib/images/sfx.gif') ?>" alt="SFX Services"> = link per visionare il testo integrale e/o accedere ad altri servizi sfx (ordinare un articolo, verificare la localizzazione del documento in Svizzera).</li>
+</ul>

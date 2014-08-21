@@ -26,6 +26,10 @@ class YearFormatterMarc extends AbstractHelper
             return '';
         }
 
+        if (is_array($publicationDate) && sizeof($publicationDate) == 1) {
+            return $publicationDate[0];
+        }
+
         $retVal = '';
 
         $dateType = $publicationDate[0];

@@ -8,13 +8,13 @@
 
 namespace Swissbib\VuFind\Search\Backend\Solr;
 
-
 use VuFindSearch\Backend\Solr\LuceneSyntaxHelper as VFCoreLuceneSyntaxHelper;
 
-class LuceneSyntaxHelper extends VFCoreLuceneSyntaxHelper {
+class LuceneSyntaxHelper extends VFCoreLuceneSyntaxHelper
+{
 
-    protected function prepareForLuceneSyntax($input) {
-
+    protected function prepareForLuceneSyntax($input)
+    {
         $input = parent::prepareForLuceneSyntax($input);
 
         //user complained:
@@ -25,12 +25,9 @@ class LuceneSyntaxHelper extends VFCoreLuceneSyntaxHelper {
         //in case you want more patterns to remove
         //$patterns = array("/\xE2\x80\x93/", "/Das/");
 
-        $input=  preg_replace($patterns,'',$input);
+        $input = preg_replace($patterns, ' ', $input);
 
         return $input;
-
     }
 
-
-
-} 
+}

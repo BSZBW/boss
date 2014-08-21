@@ -39,8 +39,8 @@ class Results extends VFSummonResults
                 // strip enclosing parentheses
                 $from = array( '/^\(/', '/\)$/');
                 $to = array('','');
-                $term = preg_replace($from,$to,$term);
-                $word = preg_replace($from,$to,$word);
+                $term = preg_replace($from, $to, $term);
+                $word = preg_replace($from, $to, $word);
                 $retVal[$term]['suggestions'][$word] = array('new_term' => $word);
             }
         }
