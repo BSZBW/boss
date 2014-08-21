@@ -1,6 +1,18 @@
+<?
+$record         = $this->driver;
+$viewRecord     = $this->record($record);
+
+$shortTitle     = $record->getShortTitle();
+$titleStatement = $record->getTitleStatement(true);
+$subtitle       = $viewRecord->getSubtitle($titleStatement);
+$responsible    = $viewRecord->getResponsible($titleStatement, $record);
+$publications = $record->getPublicationDetails();
+?>
+
 <div class="row" vocab="http://schema.org/" resource="#record" typeof="<?=$this->driver->getSchemaOrgFormats()?> Product">
+<!-- main / short title -->
   <div class="col-sm-12">
-    <h3 property="name"><?=$this->escapeHtml($this->driver->getShortTitle() . ' ' . $this->driver->getSubtitle() . ' ' . $this->driver->getTitleSection())?></h3>
+    <h3 property="name"><?=$this->escapeHtml($this->driver->getShortTitle())?></h3>
   </div>
 
   <div class="col-sm-4 hidden-xs">
@@ -30,18 +42,8 @@
   </div>
 
   <div class="col-sm-8 col-xs-12">
-    <? $subtitle = $this->record($this->driver)->getSubtitle($this->driver->getTitleStatement(true)) ?>
     <? if (isset($subtitle)): ?>
       <h4 class="resultViewSubTitle"><?= $this->escapeHtml($subtitle) ?></h4>
-    <? endif; ?>
-
-    <? $summary = $this->driver->getSummary(); $summary = isset($summary[0]) ? $summary[0] : false; ?>
-    <? if ($summary): ?>
-      <p><?=$this->truncate($summary, 300)?></p>
-
-      <? if(strlen($summary) > 300): ?>
-        <p><a href='<?=$this->recordLink()->getTabUrl($this->driver, 'Description')?>#tabnav'><?=$this->transEsc('Full description')?></a></p>
-      <? endif; ?>
     <? endif; ?>
 
     <? if ($this->userlist()->getMode() !== 'disabled'): ?>
@@ -53,6 +55,37 @@
 
     <?/* Display Main Details */?>
     <table class="table table-striped" summary="<?=$this->transEsc('Bibliographic Details')?>">
+    <!-- Verfasser / Beitragende -->
+    <tr>
+        <th><?=$this->transEsc('Author')?>: </th>
+        <td property="author"><?=$this->escapeHtml($responsible)?></td>
+    </tr>
+
+    <!-- Impressum -->
+    <? if (!empty($publications)): ?>
+        <tr>
+            <th><?=$this->transEsc('Publication')?>: </th>
+            <td>
+                <? foreach ($publications as $field): ?>
+                    <span property="publisher" typeof="Organization">
+                        <? $pubPlace = $field->getPlace(); if (!empty($pubPlace)): ?>
+                            <span property="location"><?=$this->escapeHtml($pubPlace)?> :</span>
+                        <? endif; ?>
+                        <? $pubName = $field->getName(); if (!empty($pubName)): ?>
+                            <span property="name"> <?=$this->escapeHtml($pubName)?>, </span>
+                        <? endif; ?>
+                    </span>
+                    <? $pubDate = $field->getDate(); if (!empty($pubDate)): ?>
+                        <span property="publicationDate"><?=$this->escapeHtml($pubDate)?></span>
+                    <? endif; ?>
+                    <br/>
+                <? endforeach; ?>
+            </td>
+        </tr>
+    <? endif; ?>
+
+
+
       <? $journalTitle = $this->driver->getContainerTitle(); if (!empty($journalTitle)): ?>
       <tr>
         <th><?=$this->transEsc('Journal Title')?>:</th>
@@ -82,30 +115,6 @@
           <? foreach($prevTitles as $field): ?>
             <a href="<?=$this->record($this->driver)->getLink('title', $field)?>"><?=$this->escapeHtml($field)?></a><br/>
           <? endforeach; ?>
-        </td>
-      </tr>
-      <? endif; ?>
-
-      <? $authors = $this->driver->getDeduplicatedAuthors(); ?>
-      <? if (isset($authors['main']) && !empty($authors['main'])): ?>
-      <tr>
-        <th><?=$this->transEsc('Main Author')?>: </th>
-        <td property="author"><a href="<?=$this->record($this->driver)->getLink('author', $authors['main'])?>"><?=$this->escapeHtml($authors['main'])?></a></td>
-      </tr>
-      <? endif; ?>
-
-      <? if (isset($authors['corporate']) && !empty($authors['corporate'])): ?>
-      <tr>
-        <th><?=$this->transEsc('Corporate Author')?>: </th>
-        <td property="creator"><a href="<?=$this->record($this->driver)->getLink('author', $authors['corporate'])?>"><?=$this->escapeHtml($authors['corporate'])?></a></td>
-      </tr>
-      <? endif; ?>
-
-      <? if (isset($authors['secondary']) && !empty($authors['secondary'])): ?>
-      <tr>
-        <th><?=$this->transEsc('Other Authors')?>: </th>
-        <td>
-          <? $i = 0; foreach ($authors['secondary'] as $field): ?><?=($i++ == 0)?'':', '?><span property="contributor"><a href="<?=$this->record($this->driver)->getLink('author', $field)?>"><?=$this->escapeHtml($field)?></a></span><? endforeach; ?>
         </td>
       </tr>
       <? endif; ?>
@@ -151,28 +160,6 @@
           <th><?=$this->transEsc('Language')?>: </th>
           <td><? foreach ($langs as $lang): ?><?= $this->escapeHtml($lang)?><br/><? endforeach; ?></td>
         </tr>
-      <? endif; ?>
-
-      <? $publications = $this->driver->getPublicationDetails(); if (!empty($publications)): ?>
-      <tr>
-        <th><?=$this->transEsc('Published')?>: </th>
-        <td>
-          <? foreach ($publications as $field): ?>
-            <span property="publisher" typeof="Organization">
-            <? $pubPlace = $field->getPlace(); if (!empty($pubPlace)): ?>
-              <span property="location"><?=$this->escapeHtml($pubPlace)?></span>
-            <? endif; ?>
-            <? $pubName = $field->getName(); if (!empty($pubName)): ?>
-              <span property="name"><?=$this->escapeHtml($pubName)?></span>
-            <? endif; ?>
-            </span>
-            <? $pubDate = $field->getDate(); if (!empty($pubDate)): ?>
-              <span property="publicationDate"><?=$this->escapeHtml($pubDate)?></span>
-            <? endif; ?>
-            <br/>
-          <? endforeach; ?>
-        </td>
-      </tr>
       <? endif; ?>
 
       <? $edition = $this->driver->getEdition(); if (!empty($edition)): ?>

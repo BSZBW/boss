@@ -1429,44 +1429,14 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
 
 
     /**
-     * Get publishers
+     * Get the publishers of the record.
      *
-     * @param    Boolean $asStrings
-     * @return    Array[]|String[]
+     * @return array
      */
-    public function getPublishers($asStrings = true)
+    public function getPublishers()
     {
-        $data = $this->getMarcSubFieldMaps(260, array(
-            'a' => 'place',
-            'b' => 'name',
-            'c' => 'date',
-            'd' => 'number',
-            'e' => 'place_manufacture',
-            'g' => 'date_manufacture'
-        ));
-
-        if ($asStrings) {
-            $strings = array();
-
-            foreach ($data as $publication) {
-                $string = '';
-
-                if (isset($publication['place'])) {
-                    $string = $publication['place'];
-                }
-                if (isset($publication['name'])) {
-                    $string .= ' : ' . $publication['name'];
-                }
-
-                $strings[] = trim($string);
-            }
-
-            $data = $strings;
-        }
-
-        return $data;
+        return $this->getFieldArray('260', array('b'));
     }
-
 
     /**
      * Get physical description out of the MARC record

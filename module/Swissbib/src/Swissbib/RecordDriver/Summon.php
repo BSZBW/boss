@@ -91,30 +91,6 @@ class Summon extends VuFindSummon implements SwissbibRecordDriver
     /**
      * @return  string
      */
-    public function getImprint()
-    {
-        $imprint = '';
-        $pub_place = $this->getPlacesOfPublication();
-        if (is_array($pub_place) && count($pub_place) > 0) {
-            $imprint = implode(', ', $pub_place);
-            $imprint .= ': ';
-        }
-        $publishers = $this->getPublishers();
-        if (is_array($publishers) && count($publishers) > 0) {
-            $imprint .= implode(', ', $publishers);
-            $imprint .= ', ';
-        }
-        $pub_date = $this->getPublicationDates();
-        if (is_array($pub_date)) {
-            $imprint .= implode('-', $pub_date);
-        }
-
-        return $imprint;
-    }
-
-    /**
-     * @return  string
-     */
     public function getAllSubjectHeadingsAsString()
     {
         $ret = array();

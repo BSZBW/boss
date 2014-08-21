@@ -266,6 +266,10 @@ class Record extends VuFindRecord
         {
             return implode('; ', $record->getCorporationNames());
         }
+        else
+        {
+            return '';
+        }
     }
 
     /**
