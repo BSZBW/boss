@@ -10,16 +10,16 @@ $publications = $record->getPublicationDetails();
 ?>
 
 <div class="row" vocab="http://schema.org/" resource="#record" typeof="<?=$this->driver->getSchemaOrgFormats()?> Product">
-<!-- main / short title -->
-  <div class="col-sm-12">
-    <h3 property="name"><?=$this->escapeHtml($this->driver->getShortTitle())?></h3>
-  </div>
+    <!-- main / short title -->
+    <div class="col-sm-12">
+        <h3 property="name"><?=$this->escapeHtml($shortTitle)?></h3>
+    </div>
 
-  <div class="col-sm-4 hidden-xs">
-    <div class="text-center">
-      <? /* Display thumbnail if appropriate: */ ?>
-      <? $mediumThumb = $this->record($this->driver)->getThumbnail('medium'); $largeThumb = $this->record($this->driver)->getThumbnail('large'); ?>
-      <? if ($mediumThumb): ?>
+    <div class="col-sm-4 hidden-xs">
+        <div class="text-center">
+        <? /* Display thumbnail if appropriate: */ ?>
+        <? $mediumThumb = $this->record($this->driver)->getThumbnail('medium'); $largeThumb = $this->record($this->driver)->getThumbnail('large'); ?>
+        <? if ($mediumThumb): ?>
         <? if ($largeThumb): ?><a href="<?=$this->escapeHtmlAttr($largeThumb)?>"><? endif; ?>
           <img alt="<?=$this->transEsc('Cover Image')?>" class="recordcover" src="<?=$this->escapeHtmlAttr($mediumThumb);?>"/>
         <? if ($largeThumb): ?></a><? endif; ?>
@@ -55,11 +55,13 @@ $publications = $record->getPublicationDetails();
 
     <?/* Display Main Details */?>
     <table class="table table-striped" summary="<?=$this->transEsc('Bibliographic Details')?>">
-    <!-- Verfasser / Beitragende -->
-    <tr>
-        <th><?=$this->transEsc('Author')?>: </th>
-        <td property="author"><?=$this->escapeHtml($responsible)?></td>
-    </tr>
+    <? if (!empty($responsible)): ?>
+        <!-- Verfasser / Beitragende -->
+        <tr>
+            <th><?=$this->transEsc('Author')?>: </th>
+            <td property="author"><?=$this->escapeHtml($responsible)?></td>
+        </tr>
+    <? endif; ?>
 
     <!-- Impressum -->
     <? if (!empty($publications)): ?>

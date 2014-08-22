@@ -1,6 +1,7 @@
 <?php
 namespace Swissbib\View\Helper;
 
+use VuFind\RecordDriver\Summon;
 use VuFind\View\Helper\Root\Record as VuFindRecord;
 
 /**
@@ -247,28 +248,38 @@ class Record extends VuFindRecord
     
     public function getResponsible($titleStatement, $record)
     {
-        if (isset($titleStatement['statement_responsibility']))
+        if ($record instanceof Summon)
         {
-            return $titleStatement['statement_responsibility'];
-        }
-
-        elseif ($record->getPrimaryAuthor(true))
-        {
-            return $record->getPrimaryAuthor();
-        }
-
-        elseif ($record->getSecondaryAuthors(true))
-        {
-            return implode('; ', $record->getSecondaryAuthors());
-        }
-
-        elseif ($record->getCorporationNames(true))
-        {
-            return implode('; ', $record->getCorporationNames());
+            if ($record->getAuthor()) {
+                return $record->getAuthor();
+            }
         }
         else
         {
-            return '';
+            if (isset($titleStatement['statement_responsibility']))
+            {
+                return $titleStatement['statement_responsibility'];
+            }
+
+            elseif ($record->getPrimaryAuthor(true))
+            {
+                return $record->getPrimaryAuthor();
+            }
+
+            elseif ($record->getSecondaryAuthors(true))
+            {
+                return implode('; ', $record->getSecondaryAuthors());
+            }
+
+            elseif ($record->getCorporationNames(true))
+            {
+                return implode('; ', $record->getCorporationNames());
+            }
+            else
+            {
+                return '';
+            }
+
         }
     }
 
