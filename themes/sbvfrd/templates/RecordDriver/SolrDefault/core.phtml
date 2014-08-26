@@ -2,12 +2,23 @@
 $record         = $this->driver;
 $viewRecord     = $this->record($record);
 
-$shortTitle     = $record->getShortTitle();
-$titleStatement = $record->getTitleStatement(true);
-$subtitle       = $viewRecord->getSubtitle($titleStatement);
-$responsible    = $viewRecord->getResponsible($titleStatement, $record);
-$publications   = $record->getPublicationDetails();
+$shortTitle           = $record->getShortTitle();
+$titleStatement       = $record->getTitleStatement(true);
+$subtitle             = $viewRecord->getSubtitle($titleStatement);
+$responsible          = $viewRecord->getResponsible($titleStatement, $record);
+$publications         = $record->getPublicationDetails();
+$physicalDescriptions = $record->getPhysicalDescriptions(false);
+$edition              = $record->getEdition();
+$cartMathData         = $record->getCartMathData();
+$formats              = $viewRecord->getFormatList();
+$hostitems            = $record->getHostItemEntry();
+$journalTitle         = $record->getContainerTitle();
+$ref                  = $record->getContainerReference();
+$highlightedFulltext  = $record->getHighlightedFulltext();
 
+$showFRBR = $this->configAccess()->Site->displayFrbr;
+$groupID  = $this->driver->getGroup(true);
+$theme    = $this->configAccess()->Site->theme;
 ?>
 
 <div class="row" vocab="http://schema.org/" resource="#record" typeof="<?=$this->driver->getSchemaOrgFormats()?> Product">
@@ -37,9 +48,11 @@ $publications   = $record->getPublicationDetails();
       <? endif; ?>
     </div>
 
-    <?=$this->record($this->driver)->getPreviews()?>
-
-    <? $theme = $this->configAccess()->Site->theme; ?>
+        <? // if you have a preview tab but want to move or remove the preview link
+        // from this area of the record view, this can be split into
+        // getPreviewData() (should stay here) and
+        // getPreviewLink() (can go in your desired tab) ?>
+        <?=$this->record($this->driver)->getPreviews()?>
   </div>
 
   <div class="col-sm-8 col-xs-12">
@@ -87,42 +100,16 @@ $publications   = $record->getPublicationDetails();
         </tr>
     <? endif; ?>
 
-
-
-      <? $journalTitle = $this->driver->getContainerTitle(); if (!empty($journalTitle)): ?>
+    <? if (!empty($journalTitle)): ?>
       <tr>
         <th><?=$this->transEsc('Journal Title')?>:</th>
         <td>
-          <a href="<?=$this->record($this->driver)->getLink('journaltitle', $journalTitle)?>"><?=$this->escapeHtml($journalTitle)?></a>
-          <? $ref = $this->driver->getContainerReference(); if (!empty($ref)) { echo $this->escapeHtml($ref); } ?>
+          <a href="<?= $viewRecord->getLink('journaltitle', $journalTitle)?>"><?=$this->escapeHtml($journalTitle)?></a>
+          <? if (!empty($ref)) { echo $this->escapeHtml($ref); } ?>
         </td>
       </tr>
       <? endif; ?>
 
-      <? $nextTitles = $this->driver->getNewerTitles(); $prevTitles = $this->driver->getPreviousTitles(); ?>
-      <? if (!empty($nextTitles)): ?>
-      <tr>
-        <th><?=$this->transEsc('New Title')?>: </th>
-        <td>
-          <? foreach($nextTitles as $field): ?>
-            <a href="<?=$this->record($this->driver)->getLink('title', $field)?>"><?=$this->escapeHtml($field)?></a><br/>
-          <? endforeach; ?>
-        </td>
-      </tr>
-      <? endif; ?>
-
-      <? if (!empty($prevTitles)): ?>
-      <tr>
-        <th><?=$this->transEsc('Previous Title')?>: </th>
-        <td>
-          <? foreach($prevTitles as $field): ?>
-            <a href="<?=$this->record($this->driver)->getLink('title', $field)?>"><?=$this->escapeHtml($field)?></a><br/>
-          <? endforeach; ?>
-        </td>
-      </tr>
-      <? endif; ?>
-
-      <? $hostitems=$this->driver->getHostItemEntry(); ?>
       <? if ($hostitems): ?>
       <tr>
         <th><?= $this->transEsc('note_773') ?>: </th>
@@ -135,7 +122,6 @@ $publications   = $record->getPublicationDetails();
       </tr>
       <? endif; ?>
 
-      <? $cartMathData=$this->driver->getCartMathData(); ?>
       <?php if ($cartMathData): ?>
       <tr>
         <th><?= $this->transEsc('Map_Scale') ?>:</th>
@@ -143,7 +129,6 @@ $publications   = $record->getPublicationDetails();
       </tr>
       <?php endif; ?>
 
-      <? $physicalDescriptions=$this->driver->getPhysicalDescriptions(false); ?>
       <?php if ($physicalDescriptions): ?>
       <tr>
         <th><?= $this->transEsc('Physical Description') ?>:</th>
@@ -151,14 +136,14 @@ $publications   = $record->getPublicationDetails();
       </tr>
       <?php endif; ?>
 
-      <? $formats = $this->driver->getFormats(); if (!empty($formats)): ?>
+      <? if (!empty($formats)): ?>
         <tr>
           <th><?=$this->transEsc('Format')?>: </th>
-          <td><?=$this->record($this->driver)->getFormatList()?></td>
+          <td><?= $formats ?></td>
         </tr>
       <? endif; ?>
 
-      <? $edition = $this->driver->getEdition(); if (!empty($edition)): ?>
+      <? if (!empty($edition)): ?>
       <tr>
         <th><?=$this->transEsc('Edition')?>: </th>
         <td property="bookEdition"><?=$this->escapeHtml($edition)?></td>
@@ -184,30 +169,6 @@ $publications   = $record->getPublicationDetails();
       </tr>
       <? endif; ?>
 
-      <? $recordLinks = $this->driver->getAllRecordLinks(); ?>
-      <? if(!empty($recordLinks)): ?>
-        <tr>
-          <th><?=$this->transEsc('Related Items')?>:</th>
-          <td>
-            <? foreach ($recordLinks as $recordLink): ?>
-              <?=$this->transEsc($recordLink['title'])?>:
-              <a href="<?=$this->recordLink()->related($recordLink['link'])?>"><?=$this->escapeHtml($recordLink['value'])?></a><br />
-            <? endforeach; ?>
-            <? /* if we have record links, display relevant explanatory notes */
-              $related = $this->driver->getRelationshipNotes();
-              if (!empty($related)): ?>
-                <? foreach ($related as $field): ?>
-                  <?=$this->escapeHtml($field)?><br/>
-                <? endforeach; ?>
-            <? endif; ?>
-          </td>
-        </tr>
-      <? endif; ?>
-
-      <?
-         $showFRBR = $this->configAccess()->Site->displayFrbr;
-         $groupID              = $this->driver->getGroup(true);
-      ?>
       <?php if (!empty($showFRBR) && $showFRBR && !empty($groupID)) : ?>
        <tr>
          <th></th>
