@@ -11,7 +11,7 @@
   $subtitle = $viewRecord->getSubtitle($titleStatement);
   $responsible = $viewRecord->getResponsible($titleStatement, $record);
   $edition = $record->getEdition();
-  $publicationDate = $this->publicationDateMarc($record->getPublicationDates());
+  $summDate= $record->getHumanReadablePublicationDates();
   $hostitems = $record->getHostItemEntry();
   $groupID = $record->getGroup(true);
   $uniqueID = $record->getUniqueID();
@@ -77,7 +77,7 @@
         ?></a>
         <? endif; ?>
 
-        <? $journalTitle = $this->driver->getContainerTitle(); $summDate = $this->driver->getPublicationDates(); ?>
+        <? $journalTitle = $this->driver->getContainerTitle(); ?>
         <? if (!empty($journalTitle)): ?>
           <?=!empty($summAuthor) ? '<br/>' : ''?>
           <?=/* TODO: handle highlighting more elegantly here */ $this->transEsc('Published in') . ' <a href="' . $this->record($this->driver)->getLink('journaltitle', str_replace(array('{{{{START_HILITE}}}}', '{{{{END_HILITE}}}}'), '', $journalTitle)) . '">' . $this->highlight($journalTitle) . '</a>';?>

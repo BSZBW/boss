@@ -6,7 +6,7 @@ $shortTitle     = $record->getShortTitle();
 $titleStatement = $record->getTitleStatement(true);
 $subtitle       = $viewRecord->getSubtitle($titleStatement);
 $responsible    = $viewRecord->getResponsible($titleStatement, $record);
-$publications = $record->getPublicationDetails();
+$publications   = $record->getPublicationDetails();
 ?>
 
 <div class="row" vocab="http://schema.org/" resource="#record" typeof="<?=$this->driver->getSchemaOrgFormats()?> Product">

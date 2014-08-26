@@ -11,7 +11,7 @@ $shortTitle = $record->getShortTitle();
 $subtitle = $viewRecord->getSubtitle($titleStatement);
 $responsible = $viewRecord->getResponsible($titleStatement, $record);
 $edition = $record->getEdition();
-$publicationDate = $this->publicationDateMarc($record->getPublicationDates());
+$summDate= $record->getHumanReadablePublicationDates();
 $hostitems = $record->getHostItemEntry();
 $journalTitle = $record->getContainerTitle();
 $groupID = $record->getGroup(true);
@@ -66,8 +66,10 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
             <span class="hiddex-xs label"><strong><?= $this->transEsc('Published in')?>:</strong></span>
             <span><a href="<?= $viewRecord->getLink('journaltitle', $journalTitle)?>"><?= $this->escapeHtml($journalTitle)?></a></span><br />
         <? endif; ?>
+        <? if ($summDate): ?>
         <span class="hidden-xs label"><strong><?= $this->transEsc('Year') ?>:</strong></span>
-        <span><?= $this->escapeHtml($publicationDate) ?></span><br />
+        <span><?= $this->escapeHtml($summDate[0]) ?></span><br />
+        <? endif; ?>
         <? if ($edition): ?>
              <span class="hidden-xs label"><strong><?= $this->transEsc('Edition') ?>:</strong></span>
              <span><?= $this->escapeHtml($edition) ?></span><br />

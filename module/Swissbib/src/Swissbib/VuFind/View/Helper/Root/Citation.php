@@ -45,13 +45,8 @@ class Citation extends VuFindCitation
     public function __invoke($driver)
     {
         parent::__invoke($driver);
-        $pubDates = $driver->tryMethod('getPublicationDates');
-
-        if (empty($this->details['journal'])) {
-            $this->details['pubDate'] = $this->view->publicationDateMarc($pubDates);
-        } else {
-            $this->details['pubDate'] = $this->view->publicationDateSummon($pubDates);
-        }
+        $pubDates = $driver->tryMethod('getHumanReadablePublicationDates');
+        $this->details['pubDate'] = isset($pubDates[0]) ? $pubDates[0] : null;
 
         return $this;
     }

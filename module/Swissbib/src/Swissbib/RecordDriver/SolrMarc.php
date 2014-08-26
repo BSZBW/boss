@@ -126,7 +126,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
         }
 
         // Get a representative publication date, using the view helper:
-        $pubDate = $this->getServiceLocator()->get('viewrenderer')->publicationDateMarc($this->getPublicationDates());
+        $pubDate = $this->getHumanReadablePublicationDates();
 
         // Start an array of OpenURL parameters:
         $params = array(
@@ -134,7 +134,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
             'ctx_enc' => 'info:ofi/enc:UTF-8',
             'rfr_id' => "info:sid/{$coinsID}:generator",
             'rft.title' => $this->getTitle(),
-            'rft.date' => $pubDate
+            'rft.date' => isset($pubDate[0]) ? $pubDate[0] : null,
         );
 
         $this->useOpenUrlFormats = true;
@@ -862,7 +862,8 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
 
 
     /**
-     * Get years and datetype from field 008 for display
+     * Get years and datetype from field 008
+     * format in calling functions for display and/or output
      *
      * @return  Array
      */
@@ -1439,6 +1440,89 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
     }
 
     /**
+     * Get human readable publication dates for display purposes (may not be suitable
+     * for computer processing -- use getPublicationDates() for that).
+     * still using coded data for display in swissbib, reason: consistency
+     *
+     * @return array
+     */
+    public function getHumanReadablePublicationDates()
+    {
+        $codeddata = array();
+        $codeddata = $this->getPublicationDates();
+
+        if (!is_array($codeddata) || sizeof($codeddata) == 0) {
+            return '';
+        }
+
+        if (is_array($codeddata) && sizeof($codeddata) == 1) {
+            return $codeddata[0];
+        }
+
+        $retVal = array();
+
+        $dateType = $codeddata[0];
+        $year1    = $codeddata[1];
+        $year2    = $codeddata[2];
+
+        switch ($dateType)
+        {
+            case 's':
+            case 't':
+            case 'n':
+            case 'e':
+                $retVal[0] = $year1;
+                break;
+
+            case 'c':
+            case 'u':
+                $retVal[0] = $year1 . '-';
+                break;
+
+            case 'd':
+                $retVal[0] = $year1 . '-' . $year2;
+                break;
+
+            case 'p':
+            case 'r':
+                $retVal[0] = $year1 . ' [' . $year2 . ']';
+                break;
+
+            case 'q':
+                if ($year2 === '9999') {
+                    $retVal[0] = $year1;
+                }
+                elseif ($year2 != '9999') {
+                    $retVal[0] = $year1 . ' / ' . $year2;
+                }
+                break;
+
+            case 'm':
+                if ($year2 === '9999') {
+                    $retVal[0] = $year1 . '-';
+                }
+                elseif ($year2 != '9999') {
+                    $retVal[0] = $year1 . '-' . $year2;
+                }
+                break;
+
+            case 'i':
+                if ($year1 === $year2) {
+                    $retVal[0] = $year1;
+                }
+                if ($year2 === '9999') {
+                    $retVal[0] = $year1 . '-';
+                }
+                else {
+                    $retVal[0] = $year1 . '-' . $year2;
+                }
+                break;
+        }
+        $retVal[0] = str_replace('u', '?', $retVal);
+        return $retVal[0];
+    }
+
+    /**
      * Get physical description out of the MARC record
      *
      * @param    Boolean $asStrings
@@ -1473,7 +1557,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
      *
      * return @array
      */
-    public function getContResourceDates()
+    public function getDateSpan()
     {
         return $this->getFieldArray('362');
     }
