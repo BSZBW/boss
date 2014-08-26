@@ -194,8 +194,18 @@ class Summon extends VuFindSummon implements SwissbibRecordDriver
      */
     public function getCartMathData()
     {
-        // TODO: Implement getCartMathData() method.
+        return null;
     }
+
+    /**
+     * Get highlighted fulltext
+     *
+     * @return    String
+     */
+    public function getHighlightedFulltext() {
+        return null;
+    }
+
 
     /**
      * get group-id from solr-field to display FRBR-Button
