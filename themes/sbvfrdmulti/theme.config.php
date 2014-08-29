@@ -1,8 +1,9 @@
 <?php
 return array(
-  'extends' => 'sbvfrd',
+    'extends' => 'sbvfrd',
 
-  'css'	=> array(
-    'orange.css',
-  )
+    'less' => array(
+        'active' => false,
+        'compiled.less'
+    ),
 );

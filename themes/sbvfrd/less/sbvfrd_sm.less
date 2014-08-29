@@ -1,21 +1,28 @@
 @media (min-width: 768px) {
-  header .form-control {
-    min-width: 721px;
-    max-width: 721px;
+  header {
+    .form-control {
+      min-width: 721px;
+      max-width: 721px;
+    }
+    .searchbox {
+      margin-left: -13px;
+    }
   }
 
-  header .searchbox {
-    margin-left: -13px;
+  .main {
+    & > .container {
+      & > .row {
+        margin-left: 0;
+        margin-right: 0;
+      }
+    }
   }
 
-  .main > .container > .row {
-    margin-left: 0;
-    margin-right: 0;
-  }
-
-  .container > .navbar-header {
-    margin-left: 0;
-    margin-right: -15px;
+  .container {
+    & > .navbar-header {
+      margin-left: 0;
+      margin-right: -15px;
+    }
   }
 
   .navbar {
@@ -31,17 +38,17 @@
     overflow-y: scroll;
   }
 
-  #hierarchyTree a.jstree-anchor {
-    padding-left: 40px;
-    text-indent: -40px;
-    white-space: normal;
-    height: auto;
+  #hierarchyTree {
+    a.jstree-anchor {
+      padding-left: 40px;
+      text-indent: -40px;
+      white-space: normal;
+      height: auto;
+    }
   }
 }
 
-
 @media (min-width: 768px) and (max-width: 992px) {
-
   /* off canvas implementation */
   #sidebar-offcanvas-trigger {
     height: 40px;
@@ -88,11 +95,10 @@
     overflow-x: hidden;
   }
 
-  .sidebar.transition,
-  body,
-  #sidebar-offcanvas-trigger {
+  .sidebar.transition, body, #sidebar-offcanvas-trigger {
     -webkit-transition: right .3s ease-in;
     -moz-transition: right .3s ease-in;
     transition: right .3s ease-in;
   }
+
 }

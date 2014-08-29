@@ -2,15 +2,9 @@
 return array(
     'extends' => 'bootstrap3',
 
-    'css' => array(
-        'sbvfrd.css',
-        'sbvfrd_xs.css',
-        'sbvfrd_sm.css',
-        'sbvfrd_md.css',
-        'sbvfrd_lg.css',
-        'search_home.css',
-        'search_controls.css',
-        'results.css'
+    'less' => array(
+        'active' => false,
+        'compiled.less'
     ),
 
     'js' => array(

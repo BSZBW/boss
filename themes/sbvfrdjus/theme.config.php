@@ -2,7 +2,8 @@
 return array(
     'extends' => 'sbvfrdmulti',
 
-    'css' => array(
-        'jus.css'
+    'less' => array(
+        'active' => false,
+        'compiled.less'
     ),
 );

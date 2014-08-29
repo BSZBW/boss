@@ -4,9 +4,11 @@
     margin-left: 0;
   }
 
-  .container > .navbar-header {
-    margin-left: 0;
-    margin-right: 0;
+  .container {
+    & > .navbar-header {
+      margin-left: 0;
+      margin-right: 0;
+    }
   }
 
   .navbar {
@@ -17,12 +19,15 @@
     color: #fff;
   }
 
-  .nav.nav-tabs > li > a {
-    padding: 5px 7px;
+  .nav.nav-tabs {
+    & > li {
+      & > a {
+        padding: 5px 7px;
+      }
+    }
   }
 
-  .searchHomeContent .well,
-  .searchHomeContent > [class^=col-] {
+  .searchHomeContent .well, .searchHomeContent & > [class^=col-] {
     margin: 15px 10px 10px 15px;
   }
 
@@ -41,52 +46,44 @@
     padding-right: 1px;
   }
 
-  .dropdown-menu > li > a {
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-
   .dropdown-menu {
     width: 100%;
+    & > li {
+      & > a {
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+    }
   }
 
   .btn-frbr {
     width: 100%;
     overflow: hidden;
-  }
-
-  .btn-frbr > span {
-    text-overflow: ellipsis;
-  }
-
-  .icon_show {
-    background-image: url(../images/icon_show.gif);
-    background-position: 8px 8px;
-    background-repeat: no-repeat;
-    height: 30px;
-    width: 30px;
+    & > span {
+      text-overflow: ellipsis;
+    }
   }
 
   ul.dropdown-menu {
     width: 200%;
+    & > li {
+      & > a {
+        overflow-x: hidden;
+        white-space: normal;
+        padding: 10px 10px;
+      }
+    }
   }
 
   ul[aria-labelledby=dropdownLibraries] {
-     position: fixed;
-     max-height: 80%;
-     max-width: 80%;
-     top: 10%;
-     left: 10%;
-     overflow-y: scroll;
+    position: fixed;
+    max-height: 80%;
+    max-width: 80%;
+    top: 10%;
+    left: 10%;
+    overflow-y: scroll;
   }
 
-  ul.dropdown-menu > li > a {
-     overflow-x: hidden;
-     white-space: normal;
-     padding: 10px 10px;
-  }
-
-  /* off canvas implementation */
   #sidebar-offcanvas-trigger {
     height: 40px;
     width: 13%;
@@ -132,9 +129,7 @@
     overflow-x: hidden;
   }
 
-  .sidebar.transition,
-  body,
-  #sidebar-offcanvas-trigger {
+  .sidebar.transition, body, #sidebar-offcanvas-trigger {
     -webkit-transition: right .3s ease-in;
     -moz-transition: right .3s ease-in;
     transition: right .3s ease-in;
@@ -143,4 +138,5 @@
   a.advancedSearchLink {
     display: none;
   }
+
 }

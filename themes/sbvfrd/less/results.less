@@ -1,0 +1,102 @@
+.row.result {
+  padding-top: 30px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #ccc;
+  .btn-group-vertical {
+    max-width: 116%;
+    min-width: 116%;
+    .btn {
+      & > span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+  & > .col-xs-11 {
+    width: 99%;
+  }
+  i {
+    color: @theme-color;
+    margin-left: -5px;
+    margin-right: 7px;
+  }
+  .btn {
+    text-align: left;
+    overflow-x: hidden;
+  }
+  h2 {
+    margin-top: 0;
+    & > a {
+      font-size: 20px;
+      font-weight: 600;
+    }
+  }
+  a {
+    text-decoration: none;
+  }
+  h3 {
+    font-size: 14px;
+    margin-top: 0;
+  }
+  .meta {
+    .label {
+      color: #3c4250;
+      text-align: left;
+      display: inline-block;
+      min-width: 33%;
+      max-width: 33%;
+    }
+    span {
+      margin-right: 20px;
+    }
+  }
+  .snippet {
+    font-size: 13px;
+    padding: 4px 0;
+  }
+}
+
+.row.result:last-child {
+  border-bottom: none;
+}
+
+.resultView {
+  .row.result {
+    & > label {
+      display: none;
+    }
+  }
+}
+
+.row.result .meta span, .row.result .meta a {
+  padding: 5px 4px 5px 0;
+}
+
+.searchtools {
+  a:after {
+    content: "\2014"; /*&mdash;*/
+  }
+  a:last-child:after {
+    content: '';
+  }
+}
+
+@media (min-width: 992px) {
+  .row.result > .col-xs-11 {
+    width: 98%;
+  }
+}
+
+@media (min-width: 768px) {
+  .row.result {
+    & > .col-xs-11 {
+      width: 97%;
+    }
+    .meta {
+      .label {
+        max-width: 50%;
+        min-width: 50%;
+      }
+    }
+  }
+}
