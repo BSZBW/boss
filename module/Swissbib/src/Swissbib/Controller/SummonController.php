@@ -14,7 +14,9 @@ class SummonController extends VuFindSummonController
      * Get date range settings for summon
      * Field is named PublicationDate instead publishDate
      *
-     * @param    Boolean        $savedSearch
+     * @param   Boolean    $savedSearch
+     * @param   String     $config
+     * @param   Array      $filter
      * @return    Array
      */
     protected function getDateRangeSettings($savedSearch = false, $config = 'facets',
@@ -57,9 +59,13 @@ class SummonController extends VuFindSummonController
         $cache = $this->getServiceLocator()->get('VuFind\CacheManager')
                 ->getCache('object');
 
-        $tresults = $this->getResultsManager()->get('Summon');
-        $tparams  = $tresults->getParams();
-        $tOptions =  $tparams->getOptions();
+        /**
+         * Loads the Summon Results object. This is necessary because otherwise it would fail to load the object
+         * from cache.
+         */
+        $loadResults = $this->getResultsManager()->get('Summon');
+        $loadParams  = $loadResults->getParams();
+        $loadParams->getOptions();
 
         if (!($results = $cache->getItem('summonSearchAdvancedFacets'))) {
             $results = $this->getResultsManager()->get('Summon');
@@ -163,9 +169,13 @@ class SummonController extends VuFindSummonController
         $cache = $this->getServiceLocator()->get('VuFind\CacheManager')
             ->getCache('object');
 
-        $tresults = $this->getResultsManager()->get('Summon');
-        $tparams  = $tresults->getParams();
-        $tOptions =  $tparams->getOptions();
+        /**
+         * Loads the Summon Results object. This is necessary because otherwise it would fail to load the object
+         * from cache.
+         */
+        $loadResults = $this->getResultsManager()->get('Summon');
+        $loadParams  = $loadResults->getParams();
+        $loadParams->getOptions();
 
         if (!($results = $cache->getItem($cacheName))) {
             // Use advanced facet settings to get summary facets on the front page;
