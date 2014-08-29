@@ -15,97 +15,106 @@ h1, h2, h3, h4 {
 }
 
 h1 { font-size: 26px; }
-h2 { font-size: 20px; color: #106ca0; }
+h2 { font-size: 20px; color: #373737; }
 h3 { margin-top: 10px; }
-h4 { color: #106ca0; }
+h4 { color: #373737; }
 
 h4.resultViewSubTitle {
   margin-top: 0;
 }
 
-a { color: #106CA0; text-decoration: none; }
-a:hover { color: #3C4250; text-decoration: none; }
+a, .btn-link { color: #0d785b; text-decoration: none; }
+a:hover, .btn-link:hover { color: #0d785b; text-decoration: none; }
+a:before {content: "\00BB"; margin-right: 5px}
+p > a:before {content: ""; margin-right: 0}
+.btn-link {font-weight: bold;}
 
+/* btn styles */
+.btn-primary,
+.pager li > a, .pager li > span,
+.pager li > a:hover, .pager li > a:focus {
+  color: #fff;
+  background-color: #0d785b;
+  border-color: #0d785b;
+  border-radius: 2px;
+  text-decoration: none;
+}
 
-/* Tab Navigation */
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:focus {
+  background-color: #fff;
+  border-color: #fff;
+  color: #0d785b;
+}
+
+a.btn-link:before {
+  font-weight: bold;
+}
+
+.input-group-addon, .input-group-btn {
+  width: 0;
+}
+
+/* Header */
 header {
-  min-height: 87px;
+  min-height: 170px;
 }
 
 header ul[role="navigation"] {
   margin-top: 20px;
 }
 
-.searchHomeContent .nav.nav-tabs,
-header .nav.nav-tabs {
-  border-bottom: 0;
-  margin-bottom: 5px;
-}
-
-.searchHomeContent .nav.nav-tabs li.active a,
-header .nav.nav-tabs li.active a {
-  border-bottom-color: #ddd;
-}
-
-header .nav > li > a:hover,
-header .nav > li > a:focus,
-header .nav .open > a,
-header .nav .open > a:focus,
-header .nav .open > a:hover {
+header .btn-link {
   background-color: transparent;
   color: #fff;
-  font-weight: 600;
 }
 
-
- /*triangle under the tab*/
-.searchHomeContent .nav.nav-tabs li.active:after,
-header .nav.nav-tabs li.active:after{
-  content: '';
-  border: 9px solid transparent;
-  width: 0;
-  height: 0;
-  border-top-color: #fff;
-  position: absolute;
-  top: 80%;
-  left: 44%;
+header .btn-link:hover {
+  text-decoration: none;
+  color: #fff;
 }
 
-/*triangle under the tab*/
-.searchHomeContent .nav.nav-tabs li.active a:after,
-header .nav.nav-tabs li.active a:after {
-  content: '';
-  border: 10px solid transparent;
-  width: 0;
-  height: 0;
-  border-top-color: #ddd;
-  position: absolute;
-  top: 99%;
-  left: 44%;
-}
-
-.searchHomeContent .nav.nav-tabs > li > a,
-header .nav.nav-tabs > li > a {
-  font-weight: 600;
-  color: #106ca0;
-  padding: 5px 15px;
-  margin-bottom: 5px;
+/* Tab Navigation */
+.searchHomeContent .nav.nav-tabs,
+header .nav.nav-tabs {
+  border: none;
+  margin-bottom: 8px;
 }
 
 header .nav.nav-tabs > li > a {
   color: #fff;
+  background-color: #0d785b;
+  border: none;
+  border-radius: 2px;
+  margin-right: 8px;
 }
 
-header .nav.nav-tabs > li > a:hover {
-  color: #106ca0;
-  text-decoration: none;
+header .nav.nav-tabs > li > a:before {
+  content: '';
+  margin-right: 0;
 }
 
-.searchHomeContent .nav.nav-tabs > li.active > a,
-.searchHomeContent .nav.nav-tabs > li.active > a:hover,
-header .nav.nav-tabs > li.active > a,
-header .nav.nav-tabs > li.active > a:hover {
-  color: #3c4250;
+header .nav-tabs > li > a:hover,
+header .nav-tabs > li > a:focus,
+header .nav-tabs > li.active > a,
+header .nav-tabs > li.active > a:focus,
+header .nav-tabs > li.active > a:hover {
+  color: #0d785b;
+  background-color: #fff;
+  border: none;
+  font-weight: bold;
+}
+
+header .input-group-btn .btn-primary {
+  min-width: 0;
+  width: 37px;
+  border-radius: 0 2px 2px 0;
+  padding: 5px 0;
+}
+
+header .input-group-btn .btn-primary i {
+  font-size: 16pt;
 }
 
 
@@ -118,19 +127,6 @@ header .nav.nav-tabs > li.active > a:hover {
 .well .navbar-form .form-control {
   width: 100%;
 }
-
-
-/* btn styles */
-.btn-primary, .btn-link, .btn-primary:hover, .btn-link:hover,
-.pager li > a, .pager li > span,
-.pager li > a:hover, .pager li > a:focus {
-  color: #fff;
-  background-color: #3C4250;
-  border-color: #3C4250;
-  border-radius: 4px;
-  text-decoration: none;
-}
-
 
 /* lists */
 .list-group-item {
@@ -211,9 +207,9 @@ header a {
 
 .navbar-brand {
   text-indent: -9999px;
-  height: 87px;
-  width: 138px;
-  background: transparent url(../images/logo.png) no-repeat 0 20px;
+  height: 170px;
+  width: 240px;
+  background: transparent url(../images/logo2.png) no-repeat 0 20px;
 }
 
 .container > .navbar-header {

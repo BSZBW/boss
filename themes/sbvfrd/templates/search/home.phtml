@@ -2,8 +2,7 @@
   // Set page title.
   $this->headTitle($this->translate('Search Home'));
 
-  // Disable top search box -- this page has a special layout.
-  $this->layout()->searchbox = false;
+//$this->layout()->searchbox = true;
 
   // Set default value if necessary:
   if (!isset($this->searchClassId)) {
@@ -16,6 +15,10 @@
   $advSearch = $options->getAdvancedSearchAction();
 
   $this->layout()->breadcrumbs = false;
+
+  if (!isset($this->layout()->searchbox)) {
+    $this->layout()->searchbox = $this->render('search/searchbox.phtml');
+  }
 ?>
 <div class="searchHomeContent">
   <? if ($this->ils()->getOfflineMode() == "ils-offline"): ?>
@@ -27,9 +30,6 @@
       <p><a href="mailto:<?=$supportEmail?>"><?=$supportEmail?></a></p>
     </div>
   <? endif; ?>
-  <div class="well well-lg clearfix">
-    <?=$this->render("search/searchbox.phtml")?>
-  </div>
 </div>
 
 <div class="row searchHomeContent">
@@ -75,7 +75,7 @@
         <? else: ?>
           <? $i = 0; foreach ($sortedList as $url => $value): ?>
             <? if (++$i > 10): ?>
-              <li><a href="<?=$this->url($advSearch)?>" class="advancedSearchLink"><strong><?=$this->transEsc("More options")?>...</strong></a></li>
+              <li><a href="<?=$this->url($advSearch)?>" class="advancedSearchLink btn-link"><?=$this->transEsc("More options")?>...</a></li>
               <? break; ?>
             <? elseif (!empty($value)): ?>
               <li><a href="<?=$url?>"><?=$this->escapeHtml($value)?></a></li>
