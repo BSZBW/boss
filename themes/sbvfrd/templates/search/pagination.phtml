@@ -1,0 +1,18 @@
+<? if ($this->pageCount): ?>
+
+   <?=$this->render('search/controls/count.phtml'); ?>
+
+  <ul class="pagination">
+    <? if (isset($this->previous)): ?>
+        <li><a href="<?=$this->currentPath() . $this->results->getUrlQuery()->setPage($this->previous)?>"><i class="fa fa-caret-left"></i></a></li>
+    <? endif; ?>
+
+    <li>
+        <a><?= $this->current ?> <?= $this->transEsc('of') ?> <?= $this->pageCount ?></a>
+    </li>
+
+    <? if (isset($this->next)): ?>
+        <li><a href="<?=$this->currentPath() . $this->results->getUrlQuery()->setPage($this->next)?>"><i class="fa fa-caret-right"></i></a></li>
+    <? endif; ?>
+  </ul>
+<? endif; ?>
