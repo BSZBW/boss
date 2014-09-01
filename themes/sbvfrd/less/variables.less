@@ -4,3 +4,34 @@
 /* colors */
 @theme-color: #50BF9E;
 @link-color: #0D785B;
+
+@content-box-background-color: #f7f7f7;
+@content-box-border-color: #ccc;
+
+@white: #fff;
+
+
+/* Mixins */
+.tab {
+  color: @white;
+  text-align: center;
+  background-color: @link-color;
+  width: 150px;
+  margin-bottom: 1px;
+  padding: 4px 0;
+  border: solid @white;
+  border-width: 0 0 1px 1px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+}
+
+
+.tab-active {
+  color: @link-color;
+  font-weight: bold;
+  background-color: @white;
+  margin-bottom: 0;
+  border: 1px solid @content-box-border-color;
+  border-bottom-color: @white;
+}
+
