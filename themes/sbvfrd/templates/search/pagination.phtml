@@ -4,6 +4,9 @@
        <?=$this->render('search/controls/count.phtml'); ?>
 
       <ul class="pagination">
+        <li class="hidden-sm hidden-xs">
+            <a href="#"><?= $this->transEsc('pagination.page') ?>:</a>
+        </li>
         <? if (isset($this->previous)): ?>
             <li><a href="<?=$this->currentPath() . $this->results->getUrlQuery()->setPage($this->previous)?>"><i class="fa fa-caret-left"></i></a></li>
         <? else: ?>
