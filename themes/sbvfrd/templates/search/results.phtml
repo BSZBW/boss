@@ -50,11 +50,7 @@
   <?=$this->flashmessages()?>
   <div class="hidden-print search-controls clearfix row">
     <div class="col-lg-8 col-md-7 col-sm-7">
-      <? if ($recordTotal > 0): ?>
-        <?=$this->render('search/controls/count.phtml')?>
-      <? else: ?>
-          <p class="lead"><?=$this->transEsc('nohit_heading')?></p>
-      <? endif; ?>
+        <?= $this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', array('results' => $this->results, 'recordTotal' => $recordTotal, 'params' => $this->params, 'lookfor' => $this->lookfor)) ?>
     </div>
 
     <? if ($recordTotal > 0): ?>
@@ -90,7 +86,7 @@
       <?=$this->context($this)->renderInContext('search/bulk-action-buttons.phtml', array('idPrefix' => ''))?>
       <?=$this->render('search/list-' . $this->params->getView() . '.phtml')?>
       <?=$this->context($this)->renderInContext('search/bulk-action-buttons.phtml', array('idPrefix' => 'bottom_'))?>
-      <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', array('results' => $this->results))?>
+      <?= $this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', array('results' => $this->results, 'recordTotal' => $recordTotal, 'params' => $this->params, 'lookfor' => $this->lookfor)) ?>
     </form>
 
     <div class="searchtools hidden-print">
