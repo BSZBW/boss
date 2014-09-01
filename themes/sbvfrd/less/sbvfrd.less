@@ -422,3 +422,61 @@ footer {
     }
   }
 }
+
+.slider {
+  &.slider-horizontal {
+    height: 40px !important;
+  }
+
+  & .slider-track {
+    border: solid @link-color;
+    border-width: 0 0 1px 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    height: 14px !important;
+    margin-top: -10px !important;
+
+    & .slider-selection {
+      background: none;
+      box-shadow: none;
+    }
+
+    & .slider-handle,
+    & .slider-handle:active,
+    & .slider-handle:focus,
+    & .slider-handle:hover {
+      opacity: 1;
+      background-color: @link-color;
+      border-radius: 2px;
+      border: none;
+      text-align: center;
+      letter-spacing: 3px;
+      text-indent: 3px;
+      font-size: 16px;
+      vertical-align: middle;
+      height: auto;
+      width: auto;
+      padding: 1px 3px;
+      margin-top: 0 !important;
+
+      &:before {
+        content: "\f0d9 \f0da";
+        font-family: FontAwesome;
+        color: @white;
+      }
+
+      &[style*="0%"] {
+        min-width: 27px;
+
+        &:before {
+          content: "\f0da";
+        }
+      }
+
+      &[style*="100%"]:before {
+        content: "\f0d9";
+      }
+    }
+  }
+}
