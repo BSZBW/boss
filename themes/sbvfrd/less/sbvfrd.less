@@ -425,10 +425,6 @@ footer {
 
 /* pagination */
 .pagination-container {
-  &:last-child {
-    margin-top: 10px;
-  }
-
   & .pagination {
     & > li {
       & > a {
@@ -447,14 +443,22 @@ footer {
           background-color: @link-color;
           color: @white;
         }
+
+        & > i {
+          cursor: pointer;
+        }
       }
 
       &.inactive > a {
         background-color: @theme-color;
+        cursor: default;
 
         &:hover {
           background-color: @theme-color;
-          cursor: normal;
+        }
+
+        & > i {
+          cursor: default;
         }
       }
 
@@ -473,6 +477,7 @@ footer {
           border-top: 0px;
           border-bottom: 0px;
           width: 110px;
+          cursor: default;
 
           &:hover {
             background-color: none;
