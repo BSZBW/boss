@@ -45,12 +45,8 @@
     <div class="resultItemLine1">
       <a href="<?=$this->recordLink()->getUrl($this->driver)?>">
       <?
-        $summHighlightedTitle = $this->driver->getHighlightedTitle();
-        $summTitle = $this->driver->getTitle();
-        if (!empty($summHighlightedTitle)) {
-            echo $this->highlight($this->addEllipsis($summHighlightedTitle, $summTitle));
-        } else if (!empty($summTitle)) {
-            echo $this->escapeHtml($this->truncate($summTitle, 180));
+        if (!empty($shortTitle)) {
+            echo $this->escapeHtml($shortTitle);
         } else {
             echo $this->transEsc('Title not available');
         }
@@ -59,83 +55,40 @@
 
     <div class="meta">
        <? if (isset($subtitle)): ?>
-        <?= $this->escapeHtml($subtitle) ?>
+        <?= $this->escapeHtml($subtitle) ?><br />
        <? endif; ?>
+        <? if ($responsible): ?>
+            <span class="hidden-xs"><strong><?= $this->transEsc('Author') ?>:</strong></span>
+            <span>
+                <?= $this->escapeHtml($responsible) ?>
+            </span><br />
+        <? endif; ?>
     </div>
 
-    <div class="resultItemLine2">
-      <? if($this->driver->isCollection()): ?>
-        <?=implode('<br/>', $this->driver->getSummary()); ?>
-      <? else: ?>
-        <? $summAuthor = $this->driver->getPrimaryAuthor(); if (!empty($summAuthor)): ?>
-        <?=$this->transEsc('by')?>
-        <a href="<?=$this->record($this->driver)->getLink('author', $summAuthor)?>"><?
-          $summHighlightedAuthor = $this->driver->getHighlightedAuthor();
-          echo !empty($summHighlightedAuthor)
-              ? $this->highlight($summHighlightedAuthor)
-              : $this->escapeHtml($summAuthor);
-        ?></a>
+    <!-- Zeitschriftentitel, Erscheinungsjahr -->
+    <div class="meta">
+        <? if ($hostitems): ?>
+            <? foreach ($hostitems as $hostitem): ?>
+                <span class="hidden-xs label"><strong><?= $this->transEsc('note_773') ?>:</strong></span>
+                <? $text = array_key_exists('related', $hostitem) ? $hostitem['title'] . ', ' . $hostitem['related'] : $hostitem['title'] ?>
+                <span><?= $this->escapeHtml($text) ?></span><br />
+            <? endforeach; ?>
         <? endif; ?>
-
-        <? $journalTitle = $this->driver->getContainerTitle(); ?>
-        <? if (!empty($journalTitle)): ?>
-          <?=!empty($summAuthor) ? '<br/>' : ''?>
-          <?=/* TODO: handle highlighting more elegantly here */ $this->transEsc('Published in') . ' <a href="' . $this->record($this->driver)->getLink('journaltitle', str_replace(array('{{{{START_HILITE}}}}', '{{{{END_HILITE}}}}'), '', $journalTitle)) . '">' . $this->highlight($journalTitle) . '</a>';?>
-          <?=!empty($summDate) ? ' (' . $this->escapeHtml($summDate[0]) . ')' : ''?>
-        <? elseif (!empty($summDate)): ?>
-          <?=!empty($summAuthor) ? '<br/>' : ''?>
-          <?=$this->transEsc('Published') . ' ' . $this->escapeHtml($summDate[0])?>
+        <? if ($journalTitle): ?>
+            <span class="hiddex-xs label"><strong><?= $this->transEsc('Published in')?>:</strong></span>
+            <span><a href="<?= $viewRecord->getLink('journaltitle', $journalTitle)?>"><?= $this->escapeHtml($journalTitle)?></a></span><br />
         <? endif; ?>
-        <? $summInCollection = $this->driver->getContainingCollections(); if (false && !empty($summInCollection)): ?>
-          <? foreach ($summInCollection as $collId => $collText): ?>
-            <div>
-              <b><?=$this->transEsc("in_collection_label")?></b>
-              <a class="collectionLinkText" href="<?=$this->url('collection', array('id' => $collId))?>?recordID=<?=urlencode($this->driver->getUniqueID())?>">
-                <?=$this->escapeHtml($collText)?>
-              </a>
-            </div>
-          <? endforeach; ?>
+        <? if ($summDate): ?>
+            <span class="hidden-xs label"><strong><?= $this->transEsc('Year') ?>:</strong></span>
+            <span><?= $this->escapeHtml($summDate[0]) ?></span><br />
         <? endif; ?>
-      <? endif; ?>
+        <? if ($edition): ?>
+            <span class="hidden-xs label"><strong><?= $this->transEsc('Edition') ?>:</strong></span>
+            <span><?= $this->escapeHtml($edition) ?></span><br />
+        <? endif; ?>
     </div>
 
     <div class="last">
-    <? if(!$this->driver->isCollection()) {
-        if ($snippet = $this->driver->getHighlightedSnippet()) {
-          if (!empty($snippet['caption'])) {
-            echo '<strong>' . $this->transEsc($snippet['caption']) . ':</strong> ';
-          }
-          if (!empty($snippet['snippet'])) {
-            echo '<span class="quotestart">&#8220;</span>...' . $this->highlight($snippet['snippet']) . '...<span class="quoteend">&#8221;</span><br/>';
-          }
-        }
-      } ?>
-
-      <?
-      /* Display information on duplicate records if available */
-      $dedupData = $this->driver->getDedupData();
-      if ($dedupData): ?>
-      <div class="dedupInformation">
-      <?
-        $i = 0;
-        foreach ($dedupData as $source => $current) {
-          if (++$i == 1) {
-            ?><span class="currentSource"><a href="<?=$this->recordLink()->getUrl($this->driver)?>"><?=$this->transEsc("source_$source", array(), $source)?></a></span><?
-          } else {
-            if ($i == 2) {
-              ?> <span class="otherSources">(<?=$this->transEsc('Other Sources')?>: <?
-            } else {
-              ?>, <?
-            }
-            ?><a href="<?=$this->recordLink()->getUrl($current['id'])?>"><?=$this->transEsc("source_$source", array(), $source)?></a><?
-          }
-        }
-        if ($i > 1) {
-          ?>)</span><?
-        }?>
-      </div>
-      <? endif; ?>
-
     <? $listTags = ($this->usertags()->getMode() !== 'disabled') ? $this->driver->getTags(
         $list_id, // get tags for all lists if no single list is selected
         $user_id, 'tag'
@@ -162,51 +115,16 @@
         <? endforeach; ?>
         <br/>
     <? endif; ?>
-      <div class="callnumAndLocation">
-        <? if ($this->driver->supportsAjaxStatus()): ?>
-          <strong class="hideIfDetailed"><?=$this->transEsc('Call Number')?>:</strong>
-          <span class="callnumber ajax-availability hidden">
-            <?=$this->transEsc('Loading')?>...
-          </span><br class="hideIfDetailed"/>
-          <strong><?=$this->transEsc('Located')?>:</strong>
-          <span class="location ajax-availability hidden">
-            <?=$this->transEsc('Loading')?>...
-          </span>
-          <div class="locationDetails hidden"></div>
-        <? else: ?>
-          <? $summCallNo = $this->driver->getCallNumber(); if (!empty($summCallNo)): ?>
-            <strong><?=$this->transEsc('Call Number')?>:</strong> <?=$this->escapeHtml($summCallNo)?>
-          <? endif; ?>
-        <? endif; ?>
-      </div>
 
-      <div class="meta">
-        <? if ($hostitems): ?>
-           <? foreach ($hostitems as $hostitem): ?>
-               <span class="hidden-xs"><strong><?= $this->transEsc('note_773') ?>:</strong></span>
-               <? $text = array_key_exists('related', $hostitem) ? $hostitem['title'] . ', ' . $hostitem['related'] : $hostitem['title'] ?>
-               <span><?= $this->escapeHtml($text) ?></span><br/>
-           <? endforeach; ?>
-        <? endif; ?>
-        <span class="hidden-xs"><strong><?= $this->transEsc('Year') ?>:</strong></span>
-        <span><?= $this->escapeHtml($publicationDate) ?></span><br />
-        <? if ($edition): ?>
-           <span class="hidden-xs"><strong><?= $this->transEsc('Edition') ?>:</strong></span>
-           <span><?= $this->escapeHtml($edition) ?></span><br />
-        <? endif; ?>
-
-        <? if ($responsible): ?>
-            <span class="hidden-xs"><strong><?= $this->transEsc('Author') ?>:</strong></span>
-            <span>
-                <?= $this->escapeHtml($responsible) ?>
-            </span><br/>
-        <? endif; ?>
-       </div>
-
-      <? /* We need to find out if we're supposed to display an OpenURL link ($openUrlActive),
+        <?
+        $openUrl = $this->driver->openURLActive('record') ? $this->driver->getOpenURL() : false;
+        // Account for replace_other_urls setting
+        $urls = ($openUrl && $this->driver->replaceURLsWithOpenURL()) ? array() : $this->record($this->driver)->getLinkDetails();
+        ?>
+    <? /* We need to find out if we're supposed to display an OpenURL link ($openUrlActive),
             but even if we don't plan to display the link, we still want to get the $openUrl
             value for use in generating a COinS (Z3988) tag -- see bottom of file.
-          */
+
         $openUrl = $this->driver->getOpenURL();
         $openUrlActive = $this->driver->openURLActive('results');
         $urls = $this->record($this->driver)->getLinkDetails();
@@ -229,7 +147,7 @@
               <a href="<?=$this->escapeHtmlAttr($this->proxyUrl($current['url']))?>" class="fulltext" target="new"><i class="fa fa-external-link"></i> <?=($current['url'] == $current['desc']) ? $this->transEsc('Get full text') : $this->escapeHtml($current['desc'])?></a>
             <? endforeach; ?>
           <? endif; ?>
-        <? endif; ?>
+        <? endif; */?>
       <br/>
       <?=str_replace('class="', 'class="label label-info ', $this->record($this->driver)->getFormatList())?>
 
@@ -259,5 +177,5 @@
       </ul>
     </div>
   </div>
-  <?=$openUrl?'<span class="Z3988" title="'.$this->escapeHtmlAttr($openUrl).'"></span>':''?>
+    <span class="Z3988" title="<?= $this->escapeHtml($record->getOpenURL()) ?>"></span>
 </div>
