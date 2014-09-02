@@ -366,13 +366,30 @@ $prevTitles  = $record->getPreviousTitles();
     <? /** == Schlagworte */ ?>
     <? if($subjectVocabularies): ?>
     <? $contentDisplayed = true; ?>
-    <th><?= $this->transEsc('Subjects') ?>: </th>
-        <td>
-            more follows ...
-        </td>
+    <? /* ohne allgemeine Überschrift, Design @todo
+    <th><?= $this->transEsc('Subjects') ?></th>
+    */ ?>
+    <? foreach ($subjectVocabularies as $vocabulary => $fieldsData): ?>
+        <tr>
+            <th><?= $this->transEsc('vocabulary.' . $vocabulary, array(), $vocabulary) ?>: </th>
+            <td>
+            <? foreach ($fieldsData as $fieldIndex => $fieldData): ?>
+                <? foreach ($fieldData as $fieldValues): ?>
+                    <? /* Optional: Filter out numeric fields directly here in template
+                          $fieldValues = array_filter($fieldValues, function($value) {
+                             return !is_numeric($value);
+                          }); */ ?>
+                        <?= $this->escapeHtml(implode(' > ', $fieldValues)) ?><br />
+                    <? endforeach; ?>
+                <? endforeach; ?>
+            </td>
+        </tr>
+    <? endforeach; ?>
     <? endif; ?>
 
-  <? if (!isset($contentDisplayed) || !$contentDisplayed): // Avoid errors if there were no rows above ?>
-    <tr><td><?=$this->transEsc('no_description')?></td></tr>
+    <? if (!isset($contentDisplayed) || !$contentDisplayed): // Avoid errors if there were no rows above ?>
+    <tr>
+        <td><?=$this->transEsc('no_description')?></td>
+    </tr>
   <? endif; ?>
 </table>
