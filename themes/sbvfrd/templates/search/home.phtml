@@ -55,8 +55,8 @@ if (!isset($this->layout()->searchbox)) {
       <div class="<?= $field == 'callnumber-first' ? 'col-sm-6' : 'col-sm-6 col-md-4' ?>">
         <div class="row">
           <div class="home-content-box">
-            <h2 class="lead col-sm-12"><?= $this->transEsc('home_browse') . ' ' . $this->transEsc($details['label']) ?></h2>
-            <ul class="list-unstyled <?= $field == "callnumber-first" ? 'col-sm-6' : 'col-sm-12' ?>">
+            <h2 class="lead"><?= $this->transEsc('home_browse') . ' ' . $this->transEsc($details['label']) ?></h2>
+            <ul class="list-unstyled">
               <? /* Special case: two columns for LC call numbers... */ ?>
               <? if ($field == "callnumber-first"): ?>
               <? $i = 0;

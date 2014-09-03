@@ -1,13 +1,30 @@
 @media (max-width: 767px) {
-  .row {
-    margin-right: 0;
-    margin-left: 0;
-  }
 
   .container {
     & > .navbar-header {
       margin-left: 0;
       margin-right: 0;
+    }
+  }
+
+  .home-content-box {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  footer {
+    h2, ul, a, span {
+      max-width: 95%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    a, span {
+      display: block;
+
+      &.copyright {
+        margin-bottom: 14px;
+      }
     }
   }
 

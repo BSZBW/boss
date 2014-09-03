@@ -1,5 +1,6 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,700);
 
+
 * {
   font-family: 'Open Sans', sans-serif;
   font-size: 14px;
@@ -7,6 +8,11 @@
 
 body {
   color: #3C4250;
+  background-color: @footer-background-color;
+}
+
+div.main {
+  background-color: @white;
 }
 
 h1, h2, h3, h4 {
@@ -195,15 +201,6 @@ header {
       }
     }
   }
-}
-
-/* well stuff */
-.well-lg {
-  padding: 19px 13px;
-}
-
-.well .navbar-form, .well .navbar-form .form-control {
-  width: 100%;
 }
 
 /* lists */
@@ -399,6 +396,51 @@ div.memorize {
   }
 }
 
+.searchHomeContent {
+  & > div[class^="col-"] {
+
+    &:last-child {
+      .home-content-box {
+        margin-bottom: 25px;
+      }
+    }
+  }
+}
+
+
+/* home content */
+.home-content-box {
+  background-color: @content-box-background-color;
+  border: 1px solid @content-box-border-color;
+  min-height: 320px;
+  max-width: 95%;
+  margin-top: 30px;
+  border-radius: 2px;
+  padding: 20px 20px 0 20px;
+
+  h2 {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0 0 14px 0;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  .btn-link {
+    margin-top: 18px;
+    padding-left: 0;
+  }
+
+  li:last-child {
+    padding-top: 25px;
+  }
+}
+
+
+
+/* footer */
 footer {
   background-color: @footer-background-color;
   min-height: 235px;
@@ -449,6 +491,8 @@ footer {
     }
   }
 }
+
+
 
 /* pagination */
 .pagination-container {
