@@ -66,7 +66,7 @@ p {
 .pager li & > span,
 .pager li & > a:hover,
 .pager li & > a:focus {
-  color: #fff;
+  color: @white;
   background-color: @link-color;
   border-color: @link-color;
   border-radius: 2px;
@@ -74,8 +74,8 @@ p {
 }
 
 .btn-primary:hover, .btn-primary:active, .btn-primary:focus {
-  background-color: #fff;
-  border-color: #fff;
+  background-color: @white;
+  border-color: @white;
   color: @link-color;
 }
 
@@ -125,12 +125,12 @@ header {
 
   .btn-link {
     background-color: transparent;
-    color: #fff;
+    color: @white;
   }
 
   .btn-link:hover {
     text-decoration: none;
-    color: #fff;
+    color: @white;
   }
 
   .nav.nav-tabs {
@@ -179,7 +179,7 @@ header {
   }
 
   a {
-    color: #fff;
+    color: @white;
   }
   .navbar-collapse {
     margin-left: -15px;
@@ -187,14 +187,17 @@ header {
   }
 
   .breadcrumb {
-    background-color: #fff;
+    background-color: @white;
     & > li {
-      color: #3C4250;
+      color: @link-color;
       font-weight: 600;
       & > a {
         font-weight: 600;
-        color: #106ca0;
+        color: @theme-color;
       }
+    }
+    & > .active {
+      color: @link-color;
     }
   }
 }
@@ -228,7 +231,7 @@ a.list-group-item.active:focus {
       & > th {
         background: #3C4250;
         font-weight: 600;
-        color: #fff;
+        color: @white;
         border: none;
         border-right: 1px solid #222;
       }
@@ -368,10 +371,10 @@ div.memorize {
       }
     }
     & > li.active {
-      background-color: #265680;
-      border-color: #265680;
+      background-color: @link-color;
+      border-color: @link-color;
       & > a {
-        color: #fff;
+        color: @white;
       }
       & > ul {
         display: block;
