@@ -1,11 +1,34 @@
 @media (max-width: 767px) {
 
-  .container {
-    & > .navbar-header {
-      margin-left: 0;
-      margin-right: 0;
+  header {
+    section {
+      & > .navbar-form {
+        width: 95%;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 0;
+      }
+
+      ul.nav {
+        max-width: 316px;
+
+        & > li {
+          width: 146px;
+          max-width: 146px;
+          margin-right: 10px;
+
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+      }
+    }
+
+    .navbar-brand {
+      height: 85px;
     }
   }
+
 
   .home-content-box {
     margin-left: auto;
