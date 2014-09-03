@@ -88,11 +88,6 @@ a.btn-link:before {
   font-weight: bold;
 }
 
-.input-group-addon, .input-group-btn {
-  width: 0;
-}
-
-
 /* General tab navigation */
 .nav.nav-tabs {
   & > li {
@@ -122,9 +117,6 @@ a.btn-link:before {
 header {
   min-height: 170px;
   background-color: @theme-color;
-
-
-
 
   .btn-link {
     background-color: transparent;
@@ -169,20 +161,52 @@ header {
     }
   }
 
-  .input-group-btn {
-    .btn-primary {
-      min-width: 0;
-      width: 37px;
-      border-radius: 0 2px 2px 0;
-      padding: 5px 0;
-      i {
-        font-size: 16pt;
+  .navbar-form {
+    width: 100%;
+
+
+    .form-control {
+      display: inline-block;
+      min-width: 100%;
+
+      &.tt-hint {
+        position: relative !important;
+      }
+
+      &.tt-input {
+        margin-top: -34px;
+      }
+    }
+  }
+
+  .input-group {
+    position: relative;
+    width: 100%;
+
+
+    .input-group-btn {
+      position: relative;
+
+      .btn-primary {
+        min-width: 0;
+        width: 37px;
+        border-radius: 0 2px 2px 0;
+        padding: 5px 0;
+
+        i {
+          font-size: 16pt;
+        }
       }
     }
   }
 
   a {
-    color: #fff;
+    color: @white;
+  }
+
+  /* use important because of inline styles */
+  .twitter-typeahead {
+    position: static !important;
   }
 }
 
@@ -306,12 +330,6 @@ ul[aria-labelledby=dropdownLibraries] {
   h4 {
     color: #3C4250;
     font-size: 24px;
-  }
-}
-
-.navbar-form {
-  .form-control {
-    display: inline-block;
   }
 }
 
