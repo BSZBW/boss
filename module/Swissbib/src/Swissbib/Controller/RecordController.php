@@ -191,11 +191,11 @@ class RecordController extends VuFindRecordController
                 $function = (string)$checkHolds['function'];
                 $results = $catalog->$function($holdDetails);
 
-                // Success: Go to Display Holds
+                // Success: Return to record
                 if (isset($results['success']) && $results['success'] == true) {
                     $this->flashMessenger()->setNamespace('info')
                         ->addMessage('hold_place_success');
-                    return $this->redirect()->toRoute('myresearch-holds');
+                    return $this->redirectToRecord();
                 } else {
                     // Failure: use flash messenger to display messages, stay on
                     // the current form.
