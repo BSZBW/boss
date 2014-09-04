@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,700);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,600,700);
 
 * {
   font-family: 'Open Sans', sans-serif;
@@ -46,8 +46,17 @@ a, .btn-link {
 }
 
 a:hover, .btn-link:hover {
-  color: @link-color;
+  color: @theme-color;
   text-decoration: none;
+}
+
+ul {
+  li {
+    & > a:focus,
+    & > a:active {
+      font-weight: 600;
+    }
+  }
 }
 
 a:before {
@@ -58,6 +67,15 @@ a:before {
 p {
   & > a:before {
     .a-before-reset;
+  }
+
+  & > a {
+    text-decoration: underline;
+
+    &:hover {
+      font-weight: 400;
+      text-decoration: underline;
+    }
   }
 }
 
@@ -149,15 +167,18 @@ header {
       text-decoration: underline;
       padding-left: 0;
       margin-right: 15px;
-    }
 
-    a:hover {
-      background-color: transparent;
-      text-decoration: underline;
-    }
+      &:hover,
+      &:focus,
+      &:active {
+        background-color: @theme-color;
+        text-decoration: underline;
+        color: @link-color;
+      }
 
-    a:before {
-      .a-before-reset;
+      &:before {
+        .a-before-reset;
+      }
     }
 
     li.open {
@@ -630,10 +651,17 @@ footer {
     }
   }
 
-  a,
-  a:hover,
-  a:focus {
+  a {
     color: @footer-color;
+
+    &:focus,
+    &:hover {
+      color: @theme-color;
+
+      i {
+        color: @theme-color;
+      }
+    }
   }
 
   ul {
@@ -664,7 +692,7 @@ footer {
         }
 
         &:hover {
-          background-color: @link-color;
+          background-color: @theme-color;
           color: @white;
         }
 
@@ -747,10 +775,7 @@ footer {
       box-shadow: none;
     }
 
-    & .slider-handle,
-    & .slider-handle:active,
-    & .slider-handle:focus,
-    & .slider-handle:hover {
+    & .slider-handle {
       opacity: 1;
       background-color: @link-color;
       border-radius: 2px;
@@ -764,6 +789,12 @@ footer {
       width: auto;
       padding: 1px 3px;
       margin-top: 0 !important;
+
+      &:active,
+      &:focus,
+      &:hover {
+        background-color: @theme-color;
+      }
 
       &:before {
         content: "\f0d9 \f0da";
