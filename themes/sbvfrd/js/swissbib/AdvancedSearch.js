@@ -27,31 +27,17 @@ swissbib.AdvancedSearch = {
    * @return void
    */
   initJsTree: function () {
-    jQuery(".classification-tree").jstree({
-      'plugins': ['search','types'],
-      'core' : {
-        'themes' : {
-          'url': path + '/themes/sbvfrd/js/vendor/jsTree/themes/default/style.css'
-        }
-      },
-      'types' : {
-        'record': {
-          'icon':'fa fa-file'
-        },
-        'collection': {
-          'icon':'fa fa-folder'
-        }
-      }
-    }).bind("select_node.jstree", function (event, data) {
-      var el = jQuery('#' + data.selected[0]);
-
-      el.toggleClass("selected");
-      el.hasClass("selected") ? el.find("input").attr("name", "filter[]") : el.find("input").removeAttr("name");
-
-      if (swissbib.AdvancedSearch.catTreeAutoSend)  swissbib.AdvancedSearch.sendForm(el);
-    });
+    jQuery(".classification-tree").jstree().bind("select_node.jstree", this.onJsTreeSelectNode);
   },
 
+  onJsTreeSelectNode: function (event, data) {
+    var el = jQuery('#' + data.selected[0]);
+
+    el.toggleClass("selected");
+    el.hasClass("selected") ? el.find("input").attr("name", "filter[]") : el.find("input").removeAttr("name");
+
+    if (swissbib.AdvancedSearch.catTreeAutoSend)  swissbib.AdvancedSearch.sendForm(el);
+  },
 
   sendForm: function (el) {
     jQuery(el).parents('form:first').submit();
