@@ -34,10 +34,11 @@ if (!isset($this->layout()->searchbox)) {
   </div>
 <? endif; ?>
 
+<div class="col-md-12">
 
-<div class="container">
-  <div class="row searchHomeContent">
-    <div class="col-sm-6 col-md-4 swissbibCustom">
+  <div class="container">
+    <div class="row searchHomeContent">
+      <div class="col-sm-6 col-md-4 swissbibCustom">
       <div class="row">
         <?= $this->render('search/homeElements/' . $this->layout()->userLang . '/swissbib_content_1'); ?>
       </div>
@@ -107,4 +108,5 @@ if (!isset($this->layout()->searchbox)) {
     <? endforeach; ?>
     <? endif; ?>
   </div>
+</div>
 </div>
