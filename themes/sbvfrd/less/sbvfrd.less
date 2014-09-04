@@ -110,9 +110,9 @@ a.btn-link:before {
 /* forms */
 
 .form-control {
-  height: 35px;
-
-
+  height: 28px;
+  padding: 3px 6px;
+  border-radius: 2px;
   &:focus {
     border-color: @content-box-border-color;
     box-shadow: inset 0 1px 1px @content-box-border-color;
@@ -223,6 +223,7 @@ header {
     .form-control {
       display: inline-block;
       min-width: 100%;
+      height: 35px;
       border: none;
       box-shadow: none;
       border-radius: 2px 0 0 2px;
@@ -482,12 +483,6 @@ ul[aria-labelledby=dropdownLibraries] {
       border: none;
     }
   }
-}
-
-.form-control {
-  height: 28px;
-  padding: 3px 6px;
-  border-radius: 2px;
 }
 
 .twitter-typeahead {
