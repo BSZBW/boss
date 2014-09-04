@@ -71,8 +71,11 @@
                       class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <? foreach ($this->layout()->allLangs as $langCode => $langName): ?>
-                    <li<?= $this->layout()->userLang == $langCode ? ' class="active"' : '' ?>><a href="#"
-                                                                                                 onClick="document.langForm.mylang.value='<?= $langCode ?>';document.langForm.submit()"><?= $this->displayLanguageOption($langName) ?></a>
+                    <li<?= $this->layout()->userLang == $langCode ? ' class="active"' : '' ?>>
+                      <a href="#" onClick="document.langForm.mylang.value='<?= $langCode ?>';document.langForm.submit()">
+                        <span class="visible-xs"><?= $this->displayLanguageOption($langName) ?></span>
+                        <span class="hidden-xs"><?= strtoupper(trim($langCode)) ?></span>
+                      </a>
                     </li>
                   <? endforeach; ?>
                 </ul>
