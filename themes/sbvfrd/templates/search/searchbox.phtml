@@ -29,7 +29,13 @@
   </div>
 <? else: ?>
   <form role="search" class="navbar-form navbar-left" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" id="searchForm" autocomplete="off">
-    <?= $this->render('search/searchTabs'); ?>
+    <? $tabs = $this->render('search/searchTabs'); ?>
+    <div class="search-tabs-box">
+    <? if (!empty($tabs)): ?>
+      <span class="search-tabs-label"><?= $this->transEsc('Search In') ?>:</span>
+      <?= $tabs ?>
+    <? endif; ?>
+    </div>
     <div class="input-group">
         <input class="form-control search-query<? if($this->searchbox()->autocompleteEnabled($this->searchClassId)):?> autocomplete searcher:<?=$this->escapeHtmlAttr($this->searchClassId) ?><? endif ?>" id="searchForm_lookfor" type="text" name="lookfor" value="<?=$this->escapeHtmlAttr($this->lookfor)?>"/>
         <span class="input-group-btn">

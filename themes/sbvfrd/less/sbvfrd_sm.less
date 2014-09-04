@@ -26,6 +26,10 @@
 
 
   header {
+    .navbar-form {
+      padding-left: 0;
+    }
+
     .navbar-nav {
       li.dropdown {
         a.dropdown-toggle {
@@ -64,6 +68,12 @@
 
               span {
                 text-decoration: underline;
+              }
+
+              &:hover {
+                span {
+                  color: @link-color;
+                }
               }
 
               &:before {
