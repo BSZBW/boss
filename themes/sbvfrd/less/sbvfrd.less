@@ -1,5 +1,6 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,700);
 
+
 * {
   font-family: 'Open Sans', sans-serif;
   font-size: 14px;
@@ -7,6 +8,11 @@
 
 body {
   color: #3C4250;
+  background-color: @footer-background-color;
+}
+
+div.main {
+  background-color: @white;
 }
 
 h1, h2, h3, h4 {
@@ -52,8 +58,7 @@ a:before {
 
 p {
   & > a:before {
-    content: "";
-    margin-right: 0;
+    .a-before-reset;
   }
 }
 
@@ -66,7 +71,7 @@ p {
 .pager li & > span,
 .pager li & > a:hover,
 .pager li & > a:focus {
-  color: @white;
+  color: #fff;
   background-color: @link-color;
   border-color: @link-color;
   border-radius: 2px;
@@ -74,19 +79,14 @@ p {
 }
 
 .btn-primary:hover, .btn-primary:active, .btn-primary:focus {
-  background-color: @white;
-  border-color: @white;
+  background-color: #fff;
+  border-color: #fff;
   color: @link-color;
 }
 
 a.btn-link:before {
   font-weight: bold;
 }
-
-.input-group-addon, .input-group-btn {
-  width: 0;
-}
-
 
 /* General tab navigation */
 .nav.nav-tabs {
@@ -96,8 +96,7 @@ a.btn-link:before {
     }
 
     & > a:before {
-      content: '';
-      margin-right: 0;
+      .a-before-reset;
     }
 
     & > a:hover,
@@ -113,102 +112,182 @@ a.btn-link:before {
   }
 }
 
+/* forms */
+
+.form-control {
+  height: 35px;
+
+
+  &:focus {
+    border-color: @content-box-border-color;
+    box-shadow: inset 0 1px 1px @content-box-border-color;
+  }
+}
+
 
 /* Header */
 header {
   min-height: 170px;
   background-color: @theme-color;
 
-  ul[role="navigation"] {
-    margin-top: 20px;
-  }
-
   .btn-link {
     background-color: transparent;
-    color: @white;
+    color: #fff;
   }
 
   .btn-link:hover {
     text-decoration: none;
-    color: @white;
+    color: @link-color;
   }
 
-  .nav.nav-tabs {
-    border: none;
-    margin-bottom: 5px;
-
-    & > li {
-      & > a {
-        border: none;
-        margin-right: 8px;
-        border-bottom-left-radius: 2px;
-        border-bottom-right-radius: 2px;
-        margin-bottom: 0;
-        min-height: 32px;
-        max-height: 32px;
-        vertical-align: middle;
-        padding: 4px 0 2px 0;
-        font-size: 16px;
-      }
-
-      & > a:hover,
-      & > a:focus {
-        border: none;
-        font-size: 15px;
-      }
-    }
-
-    & > li.active {
-      & > a {
-        border: none;
-        font-size: 15px;
-      }
-    }
-  }
-
-  .input-group-btn {
-    .btn-primary {
-      min-width: 0;
-      width: 37px;
-      border-radius: 0 2px 2px 0;
-      padding: 5px 0;
+  .navbar-right {
+    a {
       i {
-        font-size: 16pt;
+        margin-right: 5px;
+      }
+
+      i.fa-lock {
+        vertical-align: middle;
+        font-size: 15px;
+      }
+
+      text-decoration: underline;
+      padding-left: 0;
+      margin-right: 15px;
+    }
+
+    a:hover {
+      background-color: transparent;
+      text-decoration: underline;
+    }
+
+    a:before {
+      .a-before-reset;
+    }
+
+    li.open {
+      a,
+      a:hover,
+      a:focus {
+        background-color: @theme-color;
+      }
+
+      a {
+        color: @white;
+      }
+
+      a:hover {
+        color: @link-color;
+      }
+    }
+  }
+
+  .search-tabs-box {
+    min-height: 61px;
+    color: @white;
+
+    .nav.nav-tabs {
+      border: none;
+      margin-bottom: 5px;
+      margin-top: 5px;
+
+      & > li {
+        & > a {
+          border: none;
+          margin-right: 8px;
+          border-bottom-left-radius: 2px;
+          border-bottom-right-radius: 2px;
+          margin-bottom: 0;
+          min-height: 32px;
+          max-height: 32px;
+          vertical-align: middle;
+          padding: 4px 0 2px 0;
+          font-size: 16px;
+        }
+
+        & > a:hover,
+        & > a:focus {
+          border: none;
+          font-size: 15px;
+        }
+      }
+
+      & > li.active {
+        & > a {
+          border: none;
+          font-size: 15px;
+        }
+      }
+    }
+  }
+
+  .navbar-form {
+    width: 100%;
+    margin-top: 0;
+
+    .form-control {
+      display: inline-block;
+      min-width: 100%;
+      border: none;
+      box-shadow: none;
+      border-radius: 2px 0 0 2px;
+
+      &:focus {
+        border: none;
+        box-shadow: none;
+      }
+
+      &.tt-hint {
+        position: relative !important;
+        top: 1px !important;
+        border-radius: 2px 0 0 2px;
+      }
+
+      &.tt-input {
+        margin-top: -36px;
+      }
+    }
+  }
+
+  .input-group {
+    position: relative;
+    width: 100%;
+
+
+    .input-group-btn {
+      position: relative;
+
+      .btn-primary {
+        min-width: 0;
+        width: 37px;
+        border-radius: 0 2px 2px 0;
+        padding: 5px 0;
+
+        i {
+          font-size: 16pt;
+        }
       }
     }
   }
 
   a {
     color: @white;
-  }
-  .navbar-collapse {
-    margin-left: -15px;
-    margin-right: -15px;
-  }
 
-  .breadcrumb {
-    background-color: @white;
-    & > li {
-      color: @link-color;
-      font-weight: 600;
-      & > a {
-        font-weight: 600;
-        color: @theme-color;
+    &.advancedSearchLink {
+      font-size: 16px;
+
+      &:before {
+        content: '\f00e';
+        font-family: FontAwesome;
+        font-weight: normal;
       }
     }
-    & > .active {
-      color: @link-color;
-    }
   }
-}
 
-/* well stuff */
-.well-lg {
-  padding: 19px 13px;
-}
-
-.well .navbar-form, .well .navbar-form .form-control {
-  width: 100%;
+  /* use important because of inline styles */
+  .twitter-typeahead {
+    position: static !important;
+  }
 }
 
 /* lists */
@@ -231,7 +310,7 @@ a.list-group-item.active:focus {
       & > th {
         background: #3C4250;
         font-weight: 600;
-        color: @white;
+        color: #fff;
         border: none;
         border-right: 1px solid #222;
       }
@@ -283,9 +362,9 @@ a.list-group-item.active:focus {
 
 .navbar-brand {
   text-indent: -9999px;
-  height: 170px;
-  width: 240px;
-  background: transparent url("@{theme-base-path}images/logo2.png") no-repeat 0 20px;
+  height: 123px;
+  width: 100%;
+  background: transparent url("@{theme-base-path}images/logo2.png") no-repeat 0 0;
 }
 
 .container {
@@ -327,15 +406,10 @@ ul[aria-labelledby=dropdownLibraries] {
 }
 
 .sidebar {
+
   h4 {
     color: #3C4250;
     font-size: 24px;
-  }
-}
-
-.navbar-form {
-  .form-control {
-    display: inline-block;
   }
 }
 
@@ -371,10 +445,10 @@ div.memorize {
       }
     }
     & > li.active {
-      background-color: @link-color;
-      border-color: @link-color;
+      background-color: #265680;
+      border-color: #265680;
       & > a {
-        color: @white;
+        color: #fff;
       }
       & > ul {
         display: block;
@@ -404,27 +478,103 @@ div.memorize {
   }
 }
 
-footer {
-  p {
-    strong {
-      color: #3C4250;
-    }
-  }
-  ul {
-    list-style: none;
-    padding: 0;
-  }
-  hr {
-    margin-top: 42px;
-    margin-bottom: 42px;
-  }
-  .container {
-    & > div {
-      margin-left: -15px;
-      margin-right: -15px;
+.searchHomeContent {
+  & > div[class^="col-"] {
+
+    &:last-child {
+      .home-content-box {
+        margin-bottom: 25px;
+      }
     }
   }
 }
+
+
+/* home content */
+.home-content-box {
+  background-color: @content-box-background-color;
+  border: 1px solid @content-box-border-color;
+  min-height: 320px;
+  max-width: 95%;
+  margin-top: 30px;
+  border-radius: 2px;
+  padding: 20px 20px 0 20px;
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 14px 0;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  .btn-link {
+    margin-top: 18px;
+    padding-left: 0;
+  }
+
+  li:last-child {
+    padding-top: 25px;
+  }
+}
+
+
+
+/* footer */
+footer {
+  background-color: @footer-background-color;
+  min-height: 235px;
+  padding-top: 20px;
+
+  * {
+    color: @footer-color;
+  }
+
+  h2 {
+    margin: 0 0 14px 0;
+  }
+  
+  & > .container > .row:first-child {
+    min-height: 173px;
+  }
+  
+  .row:nth-child(2) {
+    border-top: 1px solid @footer-color;
+    min-height: 40px;
+    padding-top: 11px;
+
+    a {
+      text-decoration: underline;
+
+      i {
+        margin-right: 5px;
+      }
+
+      &:before {
+        .a-before-reset;
+      }
+    }
+  }
+
+  a,
+  a:hover,
+  a:focus {
+    color: @footer-color;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+
+    li {
+      padding-bottom: 12px;
+    }
+  }
+}
+
+
 
 /* pagination */
 .pagination-container {
@@ -438,8 +588,7 @@ footer {
         width: 40px;
 
         &:before {
-          content: '';
-          margin-right: 0;
+          .a-before-reset;
         }
 
         &:hover {
