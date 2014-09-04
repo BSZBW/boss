@@ -230,6 +230,7 @@ header {
       min-width: 100%;
       border: none;
       box-shadow: none;
+      border-radius: 2px 0 0 2px;
 
       &:focus {
         border: none;
@@ -238,10 +239,12 @@ header {
 
       &.tt-hint {
         position: relative !important;
+        top: 1px !important;
+        border-radius: 2px 0 0 2px;
       }
 
       &.tt-input {
-        margin-top: -34px;
+        margin-top: -36px;
       }
     }
   }
@@ -269,6 +272,16 @@ header {
 
   a {
     color: @white;
+
+    &.advancedSearchLink {
+      font-size: 16px;
+
+      &:before {
+        content: '\f00e';
+        font-family: FontAwesome;
+        font-weight: normal;
+      }
+    }
   }
 
   /* use important because of inline styles */
