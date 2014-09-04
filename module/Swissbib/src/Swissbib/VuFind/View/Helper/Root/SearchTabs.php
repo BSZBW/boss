@@ -52,9 +52,13 @@ class SearchTabs extends VuFindSearchTabs
      */
     public function __invoke($activeSearchClass, $query, $handler, $type = 'basic', $view = 'default')
     {
+        $backupConfig = $this->config;
         $this->config = $this->injectViewDependentConfig($view);
 
-        return parent::__invoke($activeSearchClass, $query, $handler, $type);
+        $tabs = parent::__invoke($activeSearchClass, $query, $handler, $type);
+
+        $this->config = $backupConfig;
+        return $tabs;
     }
 
     /**
