@@ -1,33 +1,60 @@
-<div>
+<div class="row">
   <? if ($mobileViewLink = $this->mobileUrl()): // display 'return to mobile' link when applicable ?>
-    <hr/>
-    <div class="mobileViewLink"><a href="<?=$this->escapeHtmlAttr($mobileViewLink)?>" class="btn btn-primary btn-lg"><?=$this->transEsc("mobile_link")?></a></div>
+    <div class="mobileViewLink"><a href="<?= $this->escapeHtmlAttr($mobileViewLink) ?>"
+                                   class="btn btn-primary btn-lg"><?= $this->transEsc("mobile_link") ?></a></div>
   <? endif; ?>
-  <hr/>
-  <div class="col-sm-4"><p><strong><?=$this->transEsc('Search Options')?></strong></p>
-    <ul>
-      <li><a href="<?=$this->url('search-history')?>"><?=$this->transEsc('Search History')?></a></li>
-      <li><a href="<?=$this->url('search-advanced')?>" class="advancedSearchLink"><?=$this->transEsc('Advanced Search')?></a></li>
-      <li><a href="<?=$this->url('myresearch-favorite-institutions')?>"><?=$this->transEsc('mylibraries')?></a></li>
-    </ul>
+  <div class="col-sm-4">
+    <div class="row">
+      <h2><?= $this->transEsc('Search Options') ?></h2>
+      <ul>
+        <li><a href="<?= $this->url('search-history') ?>"><?= $this->transEsc('Search History') ?></a></li>
+        <li class="hidden-xs"><a href="<?= $this->url('search-advanced') ?>"
+               class="advancedSearchLink"><?= $this->transEsc('Advanced Search') ?></a></li>
+        <li><a href="<?= $this->url('myresearch-favorite-institutions') ?>"><?= $this->transEsc('mylibraries') ?></a>
+        </li>
+      </ul>
+    </div>
   </div>
-  <div class="col-sm-4"><p><strong><?=$this->transEsc('Find More')?></strong></p>
-    <ul>
-      <li><a href="<?=$this->url('browse-home')?>"><?=$this->transEsc('Browse the Catalog')?></a></li>
-      <li><a href="<?=$this->url('alphabrowse-home')?>"><?=$this->transEsc('Browse Alphabetically')?></a></li>
-      <li><a href="<?=$this->url('search-reserves')?>"><?=$this->transEsc('Course Reserves')?></a></li>
-      <li><a href="<?=$this->url('search-newitem')?>"><?=$this->transEsc('New Items')?></a></li>
-    </ul>
+  <div class="col-sm-4">
+    <div class="row">
+      <h2><?= $this->transEsc('Find More') ?></h2>
+      <ul>
+        <li><a href="<?= $this->url('browse-home') ?>"><?= $this->transEsc('Browse the Catalog') ?></a></li>
+        <li><a href="<?= $this->url('alphabrowse-home') ?>"><?= $this->transEsc('Browse Alphabetically') ?></a></li>
+        <li><a href="<?= $this->url('search-reserves') ?>"><?= $this->transEsc('Course Reserves') ?></a></li>
+        <li><a href="<?= $this->url('search-newitem') ?>"><?= $this->transEsc('New Items') ?></a></li>
+      </ul>
+    </div>
   </div>
-  <div class="col-sm-4"><p><strong><?=$this->transEsc('Need Help?')?></strong></p>
-    <ul>
-      <?= $this->render('HelpPage/menulinks') ?>
-      <!--  <li><a href="--><?//=$this->url('help-home')?><!--?topic=search" class="help-link" title="--><?//=$this->transEsc('Search Tips')?><!--">--><?//=$this->transEsc('Search Tips')?><!--</a></li>-->
-      <li><a href="#"><?=$this->transEsc('Ask a Librarian')?></a></li>
-      <li><a href="#"><?=$this->transEsc('FAQs')?></a></li>
-    </ul>
+  <div class="col-sm-4">
+    <div class="row">
+      <h2><?= $this->transEsc('Need Help?') ?></h2>
+      <ul>
+        <?= $this->render('HelpPage/menulinks') ?>
+        <!--  <li><a href="--><? //=$this->url('help-home')?><!--?topic=search" class="help-link" title="-->
+        <? //=$this->transEsc('Search Tips')?><!--">--><? //=$this->transEsc('Search Tips')?><!--</a></li>-->
+        <li><a href="#"><?= $this->transEsc('Ask a Librarian') ?></a></li>
+        <li><a href="#"><?= $this->transEsc('FAQs') ?></a></li>
+      </ul>
+    </div>
   </div>
 </div>
+<div class="row">
+  <div class="col-sm-4">
+    <div class="row">
+      <span class="copyright">swissbib Copyright 2014</span>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="row">
+      <a href="mailto:info@swissbib.ch"><i class="fa fa-envelope"></i>info@swissbib.ch</a>
+    </div>
+  </div>
+  <div class="col-sm-4">
+
+  </div>
+</div>
+
 <button id="sidebar-offcanvas-trigger">
 
 </button>

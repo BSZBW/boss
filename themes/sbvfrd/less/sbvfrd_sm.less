@@ -1,23 +1,4 @@
 @media (min-width: 768px) {
-  header {
-    .form-control {
-      min-width: 721px;
-      max-width: 721px;
-    }
-    .searchbox {
-      margin-left: -13px;
-    }
-  }
-
-  .main {
-    & > .container {
-      & > .row {
-        margin-left: 0;
-        margin-right: 0;
-      }
-    }
-  }
-
   .container {
     & > .navbar-header {
       margin-left: 0;
@@ -27,10 +8,6 @@
 
   .navbar {
     margin-bottom: 0;
-  }
-
-  .searchHomeContent.row {
-    margin-right: -15px;
   }
 
   ul[aria-labelledby=dropdownLibraries] {
@@ -44,6 +21,94 @@
       text-indent: -40px;
       white-space: normal;
       height: auto;
+    }
+  }
+
+
+  header {
+    .navbar-form {
+      padding-left: 0;
+    }
+
+    .navbar-nav {
+      li.dropdown {
+        a.dropdown-toggle {
+          display: none;
+        }
+
+        ul {
+          display: block;
+          position: static;
+          background-color: transparent;
+          box-shadow: none;
+          border: none;
+
+          &:before {
+            content: '\f0ac';
+            font-family: FontAwesome;
+            margin-right: 5px;
+            margin-top: 10px;
+            text-decoration: none;
+            display: inline-block;
+            float: left;
+            color: @white;
+          }
+
+          li {
+            float: left;
+            border: none;
+
+            a {
+              color: @white;
+              border: none;
+              padding: 0;
+              margin-top: 10px;
+              margin-right: 5px;
+              text-decoration: none;
+
+              span {
+                text-decoration: underline;
+              }
+
+              &:hover {
+                span {
+                  color: @link-color;
+                }
+              }
+
+              &:before {
+                content: '|';
+                text-decoration: none;
+                display: inline-block;
+              }
+            }
+
+            &.active a {
+              background-color: transparent;
+              color: @link-color;
+              font-weight: bold;
+
+              span {
+                text-decoration: underline;
+              }
+
+              &:before {
+                color: @white;
+              }
+            }
+
+            &:before {
+
+            }
+
+            &:first-child {
+              a:before {
+                content: '';
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

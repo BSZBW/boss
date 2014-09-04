@@ -42,10 +42,10 @@
 
 <?= $this->render('search/advanced/templates-handlebars') ?>
 <? $this->searchType = 'advanced' ?>
-<?= $this->render('search/searchTabs'); ?>
 <?=$this->flashmessages()?>
 <form role="search" name="searchForm" id="advSearchForm" method="get" action="<?=$this->url($this->options->getSearchAction())?>">
   <div class="<?=$this->layoutClass('mainbody')?>">
+    <?= $this->render('search/searchTabs'); ?>
     <input type="hidden" name="sort" value="relevance">
     <div class="clearfix">
       <p class="lead pull-left"><?=$this->transEsc('Advanced Search')?></p>
