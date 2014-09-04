@@ -166,15 +166,16 @@ header {
       text-decoration: underline;
       padding-left: 0;
       margin-right: 15px;
-    }
 
-    a:hover {
-      background-color: transparent;
-      text-decoration: underline;
-    }
+      &:hover {
+        background-color: transparent;
+        text-decoration: underline;
+        color: @link-color;
+      }
 
-    a:before {
-      .a-before-reset;
+      &:before {
+        .a-before-reset;
+      }
     }
 
     li.open {
@@ -647,10 +648,17 @@ footer {
     }
   }
 
-  a,
-  a:hover,
-  a:focus {
+  a {
     color: @footer-color;
+
+    &:focus,
+    &:hover {
+      color: @theme-color;
+
+      i {
+        color: @theme-color;
+      }
+    }
   }
 
   ul {
