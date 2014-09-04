@@ -29,11 +29,12 @@
   </div>
 <? else: ?>
   <form role="search" class="navbar-form navbar-left" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" id="searchForm" autocomplete="off">
-    <? $tabs = $this->render('search/searchTabs'); ?>
+
     <div class="search-tabs-box">
-    <? if (!empty($tabs)): ?>
+    <? $searchtabs = $this->searchtabs($this->searchClassId, $this->lookfor, $this->searchIndex, $this->searchType);
+    if (count($searchtabs) > 0): ?>
       <span class="search-tabs-label"><?= $this->transEsc('Search In') ?>:</span>
-      <?= $tabs ?>
+      <?= $this->render('search/searchTabs'); ?>
     <? endif; ?>
     </div>
     <div class="input-group">
