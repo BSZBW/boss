@@ -52,7 +52,8 @@ a:hover, .btn-link:hover {
 
 ul {
   li {
-    & > a:hover {
+    & > a:focus,
+    & > a:active {
       font-weight: 600;
     }
   }
@@ -167,8 +168,10 @@ header {
       padding-left: 0;
       margin-right: 15px;
 
-      &:hover {
-        background-color: transparent;
+      &:hover,
+      &:focus,
+      &:active {
+        background-color: @theme-color;
         text-decoration: underline;
         color: @link-color;
       }
