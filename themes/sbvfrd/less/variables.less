@@ -5,9 +5,11 @@
 /* colors */
 @theme-color: #50BF9E;
 @link-color: #0D785B;
+@font-color: #555;
 
 @content-box-background-color: #f7f7f7;
 @content-box-border-color: #ccc;
+@sidebar-background-color: #D3D3D3;
 
 @black: #000;
 @white: #fff;
@@ -37,3 +39,16 @@
   border-bottom-color: @white;
 }
 
+.mixin-btn-primary {
+  color: @white;
+  background-color: @link-color;
+  border-color: @link-color;
+  border-radius: 2px;
+  text-decoration: none;
+}
+
+.mixin-btn-primary-active {
+  background-color: @white;
+  border-color: @white;
+  color: @link-color;
+}
