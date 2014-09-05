@@ -50,6 +50,10 @@ a:hover, .btn-link:hover {
   text-decoration: none;
 }
 
+.btn:hover * {
+  cursor: pointer;
+}
+
 ul {
   li {
     & > a:focus,
@@ -133,6 +137,7 @@ header {
   .btn-link {
     background-color: transparent;
     color: @white;
+    font-weight: 500;
   }
 
   .btn-link:hover {
@@ -143,6 +148,7 @@ header {
   .btn-primary:hover {
     font-weight: normal;
     background-color: @highlight-color;
+    border-color: @highlight-color;
   }
 
   .navbar-right {
