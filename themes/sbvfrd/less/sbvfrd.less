@@ -451,16 +451,27 @@ ul[aria-labelledby=dropdownLibraries] {
     text-overflow: ellipsis;
     overflow: hidden;
     border: 1px solid #CCC;
+    padding-left: 8px;
+    padding-right: 8px;
   }
   .title.collapsed {
     border-radius: 2px;
   }
   .collapse .list-group-item[id^=more],
-  .collapsing .list-group-item[id^=more] {
+  .collapsing .list-group-item[id^=more],
+  .collapse .list-group-item[class*=narrowGroupHidden]:last-child,
+  .collapsing .list-group-item[class*=narrowGroupHidden]:last-child {
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
     color: @link-color;
     font-weight: 600;
+
+    &:before {
+      .a-before;
+    }
+  }
+  & > h4 {
+    margin-bottom: 20px;
   }
   h4 {
     font-size: 14px;
