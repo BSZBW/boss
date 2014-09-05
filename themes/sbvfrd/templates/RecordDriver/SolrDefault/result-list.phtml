@@ -84,10 +84,10 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
   </div>
 
   <div class="col-xs-1 col-md-3 hidden-print">
-    <div class="btn-group-vertical">
+    <div>
         <? if ($this->userlist()->getMode() !== 'disabled'): ?>
-          <a href="<?= $this->recordLink()->getActionUrl($this->driver, 'Save'); ?>" class="btn btn-default" title="<?= $this->transEsc('memorizelistadd') ?>">
-              <i class="fa fa-heart"></i>
+          <a href="<?= $this->recordLink()->getActionUrl($this->driver, 'Save'); ?>" title="<?= $this->transEsc('memorizelistadd') ?>">
+            <i class="fa fa-bars"></i><i class="fa fa-plus"></i>
               <?= $this->transEsc('memorizelistadd') ?>
           </a>
           <? /* Saved lists */ ?>
@@ -101,7 +101,7 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
           <? foreach ($trees as $hierarchyID => $hierarchyTitle): ?>
               <input type="hidden" value="<?=$this->escapeHtmlAttr($hierarchyID)?>" class="hiddenHierarchyId" />
 
-              <a class="btn btn-default <?=$viewRecord->getTabVisibility('HierarchyTree')?>" href="<?=$this->recordLink()->getTabUrl($this->driver, 'HierarchyTree')?>?hierarchy=<?=urlencode($hierarchyID)?>#tabnav" title="<?=$this->transEsc('hierarchy_tree')?>">
+              <a <?=$viewRecord->getTabVisibility('HierarchyTree')?>" href="<?=$this->recordLink()->getTabUrl($this->driver, 'HierarchyTree')?>?hierarchy=<?=urlencode($hierarchyID)?>#tabnav" title="<?=$this->transEsc('hierarchy_tree')?>">
                 <i class="fa fa-sitemap"></i>
                 <span class="hidden-xs"> <?=$this->transEsc('hierarchy_view_context')?>
                     <? if (count($trees) > 1): ?>:
@@ -114,7 +114,7 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
 
       <? if (!empty($showFRBR) && $showFRBR && !empty($groupID) && !strcmp($results->getParams()->getSearchHandler(), 'FRBR') == 0) : ?>
         <a href="<?= $this->url('search-results') . '?lookfor=' . $groupID . "&type=FRBR&limit=" . $results->getParams()->getLimit() . "&sort=publishDateSort+desc" ?>"
-              class="btn-frbr btn btn-default" title="<?= $this->transEsc('FRBR_Button') ?>">
+              class="btn-frbr" title="<?= $this->transEsc('FRBR_Button') ?>">
           <i class="fa fa-eye"></i>
           <span class="hidden-xs"><?= $this->transEsc('FRBR_Button') ?></span>
         </a>
