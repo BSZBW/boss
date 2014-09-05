@@ -20,7 +20,7 @@
   <? $exportFormats = $this->export()->getFormatsForRecord($this->driver); ?>
   <? if(count($exportFormats) > 0): ?>
     <li class="dropdown">
-      <a class="export-toggle dropdown-toggle" data-toggle="dropdown" href="<?=$this->recordLink()->getActionUrl($this->driver, 'Export')?>"><i class="fa fa-list-alt"></i></a>
+      <a class="export-toggle dropdown-toggle" data-toggle="dropdown" href="<?=$this->recordLink()->getActionUrl($this->driver, 'Export')?>" title=" <?=$this->transEsc('Export Record') ?>"><i class="fa fa-list-alt"></i></a>
       <ul class="dropdown-menu" role="menu">
         <? foreach ($exportFormats as $exportFormat): ?>
           <li class="<?=$this->export()->getVisibilityClassName($exportFormat)?>"><a <? if ($this->export()->needsRedirect($exportFormat)): ?>target="<?=$this->escapeHtmlAttr($exportFormat)?>Main" <? endif; ?>href="<?=$this->recordLink()->getActionUrl($this->driver, 'Export')?>?style=<?=$this->escapeHtmlAttr($exportFormat)?>"><?=$this->transEsc('Export to')?> <?=$this->transEsc($exportFormat)?></a></li>

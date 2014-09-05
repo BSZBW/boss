@@ -28,7 +28,7 @@ $theme    = $this->configAccess()->Site->theme;
     </div>
 
     <div class="col-sm-4 hidden-xs">
-        <div class="text-center">
+        <div>
         <? /* Display thumbnail if appropriate: */ ?>
         <? $mediumThumb = $this->record($this->driver)->getThumbnail('medium'); $largeThumb = $this->record($this->driver)->getThumbnail('large'); ?>
         <? if ($mediumThumb): ?>
