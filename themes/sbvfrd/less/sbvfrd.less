@@ -140,6 +140,11 @@ header {
     color: @link-color;
   }
 
+  .btn-primary:hover {
+    font-weight: normal;
+    background-color: @highlight-color;
+  }
+
   .navbar-right {
     a {
       i {
@@ -202,12 +207,18 @@ header {
           vertical-align: middle;
           padding: 4px 0 2px 0;
           font-size: 16px;
+
+          &:hover, &:focus {
+            border: none;
+            font-size: 16px;
+            background-color: @highlight-color;
+            color: @white;
+            font-weight: normal;
+          }
         }
 
-        & > a:hover,
-        & > a:focus {
-          border: none;
-          font-size: 15px;
+        &.active {
+
         }
       }
 
@@ -215,6 +226,13 @@ header {
         & > a {
           border: none;
           font-size: 15px;
+
+          &:hover, &:focus {
+            font-size: 15px;
+            background-color: @white;
+            color: @link-color;
+            font-weight: bold;
+          }
         }
       }
     }
