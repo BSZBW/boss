@@ -16,11 +16,11 @@
         <li>
             <a>
                 <span class="<?= isset($this->previous) ? 'standard' : 'marked' ?>">
-                    <?= $this->current ?>
+                    <?= $this->localizedNumber($this->current) ?>
                 </span>
                 <?= $this->transEsc('of') ?>
                 <span class="<?= isset($this->next) ? 'standard' : 'marked' ?>">
-                    <?= $this->pageCount ?>
+                    <?= $this->localizedNumber($this->pageCount) ?>
                 </span>
             </a>
         </li>
