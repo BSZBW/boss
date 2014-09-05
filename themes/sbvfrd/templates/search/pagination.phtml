@@ -1,7 +1,9 @@
 <div class="pagination-container">
     <? if ($this->pageCount): ?>
 
+      <? if ( !$hideHits ): ?>
        <?=$this->render('search/controls/count.phtml'); ?>
+      <? endif; ?>
 
       <ul class="pagination">
         <li class="hidden-sm hidden-xs">
@@ -16,11 +18,11 @@
         <li>
             <a>
                 <span class="<?= isset($this->previous) ? 'standard' : 'marked' ?>">
-                    <?= $this->current ?>
+                    <?= $this->localizedNumber($this->current) ?>
                 </span>
                 <?= $this->transEsc('of') ?>
                 <span class="<?= isset($this->next) ? 'standard' : 'marked' ?>">
-                    <?= $this->pageCount ?>
+                    <?= $this->localizedNumber($this->pageCount) ?>
                 </span>
             </a>
         </li>
