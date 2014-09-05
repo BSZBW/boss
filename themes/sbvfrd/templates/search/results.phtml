@@ -46,7 +46,7 @@
   <? if ( $recordTotal > 0 ): ?>
     <div class="results-top row">
       <div class="col-md-9">
-        <i class="fa fa-search"></i><h1><?=$this->transEsc('Search Results')?></h1>
+        <h1><i class="fa fa-search"></i> <span><?=$this->transEsc('Search Results')?></span></h1>
       </div>
       <div class="col-md-3">
         <div class="searchtools">
@@ -73,12 +73,12 @@
   <? endif; ?>
   <?=$this->flashmessages()?>
   <div class="hidden-print search-controls clearfix row">
-    <div class="col-lg-8 col-md-7 col-sm-7">
+    <div class="col-lg-6 col-md-7 col-sm-7">
         <?= $this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', array('results' => $this->results, 'recordTotal' => $recordTotal, 'params' => $this->params, 'lookfor' => $this->lookfor)) ?>
     </div>
 
     <? if ($recordTotal > 0): ?>
-      <div class="col-lg-4 col-md-5 col-sm-5 text-right">
+      <div class="col-lg-6 col-md-5 col-sm-5 text-right">
         <?=$this->render('search/controls/limit.phtml')?>
         <?=$this->render('search/controls/sort.phtml')?>
         <?=$this->render('search/controls/view.phtml')?>

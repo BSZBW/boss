@@ -1,6 +1,6 @@
 .row.result {
-  padding-top: 30px;
-  padding-bottom: 30px;
+  padding-top: 20px;
+  padding-bottom: 20px;
   .btn-group-vertical {
     max-width: 116%;
     min-width: 116%;
@@ -42,8 +42,6 @@
       color: #3c4250;
       text-align: left;
       display: inline-block;
-      min-width: 33%;
-      max-width: 33%;
     }
     span {
       margin-right: 20px;
@@ -68,39 +66,52 @@
       display: none;
     }
   }
+  & > div {
+    margin-left: -15px;
+  }
+  .pagination-container {
+    margin-left: -15px;
+  }
+  .results-top {
+    padding-top: 8px;
+    margin-left: -30px;
+    .fa,
+    h1 span {
+      font-size: 18px;
+    }
+    h1 {
+      margin: 0;
+      float: left;
+    }
+    .searchtools {
+      float: right;
+      a {
+        color: @font-color;
+        margin-right: 8px;
+        &:last-child {
+          margin-right: 0;
+        }
+        &:hover {
+          color: @theme-color;
+        }
+        &:hover .fa {
+          cursor: pointer;
+        }
+      }
+    }
+  }
 }
 
 .row.result .meta span, .row.result .meta a {
   padding: 5px 4px 5px 0;
 }
 
-.results-top {
-  .fa {
-    font-size: 26px;
-  }
-  h1 {
-    margin: 0;
-    float: left;
-    .fa {
-      margin-right: 8px;
-    }
-  }
-  .searchtools {
-    float: right;
-    a {
-      color: @font-color;
-      margin-right: 8px;
-      &:last-child {
-        margin-right: 0;
-      }
-      &:hover {
-        color: @theme-color;
-      }
-      &:hover .fa {
-        cursor: pointer;
-      }
-    }
-  }
+.search-controls {
+  margin-top: 25px;
+}
+
+.jumpMenu.form-control {
+  height: 32px;
 }
 
 @media (min-width: 992px) {
@@ -113,12 +124,6 @@
   .row.result {
     & > .col-xs-11 {
       width: 97%;
-    }
-    .meta {
-      .label {
-        max-width: 50%;
-        min-width: 50%;
-      }
     }
   }
 }
