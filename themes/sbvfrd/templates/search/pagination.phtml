@@ -1,7 +1,9 @@
 <div class="pagination-container">
     <? if ($this->pageCount): ?>
 
+      <? if ( !$hideHits ): ?>
        <?=$this->render('search/controls/count.phtml'); ?>
+      <? endif; ?>
 
       <ul class="pagination">
         <li class="hidden-sm hidden-xs">

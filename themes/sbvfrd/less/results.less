@@ -1,7 +1,6 @@
 .row.result {
   padding-top: 30px;
   padding-bottom: 30px;
-  border-bottom: 1px solid #ccc;
   .btn-group-vertical {
     max-width: 116%;
     min-width: 116%;
@@ -54,6 +53,9 @@
     font-size: 13px;
     padding: 4px 0;
   }
+  &:nth-child(odd) {
+    background: @sidebar-title-color;
+  }
 }
 
 .row.result:last-child {
@@ -72,12 +74,32 @@
   padding: 5px 4px 5px 0;
 }
 
-.searchtools {
-  a:after {
-    content: "\2014"; /*&mdash;*/
+.results-top {
+  .fa {
+    font-size: 26px;
   }
-  a:last-child:after {
-    content: '';
+  h1 {
+    margin: 0;
+    float: left;
+    .fa {
+      margin-right: 8px;
+    }
+  }
+  .searchtools {
+    float: right;
+    a {
+      color: @font-color;
+      margin-right: 8px;
+      &:last-child {
+        margin-right: 0;
+      }
+      &:hover {
+        color: @theme-color;
+      }
+      &:hover .fa {
+        cursor: pointer;
+      }
+    }
   }
 }
 

@@ -18,15 +18,20 @@ $groupID = $record->getGroup(true);
 $uniqueID = $record->getUniqueID();
 $showFRBR = $this->configAccess()->Site->displayFrbr;
 $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
-?>
 
+?>
 <div class="<?=$this->driver->supportsAjaxStatus()?'ajaxItem ':''?>col-xs-11 gutter-1">
   <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID())?>" class="hiddenId" />
   <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getResourceSource())?>" class="hiddenSource" />
 
   <div class="hidden-xs col-sm-3 col-md-2 no-gutter">
     <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="img-responsive">
+      <? if ( !($record->getThumbnail() === false) ):  ?>
         <img class="recordcover" src="<?= $thumbnailSrc ?>"/>
+      <? else: ?>
+        <? //@todo render icons if no image is available, probably use getFormatList() to do so ?>
+        <?= $viewRecord->getFormatList() ?>
+      <? endif; ?>
     </a>
   </div>
 
