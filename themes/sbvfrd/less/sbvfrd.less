@@ -59,16 +59,7 @@ ul {
   }
 }
 
-a:before {
-  content: "\00BB";
-  margin-right: 5px;
-}
-
 p {
-  & > a:before {
-    .a-before-reset;
-  }
-
   & > a {
     text-decoration: underline;
 
@@ -106,10 +97,6 @@ a.btn-link:before {
   & > li {
     & > a {
       .tab
-    }
-
-    & > a:before {
-      .a-before-reset;
     }
 
     & > a:hover,
@@ -174,10 +161,6 @@ header {
         background-color: @theme-color;
         text-decoration: underline;
         color: @link-color;
-      }
-
-      &:before {
-        .a-before-reset;
       }
     }
 
@@ -298,6 +281,7 @@ header {
         content: '\f00e';
         font-family: FontAwesome;
         font-weight: normal;
+        margin-right: 5px;
       }
     }
   }
@@ -594,6 +578,11 @@ div.memorize {
   border-radius: 2px;
   padding: 20px 20px 0 20px;
 
+  & > a:before,
+  ul li:before {
+    .a-before;
+  }
+
   h2 {
     font-size: 20px;
     font-weight: 600;
@@ -611,10 +600,13 @@ div.memorize {
 
   li:last-child {
     padding-top: 25px;
+
+    &:before {
+      color: @link-color;
+      font-weight: bold;
+    }
   }
 }
-
-
 
 /* footer */
 footer {
@@ -645,10 +637,6 @@ footer {
       i {
         margin-right: 5px;
       }
-
-      &:before {
-        .a-before-reset;
-      }
     }
   }
 
@@ -671,11 +659,13 @@ footer {
 
     li {
       padding-bottom: 12px;
+
+      &:before {
+        .a-before;
+      }
     }
   }
 }
-
-
 
 /* pagination */
 .pagination-container {
@@ -687,10 +677,6 @@ footer {
         border: none;
         text-align: center;
         width: 40px;
-
-        &:before {
-          .a-before-reset;
-        }
 
         &:hover {
           background-color: @theme-color;
