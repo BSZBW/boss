@@ -389,14 +389,34 @@ a.list-group-item.active:focus {
   }
 }
 
-.breadcrumb {
-  & > li {
-    & + {
-      li:before {
-        content: "|";
-        color: #3C4250;
-        padding: 0 15px;
-        font-weight: normal;
+
+.row-breadcrumb {
+  background-color: @sidebar-background-color;
+
+  .breadcrumbMain {
+    background-color: @white;
+
+    .breadcrumb {
+      background-color: @white;
+      margin-bottom: 0;
+      padding: 8px 0;
+
+      & > li {
+        color: @link-color;
+        font-weight: bold;
+
+        & > a {
+          font-weight: normal;
+          text-decoration: underline;
+
+        }
+
+        &:before {
+          content: "/";
+          color: @link-color;
+          font-weight: normal;
+          padding: 0 5px;
+        }
       }
     }
   }

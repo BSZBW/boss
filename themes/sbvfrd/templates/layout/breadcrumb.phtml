@@ -1,4 +1,4 @@
-<div class="<?= $this->layoutClass('mainbody') ?>">
+<div class="<?= $this->layoutClass('mainbody') ?> breadcrumbMain">
 
 <? if((!isset($this->layout()->showBreadcrumbs) || $this->layout()->showBreadcrumbs == true)
    && !empty($this->layout()->breadcrumbs)
@@ -25,4 +25,4 @@
    </ul>
  <? endif; ?>
 </div>
-<div class="col-md-3"></div>
+<div class="col-md-3 breadcrumbSide hidden-xs hidden-sm"></div>
