@@ -42,8 +42,8 @@
 
 <?= $this->render('search/advanced/templates-handlebars') ?>
 <?=$this->flashmessages()?>
-<form role="search" name="searchForm" id="advSearchForm" method="get" action="<?=$this->url($this->options->getSearchAction())?>">
-  <div class="<?=$this->layoutClass('mainbody')?>">
+<div class="<?=$this->layoutClass('mainbody')?>">
+  <form role="search" name="searchForm" id="advSearchForm" method="get" action="<?=$this->url($this->options->getSearchAction())?>">
     <? $this->searchType = 'advanced' ?>
     <?= $this->render('search/searchTabs'); ?>
     <input type="hidden" name="sort" value="relevance">
@@ -63,32 +63,32 @@
       <?=$this->extraAdvancedControls ?>
       <input class="btn btn-primary pull-right" type="submit" value="<?= $this->transEsc('Find')?>"/>
     <? endif; ?>
-  </div>
+  </form>
+</div>
 
-  <div class="<?=$this->layoutClass('sidebar')?>">
-    <? if ($hasDefaultsApplied): ?>
-      <input type="hidden" name="dfApplied" value="1" />
-    <? endif ?>
-    <? if (!empty($searchFilters)): ?>
-      <h4><?=$this->transEsc("adv_search_filters")?></h4>
+<div class="<?=$this->layoutClass('sidebar')?>">
+  <? if ($hasDefaultsApplied): ?>
+    <input type="hidden" name="dfApplied" value="1" />
+  <? endif ?>
+  <? if (!empty($searchFilters)): ?>
+    <h4><?=$this->transEsc("adv_search_filters")?></h4>
+    <ul class="list-group">
+      <label class="list-group-item checkbox"><?=$this->transEsc("adv_search_select_all")?> <input type="checkbox" checked="checked" class="checkbox-select-all"/></label>
+    </ul>
+    <? foreach ($searchFilters as $field => $data): ?>
       <ul class="list-group">
-        <label class="list-group-item checkbox"><?=$this->transEsc("adv_search_select_all")?> <input type="checkbox" checked="checked" class="checkbox-select-all"/></label>
+        <li class="list-group-item title"><?=$this->transEsc($field)?></li>
+        <? foreach ($data as $value): ?>
+          <label class="list-group-item checkbox"><input class="checkbox-select-item" type="checkbox" checked="checked" name="filter[]" value='<?=$this->escapeHtmlAttr($value['field'])?>:"<?=$this->escapeHtmlAttr($value['value'])?>"' /> <?=$this->escapeHtml($value['displayText'])?></label>
+        <? endforeach; ?>
       </ul>
-      <? foreach ($searchFilters as $field => $data): ?>
-        <ul class="list-group">
-          <li class="list-group-item title"><?=$this->transEsc($field)?></li>
-          <? foreach ($data as $value): ?>
-            <label class="list-group-item checkbox"><input class="checkbox-select-item" type="checkbox" checked="checked" name="filter[]" value='<?=$this->escapeHtmlAttr($value['field'])?>:"<?=$this->escapeHtmlAttr($value['value'])?>"' /> <?=$this->escapeHtml($value['displayText'])?></label>
-          <? endforeach; ?>
-        </ul>
-      <? endforeach; ?>
-    <? endif; ?>
-    <div class="sidegroup">
-      <h4><?=$this->transEsc("Search Tips")?></h4>
-      <ul class="list-group">
-        <a class="list-group-item help-link" href="<?=$this->url('help-home')?>?topic=advsearch" title="<?=$this->transEsc('Help with Advanced Search')?>"><?=$this->transEsc("Help with Advanced Search")?></a>
-        <a class="list-group-item help-link" href="<?=$this->url('help-home')?>?topic=search" title="<?=$this->transEsc('Help with Search Operators')?>"><?=$this->transEsc("Help with Search Operators")?></a>
-      </ul>
-    </div>
+    <? endforeach; ?>
+  <? endif; ?>
+  <div class="sidegroup">
+    <h4><?=$this->transEsc("Search Tips")?></h4>
+    <ul class="list-group">
+      <a class="list-group-item help-link" href="<?=$this->url('help-home')?>?topic=advsearch" title="<?=$this->transEsc('Help with Advanced Search')?>"><?=$this->transEsc("Help with Advanced Search")?></a>
+      <a class="list-group-item help-link" href="<?=$this->url('help-home')?>?topic=search" title="<?=$this->transEsc('Help with Search Operators')?>"><?=$this->transEsc("Help with Search Operators")?></a>
+    </ul>
   </div>
-</form>
+</div>
