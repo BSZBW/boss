@@ -41,6 +41,7 @@
 ?>
 
 <?= $this->render('search/advanced/templates-handlebars') ?>
+
 <?=$this->flashmessages()?>
 <div class="<?=$this->layoutClass('mainbody')?>">
   <form role="search" name="searchForm" id="advSearchForm" method="get" action="<?=$this->url($this->options->getSearchAction())?>">
@@ -49,7 +50,7 @@
     <input type="hidden" name="sort" value="relevance">
     <div class="clearfix">
       <p class="lead pull-left"><?=$this->transEsc('Advanced Search')?></p>
-      <div id="groupJoin" class="form-inline pull-right hidden">
+      <div id="groupJoin" class="form-inline pull-right">
         <label for="join"><?=$this->transEsc("search_match")?>:</label>
         <select id="search_bool0" name="join" class="form-control">
           <option value="AND"<? if($searchDetails && $searchDetails->getOperator()=='ALL'):?> selected<?endif?>><?= $this->transEsc('group_AND') ?></option>

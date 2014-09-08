@@ -176,9 +176,8 @@ swissbib.AdvancedSearch = {
 
     // Hide some group-related controls if there is only one group:
     var action = this.groupCount > 1 ? 'show' : 'hide';
-    $("#groupJoin")[action]();
+//    $("#groupJoin")[action]();
     $("#delete_link_0")[action]();
-
   },
 
 
