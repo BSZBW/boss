@@ -34,7 +34,7 @@ if (!isset($this->layout()->searchbox)) {
   </div>
 <? endif; ?>
 
-<div class="col-md-12">
+<div class="col-md-12 container-fix-md">
 
   <div class="container">
     <div class="row searchHomeContent">
@@ -98,15 +98,14 @@ if (!isset($this->layout()->searchbox)) {
                   <?
                   else: $i--; ?>
                   <? endif; ?>
-                <? endforeach; ?>
-              <?
-              endif; ?>
-            </ul>
+                  <? endforeach; ?>
+                <? endif; ?>
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
-    <? endforeach; ?>
-    <? endif; ?>
+      <? endforeach; ?>
+      <? endif; ?>
+    </div>
   </div>
-</div>
 </div>
