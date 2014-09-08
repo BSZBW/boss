@@ -420,8 +420,6 @@ a.list-group-item.active:focus {
 
 
 .row-breadcrumb {
-  background-color: @sidebar-background-color;
-
   .breadcrumbMain {
     background-color: @white;
 
@@ -448,6 +446,10 @@ a.list-group-item.active:focus {
         }
       }
     }
+  }
+
+  .breadcrumbSide {
+    background-color: @sidebar-background-color;
   }
 }
 
@@ -476,7 +478,6 @@ ul[aria-labelledby=dropdownLibraries] {
     display: table;
     border-collapse: collapse;
     & > .row.table-sidebar {
-      padding-left: 15px;
       & > div,
       & > form > div {
         display: table-cell;
