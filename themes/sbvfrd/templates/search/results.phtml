@@ -38,25 +38,49 @@
   // Load Javascript dependencies into header:
   $this->headScript()->appendFile("check_item_statuses.js");
   $this->headScript()->appendFile("check_save_statuses.js");
+
+  $recordTotal = $this->recordTotal = $this->results->getResultTotal();
 ?>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
+  <? if ( $recordTotal > 0 ): ?>
+    <div class="results-top row">
+      <div class="col-md-9">
+        <h1><i class="fa fa-search"></i> <span><?=$this->transEsc('Search Results')?></span></h1>
+      </div>
+      <div class="col-md-3">
+        <div class="searchtools">
+          <div class="searchtools hidden-print">
+            <a href="<?=$this->results->getUrlQuery()->setViewParam('rss')?>"><i class="fa fa-rss"></i></a>
+            <a href="<?=$this->url('search-email')?>" class="mailSearch modal-link hidden-xs hidden-sm" id="mailSearch<?=$this->escapeHtmlAttr($this->results->getSearchId())?>" title="<?=$this->transEsc('Email this Search')?>"><i class="fa fa-envelope hidden-xs hidden-sm" ></i></a>
+            <? if (is_numeric($this->results->getSearchId())): ?>
+              <? if ($this->results->isSavedSearch()): ?>
+                <a href="<?=$this->url('myresearch-savesearch')?>?delete=<?=urlencode($this->results->getSearchId())?>"><i class="fa fa-minus-square"></i></a>
+              <? else: ?>
+                <a href="<?=$this->url('myresearch-savesearch')?>?save=<?=urlencode($this->results->getSearchId())?>"><i class="fa fa-plus-square"></i></a>
+              <? endif; ?>
+            <? endif; ?>
+          </div>
+        </div>
+      </div>
+    </div>
+  <? endif; ?>
   <?=$this->search()->renderSpellingSuggestions('<strong>' . $this->transEsc('spell_suggest') . '</strong>:', $this->results, $this); ?>
-  <? if (($recordTotal = $this->recordTotal = $this->results->getResultTotal()) > 0): // only display these at very top if we have results ?>
+  <? if ( $recordTotal > 0 ): // only display these at very top if we have results ?>
     <? foreach ($this->results->getRecommendations('top') as $current): ?>
       <?=$this->recommend($current)?>
     <? endforeach; ?>
   <? endif; ?>
   <?=$this->flashmessages()?>
   <div class="hidden-print search-controls clearfix row">
-    <div class="col-lg-8 col-md-7 col-sm-7">
+    <div class="col-lg-6 col-md-7 col-sm-7">
         <?= $this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', array('results' => $this->results, 'recordTotal' => $recordTotal, 'params' => $this->params, 'lookfor' => $this->lookfor)) ?>
     </div>
 
     <? if ($recordTotal > 0): ?>
-      <div class="col-lg-4 col-md-5 col-sm-5 text-right">
-        <?=$this->render('search/controls/limit.phtml')?>
+      <div class="col-lg-6 col-md-5 col-sm-5 text-right">
         <?=$this->render('search/controls/sort.phtml')?>
+        <?=$this->render('search/controls/limit.phtml')?>
         <?=$this->render('search/controls/view.phtml')?>
       </div>
     <? endif; ?>
@@ -86,21 +110,8 @@
       <?=$this->context($this)->renderInContext('search/bulk-action-buttons.phtml', array('idPrefix' => ''))?>
       <?=$this->render('search/list-' . $this->params->getView() . '.phtml')?>
       <?=$this->context($this)->renderInContext('search/bulk-action-buttons.phtml', array('idPrefix' => 'bottom_'))?>
-      <?= $this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', array('results' => $this->results, 'recordTotal' => $recordTotal, 'params' => $this->params, 'lookfor' => $this->lookfor)) ?>
+      <?= $this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', array('results' => $this->results, 'recordTotal' => $recordTotal, 'params' => $this->params, 'lookfor' => $this->lookfor, 'hideHits' => true)) ?>
     </form>
-
-    <div class="searchtools hidden-print">
-      <strong><?=$this->transEsc('Search Tools')?>:</strong>
-      <i class="fa fa-bell"></i> <a href="<?=$this->results->getUrlQuery()->setViewParam('rss')?>"><?=$this->transEsc('Get RSS Feed')?></a>
-      <i class="fa fa-envelope hidden-xs hidden-sm" ></i> <a href="<?=$this->url('search-email')?>" class="mailSearch modal-link hidden-xs hidden-sm" id="mailSearch<?=$this->escapeHtmlAttr($this->results->getSearchId())?>" title="<?=$this->transEsc('Email this Search')?>"><?=$this->transEsc('Email this Search')?></a>
-      <? if (is_numeric($this->results->getSearchId())): ?>
-        <? if ($this->results->isSavedSearch()): ?>
-          <i class="fa fa-minus-square"></i> <a href="<?=$this->url('myresearch-savesearch')?>?delete=<?=urlencode($this->results->getSearchId())?>"><?=$this->transEsc('save_search_remove')?></a>
-        <? else: ?>
-          <i class="fa fa-plus-square"></i> <a href="<?=$this->url('myresearch-savesearch')?>?save=<?=urlencode($this->results->getSearchId())?>"><?=$this->transEsc('save_search')?></a>
-        <? endif; ?>
-      <? endif; ?>
-    </div>
   <? endif; ?>
 </div>
 <? /* End Main Listing */ ?>

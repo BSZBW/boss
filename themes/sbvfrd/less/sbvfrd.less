@@ -41,6 +41,7 @@ h4.resultViewSubTitle {
 }
 
 a, .btn-link {
+  cursor: pointer;
   color: @link-color;
   text-decoration: none;
 }
@@ -48,6 +49,10 @@ a, .btn-link {
 a:hover, .btn-link:hover {
   color: @theme-color;
   text-decoration: none;
+}
+
+.btn:hover * {
+  cursor: pointer;
 }
 
 ul {
@@ -72,6 +77,10 @@ p {
 
 .btn-link {
   font-weight: bold;
+}
+
+.label-info {
+  background: @link-color;
 }
 
 /* btn styles */
@@ -133,6 +142,7 @@ header {
   .btn-link {
     background-color: transparent;
     color: @white;
+    font-weight: 500;
   }
 
   .btn-link:hover {
@@ -143,6 +153,7 @@ header {
   .btn-primary:hover {
     font-weight: normal;
     background-color: @highlight-color;
+    border-color: @highlight-color;
   }
 
   .navbar-right {
@@ -319,7 +330,7 @@ header {
 
 .list-group-item.title {
   font-weight: 600;
-  background: #F5F5F5;
+  background: @sidebar-title-color;
 }
 
 .list-group-item:first-child,
@@ -465,6 +476,7 @@ ul[aria-labelledby=dropdownLibraries] {
     display: table;
     border-collapse: collapse;
     & > .row.table-sidebar {
+      padding-left: 15px;
       & > div,
       & > form > div {
         display: table-cell;
@@ -827,7 +839,7 @@ footer {
           background-color: @white;
           border-top: 0px;
           border-bottom: 0px;
-          width: 110px;
+          width: 130px;
           cursor: default;
 
           &:hover {

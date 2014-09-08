@@ -11,10 +11,9 @@ $retrosURL       = (is_array($urldisplay['urls']) && count($urldisplay['urls']) 
 ?>
 
 <? if ($amountHoldings === 1): ?>
-    <button class="btn btn btn-default dropdown-toggle" type="button" id="dropdownLibraries" data-toggle="dropdown">
-      <span class="hidden-xs"><i class="fa fa-fw"><strong>1</strong></i><?= $this->transEsc('result.library') ?></span>
-      <span class="caret"></span>
-    </button>
+    <a class="dropdown-toggle" id="dropdownLibraries" data-toggle="dropdown">
+      <i class="fa fa-institution"></i><span class="hidden-xs"><?= $this->transEsc('result.library') ?> (1)</span>
+    </a>
     <? if (in_array('RETROS', $urldisplay['unions'])): ?>
         <a class="linkbutton primary icon_link_primary" href="<?= $this->redirectProtocolWrapper()->getWrappedURL($urldisplay['urls'][1]['url']) ?>" target="_blank"><span>retro.seals</span></a>
     <? elseif($retrosURL): ?>
@@ -25,10 +24,9 @@ $retrosURL       = (is_array($urldisplay['urls']) && count($urldisplay['urls']) 
 
 
 <? elseif ($amountHoldings > 1): ?>
-  <button class="btn btn btn-default dropdown-toggle" type="button" id="dropdownLibraries" data-toggle="dropdown">
-    <span class="hidden-xs"><i class="fa fa-fw"><strong><?= $amountHoldings ?></strong></i><?= $this->transEsc('result.libraries') ?></span>
-    <span class="caret"></span>
-  </button>
+  <a class="dropdown-toggle" id="dropdownLibraries" data-toggle="dropdown">
+    <i class="fa fa-institution"></i><span class="hidden-xs"><?= $this->transEsc('result.libraries') ?> (<?= $amountHoldings ?>)</span>
+  </a>
     <? if (in_array('RETROS', $urldisplay['unions'])): ?>
         <a class="linkbutton primary icon_link_primary" href="<?= $this->redirectProtocolWrapper()->getWrappedURL($urldisplay['urls'][1]['url']) ?>" target="_blank"><span>retro.seals</span></a>
     <? elseif($retrosURL): ?>
