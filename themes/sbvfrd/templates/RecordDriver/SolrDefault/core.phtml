@@ -27,7 +27,7 @@ $theme    = $this->configAccess()->Site->theme;
         <h3 property="name"><?=$this->escapeHtml($shortTitle)?></h3>
     </div>
 
-    <div class="col-sm-4 hidden-xs">
+    <div class="col-sm-3 hidden-xs">
         <div>
         <? /* Display thumbnail if appropriate: */ ?>
         <? $mediumThumb = $this->record($this->driver)->getThumbnail('medium'); $largeThumb = $this->record($this->driver)->getThumbnail('large'); ?>
@@ -55,7 +55,7 @@ $theme    = $this->configAccess()->Site->theme;
         <?=$this->record($this->driver)->getPreviews()?>
   </div>
 
-  <div class="col-sm-8 col-xs-12">
+  <div class="col-sm-9 col-xs-12">
     <? if (isset($subtitle)): ?>
       <h4 class="resultViewSubTitle"><?= $this->escapeHtml($subtitle) ?></h4>
     <? endif; ?>
@@ -68,86 +68,70 @@ $theme    = $this->configAccess()->Site->theme;
     <? endif; ?>
 
     <?/* Display Main Details */?>
-    <table class="table table-striped" summary="<?=$this->transEsc('Bibliographic Details')?>">
+    <div class="meta" summary="<?=$this->transEsc('Bibliographic Details')?>">
     <? if (!empty($responsible)): ?>
         <!-- Verfasser / Beitragende -->
-        <tr>
-            <th><?=$this->transEsc('Author')?>: </th>
-            <td property="author"><?=$this->escapeHtml($responsible)?></td>
-        </tr>
+        <span class="label"><?=$this->transEsc('Author')?>:</span>
+        <span><?=$this->escapeHtml($responsible)?></span><br />
     <? endif; ?>
 
     <!-- Impressum -->
     <? if (!empty($publications)): ?>
-        <tr>
-            <th><?=$this->transEsc('Publication')?>: </th>
-            <td>
-                <? foreach ($publications as $field): ?>
-                    <span property="publisher" typeof="Organization">
-                        <? $pubPlace = $field->getPlace(); if (!empty($pubPlace)): ?>
-                            <span property="location"><?=$this->escapeHtml($pubPlace)?> :</span>
-                        <? endif; ?>
-                        <? $pubName = $field->getName(); if (!empty($pubName)): ?>
-                            <span property="name"> <?=$this->escapeHtml($pubName)?>, </span>
-                        <? endif; ?>
-                    </span>
-                    <? $pubDate = $field->getDate(); if (!empty($pubDate)): ?>
-                        <span property="publicationDate"><?=$this->escapeHtml($pubDate)?></span>
-                    <? endif; ?>
-                    <br/>
-                <? endforeach; ?>
-            </td>
-        </tr>
+      <span class="label"><?=$this->transEsc('Publication')?>: </span>
+      <span>
+          <? foreach ($publications as $field): ?>
+              <span property="publisher" typeof="Organization">
+                  <? $pubPlace = $field->getPlace(); if (!empty($pubPlace)): ?>
+                      <span property="location"><?=$this->escapeHtml($pubPlace)?> :</span>
+                  <? endif; ?>
+                  <? $pubName = $field->getName(); if (!empty($pubName)): ?>
+                      <span property="name"> <?=$this->escapeHtml($pubName)?>, </span>
+                  <? endif; ?>
+              </span>
+              <? $pubDate = $field->getDate(); if (!empty($pubDate)): ?>
+                  <span property="publicationDate"><?=$this->escapeHtml($pubDate)?></span>
+              <? endif; ?>
+              <br/>
+          <? endforeach; ?>
+      </span><br />
     <? endif; ?>
 
     <? if (!empty($journalTitle)): ?>
-      <tr>
-        <th><?=$this->transEsc('Journal Title')?>:</th>
-        <td>
-          <a href="<?= $viewRecord->getLink('journaltitle', $journalTitle)?>"><?=$this->escapeHtml($journalTitle)?></a>
-          <? if (!empty($ref)) { echo $this->escapeHtml($ref); } ?>
-        </td>
-      </tr>
+      <span class="label"><?=$this->transEsc('Journal Title')?>:</span>
+      <span>
+        <a href="<?= $viewRecord->getLink('journaltitle', $journalTitle)?>"><?=$this->escapeHtml($journalTitle)?></a>
+        <? if (!empty($ref)) { echo $this->escapeHtml($ref); } ?>
+      </span><br />
       <? endif; ?>
 
       <? if ($hostitems): ?>
-      <tr>
-        <th><?= $this->transEsc('note_773') ?>: </th>
-        <td>
-            <? foreach ($hostitems as $hostitem): ?>
-                <? $text = array_key_exists('related', $hostitem) ? $hostitem['title'] . ', ' . $hostitem['related'] : $hostitem['title'] ?>
-                <?= $this->escapeHtml($text) ?><br />
-            <? endforeach; ?>
-        </td>
-      </tr>
+      <span class="label"><?= $this->transEsc('note_773') ?>: </span>
+      <span>
+          <? foreach ($hostitems as $hostitem): ?>
+              <? $text = array_key_exists('related', $hostitem) ? $hostitem['title'] . ', ' . $hostitem['related'] : $hostitem['title'] ?>
+              <?= $this->escapeHtml($text) ?><br />
+          <? endforeach; ?>
+      </span><br />
       <? endif; ?>
 
       <?php if ($cartMathData): ?>
-      <tr>
-        <th><?= $this->transEsc('Map_Scale') ?>:</th>
-        <td><?= $this->escapeHtml($cartMathData) ?></td>
-      </tr>
+        <span class="label"><?= $this->transEsc('Map_Scale') ?>:</span>
+        <span><?= $this->escapeHtml($cartMathData) ?></span><br />
       <?php endif; ?>
 
       <?php if ($physicalDescriptions): ?>
-      <tr>
-        <th><?= $this->transEsc('Physical Description') ?>:</th>
-        <td><?= $this->physicalDescription($physicalDescriptions) ?></td>
-      </tr>
+        <span class="label"><?= $this->transEsc('Physical Description') ?>:</span>
+        <span><?= $this->physicalDescription($physicalDescriptions) ?></span><br />
       <?php endif; ?>
 
       <? if (!empty($formats)): ?>
-        <tr>
-          <th><?=$this->transEsc('Format')?>: </th>
-          <td><?= $formats ?></td>
-        </tr>
+        <span class="label"><?=$this->transEsc('Format')?>: </span>
+        <span><?= $formats ?></span><br />
       <? endif; ?>
 
       <? if (!empty($edition)): ?>
-      <tr>
-        <th><?=$this->transEsc('Edition')?>: </th>
-        <td property="bookEdition"><?=$this->escapeHtml($edition)?></td>
-      </tr>
+        <span class="label"><?=$this->transEsc('Edition')?>: </span>
+        <span property="bookEdition"><?=$this->escapeHtml($edition)?></span><br />
       <? endif; ?>
 
       <?
@@ -156,34 +140,28 @@ $theme    = $this->configAccess()->Site->theme;
         $urls = ($openUrl && $this->driver->replaceURLsWithOpenURL()) ? array() : $this->record($this->driver)->getLinkDetails();
       ?>
       <? if (!empty($urls) || $openUrl): ?>
-      <tr>
-        <th><?=$this->transEsc('Online Access')?>: </th>
-        <td>
+        <span class="label"><?=$this->transEsc('Online Access')?>: </span>
+        <span>
           <? foreach ($urls as $current): ?>
             <a href="<?=$this->escapeHtmlAttr($this->proxyUrl($current['url']))?>"><?=$this->escapeHtml($current['desc'])?></a><br/>
           <? endforeach; ?>
           <? if ($openUrl): ?>
             <?=$this->openUrl($openUrl)?><br/>
           <? endif; ?>
-        </td>
-      </tr>
+        </span><br />
       <? endif; ?>
 
       <?php if (!empty($showFRBR) && $showFRBR && !empty($groupID)) : ?>
-       <tr>
-         <th></th>
-         <td>
-           <a href="<?=
-            $this->url('search-results') . '?lookfor=' . $groupID . "&type=FRBR"
-            . "&sort=publishDateSort+desc" ?>"
-               class="btn btn-default icon_show" title="<?= $this->transEsc('FRBR_Button') ?>">
-                <span class="hidden-xs"><?= $this->transEsc('FRBR_Button') ?></span>
-            </a>
-         </td>
-       </tr>
+       <span>
+         <a href="<?=
+          $this->url('search-results') . '?lookfor=' . $groupID . "&type=FRBR"
+          . "&sort=publishDateSort+desc" ?>"
+             class="btn btn-primary icon_show" title="<?= $this->transEsc('FRBR_Button') ?>">
+              <span class="hidden-xs"><?= $this->transEsc('FRBR_Button') ?></span>
+          </a>
+       </span><br />
       <?php endif; ?>
-
-    </table>
+    </div>
     <?/* End Main Details */?>
   </div>
 </div>
