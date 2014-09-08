@@ -350,40 +350,57 @@ a.list-group-item.active:focus {
 
 /* tables */
 .table {
+  tr {
+    &:last-child {
+      border-bottom: 1px solid @black;
+    }
+  }
+
   & > thead {
     & > tr {
       & > th {
-        background: #3C4250;
-        font-weight: 600;
-        color: @white;
-        border: none;
-        border-right: 1px solid #222;
+        background: @sidebar-background-color;
+        font-weight: normal;
+        .mixin-table-border;
+        border-bottom: 1px solid @black;
+
+        &:last-child {
+          border-right: none;
+        }
       }
     }
   }
   & > tbody {
     & > tr {
       & > th {
-        border: none;
-        border-right: 1px solid #DDD;
-        font-weight: 600;
+        .mixin-table-border;
+
+        &:last-child {
+          border: none;
+        }
+      }
+
+      & > td {
+        .mixin-table-border;
+
+        &:last-child {
+          border: none;
+        }
       }
     }
   }
-}
 
-.table & > thead & > tr & > td,
-.table & > tbody & > tr & > td,
-.table & > tfoot & > tr & > td {
-  border: none;
-  border-right: 1px solid #DDD;
-}
+  & > tfoot {
+    & > tr {
+      & > td {
+        .mixin-table-border;
 
-.table & > thead & > tr & > th:last-child,
-.table & > thead & > tr & > td:last-child,
-.table & > tbody & > tr & > td:last-child,
-.table & > tfoot & > tr & > td:last-child {
-  border-right: none;
+        &:last-child {
+          border: none;
+        }
+      }
+    }
+  }
 }
 
 .pager & > li:first-child & > a,
@@ -584,6 +601,10 @@ ul[aria-labelledby=dropdownLibraries] {
 
 /* detailview record */
 .record {
+  a {
+    text-decoration: underline;
+  }
+
   & > .row {
     background-color: @content-box-background-color;
     margin-bottom: 20px;
@@ -614,6 +635,11 @@ ul[aria-labelledby=dropdownLibraries] {
       }
     }
   }
+}
+
+.recordTabs,
+.tab-content {
+  margin-right: 10px;
 }
 
 .holdingsAjaxSpinner {
@@ -663,14 +689,39 @@ div.memorize {
     list-style: none;
     padding-left: 0;
   }
+
   .institutionBox {
     h4 {
+      font-size: 18px;
       cursor: pointer;
+      padding-left: 10px;
+      margin-top: 14px;
     }
   }
+
   h3 {
-    border-bottom: 1px solid #CCC;
-    padding-bottom: 5px;
+    border-bottom: 1px solid @black;
+    padding: 0 0 16px 10px;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+
+  .institutionFavorite  {
+    & > a {
+      &:hover:before {
+        color: @theme-color;
+      }
+
+      &:before {
+        font-family: FontAwesome;
+        content: '\f004';
+        color: @link-color;
+        margin: 0 5px 0 10px;
+        display: inline-block;
+      }
+    }
   }
 }
 
