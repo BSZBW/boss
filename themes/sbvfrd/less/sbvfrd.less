@@ -420,8 +420,6 @@ a.list-group-item.active:focus {
 
 
 .row-breadcrumb {
-  background-color: @sidebar-background-color;
-
   .breadcrumbMain {
     background-color: @white;
 
@@ -449,6 +447,10 @@ a.list-group-item.active:focus {
       }
     }
   }
+
+  .breadcrumbSide {
+    background-color: @sidebar-background-color;
+  }
 }
 
 ul.dropdown-menu {
@@ -473,15 +475,11 @@ ul[aria-labelledby=dropdownLibraries] {
 .main {
   & > .container > .row.table-sidebar > form,
   & > .container {
-    display: table;
     border-collapse: collapse;
     & > .row.table-sidebar {
-      padding-left: 15px;
       & > div,
       & > form > div {
-        display: table-cell;
         vertical-align: top;
-        float: none;
       }
       & > div.sidebar,
       & > form > div.sidebar {
@@ -556,6 +554,65 @@ ul[aria-labelledby=dropdownLibraries] {
   padding: 6px 0 8px;
   .tt-hint {
     display: none;
+  }
+}
+
+/* detail toolbar */
+.detailToolbar {
+  .nav-pills {
+    margin: 30px 20px 0 0;
+
+    & > li {
+      float: right;
+
+      & > a {
+        padding: 0 5px 0 0;
+        color: @black;
+
+        & > i {
+          font-size: 20px;
+          cursor: pointer;
+        }
+
+        &:hover {
+          background-color: transparent;
+        }
+      }
+    }
+  }
+}
+
+/* detailview record */
+.record {
+  & > .row {
+    background-color: @content-box-background-color;
+    margin-bottom: 20px;
+
+    h3 {
+      font-size: 16px;
+      margin-bottom: 26px;
+    }
+
+    h4 {
+      font-size: 14px;
+    }
+
+    .meta {
+      font-size: 14px;
+
+      .label {
+        color: @black;
+        font-size: 14px !important;
+        text-align: left;
+        display: inline-block;
+        min-width: 33%;
+        max-width: 33%;
+        padding-left: 0;
+      }
+      span {
+        margin-right: 20px;
+      }
+    }
   }
 }
 
