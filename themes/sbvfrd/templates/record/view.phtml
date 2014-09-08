@@ -74,6 +74,7 @@
     <?=$this->record($this->driver)->getCoreMetadata()?>
   </div>
 
+  <div class="row">
   <? if (count($this->tabs) > 0): ?>
     <a name="tabnav"></a>
     <ul class="recordTabs nav nav-tabs">
@@ -99,9 +100,10 @@
     </ul>
   <? endif; ?>
 
-  <div class="tab-content" id="record-tabs">
-    <div class="tab-pane active" id="<?=$this->activeTab ?>-tab">
-      <?=isset($activeTabObj) ? $this->record($this->driver)->getTab($activeTabObj) : '' ?>
+    <div class="tab-content" id="record-tabs">
+      <div class="tab-pane active" id="<?=$this->activeTab ?>-tab">
+        <?=isset($activeTabObj) ? $this->record($this->driver)->getTab($activeTabObj) : '' ?>
+      </div>
     </div>
   </div>
 
