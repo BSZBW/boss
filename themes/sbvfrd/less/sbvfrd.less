@@ -836,6 +836,30 @@ footer {
   }
 }
 
+#advSearchForm {
+  margin-bottom: 75px;
+
+  & > .clearfix {
+    margin-top: 20px;
+  }
+
+  .lead {
+    font-size: 20px;
+    font-weight: bold;
+
+    &:before {
+      content: "\f00e";
+      font-family: FontAwesome;
+      margin-right: 5px;
+      font-weight: normal;
+    }
+  }
+
+  .fa-plus-circle {
+    color: @link-color;
+  }
+}
+
 /* pagination */
 .pagination-container {
   & .pagination {
