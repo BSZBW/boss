@@ -319,6 +319,47 @@ header {
   .twitter-typeahead {
     position: static !important;
   }
+
+  .advancedSearchHeaderBox {
+    margin-top: 20px;
+    margin-bottom: 15px;
+    height: 86px;
+    max-height: 86px;
+    background-color: @highlight-color;
+    max-width: 85%;
+    overflow: hidden;
+
+    &.tabsVisible {
+      margin-top: 0;
+    }
+
+    a,p {
+      font-size: 13px;
+      margin: 5px;
+    }
+
+    a {
+      &:hover {
+        color: @link-color;
+      }
+
+      &.simpleSearchLink {
+        &:before {
+          content: '\f002';
+          font-family: FontAwesome;
+          margin-right: 5px;
+        }
+      }
+    }
+
+    p {
+      color: @black;
+
+      strong {
+        font-size: 13px;
+      }
+    }
+  }
 }
 
 /* lists */
@@ -832,6 +873,122 @@ footer {
       &:before {
         .a-before;
       }
+    }
+  }
+}
+
+#advSearchForm {
+  margin-bottom: 75px;
+
+  & > .clearfix {
+    margin-top: 20px;
+  }
+
+  .lead {
+    font-size: 20px;
+    font-weight: bold;
+
+    &:before {
+      content: "\f00e";
+      font-family: FontAwesome;
+      margin-right: 5px;
+      font-weight: normal;
+    }
+  }
+
+  .group {
+    &.well {
+      border-radius: 2px;
+    }
+
+    .row-connector {
+      padding-bottom: 14px;
+
+      label {
+        margin-right: 50px;
+      }
+    }
+
+    & [class^=col-] {
+      padding-left: 15px;
+    }
+
+    .search-input-col {
+      & > .row {
+        margin-bottom: 14px;
+      }
+    }
+
+    .pull-right {
+      text-align: right;
+    }
+
+    .groupLabel {
+      font-size: 18px;
+    }
+  }
+
+  a {
+    .fa-plus-circle {
+      color: @link-color;
+    }
+
+    &:hover {
+      .fa-plus-circle {
+        color: @theme-color;
+      }
+    }
+  }
+
+  legend {
+    border-bottom: none;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .col-sm-12 {
+    & > legend {
+      margin-top: 25px;
+      padding-top: 24px;
+      border-top: 1px solid @content-box-border-color;
+      font-size: 20px;
+
+      &:before {
+        content: '\f1de';
+        font-family: FontAwesome;
+        font-weight: normal;
+        margin-right: 5px;
+      }
+    }
+
+    label {
+      font-size: 18px;
+      margin-bottom: 24px;
+    }
+  }
+
+  hr {
+    margin-top: 25px;
+    margin-bottom: 24px;
+  }
+
+
+  .btn {
+    min-width: 150px;
+  }
+
+  #groupJoin {
+    label {
+      margin-right: 20px;
+    }
+  }
+
+  .fa-times {
+    color: @link-color;
+    cursor: pointer;
+
+    &:hover {
+      color: @theme-color;
     }
   }
 }

@@ -11,43 +11,6 @@ class SummonController extends VuFindSummonController
 {
 
     /**
-     * Get date range settings for summon
-     * Field is named PublicationDate instead publishDate
-     *
-     * @param   Boolean    $savedSearch
-     * @param   String     $config
-     * @param   Array      $filter
-     * @return    Array
-     */
-    protected function getDateRangeSettings($savedSearch = false, $config = 'facets',
-      $filter = array()
-    ) {
-        // Default to blank strings:
-        $from = $to = '';
-
-        // Check to see if there is an existing range in the search object:
-        if ($savedSearch) {
-            $filters = $savedSearch->getParams()->getFilters();
-            if (isset($filters['PublicationDate'])) {
-                foreach ($filters['PublicationDate'] as $current) {
-                    if ($range = SolrUtils::parseRange($current)) {
-                        $from = $range['from'] == '*' ? '' : $range['from'];
-                        $to = $range['to'] == '*' ? '' : $range['to'];
-                        $savedSearch->getParams()
-                            ->removeFilter('PublicationDate:' . $current);
-                        break;
-                    }
-                }
-            }
-        }
-
-        // Send back the settings:
-        return array($from, $to);
-    }
-
-
-
-    /**
      * Return a Search Results object containing advanced facet information.  This
      * data may come from the cache.
      *

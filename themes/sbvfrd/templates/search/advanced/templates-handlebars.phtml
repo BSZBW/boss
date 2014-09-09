@@ -1,63 +1,94 @@
 <script id="adv-search-field" type="text/x-handlebars-template">
-  <div class="advRow fieldbox">
-    {{{label}}}
-    {{{term}}}
-    {{{selector}}}
+  <div class="row" id="search_field_row_{{groupIndex}}_{{fieldIndex}}">
+    <div class="col-sm-7">
+      {{{term}}}
+    </div>
+    <div class="col-sm-4">
+      {{{selector}}}
+    </div>
+    <div class="col-sm-1">
+      <a class="help-block" onclick="swissbib.AdvancedSearch.removeField({{groupIndex}}, {{fieldIndex}});">
+        <i class="fa fa-times"></i>
+      </a>
+    </div>
   </div>
 </script>
 
 <script id="adv-search-field-label" type="text/x-handlebars-template">
-  <div class="label">
-    <label for="search_lookfor{{groupIndex}}_{{fieldIndex}}" class="{{classes}}">{{label}}:</label>
-    &nbsp;
-  </div>
+  <label for="search_lookfor{{groupIndex}}_{{fieldIndex}}" class="{{classes}} groupLabel">{{label}}:</label>
 </script>
 
 <script id="adv-search-field-term-text" type="text/x-handlebars-template">
-  <div class="terms">
-    <input type="text" class="text large" value="{{value}}" size="{{size}}" name="lookfor{{groupIndex}}[]" id="search_lookfor{{groupIndex}}_{{fieldIndex}}">
-  </div>
+    <input type="text" class="text form-control" value="{{value}}" size="{{size}}" name="lookfor{{groupIndex}}[]" id="search_lookfor{{groupIndex}}_{{fieldIndex}}">
 </script>
 
 <script id="adv-search-field-field-selector" type="text/x-handlebars-template">
-  <div class="field">
-    <label for="search_type{{groupIndex}}_{{fieldIndex}}">{{label}}</label>
-    <select class="select" name="type{{groupIndex}}[]" id="search_typ{{groupIndex}}_{{fieldIndex}}">
+    <select class="select form-control" name="type{{groupIndex}}[]" id="search_typ{{groupIndex}}_{{fieldIndex}}">
       {{#each options}}
       <option value="{{name}}"
       {{#if selected}}selected="selected"{{/if}}>{{label}}</option>
       {{/each}}
     </select>
-  </div>
 </script>
 
 <script id="adv-search-group" type="text/x-handlebars-template">
   <div id="group{{groupIndex}}" class="group well clearfix">
     {{{searchDetails}}}
-    <div id="group{{groupIndex}}SearchHolder" class="groupSearchHolder"></div>
-    {{{addLink}}}
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div id="group{{groupIndex}}SearchHolder" class="groupSearchHolder col-sm-10 search-input-col"></div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2"></div>
+      <div class="col-sm-10">
+        {{{addLink}}}
+      </div>
+    </div>
   </div>
 </script>
 
 <script id="adv-search-group-searchDetails" type="text/x-handlebars-template">
-  <div class="groupSearchDetails">
-    <div class="join">
-      <label for="search_bool{{groupIndex}}">{{matchLabel}}:</label>
-      <select name="bool{{groupIndex}}[]" id="search_bool{{groupIndex}}">
-        {{#each joins}}
-        <option value="{{name}}"
-        {{#if selected}}selected="selected"{{/if}}>{{label}}</option>
-        {{/each}}
-      </select>
+  <div class="row">
+    <div class="col-sm-5">
+      {{{label}}}
     </div>
-    <a onclick="swissbib.AdvancedSearch.deleteThisGroup(this)" id="delete_link_{{groupIndex}}" class="linkbutton small icon_delete" href="javascript:void(0)" style="display: inline;"><span>{{deleteLabel}}</span></a>
+    <div class="col-sm-4"></div>
+    <div class="col-sm-3 pull-right">
+      <a onclick="swissbib.AdvancedSearch.deleteThisGroup(this)" id="delete_link_{{groupIndex}}" href="javascript:void(0)" style="display: inline;">
+        <i class="fa fa-times-circle"></i>
+        {{deleteLabel}}
+      </a>
+    </div>
+  </div>
+  <div class="row row-connector">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-10">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="row">
+            <div class="col-sm-2">
+              <label for="search_bool{{groupIndex}}">{{matchLabel}}:</label>
+            </div>
+            <div class="col-sm-10">
+              <select name="bool{{groupIndex}}[]" id="search_bool{{groupIndex}}" class="form-control">
+               {{#each joins}}
+               <option value="{{name}}"
+               {{#if selected}}selected="selected"{{/if}}>{{label}}</option>
+               {{/each}}
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </script>
 
 <script id="adv-search-group-addfield" type="text/x-handlebars-template">
-  <div class="floatbox">
-    <a onclick="swissbib.AdvancedSearch.addFieldToThisGroup(this)" id="add_search_link_{{groupIndex}}" class="linkbutton small icon_add" href="javascript:void(0)"><span>{{addLabel}}</span></a>
-  </div>
+    <a onclick="swissbib.AdvancedSearch.addFieldToThisGroup(this)" id="add_search_link_{{groupIndex}}" href="javascript:void(0)">
+      <i id="group{{ groupInex }}Holder" class="fa fa-plus-circle"></i>
+      {{addLabel}}
+    </a>
 </script>
 
 
