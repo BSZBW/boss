@@ -24,8 +24,9 @@
     <? if (count($searchtabs) > 0): ?>
       <span class="search-tabs-label"><?= $this->transEsc('Search In') ?>:</span>
       <?= $this->render('search/searchTabs'); ?>
+      <? $withTabsClass = ' tabsVisible' ?>
     <? endif; ?>
-      <div class="advancedSearchHeaderBox">
+      <div class="advancedSearchHeaderBox<?= $withTabsClass ?>">
         <div class="row">
           <div class="col-sm-4">
             <a class="navbar-text advancedSearchLink edit" href="<?=$this->url($advSearch)?>?edit=<?=$this->escapeHtmlAttr($this->searchId)?>"><?=$this->transEsc("Edit this Advanced Search")?></a>

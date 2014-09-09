@@ -16,7 +16,6 @@ swissbib.AdvancedSearch = {
    */
   init: function () {
     if (this.isInAdvancedSearch()) {
-      this.initFromSearchDetails();
       this.initJsTree();
 
       $("#addGroupLink").removeClass("offscreen");
@@ -53,30 +52,6 @@ swissbib.AdvancedSearch = {
     return location.pathname.indexOf('/Advanced') >= 0;
   },
 
-
-  /**
-   * Initialize search mask from search details
-   *
-   */
-  initFromSearchDetails: function () {
-    var firstGroupIndex, newField, that = this;
-
-    if (this.searchDetails.length) {
-      jQuery.each(this.searchDetails, function (groupIndex, searchGroup) {
-        jQuery.each(searchGroup, function (searchIndex, search) {
-          if (searchIndex == 0) {
-            groupIndex = that.addGroup(search.lookfor, search.field, search.bool);
-          } else {
-            newField = that.addField(groupIndex, search.lookfor, search.field);
-          }
-        })
-      });
-    } else {
-      firstGroupIndex = this.addGroup();
-      this.addField(firstGroupIndex);
-      this.addField(firstGroupIndex);
-    }
-  },
 
 
   /**

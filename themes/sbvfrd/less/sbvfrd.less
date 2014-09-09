@@ -319,6 +319,47 @@ header {
   .twitter-typeahead {
     position: static !important;
   }
+
+  .advancedSearchHeaderBox {
+    margin-top: 20px;
+    margin-bottom: 15px;
+    height: 86px;
+    max-height: 86px;
+    background-color: @highlight-color;
+    max-width: 85%;
+    overflow: hidden;
+
+    &.tabsVisible {
+      margin-top: 0;
+    }
+
+    a,p {
+      font-size: 13px;
+      margin: 5px;
+    }
+
+    a {
+      &:hover {
+        color: @link-color;
+      }
+
+      &.simpleSearchLink {
+        &:before {
+          content: '\f002';
+          font-family: FontAwesome;
+          margin-right: 5px;
+        }
+      }
+    }
+
+    p {
+      color: @black;
+
+      strong {
+        font-size: 13px;
+      }
+    }
+  }
 }
 
 /* lists */
