@@ -31,6 +31,8 @@
   $this->headScript()->appendFile(
     isset($this->advancedSearchJsOverride) ? $this->advancedSearchJsOverride : 'advanced_search.js'
   );
+//  $this->headScript()->appendFile('swissbib/AdvancedSearch.js');
+
   // Step 3: Build the page
   $this->headScript()->appendScript(
     $this->partial(
@@ -44,10 +46,12 @@
 
 <?=$this->flashmessages()?>
 <div class="<?=$this->layoutClass('mainbody')?>">
+  <? $this->searchType = 'advanced' ?>
+  <?= $this->render('search/searchTabs'); ?>
+
   <form role="search" name="searchForm" id="advSearchForm" method="get" action="<?=$this->url($this->options->getSearchAction())?>">
-    <? $this->searchType = 'advanced' ?>
-    <?= $this->render('search/searchTabs'); ?>
     <input type="hidden" name="sort" value="relevance">
+
     <div class="clearfix">
       <p class="lead pull-left"><?=$this->transEsc('Advanced Search')?></p>
       <div id="groupJoin" class="form-inline pull-right">
@@ -58,13 +62,21 @@
         </select>
       </div>
     </div>
-    <i id="groupPlaceHolder" class="fa fa-plus-circle"></i> <a href="#" onClick="addGroup()"><?= $this->transEsc('add_search_group') ?></a>
+
+    <a id="groupPlaceHolder" href="#" onClick="swissbib.AdvancedSearch.addGroup()">
+      <i  class="fa fa-plus-circle"></i>
+      <?= $this->transEsc('add_search_group') ?>
+    </a>
+
     <input class="btn btn-primary pull-right" type="submit" value="<?= $this->transEsc('Find')?>">
+
     <? if (isset($this->extraAdvancedControls)): ?>
       <?=$this->extraAdvancedControls ?>
       <input class="btn btn-primary pull-right" type="submit" value="<?= $this->transEsc('Find')?>"/>
     <? endif; ?>
+
   </form>
+
 </div>
 
 <div class="<?=$this->layoutClass('sidebar')?>">

@@ -94,13 +94,12 @@ swissbib.AdvancedSearch = {
 
     var groupIndex = this.groupCount;
     var groupHtml = this.buildGroup(groupIndex, join);
-
     // Set to 0 so adding searches knows which one is first.
     this.groupCount++;
     this.fieldCount[groupIndex] = 0;
 
     // Add the new group into the page
-    $("#searchHolder").append(groupHtml);
+    $("#groupPlaceHolder").before(groupHtml);
     // Add the first search field
     this.addField(groupIndex, firstTerm, firstField);
 
@@ -163,7 +162,7 @@ swissbib.AdvancedSearch = {
     var groupIndex = 0,
         that = this;
 
-    $("#searchHolder > .group").each(function (index, group) {
+    $("#advSearchForm > .group").each(function (index, group) {
       // If the number of this group doesn't match our running count
       if ($(this).attr("id") != "group" + groupIndex) {
         // Re-number this group
@@ -382,6 +381,7 @@ swissbib.AdvancedSearch = {
     var html = $("#adv-search-group-searchDetails").html(),
         template = Handlebars.compile(html),
         data = {
+          label: this.buildFieldLabel(groupIndex, this.fieldCount[groupIndex]),
           groupIndex: groupIndex,
           matchLabel: this.searchLabels.searchMatch,
           deleteLabel: this.searchLabels.deleteSearchGroupString,
