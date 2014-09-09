@@ -10,7 +10,7 @@
 </script>
 
 <script id="adv-search-field-label" type="text/x-handlebars-template">
-  <label for="search_lookfor{{groupIndex}}_{{fieldIndex}}" class="{{classes}}">{{label}}:</label>
+  <label for="search_lookfor{{groupIndex}}_{{fieldIndex}}" class="{{classes}} groupLabel">{{label}}:</label>
 </script>
 
 <script id="adv-search-field-term-text" type="text/x-handlebars-template">
@@ -44,12 +44,12 @@
 
 <script id="adv-search-group-searchDetails" type="text/x-handlebars-template">
   <div class="row">
-    <div class="col-sm-2">
+    <div class="col-sm-5">
       {{{label}}}
     </div>
-    <div class="col-sm-7"></div>
+    <div class="col-sm-4"></div>
     <div class="col-sm-3 pull-right">
-      <a onclick="swissbib.AdvancedSearch.deleteThisGroup(this)" id="delete_link_{{groupIndex}}" class="linkbutton small icon_delete" href="javascript:void(0)" style="display: inline;">
+      <a onclick="swissbib.AdvancedSearch.deleteThisGroup(this)" id="delete_link_{{groupIndex}}" href="javascript:void(0)" style="display: inline;">
         <i class="fa fa-times-circle"></i>
         {{deleteLabel}}
       </a>
@@ -80,7 +80,7 @@
 </script>
 
 <script id="adv-search-group-addfield" type="text/x-handlebars-template">
-    <a onclick="swissbib.AdvancedSearch.addFieldToThisGroup(this)" id="add_search_link_{{groupIndex}}" class="linkbutton small icon_add" href="javascript:void(0)">
+    <a onclick="swissbib.AdvancedSearch.addFieldToThisGroup(this)" id="add_search_link_{{groupIndex}}" href="javascript:void(0)">
       <i id="group{{ groupInex }}Holder" class="fa fa-plus-circle"></i>
       {{addLabel}}
     </a>
