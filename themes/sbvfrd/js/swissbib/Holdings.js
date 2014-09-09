@@ -144,17 +144,19 @@ swissbib.Holdings = {
     // Clear content
     popup.html('');
 
-    var dialog = popup.dialog({
-      height: "auto",
-      width: "auto",
-      minHeight: 500
-    });
+//    var dialog = popup.dialog({
+//      height: "auto",
+//      width: "auto",
+//      minHeight: 500
+//    });
 
-    popup.mask("Loading...");
+//    popup.mask("Loading...");
+//
+//    dialog.load(contentUrl, function (responseText, responseStatus, response) {
+//      that.setupItemsPopup(dialog);
+//    });
 
-    dialog.load(contentUrl, function (responseText, responseStatus, response) {
-      that.setupItemsPopup(dialog);
-    });
+    Lightbox.getByUrl(contentUrl);
   },
 
 
