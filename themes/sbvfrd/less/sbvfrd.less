@@ -855,9 +855,38 @@ footer {
     }
   }
 
-  .fa-plus-circle {
-    color: @link-color;
+  .group {
+    .row-connector {
+      padding-bottom: 14px;
+
+      label {
+        margin-right: 50px;
+      }
+    }
+
+    & [class^=col-] {
+      padding-left: 15px;
+    }
+
+    .search-input-col {
+      & > .row {
+        margin-bottom: 14px;
+      }
+    }
   }
+
+  a {
+    .fa-plus-circle {
+      color: @link-color;
+    }
+
+    &:hover {
+      .fa-plus-circle {
+        color: @theme-color;
+      }
+    }
+  }
+
 }
 
 /* pagination */
