@@ -891,6 +891,42 @@ footer {
     }
   }
 
+  legend {
+    border-bottom: none;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .col-sm-12 {
+    & > legend {
+      margin-top: 25px;
+      padding-top: 24px;
+      border-top: 1px solid @content-box-border-color;
+      font-size: 20px;
+
+      &:before {
+        content: '\f1de';
+        font-family: FontAwesome;
+        font-weight: normal;
+        margin-right: 5px;
+      }
+    }
+
+    label {
+      font-size: 18px;
+      margin-bottom: 24px;
+    }
+  }
+
+  hr {
+    margin-top: 25px;
+    margin-bottom: 24px;
+  }
+
+
+  .btn {
+    min-width: 150px;
+  }
 }
 
 /* pagination */

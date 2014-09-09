@@ -8,7 +8,7 @@
     <div class="row">
       <? foreach ($this->facetList as $field => $list): ?>
         <div class="col-sm-<?=floor(12/count($this->facetList)) ?>">
-          <label for="limit_<?=$this->escapeHtmlAttr(str_replace(' ', '', $field))?>"><?=$this->transEsc($list['label'])?>:</label>
+          <label for="limit_<?=$this->escapeHtmlAttr(str_replace(' ', '', $field))?>"><?=$this->transEsc($list['label'])?></label>
           <select class="form-control" id="limit_<?=$this->escapeHtmlAttr(str_replace(' ', '', $field))?>" name="filter[]" multiple="multiple" size="10">
             <?
               // Sort the current facet list alphabetically; we'll use this data
@@ -32,6 +32,7 @@
     </div>
   </fieldset>
 </div>
+<hr />
 
 <? endif; ?>
 <div class="row">
