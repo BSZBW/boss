@@ -65,16 +65,27 @@
       </div>
     </div>
 
-    <a id="groupPlaceHolder" href="#" onClick="swissbib.AdvancedSearch.addGroup()">
-      <i  class="fa fa-plus-circle"></i>
-      <?= $this->transEsc('add_search_group') ?>
-    </a>
+    <div class="row" id="groupPlaceHolder">
+      <div class="col-sm-6">
+        <a href="#" onClick="swissbib.AdvancedSearch.addGroup()">
+          <i  class="fa fa-plus-circle"></i>
+          <?= $this->transEsc('add_search_group') ?>
+        </a>
+      </div>
 
-    <input class="btn btn-primary pull-right" type="submit" value="<?= $this->transEsc('Find')?>">
+      <div class="col-sm-6 pull-right">
+        <input class="btn btn-primary pull-right" type="submit" value="<?= $this->transEsc('Find')?>">
+      </div>
+    </div>
+
 
     <? if (isset($this->extraAdvancedControls)): ?>
       <?=$this->extraAdvancedControls ?>
-      <input class="btn btn-primary pull-right" type="submit" value="<?= $this->transEsc('Find')?>"/>
+      <div class="row">
+        <div class="col-sm-12 pull-right">
+          <input class="btn btn-primary pull-right" type="submit" value="<?= $this->transEsc('Find')?>"/>
+        </div>
+      </div>
     <? endif; ?>
 
   </form>
