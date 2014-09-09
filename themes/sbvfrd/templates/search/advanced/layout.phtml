@@ -6,7 +6,9 @@
   $this->layout()->searchbox = false;
 
   // Set up breadcrumbs:
-  $this->layout()->breadcrumbs = '<li>' . $this->getLastSearchLink($this->transEsc('Search'), '', '</li> ')
+  $lastSearchLink = $this->getLastSearchLink($this->transEsc('Search'), '', '</li>');
+
+  $this->layout()->breadcrumbs = ($lastSearchLink ? $lastSearchLink : '')
     . '<li class="active">' . $this->transEsc('Advanced') . '</li>';
 
   // Set up saved search details:
