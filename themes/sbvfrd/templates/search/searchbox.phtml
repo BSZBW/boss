@@ -16,23 +16,40 @@
     $advSearch = $options->getAdvancedSearchAction();
     $lastSort = $options->getLastSort();
     $lastLimit = $options->getLastLimit();
+    $searchtabs = $this->searchtabs($this->searchClassId, $this->lookfor, $this->searchIndex, $this->searchType);
 ?>
 <? if ($this->searchType == 'advanced'): ?>
   <div id="searchForm">
-    <? $tabs = $this->render('search/searchTabs'); ?>
-    <? if (!empty($tabs)): ?><?=$tabs ?><div class="tab-content clearfix"><? endif; ?>
-      <p class="navbar-text"><?=$this->transEsc("Your search terms")?> : "<strong><?=$this->escapeHtml($this->lookfor)?>"</strong></p>
-      <a class="navbar-text advancedSearchLink" href="<?=$this->url($advSearch)?>?edit=<?=$this->escapeHtmlAttr($this->searchId)?>"><?=$this->transEsc("Edit this Advanced Search")?></a>
-      <a class="navbar-text advancedSearchLink" href="<?=$this->url($advSearch)?>"><?=$this->transEsc("Start a new Advanced Search")?></a>
-      <a class="navbar-text" href="<?=$this->url($searchHome)?>"><?=$this->transEsc("Start a new Basic Search")?></a>
-    <? if (!empty($tabs)): ?></div><? endif; ?>
+    <div class="search-tabs-box">
+    <? if (count($searchtabs) > 0): ?>
+      <span class="search-tabs-label"><?= $this->transEsc('Search In') ?>:</span>
+      <?= $this->render('search/searchTabs'); ?>
+    <? endif; ?>
+      <div class="advancedSearchHeaderBox">
+        <div class="row">
+          <div class="col-sm-4">
+            <a class="navbar-text advancedSearchLink edit" href="<?=$this->url($advSearch)?>?edit=<?=$this->escapeHtmlAttr($this->searchId)?>"><?=$this->transEsc("Edit this Advanced Search")?></a>
+          </div>
+          <div class="col-sm-4">
+            <a class="navbar-text advancedSearchLink new" href="<?=$this->url($advSearch)?>"><?=$this->transEsc("Start a new Advanced Search")?></a>
+          </div>
+          <div class="col-sm-4">
+            <a class="navbar-text simpleSearchLink" href="<?=$this->url($searchHome)?>"><?=$this->transEsc("Start a new Basic Search")?></a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <p class="navbar-text"><?=$this->transEsc("Your search terms")?> : "<strong><?=$this->escapeHtml($this->lookfor)?>"</strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 <? else: ?>
   <form role="search" class="navbar-form navbar-left" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" id="searchForm" autocomplete="off">
 
     <div class="search-tabs-box">
-    <? $searchtabs = $this->searchtabs($this->searchClassId, $this->lookfor, $this->searchIndex, $this->searchType);
-    if (count($searchtabs) > 0): ?>
+    <? if (count($searchtabs) > 0): ?>
       <span class="search-tabs-label"><?= $this->transEsc('Search In') ?>:</span>
       <?= $this->render('search/searchTabs'); ?>
     <? endif; ?>
