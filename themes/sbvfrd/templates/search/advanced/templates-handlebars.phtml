@@ -1,10 +1,15 @@
 <script id="adv-search-field" type="text/x-handlebars-template">
-  <div class="row">
-    <div class="col-sm-6">
+  <div class="row" id="search_field_row_{{groupIndex}}_{{fieldIndex}}">
+    <div class="col-sm-7">
       {{{term}}}
     </div>
-    <div class="col-sm-6">
+    <div class="col-sm-4">
       {{{selector}}}
+    </div>
+    <div class="col-sm-1">
+      <a class="help-block" onclick="swissbib.AdvancedSearch.removeField({{groupIndex}}, {{fieldIndex}});">
+        <i class="fa fa-times"></i>
+      </a>
     </div>
   </div>
 </script>

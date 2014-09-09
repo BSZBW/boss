@@ -270,12 +270,21 @@ swissbib.AdvancedSearch = {
     var html = $("#adv-search-field").html(),
         template = Handlebars.compile(html),
         data = {
+          groupIndex: groupIndex,
+          fieldIndex: fieldIndex,
           label: this.buildFieldLabel(groupIndex, fieldIndex),
           term: this.buildFieldTermText(groupIndex, fieldIndex, searchWord),
           selector: this.buildFieldFieldSelector(groupIndex, fieldIndex, matchField)
         };
 
     return template(data);
+  },
+
+
+  removeField: function (groupIndex, fieldIndex) {
+    console.log(groupIndex, fieldIndex);
+    this.fieldCount[groupIndex]--;
+    $('#search_field_row_' + groupIndex + '_' + fieldIndex).remove();
   },
 
 
