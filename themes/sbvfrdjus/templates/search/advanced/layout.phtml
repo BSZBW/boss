@@ -6,8 +6,10 @@
   $this->layout()->searchbox = false;
 
   // Set up breadcrumbs:
-  $this->layout()->breadcrumbs = '<li>' . $this->getLastSearchLink($this->transEsc('Search'), '', '</li> ')
-    . '<li class="active">' . $this->transEsc('Advanced') . '</li>';
+  $lastSearchLink = $this->getLastSearchLink($this->transEsc('Search'), '', '</li>');
+
+  $this->layout()->breadcrumbs = ($lastSearchLink ? $lastSearchLink : '')
+  . '<li class="active">' . $this->transEsc('Advanced') . '</li>';
 
   // Set up saved search details:
   if (isset($this->saved) && is_object($this->saved)) {
@@ -44,18 +46,48 @@
 
 <?= $this->render('search/advanced/templates-handlebars') ?>
 
-<? $searchTabs = $this->searchtabs($this->searchClassId, $this->lookfor, $this->searchIndex, 'advanced', 'advanced'); ?>
-<? if (count($searchTabs) > 0): ?>
-    <ul class="nav nav-tabs">
-        <? foreach ($searchTabs as $tab): ?>
-            <? if ($tab['selected']) $activeTab = $tab['class']; ?>
-            <li<?=$tab['selected'] ? ' class="active"' : ''?>>
-                <a href="<?=$tab['selected'] ? '' : $this->escapeHtmlAttr($tab['url'])?>"><?=$this->transEsc($tab['label']); ?></a>
-            </li>
-        <? endforeach; ?>
-    </ul>
-<? endif; ?>
+
 <?=$this->flashmessages()?>
-<form role="search" name="searchForm" id="advSearchForm" method="get" action="<?=$this->url($this->options->getSearchAction())?>">
-  <?= $this->render('search/advanced/' . lcfirst($activeTab)) ?>
-</form>
+<div class="<?=$this->layoutClass('mainbody') ?>">
+  <? $searchTabs = $this->searchtabs($this->searchClassId, $this->lookfor, $this->searchIndex, 'advanced', 'advanced'); ?>
+  <? if (count($searchTabs) > 0): ?>
+    <ul class="nav nav-tabs jus">
+      <? foreach ($searchTabs as $tab): ?>
+        <? if ($tab['selected']) $activeTab = $tab['class']; ?>
+        <li<?=$tab['selected'] ? ' class="active"' : ''?>>
+          <a href="<?=$tab['selected'] ? '' : $this->escapeHtmlAttr($tab['url'])?>"><?=$this->transEsc($tab['label']); ?></a>
+        </li>
+      <? endforeach; ?>
+    </ul>
+  <? endif; ?>
+
+  <form role="search" name="searchForm" id="advSearchForm" method="get" action="<?=$this->url($this->options->getSearchAction())?>">
+    <?= $this->render('search/advanced/' . lcfirst($activeTab)) ?>
+  </form>
+</div>
+<div class="<?=$this->layoutClass('sidebar')?>">
+  <? if ($hasDefaultsApplied): ?>
+    <input type="hidden" name="dfApplied" value="1" />
+  <? endif ?>
+  <? if (!empty($searchFilters)): ?>
+    <h4><?=$this->transEsc("adv_search_filters")?></h4>
+    <ul class="list-group">
+      <label class="list-group-item checkbox"><?=$this->transEsc("adv_search_select_all")?> <input type="checkbox" checked="checked" class="checkbox-select-all"/></label>
+    </ul>
+    <? foreach ($searchFilters as $field => $data): ?>
+      <ul class="list-group">
+        <li class="list-group-item title"><?=$this->transEsc($field)?></li>
+        <? foreach ($data as $value): ?>
+          <label class="list-group-item checkbox"><input class="checkbox-select-item" type="checkbox" checked="checked" name="filter[]" value='<?=$this->escapeHtmlAttr($value['field'])?>:"<?=$this->escapeHtmlAttr($value['value'])?>"' /> <?=$this->escapeHtml($value['displayText'])?></label>
+        <? endforeach; ?>
+      </ul>
+    <? endforeach; ?>
+  <? endif; ?>
+  <div class="sidegroup">
+    <h4><?=$this->transEsc("Search Tips")?></h4>
+    <ul class="list-group">
+      <a class="list-group-item help-link" href="<?=$this->url('help-home')?>?topic=advsearch" title="<?=$this->transEsc('Help with Advanced Search')?>"><?=$this->transEsc("Help with Advanced Search")?></a>
+      <a class="list-group-item help-link" href="<?=$this->url('help-home')?>?topic=search" title="<?=$this->transEsc('Help with Search Operators')?>"><?=$this->transEsc("Help with Search Operators")?></a>
+    </ul>
+  </div>
+</div>
