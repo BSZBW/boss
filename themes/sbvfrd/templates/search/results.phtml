@@ -51,13 +51,13 @@
       <div class="col-md-3">
         <div class="searchtools">
           <div class="searchtools hidden-print">
-            <a href="<?=$this->results->getUrlQuery()->setViewParam('rss')?>"><i class="fa fa-rss"></i></a>
+            <a href="<?=$this->results->getUrlQuery()->setViewParam('rss')?>" title="<?=$this->transEsc('Get RSS Feed')?>"><i class="fa fa-rss"></i></a>
             <a href="<?=$this->url('search-email')?>" class="mailSearch modal-link hidden-xs hidden-sm" id="mailSearch<?=$this->escapeHtmlAttr($this->results->getSearchId())?>" title="<?=$this->transEsc('Email this Search')?>"><i class="fa fa-envelope hidden-xs hidden-sm" ></i></a>
             <? if (is_numeric($this->results->getSearchId())): ?>
               <? if ($this->results->isSavedSearch()): ?>
-                <a href="<?=$this->url('myresearch-savesearch')?>?delete=<?=urlencode($this->results->getSearchId())?>"><i class="fa fa-minus-square"></i></a>
+                <a href="<?=$this->url('myresearch-savesearch')?>?delete=<?=urlencode($this->results->getSearchId())?>" title="<?=$this->transEsc('Delete')?>"><i class="fa fa-minus-square"></i></a>
               <? else: ?>
-                <a href="<?=$this->url('myresearch-savesearch')?>?save=<?=urlencode($this->results->getSearchId())?>"><i class="fa fa-plus-square"></i></a>
+                <a href="<?=$this->url('myresearch-savesearch')?>?save=<?=urlencode($this->results->getSearchId())?>" title="<?=$this->transEsc('Save')?>"><i class="fa fa-plus-square"></i></a>
               <? endif; ?>
             <? endif; ?>
           </div>

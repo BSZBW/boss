@@ -12,7 +12,8 @@ $retrosURL       = (is_array($urldisplay['urls']) && count($urldisplay['urls']) 
 
 <? if ($amountHoldings === 1): ?>
     <a class="dropdown-toggle" id="dropdownLibraries" data-toggle="dropdown">
-      <i class="fa fa-institution"></i><span class="hidden-xs"><?= $this->transEsc('result.library') ?> (1)</span>
+      <span><i class="fa fa-institution"></i></span>
+      <span class="hidden-xs hidden-sm"><span class="a-before"></span><?= $this->transEsc('result.library') ?> (1)</span>
     </a>
     <? if (in_array('RETROS', $urldisplay['unions'])): ?>
         <a class="linkbutton primary icon_link_primary" href="<?= $this->redirectProtocolWrapper()->getWrappedURL($urldisplay['urls'][1]['url']) ?>" target="_blank"><span>retro.seals</span></a>
@@ -25,7 +26,8 @@ $retrosURL       = (is_array($urldisplay['urls']) && count($urldisplay['urls']) 
 
 <? elseif ($amountHoldings > 1): ?>
   <a class="dropdown-toggle" id="dropdownLibraries" data-toggle="dropdown">
-    <i class="fa fa-institution"></i><span class="hidden-xs"><?= $this->transEsc('result.libraries') ?> (<?= $amountHoldings ?>)</span>
+    <span><i class="fa fa-institution"></i></span>
+    <span class="hidden-xs hidden-sm"><span class="a-before"></span><?= $this->transEsc('result.libraries') ?> (<?= $amountHoldings ?>)</span>
   </a>
     <? if (in_array('RETROS', $urldisplay['unions'])): ?>
         <a class="linkbutton primary icon_link_primary" href="<?= $this->redirectProtocolWrapper()->getWrappedURL($urldisplay['urls'][1]['url']) ?>" target="_blank"><span>retro.seals</span></a>
@@ -43,6 +45,6 @@ $retrosURL       = (is_array($urldisplay['urls']) && count($urldisplay['urls']) 
     <? elseif($digibernURL): ?>
         <a class="linkbutton primary icon_link_primary" href="<?= $this->redirectProtocolWrapper()->getWrappedURL($digibernURL['url']) ?>" target="_blank"><span>digibern</span></a>
     <? else: ?>
-        <p>There are no holdings available in the system</p>
+        <p class="hidden-sm hidden-xs">There are no holdings available in the system</p>
     <? endif; ?>
 <? endif; ?>
