@@ -137,7 +137,7 @@ swissbib.AdvancedSearch = {
     var groupIndex = 0,
         that = this;
 
-    $("#advSearchForm > .group").each(function (index, group) {
+    $("#advSearchForm .group").each(function (index, group) {
       // If the number of this group doesn't match our running count
       if ($(this).attr("id") != "group" + groupIndex) {
         // Re-number this group

@@ -110,7 +110,7 @@ a.btn-link:before {
 
     & > a:hover,
     & > a:focus {
-      .tab-active;
+      background-color: @theme-color;
     }
 
     &.active {
@@ -216,7 +216,7 @@ header {
           min-height: 32px;
           max-height: 32px;
           vertical-align: middle;
-          padding: 4px 0 2px 0;
+          padding: 4px 8px 2px 8px;
           font-size: 16px;
 
           &:hover, &:focus {
@@ -548,9 +548,19 @@ ul[aria-labelledby=dropdownLibraries] {
 }
 
 .sidebar {
+  .title:after {
+    content: '';
+  }
+  [data-toggle="collapse"].title:after {
+    content: '\25B2';
+  }
+  [data-toggle="collapse"].title.collapsed:after {
+    content: '\25BC';
+  }
   .badge {
     color: @font-color;
     font-weight: 600;
+    padding-right: 2px;
     background-color: transparent;
   }
   .list-group-item {
@@ -1130,4 +1140,38 @@ footer {
       }
     }
   }
+}
+
+/* jusbib classification tree tabs */
+#tabbed-tree.tabs > .nav.nav-tabs {
+  border: none;
+  margin: 20px 0;
+
+  & > li {
+    & > a {
+      border-bottom-left-radius: 2px;
+      border-bottom-right-radius: 2px;
+    }
+  }
+  & > li:active, & > li.ui-state-active,
+  & > li:focus, & > li.ui-state-focus,
+  & > li:hover, & > li.ui-state-hover {
+    & > a {
+      background-color: @theme-color;
+      font-weight: inherit;
+    }
+  }
+}
+
+.jstree-default {
+  a.jstree-hovered,
+  a.jstree-clicked {
+    background: @link-color;
+    color: @white;
+    box-shadow: none;
+  }
+}
+
+.nav.nav-tabs.jus {
+  margin-top: 8px;
 }
