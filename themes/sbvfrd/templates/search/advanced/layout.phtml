@@ -48,48 +48,49 @@
 
 <?=$this->flashmessages()?>
 <div class="<?=$this->layoutClass('mainbody')?>">
-  <? $this->searchType = 'advanced' ?>
-  <?= $this->render('search/searchTabs'); ?>
+  <div class="row">
+    <? $this->searchType = 'advanced' ?>
+    <?= $this->render('search/searchTabs'); ?>
 
-  <form role="search" name="searchForm" id="advSearchForm" method="get" action="<?=$this->url($this->options->getSearchAction())?>">
-    <input type="hidden" name="sort" value="relevance">
+    <form role="search" name="searchForm" id="advSearchForm" method="get" action="<?=$this->url($this->options->getSearchAction())?>">
+      <input type="hidden" name="sort" value="relevance">
 
-    <div class="clearfix">
-      <p class="lead pull-left"><?=$this->transEsc('Advanced Search')?></p>
-      <div id="groupJoin" class="form-inline pull-right">
-        <label for="join"><?=$this->transEsc("search_match")?>:</label>
-        <select id="search_bool0" name="join" class="form-control">
-          <option value="AND"<? if($searchDetails && $searchDetails->getOperator()=='ALL'):?> selected<?endif?>><?= $this->transEsc('group_AND') ?></option>
-          <option value="OR"<? if($searchDetails && $searchDetails->getOperator()=='OR'):?> selected<?endif?>><?= $this->transEsc('group_OR') ?></option>
-        </select>
-      </div>
-    </div>
-
-    <div class="row" id="groupPlaceHolder">
-      <div class="col-sm-6">
-        <a href="#" onClick="swissbib.AdvancedSearch.addGroup()">
-          <i  class="fa fa-plus-circle"></i>
-          <?= $this->transEsc('add_search_group') ?>
-        </a>
-      </div>
-
-      <div class="col-sm-6 pull-right">
-        <input class="btn btn-primary pull-right" type="submit" value="<?= $this->transEsc('Find')?>">
-      </div>
-    </div>
-
-
-    <? if (isset($this->extraAdvancedControls)): ?>
-      <?=$this->extraAdvancedControls ?>
-      <div class="row">
-        <div class="col-sm-12 pull-right">
-          <input class="btn btn-primary pull-right" type="submit" value="<?= $this->transEsc('Find')?>"/>
+      <div class="clearfix">
+        <p class="lead pull-left"><?=$this->transEsc('Advanced Search')?></p>
+        <div id="groupJoin" class="form-inline pull-right">
+          <label for="join"><?=$this->transEsc("search_match")?>:</label>
+          <select id="search_bool0" name="join" class="form-control">
+            <option value="AND"<? if($searchDetails && $searchDetails->getOperator()=='ALL'):?> selected<?endif?>><?= $this->transEsc('group_AND') ?></option>
+            <option value="OR"<? if($searchDetails && $searchDetails->getOperator()=='OR'):?> selected<?endif?>><?= $this->transEsc('group_OR') ?></option>
+          </select>
         </div>
       </div>
-    <? endif; ?>
 
-  </form>
+      <div class="row" id="groupPlaceHolder">
+        <div class="col-sm-6">
+          <a href="#" onClick="swissbib.AdvancedSearch.addGroup()">
+            <i  class="fa fa-plus-circle"></i>
+            <?= $this->transEsc('add_search_group') ?>
+          </a>
+        </div>
 
+        <div class="col-sm-6 pull-right">
+          <input class="btn btn-primary pull-right" type="submit" value="<?= $this->transEsc('Find')?>">
+        </div>
+      </div>
+
+
+      <? if (isset($this->extraAdvancedControls)): ?>
+        <?=$this->extraAdvancedControls ?>
+        <div class="row">
+          <div class="col-sm-12 pull-right">
+            <input class="btn btn-primary pull-right" type="submit" value="<?= $this->transEsc('Find')?>"/>
+          </div>
+        </div>
+      <? endif; ?>
+
+    </form>
+  </div>
 </div>
 
 <div class="<?=$this->layoutClass('sidebar')?>">
