@@ -83,15 +83,15 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
     <?=str_replace('class="', 'class="label label-info ', $this->record($this->driver)->getFormatList())?>
   </div>
 
-  <div class="col-xs-1 col-md-3 hidden-print">
+  <div class="col-xs-1 col-md-3 hidden-print actions">
     <div>
         <? if ($this->userlist()->getMode() !== 'disabled'): ?>
           <a href="<?= $this->recordLink()->getActionUrl($this->driver, 'Save'); ?>" title="<?= $this->transEsc('memorizelistadd') ?>">
-            <i class="fa fa-bars"></i><i class="fa fa-plus"></i>
-              <?= $this->transEsc('memorizelistadd') ?>
+            <span class="memorizelistadd"><i class="fa fa-bars"></i><i class="fa fa-plus"></i></span>
+            <span class="hidden-xs hidden-sm"><span class="a-before"></span><?= $this->transEsc('memorizelistadd') ?></span>
           </a>
           <? /* Saved lists */ ?>
-          <div class="savedLists alert alert-info hidden">
+          <div class="savedLists alert alert-info hidden hidden-xs hidden-sm">
             <strong><?=$this->transEsc("Saved in")?>:</strong>
           </div>
         <? endif; ?>
@@ -102,8 +102,8 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
               <input type="hidden" value="<?=$this->escapeHtmlAttr($hierarchyID)?>" class="hiddenHierarchyId" />
 
               <a <?=$viewRecord->getTabVisibility('HierarchyTree')?>" href="<?=$this->recordLink()->getTabUrl($this->driver, 'HierarchyTree')?>?hierarchy=<?=urlencode($hierarchyID)?>#tabnav" title="<?=$this->transEsc('hierarchy_tree')?>">
-                <i class="fa fa-sitemap"></i>
-                <span class="hidden-xs"> <?=$this->transEsc('hierarchy_view_context')?>
+                <span><i class="fa fa-sitemap"></i></span>
+                <span class="hidden-xs hidden-sm"><span class="a-before"></span> <?=$this->transEsc('hierarchy_view_context')?>
                     <? if (count($trees) > 1): ?>:
                       <?=$this->escapeHtml($hierarchyTitle)?>
                     <? endif; ?>
@@ -115,8 +115,8 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
       <? if (!empty($showFRBR) && $showFRBR && !empty($groupID) && !strcmp($results->getParams()->getSearchHandler(), 'FRBR') == 0) : ?>
         <a href="<?= $this->url('search-results') . '?lookfor=' . $groupID . "&type=FRBR&limit=" . $results->getParams()->getLimit() . "&sort=publishDateSort+desc" ?>"
               class="btn-frbr" title="<?= $this->transEsc('FRBR_Button') ?>">
-          <i class="fa fa-eye"></i>
-          <span class="hidden-xs"><?= $this->transEsc('FRBR_Button') ?></span>
+          <span><i class="fa fa-eye"></i></span>
+          <span class="hidden-xs hidden-sm"><span class="a-before"></span><?= $this->transEsc('FRBR_Button') ?></span>
         </a>
       <? endif; ?>
 

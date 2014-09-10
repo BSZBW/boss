@@ -206,4 +206,27 @@
   a.advancedSearchLink {
     display: none;
   }
+
+  .resultView {
+    .search-controls {
+      .text-right {
+        form {
+          float: left;
+          margin-left: -30px;
+          width: 100%;
+          margin-bottom: 10px;
+
+          label,
+          label.checkbox {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+    & > form {
+      .pagination-container {
+        margin-left: 0;
+      }
+    }
+  }
 }
