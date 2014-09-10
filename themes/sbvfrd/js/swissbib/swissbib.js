@@ -439,7 +439,25 @@ var swissbib = {
 
     window.open(fullUrl);
 //      location.href = fullUrl;
-  }
+  },
+
+
+  updatePageForLogin: function() {
+    swissbib.updatePageForLoginParent();
+
+    if($('#user-favorites').length > 0) {
+      Lightbox.addCloseAction(function(){document.location.reload(true);});
+    }
+
+    console.log(window.location.pathname.substring('Search/History'));
+
+    if(window.location.pathname.indexOf('Search/History') !== -1) {
+      Lightbox.addCloseAction(function(){document.location.reload(true);});
+    }
+  },
+
+
+  updatePageForLoginParent: function() {}
 };
 
 
@@ -449,3 +467,10 @@ var swissbib = {
 $(document).ready(function () {
   swissbib.initOnReady();
 });
+
+
+/**
+ * overwrite method
+ */
+swissbib.updatePageForLoginParent = updatePageForLogin;
+updatePageForLogin = swissbib.updatePageForLogin;
