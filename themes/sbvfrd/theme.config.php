@@ -60,6 +60,7 @@ return array(
             'searchParams' => 'Swissbib\View\Helper\Swissbib\Factory::getSearchParams',
             'searchOptions' => 'Swissbib\View\Helper\Swissbib\Factory::getSearchOptions',
             'searchBox' => 'Swissbib\View\Helper\Swissbib\Factory::getSearchBox',
+            'includeTemplate' => 'Swissbib\View\Helper\Swissbib\Factory::getIncludeTemplate',
         )
     )
 );

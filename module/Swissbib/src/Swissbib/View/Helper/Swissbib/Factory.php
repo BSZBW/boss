@@ -38,6 +38,7 @@ use VuFind\View\Helper\Root\SearchBox;
 use Swissbib\VuFind\View\Helper\Root\Auth;
 use Swissbib\VuFind\View\Helper\Root\SearchTabs;
 use Swissbib\View\Helper\LayoutClass;
+use Swissbib\View\Helper\IncludeTemplate;
 
 
 /**
@@ -171,5 +172,15 @@ class Factory
             $sm->getServiceLocator()->get('Swissbib\SearchOptionsPluginManager'),
             $config->get('searchbox')->toArray()
         );
+    }
+
+    /**
+     * @param ServiceManager $sm Service manager.
+     *
+     * @return IncludeTemplate
+     */
+    public static function getIncludeTemplate(ServiceManager $sm)
+    {
+        return new IncludeTemplate();
     }
 }
