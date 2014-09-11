@@ -76,7 +76,7 @@ $this->headTitle($this->translate('Holdings') . ': ' . $this->driver->getBreadcr
               <? endif; ?>
 
               <div class="holding-institution-<?= $groupCode ?>-<?= $institutionCode ?>" id="holding-institution-<?= $institutionCode ?>">
-                <div class="holdingsAjaxSpinner holding-ajax-spinner-<?= $institutionCode ?>">
+                <div class="holdingsAjaxSpinner holding-ajax-spinner-<?= $groupCode ?>-<?= $institutionCode ?>">
                   <span class="spinner"></span>
                   <span>Loading...</span>
                 </div>

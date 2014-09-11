@@ -40,7 +40,7 @@ swissbib.Holdings = {
       institutionCode = dataParts[3];
 
       // Start ajax spinner
-      this.startSpinner(institutionCode);
+      this.startSpinner(institutionCode, groupCode);
       // Load table
       this.loadHoldingTable(idRecord, groupCode, institutionCode);
       // Mark institution as loaded
@@ -88,8 +88,8 @@ swissbib.Holdings = {
    *
    * @param  {String}  institutionCode
    */
-  startSpinner: function (institutionCode) {
-    var loaderBox = $('.holding-ajax-spinner-' + institutionCode);
+  startSpinner: function (institutionCode, groupCode) {
+    var loaderBox = $('.holding-ajax-spinner-' + groupCode + '-' + institutionCode);
     loaderBox.css({
       display: 'inline-block'
     });
