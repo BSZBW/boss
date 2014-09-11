@@ -129,6 +129,8 @@ class Bootstrapper
         $serviceLocator    = $this->serviceManager;
         /** @var Manager $authManager */
         $authManager    = $serviceLocator->get('VuFind\AuthManager');
+        /** @var Config $config */
+        $config = $this->config;
 
         if ($authManager->isLoggedIn()) {
             $locale = $authManager->isLoggedIn()->language;
@@ -138,9 +140,14 @@ class Bootstrapper
                 $translator = $this->serviceManager->get('VuFind\Translator');
                 $viewModel = $serviceLocator->get('viewmanager')->getViewModel();
 
-                $callback = function ($event) use ($locale, $translator, $viewModel) {
-                    $translator->setLocale($locale);
+                $callback = function ($event) use ($locale, $translator, $viewModel, $config) {
+                    $request = $event->getRequest();
 
+                    if ( ($languageChange = $request->getPost()->get('mylang', false)) || ($languageChange = $request->getQuery()->get('lng', false)) ) {
+                        if ( in_array($languageChange, array_keys($config->Languages->toArray())) ) $locale = $languageChange;
+                    }
+
+                    $translator->setLocale($locale);
                     $viewModel->setVariable('userLang', $locale);
                 };
 
