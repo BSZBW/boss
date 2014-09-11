@@ -81,13 +81,18 @@
         <?=$this->render('header.phtml')?>
       </div>
     </header>
+
     <div role="main" class="main">
+      <div class="container container-table-fix-md breadcrumbWrapper">
+        <?=$this->render('layout/breadcrumb') ?>
+      </div>
       <div class="container container-table-fix-md">
-        <div class="row row-breadcrumb row-table-fix-md">
-          <?=$this->render('layout/breadcrumb') ?>
-        </div>
-        <div class="row table-sidebar row-table-fix-md">
-          <?=$this->layout()->content?>
+        <div class="row row-table-fix-md table-sidebar">
+          <div class="col-md-12 col-table-fix-md dirty-hack-column">
+            <div class="row">
+              <?=$this->layout()->content?>
+            </div>
+          </div>
         </div>
       </div>
     </div>

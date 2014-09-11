@@ -26,20 +26,22 @@
       padding: 0 15px;
     }
   }
-
-  #libraryListSidebar {
-    &.affix {
-      position: relative !important;
-      max-width: auto;
+  
+  .main {
+    & > .container > .row.table-sidebar > form,
+    & > .container {
+      & > .row.table-sidebar {
+        & > div.sidebar,
+        & > form > div.sidebar {
+          top: 0;
+        }
+      }
     }
+  }
+  
+  footer {
+    margin-top: 0;
   }
 }
 
 
-@media (min-width: 992px) and (max-width: 1200px) {
-  #libraryListSidebar {
-    &.affix {
-      max-width: 212px;
-    }
-  }
-}

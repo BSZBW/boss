@@ -49,8 +49,10 @@
 <?=$this->flashmessages()?>
 <div class="<?=$this->layoutClass('mainbody')?>">
   <div class="row">
-    <? $this->searchType = 'advanced' ?>
-    <?= $this->render('search/searchTabs'); ?>
+    <div class="advancedSearchTabsWrap">
+      <? $this->searchType = 'advanced' ?>
+      <?= $this->render('search/searchTabs'); ?>
+    </div>
 
     <form role="search" name="searchForm" id="advSearchForm" method="get" action="<?=$this->url($this->options->getSearchAction())?>">
       <input type="hidden" name="sort" value="relevance">

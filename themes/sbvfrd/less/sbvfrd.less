@@ -476,38 +476,38 @@ a.list-group-item.active:focus {
   }
 }
 
+.breadcrumbWrapper {
+  background-color: @white;
 
-.row-breadcrumb {
-  .breadcrumbMain {
+  .breadcrumb {
     background-color: @white;
+    margin-bottom: 0;
+    padding: 8px 0 ;
+    max-height: 36px;
+    overflow: hidden;
+    border-radius: 0;
 
-    .breadcrumb {
-      background-color: @white;
-      margin-bottom: 0;
-      padding: 8px 0;
+    & > .active {
+      color: @link-color;
+    }
 
-      & > li {
+    & > li {
+      color: @link-color;
+      font-weight: bold;
+
+      & > a {
+        font-weight: normal;
+        text-decoration: underline;
+
+      }
+
+      &:before {
+        content: "/";
         color: @link-color;
-        font-weight: bold;
-
-        & > a {
-          font-weight: normal;
-          text-decoration: underline;
-
-        }
-
-        &:before {
-          content: "/";
-          color: @link-color;
-          font-weight: normal;
-          padding: 0 5px;
-        }
+        font-weight: normal;
+        padding: 0 5px;
       }
     }
-  }
-
-  .breadcrumbSide {
-    background-color: @sidebar-background-color;
   }
 }
 
@@ -530,24 +530,10 @@ ul[aria-labelledby=dropdownLibraries] {
   overflow-y: scroll;
 }
 
-.main {
-  & > .container > .row.table-sidebar > form,
-  & > .container {
-    border-collapse: collapse;
-    & > .row.table-sidebar {
-      & > div,
-      & > form > div {
-        vertical-align: top;
-      }
-      & > div.sidebar,
-      & > form > div.sidebar {
-        background: @sidebar-background-color;
-      }
-    }
-  }
-}
-
 .sidebar {
+  background: @sidebar-background-color;
+  vertical-align: top;
+
   .title:after {
     content: '';
   }
@@ -806,6 +792,7 @@ div.memorize {
 }
 
 .searchHomeContent {
+
   & > div[class^="col-"] {
 
     &:last-child {
@@ -860,8 +847,8 @@ div.memorize {
 /* footer */
 footer {
   background-color: @footer-background-color;
-  min-height: 235px;
   padding-top: 20px;
+  min-height: 235px;
 
   * {
     color: @footer-color;
@@ -913,6 +900,12 @@ footer {
         .a-before;
       }
     }
+  }
+
+  .sbvfrd-clearfix {
+    height: 36px;
+    background-color: @white;
+    margin-bottom: 20px;
   }
 }
 
@@ -1204,4 +1197,8 @@ footer {
 
 .nav.nav-tabs.jus {
   margin-top: 8px;
+}
+
+.advancedSearchTabsWrap {
+  padding-right: 15px;
 }
