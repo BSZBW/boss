@@ -179,4 +179,21 @@ class SummonController extends VuFindSummonController
     $external = $targetsProxy->detectTarget() === false ? true : false;
     return $external;
     }
+
+
+
+    /**
+     * @Override
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function resultsAction()
+    {
+        $viewModel = parent::resultsAction();
+
+        $viewModel->setVariable('htmlLayoutClass', 'resultView');
+
+        return $viewModel;
+    }
+
 }
