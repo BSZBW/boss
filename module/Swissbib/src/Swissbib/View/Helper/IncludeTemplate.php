@@ -23,7 +23,7 @@ class IncludeTemplate extends AbstractHelper {
         $phpRenderer    = $this->getView();
         $resolverBackup = $phpRenderer->resolver();
         $resolver       = new AggregateResolver();
-        $stack          = new TemplateMapResolver(array($templateFile => APPLICATION_PATH . '/themes/' . $theme . '/templates/' . $templateFile . '.phtml'));
+        $stack          = new TemplateMapResolver(array($templateFile => $filePath));
 
         $phpRenderer->setResolver($resolver);
         $resolver->attach($stack)->attach($resolverBackup);
