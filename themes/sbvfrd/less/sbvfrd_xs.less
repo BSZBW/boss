@@ -7,6 +7,16 @@
       margin: 0 auto;
     }
 
+    .search-tabs-box {
+      .nav.nav-tabs {
+        li {
+          a {
+            padding: 4px 0 2px 0;
+          }
+        }
+      }
+    }
+
     section {
       & > .navbar-form {
         width: 95%;
@@ -85,11 +95,13 @@
     & > li {
       width: 131px;
       max-width: 131px;
+      min-width: 131px;
 
       & > a {
         padding: 5px 7px;
         width: 131px;
         max-width: 131px;
+        min-width: 131px;
       }
     }
   }
@@ -227,13 +239,6 @@
       .pagination-container {
         margin-left: 0;
       }
-    }
-  }
-
-  #libraryListSidebar {
-    &.affix {
-      position: relative !important;
-      max-width: auto;
     }
   }
 }
