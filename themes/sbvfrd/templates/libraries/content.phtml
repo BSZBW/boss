@@ -13,11 +13,11 @@
     <? endforeach; ?>
 </div>
 <div class="<?=$this->layoutClass('sidebar')?> hidden-xs">
-  <div id="libraryListSidebar" class="affix" role="complementary">
+  <div id="libraryListSidebar" data-spy="affix" role="complementary" data-offset-top="170" data-offset-bottom="235">
     <ul class="list-group nav sidenav">
       <? $arrayLength = count($this->groupedInstitutions);
       for ($i = 0; $i < $arrayLength; $i++): ?>
-        <li class="list-group-item title">
+        <li class="list-group-item">
           <a href="#nav_<?= $i ?>"><?= $this->groupedInstitutions[$i]['group']['label'][$this->layout()->userLang] ?></a>
           <? if (is_array($this->groupedInstitutions[$i]['institutions']) && $isPreview === true) : ?>
             <ul class="list-group nav">

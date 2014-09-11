@@ -709,17 +709,31 @@ div.memorize {
   margin-top: 25px;
 }
 
-.affix {
+#libraryListSidebar {
+  &.affix {
+    position: fixed !important;
+    max-width: 255px;
+  }
+
+  &.affix-top {
+    margin-top: 25px;
+  }
+
   .nav {
     & > li {
       & > a {
         padding: 0;
+
+        &:hover {
+          background-color: transparent;
+        }
       }
       & > ul {
         display: none;
         & > li {
           & > a {
             font-size: 10px;
+
           }
         }
       }
@@ -729,7 +743,12 @@ div.memorize {
       border-color: @link-color;
       & > a {
         color: @white;
+
+        &:hover {
+                  background-color: transparent;
+                }
       }
+
       & > ul {
         display: block;
       }
