@@ -120,6 +120,10 @@ label.list-group-item {border-radius:0;font-weight:normal;margin-top:0;padding-l
     text-align:right;
   }
 }
+#hierarchyTreeHolder {
+  border-right:1px solid @gray-lighter;
+  overflow-x:hidden;
+}
 
 /* --- Search --- */
 .bulkActionButtons {
@@ -157,7 +161,7 @@ label.list-group-item {border-radius:0;font-weight:normal;margin-top:0;padding-l
 
 /* --- Sidebar rounded corners --- */
 .sidebar {
-  & .title {
+  .list-group:not(.filters) .title {
     cursor:pointer;
     &.collapsed {
       border-radius:@border-radius-base;
