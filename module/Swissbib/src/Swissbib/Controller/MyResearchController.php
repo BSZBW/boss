@@ -273,12 +273,14 @@ class MyResearchController extends VuFindMyResearchController
    */
   public function loginAction()
   {
+
+
     //we need to differantiate between Shibboleh and not Shibboleth authentication mechanisms
     //in case of Shibboleth we will get a problem with HTTP_Referer after successful authentication at IDP
     //because then the Referer points to the IDP address instead of a valid VuFind resource (often something like save a record in various contexts)
     //therefor this mechanisms where we store a temporary session for the latest Referer before the IDP request is executed in the next step by the user
     //at the moment it is used in Swissbib/Controller/RecordController
-    $clazz = $this->getAuthManager()->getAuthClass();
+    $clazz = $this->getAuthManager()->getAuthClassForTemplateRendering();
     if ($clazz == "Swissbib\\VuFind\\Auth\\Shibboleth") {
       //store the current referrer into a special Session
       $followup = new SessionContainer('ShibbolethSaveFollowup');
