@@ -2,6 +2,8 @@
 <html lang="<?=$this->layout()->userLang?>">
   <head>
     <?$this->headThemeResources()?>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
     <?=$this->headMeta()?>
     <?=$this->headTitle()?>
@@ -81,21 +83,46 @@
         <?=$this->render('header.phtml')?>
       </div>
       <div class="container">
-
+        <nav class="nav searchbox hidden-lg hidden-print">
+          <?=$this->layout()->searchbox ?>
+        </nav>
+        <? if((!isset($this->layout()->showBreadcrumbs) || $this->layout()->showBreadcrumbs == true)
+          && !empty($this->layout()->breadcrumbs)
+          && $this->layout()->breadcrumbs !== false
+        ): ?>
+          <ul class="breadcrumb hidden-print">
+          <? if(is_array($this->layout()->breadcrumbs)): ?>
+            <? if(count($this->layout()->breadcrumbs) > 1): ?>
+              <?=$this->render('breadcrumbs/multi.phtml', array(
+                  'parents' => $this->layout()->breadcrumbs,
+                  'title'   => $this->layout()->title,
+                  'end'     => $this->layout()->breadcrumbEnd,
+                  'from'    => $this->layout()->from
+                )) ?>
+            <? else: ?>
+              <?=$this->render('breadcrumbs/default.phtml', array(
+                  'parents' => $this->layout()->breadcrumbs,
+                  'title'   => $this->layout()->title
+                )) ?>
+            <? endif; ?>
+          <? else: ?>
+            <?=$this->layout()->breadcrumbs ?>
+          <? endif; ?>
+          </ul>
+        <? endif; ?>
       </div>
     </header>
     <div role="main" class="main">
       <div class="container">
         <div class="row">
-          <?=$this->render('layout/breadcrumb') ?>
-          <?=$this->layout()->content?>
+          <?=$this->layout()->content ?>
         </div>
       </div>
     </div>
     <footer role="contentinfo" class="hidden-print">
       <div class="container">
         <?=$this->render('footer.phtml')?>
-        <div class="col-sm-12"><?=$this->layout()->poweredBy ?></div>
+        <?=$this->layout()->poweredBy ?>
       </div>
     </footer>
     <!-- MODAL IN CASE WE NEED ONE -->
