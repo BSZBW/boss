@@ -5,6 +5,7 @@
 var OffCanvas = {
   sidebar: null,
   button: null,
+  icon: null,
   body: null,
 
   /**
@@ -20,6 +21,7 @@ var OffCanvas = {
   initOffCanvas: function () {
     this.sidebar = $(".sidebar");
     this.button = $("button#sidebar-offcanvas-trigger");
+    this.icon = $("button#sidebar-offcanvas-trigger i");
 
     if (this.sidebar.length > 0) {
       this.body = $("body");
@@ -47,6 +49,8 @@ var OffCanvas = {
       this.sidebar.css('overflow-y', '');
       this.body.css('height', '');
       this.body.css('overflow-y', '');
+      this.icon.removeClass("fa fa-caret-right");
+      this.icon.addClass("fa fa-caret-left");
     } else {
       this.body.addClass("offcanvas-active");
       this.button.addClass("offcanvas-active");
@@ -55,6 +59,8 @@ var OffCanvas = {
       this.sidebar.css('overflow-y', 'scroll');
       this.body.css('height', window.innerHeight);
       this.body.css('overflow-y', 'hidden');
+      this.icon.removeClass("fa fa-caret-left");
+      this.icon.addClass("fa fa-caret-right");
     }
   },
 
