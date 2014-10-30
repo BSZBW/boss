@@ -39,6 +39,7 @@ use Swissbib\VuFind\View\Helper\Root\Auth;
 use Swissbib\VuFind\View\Helper\Root\SearchTabs;
 use Swissbib\View\Helper\LayoutClass;
 use Swissbib\View\Helper\IncludeTemplate;
+use Swissbib\View\Helper\TranslateFacets;
 
 
 /**
@@ -108,6 +109,14 @@ class Factory
     public static function getAuth(ServiceManager $sm)
     {
         return new Auth($sm->getServiceLocator()->get('VuFind\AuthManager'));
+    }
+
+
+    public static function getFacetTranslator(ServiceManager $sm)
+    {
+        $config =  $sm->getServiceLocator()->get('VuFind\Config')->get('facets')->Advanced_Settings->translated_facets->toArray();
+        return new TranslateFacets($config);
+
     }
 
     /**

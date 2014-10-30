@@ -197,36 +197,59 @@ class Bootstrapper
             return;
         }
 
-        $baseDir = LOCAL_OVERRIDE_DIR . '/languages';
+        $config =& $this->config;
+        $callback = function ($event) use ($config) {
 
-        // Custom namespaces for zendTranslate
-        $types   = array(
-            'bibinfo',
-            'group',
-            'institution',
-            'union'
-        );
-
-        $callback = function ($event) use ($baseDir, $types) {
             /** @var Translator $translator */
             $translator = $event->getApplication()->getServiceManager()->get('VuFind\Translator');
-            $locale     = $translator->getLocale();
-
-            foreach ($types as $type) {
-                $langFile = $baseDir . '/' . $type . '/' . $locale . '.ini';
-
-                    // File not available, add empty file to prevent problems
-                if (!is_file($langFile)) {
-                    $langFile = $baseDir . '/empty_fallback.ini';
-                }
-
-                $translator->addTranslationFile('ExtendedIni', $langFile, $type, $locale);
+            if (isset($config->TextDomains)
+                && isset($config->TextDomains->textDomains)
+            ) {
+                $this->addTextDomainTranslation(
+                    $translator,
+                    $config->TextDomains->textDomains
+                );
             }
         };
 
         // Attach right AFTER base translator, so it is initialized
         $this->events->attach('dispatch', $callback, 8998);
     }
+
+
+
+
+
+
+    /**
+     * Adds text-domain language files
+     *
+     * @param Translator $translator  Translator Object
+     * @param Config     $textDomains Text-domain configuration
+     *
+     * @return void
+     */
+    protected function addTextDomainTranslation(Translator $translator, $textDomains)
+    {
+        // nothing to do if no text-domain is configured
+        if (!($textDomains instanceof Config)) {
+            return;
+        }
+
+        $language = $translator->getLocale();
+
+        foreach ($textDomains as $textDomain) {
+            $langFile = $textDomain . '/' . $language . '.ini';
+            $translator->addTranslationFile(
+                'ExtendedIni',
+                $langFile,
+                $textDomain,
+                $language
+            );
+        }
+    }
+
+
 
 
 
