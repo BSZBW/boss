@@ -183,7 +183,84 @@ class Results extends VuFindSolrResults
      */
     public function getFacetList($filter = null)
     {
+
+
+        /* start of VF2 implementation - has to be re-changed once multi domain translations even for factes are implemented*/
+
+        // Make sure we have processed the search before proceeding:
+        if (null === $this->responseFacets) {
+            $this->performAndProcessSearch();
+        }
+
+        // If there is no filter, we'll use all facets as the filter:
+        if (is_null($filter)) {
+            $filter = $this->getParams()->getFacetConfig();
+        }
+
+        // Start building the facet list:
+        $list = array();
+
+        // Loop through every field returned by the result set
+        $fieldFacets = $this->responseFacets->getFieldFacets();
+        foreach (array_keys($filter) as $field) {
+            $data = isset($fieldFacets[$field]) ? $fieldFacets[$field] : array();
+            // Skip empty arrays:
+            if (count($data) < 1) {
+                continue;
+            }
+            // Initialize the settings for the current field
+            $list[$field] = array();
+            // Add the on-screen label
+            $list[$field]['label'] = $filter[$field];
+            // Build our array of values for this field
+            $list[$field]['list']  = array();
+            // Should we translate values for the current facet?
+            //$translate
+            //    = in_array($field, $this->getOptions()->getTranslatedFacets());
+
+
+            $refValuesToTranslate =&  $this->getOptions()->getTranslatedFacets();
+            $fieldToTranslateInArray =  array_filter($refValuesToTranslate,function ($passedValue) use ($field){
+                return $passedValue === $field || count(preg_grep ( "/" .$field . ":" . "/", array ($passedValue))) > 0;
+            }) ;
+
+            $translate = count($fieldToTranslateInArray) > 0;
+            $fieldToEvaluate = $translate ? current($fieldToTranslateInArray) : null;
+
+            // Loop through values:
+            foreach ($data as $value => $count) {
+                // Initialize the array of data about the current facet:
+                $currentSettings = array();
+                $currentSettings['value'] = $value;
+                $currentSettings['displayText']
+                    = $translate ? strstr($fieldToEvaluate,':') === FALSE ? $this->translate($value) :
+                                        $this->translate(array($value , substr($fieldToEvaluate,strpos( $fieldToEvaluate,':') + 1 )))  : $value;
+
+                //$currentSettings['displayText']
+                //    = $translate ?  $this->translate($value) : $value;
+
+
+                $currentSettings['count'] = $count;
+                $currentSettings['operator']
+                    = $this->getParams()->getFacetOperator($field);
+                $currentSettings['isApplied']
+                    = $this->getParams()->hasFilter("$field:".$value)
+                    || $this->getParams()->hasFilter("~$field:".$value);
+
+                // Store the collected values:
+                $list[$field]['list'][] = $currentSettings;
+            }
+        }
+        return $list;
+
+
+
+        /* end of VF2 implementation */
+
+        /* I guess we need this for QueryFacets -> to be done
+
         $facetList     = parent::getFacetList($filter);
+        $facetList     = $this->getFacetList($filter);
         $specialFacets = array();
 
         if( in_array('mylibraries', $filter)) {
@@ -194,7 +271,13 @@ class Results extends VuFindSolrResults
         $facetList = $specialFacets + $facetList;
 
         return $facetList;
+        */
+
     }
+
+
+
+
 
 
     /**
