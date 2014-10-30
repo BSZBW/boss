@@ -19,6 +19,22 @@ $highlightedFulltext  = $record->getHighlightedFulltext();
 $showFRBR = $this->configAccess()->Site->displayFrbr;
 $groupID  = $this->driver->getGroup(true);
 $theme    = $this->configAccess()->Site->theme;
+
+$openUrl = $this->driver->openURLActive('record') ? $this->driver->getOpenURL() : false;
+if (strcmp(strtolower($theme),'sbvfrdmulti') != 0) {
+    $urls = $viewRecord->getExtendedLinkDetails();
+}
+else {
+    $localunions = array('IDSBB','SNL', 'RETROS');
+    $localtags = array('856');
+    $localRestrictions = compact('localunions','localtags');
+
+    $globalunions = array('IDSBB','SNL');
+    $tags = array('956');
+    $globalRestrictions = compact('globalunions','tags');
+
+    $urls = $viewRecord->getExtendedLinkDetails($localRestrictions,$globalRestrictions);
+}
 ?>
 
 <div class="row" vocab="http://schema.org/" resource="#record" typeof="<?=$this->driver->getSchemaOrgFormats()?> Product">
@@ -134,16 +150,13 @@ $theme    = $this->configAccess()->Site->theme;
         <span property="bookEdition"><?=$this->escapeHtml($edition)?></span><br />
       <? endif; ?>
 
-      <?
-        $openUrl = $this->driver->openURLActive('record') ? $this->driver->getOpenURL() : false;
-        // Account for replace_other_urls setting
-        $urls = ($openUrl && $this->driver->replaceURLsWithOpenURL()) ? array() : $this->record($this->driver)->getLinkDetails();
-      ?>
       <? if (!empty($urls) || $openUrl): ?>
         <span class="label"><?=$this->transEsc('Online Access')?>: </span>
-        <span>
+        <span><br />
           <? foreach ($urls as $current): ?>
-            <a href="<?=$this->escapeHtmlAttr($this->proxyUrl($current['url']))?>"><?=$this->escapeHtml($current['desc'])?></a><br/>
+            <a href="<?=$this->escapeHtmlAttr($this->proxyUrl($current['url']))?>" target="_blank" title="<?=$this->escapeHtml($current['desc'])?>">
+                <?=$this->escapeHtml($current['desc'])?>
+            </a><br/>
           <? endforeach; ?>
           <? if ($openUrl): ?>
             <?=$this->openUrl($openUrl)?><br/>
