@@ -298,6 +298,7 @@ class Record extends VuFindRecord
 
         // No thumbnail?  Return false:
         if (empty($thumb)) {
+					/*
             if (!empty ($this->config->Content->externalResourcesServer)) {
                 //$urlHelper = $this->getView()->plugin('url');
                 //$urlSrc = $urlHelper('cover-unavailable');
@@ -310,7 +311,17 @@ class Record extends VuFindRecord
                 $urlHelper = $this->getView()->plugin('url');
                 return $urlHelper('cover-unavailable') ;
             }
+					*/
 
+					$this->driver->setUseMostSpecificFormat(true);
+
+					//TODO: proper path
+					//$dir = APPLICATION_PATH . '/themes/sbvfrd/images/';
+
+					$icon = $this->getFormatClass($this->driver->getFormats()[0]);
+
+					//TODO: fallback
+					return $icon;
         }
 
         // Array?  It's parameters to send to the cover generator:

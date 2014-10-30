@@ -4,7 +4,7 @@
 $record = $this->driver;
 $viewRecord = $this->record($this->driver);
 $thumbnail = $viewRecord->getThumbnail('small');
-$thumbnailSrc = $thumbnail ? $thumbnail : $this->url('cover-unavailable');
+//$thumbnailSrc = $thumbnail ? $thumbnail : $this->url('cover-unavailable');
 $detailLink = $this->recordLink()->getUrl($record);
 $titleStatement = $record->getTitleStatement(true);
 $shortTitle = $record->getShortTitle();
@@ -27,10 +27,10 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
   <div class="hidden-xs col-sm-3 col-md-2 no-gutter">
     <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="img-responsive">
       <? if ( !($record->getThumbnail() === false) ):  ?>
-        <img class="recordcover" src="<?= $thumbnailSrc ?>"/>
+        <img class="recordcover" src="<?= $thumbnail ?>"/>
       <? else: ?>
-        <? //@todo render icons if no image is available, probably use getFormatList() to do so ?>
-        <?= $viewRecord->getFormatList() ?>
+				<!--<img class="recordcover" src="<?= $thumbnail ?>.svg" onerror="this.src='<?= $thumbnail ?>.png'; this.onerror=null;"/>-->
+				<div class="thumbico <?= $thumbnail ?>"></div>
       <? endif; ?>
     </a>
   </div>
