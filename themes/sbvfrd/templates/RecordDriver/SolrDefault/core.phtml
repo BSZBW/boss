@@ -20,20 +20,25 @@ $showFRBR = $this->configAccess()->Site->displayFrbr;
 $groupID  = $this->driver->getGroup(true);
 $theme    = $this->configAccess()->Site->theme;
 
-$openUrl = $this->driver->openURLActive('record') ? $this->driver->getOpenURL() : false;
-if (strcmp(strtolower($theme),'sbvfrdmulti') != 0) {
-    $urls = $viewRecord->getExtendedLinkDetails();
+if ($searchClassId != 'Summon') {
+    if (strcmp(strtolower($theme),'sbvfrdmulti') != 0) {
+        $urls = $viewRecord->getExtendedLinkDetails();
+    }
+    else {
+        $localunions = array('IDSBB','SNL', 'RETROS');
+        $localtags = array('856');
+        $localRestrictions = compact('localunions','localtags');
+
+        $globalunions = array('IDSBB','SNL');
+        $tags = array('956');
+        $globalRestrictions = compact('globalunions','tags');
+
+        $urls = $viewRecord->getExtendedLinkDetails($localRestrictions,$globalRestrictions);
+    }
 }
 else {
-    $localunions = array('IDSBB','SNL', 'RETROS');
-    $localtags = array('856');
-    $localRestrictions = compact('localunions','localtags');
-
-    $globalunions = array('IDSBB','SNL');
-    $tags = array('956');
-    $globalRestrictions = compact('globalunions','tags');
-
-    $urls = $viewRecord->getExtendedLinkDetails($localRestrictions,$globalRestrictions);
+    $urls = null;
+    $openUrl = null;
 }
 ?>
 
