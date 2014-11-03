@@ -525,16 +525,21 @@ ul.dropdown-menu {
 }
 
 ul[aria-labelledby=dropdownLibraries] {
-  max-height: 50%;
+  max-height: 266px;
   overflow-y: auto;
   & > li {
     & > a {
       border: none;
       color: @link-color;
+      padding-top: 5px;
+      padding-bottom: 5px;
       &:hover,
       &focus{
         color: @theme-color;
         background-color: @dropdown-bg;
+      }
+      span.a-before:first-child {
+        width: 5px;
       }
     }
   }
