@@ -296,7 +296,7 @@ class Record extends VuFindRecord
         // Try to build thumbnail:
         $thumb = $this->driver->tryMethod('getThumbnail', array($size));
 
-        // No thumbnail?  Return false:
+        // No thumbnail?  Return placeholder-icon class
         if (empty($thumb)) {
 					/*
             if (!empty ($this->config->Content->externalResourcesServer)) {
@@ -314,14 +314,9 @@ class Record extends VuFindRecord
 					*/
 
 					$this->driver->setUseMostSpecificFormat(true);
+					$iconClass = $this->getFormatClass($this->driver->getFormats()[0]);
 
-					//TODO: proper path
-					//$dir = APPLICATION_PATH . '/themes/sbvfrd/images/';
-
-					$icon = $this->getFormatClass($this->driver->getFormats()[0]);
-
-					//TODO: fallback
-					return $icon;
+					return $iconClass;
         }
 
         // Array?  It's parameters to send to the cover generator:
