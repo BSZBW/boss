@@ -455,7 +455,27 @@ var swissbib = {
       Lightbox.addCloseAction(function(){document.location.reload(true);});
     }
   },
-
+    // function for the UserVoice feedback widget in swissbib green
+    UserVoiceFeedback: function() {
+        UserVoice = window.UserVoice || [];
+        (function () {
+            var uv = document.createElement('script');
+            uv.type = 'text/javascript';
+            uv.async = true;
+            uv.src = '//widget.uservoice.com/JtF9LB73G7r3zwkipwE1LA.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(uv, s)
+        })();
+        UserVoice.push(['set', {
+            accent_color: '#6aba2e',
+            trigger_color: 'white',
+            trigger_background_color: 'rgba(46, 49, 51, 0.6)'
+        }]);
+        UserVoice.push(['addTrigger', '#feedback', {
+            mode: 'contact'
+        }]);
+        UserVoice.push(['autoprompt', {}]);
+    },
 
   updatePageForLoginParent: function() {}
 };
@@ -466,6 +486,7 @@ var swissbib = {
  */
 $(document).ready(function () {
   swissbib.initOnReady();
+    swissbib.UserVoiceFeedback();
 });
 
 

@@ -2,18 +2,18 @@
 /** @var  Swissbib\RecordDriver\Summon $resultItem */
 /** @var  Swissbib\View\Helper\Record $viewRecord */
 
-$resultItem = $this->driver;
-$viewRecord = $this->record($this->driver);
+$record = $this->driver;
+$viewRecord = $this->record($record);
 
-$link360 = $resultItem->getLink();
-$openURL = $resultItem->getOpenURL();
+$link360 = $record->getLink();
+$openURL = $record->getOpenURL();
 $linkSFX = $this->openUrl($openURL);
 $linkSFX_param = 'title = "' . $this->transEsc('articles.linkSFX') . '" target="_blank"';
 $linkSFX = str_replace("<a ", "<a $linkSFX_param ", $linkSFX);
 
-$ABSTRACT = trim(implode($resultItem->getSummary()));
-$SUBJECTS = $resultItem->getAllSubjectHeadingsAsString();
-$DATABASE = $resultItem->getDatabaseTitle();
+$ABSTRACT = trim(implode($record->getSummary()));
+$SUBJECTS = $record->getAllSubjectHeadingsAsString();
+$DATABASE = $record->getDatabaseTitle();
 
 ?>
 <div class="details">
