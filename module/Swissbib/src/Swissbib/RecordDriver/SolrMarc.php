@@ -89,6 +89,8 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
 
     protected $protocolWrapper = null;
 
+    protected $multiValuedFRBRField = true;
+
     /**
      * @var    Array    List of all Elements of the description, to figure out whether to show tab or not
      */
@@ -106,6 +108,8 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
     ) {
         parent::__construct($mainConfig, $recordConfig, $searchSettings);
 
+
+        $this->multiValuedFRBRField = isset($searchSettings->General->multiValuedFRBRField) ? $searchSettings->General->multiValuedFRBRField : true;
         $this->protocolWrapper = $protocolWrapper;
     }
 
@@ -1228,7 +1232,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
      */
     public function getGroup()
     {
-        return isset($this->fields['groupid_isn_mv']) ? $this->fields['groupid_isn_mv'][0] : '';
+        return isset($this->fields['groupid_isn_mv']) ?  $this->multiValuedFRBRField ? $this->fields['groupid_isn_mv'][0] : $this->fields['groupid_isn_mv'] : '';
     }
 
 
