@@ -156,12 +156,14 @@
   }
 
   ul[aria-labelledby=dropdownLibraries] {
-    position: fixed;
-    max-height: 80%;
-    max-width: 80%;
-    top: 10%;
-    left: 10%;
-    overflow-y: scroll;
+    width: 950%;
+    & > li {
+      border: none;
+      & > a {
+        padding-top: 5px;
+        padding-bottom: 5px;
+      }
+    }
   }
 
   #sidebar-offcanvas-trigger {
