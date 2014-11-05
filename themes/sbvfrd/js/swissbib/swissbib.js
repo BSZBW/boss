@@ -59,7 +59,7 @@ var swissbib = {
    * @param    {Element}    ctx        Selector context
    */
   initNavigation: function (ctx) {
-    $("#navigation", ctx).menunav();
+    //$("#navigation", ctx).menunav();
   },
 
 
