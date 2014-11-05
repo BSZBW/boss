@@ -165,15 +165,15 @@
   }
 
   #sidebar-offcanvas-trigger {
-    height: 40px;
-    width: 13%;
+    height: 54px;
+    width: 28px;
     max-width: 40px;
     position: fixed;
     top: 32%;
     right: 0;
-    border: 1px solid #3C4250;
-    background-color: #f5f5f5;
-    opacity: .5;
+    border: none;
+    background-color: @link-color;
+    border-radius: 2px 0 0 2px;
   }
 
   #sidebar-offcanvas-trigger.offcanvas-active {
@@ -181,7 +181,11 @@
   }
 
   #sidebar-offcanvas-trigger:hover {
-    opacity: 1;
+    background-color: @highlight-color;
+  }
+
+  #sidebar-offcanvas-trigger:focus {
+    outline: 0;
   }
 
   .sidebar {
