@@ -2199,6 +2199,16 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
         return false;
     }
 
+    /**
+     * Returns true if the record supports real-time AJAX status lookups.
+     *
+     * @return bool
+     */
+    public function supportsAjaxStatus()
+    {
+        return false;
+    }
+
 
     /**
      * @override
