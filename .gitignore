@@ -13,7 +13,10 @@ local/languages/location/*
 local/httpd-vufind.conf
 local/cache/*
 local/log/*
+module/**/autoload_classmap.php
 public/.htaccess
+themes/**/compiled.css
+vendor/**/autoload_classmap.php
 
 # while testing:
 local/config/vufind/TargetsProxy.ini
