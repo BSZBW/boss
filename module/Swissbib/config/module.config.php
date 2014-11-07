@@ -296,7 +296,8 @@ return array(
             ),
             'ils_driver'               => array(
                 'factories' => array(
-                    'aleph' => 'Swissbib\VuFind\ILS\Driver\Factory::getAlephDriver'
+                    'aleph' => 'Swissbib\VuFind\ILS\Driver\Factory::getAlephDriver',
+                    'multibackend' => 'Swissbib\VuFind\ILS\Driver\Factory::getMultiBackend',
                 )
             ),
             'hierarchy_driver'         => array(
