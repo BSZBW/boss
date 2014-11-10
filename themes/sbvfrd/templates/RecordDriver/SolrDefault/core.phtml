@@ -44,7 +44,8 @@ else {
 
 <div class="row" vocab="http://schema.org/" resource="#record" typeof="<?=$this->driver->getSchemaOrgFormats()?> Product">
     <!-- main / short title -->
-    <div class="col-sm-12">
+    <div class="col-sm-3 hidden-xs"></div>
+	<div class="col-sm-9 col-xs-12">
         <h3 property="name"><?=$this->escapeHtml($shortTitle)?></h3>
     </div>
 
