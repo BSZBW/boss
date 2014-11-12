@@ -1,24 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 18.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
-<svg version="1.0" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 75 55.7" enable-background="new 0 0 75 55.7" xml:space="preserve" width="76px" height="57px">
-<path fill="#3C4250" d="M57.9,23.6H40.7V6.4h17.1V23.6z"/>
-<path fill="#3C4250" d="M68.6,10.7H60V6.4h8.6V10.7z"/>
-<path fill="#3C4250" d="M68.6,17.2H60v-4.3h8.6V17.2z"/>
-<path fill="#3C4250" d="M68.6,23.6H60v-4.3h8.6V23.6z"/>
-<path fill="#3C4250" d="M68.6,36.5H40.7v-4.3h27.9V36.5z"/>
-<path fill="#3C4250" d="M68.6,30H40.7v-4.3h27.9V30z"/>
-<path fill="#3C4250" d="M68.6,42.9H40.7v-4.3h27.9V42.9z"/>
-<path fill="#3C4250" d="M34.3,23.6H6.4v-4.3h27.9V23.6z"/>
-<path fill="#3C4250" d="M34.3,30H6.4v-4.3h27.9V30z"/>
-<path fill="#3C4250" d="M34.3,36.5H17.1v-4.3h17.1V36.5z"/>
-<path fill="#3C4250" d="M34.3,42.9H17.1v-4.3h17.1V42.9z"/>
-<path fill="#3C4250" d="M15,17.2H6.4V6.4H15V17.2z"/>
-<path fill="#3C4250" d="M15,47.2H6.4v-15H15V47.2z"/>
-<path fill="#3C4250" d="M34.3,49.3H17.1V45h17.1V49.3z"/>
-<path fill="#3C4250" d="M34.3,10.7H17.1V6.4h17.1V10.7z"/>
-<path fill="#3C4250" d="M34.3,17.2H17.1v-4.3h17.1V17.2z"/>
-<path fill="#3C4250" d="M68.6,49.3H40.7V45h27.9V49.3z"/>
-<path fill="#3C4250" d="M75,0H0v55.7h75V0z M4.3,4.3h32.1v47.1H4.3V4.3z M70.7,4.3v47.1H38.6V4.3H70.7z"/>
+<!-- Generator: Adobe Illustrator 18.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd" [
+	<!ENTITY ns_extend "http://ns.adobe.com/Extensibility/1.0/">
+	<!ENTITY ns_ai "http://ns.adobe.com/AdobeIllustrator/10.0/">
+	<!ENTITY ns_graphs "http://ns.adobe.com/Graphs/1.0/">
+	<!ENTITY ns_vars "http://ns.adobe.com/Variables/1.0/">
+	<!ENTITY ns_imrep "http://ns.adobe.com/ImageReplacement/1.0/">
+	<!ENTITY ns_sfw "http://ns.adobe.com/SaveForWeb/1.0/">
+	<!ENTITY ns_custom "http://ns.adobe.com/GenericCustomNamespace/1.0/">
+	<!ENTITY ns_adobe_xpath "http://ns.adobe.com/XPath/1.0/">
+]>
+<svg version="1.0" id="Ebene_1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="75px" height="55.7px"
+	 viewBox="-462 473.3 75 55.7" enable-background="new -462 473.3 75 55.7" xml:space="preserve">
+<metadata>
+	<sfw  xmlns="&ns_sfw;">
+		<slices></slices>
+		<sliceSourceBounds  width="75" height="55.7" y="0" x="0" bottomLeftOrigin="true"></sliceSourceBounds>
+	</sfw>
+</metadata>
+<path fill="#3C4250" d="M-404.1,496.9h-17.2v-17.2h17.1v17.2H-404.1z"/>
+<path fill="#3C4250" d="M-393.4,484h-8.6v-4.3h8.6V484z"/>
+<path fill="#3C4250" d="M-393.4,490.5h-8.6v-4.3h8.6V490.5z"/>
+<path fill="#3C4250" d="M-393.4,496.9h-8.6v-4.3h8.6V496.9z"/>
+<path fill="#3C4250" d="M-393.4,509.8h-27.9v-4.3h27.9V509.8z"/>
+<path fill="#3C4250" d="M-393.4,503.3h-27.9V499h27.9V503.3z"/>
+<path fill="#3C4250" d="M-393.4,516.2h-27.9v-4.3h27.9V516.2z"/>
+<path fill="#3C4250" d="M-427.7,496.9h-27.9v-4.3h27.9V496.9z"/>
+<path fill="#3C4250" d="M-427.7,503.3h-27.9V499h27.9V503.3z"/>
+<path fill="#3C4250" d="M-427.7,509.8h-17.2v-4.3h17.1L-427.7,509.8L-427.7,509.8z"/>
+<path fill="#3C4250" d="M-427.7,516.2h-17.2v-4.3h17.1L-427.7,516.2L-427.7,516.2z"/>
+<path fill="#3C4250" d="M-447,490.5h-8.6v-10.8h8.6V490.5z"/>
+<path fill="#3C4250" d="M-447,520.5h-8.6v-15h8.6V520.5z"/>
+<path fill="#3C4250" d="M-427.7,522.6h-17.2v-4.3h17.1L-427.7,522.6L-427.7,522.6z"/>
+<path fill="#3C4250" d="M-427.7,484h-17.2v-4.3h17.1L-427.7,484L-427.7,484z"/>
+<path fill="#3C4250" d="M-427.7,490.5h-17.2v-4.3h17.1L-427.7,490.5L-427.7,490.5z"/>
+<path fill="#3C4250" d="M-393.4,522.6h-27.9v-4.3h27.9V522.6z"/>
+<path fill="#3C4250" d="M-387,473.3h-75V529h75V473.3z M-457.7,477.6h32.1v47.1h-32.1V477.6z M-391.3,477.6v47.1h-32.1v-47.1H-391.3
+	z"/>
 </svg>

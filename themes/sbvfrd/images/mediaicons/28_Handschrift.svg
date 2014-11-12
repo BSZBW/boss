@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 18.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
-<svg version="1.0" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 75 77.2" enable-background="new 0 0 75 77.2" xml:space="preserve" width="76px" height="79px">
-<path fill="#3C4250" d="M11,30.9C11,30.9,3,62.3,0,75l15.4-19.9c-1.4-3.2-0.2-9,2.3-11.8c3.4-3.7,9.4-3.7,13.1-0.3
-	c3.7,3.4,3.9,9.1,0.6,12.8c-2.6,2.8-8.2,4.9-11.5,3.7L0,77.2l41.9-15.4l17.6-26.5l-22-20L11,30.9z"/>
-<path fill="#3C4250" d="M52.9,0L42,11.2l22,21.9l11-11L52.9,0z"/>
+<!-- Generator: Adobe Illustrator 18.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd" [
+	<!ENTITY ns_extend "http://ns.adobe.com/Extensibility/1.0/">
+	<!ENTITY ns_ai "http://ns.adobe.com/AdobeIllustrator/10.0/">
+	<!ENTITY ns_graphs "http://ns.adobe.com/Graphs/1.0/">
+	<!ENTITY ns_vars "http://ns.adobe.com/Variables/1.0/">
+	<!ENTITY ns_imrep "http://ns.adobe.com/ImageReplacement/1.0/">
+	<!ENTITY ns_sfw "http://ns.adobe.com/SaveForWeb/1.0/">
+	<!ENTITY ns_custom "http://ns.adobe.com/GenericCustomNamespace/1.0/">
+	<!ENTITY ns_adobe_xpath "http://ns.adobe.com/XPath/1.0/">
+]>
+<svg version="1.0" id="Ebene_1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="75px" height="77.2px"
+	 viewBox="-462 462.8 75 77.2" enable-background="new -462 462.8 75 77.2" xml:space="preserve">
+<metadata>
+	<sfw  xmlns="&ns_sfw;">
+		<slices></slices>
+		<sliceSourceBounds  width="75" height="77.2" y="0" x="0" bottomLeftOrigin="true"></sliceSourceBounds>
+	</sfw>
+</metadata>
+<path fill="#3C4250" d="M-451,493.7c0,0-8,31.4-11,44.1l15.4-19.9c-1.4-3.2-0.2-9,2.3-11.8c3.4-3.7,9.4-3.7,13.1-0.3
+	c3.7,3.4,3.9,9.1,0.6,12.8c-2.6,2.8-8.2,4.9-11.5,3.7L-462,540l41.9-15.4l17.6-26.5l-22-20L-451,493.7z"/>
+<path fill="#3C4250" d="M-409.1,462.8L-420,474l22,21.9l11-11L-409.1,462.8z"/>
 </svg>
