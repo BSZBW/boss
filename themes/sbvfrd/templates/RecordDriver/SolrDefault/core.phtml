@@ -113,9 +113,9 @@ else {
               <? $pubDate = $field->getDate(); if (!empty($pubDate)): ?>
                   <span property="publicationDate"><?=$this->escapeHtml($pubDate)?></span>
               <? endif; ?>
-              <br/>
+              <? if(!next($publications) === false){echo('<br />');} ?>
           <? endforeach; ?>
-      </span>
+      </span><br />
     <? endif; ?>
 
     <? if (!empty($journalTitle)): ?>
