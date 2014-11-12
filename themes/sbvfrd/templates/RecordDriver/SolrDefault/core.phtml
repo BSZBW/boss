@@ -57,7 +57,7 @@ else {
           <img alt="<?=$this->transEsc('Cover Image')?>" class="recordcover" src="<?=$this->escapeHtmlAttr($mediumThumb);?>"/>
         <? if ($largeThumb): ?></a><? endif; ?>
       <? else: ?>
-        <img src="<?=$this->url('cover-unavailable')?>" class="recordcover" alt="<?=$this->transEsc('No Cover Image')?>"/>
+          <div class="thumbico <?= $viewRecord->getThumbnailPlaceholder() ?> bigico"></div>
       <? endif; ?>
 
       <? /* Display qrcode if appropriate: */ ?>
