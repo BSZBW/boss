@@ -1,24 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 18.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd" [
-	<!ENTITY ns_extend "http://ns.adobe.com/Extensibility/1.0/">
-	<!ENTITY ns_ai "http://ns.adobe.com/AdobeIllustrator/10.0/">
-	<!ENTITY ns_graphs "http://ns.adobe.com/Graphs/1.0/">
-	<!ENTITY ns_vars "http://ns.adobe.com/Variables/1.0/">
-	<!ENTITY ns_imrep "http://ns.adobe.com/ImageReplacement/1.0/">
-	<!ENTITY ns_sfw "http://ns.adobe.com/SaveForWeb/1.0/">
-	<!ENTITY ns_custom "http://ns.adobe.com/GenericCustomNamespace/1.0/">
-	<!ENTITY ns_adobe_xpath "http://ns.adobe.com/XPath/1.0/">
-]>
-<svg version="1.0" id="Ebene_1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
-	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="66.3px" height="75px"
-	 viewBox="-466 463 66.3 75" enable-background="new -466 463 66.3 75" xml:space="preserve">
-<metadata>
-	<sfw  xmlns="&ns_sfw;">
-		<slices></slices>
-		<sliceSourceBounds  width="66.4" height="75" y="0" x="-0.1" bottomLeftOrigin="true"></sliceSourceBounds>
-	</sfw>
-</metadata>
-<path fill="#3C4250" d="M-399.7,499.5v-25.8l-47.2-10.7v38.6c-20.4,0-24.7,18.7-12,24.9c8.4,4,20.5-0.4,20.5-12v-40.8l30,6.4v30
-	c-20.4,0-25,20.4-12.3,26.6c8.4,4.1,20.9-1.6,20.9-13.2L-399.7,499.5L-399.7,499.5z"/>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg version="1.0" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="67px" height="75px" viewBox="0 0 67.1 75" enable-background="new 0 0 67.1 75" xml:space="preserve">
+<path fill-rule="evenodd" clip-rule="evenodd" fill="#424242" d="M66.6,36.5l0-25.8L19.6,0v38.6c-20.3,0-24.6,18.7-11.9,24.9
+	c8.3,4,20.4-0.4,20.4-12V10.7L58,17.1v30c-20.3,0-24.9,20.4-12.2,26.6c8.3,4.1,20.8-1.6,20.8-13.2V36.5z M66.6,36.5"/>
 </svg>

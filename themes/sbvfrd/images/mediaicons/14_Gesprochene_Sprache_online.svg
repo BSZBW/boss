@@ -1,29 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 18.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd" [
-	<!ENTITY ns_extend "http://ns.adobe.com/Extensibility/1.0/">
-	<!ENTITY ns_ai "http://ns.adobe.com/AdobeIllustrator/10.0/">
-	<!ENTITY ns_graphs "http://ns.adobe.com/Graphs/1.0/">
-	<!ENTITY ns_vars "http://ns.adobe.com/Variables/1.0/">
-	<!ENTITY ns_imrep "http://ns.adobe.com/ImageReplacement/1.0/">
-	<!ENTITY ns_sfw "http://ns.adobe.com/SaveForWeb/1.0/">
-	<!ENTITY ns_custom "http://ns.adobe.com/GenericCustomNamespace/1.0/">
-	<!ENTITY ns_adobe_xpath "http://ns.adobe.com/XPath/1.0/">
-]>
-<svg version="1.0" id="Ebene_1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
-	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="75px" height="51.5px"
-	 viewBox="-462 475.5 75 51.5" enable-background="new -462 475.5 75 51.5" xml:space="preserve">
-<metadata>
-	<sfw  xmlns="&ns_sfw;">
-		<slices></slices>
-		<sliceSourceBounds  width="75" height="51.5" y="0" x="0" bottomLeftOrigin="true"></sliceSourceBounds>
-	</sfw>
-</metadata>
-<path fill="#3C4250" d="M-402,496.4c-8.4,0-15,6.7-15,15.3c0,8.6,6.6,15.3,15,15.3s15-6.7,15-15.3C-387,503.1-393.6,496.4-402,496.4
-	L-402,496.4z M-402,523.1c-6.5,0-11.2-4.8-11.2-11.5c0-6.7,4.7-11.5,11.2-11.5c6.6,0,11.2,4.8,11.2,11.5
-	C-390.8,518.3-395.4,523.1-402,523.1L-402,523.1z"/>
-<path fill="#3C4250" d="M-406.3,518.4l10.7-6.4l-10.7-8.6V518.4z"/>
-<path fill="#3C4250" d="M-410.6,488.4v4.3h-2.1v-4.3h-4.3v4.3h-2.1v-6.4h-4.3v6.4h-2.1v-12.9h-4.3v12.9h-2.1v-4.3h-4.3v4.3h-2.1
-	v-6.4h-4.3v6.4h-2.1v-2.2h-4.3v2.1h-2.1v-17.1h-4.5v17.1h-2.1v-4.3h-4.3V499h4.3v-4.3h2.1v15h4.3v-15h2.1v2.1h4.3v-2.1h2.1v6.4h4.3
-	v-6.4h2.1v4.3h4.3v-4.3h2.1v12.9h4.3v-12.8h2.1v6.4h4.3v-6.4h2.3v4.3h4.3v-4.3h2.1v4.3h4.3v-10.7H-410.6z"/>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg version="1.0" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="75px" height="52px" viewBox="-442 307 75 52" enable-background="new -442 307 75 52" xml:space="preserve">
+<g>
+	<path fill="#3C4250" d="M-382,328.1c-8.4,0-15,6.8-15,15.4s6.6,15.4,15,15.4s15-6.8,15-15.4S-373.6,328.1-382,328.1L-382,328.1z
+		 M-382,355.1c-6.5,0-11.2-4.8-11.2-11.6c0-6.8,4.7-11.6,11.2-11.6c6.6,0,11.2,4.8,11.2,11.6C-370.8,350.2-375.4,355.1-382,355.1
+		L-382,355.1z"/>
+	<path fill="#3C4250" d="M-386.3,350.3l10.7-6.5l-10.7-8.7V350.3z"/>
+	<path fill="#3C4250" d="M-390.6,320v4.3h-2.1V320h-4.3v4.3h-2.1v-6.5h-4.3v6.5h-2.1v-13h-4.3v13h-2.1V320h-4.3v4.3h-2.1v-6.5h-4.3
+		v6.5h-2.1v-2.2h-4.3v2.1h-2.1V307h-4.5v17.3h-2.1v-4.3h-4.3v10.8h4.3v-4.3h2.1v15.1h4.3v-15.1h2.1v2.1h4.3v-2.1h2.1v6.5h4.3v-6.5
+		h2.1v4.3h4.3v-4.3h2.1v13h4.3v-12.9h2.1v6.5h4.3v-6.5h2.3v4.3h4.3v-4.3h2.1v4.3h4.3V320H-390.6z"/>
+</g>
 </svg>
