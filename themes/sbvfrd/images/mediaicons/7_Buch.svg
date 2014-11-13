@@ -2,12 +2,13 @@
 <!-- Generator: Adobe Illustrator 18.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
 <svg version="1.0" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 75 53.5" enable-background="new 0 0 75 53.5" xml:space="preserve">
-<path fill="#1D1D1B" d="M72.9,2.1V0H2.1v2.1H0v51.4h75V2.1H72.9z M4.3,4.3V2.1h32.1v47.1H4.3V4.3z M40.7,4.3v15l5-4l5.8,4V2.1h19.3
-	v47.1H38.6V2.1h2.1V4.3z"/>
-<path fill="#1D1D1B" d="M8.6,23.6h23.6v4.3H8.6V23.6z"/>
-<path fill="#1D1D1B" d="M32.1,32.1H8.6v4.3h23.6V32.1L32.1,32.1z M32.1,32.1"/>
-<path fill="#1D1D1B" d="M31.5,40.7H8.6l0,4.3h23.6v-4.3L31.5,40.7z"/>
-<path fill="#1D1D1B" d="M17.1,4.3h-4.3L8.6,19.2l4.3,0.1v-2.1h4.3v2.1h4.3L17.1,4.3z M12.9,15l1.9-6.4l2.4,6.4H12.9z"/>
-<path fill="#1D1D1B" d="M32.1,19.3h-8.6V15h8.6V19.3z"/>
+	 width="75px" height="54px" viewBox="0 0 75 54" enable-background="new 0 0 75 54" xml:space="preserve">
+<g>
+	<path fill="#3C4250" d="M73,2V0H3v2H0v52h75V2H73z M37,49H5V4.3V2h32V49z M71,49H39V2h2v2.3v15.1l5.1-4l5.9,4V2h19V49z"/>
+	<rect x="9" y="23" fill="#3C4250" width="24" height="5"/>
+	<rect x="9" y="32" fill="#3C4250" width="24" height="4"/>
+	<polygon fill="#3C4250" points="33,41 32.5,41 9.6,41 9.6,45 33,45 	"/>
+	<path fill="#3C4250" d="M13,17h5v2h4.4L18.1,4h-4.3L9.2,19.2l3.8,0.2V17z M15.8,8.6l2.4,6.4h-4.3L15.8,8.6z"/>
+	<rect x="24" y="15" fill="#3C4250" width="9" height="4"/>
+</g>
 </svg>

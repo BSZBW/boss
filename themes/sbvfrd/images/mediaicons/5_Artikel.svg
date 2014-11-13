@@ -2,11 +2,13 @@
 <!-- Generator: Adobe Illustrator 18.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
 <svg version="1.0" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 51.4 75" enable-background="new 0 0 51.4 75" xml:space="preserve">
-<path fill="#1D1D1B" d="M42.9,23.6H8.6V10.7h34.3V23.6z"/>
-<path fill="#1D1D1B" d="M8.6,27.8h34.3v4.3H8.6V27.8z"/>
-<path fill="#1D1D1B" d="M8.6,36.4v4.3h34.3v-4.3"/>
-<path fill="#1D1D1B" d="M42.9,45H8.6v4.3h34.3V45L42.9,45z"/>
-<path fill="#1D1D1B" d="M8.6,53.5h34.3v4.3H8.6V53.5z"/>
-<path fill="#1D1D1B" d="M51.4,75H0V0h51.4V75z M4.3,70.7h42.8V4.3H4.3V70.7z"/>
+	 width="54px" height="79px" viewBox="0 0 54 79" enable-background="new 0 0 54 79" xml:space="preserve">
+<g>
+	<rect x="9" y="11" fill="#3C4250" width="36" height="14"/>
+	<rect x="9" y="30" fill="#3C4250" width="36" height="4"/>
+	<rect x="9" y="39" fill="#3C4250" width="36" height="4"/>
+	<rect x="9" y="48" fill="#3C4250" width="36" height="4"/>
+	<rect x="9" y="57" fill="#3C4250" width="36" height="4"/>
+	<path fill="#3C4250" d="M0,0v79h54V0H0z M49,75H5V5h44V75z"/>
+</g>
 </svg>
