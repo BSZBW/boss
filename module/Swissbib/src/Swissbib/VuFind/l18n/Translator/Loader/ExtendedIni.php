@@ -128,7 +128,11 @@ class ExtendedIni extends VFExtendedIni
                 ? $filename : $path . '/' . $filename;
 
             if ($fullFilePath) {
-                $current = $this->languageFileToTextDomain($fullFilePath);
+                $this->reader->getTextDomain($path . '/' . $filename);
+                //s. d374b404e4e4dea5a7f2b2edf83605d98e07175e
+                //todo GH: discuss it on VuFind List and ask for current status Pull request multi doamin
+                $current = $this->reader->getTextDomain($path . '/' . $filename);
+                //$current = $this->languageFileToTextDomain($fullFilePath);
                 if ($data === false) {
                     $data = $current;
                 } else {
