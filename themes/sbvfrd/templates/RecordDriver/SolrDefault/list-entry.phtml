@@ -75,7 +75,7 @@
             <? endforeach; ?>
         <? endif; ?>
         <? if ($journalTitle): ?>
-            <span class="hiddex-xs label"><strong><?= $this->transEsc('Published in')?>:</strong></span>
+            <span class="hidden-xs label"><strong><?= $this->transEsc('Published in')?>:</strong></span>
             <span><a href="<?= $viewRecord->getLink('journaltitle', $journalTitle)?>"><?= $this->escapeHtml($journalTitle)?></a></span><br />
         <? endif; ?>
         <? if ($summDate): ?>
