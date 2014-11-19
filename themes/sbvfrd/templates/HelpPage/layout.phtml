@@ -4,6 +4,10 @@
 /** @var String $topic Active topic */
 
 $this->headTitle($this->translate('helppage') . ' - ' . $this->translate('helppage.' . $topic));
+
+// Set up breadcrumbs:
+$this->layout()->breadcrumbs = '<li><a href="' . $this->url('help-page') . '">' . $this->transEsc('helppage') . '</a></li>
+<li class="active"><a href="' . $this->url('help-page', array('topic' => ucfirst($topic))) . '">' . $this->translate('helppage.' . $topic) . '</a></li>';
 ?>
 
 <!-- end: col1 (sidebar) -->
@@ -28,4 +32,3 @@ $this->headTitle($this->translate('helppage') . ' - ' . $this->translate('helppa
     <?php endforeach; ?>
   </ul>
 </div>
-
