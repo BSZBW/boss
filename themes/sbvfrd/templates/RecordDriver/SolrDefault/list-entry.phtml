@@ -8,6 +8,12 @@
   $detailLink = $this->recordLink()->getUrl($record);
   $titleStatement = $record->getTitleStatement(true);
   $shortTitle = $record->getShortTitle();
+    if (!empty($shortTitle)) {
+        $shortTitle = $this->escapeHtml($shortTitle);
+    }
+    else {
+        $shortTitle = $this->transEsc('Title not available');
+    };
   $subtitle = $viewRecord->getSubtitle($titleStatement);
   $responsible = $viewRecord->getResponsible($titleStatement, $record);
   $edition = $record->getEdition();
@@ -29,41 +35,38 @@
     $user_id = $this->user ? $this->user->id : null;
   }
 ?>
-<div class="row result<? if($this->driver->supportsAjaxStatus()): ?> ajaxItem<? endif ?>">
-  <label class="pull-left"><?=$this->record($this->driver)->getCheckbox() ?></label>
-  <input type="hidden" value="<?=$id ?>" class="hiddenId"/>
-  <div class="col-sm-2 hidden-xs left no-gutter">
-    <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title img-responsive">
-      <? if ($summThumb = $this->record($this->driver)->getThumbnail()): ?>
-        <img src="<?=$this->escapeHtmlAttr($summThumb)?>" alt="<?=$this->transEsc('Cover Image')?>"/>
-      <? else: ?>
-        <img src="<?=$this->url('cover-unavailable')?>" alt="<?=$this->transEsc('No Cover Image')?>"/>
-      <? endif; ?>
-    </a>
-  </div>
-  <div class="col-sm-6 col-xs-10 middle">
-    <div class="resultItemLine1">
-      <a href="<?=$this->recordLink()->getUrl($this->driver)?>">
-      <?
-        if (!empty($shortTitle)) {
-            echo $this->escapeHtml($shortTitle);
-        } else {
-            echo $this->transEsc('Title not available');
-        }
-      ?></a>
+<div class="row result">
+    <div class="col-sm-1">
+        <label class="pull-left"><?=$this->record($this->driver)->getCheckbox() ?></label>
+        <input type="hidden" value="<?=$id ?>" class="hiddenId"/>
     </div>
-
-    <div class="meta">
-       <? if (isset($subtitle)): ?>
-        <?= $this->escapeHtml($subtitle) ?><br />
-       <? endif; ?>
-        <? if ($responsible): ?>
-            <span class="hidden-xs"><strong><?= $this->transEsc('Author') ?>:</strong></span>
-            <span>
-                <?= $this->escapeHtml($responsible) ?>
-            </span><br />
+    <div class="col-sm-2 hidden-xs left no-gutter">
+        <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title img-responsive">
+        <? if ($summThumb = $this->record($this->driver)->getThumbnail()): ?>
+            <img src="<?=$this->escapeHtmlAttr($summThumb)?>" alt="<?=$this->transEsc('Cover Image')?>"/>
+        <? else: ?>
+            <img src="<?=$this->url('cover-unavailable')?>" alt="<?=$this->transEsc('No Cover Image')?>"/>
         <? endif; ?>
+        </a>
     </div>
+    <div class="col-sm-6 col-xs-10 middle">
+        <div>
+            <h2>
+                <a class="title" title="<?= $shortTitle ?>" href="<?=$this->recordLink()->getUrl($this->driver)?>"><?= $shortTitle ?></a>
+            </h2>
+        </div>
+
+        <div class="meta">
+            <? if (isset($subtitle)): ?>
+            <?= $this->escapeHtml($subtitle) ?><br />
+            <? endif; ?>
+            <? if ($responsible): ?>
+                <span class="hidden-xs"><strong><?= $this->transEsc('Author') ?>:</strong></span>
+                <span>
+                    <?= $this->escapeHtml($responsible) ?>
+                </span><br />
+            <? endif; ?>
+        </div>
 
     <!-- Zeitschriftentitel, Erscheinungsjahr -->
     <div class="meta">
