@@ -6,19 +6,75 @@ $this->headTitle($this->translate('Photocopies'));
 $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Photocopies') . '</li>';
 ?>
 
-<div class="<?= $this->layoutClass('mainbody') ?>">
-  <h2><?= $this->transEsc('Photocopies') ?></h2>
-  <?= $this->flashmessages(); ?>
+<div class="row">
+    <div class="<?=$this->layoutClass('mainbody')?>">
+        <h2><?=$this->transEsc('Photocopies') ?></h2>
 
-  <?php if( sizeof($this->photoCopies) ): ?>
-    <p><?=$this->transEsc('Your photocopies') ?></p>
-    <?=$this->render('myresearch/photocopies/itemlist.phtml')?>
-  <?php else: ?>
-    <p><?=$this->transEsc('No photocopies') ?></p>
-  <?php endif; ?>
+        <?=$this->flashmessages()?>
+
+        <div class="col-xs-10 col-sm-8 col-md-7">
+        <?php if(sizeof($this->photoCopies)): ?>
+
+        <?php foreach ($photoCopies as $index => $photoCopy): ?>
+            <hr/>
+
+            <?= $this->escapeHtml($photoCopy['title']) ?>
+            <? if (!empty($photoCopy['description'])): ?>
+            , <?= $this->escapeHtml($photoCopy['description']) ?>
+            <? endif; ?>
+
+            <? if (!empty($photoCopy['library'])): ?>
+              <br/>
+              <strong><?=$this->transEsc('Institution')?>: </strong><?=$this->escapeHtml($photoCopy['library'])?>
+              <br />
+            <? endif; ?>
+
+            <? if (!empty($photoCopy['callNumber'])): ?>
+              <strong><?=$this->transEsc('Call Number')?>:</strong> <?=$this->escapeHtml($photoCopy['callNumber'])?>
+              <br />
+            <? endif; ?>
+
+            <strong><?=$this->transEsc('pick_up_location') ?>:</strong> <?=$this->transEsc($photoCopy['pickup']) ?><br />
+
+            <strong><?=$this->transEsc('Created') ?>:</strong> <?=$this->escapeHtml($photoCopy['dateOpen']) ?><br />
+
+            <strong><?=$this->transEsc('Status') ?>:</strong> <?=$this->transEsc($photoCopy['status']) ?><br />
+
+            <strong><?=$this->transEsc('Note') ?>: </strong> <?= $this->escapeHtml($photoCopy['title2'] . ' / ' . $photoCopy['author'] . '. ' . $photoCopy['note1'] . ', ' . $photoCopy['pages'] . '. ' . $photoCopy['note2']) ?>
+
+            <? endforeach; ?>
+
+        <? else: ?>
+            <?=$this->transEsc('You do not have any holds or recalls placed') ?>.
+        <? endif; ?>
+        </div>
+    </div>
+
+    <div class="<?= $this->layoutClass('sidebar') ?>">
+            <?= $this->context($this)->renderInContext("myresearch/menu.phtml", array('active' => 'photocopies')) ?>
+    </div>
+
 
 </div>
 
-<div class="<?= $this->layoutClass('sidebar') ?>">
-  <?= $this->context($this)->renderInContext("myresearch/menu.phtml", array('active' => 'photocopies')) ?>
+
+
+
+<!--<div class="<?/*= $this->layoutClass('mainbody') */?>">
+  <h2><?/*= $this->transEsc('Photocopies') */?></h2>
+  <?/*= $this->flashmessages(); */?>
+
+  <?php /*if( sizeof($this->photoCopies) ): */?>
+    <p><?/*=$this->transEsc('Your photocopies') */?></p>
+    <?/*=$this->render('myresearch/photocopies/itemlist.phtml')*/?>
+
+  <?php /*else: */?>
+    <p><?/*=$this->transEsc('No photocopies') */?></p>
+  <?php /*endif; */?>
+
 </div>
+
+<div class="<?/*= $this->layoutClass('sidebar') */?>">
+  <?/*= $this->context($this)->renderInContext("myresearch/menu.phtml", array('active' => 'photocopies')) */?>
+</div>
+-->
