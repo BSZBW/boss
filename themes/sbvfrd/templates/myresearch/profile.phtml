@@ -9,7 +9,7 @@
     $showHomeLibForm = (isset($this->pickup) && count($this->pickup) > 1);
 
     // Template for use by the renderArray helper:
-    $arrTemplate = '<tr><th>%%LABEL%%:</th><td> %%VALUE%%</td></tr>';
+    $arrTemplate = '<tr><th>%%LABEL%%</th><td> %%VALUE%%</td></tr>';
 ?>
 
 <div class="row">
@@ -44,7 +44,7 @@
           </form>
         </td>
       <? endif; ?>
-      <?
+      <?/*
         echo $this->renderArray(
           $arrTemplate, $this->profile,
           array(
@@ -60,8 +60,36 @@
             $this->transEsc('Phone Number') => 'phone',
 //            $this->transEsc('Group') => 'group'
           )
-        );
+        );*/
       ?>
+        <tr>
+            <th><?=$this->escapeHtml($this->transEsc('Address'))?></th>
+            <td><?=$this->escapeHtml($this->profile['address1'])?></td>
+        </tr>
+        <tr>
+            <th>&nbsp;</th>
+            <td><?=$this->escapeHtml($this->profile['address2'])?></td>
+        </tr>
+        <tr>
+            <th>&nbsp;</th>
+            <td><?=$this->escapeHtml($this->profile['address3'])?></td>
+        </tr>
+        <tr>
+            <th>&nbsp;</th>
+            <td><?=$this->escapeHtml($this->profile['address4'])?></td>
+        </tr>
+        <tr>
+            <th>&nbsp;</th>
+            <td><?=$this->escapeHtml($this->profile['address5'])?></td>
+        </tr>
+        <tr>
+            <th><?=$this->escapeHtml($this->transEsc('Email'));?></th>
+            <td><?=$this->escapeHtml($this->profile['email'])?></td>
+        </tr>
+        <tr>
+            <th><?=$this->escapeHtml($this->transEsc('Phone Number'));?></th>
+            <td><?=$this->escapeHtml($this->profile['phone'])?></td>
+        </tr>
     </table>
   </div>
 
