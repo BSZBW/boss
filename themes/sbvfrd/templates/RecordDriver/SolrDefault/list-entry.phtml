@@ -35,26 +35,25 @@
     $user_id = $this->user ? $this->user->id : null;
   }
 ?>
+
 <div class="row result">
     <div class="col-sm-1">
-        <label class="pull-left"><?=$this->record($this->driver)->getCheckbox() ?></label>
+        <label class="pull-left"><?=$viewRecord->getCheckbox() ?></label>
         <input type="hidden" value="<?=$id ?>" class="hiddenId"/>
     </div>
     <div class="col-sm-2 hidden-xs left no-gutter">
-        <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title img-responsive">
-        <? if ($summThumb = $this->record($this->driver)->getThumbnail()): ?>
-            <img src="<?=$this->escapeHtmlAttr($summThumb)?>" alt="<?=$this->transEsc('Cover Image')?>"/>
+        <a href="<?=$this->recordLink()->getUrl($record)?>" class="title img-responsive">
+        <? if (!($thumbnail === false)): ?>
+            <img class="recordcover" src="<?= $thumbnail ?>" />
         <? else: ?>
-            <img src="<?=$this->url('cover-unavailable')?>" alt="<?=$this->transEsc('No Cover Image')?>"/>
+            <div class="thumbico <?= $viewRecord->getThumbnailPlaceholder() ?>"></div>
         <? endif; ?>
         </a>
     </div>
     <div class="col-sm-6 col-xs-10 middle">
-        <div>
-            <h2>
-                <a class="title" title="<?= $shortTitle ?>" href="<?=$this->recordLink()->getUrl($this->driver)?>"><?= $shortTitle ?></a>
-            </h2>
-        </div>
+        <h2>
+            <a class="title" title="<?= $shortTitle ?>" href="<?=$this->recordLink()->getUrl($record)?>"><?= $shortTitle ?></a>
+        </h2>
 
         <div class="meta">
             <? if (isset($subtitle)): ?>

@@ -1,11 +1,14 @@
+<?
+$totalItemCount = isset($this->recordTotal) ? $this->recordTotal : $totalItemCount;
+?>
 <div class="hidden-sm hidden-xs">
     <?=$this->transEsc("Showing")?>
     <strong><?=$this->localizedNumber($this->results->getStartRecord())?></strong> - <strong><?=$this->localizedNumber($this->results->getEndRecord())?></strong>
     <? if (!isset($this->skipTotalCount)): ?>
-      <?=$this->transEsc('of')?> <strong><?=$this->localizedNumber($this->recordTotal)?></strong>
+      <?=$this->transEsc('of')?> <strong><?=$this->localizedNumber($totalItemCount)?></strong>
     <? endif; ?>
 </div>
 
 <div class="hidden-md hidden-lg">
-    <strong><?=$this->localizedNumber($this->recordTotal)?></strong> <?=$this->transEsc("Results")?>
+    <strong><?=$this->localizedNumber($totalItemCount)?></strong> <?=$this->transEsc("Results")?>
 </div>
