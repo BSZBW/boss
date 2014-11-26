@@ -24,12 +24,19 @@
         </ul>
     </div>
     <div class="sidegroup">
+        <h4><?=$this->transEsc('Search')?></h4>
+        <ul class="list-group">
+            <a class="list-group-item" href="<?= $this->url('search-history')?>" title="<?= $this->transEsc('Search History')?>"><?=$this->transEsc('Search History')?></a>
+            <a class="list-group-item" href="<?=$this->url('myresearch-settings')?>" title="<?=$this->transEsc('My_Search_Settings')?>"><?=$this->transEsc('My_Search_Settings')?></a>
+        </ul>
+    </div>
+    <div class="sidegroup">
         <h4><?=$this->transEsc('other_catalogs')?></h4>
         <ul class="list-group">
-            <a class="list-group-item help-link" href="http://www.swissbib.ch" target="_blank" title="swissbib: Schweizerischer Metakatalog">swissbib: Schweizerischer Metakatalog</a></a>
-            <a class="list-group-item help-link" href="http://aleph.unibas.ch/F" title="ALEPH-Katalog IDS Basel Bern">ALEPH-Katalog IDS Basel Bern</a>
-            <a class="list-group-item help-link" href="http://aleph.unibas.ch/F/?func=option-update-lng&file_name=find-b&p_con_lng=GER&local_base=dsv05" title="Verbundkatalog HAN für Handschriften, Archive und Nachlässe">Verbundkatalog HAN für Handschriften, Archive und Nachlässe</a>
-            <a class="list-group-item help-link" href="#" target="_blank" title="GND">GND</a>
+            <a class="list-group-item" href="http://www.swissbib.ch" target="_blank" title="swissbib: Schweizerischer Metakatalog">swissbib: Schweizerischer Metakatalog</a></a>
+            <a class="list-group-item" href="http://aleph.unibas.ch/F" title="ALEPH-Katalog IDS Basel Bern">ALEPH-Katalog IDS Basel Bern</a>
+            <a class="list-group-item" href="http://aleph.unibas.ch/F/?func=option-update-lng&file_name=find-b&p_con_lng=GER&local_base=dsv05" title="Verbundkatalog HAN für Handschriften, Archive und Nachlässe">Verbundkatalog HAN für Handschriften, Archive und Nachlässe</a>
+            <a class="list-group-item" href="http://swb.bsz-bw.de/DB=2.104/START_WELCOME" target="_blank" title="Thesaurus (GND)">Thesaurus (GND)</a>
         </ul>
     </div>
 </div>
