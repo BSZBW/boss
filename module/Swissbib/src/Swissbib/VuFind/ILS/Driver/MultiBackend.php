@@ -65,4 +65,34 @@ class MultiBackend extends VFMultiBackend {
         }
         return array();
     }
+
+    public function getRequiredDate($patron, $holdInfo=null) {
+        $id = $patron['id'];
+        $source = $this->getSource($id);
+        $driver = $this->getDriver($source);
+        if ($driver) {
+            return $driver->getRequiredDate($patron, $holdInfo);
+        }
+        return array();
+    }
+
+    public function getPickUpLocations($patron = false, $holdDetails = null)
+    {
+        $source = $this->getSource($patron['cat_username'], 'login');
+        $driver = $this->getDriver($source);
+        if ($driver) {
+            if ($holdDetails) {
+                $locations = $driver->getPickUpLocations(
+                    $this->stripIdPrefixes($patron, $source),
+                    $this->stripIdPrefixes($holdDetails, $source)
+                );
+                return $this->addIdPrefixes($locations, $source);
+            }
+            throw new ILSException('No suitable backend driver found');
+        }
+    }
+
+    public function getHoldingInfoForItem() {
+        return null;
+    }
 }
