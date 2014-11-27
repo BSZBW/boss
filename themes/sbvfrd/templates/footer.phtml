@@ -59,7 +59,9 @@
   </div>
   <div class="col-sm-4">
       <div class="row">
-          <a target="_blank" href="http://www.urz.unibas.ch/"><img src="<?= $this->basePath('themes/sbvfrd/images/poweredby_unibasel.gif') ?>"></a>
+          <a target="_blank" href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://www.urz.unibas.ch') ?>">
+              <img src="<?= $this->basePath('themes/sbvfrd/images/poweredby_unibasel.gif') ?>">
+          </a>
       </div>
   </div>
 </div>
