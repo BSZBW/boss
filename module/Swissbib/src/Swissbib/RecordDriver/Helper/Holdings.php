@@ -791,9 +791,7 @@ class Holdings
      */
     protected function getPatron()
     {
-        $test = $this->ilsAuth->storedCatalogLogin();
-        //$test2 = $this->authManager->storedCatalogLogin();
-        return $test;
+        return $this->ilsAuth->storedCatalogLogin();
     }
 
 
