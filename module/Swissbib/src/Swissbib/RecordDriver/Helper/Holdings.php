@@ -7,6 +7,7 @@ use Zend\I18n\Translator\Translator;
 use VuFind\Crypt\HMAC;
 use VuFind\ILS\Connection as IlsConnection;
 use VuFind\Auth\Manager as AuthManager;
+use VuFind\Auth\ILSAuthenticator as IlsAuth;
 use VuFind\Config\PluginManager as ConfigManager;
 
 use Swissbib\VuFind\ILS\Driver\Aleph;
@@ -26,6 +27,9 @@ class Holdings
 
     /** @var    AuthManager        Check login status and info */
     protected $authManager;
+
+    /** @var IlsAuth  */
+    protected $ilsAuth;
 
     /** @var    ConfigManager    Load configurations */
     protected $configManager;
@@ -145,6 +149,7 @@ class Holdings
         IlsConnection $ilsConnection,
         HMAC $hmac,
         AuthManager $authManager,
+        IlsAuth $ilsAuth,
         ConfigManager $configManager,
         Translator $translator,
         LocationMap $locationMap,
@@ -159,6 +164,7 @@ class Holdings
         $this->configHoldings = $configManager->get('Holdings');
         $this->hmac = $hmac;
         $this->authManager = $authManager;
+        $this->ilsAuth = $ilsAuth;
         $this->translator = $translator;
         $this->locationMap = $locationMap;
         $this->ebooksOnDemand = $ebooksOnDemand;
@@ -785,7 +791,9 @@ class Holdings
      */
     protected function getPatron()
     {
-        return $this->authManager->storedCatalogLogin();
+        $test = $this->ilsAuth->storedCatalogLogin();
+        //$test2 = $this->authManager->storedCatalogLogin();
+        return $test;
     }
 
 

@@ -26,8 +26,10 @@
  * @category swissbib_VuFind2
  * @package  RecordDriver
  * @author   Guenter Hipler  <guenter.hipler@unibas.ch>
+ * @author   Oliver Schihin <oliver.schihin@unibas.ch>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     http://www.swissbib.org
+ * @link     http://vufind.org/wiki/vufind2:record_drivers Wiki
+ * @link     http://www.swissbib.org Project Wiki
  */
 
 namespace Swissbib\RecordDriver;
@@ -39,16 +41,6 @@ use VuFind\RecordDriver\SolrMarc as VuFindSolrMarc;
 
 use Swissbib\RecordDriver\Helper\Holdings as HoldingsHelper;
 
-/**
- * enhancement for swissbib MARC records in Solr.
- *
- * @category swissbib_VuFind2
- * @package  RecordDrivers
- * @author   Guenter Hipler  <guenter.hipler@unibas.ch>
- * @author   Oliver Schihin <oliver.schihin@unibas.ch>
- * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     http://www.swissbib.org
- */
 class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
 {
 
