@@ -17,32 +17,32 @@ $DATABASE = $record->getDatabaseTitle();
 
 ?>
 <div class="details">
-  <h4><?= $this->transEsc('Get full text') ?>: </h4>
+  <label><?= $this->transEsc('Get full text') ?>: </label>
 
-  <p>
+
     <a title="<?= $this->transEsc('articles.link360') ?>" class="linkbutton primary icon_link_primary"
        target="_blank" href="<?= $link360 ?>">
-      <span>get&#160;it</span></a>
-  </p>
+      <span>get&#160;it</span></a></br>
 
-  <h4 style="margin-left:2cm">SFX Services:</h4>
 
-  <p><?= $linkSFX ?></p>
+  <label>SFX Services:</label>
+
+  <?= $linkSFX ?>
 
   <br/>
 
   <?php if ($DATABASE): ?>
-    <h4><?= $this->transEsc('articles.Database') ?>:</h4>
+    <label><?= $this->transEsc('articles.Database') ?>:</label>
     <p><?= $this->escapeHtml($DATABASE) ?></p>
   <?php endif; ?>
 
   <?php if ($ABSTRACT): ?>
-    <h4><?= $this->transEsc('Summary') ?>:</h4>
+    <label><?= $this->transEsc('Summary') ?>:</label>
     <p><?= $this->escapeHtml($ABSTRACT) ?></p>
   <?php endif; ?>
 
   <?php if ($SUBJECTS): ?>
-    <h4><?= $this->transEsc('Subjects') ?>:</h4>
+    <label><?= $this->transEsc('Subjects') ?>:</label>
     <p><?= $this->escapeHtml($SUBJECTS) ?></p>
   <?php endif; ?>
 

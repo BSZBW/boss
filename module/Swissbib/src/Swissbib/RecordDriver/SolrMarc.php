@@ -2221,4 +2221,12 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
     {
         return true;
     }
+
+    /**
+     * @return boolean
+     */
+    public function displayLinks()
+    {
+        return false;
+    }
 }

@@ -121,12 +121,15 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
       <? if ($this->driver->displayHoldings()): ?>
         <?= $this->render('search/results/available.phtml') ?>
         <?= $this->render('search/results/libraries.phtml') ?>
+      <? elseif ($this->driver->displayLinks()): ?>
+        <?= $this->render('search/results/links.phtml') ?>
       <? endif; ?>
 
       <? if ($this->isFavoriteInstitution($record->getInstitutions())): ?>
           <img src="<?= $this->basePath('themes/swissbib/images/icon_favorit_library.gif') ?>"
                  alt="Favourite library icon (heart)" class="favourite-library">
       <? endif; ?>
+
     </div>
   </div>
     <!-- COINS -->
