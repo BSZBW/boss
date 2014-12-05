@@ -53,14 +53,14 @@ class HoldingActions extends AbstractTranslatorHelper
                     'href'  => 'javascript:alert(\'Not implemented yet\')'
                 );
             }
-            if ($item['userActions']['photocopyRequest']) {
+            if ($item['userActions']['photorequest']) {
                 $actions['photocopy'] = array(
                     'label' => $this->translate('hold_copy'),
-                    'href'  => $item['userActions']['photocopyRequestLink'],
+                    'href'  => $item['userActions']['photoRequestLink'],
                     'target' => '_blank',
                 );
             }
-            if ($item['userActions']['bookingRequest']) {
+            if ($item['userActions']['bookingrequest']) {
                 $actions['booking'] = array(
                     'label'  => $this->translate('hold_booking'),
                     'href'   => $item['userActions']['bookingRequestLink'],

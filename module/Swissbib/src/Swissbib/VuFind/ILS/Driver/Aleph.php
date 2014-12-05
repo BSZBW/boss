@@ -126,8 +126,8 @@ class Aleph extends VuFindDriver
         $functions = array(
             'hold'             => 'HoldRequest',
             'shortLoan'        => 'ShortLoan',
-            'photocopyRequest' => 'PhotocopyRequest',
-            'bookingRequest'   => 'BookingRequest'
+            'photorequest'     => 'PhotoRequest',
+            'bookingrequest'   => 'BookingRequest'
         );
 
         // Check flags for each info node

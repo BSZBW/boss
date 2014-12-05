@@ -95,4 +95,13 @@ class MultiBackend extends VFMultiBackend {
     public function getHoldingInfoForItem() {
         return null;
     }
+
+    public function getSourceConfiguration($patronId) {
+        $source = $this->getSource($patronId);
+        $driver = $this->getDriver($source);
+        if ($driver) {
+            return $driver->config;
+        }
+        throw new ILSException('No suitable backend driver configuration found');
+    }
 }

@@ -710,19 +710,20 @@ class Holdings
         /** @var Aleph $ilsDriver */
         $ilsDriver = $this->ils->getDriver();
         $patron = $this->getPatron();
+        $sourceConfiguration = $ilsDriver->getSourceConfiguration($patron['id']);
 
         $itemId = $item['bibsysnumber'] . $item['sequencenumber'];
         $bib = $item['bib_library'];
         $groupId = $this->buildItemId($item);
 
         $allowedActions = $ilsDriver->getAllowedActionsForItem($patron['id'], $itemId, $groupId, $bib);
-        $host = $ilsDriver->host; // @todo make dev port dynamic
+        $host = $sourceConfiguration['Catalog']['host'];
 
-        if ($allowedActions['photocopyRequest']) {
-            $allowedActions['photocopyRequestLink'] = $this->getPhotoCopyRequestLink($host, $item);
+        if ($allowedActions['photorequest']) {
+            $allowedActions['photoRequestLink'] = $this->getPhotoRequestLink($host, $item);
         }
 
-        if ($allowedActions['bookingRequest']) {
+        if ($allowedActions['bookingrequest']) {
             $allowedActions['bookingRequestLink'] = $this->getBookingRequestLink($host, $item);
         }
 
@@ -737,7 +738,7 @@ class Holdings
      * @param    Array $item
      * @return    String
      */
-    protected function getPhotoCopyRequestLink($host, array $item)
+    protected function getPhotoRequestLink($host, array $item)
     {
         $queryParams = array(
             'func' => 'item-photo-request',
