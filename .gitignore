@@ -30,27 +30,5 @@ TAGS
 *~
 vendor/.git
 
-!.gitignore
-.idea
-build
-cli/removeLocalCacheLocalosc.sh
-cli/removeLocalCache_debian.sh
-cli/syncLocal.sh
-cli/tv_sync.sh
-cli/sync_debian.sh
-local/config/vufind/config.ini
-local/config/vufind/libadmin-groups.ini
-local/config/vufind/favorite-institutions.ini
-local/languages/location/*
-local/httpd-vufind.conf
-local/cache/*
-local/log/*
-module/**/autoload_classmap.php
-public/.htaccess
-themes/**/compiled.css
-vendor/**/autoload_classmap.php
-
-# while testing:
-local/config/vufind/TargetsProxy.ini
 
 
