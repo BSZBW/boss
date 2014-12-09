@@ -42,7 +42,7 @@ $this->layout()->breadcrumbs = '<li>' . $this->getLastSearchLink($this->transEsc
                         </select>
                     </div>
                 </div>
-            <? elseif (count($this->pickup) > 1): ?>
+            <? elseif (count($this->pickup) >= 1): ?>
                 <div class="form-group">
                     <label class="col-sm-3 control-label"><?=$this->transEsc("pick_up_location")?>:</label>
                     <div class="col-sm-9">
