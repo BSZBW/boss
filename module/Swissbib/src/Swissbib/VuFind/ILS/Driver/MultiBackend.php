@@ -92,10 +92,6 @@ class MultiBackend extends VFMultiBackend {
         }
     }
 
-    public function getHoldingInfoForItem() {
-        return null;
-    }
-
     public function getSourceConfiguration($patronId) {
         $source = $this->getSource($patronId);
         $driver = $this->getDriver($source);
@@ -103,5 +99,16 @@ class MultiBackend extends VFMultiBackend {
             return $driver->config;
         }
         throw new ILSException('No suitable backend driver configuration found');
+    }
+
+    public function placeHold($holdDetails)
+    {
+        $source = $this->getSource($holdDetails['patron']['cat_username'], 'login');
+        $driver = $this->getDriver($source);
+        if ($driver) {
+            $holdDetails = $this->stripIdPrefixes($holdDetails, $source);
+            return $driver->placeHold($holdDetails);
+        }
+        throw new ILSException('No suitable backend driver found');
     }
 }

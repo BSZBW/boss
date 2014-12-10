@@ -213,7 +213,7 @@ class RecordController extends VuFindRecordController
                     if ($this->inLightbox()) {
                         return false;
                     }
-                    return $this->redirect()->toRoute('myresearch-holds');
+                    return $this->redirectToRecord();
                 } else {
                     // Failure: use flash messenger to display messages, stay on
                     // the current form.
