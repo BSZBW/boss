@@ -10,6 +10,14 @@
 
     // Template for use by the renderArray helper:
     $arrTemplate = '<tr><th>%%LABEL%%</th><td> %%VALUE%%</td></tr>';
+
+    $delinquency = $profile['delinq-1'] . $profile['delinq-2'] . $profile['delinq-3'];
+    $delinq_notes = array(
+        'n1' => $profile['delinq-n-1'],
+        'n2' => $profile['delinq-n-2'],
+        'n3' => $profile['delinq-n-3']
+);
+
 ?>
 
 <div class="row">
@@ -90,6 +98,18 @@
             <th><?=$this->escapeHtml($this->transEsc('Phone Number'));?></th>
             <td><?=$this->escapeHtml($this->profile['phone'])?></td>
         </tr>
+        <? if (preg_match('/[1-9]/', $delinquency)): ?>
+        <tr>
+            <th><?=$this->escapeHtml($this->transEsc('Account blocked'))?></th>
+            <td>
+                <? foreach ($delinq_notes as $field): ?>
+                 <? if (!empty($field)): ?>
+                 <?= $this->transEsc($field) ?><br/>
+                 <? endif; ?>
+                <? endforeach; ?>
+            </td>
+        </tr>
+        <? endif; ?>
     </table>
   </div>
 
