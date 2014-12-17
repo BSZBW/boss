@@ -70,6 +70,7 @@ $this->layout()->breadcrumbs = '<li>' . $this->getLastSearchLink($this->transEsc
                 <label class="col-sm-3 control-label"><?=$this->transEsc("Comments")?>:</label>
                 <div class="col-sm-9">
                     <textarea rows="1" cols="20" name="gatheredDetails[comment]" class="form-control"><?=isset($this->gatheredDetails['comment']) ? $this->escapeHtml($this->gatheredDetails['comment']) : ''?></textarea>
+                    <p><?=$this->transEsc('hold_text2') ?></p>
                 </div>
             </div>
         <? endif; ?>
@@ -126,7 +127,6 @@ $this->layout()->breadcrumbs = '<li>' . $this->getLastSearchLink($this->transEsc
             <label class="col-sm-3 control-label"><?=$this->transEsc('hold_text1')?>:</label>
             <div class="col-sm-9">
                 <ul class="list">
-                    <li><?=$this->transEsc('hold_text2') ?></li>
                     <li><?=$this->transEsc('hold_text3') ?></li>
                     <li><?=$this->transEsc('hold_text4') ?> <a href="http://www.ub.unibas.ch/ids-basel-bern/kosten-lieferfristen" target="_blank" ><?=$this->transEsc('hold_text5')?></a></li>
                 </ul>
