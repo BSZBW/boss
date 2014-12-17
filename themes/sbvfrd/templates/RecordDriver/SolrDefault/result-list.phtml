@@ -84,9 +84,9 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
   <div class="col-xs-1 col-md-3 hidden-print actions">
     <div>
         <? if ($this->userlist()->getMode() !== 'disabled'): ?>
-          <a href="<?= $this->recordLink()->getActionUrl($this->driver, 'Save'); ?>" title="<?= $this->transEsc('memorizelistadd') ?>">
+          <a href="<?= $this->recordLink()->getActionUrl($this->driver, 'Save'); ?>" title="<?= $this->transEsc('Add to favorites') ?>">
             <span class="memorizelistadd"><i class="fa fa-bars"></i><i class="fa fa-plus"></i></span>
-            <span class="hidden-xs hidden-sm"><span class="a-before"></span><?= $this->transEsc('memorizelistadd') ?></span>
+            <span class="hidden-xs hidden-sm"><span class="a-before"></span><?= $this->transEsc('Add to favorites') ?></span>
           </a>
           <? /* Saved lists */ ?>
           <div class="savedLists alert alert-info hidden hidden-xs hidden-sm">
