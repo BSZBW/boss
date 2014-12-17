@@ -12,7 +12,7 @@
 ?>
 <ul class="nav nav-pills hidden-print">
   <? if (count($this->driver->getCitationFormats()) > 0): ?>
-    <li class="visible-lg"><a id="cite-record" class="modal-link <?=$controllerClass?>" href="<?=$this->url('record-cite', array('id'=>$id)) ?>" title="<?=$this->transEsc('Cite this')?>"><i class="fa fa-asterisk"></i></a></li>
+    <li class="visible-lg"><a id="cite-record" class="modal-link <?=$controllerClass?>" href="<?=$this->url('record-cite', array('id'=>$id)) ?>" title="<?=$this->transEsc('Cite this')?>"><i class="fa fa-chain"></i></a></li>
   <? endif; ?>
   <li class="visible-lg"><a id="mail-record" class="modal-link <?=$controllerClass?>" href="<?=$this->url('record-email', array('id'=>$id)) ?>" title="<?=$this->transEsc('Email this')?>"><i class="fa fa-envelope"></i></a></li>
 
@@ -29,7 +29,7 @@
   <? endif; ?>
 
   <? if ($this->userlist()->getMode() !== 'disabled'): ?>
-    <li><a id="save-record" class="modal-link <?=$controllerClass?>" href="<?=$this->recordLink()->getActionUrl($this->driver, 'Save')?>" title="<?=$this->transEsc('Add to favorites')?>"><i class="fa fa-plus"></i></a></li>
+    <li><a id="save-record" class="modal-link <?=$controllerClass?>" href="<?=$this->recordLink()->getActionUrl($this->driver, 'Save')?>" title="<?=$this->transEsc('Add to favorites')?>"><i class="fa fa-list-ul"></i></a></li>
   <? endif; ?>
   <? if (!empty($addThis)): ?>
     <li><a class="addThis addthis_button" href="https://www.addthis.com/bookmark.php?v=250&amp;pub=<?=urlencode($addThis)?>"><i class="fa fa-bookmark"></i></a></li>
