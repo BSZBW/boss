@@ -651,24 +651,6 @@ class Aleph extends VuFindDriver
     }
 
     /**
-     * Get my holds xml data
-     *
-     * @param    String        $userId
-     * @return    \SimpleXMLElement[]
-     */
-    protected function getMyHoldsResponse($userId)
-    {
-        $xml = $this->doRestDLFRequest(
-            array('patron', $userId, 'circulationActions', 'requests', 'holds'),
-            array('view' => 'full')
-        );
-
-        return $xml->xpath('//hold-request');
-    }
-
-
-
-    /**
      * Get my holds
      *
      * @param    Array        $user
@@ -676,8 +658,12 @@ class Aleph extends VuFindDriver
      */
     public function getMyHolds($user)
     {
-        $holdResponseItems    = $this->getMyHoldsResponse($user['id']);
-        $holds                = array();
+        $userId = $user['id'];
+        $holdList = array();
+        $xml = $this->doRestDLFRequest(
+            array('patron', $userId, 'circulationActions', 'requests', 'holds'),
+            array('view' => 'full'))
+        ;
         $dataMap         = array(
             'location'        => 'z37-pickup-location',
             'title'            => 'z13-title',
@@ -695,15 +681,15 @@ class Aleph extends VuFindDriver
             'description'    => 'z30-description'
         );
 
-        foreach ($holdResponseItems as $holdResponseItem) {
-            $itemData    = $this->extractResponseData($holdResponseItem, $dataMap);
-            $href         = $holdResponseItem->xpath('@href');
-            $delete        = $holdResponseItem->xpath('@delete');
+        foreach ($xml->xpath('//hold-request') as $item) {
+            $itemData    = $this->extractResponseData($item, $dataMap);
+            $href         = $item->xpath('@href');
+            $delete        = $item->xpath('@delete');
 
                 // Special fields which require calculation
             $itemData['type']        = 'hold';
             $itemData['item_id']    = substr($href[0], strrpos($href[0], '/') + 1);
-            $itemData['isbn']        = array($itemData['isbn-raw']);
+            //$itemData['isbn']        = array($itemData['isbn-raw']);
             $itemData['id']            = $this->barcodeToID($itemData['barcode']);
             $itemData['expire']        = DateTime::createFromFormat('Ymd', $itemData['expire'])->format('d.m.Y');
             $itemData['create']     = DateTime::createFromFormat('Ymd', $itemData['create'])->format('d.m.Y');
@@ -719,10 +705,10 @@ class Aleph extends VuFindDriver
             {
                 $itemData['position'] = preg_replace('/^Waiting in position[\s]+([\d]+).*$/', '$1', $itemData['status']);
             }
-            $holds[] = $itemData;
+            $holdList[] = $itemData;
         }
 
-        return $holds;
+        return $holdList;
     }
 
 
