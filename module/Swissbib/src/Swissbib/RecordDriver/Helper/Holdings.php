@@ -205,17 +205,6 @@ class Holdings
 
 
     /**
-     * Get ils driver (aleph)
-     *
-     * @return    Aleph
-     */
-    protected function getIlsDriver()
-    {
-        return $this->ils->getDriver();
-    }
-
-
-    /**
      * Get holdings data
      *
      * @param        String $institutionCode
@@ -603,7 +592,8 @@ class Holdings
                 unset($holding['backlink']);
                 $bib = $holding['bib_library'];
                 $resourceId = $bib . $holding['bibsysnumber'];
-                $itemsCount = $this->getIlsDriver()->getHoldingItemCount($resourceId, $holding['institution']);
+                $ilsDriver = $this->ils->getDriver();
+                $itemsCount = $ilsDriver->getHoldingItemCount($resourceId, $holding['institution']);
 
                 $holding['itemsLink'] = array(
                     'count' => $itemsCount,
