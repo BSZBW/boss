@@ -214,9 +214,6 @@ class Aleph extends VuFindDriver
         return $this->itemLinks;
     }
 
-
-
-
     public function getHoldingHoldingItems(
                     $resourceId,
                     $institutionCode = '',

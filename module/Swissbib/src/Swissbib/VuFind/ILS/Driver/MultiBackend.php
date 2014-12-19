@@ -103,6 +103,15 @@ class MultiBackend extends VFMultiBackend {
         throw new ILSException('No suitable backend driver found');
     }
 
+    public function getHoldingItemCount($id) {
+        $source = $this->getSource($id);
+        $driver = $this->getDriver($source);
+        if ($driver) {
+            return $driver->getHoldingItemCount($id);
+        }
+        throw new ILSException('No suitable backend driver found');
+    }
+
     /**
      * Extract source from the given ID
      *
