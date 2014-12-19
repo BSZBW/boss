@@ -57,4 +57,9 @@ class Results extends VFSummonResults
       return $this->target;
     }
 
+    public function getMyLibrariesFacets()
+    {
+        return array();
+    }
+
 }
