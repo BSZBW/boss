@@ -28,6 +28,9 @@ class Results extends VuFindSolrResults
      * @param    Params            $params
      * @return    ParamBag
      */
+
+    /*
+     * GH 19.12.2014 test it if we need it
     protected function createBackendParameters(AbstractQuery $query, Params $params)
     {
 
@@ -42,8 +45,11 @@ class Results extends VuFindSolrResults
 
         //return $backendParams;
     }
+    */
 
 
+    /*
+    GH 19.12.2014: test it if we need it
 
     protected function createSpellcheckBackendParameters(AbstractQuery $query, Params $params)
     {
@@ -66,37 +72,7 @@ class Results extends VuFindSolrResults
         return $backendParams;
     }
 
-
-
-
-    /**
-     * Add user institutions as facet queries to backend params
-     *
-     * @param    ParamBag    $backendParams
-     * @return    ParamBag
-     */
-    //todo: this function was moved to the params type - could be deleted?
-    //at the moment no time for testing - to be done later (GH)
-    protected function addUserInstitutions(ParamBag $backendParams)
-    {
-        /** @var Manager $favoritesManger */
-        $favoritesManger        = $this->getServiceLocator()->get('Swissbib\FavoriteInstitutions\Manager');
-        /** @var String[] $favoriteInstitutions */
-        $favoriteInstitutions    = $favoritesManger->getUserInstitutions();
-
-        if (sizeof($favoriteInstitutions > 0)) {
-                //facet parameter has to be true in case it's false
-            $backendParams->set("facet", "true");
-
-            foreach ($favoriteInstitutions as $institutionCode) {
-                //$backendParams->add("facet.query", "institution:" . $institutionCode);
-                $backendParams->add("bq", "institution:" . $institutionCode . "^5000");
-            }
-        }
-
-        return $backendParams;
-    }
-
+    */
 
 
     /**
@@ -110,8 +86,14 @@ class Results extends VuFindSolrResults
     protected function getResultQueryFacets($onlyNonZero = false)
     {
         /** @var \ArrayObject $queryFacets */
+
+        //GH 19.12.2014
+        //this might need a redesign. It's the old implementation for swissbib classic
+        //where a dedicated template for favorites was used and the favorite facets (QueryFacets) were totally separated from the Term facets
+        //aim: Integration of QueryFacets as part of the Facet (recommendation) component of VF2 (Top, side etc)
         $queryFacets = $this->responseFacets->getQueryFacets();
         $facets        = array();
+
 
         foreach ($queryFacets as $facetName => $queryCount) {
             list($fieldName,$filterValue) = explode(':', $facetName, 2);
@@ -137,39 +119,79 @@ class Results extends VuFindSolrResults
      *
      * @return    Array[]
      */
-    public function getSpecialFacets()
+    public function getMyLibrariesFacets()
     {
         $queryFacets    = $this->getResultQueryFacets(true);
-        $facetListItems    = array();
+        $list = array();
 
-        foreach ($queryFacets as $queryFacet) {
-            if ($queryFacet['field'] === 'institution') {
-                $sortKey    = sprintf('%09d', $queryFacet['count']) . '_' . $queryFacet['value']; // Sortable but unique key
+        $configQuerySettings = $this->getServiceLocator()->get('VuFind\Config')
+            ->get($this->getOptions()->getFacetsIni())->QueryFacets;
+        if (count($queryFacets) > 0 && isset($configQuerySettings))
+        {
+            $configResultSettings = $this->getServiceLocator()->get('VuFind\Config')
+                ->get($this->getOptions()->getFacetsIni())->Results_Settings;
 
-                $facetListItems[$sortKey] = array(
-                    'value'            => $queryFacet['value'],
-                    'displayText'    => $queryFacet['value'],
-                    'count'            => $queryFacet['count'],
-                    'isApplied'        => $this->getParams()->hasFilter($queryFacet['name'])
-                );
+
+            foreach ($queryFacets as $queryFacet) {
+
+                if (isset($configQuerySettings[$queryFacet['field']]))
+                {
+                    $facetGroupName = $queryFacet['field'];
+
+
+                    if (!isset($list[$facetGroupName])) {
+                        $list[$facetGroupName] = array();
+                    }
+                    if (!isset($list[$facetGroupName]['label'])) {
+                        $list[$facetGroupName]['label'] = $configQuerySettings[$queryFacet['field']];
+                    }
+
+
+
+                    $translateInfo = $this->isFieldToTranslate($queryFacet['field']);
+
+                    if (!isset($list[$facetGroupName]['displayLimit'])) {
+                        $list[$facetGroupName]['displayLimit'] = isset($configResultSettings->{'facet_limit_' . $translateInfo['normalizedFieldName']}) ?
+                            $configResultSettings->{'facet_limit_' . $translateInfo['normalizedFieldName']} :  $configResultSettings->facet_limit_default;
+
+                        //$list[$facetGroupName]['displayLimit'] = 1;
+                    }
+
+                    if (!isset($list[$facetGroupName]['field'])) {
+                        $list[$facetGroupName]['field'] = $facetGroupName;
+                    }
+
+
+                    if (!isset($list[$facetGroupName]['list']))
+                    {
+                        $list[$facetGroupName]['list'] = array();
+                    }
+
+
+                    $currentSettings = array();
+
+                    $currentSettings['displayText']
+                        = $translateInfo['translate'] ? count($translateInfo['field_domain']) == 1 ? $this->translate($queryFacet['value']) :
+                        $this->translate(array($queryFacet['value'] , $translateInfo['field_domain'][1]))  : $queryFacet['value'];
+                    //$currentSettings['isApplied'] = $this->getParams()->hasFilter($queryFacet['name']);
+
+                    $currentSettings['isApplied'] = $this->getParams()->hasFilter($facetGroupName .":".$queryFacet['value'])
+                                    || $this->getParams()->hasFilter("~" . $facetGroupName . ":".$queryFacet['value']);
+
+                    $currentSettings['count'] = $queryFacet['count'];
+                    $currentSettings['value'] = $queryFacet['value'];
+
+
+                    $list[$facetGroupName]['list'][] = $currentSettings;
+
+                }
+
             }
+
         }
 
-        if (empty($facetListItems)) {
-            return array();
-        }
+        return $list;
 
-            // Sort by count (which is the key)
-        krsort($facetListItems);
-        $facetListItems = array_values($facetListItems);
-
-        return array(
-            'institution' => array(
-                'label'    => 'mylibraries',
-                'field'    => 'institution',
-                'list'    => $facetListItems
-            )
-        );
     }
 
 
@@ -202,8 +224,14 @@ class Results extends VuFindSolrResults
 
         // Loop through every field returned by the result set
         $fieldFacets = $this->responseFacets->getFieldFacets();
+
+        //how Facet-Configuration is used seems to be weired for me
+        $configResultSettings = $this->getServiceLocator()->get('VuFind\Config')
+            ->get($this->getOptions()->getFacetsIni())->Results_Settings;
+
         foreach (array_keys($filter) as $field) {
             $data = isset($fieldFacets[$field]) ? $fieldFacets[$field] : array();
+
             // Skip empty arrays:
             if (count($data) < 1) {
                 continue;
@@ -214,27 +242,26 @@ class Results extends VuFindSolrResults
             $list[$field]['label'] = $filter[$field];
             // Build our array of values for this field
             $list[$field]['list']  = array();
-            // Should we translate values for the current facet?
-            //$translate
-            //    = in_array($field, $this->getOptions()->getTranslatedFacets());
 
 
-            $refValuesToTranslate =&  $this->getOptions()->getTranslatedFacets();
-            $fieldToTranslateInArray =  array_filter($refValuesToTranslate,function ($passedValue) use ($field){
-                return $passedValue === $field || count(preg_grep ( "/" .$field . ":" . "/", array ($passedValue))) > 0;
-            }) ;
+            $translateInfo = $this->isFieldToTranslate($field);
 
-            $translate = count($fieldToTranslateInArray) > 0;
-            $fieldToEvaluate = $translate ? current($fieldToTranslateInArray) : null;
 
+            $list[$field]['displayLimit'] = isset($configResultSettings->{'facet_limit_' . $translateInfo['normalizedFieldName']}) ?
+                $configResultSettings->{'facet_limit_' . $translateInfo['normalizedFieldName']} :  $configResultSettings->facet_limit_default;
             // Loop through values:
             foreach ($data as $value => $count) {
                 // Initialize the array of data about the current facet:
                 $currentSettings = array();
                 $currentSettings['value'] = $value;
+
+                //if translation should be done (flag -translate) we have to distinguis between
+                //a) multi domain (field contains a colon). Then the signature of the translation method differs (domain has to be indicated)
+                //b) or simple translation
+
                 $currentSettings['displayText']
-                    = $translate ? strstr($fieldToEvaluate,':') === FALSE ? $this->translate($value) :
-                                        $this->translate(array($value , substr($fieldToEvaluate,strpos( $fieldToEvaluate,':') + 1 )))  : $value;
+                    = $translateInfo['translate'] ? count($translateInfo['field_domain']) == 1 ? $this->translate($value) :
+                                        $this->translate(array($value , $translateInfo['field_domain'][1]))  : $value;
 
                 //$currentSettings['displayText']
                 //    = $translate ?  $this->translate($value) : $value;
@@ -251,27 +278,8 @@ class Results extends VuFindSolrResults
                 $list[$field]['list'][] = $currentSettings;
             }
         }
+
         return $list;
-
-
-
-        /* end of VF2 implementation */
-
-        /* I guess we need this for QueryFacets -> to be done
-
-        $facetList     = parent::getFacetList($filter);
-        $facetList     = $this->getFacetList($filter);
-        $specialFacets = array();
-
-        if( in_array('mylibraries', $filter)) {
-          $specialFacets = $this->getSpecialFacets();
-        }
-
-            // Prepend special facets
-        $facetList = $specialFacets + $facetList;
-
-        return $facetList;
-        */
 
     }
 
@@ -375,10 +383,43 @@ class Results extends VuFindSolrResults
         $this->results = $collection->getRecords();
 
 
+    }
+
+    /*
+     * Utility method to inspect multi domain translation for facets
+     * @return array()
+     */
+    protected function isFieldToTranslate($field)
+    {
 
 
+        $translateInfo = array();
 
+        //getTranslatedFacets returns the entries in Advanced_Settings -> translated_facets
+        $refValuesToTranslate =&  $this->getOptions()->getTranslatedFacets();
+        //is the current field a facet which should be translated?
+        //we have to use this customized filter mechanism because facets going to be translated are indicated in conjunction with their domain facetName:domainName
+        $fieldToTranslateInArray =  array_filter($refValuesToTranslate,function ($passedValue) use ($field){
+            //return true, if the field shoul be translated
+            //either $field==value in arra with facets to be translated (simple translation)
+            //or multi domain translation where the domain is part of the configuration fieldname:domainName
+            return $passedValue === $field || count(preg_grep ( "/" .$field . ":" . "/", array ($passedValue))) > 0;
+        }) ;
 
+        //Did we detect the field should be translated (field is part of the filtered array)
+        $translateInfo['translate'] = count($fieldToTranslateInArray) > 0;
+        //this name is always without any colons and could be used in further processing
+        $translateInfo['normalizedFieldName'] = $field;
+        $translateInfo['field_domain'] = array();
+
+        $fieldToTranslate = $translateInfo['translate'] ? current($fieldToTranslateInArray) : null;
+        if ($translateInfo['translate']) {
+            $translateInfo['field_domain'] =  strstr($fieldToTranslate,':') === FALSE ? array($field) : array($field,substr($fieldToTranslate,strpos( $fieldToTranslate,':') + 1 ));
+            //normalizedFieldName contains only the fieldname without any colons as seperator for the domain name (it's handy)
+            $translateInfo['normalizedFieldName'] = $translateInfo['field_domain'][0];
+        }
+
+        return $translateInfo;
     }
 
 
