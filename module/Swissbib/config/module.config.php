@@ -284,6 +284,7 @@ return array(
             'recommend' => array(
                 'factories' => array(
                     'favoritefacets' => 'Swissbib\Services\Factory::getFavoriteFacets',
+                    'sidefacets' => 'Swissbib\Recommend\Factory::getSideFacets'
                 ),
             ),
             'recorddriver'             => array(
