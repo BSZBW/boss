@@ -2126,17 +2126,12 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
             }
         }
 
-        // Found link based on special conditions, stop here
-        if ($link) {
-            return array(
-                'title' => 'note_' . $fieldIndex,
-                'value' => $title,
-                'link' => $link
-            );
-        }
-
-        // Fallback to base method if no custom field found
-        return parent::getFieldData($field, $fieldIndex);
+        // Make sure we have something to display:
+        return !isset($link) ? false : array(
+            'title' => $this->getRecordLinkNote($field),
+            'value' => $title,
+            'link'  => $link
+        );
     }
 
 
