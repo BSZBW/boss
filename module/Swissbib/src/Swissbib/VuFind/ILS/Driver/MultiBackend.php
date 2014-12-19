@@ -103,13 +103,50 @@ class MultiBackend extends VFMultiBackend {
         throw new ILSException('No suitable backend driver found');
     }
 
-    public function getHoldingItemCount($id) {
-        $source = $this->getSource($id);
+    /**
+     * The following functions are implementations of a "Basel Bern" functionality, display of journal volumes to order
+     */
+
+    public function getHoldingHoldingItems(
+        $resourceId,
+        $institutionCode = '',
+        $offset = 0,
+        $year = 0,
+        $volume = 0,
+        $numItems = 10,
+        array $extraRestParams = array()
+    )
+    {
+        $source = $this->getSource($resourceId);
         $driver = $this->getDriver($source);
         if ($driver) {
-            return $driver->getHoldingItemCount($id);
+            return $driver->getHoldingHoldingItems(
+                $resourceId,
+                $institutionCode = '',
+                $offset = 0,
+                $year = 0,
+                $volume = 0,
+                $numItems = 10,
+                $extraRestParams = array()
+                );
+        }
+    }
+
+    public function getHoldingItemCount($resourceId, $institutionCode = '') {
+        $source = $this->getSource($resourceId);
+        $driver = $this->getDriver($source);
+        if ($driver) {
+            return $driver->getHoldingItemCount($resourceId, $institutionCode = '');
         }
         throw new ILSException('No suitable backend driver found');
+    }
+
+    public function getResourceFilters($resourceId) {
+        $source = $this->getSource($resourceId);
+        $driver = $this->getDriver($source);
+        if ($driver) {
+            return $driver->getResourceFilters($resourceId);
+        }
     }
 
     /**

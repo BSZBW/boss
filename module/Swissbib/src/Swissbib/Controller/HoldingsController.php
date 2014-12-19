@@ -6,7 +6,7 @@ use Zend\View\Model\ViewModel;
 
 use Swissbib\Controller\BaseController;
 use Swissbib\RecordDriver\SolrMarc;
-use Swissbib\VuFind\ILS\Driver\Aleph;
+use Swissbib\VuFind\ILS\Driver\MultiBackend;
 use Swissbib\Helper\BibCode;
 use Swissbib\RecordDriver\Helper\Holdings;
 
@@ -70,9 +70,9 @@ class HoldingsController extends BaseController
         $offset = ($page - 1) * $this->PAGESIZE_HOLDINGITEMS;
 
         /** @var Aleph $aleph */
-        $aleph = $this->getILS();
-        $holdingItems = $aleph->getHoldingHoldingItems($resourceId, $institution, $offset, $year, $volume, $this->PAGESIZE_HOLDINGITEMS);
-        $totalItems = $aleph->getHoldingItemCount($resourceId, $institution, $year, $volume);
+        $catalog = $this->getILS();
+        $holdingItems = $catalog->getHoldingHoldingItems($resourceId, $institution, $offset, $year, $volume, $this->PAGESIZE_HOLDINGITEMS);
+        $totalItems = $catalog->getHoldingItemCount($resourceId, $institution, $year, $volume);
         /** @var Holdings $helper */
         $helper = $this->getServiceLocator()->get('Swissbib\HoldingsHelper');
         $dummyHoldingItem = $this->getFirstHoldingItem($idRecord, $institution);
@@ -80,7 +80,7 @@ class HoldingsController extends BaseController
         $bibSysNumber = $dummyHoldingItem['bibsysnumber'];
         $admCode = $dummyHoldingItem['adm_code'];
         $bib = $dummyHoldingItem['bib_library'];
-        $resourceFilters = $aleph->getResourceFilters($resourceId);
+        $resourceFilters = $catalog->getResourceFilters($resourceId);
         $extendingOptions = array(
             'availability' => false
         );
