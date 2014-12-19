@@ -19,8 +19,6 @@ $account = $this->auth()->getManager();
 $user = $this->auth()->isLoggedIn();
 ?>
 
-<?=$this->flashmessages()?>
-
 <div class="<?=$this->layoutClass('mainbody')?> resultView">
     <div class="results-top row">
         <div class="col-md-9">
@@ -30,6 +28,7 @@ $user = $this->auth()->isLoggedIn();
             </h1>
         </div>
     </div>
+    <?=$this->flashmessages()?>
     <div class="hidden-print search-controls clearfix row">
         <? if (isset($list)): ?>
             <? if ($list->editAllowed($account->isLoggedIn())): ?>
