@@ -92,15 +92,6 @@ class MultiBackend extends VFMultiBackend {
         }
     }
 
-    public function getSourceConfiguration($patronId) {
-        $source = $this->getSource($patronId);
-        $driver = $this->getDriver($source);
-        if ($driver) {
-            return $driver->config;
-        }
-        throw new ILSException('No suitable backend driver configuration found');
-    }
-
     public function placeHold($holdDetails)
     {
         $source = $this->getSource($holdDetails['patron']['cat_username'], 'login');
@@ -111,4 +102,37 @@ class MultiBackend extends VFMultiBackend {
         }
         throw new ILSException('No suitable backend driver found');
     }
+
+    /**
+     * Extract source from the given ID
+     *
+     * @param string $id        The id to be split
+     * @param string $delimiter The delimiter to be used from $this->delimiters
+     *
+     * @return string  Source
+     *
+     * Circumvent the private declaration in parent class
+     */
+
+    public function getSource($id, $delimiter = '') {
+        return parent::getSource($id, $delimiter = '');
+    }
+
+    /**
+     * Get configuration for the ILS driver.  We will load an .ini file named
+     * after the driver class and number if it exists;
+     * otherwise we will return an empty array.
+     *
+     * @param string $source The source id to use for determining the
+     * configuration file
+     *
+     * @return array   The configuration of the driver
+     *
+     * Circumvent the private declaration in parent class
+     */
+
+    public function getDriverConfig($source) {
+        return parent::getDriverConfig($source);
+    }
+
 }

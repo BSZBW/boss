@@ -710,7 +710,8 @@ class Holdings
         /** @var Aleph $ilsDriver */
         $ilsDriver = $this->ils->getDriver();
         $patron = $this->getPatron();
-        $sourceConfiguration = $ilsDriver->getSourceConfiguration($patron['id']);
+        $source = $ilsDriver->getSource($patron['id']);
+        $sourceConfiguration = $ilsDriver->getDriverConfig($source);
 
         $itemId = $item['bibsysnumber'] . $item['sequencenumber'];
         $bib = $item['bib_library'];
