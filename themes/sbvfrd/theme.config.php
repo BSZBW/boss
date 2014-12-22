@@ -3,6 +3,10 @@ $test = "";
 return array(
     'extends' => 'bootstrap3',
 
+    'css' => array(
+        'sbvfrd_print.css:print'
+    ),
+
     'less' => array(
         'active' => false,
         'compiled.less'
