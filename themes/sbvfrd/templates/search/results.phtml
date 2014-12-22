@@ -40,6 +40,9 @@
   $this->headScript()->appendFile("check_save_statuses.js");
 
   $recordTotal = $this->recordTotal = $this->results->getResultTotal();
+
+  $bulkExportFormats = array('EndNote', 'BibTeX'); // @todo: konfigurierbar machen, MARCXML aktivieren (funktioniert aktuell nicht)
+
 ?>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
@@ -60,6 +63,15 @@
                 <a href="<?=$this->url('myresearch-savesearch')?>?save=<?=urlencode($this->results->getSearchId())?>" title="<?=$this->transEsc('save_search')?>"><i class="fa fa-plus-square"></i></a>
               <? endif; ?>
             <? endif; ?>
+            <!-- Styling & Funktionstests -->
+            <li class="dropdown">
+              <a class="export-toggle dropdown-toggle" data-toggle="dropdown" href="<?=$this->recordLink()->getActionUrl($this->driver, 'Export')?>" title=" <?=$this->transEsc('Export Record') ?>"><i class="fa fa-list-alt"></i></a>
+              <ul class="dropdown-menu" role="menu">
+                <? foreach ($bulkExportFormats as $bulkExportFormat): ?>
+                  <li class="<?=$this->export()->getVisibilityClassName($bulkExportFormat)?>"><a <? if ($this->export()->needsRedirect($bulkExportFormat)): ?>target="<?=$this->escapeHtmlAttr($bulkExportFormat)?>Main" <? endif; ?>href="<?=$this->recordLink()->getActionUrl($this->driver, 'Export')?>?style=<?=$this->escapeHtmlAttr($bulkExportFormat)?>"><?=$this->transEsc('Export to')?> <?=$this->transEsc($bulkExportFormat)?></a></li>
+                <? endforeach; ?>
+              </ul>
+            </li>
           </div>
         </div>
       </div>
