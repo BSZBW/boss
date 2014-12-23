@@ -1,5 +1,86 @@
+/* -------------------------------------------------------------------------------------
+ General Rules
+ ======================================================================================*/
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    line-height: 1.5;
+
+}
+
+a, a:link, a:visited {
+    text-decoration: none;
+    color: #000;
+}
 
 
+/* hide buttons */
+.btn {
+    display: none;
+}
+
+/* Hide hidden Parts */
+.hidden {
+    display: none;
+}
+
+.label {
+    font-weight: bold;
+    padding-right: 5px;
+}
+
+/* -------------------------------------------------------------------------------------
+ Detail (Vollanzeige)
+ ======================================================================================*/
+
+/* Hide Cover Image */
 .thumbDetailView {
-  display: none;
+    display: none;
+}
+
+/* indent detail information */
+.meta {
+    border-left: 1px solid #333;
+    margin-left: 5px;
+    padding-left: 8px;
+}
+
+/* -------------------------------------------------------------------------------------
+ Tabs (Vollanzeige)
+ ======================================================================================*/
+
+/* hide inactive tabs */
+ul.recordTabs{
+    padding-left: 0px;
+}
+
+ul.recordTabs li
+{
+    display: none;
+}
+
+ul.recordTabs li.active
+{
+    display: initial;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+div#record-tabs
+{
+    text-align: left;
+}
+
+div#record-tabs div.tab-pane
+{
+    display: none;
+}
+
+div#record-tabs div.tab-pane.active
+{
+    display: block;
+
+    border-left: 1px solid #333;
+    margin-left: 5px;
+    padding-left: 8px;
 }
