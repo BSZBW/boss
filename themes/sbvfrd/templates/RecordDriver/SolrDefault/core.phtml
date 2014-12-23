@@ -2,6 +2,7 @@
 $record         = $this->driver;
 $viewRecord     = $this->record($record);
 
+$id                   = $record->getUniqueId();
 $shortTitle           = $record->getShortTitle();
 $titleStatement       = $record->getTitleStatement(true);
 $subtitle             = $viewRecord->getSubtitle($titleStatement);
@@ -165,6 +166,11 @@ else {
           <? endif; ?>
         </span><br />
       <? endif; ?>
+
+      <?php if ($id): ?>
+        <span class="label visible-print-inline"><?= $this->transEsc('Item_ID') ?>:</span>
+        <span class="visible-print-inline"><?= $id ?></span><br />
+      <?php endif; ?>
 
       <?php if (!empty($showFRBR) && $showFRBR && !empty($groupID)) : ?>
        <span class="hidden-xs">
