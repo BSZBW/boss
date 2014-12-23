@@ -52,7 +52,8 @@ h4 {
  Tabs (Vollanzeige)
  ======================================================================================*/
 
-/* hide inactive tabs */
+/* tabs title */
+
 ul.recordTabs{
     padding-left: 0px;
 }
@@ -68,6 +69,8 @@ ul.recordTabs li.active
     font-size: 16px;
     font-weight: bold;
 }
+
+/* tab-content general */
 
 div#record-tabs
 {
@@ -91,11 +94,40 @@ div#record-tabs div.tab-pane{
 
 div#record-tabs div.tab-pane h3
 {
-    font-size: 14px
+    font-size: 14px;
+    margin: 0px 0px 0px 0px;
 }
 
 div#record-tabs div.tab-pane h4
 {
     font-size: 14px;
     font-weight: normal;
+    margin: 0px 0px 0px 0px;
+}
+
+div#record-tabs div.tab-pane ul, ol
+{
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+
+}
+
+/* tab-content Beschreibung */
+
+div#record-tabs div.tab-pane table td,th
+{
+    vertical-align: top;
+}
+
+/* tab-content Reihe Bände */
+
+div#record-tabs div.tab-pane div#treeSearch
+{
+    display: none;
+}
+
+div#record-tabs div.tab-pane div#hierarchyTree i
+{
+    display: none;
 }
