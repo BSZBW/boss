@@ -1,8 +1,9 @@
 <?php
 /** @var    Swissbib\RecordDriver\SolrMarc $record */
-/** @var    VuFind\View\Helper\Root\Record $viewRecord */
+/** @var    Swissbib\View\Helper\Record $viewRecord */
 $record = $this->driver;
 $viewRecord = $this->record($this->driver);
+
 $thumbnail = $viewRecord->getThumbnail('small');
 $detailLink = $this->recordLink()->getUrl($record);
 $titleStatement = $record->getTitleStatement(true);
@@ -23,7 +24,7 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
   <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID())?>" class="hiddenId" />
   <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getResourceSource())?>" class="hiddenSource" />
 
-  <div class="hidden-xs col-sm-3 col-md-2 no-gutter">
+  <div class="hidden-xs col-sm-3 col-md-2 no-gutter hidden-print">
     <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="img-responsive">
       <? if ( !($thumbnail === false) ):  ?>
         <img class="recordcover" src="<?= $thumbnail ?>"/>
@@ -78,18 +79,27 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
              <span><?= $this->escapeHtml($edition) ?></span><br />
         <? endif; ?>
     </div>
+
+    <!-- ID -->
+    <div class="meta visible-print-block">
+      <? if ($uniqueID): ?>
+        <span class="hidden-xs label"><strong><?= $this->transEsc('Item_ID') ?>:</strong></span>
+        <span><?= $uniqueID ?></span><br />
+      <? endif; ?>
+    </div>
+
     <?=str_replace('class="', 'class="label label-info ', $this->record($this->driver)->getFormatList())?>
   </div>
 
-  <div class="col-xs-1 col-md-3 hidden-print actions">
+  <div class="col-xs-1 col-md-3 actions">
     <div>
         <? if ($this->userlist()->getMode() !== 'disabled'): ?>
-          <a href="<?= $this->recordLink()->getActionUrl($this->driver, 'Save'); ?>" title="<?= $this->transEsc('Add to favorites') ?>">
+          <a class="hidden-print" href="<?= $this->recordLink()->getActionUrl($this->driver, 'Save'); ?>" title="<?= $this->transEsc('Add to favorites') ?>">
             <span class="memorizelistadd"><i class="fa fa-list-ul"></i></span>
             <span class="hidden-xs hidden-sm"><span class="a-before"></span><?= $this->transEsc('Add to favorites') ?></span>
           </a>
           <? /* Saved lists */ ?>
-          <div class="savedLists alert alert-info hidden hidden-xs hidden-sm">
+          <div class="savedLists alert alert-info hidden hidden-xs hidden-sm hidden-print">
             <strong><?=$this->transEsc('Saved in')?>:</strong>
           </div>
         <? endif; ?>
@@ -97,7 +107,7 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
         <? /* Hierarchy tree link */ ?>
         <? $trees = $this->driver->tryMethod('getHierarchyTrees'); if (!empty($trees)): ?>
           <? foreach ($trees as $hierarchyID => $hierarchyTitle): ?>
-              <input type="hidden" value="<?=$this->escapeHtmlAttr($hierarchyID)?>" class="hiddenHierarchyId" />
+              <input type="hidden" value="<?=$this->escapeHtmlAttr($hierarchyID)?>" class="hiddenHierarchyId hidden-print" />
 
               <a <?=$viewRecord->getTabVisibility('HierarchyTree')?>" href="<?=$this->recordLink()->getTabUrl($this->driver, 'HierarchyTree')?>?hierarchy=<?=urlencode($hierarchyID)?>#tabnav" title="<?=$this->transEsc('hierarchy_tree')?>">
                 <span><i class="fa fa-sitemap"></i></span>
@@ -111,7 +121,7 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
       <? endif; ?>
 
       <? if (!empty($showFRBR) && $showFRBR && !empty($groupID) && !strcmp($results->getParams()->getSearchHandler(), 'FRBR') == 0) : ?>
-        <a href="<?= $this->url('search-results') . '?lookfor=' . $groupID . "&type=FRBR&limit=" . $results->getParams()->getLimit() . "&sort=publishDateSort+desc" ?>"
+        <a class="hidden-print" href="<?= $this->url('search-results') . '?lookfor=' . $groupID . "&type=FRBR&limit=" . $results->getParams()->getLimit() . "&sort=publishDateSort+desc" ?>"
               class="btn-frbr" title="<?= $this->transEsc('FRBR_Button') ?>">
           <span><i class="fa fa-eye"></i></span>
           <span class="hidden-xs hidden-sm"><span class="a-before"></span><?= $this->transEsc('FRBR_Button') ?></span>
@@ -126,12 +136,12 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
       <? endif; ?>
 
       <? if ($this->isFavoriteInstitution($record->getInstitutions())): ?>
-          <img src="<?= $this->basePath('themes/swissbib/images/icon_favorit_library.gif') ?>"
+          <img class="hidden-print" src="<?= $this->basePath('themes/swissbib/images/icon_favorit_library.gif') ?>"
                  alt="Favourite library icon (heart)" class="favourite-library">
       <? endif; ?>
 
     </div>
   </div>
     <!-- COINS -->
-    <span class="Z3988" title="<?= $this->escapeHtml($record->getOpenURL()) ?>"></span>
+    <span class="Z3988 hidden-print" title="<?= $this->escapeHtml($record->getOpenURL()) ?>"></span>
 </div>

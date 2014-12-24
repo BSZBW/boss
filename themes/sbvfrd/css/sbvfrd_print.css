@@ -38,19 +38,35 @@ h4 {
 }
 
 /* -------------------------------------------------------------------------------------
+ List (Trefferliste)
+ ======================================================================================*/
+div.resultView div.result {
+    border-top: 1px solid #AAAAAA;
+}
+
+div.resultView div.result h2
+{
+    margin-top: 4px;
+    margin-bottom : 0px;
+}
+
+div.resultView div.result span.label-info
+{
+
+}
+
+/* -------------------------------------------------------------------------------------
  Detail (Vollanzeige)
  ======================================================================================*/
 
-/* indent detail information */
-.meta {
+/* detail information */
+/*
+div#record .meta {
     border-left: 1px solid #333;
     margin-left: 5px;
     padding-left: 8px;
 }
-
-/* -------------------------------------------------------------------------------------
- Tabs (Vollanzeige)
- ======================================================================================*/
+*/
 
 /* tabs title */
 
@@ -85,13 +101,13 @@ div#record-tabs div.tab-pane
 div#record-tabs div.tab-pane.active {
     display: block;
 }
-
+/*
 div#record-tabs div.tab-pane{
     border-left: 1px solid #333;
     margin-left: 5px;
     padding-left: 8px;
 }
-
+*/
 div#record-tabs div.tab-pane h3
 {
     font-size: 14px;
