@@ -12,7 +12,7 @@
 ?>
 <ul class="nav nav-pills hidden-print">
   <? if (count($this->driver->getCitationFormats()) > 0): ?>
-    <li class="visible-lg"><a id="cite-record" class="modal-link <?=$controllerClass?>" href="<?=$this->url('record-cite', array('id'=>$id)) ?>" title="<?=$this->transEsc('Cite this')?>"><i class="fa fa-chain"></i></a></li>
+    <li class="visible-lg"><a id="cite-record" class="modal-link <?=$controllerClass?>" href="<?=$this->url('record-cite', array('id'=>$id)) ?>" title="<?=$this->transEsc('Cite this')?>"><i class="fa fa-pencil"></i></a></li>
   <? endif; ?>
   <?php $mailID = $this->auth()->isAjaxLoginAllowed() ? 'id="mail-record"' : '' ?>
   <li class="visible-lg"><a <?= $mailID  ?>  class="modal-link <?=$controllerClass?>" href="<?=$this->url('record-email', array('id'=>$id)) ?>" title="<?=$this->transEsc('Email this')?>"><i class="fa fa-envelope"></i></a></li>
@@ -20,7 +20,7 @@
   <? $exportFormats = $this->export()->getFormatsForRecord($this->driver); ?>
   <? if(count($exportFormats) > 0): ?>
     <li class="dropdown">
-      <a class="export-toggle dropdown-toggle" data-toggle="dropdown" href="<?=$this->recordLink()->getActionUrl($this->driver, 'Export')?>" title=" <?=$this->transEsc('Export Record') ?>"><i class="fa fa-list-alt"></i></a>
+      <a class="export-toggle dropdown-toggle" data-toggle="dropdown" href="<?=$this->recordLink()->getActionUrl($this->driver, 'Export')?>" title=" <?=$this->transEsc('Export Record') ?>"><i class="fa fa-share"></i></a>
       <ul class="dropdown-menu" role="menu">
         <? foreach ($exportFormats as $exportFormat): ?>
           <li class="<?=$this->export()->getVisibilityClassName($exportFormat)?>"><a <? if ($this->export()->needsRedirect($exportFormat)): ?>target="<?=$this->escapeHtmlAttr($exportFormat)?>Main" <? endif; ?>href="<?=$this->recordLink()->getActionUrl($this->driver, 'Export')?>?style=<?=$this->escapeHtmlAttr($exportFormat)?>"><?=$this->transEsc('Export to')?> <?=$this->transEsc($exportFormat)?></a></li>
