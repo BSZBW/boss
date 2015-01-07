@@ -271,4 +271,17 @@ class RecordController extends VuFindRecordController
             )
         );
     }
+
+    /**
+     * @return mixed
+     */
+    public function ajaxtabAction()
+    {
+        //This is the same Hack as in the $this->homeAction,
+        //The MarcFormatter is using a ServiceManager in a static function in an XSLT-Template
+        //This call injects the ServiceManager indirectly
+        $this->getServiceLocator()->get("MarcFormatter");
+
+        return parent::ajaxtabAction();
+    }
 }
