@@ -138,16 +138,24 @@ class RecordController extends VuFindRecordController
      */
     public function holdAction()
     {
-        // If we're not supposed to be here, give up now!
-        $catalog = $this->getILS();
-        $checkHolds = $catalog->checkFunction("Holds");
-        if (!$checkHolds) {
-            return $this->forwardTo('Record', 'Home');
-        }
+        $driver = $this->loadRecord();
 
         // Stop now if the user does not have valid catalog credentials available:
         if (!is_array($patron = $this->catalogLogin())) {
             return $patron;
+        }
+
+        // If we're not supposed to be here, give up now!
+        $catalog = $this->getILS();
+        $checkHolds = $catalog->checkFunction(
+            'Holds',
+            array(
+                'id' => $driver->getUniqueID(),
+                'patron' => $patron
+            )
+        );
+        if (!$checkHolds) {
+            return $this->forwardTo('Record', 'Home');
         }
 
         // Do we have valid information?
@@ -158,7 +166,6 @@ class RecordController extends VuFindRecordController
         }
 
         // Block invalid requests:
-        $driver = $this->loadRecord();
         if (!$catalog->checkRequestIsValid(
             $driver->getUniqueID(), $gatheredDetails, $patron
         )) {
@@ -167,19 +174,27 @@ class RecordController extends VuFindRecordController
 
         // Send various values to the view so we can build the form:
         $pickup = $catalog->getPickUpLocations($patron, $gatheredDetails);
-        $requiredDate = $catalog->getRequiredDate($patron, $gatheredDetails);
+        $requestGroups = $catalog->checkCapability('getRequestGroups')
+            ? $catalog->getRequestGroups($driver->getUniqueID(), $patron)
+            : array();
         $extraHoldFields = isset($checkHolds['extraHoldFields'])
             ? explode(":", $checkHolds['extraHoldFields']) : array();
 
         // Process form submissions if necessary:
         if (!is_null($this->params()->fromPost('placeHold'))) {
-            // If the form contained a pickup location, make sure that
-            // the value has not been tampered with:
-            if (!$this->holds()->validatePickUpInput(
+            // If the form contained a pickup location or request group, make sure
+            // they are valid:
+            $valid = $this->holds()->validateRequestGroupInput(
+                $gatheredDetails, $extraHoldFields, $requestGroups
+            );
+            if (!$valid) {
+                $this->flashMessenger()->setNamespace('error')
+                    ->addMessage('hold_invalid_request_group');
+            } elseif (!$this->holds()->validatePickUpInput(
                 $gatheredDetails['pickUpLocation'], $extraHoldFields, $pickup
             )) {
                 $this->flashMessenger()->setNamespace('error')
-                    ->addMessage('error_inconsistent_parameters');
+                    ->addMessage('hold_invalid_pickup');
             } else {
                 // If we made it this far, we're ready to place the hold;
                 // if successful, we will redirect and can stop here.
@@ -191,10 +206,13 @@ class RecordController extends VuFindRecordController
                 $function = (string)$checkHolds['function'];
                 $results = $catalog->$function($holdDetails);
 
-                // Success: Return to record
+                // Success: Go to Display Holds
                 if (isset($results['success']) && $results['success'] == true) {
                     $this->flashMessenger()->setNamespace('info')
                         ->addMessage('hold_place_success');
+                    if ($this->inLightbox()) {
+                        return false;
+                    }
                     return $this->redirectToRecord();
                 } else {
                     // Failure: use flash messenger to display messages, stay on
@@ -218,19 +236,39 @@ class RecordController extends VuFindRecordController
         //$defaultRequired = $this->getServiceLocator()->get('VuFind\DateConverter')
         //    ->convertToDisplayDate("U", $defaultRequired);
 
+        try {
+            $defaultPickup
+                = $catalog->getDefaultPickUpLocation($patron, $gatheredDetails);
+        } catch (\Exception $e) {
+            $defaultPickup = false;
+        }
+        try {
+            $defaultRequestGroup = empty($requestGroups)
+                ? false
+                : $catalog->getDefaultRequestGroup($patron, $gatheredDetails);
+        } catch (\Exception $e) {
+            $defaultRequestGroup = false;
+        }
+
+        $requestGroupNeeded = in_array('requestGroup', $extraHoldFields)
+            && !empty($requestGroups)
+            && (empty($gatheredDetails['level'])
+                || $gatheredDetails['level'] != 'copy');
+
         return $this->createViewModel(
             array(
                 'gatheredDetails' => $gatheredDetails,
                 'pickup' => $pickup,
-                'defaultPickup' => $catalog->getDefaultPickUpLocation(
-                        $patron, $gatheredDetails
-                    ),
+                'defaultPickup' => $defaultPickup,
                 'homeLibrary' => $this->getUser()->home_library,
                 'extraHoldFields' => $extraHoldFields,
-                'defaultRequiredDate' => $defaultRequired
+                'defaultRequiredDate' => $defaultRequired,
+                'requestGroups' => $requestGroups,
+                'defaultRequestGroup' => $defaultRequestGroup,
+                'requestGroupNeeded' => $requestGroupNeeded,
+                'helpText' => isset($checkHolds['helpText'])
+                    ? $checkHolds['helpText'] : null
             )
         );
     }
-
-
 }

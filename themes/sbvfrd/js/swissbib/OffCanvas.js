@@ -5,31 +5,33 @@
 var OffCanvas = {
   sidebar: null,
   button: null,
+  icon: null,
   body: null,
 
   /**
    * Initialize Off-Canvas handling
    */
   init: function () {
-    OffCanvas.initOffCanvas();
+    this.initOffCanvas();
   },
 
   /**
    *
    */
   initOffCanvas: function () {
-    OffCanvas.sidebar = $(".sidebar");
-    OffCanvas.button = $("button#sidebar-offcanvas-trigger");
+    this.sidebar = $(".sidebar");
+    this.button = $("button#sidebar-offcanvas-trigger");
+    this.icon = $("button#sidebar-offcanvas-trigger i");
 
-    if (OffCanvas.sidebar.length > 0) {
-      OffCanvas.body = $("body");
-      OffCanvas.footer = $("footer");
-      OffCanvas.main = $(".main");
-      OffCanvas.header = $("header");
+    if (this.sidebar.length > 0) {
+      this.body = $("body");
+      this.footer = $("footer");
+      this.main = $(".main");
+      this.header = $("header");
 
-      OffCanvas.button.click(OffCanvas.toggleOffCanvas);
+      this.button.click(this.toggleOffCanvas.bind(this));
     } else {
-      OffCanvas.button.hide();
+      this.button.hide();
     }
   },
 
@@ -37,24 +39,28 @@ var OffCanvas = {
    * Toggle Off Canvas
    */
   toggleOffCanvas: function () {
-    OffCanvas.enableTransition();
+    this.enableTransition();
 
-    if (OffCanvas.body.hasClass("offcanvas-active")) {
-      OffCanvas.body.removeClass("offcanvas-active");
-      OffCanvas.button.removeClass("offcanvas-active");
-      OffCanvas.sidebar.removeClass("offcanvas-active");
-      OffCanvas.sidebar.css('height', '');
-      OffCanvas.sidebar.css('overflow-y', '');
-      OffCanvas.body.css('height', '');
-      OffCanvas.body.css('overflow-y', '');
+    if (this.body.hasClass("offcanvas-active")) {
+      this.body.removeClass("offcanvas-active");
+      this.button.removeClass("offcanvas-active");
+      this.sidebar.removeClass("offcanvas-active");
+      this.sidebar.css('height', '');
+      this.sidebar.css('overflow-y', '');
+      this.body.css('height', '');
+      this.body.css('overflow-y', '');
+      this.icon.removeClass("fa fa-caret-right");
+      this.icon.addClass("fa fa-caret-left");
     } else {
-      OffCanvas.body.addClass("offcanvas-active");
-      OffCanvas.button.addClass("offcanvas-active");
-      OffCanvas.sidebar.addClass("offcanvas-active");
-      OffCanvas.sidebar.css('height', window.innerHeight);
-      OffCanvas.sidebar.css('overflow-y', 'scroll');
-      OffCanvas.body.css('height', window.innerHeight);
-      OffCanvas.body.css('overflow-y', 'hidden');
+      this.body.addClass("offcanvas-active");
+      this.button.addClass("offcanvas-active");
+      this.sidebar.addClass("offcanvas-active");
+      this.sidebar.css('height', window.innerHeight);
+      this.sidebar.css('overflow-y', 'scroll');
+      this.body.css('height', window.innerHeight);
+      this.body.css('overflow-y', 'hidden');
+      this.icon.removeClass("fa fa-caret-left");
+      this.icon.addClass("fa fa-caret-right");
     }
   },
 
@@ -62,11 +68,11 @@ var OffCanvas = {
    * Workaround to prevent transition on orientation change
    */
   enableTransition: function() {
-    OffCanvas.sidebar.addClass('transition');
+    this.sidebar.addClass('transition');
     setTimeout(function() {
       $('.sidebar').removeClass('transition');
     }, 400);
   }
 };
 
-$(OffCanvas.init);
+$(OffCanvas.init.bind(OffCanvas));

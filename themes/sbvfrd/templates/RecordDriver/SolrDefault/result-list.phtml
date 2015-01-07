@@ -4,7 +4,6 @@
 $record = $this->driver;
 $viewRecord = $this->record($this->driver);
 $thumbnail = $viewRecord->getThumbnail('small');
-$thumbnailSrc = $thumbnail ? $thumbnail : $this->url('cover-unavailable');
 $detailLink = $this->recordLink()->getUrl($record);
 $titleStatement = $record->getTitleStatement(true);
 $shortTitle = $record->getShortTitle();
@@ -26,11 +25,10 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
 
   <div class="hidden-xs col-sm-3 col-md-2 no-gutter">
     <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="img-responsive">
-      <? if ( !($record->getThumbnail() === false) ):  ?>
-        <img class="recordcover" src="<?= $thumbnailSrc ?>"/>
+      <? if ( !($thumbnail === false) ):  ?>
+        <img class="recordcover" src="<?= $thumbnail ?>"/>
       <? else: ?>
-        <? //@todo render icons if no image is available, probably use getFormatList() to do so ?>
-        <?= $viewRecord->getFormatList() ?>
+		  <div class="thumbico <?= $viewRecord->getThumbnailPlaceholder() ?>"></div>
       <? endif; ?>
     </a>
   </div>
@@ -68,7 +66,7 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
             <? endforeach; ?>
         <? endif; ?>
         <? if ($journalTitle): ?>
-            <span class="hiddex-xs label"><strong><?= $this->transEsc('Published in')?>:</strong></span>
+            <span class="hidden-xs label"><strong><?= $this->transEsc('Published in')?>:</strong></span>
             <span><a href="<?= $viewRecord->getLink('journaltitle', $journalTitle)?>"><?= $this->escapeHtml($journalTitle)?></a></span><br />
         <? endif; ?>
         <? if ($summDate): ?>
@@ -86,13 +84,13 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
   <div class="col-xs-1 col-md-3 hidden-print actions">
     <div>
         <? if ($this->userlist()->getMode() !== 'disabled'): ?>
-          <a href="<?= $this->recordLink()->getActionUrl($this->driver, 'Save'); ?>" title="<?= $this->transEsc('memorizelistadd') ?>">
-            <span class="memorizelistadd"><i class="fa fa-bars"></i><i class="fa fa-plus"></i></span>
-            <span class="hidden-xs hidden-sm"><span class="a-before"></span><?= $this->transEsc('memorizelistadd') ?></span>
+          <a href="<?= $this->recordLink()->getActionUrl($this->driver, 'Save'); ?>" title="<?= $this->transEsc('Add to favorites') ?>">
+            <span class="memorizelistadd"><i class="fa fa-list-ul"></i></span>
+            <span class="hidden-xs hidden-sm"><span class="a-before"></span><?= $this->transEsc('Add to favorites') ?></span>
           </a>
           <? /* Saved lists */ ?>
           <div class="savedLists alert alert-info hidden hidden-xs hidden-sm">
-            <strong><?=$this->transEsc("Saved in")?>:</strong>
+            <strong><?=$this->transEsc('Saved in')?>:</strong>
           </div>
         <? endif; ?>
 
@@ -123,12 +121,15 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
       <? if ($this->driver->displayHoldings()): ?>
         <?= $this->render('search/results/available.phtml') ?>
         <?= $this->render('search/results/libraries.phtml') ?>
+      <? elseif ($this->driver->displayLinks()): ?>
+        <?= $this->render('search/results/links.phtml') ?>
       <? endif; ?>
 
       <? if ($this->isFavoriteInstitution($record->getInstitutions())): ?>
           <img src="<?= $this->basePath('themes/swissbib/images/icon_favorit_library.gif') ?>"
                  alt="Favourite library icon (heart)" class="favourite-library">
       <? endif; ?>
+
     </div>
   </div>
     <!-- COINS -->

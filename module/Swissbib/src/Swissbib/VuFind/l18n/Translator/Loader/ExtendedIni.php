@@ -79,23 +79,27 @@ class ExtendedIni extends VFExtendedIni
      */
     public function load($locale, $filename)
     {
-        // Reset the loaded files list:
-        $this->resetLoadedFiles();
-
         // Load base data:
         //VuFind itself doesn't use at all the filename information itself
         //we are running into problems with domain entities having the same name but being part of different domains
         //specialized domains are registered in Swissbib\Bootstraper->initSpecialTranslations
-        //todo: discuss this with VuFind list!
+        //todo: discuss this with VuFind list! we sent already a pull request but still open
 
-        $data =  !isset($filename) ?    $this->loadLanguageFile($locale . '.ini') : $this->loadLanguageFile($filename );
-        //$data =  $this->loadLanguageFile($locale . '.ini');
+        // Reset the loaded files list:
+        $this->resetLoadedFiles();
+
+        // Load base data:
+        $data = (!isset($filename))
+            ? $this->loadLanguageFile($locale . '.ini')
+            : $this->loadLanguageFile($filename);
 
         // Load fallback data, if any:
-        if (!empty($this->fallbackLocale)) {
-            $newData = $this->loadLanguageFile($this->fallbackLocale . '.ini');
-            $newData->merge($data);
-            $data = $newData;
+        if (!empty($this->fallbackLocales)) {
+            foreach ($this->fallbackLocales as $fallbackLocale) {
+                $newData = $this->loadLanguageFile($fallbackLocale . '.ini');
+                $newData->merge($data);
+                $data = $newData;
+            }
         }
 
         return $data;
@@ -112,25 +116,27 @@ class ExtendedIni extends VFExtendedIni
      */
     protected function loadLanguageFile($filename)
     {
+
         // Don't load a file that has already been loaded:
         if ($this->checkAndMarkLoadedFile($filename)) {
             return new TextDomain();
         }
 
-        if (file_exists($filename)) {
-            $data = $this->languageFileToTextDomain($filename);
-        } else {
+        $data = false;
+        foreach ($this->pathStack as $path) {
+            $fullFilePath = file_exists($filename)
+                ? $filename : $path . '/' . $filename;
 
-
-            $data = false;
-            foreach ($this->pathStack as $path) {
-                if (file_exists($path . '/' . $filename)) {
-                    $current = $this->languageFileToTextDomain($path . '/' . $filename);
-                    if ($data === false) {
-                        $data = $current;
-                    } else {
-                        $data->merge($current);
-                    }
+            if ($fullFilePath) {
+                $this->reader->getTextDomain($path . '/' . $filename);
+                //s. d374b404e4e4dea5a7f2b2edf83605d98e07175e
+                //todo GH: discuss it on VuFind List and ask for current status Pull request multi doamin
+                $current = $this->reader->getTextDomain($path . '/' . $filename);
+                //$current = $this->languageFileToTextDomain($fullFilePath);
+                if ($data === false) {
+                    $data = $current;
+                } else {
+                    $data->merge($current);
                 }
             }
         }
@@ -140,6 +146,8 @@ class ExtendedIni extends VFExtendedIni
 
         // Load parent data, if necessary:
         return $this->loadParentData($data);
+
+
     }
 
 }

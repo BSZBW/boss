@@ -296,23 +296,6 @@ class Record extends VuFindRecord
         // Try to build thumbnail:
         $thumb = $this->driver->tryMethod('getThumbnail', array($size));
 
-        // No thumbnail?  Return false:
-        if (empty($thumb)) {
-            if (!empty ($this->config->Content->externalResourcesServer)) {
-                //$urlHelper = $this->getView()->plugin('url');
-                //$urlSrc = $urlHelper('cover-unavailable');
-                //sometimes our app is not the root domain
-                //$position =  strpos($urlSrc,'/Cover');
-                //return  $this->config->Content->externalResourcesServer . substr($urlSrc,$position) ;
-                return $this->config->Content->externalResourcesServer . "/img/noCover2.gif";
-
-            } else {
-                $urlHelper = $this->getView()->plugin('url');
-                return $urlHelper('cover-unavailable') ;
-            }
-
-        }
-
         // Array?  It's parameters to send to the cover generator:
         if (is_array($thumb)) {
 
@@ -334,6 +317,27 @@ class Record extends VuFindRecord
         // Default case -- return fixed string:
         return $thumb;
     }
+
+	  /**
+		 * Returns css class of media type icon placeholder
+		 *
+	   * @param
+	   * @return string
+	  */
+	public function getThumbnailPlaceholder()
+	{
+		$this->driver->setUseMostSpecificFormat(true);
+
+		$formats = $this->driver->getFormats();
+
+		//Only get Placeholder for first Media Type
+		foreach ($formats as $format)
+		{
+			return $this->getFormatClass($format);
+		}
+
+		return '';
+	}
 
 
     /**

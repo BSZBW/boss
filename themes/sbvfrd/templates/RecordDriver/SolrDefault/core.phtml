@@ -19,24 +19,41 @@ $highlightedFulltext  = $record->getHighlightedFulltext();
 $showFRBR = $this->configAccess()->Site->displayFrbr;
 $groupID  = $this->driver->getGroup(true);
 $theme    = $this->configAccess()->Site->theme;
+
+if ($searchClassId != 'Summon') {
+    if (strcmp(strtolower($theme),'sbvfrdmulti') != 0) {
+        $urls = $viewRecord->getExtendedLinkDetails();
+    }
+    else {
+        $localunions = array('IDSBB','SNL', 'RETROS');
+        $localtags = array('856');
+        $localRestrictions = compact('localunions','localtags');
+
+        $globalunions = array('IDSBB','SNL');
+        $tags = array('956');
+        $globalRestrictions = compact('globalunions','tags');
+
+        $urls = $viewRecord->getExtendedLinkDetails($localRestrictions,$globalRestrictions);
+    }
+}
+else {
+    $urls = null;
+    $openUrl = null;
+}
 ?>
 
 <div class="row" vocab="http://schema.org/" resource="#record" typeof="<?=$this->driver->getSchemaOrgFormats()?> Product">
-    <!-- main / short title -->
-    <div class="col-sm-12">
-        <h3 property="name"><?=$this->escapeHtml($shortTitle)?></h3>
-    </div>
 
-    <div class="col-sm-3 hidden-xs">
-        <div>
-        <? /* Display thumbnail if appropriate: */ ?>
-        <? $mediumThumb = $this->record($this->driver)->getThumbnail('medium'); $largeThumb = $this->record($this->driver)->getThumbnail('large'); ?>
-        <? if ($mediumThumb): ?>
+  <div class="col-sm-3 hidden-xs">
+    <div class="thumbDetailView">
+      <? /* Display thumbnail if appropriate: */ ?>
+      <? $mediumThumb = $this->record($this->driver)->getThumbnail('medium'); $largeThumb = $this->record($this->driver)->getThumbnail('large'); ?>
+      <? if ($mediumThumb): ?>
         <? if ($largeThumb): ?><a href="<?=$this->escapeHtmlAttr($largeThumb)?>"><? endif; ?>
           <img alt="<?=$this->transEsc('Cover Image')?>" class="recordcover" src="<?=$this->escapeHtmlAttr($mediumThumb);?>"/>
         <? if ($largeThumb): ?></a><? endif; ?>
       <? else: ?>
-        <img src="<?=$this->url('cover-unavailable')?>" class="recordcover" alt="<?=$this->transEsc('No Cover Image')?>"/>
+          <div class="thumbico <?= $viewRecord->getThumbnailPlaceholder() ?> bigico"></div>
       <? endif; ?>
 
       <? /* Display qrcode if appropriate: */ ?>
@@ -48,14 +65,15 @@ $theme    = $this->configAccess()->Site->theme;
       <? endif; ?>
     </div>
 
-        <? // if you have a preview tab but want to move or remove the preview link
-        // from this area of the record view, this can be split into
-        // getPreviewData() (should stay here) and
-        // getPreviewLink() (can go in your desired tab) ?>
-        <?=$this->record($this->driver)->getPreviews()?>
+    <? // if you have a preview tab but want to move or remove the preview link
+    // from this area of the record view, this can be split into
+    // getPreviewData() (should stay here) and
+    // getPreviewLink() (can go in your desired tab) ?>
+    <?=$this->record($this->driver)->getPreviews()?>
   </div>
 
   <div class="col-sm-9 col-xs-12">
+    <h3 property="name"><?=$this->escapeHtml($shortTitle)?></h3>
     <? if (isset($subtitle)): ?>
       <h4 class="resultViewSubTitle"><?= $this->escapeHtml($subtitle) ?></h4>
     <? endif; ?>
@@ -91,9 +109,9 @@ $theme    = $this->configAccess()->Site->theme;
               <? $pubDate = $field->getDate(); if (!empty($pubDate)): ?>
                   <span property="publicationDate"><?=$this->escapeHtml($pubDate)?></span>
               <? endif; ?>
-              <br/>
+              <? if(!next($publications) === false){echo('<br />');} ?>
           <? endforeach; ?>
-      </span>
+      </span><br />
     <? endif; ?>
 
     <? if (!empty($journalTitle)): ?>
@@ -134,16 +152,13 @@ $theme    = $this->configAccess()->Site->theme;
         <span property="bookEdition"><?=$this->escapeHtml($edition)?></span><br />
       <? endif; ?>
 
-      <?
-        $openUrl = $this->driver->openURLActive('record') ? $this->driver->getOpenURL() : false;
-        // Account for replace_other_urls setting
-        $urls = ($openUrl && $this->driver->replaceURLsWithOpenURL()) ? array() : $this->record($this->driver)->getLinkDetails();
-      ?>
       <? if (!empty($urls) || $openUrl): ?>
         <span class="label"><?=$this->transEsc('Online Access')?>: </span>
-        <span>
+        <span><br />
           <? foreach ($urls as $current): ?>
-            <a href="<?=$this->escapeHtmlAttr($this->proxyUrl($current['url']))?>"><?=$this->escapeHtml($current['desc'])?></a><br/>
+            <a href="<?=$this->escapeHtmlAttr($this->proxyUrl($current['url']))?>" target="_blank" title="<?=$this->escapeHtml($current['desc'])?>">
+                <?=$this->escapeHtml($current['desc'])?>
+            </a><br/>
           <? endforeach; ?>
           <? if ($openUrl): ?>
             <?=$this->openUrl($openUrl)?><br/>
@@ -152,12 +167,12 @@ $theme    = $this->configAccess()->Site->theme;
       <? endif; ?>
 
       <?php if (!empty($showFRBR) && $showFRBR && !empty($groupID)) : ?>
-       <span>
+       <span class="hidden-xs">
          <a href="<?=
           $this->url('search-results') . '?lookfor=' . $groupID . "&type=FRBR"
           . "&sort=publishDateSort+desc" ?>"
              class="btn btn-primary icon_show" title="<?= $this->transEsc('FRBR_Button') ?>">
-              <span class="hidden-xs"><?= $this->transEsc('FRBR_Button') ?></span>
+              <span><?= $this->transEsc('FRBR_Button') ?></span>
           </a>
        </span><br />
       <?php endif; ?>

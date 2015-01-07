@@ -28,6 +28,7 @@ use ProxyManager\ProxyGenerator\LazyLoadingValueHolderGenerator;
 use ProxyManagerTestAsset\BaseClass;
 use ProxyManagerTestAsset\ClassWithPublicArrayProperty;
 use ProxyManagerTestAsset\ClassWithPublicProperties;
+use ProxyManagerTestAsset\ClassWithSelfHint;
 use ReflectionClass;
 
 /**
@@ -214,6 +215,29 @@ class LazyLoadingValueHolderFunctionalTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @group 16
+     *
+     * Verifies that initialization of a value holder proxy may happen multiple times
+     */
+    public function testWillAllowMultipleProxyInitialization()
+    {
+        $proxyClass  = $this->generateProxy('ProxyManagerTestAsset\\BaseClass');
+        $counter     = 0;
+        $initializer = function (& $wrappedInstance) use (& $counter) {
+            $wrappedInstance = new BaseClass();
+
+            $wrappedInstance->publicProperty = (string) ($counter += 1);
+        };
+
+        /* @var $proxy BaseClass */
+        $proxy = new $proxyClass($initializer);
+
+        $this->assertSame('1', $proxy->publicProperty);
+        $this->assertSame('2', $proxy->publicProperty);
+        $this->assertSame('3', $proxy->publicProperty);
+    }
+
+    /**
      * Generates a proxy for the given class name, and retrieves its class name
      *
      * @param string $parentClassName
@@ -283,7 +307,9 @@ class LazyLoadingValueHolderFunctionalTest extends PHPUnit_Framework_TestCase
      */
     public function getProxyMethods()
     {
-        return array(
+        $selfHintParam = new ClassWithSelfHint();
+
+        $data = array(
             array(
                 'ProxyManagerTestAsset\\BaseClass',
                 new BaseClass(),
@@ -313,6 +339,19 @@ class LazyLoadingValueHolderFunctionalTest extends PHPUnit_Framework_TestCase
                 'publicMethodDefault'
             ),
         );
+
+        if (PHP_VERSION_ID >= 50401) {
+            // PHP < 5.4.1 misbehaves, throwing strict standards, see https://bugs.php.net/bug.php?id=60573
+            $data[] = array(
+                'ProxyManagerTestAsset\\ClassWithSelfHint',
+                new ClassWithSelfHint(),
+                'selfHintMethod',
+                array('parameter' => $selfHintParam),
+                $selfHintParam
+            );
+        }
+
+        return $data;
     }
 
     /**

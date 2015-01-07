@@ -284,6 +284,7 @@ return array(
             'recommend' => array(
                 'factories' => array(
                     'favoritefacets' => 'Swissbib\Services\Factory::getFavoriteFacets',
+                    'sidefacets' => 'Swissbib\Recommend\Factory::getSideFacets'
                 ),
             ),
             'recorddriver'             => array(
@@ -296,7 +297,8 @@ return array(
             ),
             'ils_driver'               => array(
                 'factories' => array(
-                    'aleph' => 'Swissbib\VuFind\ILS\Driver\Factory::getAlephDriver'
+                    'aleph' => 'Swissbib\VuFind\ILS\Driver\Factory::getAlephDriver',
+                    'multibackend' => 'Swissbib\VuFind\ILS\Driver\Factory::getMultiBackend',
                 )
             ),
             'hierarchy_driver'         => array(

@@ -27,6 +27,8 @@ use ReflectionClass;
  *
  * @author Marco Pivetta <ocramius@gmail.com>
  * @license MIT
+ *
+ * @group Coverage
  */
 class ConstructorTest extends PHPUnit_Framework_TestCase
 {
@@ -146,7 +148,7 @@ $this->post = $suffixInterceptors;',
      */
     public function testBodyStructureWithPrivateProperties()
     {
-        if (PHP_VERSION_ID < 50400 || defined('HHVM_VERSION')) {
+        if (! method_exists('Closure', 'bind')) {
             $this->setExpectedException('ProxyManager\Exception\UnsupportedProxiedClassException');
         }
 

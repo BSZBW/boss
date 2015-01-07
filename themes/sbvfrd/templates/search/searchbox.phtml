@@ -56,7 +56,9 @@
     <? endif; ?>
     </div>
     <div class="input-group">
-        <input class="form-control search-query<? if($this->searchbox()->autocompleteEnabled($this->searchClassId)):?> autocomplete searcher:<?=$this->escapeHtmlAttr($this->searchClassId) ?><? endif ?>" id="searchForm_lookfor" type="text" name="lookfor" value="<?=$this->escapeHtmlAttr($this->lookfor)?>"/>
+        <span class="searchBoxWrapper">
+           <input class="form-control search-query<? if($this->searchbox()->autocompleteEnabled($this->searchClassId)):?> autocomplete searcher:<?=$this->escapeHtmlAttr($this->searchClassId) ?><? endif ?>" id="searchForm_lookfor" type="text" name="lookfor" value="<?=$this->escapeHtmlAttr($this->lookfor)?>"/>
+        </span>
         <span class="input-group-btn">
            <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
             <? if ($advSearch): ?>

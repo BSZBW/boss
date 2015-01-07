@@ -40,6 +40,9 @@
   $this->headScript()->appendFile("check_save_statuses.js");
 
   $recordTotal = $this->recordTotal = $this->results->getResultTotal();
+
+  $bulkExportFormats = array('EndNote', 'BibTeX'); // @todo: konfigurierbar machen, MARCXML aktivieren (funktioniert aktuell nicht)
+
 ?>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
@@ -52,14 +55,22 @@
         <div class="searchtools">
           <div class="searchtools hidden-print">
             <a href="<?=$this->results->getUrlQuery()->setViewParam('rss')?>" title="<?=$this->transEsc('Get RSS Feed')?>"><i class="fa fa-rss"></i></a>
-            <a href="<?=$this->url('search-email')?>" class="mailSearch modal-link hidden-xs hidden-sm" id="mailSearch<?=$this->escapeHtmlAttr($this->results->getSearchId())?>" title="<?=$this->transEsc('Email this Search')?>"><i class="fa fa-envelope hidden-xs hidden-sm" ></i></a>
+            <?php $mailClass = $this->auth()->isAjaxLoginAllowed() ? "mailSearch modal-link hidden-xs hidden-sm" : "hidden-xs hidden-sm" ?>
+            <a href="<?=$this->url('search-email')?>" class="<?= $this->auth()->isAjaxLoginAllowed() ? "mailSearch modal-link hidden-xs hidden-sm" : "hidden-xs hidden-sm" ?>" id="mailSearch<?=$this->escapeHtmlAttr($this->results->getSearchId())?>" title="<?=$this->transEsc('Email this Search')?>"><i class="fa fa-envelope hidden-xs hidden-sm" ></i></a>
             <? if (is_numeric($this->results->getSearchId())): ?>
               <? if ($this->results->isSavedSearch()): ?>
-                <a href="<?=$this->url('myresearch-savesearch')?>?delete=<?=urlencode($this->results->getSearchId())?>" title="<?=$this->transEsc('Delete')?>"><i class="fa fa-minus-square"></i></a>
+                <a href="<?=$this->url('myresearch-savesearch')?>?delete=<?=urlencode($this->results->getSearchId())?>" title="<?=$this->transEsc('save_search_remove')?>"><i class="fa fa-minus-square"></i></a>
               <? else: ?>
-                <a href="<?=$this->url('myresearch-savesearch')?>?save=<?=urlencode($this->results->getSearchId())?>" title="<?=$this->transEsc('Save')?>"><i class="fa fa-plus-square"></i></a>
+                <a href="<?=$this->url('myresearch-savesearch')?>?save=<?=urlencode($this->results->getSearchId())?>" title="<?=$this->transEsc('save_search')?>"><i class="fa fa-plus-square"></i></a>
               <? endif; ?>
             <? endif; ?>
+            <!-- Styling & Funktionstests -->
+              <a class="export-toggle dropdown-toggle" data-toggle="dropdown" href="<?=$this->recordLink()->getActionUrl($this->driver, 'Export')?>" title=" <?=$this->transEsc('Export Record') ?>"><i class="fa fa-share"></i></a>
+              <ul class="dropdown-menu" role="menu">
+                <? foreach ($bulkExportFormats as $bulkExportFormat): ?>
+                  <li class="<?=$this->export()->getVisibilityClassName($bulkExportFormat)?>"><a <? if ($this->export()->needsRedirect($bulkExportFormat)): ?>target="<?=$this->escapeHtmlAttr($bulkExportFormat)?>Main" <? endif; ?>href="<?=$this->recordLink()->getActionUrl($this->driver, 'Export')?>?style=<?=$this->escapeHtmlAttr($bulkExportFormat)?>"><?=$this->transEsc('Export to')?> <?=$this->transEsc($bulkExportFormat)?></a></li>
+                <? endforeach; ?>
+              </ul>
           </div>
         </div>
       </div>

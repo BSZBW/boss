@@ -143,7 +143,9 @@ class Params extends VuFindSolrParams
             $backendParams->set("facet", "true");
 
             foreach ($favoriteInstitutions as $institutionCode) {
-                $backendParams->add("facet.query", "institution:" . $institutionCode);
+                //GH 19.12.2014: use configuration for index name
+                //more investigation for a better solution necessary
+                $backendParams->add("facet.query", "mylibrary:" . $institutionCode);
                 //$backendParams->add("bq", "institution:" . $institutionCode . "^5000");
             }
         }

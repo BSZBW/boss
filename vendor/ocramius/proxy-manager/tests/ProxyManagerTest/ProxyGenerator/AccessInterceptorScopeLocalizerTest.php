@@ -29,6 +29,7 @@ use ReflectionProperty;
  * @license MIT
  *
  * @covers \ProxyManager\ProxyGenerator\AccessInterceptorScopeLocalizerGenerator
+ * @group Coverage
  */
 class AccessInterceptorScopeLocalizerTest extends AbstractProxyGeneratorTest
 {
@@ -48,7 +49,7 @@ class AccessInterceptorScopeLocalizerTest extends AbstractProxyGeneratorTest
             return parent::testGeneratesValidCode($className);
         }
 
-        if ((PHP_VERSION_ID < 50400 || defined('HHVM_VERSION'))
+        if ((! method_exists('Closure', 'bind'))
             && $reflectionClass->getProperties(ReflectionProperty::IS_PRIVATE)
         ) {
             $this->setExpectedException('ProxyManager\Exception\UnsupportedProxiedClassException');

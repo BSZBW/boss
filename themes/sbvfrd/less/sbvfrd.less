@@ -268,7 +268,6 @@ header {
 
       &.tt-hint {
         position: relative !important;
-        top: 1px !important;
         border-radius: 2px 0 0 2px;
       }
 
@@ -278,23 +277,25 @@ header {
     }
   }
 
-  .input-group {
-    position: relative;
-    width: 100%;
-
-
-    .input-group-btn {
+  #searchForm {
+    .input-group {
       position: relative;
+      width: 100%;
 
-      .btn-primary,
-      .btn-default {
-        min-width: 0;
-        width: 37px;
-        border-radius: 0 2px 2px 0;
-        padding: 5px 0;
+      .input-group-btn {
+        position: relative;
+        width: 1%;
 
-        i {
-          font-size: 16pt;
+        .btn-primary,
+        .btn-default {
+          min-width: 0;
+          width: 37px;
+          border-radius: 0 2px 2px 0;
+          padding: 5px 0;
+
+          i {
+            font-size: 16pt;
+          }
         }
       }
     }
@@ -305,6 +306,8 @@ header {
 
     &.advancedSearchLink {
       font-size: 16px;
+      padding-top: 5px;
+      padding-bottom: 5px;
 
       &:before {
         content: '\f00e';
@@ -467,7 +470,7 @@ a.list-group-item.active:focus {
   text-indent: -9999px;
   height: 123px;
   width: 100%;
-  background: transparent url("@{theme-base-path}images/logo2.png") no-repeat 0 0;
+  background: transparent url("@{theme-base-path}images/logo_swissbib.png") no-repeat 0 0;
 }
 
 .container {
@@ -525,8 +528,25 @@ ul.dropdown-menu {
 }
 
 ul[aria-labelledby=dropdownLibraries] {
-  max-height: 50%;
-  overflow-y: scroll;
+  max-height: 234px;
+  overflow-y: auto;
+  & > li {
+    & > a {
+      border: none;
+      color: @link-color;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      margin-right: 10px;
+      &:hover,
+      &focus{
+        color: @theme-color;
+        background-color: @dropdown-bg;
+      }
+      span.a-before:first-child {
+        width: 5px;
+      }
+    }
+  }
 }
 
 .sidebar {
@@ -636,7 +656,7 @@ ul[aria-labelledby=dropdownLibraries] {
 }
 
 .twitter-typeahead {
-  padding: 6px 0 8px;
+  width: 100%;
   .tt-hint {
     display: none;
   }
@@ -652,7 +672,7 @@ ul[aria-labelledby=dropdownLibraries] {
 
       & > a {
         padding: 0 5px 0 0;
-        color: @black;
+        color: @font-color;
 
         & > i {
           font-size: 20px;
@@ -1234,4 +1254,8 @@ footer {
 
 #bottom-puffer {
   height: 36px;
+}
+
+.thumbDetailView {
+  margin-top: 12px;
 }

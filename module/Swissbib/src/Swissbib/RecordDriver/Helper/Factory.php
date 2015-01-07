@@ -23,13 +23,10 @@
  * @category swissbib VuFind2
  * @package  Controller
  * @author   Guenter Hipler <guenter.hipler@unibas.ch>
+ * @author   Oliver Schihin <oliver.schihin@unibas.ch>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org/wiki/vufind2:developer_manual Wiki
  */
-
-
-
-
 
 namespace Swissbib\RecordDriver\Helper;
 use Zend\ServiceManager\ServiceManager;
@@ -61,6 +58,7 @@ class Factory
         $ilsConnection = $sm->get('VuFind\ILSConnection');
         $hmac = $sm->get('VuFind\HMAC');
         $authManager = $sm->get('VuFind\AuthManager');
+        $ilsAuth = $sm->get('Vufind\ILSAuthenticator');
         $config = $sm->get('VuFind\Config');
         $translator = $sm->get('VuFind\Translator');
         $locationMap = $sm->get('Swissbib\LocationMap');
@@ -69,9 +67,11 @@ class Factory
         $bibCodeHelper = $sm->get('Swissbib\BibCodeHelper');
         $logger = $sm->get('Swissbib\Logger');
 
-        return new HoldingsHelper($ilsConnection,
+        return new HoldingsHelper(
+            $ilsConnection,
             $hmac,
             $authManager,
+            $ilsAuth,
             $config,
             $translator,
             $locationMap,

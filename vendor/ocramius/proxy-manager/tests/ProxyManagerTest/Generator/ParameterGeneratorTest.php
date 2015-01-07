@@ -29,6 +29,7 @@ use Zend\Code\Reflection\ParameterReflection;
  * @license MIT
  *
  * @covers \ProxyManager\Generator\ParameterGenerator
+ * @group Coverage
  */
 class ParameterGeneratorTest extends PHPUnit_Framework_TestCase
 {
@@ -124,6 +125,22 @@ class ParameterGeneratorTest extends PHPUnit_Framework_TestCase
             1
         ));
 
-        $this->assertNull($parameter->getDefaultValue()->getValue());
+        $this->assertSame('null', strtolower((string) $parameter->getDefaultValue()));
+    }
+
+    public function testGeneratedParametersAreProperlyEscaped()
+    {
+        $parameter = new ParameterGenerator();
+
+        $parameter->setName('foo');
+        $parameter->setDefaultValue('\'bar\\baz');
+
+        $this->assertThat(
+            $parameter->generate(),
+            $this->logicalOr(
+                $this->equalTo('$foo = \'\\\'bar\\baz\''),
+                $this->equalTo('$foo = \'\\\'bar\\\\baz\'')
+            )
+        );
     }
 }

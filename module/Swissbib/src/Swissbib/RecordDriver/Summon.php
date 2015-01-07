@@ -267,6 +267,14 @@ class Summon extends VuFindSummon implements SwissbibRecordDriver
     }
 
     /**
+     * @return boolean
+     */
+    public function displayLinks()
+    {
+        return true;
+    }
+
+    /**
      * @param string $size
      * @return array|bool|string
      */
