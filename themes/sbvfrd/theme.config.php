@@ -12,6 +12,8 @@ return array(
 //
         'lib/jstorage.min.js', //used for favorites - there is still some amount of JS code inline of the page -> Todo: Refactoring in upcoming Sprints
         'lib/handlebars.js',
+        'lib/respond.js',
+        'lib/html5shiv.js',
 
         'jquery/plugin/jquery-migrate-1.2.1.js',
         'jquery/plugin/jquery.easing.js',
@@ -23,6 +25,7 @@ return array(
         'jquery/plugin/jquery.hoverintent.js',
         'jquery/plugin/loadmask/jquery.loadmask.js',
         'jquery/plugin/jquery.form.min.js',
+        'jquery/plugin/jquery.base64.js',
 
         'swissbib-jq-plugins/hint.js',
         'swissbib-jq-plugins/menunav.js',
