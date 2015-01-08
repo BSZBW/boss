@@ -35,15 +35,8 @@ class RecordController extends VuFindRecordController
 
 
         } catch (RecordMissingException $e) {
-            $viewModel    = new ViewModel();
 
-            $viewModel->setTemplate('record/not-found');
-            $viewModel->setVariables(array(
-                                          'message'        => $e->getMessage(),
-                                          'exception'    => $e
-                                     ));
-
-            return $viewModel;
+            return $this->forwardTo('MissingRecord', 'Home');
         }
     }
 
