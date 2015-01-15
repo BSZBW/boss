@@ -50,10 +50,23 @@ div.resultView div.result h2
     margin-bottom : 0px;
 }
 
+/* Media Info */
 div.resultView div.result span.label-info
 {
 
 }
+
+div.resultView div.result div.actions
+{
+    margin-top: 8px;
+}
+
+div.resultView div.result div.actions ul
+{
+    margin-top: 8px;
+    margin-bottom: 12px;
+}
+
 
 /* -------------------------------------------------------------------------------------
  Detail (Vollanzeige)

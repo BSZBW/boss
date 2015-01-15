@@ -109,7 +109,7 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
           <? foreach ($trees as $hierarchyID => $hierarchyTitle): ?>
               <input type="hidden" value="<?=$this->escapeHtmlAttr($hierarchyID)?>" class="hiddenHierarchyId hidden-print" />
 
-              <a <?=$viewRecord->getTabVisibility('HierarchyTree')?>" href="<?=$this->recordLink()->getTabUrl($this->driver, 'HierarchyTree')?>?hierarchy=<?=urlencode($hierarchyID)?>#tabnav" title="<?=$this->transEsc('hierarchy_tree')?>">
+              <a class="hidden-print" href="<?=$this->recordLink()->getTabUrl($this->driver, 'HierarchyTree')?>?hierarchy=<?=urlencode($hierarchyID)?>#tabnav" title="<?=$this->transEsc('hierarchy_tree')?>">
                 <span><i class="fa fa-sitemap"></i></span>
                 <span class="hidden-xs hidden-sm"><span class="a-before"></span> <?=$this->transEsc('hierarchy_view_context')?>
                     <? if (count($trees) > 1): ?>:
