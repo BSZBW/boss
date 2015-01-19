@@ -40,6 +40,17 @@ h4 {
 /* -------------------------------------------------------------------------------------
  List (Trefferliste)
  ======================================================================================*/
+div.resultView div.results-top h1 {
+    font-size: 26px;
+    margin-bottom: 5px;
+}
+
+div.resultView div.results-top h2 {
+    font-size: 18px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
 div.resultView div.result {
     border-top: 1px solid #AAAAAA;
 }
@@ -48,12 +59,19 @@ div.resultView div.result h2
 {
     margin-top: 4px;
     margin-bottom : 0px;
+    font-size: 21px;
+}
+
+div.resultView div.result span#subtitle
+{
+
 }
 
 /* Media Info */
 div.resultView div.result span.label-info
 {
-
+    margin-top: 8px;
+    display: inline-block;
 }
 
 div.resultView div.result div.actions
