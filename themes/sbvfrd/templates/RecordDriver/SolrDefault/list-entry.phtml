@@ -37,11 +37,11 @@
 ?>
 
 <div class="row result">
-    <div class="col-sm-1">
+    <div class="col-sm-1 hidden-print">
         <label class="pull-left"><?=$viewRecord->getCheckbox() ?></label>
         <input type="hidden" value="<?=$id ?>" class="hiddenId"/>
     </div>
-    <div class="col-sm-2 hidden-xs left no-gutter">
+    <div class="col-sm-2 hidden-xs left no-gutter hidden-print">
         <a href="<?=$this->recordLink()->getUrl($record)?>" class="title img-responsive">
         <? if (!($thumbnail === false)): ?>
             <img class="recordcover" src="<?= $thumbnail ?>" />
@@ -88,6 +88,13 @@
             <span class="hidden-xs label"><strong><?= $this->transEsc('Edition') ?>:</strong></span>
             <span><?= $this->escapeHtml($edition) ?></span><br />
         <? endif; ?>
+      <!-- ID -->
+      <? if ($uniqueID): ?>
+        <span class="visible-print-inline">
+          <span class="hidden-xs label"><strong><?= $this->transEsc('Item_ID') ?>:</strong></span>
+          <span><?= $uniqueID ?></span><br />
+        </span>
+      <? endif; ?>
     </div>
 
     <div class="last">
@@ -115,7 +122,6 @@
         <? $i=0;foreach($this->lists as $current): ?>
             <a href="<?=$this->url('userList', array('id' => $current->id))?>"><?=$current->title?></a><? if($i++ < count($this->lists)-1): ?>,<? endif; ?>
         <? endforeach; ?>
-        <br/>
     <? endif; ?>
 
         <?
@@ -161,7 +167,7 @@
     </div>
   </div>
 
-  <div class="col-xs-2 right">
+  <div class="col-xs-2 right hidden-print">
     <i class="fa fa-edit"></i> <a href="<?=$this->url('myresearch-edit')?>?id=<?=urlencode($id)?>&amp;source=<?=urlencode($source)?><? if (!is_null($list_id)):?>&amp;list_id=<?=urlencode($list_id)?><? endif; ?>" class="edit tool"><?=$this->transEsc('Edit')?></a><br/>
     <? /* Use a different delete URL if we're removing from a specific list or the overall favorites: */
       $deleteUrl = is_null($list_id)

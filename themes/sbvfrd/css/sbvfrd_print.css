@@ -38,7 +38,7 @@ h4 {
 }
 
 /* -------------------------------------------------------------------------------------
- List (Trefferliste)
+ Lists (Trefferliste/Merkliste)
  ======================================================================================*/
 div.resultView div.results-top h1 {
     font-size: 26px;
@@ -49,6 +49,10 @@ div.resultView div.results-top h2 {
     font-size: 18px;
     margin-top: 5px;
     margin-bottom: 10px;
+}
+
+div.resultView div.checkbox {
+    display: none;
 }
 
 div.resultView div.result {
