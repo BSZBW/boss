@@ -41,7 +41,8 @@ h4 {
  Lists (Trefferliste/Merkliste)
  ======================================================================================*/
 div.resultView div.results-top h1 {
-    font-size: 26px;
+    font-size: 24px;
+    margin-top: 0px
     margin-bottom: 5px;
 }
 
@@ -63,7 +64,7 @@ div.resultView div.result h2
 {
     margin-top: 4px;
     margin-bottom : 0px;
-    font-size: 21px;
+    font-size: 18px;
 }
 
 div.resultView div.result span#subtitle
@@ -94,14 +95,21 @@ div.resultView div.result div.actions ul
  Detail (Vollanzeige)
  ======================================================================================*/
 
-/* detail information */
-/*
-div#record .meta {
-    border-left: 1px solid #333;
-    margin-left: 5px;
-    padding-left: 8px;
+/* titles */
+
+div#record h3 {
+    font-size: 18px;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
-*/
+
+div#record h4 {
+    font-size: 14px;
+    font-weight: normal;
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
 
 /* tabs title */
 
