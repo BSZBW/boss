@@ -2,14 +2,14 @@
 return array(
   'extends' => 'bootstrap3',
 
-    'css' => array(
-        'sbvfrd_print.css:print'
-    ),
+  'css' => array(
+    'sbvfrd_print.css:print'
+  ),
 
-    'less' => array(
-        'active' => false,
-        'compiled.less'
-    ),
+  'less' => array(
+    'active' => false,
+    'compiled.less'
+  ),
 
   'js'      => array(
     'jquery/ui/jquery-ui.min.js',
