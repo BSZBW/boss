@@ -6,7 +6,7 @@
       <? endif; ?>
 
       <ul class="pagination">
-        <li class="hidden-sm hidden-xs">
+        <li class="hidden-sm hidden-xs page">
             <a href="#"><?= $this->transEsc('pagination.page') ?>:</a>
         </li>
         <? if (isset($this->previous)): ?>
@@ -15,7 +15,7 @@
             <li class="inactive"><a href="#"><i class="fa fa-caret-left"></i></a></li>
         <? endif; ?>
 
-        <li>
+        <li class="page-numbers">
             <a>
                 <span class="<?= isset($this->previous) ? 'standard' : 'marked' ?>">
                     <?= $this->localizedNumber($this->current) ?>

@@ -6,34 +6,39 @@ $this->headTitle($this->translate('Bookings'));
 $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Bookings') . '</li>';
 ?>
 
-<div class="<?= $this->layoutClass('mainbody') ?>">
+<div class="<?= $this->layoutClass('mainbody') ?> resultView">
   <h2><?= $this->transEsc('Bookings') ?></h2>
   <?= $this->flashmessages(); ?>
 
-  <div class="col-xs-10 col-sm-8 col-md-7">
+  <form>
+  <div class="col-xs-10">
   <?php if( sizeof($this->bookings) ): ?>
 
   <?php foreach ($this->bookings as $index => $booking): ?>
-    <hr/>
+      <div class="row result">
 
+    <h2 property="name">
     <?= $this->escapeHtml($booking['title']) ?>
+    </h2>
 
+    <div class="meta">
     <? if (!empty($booking['library'])): ?>
-      <br/>
-      <strong><?=$this->transEsc('Institution')?>: </strong><?=$this->escapeHtml($booking['library'])?>
+      <span class="label"><strong><?=$this->transEsc('Institution')?>: </strong></span><?=$this->escapeHtml($booking['library'])?>
       <br />
     <? endif; ?>
 
     <? if (!empty($booking['callNumber'])): ?>
-      <strong><?=$this->transEsc('Call Number')?>:</strong> <?=$this->escapeHtml($booking['callNumber'])?>
+      <span class="label"><strong><?=$this->transEsc('Call Number')?>:</strong></span> <?=$this->escapeHtml($booking['callNumber'])?>
       <br />
     <? endif; ?>
 
-    <strong><?=$this->transEsc('pick_up_location') ?>:</strong> <?=$this->transEsc($booking['pickupLocation']) ?><br />
+    <span class="label"><strong><?=$this->transEsc('pick_up_location') ?>:</strong></span> <?=$this->transEsc($booking['pickupLocation']) ?><br />
 
-    <strong><?=$this->transEsc('date_from') ?>:</strong> <?=date('d/m/y H:i', $booking['dateStart']) ?><br />
+    <span class="label"><strong><?=$this->transEsc('date_from') ?>:</strong></span> <?=date('d/m/y H:i', $booking['dateStart']) ?><br />
 
-    <strong><?=$this->transEsc('date_to') ?>:</strong> <?=date('d/m/y H:i', $booking['dateEnd']) ?><br />
+    <span class="label"><strong><?=$this->transEsc('date_to') ?>:</strong></span> <?=date('d/m/y H:i', $booking['dateEnd']) ?><br />
+    </div>
+    </div>
 
   <? endforeach; ?>
 
@@ -41,7 +46,8 @@ $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') .
     <p><?=$this->transEsc('No bookings') ?></p>
   <?php endif; ?>
 
-</div>
+    </div>
+  </form>
 </div>
 
 <div class="<?= $this->layoutClass('sidebar') ?>">

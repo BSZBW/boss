@@ -27,7 +27,7 @@
 
         <div class="pagination-container col-md-8 col-sm-9">
           <ul class="pagination hidden-print">
-            <li>
+            <li class="page">
               <a>
                 <?= $this->transEsc('Results') ?>:
               </a>
@@ -39,7 +39,7 @@
             <? else: ?>
               <li class="disabled"><a href="#"><i class="fa fa-caret-left"></i></a></li>
             <? endif; ?>
-              <li>
+              <li class="page-numbers">
                 <a>
                   <span class="<?= $this->scrollData['previousRecord'] ? 'standard' : 'marked' ?>">
                     <?=$this->localizedNumber($this->scrollData['currentPosition']) ?>

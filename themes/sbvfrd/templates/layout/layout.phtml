@@ -1,5 +1,7 @@
 <?=$this->doctype('HTML5')?>
-<html lang="<?=$this->layout()->userLang?>">
+<!--[if IE 8]> <html lang="<?=$this->layout()->userLang?>" class="ie8"> <![endif]-->
+<!--[if gt IE 8]> <html lang="<?=$this->layout()->userLang?>"> <![endif]-->
+<!--[if !IE]><!--> <html lang="<?=$this->layout()->userLang?>"> <!--<![endif]-->
   <head>
     <?$this->headThemeResources()?>
     <meta name="viewport" content="width=device-width,initial-scale=1.0"/>

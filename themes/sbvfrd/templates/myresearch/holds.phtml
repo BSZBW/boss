@@ -6,7 +6,7 @@
     $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('My Holds') . '</li>';
 ?>
 
-<div class="<?=$this->layoutClass('mainbody')?>">
+<div class="<?=$this->layoutClass('mainbody')?> resultView">
 <h2><?=$this->transEsc('Your Holds and Recalls') ?></h2>
 
 <?=$this->flashmessages()?>
@@ -36,10 +36,9 @@
 
   <? $iteration = 0; ?>
   <? foreach ($this->recordList as $resource): ?>
-    <hr/>
     <? $iteration++; ?>
     <? $ilsDetails = $resource->getExtraDetail('ils_details'); ?>
-    <div id="record<?=$this->escapeHtmlAttr($resource->getUniqueId()) ?>" class="row">
+    <div id="record<?=$this->escapeHtmlAttr($resource->getUniqueId()) ?>" class="row result">
       <? if ($this->cancelForm && isset($ilsDetails['cancel_details'])): ?>
         <? $safeId = preg_replace('/[^a-zA-Z0-9]/', '', $resource->getUniqueId()); ?>
         <input type="hidden" name="cancelAllIDS[]" value="<?=$this->escapeHtmlAttr($ilsDetails['cancel_details']) ?>" />
@@ -54,7 +53,8 @@
           <img src="<?/*=$this->url('cover-unavailable')*/?>" class="recordcover" alt="<?/*=$this->transEsc('No Cover Image')*/?>"/>
         <?/* endif; */?>
       </div>-->
-      <div class="col-xs-10 col-sm-8 col-md-7">
+      <div class="col-xs-10">
+          <h2 property="name">
         <?
           // If this is a non-missing Solr record, we should display a link:
           if (is_a($resource, 'VuFind\\RecordDriver\\SolrDefault') && !is_a($resource, 'VuFind\\RecordDriver\\Missing')) {
@@ -69,15 +69,16 @@
             // Last resort -- indicate that no title could be found.
             echo $this->transEsc('Title not available');
           }
-        ?><br/>
+        ?></h2>
 
+       <div class="meta">
        <? if (!empty($ilsDetails['institution'])): ?>
-          <strong><?=$this->transEsc('Institution')?>: </strong><?=$this->escapeHtml($this->zendTranslate($ilsDetails['institution'], 'institution'))?>
+           <span class="label"><strong><?=$this->transEsc('Institution')?>: </strong></span><?=$this->escapeHtml($this->zendTranslate($ilsDetails['institution'], 'institution'))?>
           <br />
        <? endif; ?>
 
        <? if (!empty($ilsDetails['signature'])): ?>
-          <strong><?=$this->transEsc('Call Number')?>:</strong> <?=$this->escapeHtml($ilsDetails['signature'])?>
+           <span class="label"><strong><?=$this->transEsc('Call Number')?>:</strong></span> <?=$this->escapeHtml($ilsDetails['signature'])?>
           <br />
        <? endif; ?>
 
@@ -123,12 +124,12 @@
           <? endif; ?>
         <? endif; ?>
         <? if (!empty($pickupDisplay)): ?>
-          <strong><?=$this->transEsc('pick_up_location') ?>:</strong>
+           <span class="label"><strong><?=$this->transEsc('pick_up_location') ?>:</strong></span>
           <?=$pickupTranslate ? $this->transEsc($pickupDisplay) : $this->escapeHtml($pickupDisplay)?>
           <br />
         <? endif; ?>
 
-        <strong><?=$this->transEsc('Created') ?>:</strong> <?=$this->escapeHtml($ilsDetails['create']) ?>
+           <span class="label"><strong><?=$this->transEsc('Created') ?>:</strong></span> <?=$this->escapeHtml($ilsDetails['create']) ?>
 <!--            <strong>--><?//=$this->transEsc('Expires') ?><!--:</strong> --><?//=$this->escapeHtml($ilsDetails['expire']) ?>
         <br />
 
@@ -147,7 +148,7 @@
           $status = $this->transEsc($ilsDetails['status']);
           }
         ?>
-        <strong><?=$this->transEsc('Status')?>: </strong> <?=$this->escapeHtml($status)?>
+        <span class="label"><strong><?=$this->transEsc('Status')?>: </strong></span> <?=$this->escapeHtml($status)?>
 
         <? if (isset($this->cancelResults['items'])): ?>
           <? foreach ($this->cancelResults['items'] as $itemId=>$cancelResult): ?>
@@ -159,13 +160,14 @@
 
         <? if (isset($ilsDetails['available']) && $ilsDetails['available'] == true): ?>
           <div class="text-success"><?=$this->transEsc("hold_available") ?></div>
-        <? elseif (isset($ilsDetails['position'])): ?>
-          <p><strong><?=$this->transEsc("hold_queue_position") ?>:</strong> <?=$this->escapeHtml($ilsDetails['position']) ?></p>
+       <!-- <?/* elseif (isset($ilsDetails['position'])): */?>
+          <p><strong><?/*=$this->transEsc("hold_queue_position") */?>:</strong> <?/*=$this->escapeHtml($ilsDetails['position']) */?></p>-->
         <? endif; ?>
         <? if (isset($ilsDetails['cancel_link'])): ?>
           <p><a href="<?=$this->escapeHtmlAttr($ilsDetails['cancel_link']) ?>"><?=$this->transEsc("hold_cancel") ?></a></p>
         <? endif; ?>
 
+      </div>
       </div>
     </div>
   <? endforeach; ?>

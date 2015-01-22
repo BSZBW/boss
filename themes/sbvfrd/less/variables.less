@@ -21,6 +21,30 @@
 @footer-background-color: #323232;
 @footer-color: @white;
 
+@state-info-text:                @font-color;
+@state-info-bg:                  @highlight-color;
+@state-info-border:              darken(spin(@state-info-bg, -10), 7%);
+
+//== Form states and alerts
+//
+//## Define colors for form feedback states and, by default, alerts.
+
+@state-success-text:             @font-color;
+@state-success-bg:               @highlight-color;
+@state-success-border:           darken(spin(@state-info-bg, -10), 5%);
+
+@state-info-text:                @state-success-text;
+@state-info-bg:                  @state-success-bg;
+@state-info-border:              @state-success-border;
+
+@state-warning-text:             @state-success-text;
+@state-warning-bg:               @state-success-bg;
+@state-warning-border:           @state-success-border;
+
+@state-danger-text:              @state-success-text;
+@state-danger-bg:                @state-success-bg;
+@state-danger-border:            @state-success-border;
+
 
 /* Mixins */
 

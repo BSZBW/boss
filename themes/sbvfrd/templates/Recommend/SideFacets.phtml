@@ -122,7 +122,7 @@ $(document).ready(function() {
 });
 JS;
             ?>
-            <?=$this->inlineScript(\Zend\View\Helper\HeadScript::SCRIPT, $script, 'SET'); ?>
+            <?= '';/** $this->inlineScript(\Zend\View\Helper\HeadScript::SCRIPT, $script, 'SET'); */ ?>
           <? endif; ?>
         <? else: ?>
           <? foreach ($cluster['list'] as $i=>$thisFacet): ?>

@@ -108,7 +108,10 @@ class Factory
      */
     public static function getAuth(ServiceManager $sm)
     {
-        return new Auth($sm->getServiceLocator()->get('VuFind\AuthManager'));
+
+        $config = isset($sm->getServiceLocator()->get('VuFind\Config')->get('config')->Authentication->noAjaxLogin) ?
+            $sm->getServiceLocator()->get('VuFind\Config')->get('config')->Authentication->noAjaxLogin->toArray() : array();
+        return new Auth($sm->getServiceLocator()->get('VuFind\AuthManager'), $config);
     }
 
 

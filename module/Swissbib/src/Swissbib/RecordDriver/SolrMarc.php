@@ -542,7 +542,8 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
 
 
     /**
-     * Returns one of three things: a full URL to a thumbnail preview of the record
+     * Returns one of three things:
+     * a full URL to a thumbnail preview of the record
      * if an image is available in an external system; an array of parameters to
      * send to VuFind's internal cover generator if no fixed URL exists; or false
      * if no thumbnail can be generated.
@@ -648,27 +649,32 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
 
     protected function getThumbnail_856_1()
     {
-        $field = $this->get950();
-        if ($field['union'] === 'RERO' && $field['tag'] === '856') {
-            if (preg_match('/^.*v_bcu\/media\/images/', $field['sf_u'])) {
+        $fields = $this->get950();
+        if (!$fields) {
+            return array();
+        }
+        foreach ($fields as $field) {
+            if ($field['union'] === 'RERO' && $field['tag'] === '856') {
+                if (preg_match('/^.*v_bcu\/media\/images/', $field['sf_u'])) {
+                    return 'https://externalservices.swissbib.ch/services/ImageTransformer?imagePath='
+                    . $field['sf_u']
+                    . '&scale=1';
+                } elseif (preg_match('/^.*bibliotheques\/iconographie/', $field['sf_u'])) {
+                    return 'https://externalservices.swissbib.ch/services/ImageTransformer?imagePath='
+                    /*return 'https://externalservices.swissbib.ch/services/ProtocolWrapper?targetURL='*/
+                    . $field['sf_u']
+                    . '&scale=1';
+                }
+            } elseif ($field['union'] === 'CCSA' && $field['tag'] === '856') {
+                $URL_thumb = preg_replace('/hi-res.cgi/', 'get_thumb.cgi', $field['sf_u']);
                 return 'https://externalservices.swissbib.ch/services/ImageTransformer?imagePath='
-                . $field['sf_u']
+                . $URL_thumb
                 . '&scale=1';
-            } elseif (preg_match('/^.*bibliotheques\/iconographie/', $field['sf_u'])) {
-                return 'https://externalservices.swissbib.ch/services/ImageTransformer?imagePath='
-                /*return 'https://externalservices.swissbib.ch/services/ProtocolWrapper?targetURL='*/
-                . $field['sf_u']
-                . '&scale=1';
+            } elseif ($field['union'] === 'CHARCH' && $field['tag'] === '856') {
+                $thumb_URL = preg_replace('/SIZE=10/', 'SIZE=30', $field['sf_u']);
+                $URL_thumb = preg_replace('/http/', 'https', $thumb_URL);
+                return $URL_thumb;
             }
-        } elseif ($field['union'] === 'CCSA' && $field['tag'] === '856') {
-            $URL_thumb = preg_replace('/hi-res.cgi/', 'get_thumb.cgi', $field['sf_u']);
-            return 'https://externalservices.swissbib.ch/services/ImageTransformer?imagePath='
-            . $URL_thumb
-            . '&scale=1';
-        } elseif ($field['union'] === 'CHARCH' && $field['tag'] === '856') {
-            $thumb_URL = preg_replace('/SIZE=10/', 'SIZE=30', $field['sf_u']);
-            $URL_thumb = preg_replace('/http/', 'https', $thumb_URL);
-            return $URL_thumb;
             //return 'https://externalservices.swissbib.ch/services/ImageTransformer?imagePath='
             //. $URL_thumb
             //. '&scale=1';
@@ -724,7 +730,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
      */
     protected function get950()
     {
-        return $this->getMarcSubFieldMap(950, array(
+        return $this->getMarcSubFieldMaps(950, array(
             'B' => 'union',
             'P' => 'tag',
             'a' => 'sf_a',

@@ -471,9 +471,11 @@ var swissbib = {
             trigger_color: 'white',
             trigger_background_color: 'rgba(46, 49, 51, 0.6)'
         }]);
-        UserVoice.push(['addTrigger', '#feedback', {
-            mode: 'contact'
-        }]);
+        if (document.getElementById('feedback') != null) {
+          UserVoice.push(['addTrigger', '#feedback', {
+              mode: 'contact'
+          }]);
+        }
         UserVoice.push(['autoprompt', {}]);
     },
 
@@ -495,3 +497,9 @@ $(document).ready(function () {
  */
 swissbib.updatePageForLoginParent = updatePageForLogin;
 updatePageForLogin = swissbib.updatePageForLogin;
+
+/**
+ * IE8 base64 support
+ */
+window.btoa = window.btoa || jQuery.base64.encode;
+window.atob = window.atob || jQuery.base64.decode;

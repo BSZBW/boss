@@ -122,7 +122,7 @@ class MultiBackend extends VFMultiBackend {
         if ($driver) {
             return $driver->getHoldingHoldingItems(
                 $resourceId,
-                $institutionCode = '',
+                $institutionCode,
                 $offset = 0,
                 $year = 0,
                 $volume = 0,
@@ -136,7 +136,10 @@ class MultiBackend extends VFMultiBackend {
         $source = $this->getSource($resourceId);
         $driver = $this->getDriver($source);
         if ($driver) {
-            return $driver->getHoldingItemCount($resourceId, $institutionCode = '');
+            return $driver->getHoldingItemCount(
+                $resourceId,
+                $institutionCode
+                );
         }
         throw new ILSException('No suitable backend driver found');
     }

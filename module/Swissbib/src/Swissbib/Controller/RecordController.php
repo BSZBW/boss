@@ -35,15 +35,8 @@ class RecordController extends VuFindRecordController
 
 
         } catch (RecordMissingException $e) {
-            $viewModel    = new ViewModel();
 
-            $viewModel->setTemplate('record/not-found');
-            $viewModel->setVariables(array(
-                                          'message'        => $e->getMessage(),
-                                          'exception'    => $e
-                                     ));
-
-            return $viewModel;
+            return $this->forwardTo('MissingRecord', 'Home');
         }
     }
 
@@ -270,5 +263,18 @@ class RecordController extends VuFindRecordController
                     ? $checkHolds['helpText'] : null
             )
         );
+    }
+
+    /**
+     * @return mixed
+     */
+    public function ajaxtabAction()
+    {
+        //This is the same Hack as in the $this->homeAction,
+        //The MarcFormatter is using a ServiceManager in a static function in an XSLT-Template
+        //This call injects the ServiceManager indirectly
+        $this->getServiceLocator()->get("MarcFormatter");
+
+        return parent::ajaxtabAction();
     }
 }
