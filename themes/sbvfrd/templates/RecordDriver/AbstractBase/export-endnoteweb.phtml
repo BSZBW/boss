@@ -74,7 +74,7 @@ if (is_array($languages)) {
 }
 
 $pubPlaces = $this->driver->tryMethod('getPlacesOfPublication');
-$pubDates = $this->driver->tryMethod('getHumanReadablePublicationDates');
+$pubDates = $this->driver->tryMethod('getPublicationDates');
 $pubNames = $this->driver->tryMethod('getPublishers');
 if (is_array($pubPlaces) && is_array($pubDates) && is_array($pubNames)) {
     $total = min(count($pubPlaces), count($pubDates), count($pubNames));
@@ -89,12 +89,9 @@ if (is_array($pubPlaces) && is_array($pubDates) && is_array($pubNames)) {
         if (isset($pubNames[$i])) {
             echo "PB  - " . rtrim($pubNames[$i], ", ") . "\n";
         }
-        $date = trim($pubDates[$i], '[]. ');
-        if (strlen($date) > 4) {
-            $date = $this->dateTime()->extractYear($date);
-        }
+        $date = $this->driver->getHumanReadablePublicationDates($pubDates);
         if ($date) {
-            echo "YR  - $date\n";
+            echo "YR  - $date[0]\n";
         }
     }
 }
