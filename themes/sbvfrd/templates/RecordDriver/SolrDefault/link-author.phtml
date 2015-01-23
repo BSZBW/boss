@@ -1,15 +1,3 @@
-<!-- compare the comments in https://github.com/swissbib/vufind/issues/32
-related to the way I created the link
-
-an alternative would be something like
- $this->url('search-results')?>?lookfor=%22 =urlencode($this->lookfor)?>%22&amp;type=Subject
-the way it is done by VF2 (a little bit ugly). My Favorite is to use the functionality of the ZF2 URL view helper
-
-In 2013 / 2014 I have found Google entries that URL Helper might have difficulties with the encoding, but I'm not sure
-if this is correct
-
--->
-
 <?=$this->url('search-results', array(),array('query' => array(
     'lookfor' => $this->lookfor,
     'type' => 'Author'))); ?>
