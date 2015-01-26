@@ -35,22 +35,32 @@
 
     .label {
         font-weight: bold;
+        font-size: 14px;
         padding-right: 5px;
+        border: none;
     }
 
     /* -------------------------------------------------------------------------------------
      Lists (Trefferliste/Merkliste)
      ======================================================================================*/
     div.resultView div.results-top h1 {
-        font-size: 24px;
         margin-top: 0px;
         margin-bottom: 5px;
+        font-size: 24px;
+
+        i.fa, span {
+            font-size: inherit;
+        }
     }
 
     div.resultView div.results-top h2 {
         font-size: 18px;
         margin-top: 5px;
         margin-bottom: 10px;
+
+        span {
+            font-size: inherit;
+        }
     }
 
     div.resultView div.checkbox {
@@ -75,7 +85,11 @@
     div.resultView div.result span.label-info {
         margin-top: 8px;
         display: inline-block;
+        padding: 0;
     }
+
+
+    /* Libraries */
 
     div.resultView div.result div.actions {
         margin-top: 8px;
@@ -84,6 +98,20 @@
     div.resultView div.result div.actions ul {
         margin-top: 8px;
         margin-bottom: 12px;
+    }
+
+    div.resultView div.result #dropdownLibraries span {
+        width: inherit;
+    }
+    
+    div.resultView div.result ul.dropdown-menu {
+        display: block;
+        position: relative;
+        border: none;
+
+        li a {
+            padding: 0px;
+        }
     }
 
     /* -------------------------------------------------------------------------------------
