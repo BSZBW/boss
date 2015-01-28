@@ -26,9 +26,10 @@
  * @link     http://vufind.org/wiki/vufind2:building_a_controller Wiki
  */
 namespace VuFindConsole\Controller;
-use File_MARC, File_MARCXML, VuFind\Sitemap, Zend\Console\Console;
+use File_MARC, File_MARCXML, VuFind\Sitemap\Generator as Sitemap;
 use VuFindSearch\Backend\Solr\Document\UpdateDocument;
 use VuFindSearch\Backend\Solr\Record\SerializableRecord;
+use Zend\Console\Console;
 
 /**
  * This controller handles various command-line tools
@@ -445,6 +446,9 @@ class UtilController extends AbstractBase
             ->get('VuFind\SearchResultsPluginManager')->get('Solr')
             ->getFullFieldFacets(array('hierarchy_top_id'));
         foreach ($hierarchies['hierarchy_top_id']['data']['list'] as $hierarchy) {
+            if (empty($hierarchy['value'])) {
+                continue;
+            }
             Console::writeLine("Building tree for {$hierarchy['value']}...");
             $driver = $recordLoader->load($hierarchy['value']);
             if ($driver->getHierarchyType()) {
@@ -464,7 +468,10 @@ class UtilController extends AbstractBase
     public function cssbuilderAction()
     {
         $argv = $this->consoleOpts->getRemainingArgs();
-        $compiler = new \VuFindTheme\LessCompiler();
+        $compiler = new \VuFindTheme\LessCompiler(true);
+        $cacheManager = $this->getServiceLocator()->get('VuFind\CacheManager');
+        $cacheDir = $cacheManager->getCacheDir() . 'less/';
+        $compiler->setTempPath($cacheDir);
         $compiler->compile($argv);
         return $this->getSuccessResponse();
     }

@@ -29,7 +29,7 @@ namespace VuFind\Search\Base;
 use Zend\ServiceManager\ServiceLocatorAwareInterface,
     Zend\ServiceManager\ServiceLocatorInterface;
 use VuFindSearch\Backend\Solr\LuceneSyntaxHelper, VuFindSearch\Query\Query;
-use VuFind\Search\QueryAdapter;
+use VuFind\Search\QueryAdapter, VuFind\Solr\Utils as SolrUtils;
 
 /**
  * Abstract parameters search model.
@@ -119,7 +119,7 @@ class Params implements ServiceLocatorAwareInterface
      *
      * @var bool
      */
-    protected $recommendationEnabled = false;
+    protected $recommendationEnabled = array();
 
     /**
      * Main facet configuration
@@ -670,13 +670,17 @@ class Params implements ServiceLocatorAwareInterface
      */
     public function getRecommendations($location = 'top')
     {
-        if (!$this->recommendationsEnabled()) {
-            return array();
+        $enabled = $this->recommendationsEnabled();
+        if (null === $location) {
+            $active = array();
+            foreach ($enabled as $current) {
+                if (isset($this->recommend[$current])) {
+                    $active[$current] = $this->recommend[$current];
+                }
+            }
+            return $active;
         }
-        if (is_null($location)) {
-            return $this->recommend;
-        }
-        return isset($this->recommend[$location])
+        return in_array($location, $enabled) && isset($this->recommend[$location])
             ? $this->recommend[$location] : array();
     }
 
@@ -685,14 +689,19 @@ class Params implements ServiceLocatorAwareInterface
      * off recommendations when retrieving results in a context other than standard
      * display of results.
      *
-     * @param bool $bool True to enable, false to disable (null to leave unchanged)
+     * @param bool|array $new New setting (true to enable all, false to disable all,
+     * array to set which areas are active, null to leave unchanged)
      *
-     * @return bool      Current state of recommendations
+     * @return array          Current active recommendation areas
      */
-    public function recommendationsEnabled($bool = null)
+    public function recommendationsEnabled($new = null)
     {
-        if (!is_null($bool)) {
-            $this->recommendationEnabled = $bool;
+        if (true === $new) {
+            $this->recommendationEnabled = array('top', 'side', 'noresults');
+        } else if (false === $new) {
+            $this->recommendationEnabled = array();
+        } else if (null !== $new) {
+            $this->recommendationEnabled = $new;
         }
         return $this->recommendationEnabled;
     }
@@ -708,7 +717,8 @@ class Params implements ServiceLocatorAwareInterface
     protected function getRecommendationSettings()
     {
         // Bypass settings if recommendations are disabled.
-        if (!$this->recommendationsEnabled()) {
+        $enabled = $this->recommendationsEnabled();
+        if (empty($enabled)) {
             return array();
         }
 
@@ -724,38 +734,46 @@ class Params implements ServiceLocatorAwareInterface
         // Load a type-specific recommendations setting if possible, or the default
         // otherwise:
         $recommend = array();
-        if (!is_null($handler)
-            && isset($searchSettings->TopRecommendations->$handler)
-        ) {
-            $recommend['top'] = $searchSettings->TopRecommendations
-                ->$handler->toArray();
-        } else {
-            $recommend['top']
-                = isset($searchSettings->General->default_top_recommend)
-                ? $searchSettings->General->default_top_recommend->toArray()
-                : false;
+
+        if (in_array('top', $enabled)) {
+            if (null !== $handler
+                && isset($searchSettings->TopRecommendations->$handler)
+            ) {
+                $recommend['top'] = $searchSettings->TopRecommendations
+                    ->$handler->toArray();
+            } else {
+                $recommend['top']
+                    = isset($searchSettings->General->default_top_recommend)
+                    ? $searchSettings->General->default_top_recommend->toArray()
+                    : false;
+            }
         }
-        if (!is_null($handler)
-            && isset($searchSettings->SideRecommendations->$handler)
-        ) {
-            $recommend['side'] = $searchSettings->SideRecommendations
-                ->$handler->toArray();
-        } else {
-            $recommend['side']
-                = isset($searchSettings->General->default_side_recommend)
-                ? $searchSettings->General->default_side_recommend->toArray()
-                : false;
+        if (in_array('side', $enabled)) {
+            if (null !== $handler
+                && isset($searchSettings->SideRecommendations->$handler)
+            ) {
+                $recommend['side'] = $searchSettings->SideRecommendations
+                    ->$handler->toArray();
+            } else {
+                $recommend['side']
+                    = isset($searchSettings->General->default_side_recommend)
+                    ? $searchSettings->General->default_side_recommend->toArray()
+                    : false;
+            }
         }
-        if (!is_null($handler)
-            && isset($searchSettings->NoResultsRecommendations->$handler)
-        ) {
-            $recommend['noresults'] = $searchSettings->NoResultsRecommendations
-                ->$handler->toArray();
-        } else {
-            $recommend['noresults']
-                = isset($searchSettings->General->default_noresults_recommend)
-                ? $searchSettings->General->default_noresults_recommend->toArray()
-                : false;
+        if (in_array('noresults', $enabled)) {
+            if (null !== $handler
+                && isset($searchSettings->NoResultsRecommendations->$handler)
+            ) {
+                $recommend['noresults'] = $searchSettings->NoResultsRecommendations
+                    ->$handler->toArray();
+            } else {
+                $recommend['noresults']
+                    = isset($searchSettings->General->default_noresults_recommend)
+                    ? $searchSettings->General->default_noresults_recommend
+                        ->toArray()
+                    : false;
+            }
         }
 
         return $recommend;
@@ -1166,13 +1184,14 @@ class Params implements ServiceLocatorAwareInterface
     protected function initRangeFilters($request)
     {
         $this->initDateFilters($request);
+        $this->initFullDateFilters($request);
         $this->initGenericRangeFilters($request);
         $this->initNumericRangeFilters($request);
     }
 
     /**
-     * Support method for initDateFilters() -- normalize a year for use in a date
-     * range.
+     * Support method for initDateFilters() -- normalize a year for use in a
+     * year-based date range.
      *
      * @param string $year Value to check for valid year.
      *
@@ -1191,6 +1210,21 @@ class Params implements ServiceLocatorAwareInterface
         }
 
         return $year;
+    }
+
+    /**
+     * Support method for initFullDateFilters() -- normalize a date for use in a
+     * year/month/day date range.
+     *
+     * @param string $date Value to check for valid date.
+     *
+     * @return string      Formatted date.
+     */
+    protected function formatDateForFullDateRange($date)
+    {
+        // Make sure date is valid; default to wildcard otherwise:
+        $date = SolrUtils::sanitizeDate($date);
+        return $date === null ? '*' : $date;
     }
 
     /**
@@ -1309,7 +1343,7 @@ class Params implements ServiceLocatorAwareInterface
 
     /**
      * Support method for initDateFilters() -- build a filter query based on a range
-     * of dates.
+     * of 4-digit years.
      *
      * @param string $field field to use for filtering.
      * @param string $from  year for start of range.
@@ -1324,9 +1358,31 @@ class Params implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Support method for initFilters() -- initialize date-related filters.  Factored
-     * out as a separate method so that it can be more easily overridden by child
-     * classes.
+     * Support method for initFullDateFilters() -- build a filter query based on a
+     * range of dates.
+     *
+     * @param string $field field to use for filtering.
+     * @param string $from  year for start of range.
+     * @param string $to    year for end of range.
+     *
+     * @return string       filter query.
+     */
+    protected function buildFullDateRangeFilter($field, $from, $to)
+    {
+        // Make sure that $to is less than $from:
+        if ($to != '*' && $from!= '*' && strtotime($to) < strtotime($from)) {
+            $tmp = $to;
+            $to = $from;
+            $from = $tmp;
+        }
+
+        return $this->buildGenericRangeFilter($field, $from, $to);
+    }
+
+    /**
+     * Support method for initFilters() -- initialize year-based date filters.
+     * Factored out as a separate method so that it can be more easily overridden
+     * by child classes.
      *
      * @param \Zend\StdLib\Parameters $request Parameter object representing user
      * request.
@@ -1338,6 +1394,24 @@ class Params implements ServiceLocatorAwareInterface
         return $this->initGenericRangeFilters(
             $request, 'daterange', array($this, 'formatYearForDateRange'),
             array($this, 'buildDateRangeFilter')
+        );
+    }
+
+    /**
+     * Support method for initFilters() -- initialize year/month/day-based date
+     * filters. Factored out as a separate method so that it can be more easily
+     * overridden by child classes.
+     *
+     * @param \Zend\StdLib\Parameters $request Parameter object representing user
+     * request.
+     *
+     * @return void
+     */
+    protected function initFullDateFilters($request)
+    {
+        return $this->initGenericRangeFilters(
+            $request, 'fulldaterange', array($this, 'formatDateForFullDateRange'),
+            array($this, 'buildFullDateRangeFilter')
         );
     }
 

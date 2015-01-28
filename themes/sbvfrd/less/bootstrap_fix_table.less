@@ -1,0 +1,40 @@
+@media (min-width: 992px) {
+  .container-table-fix-md {
+    display: table;
+    padding-left: 0;
+    padding-right: 0
+  }
+
+  .row-table-fix-md {
+    display: table-row;
+  }
+
+  .col-table-fix-md {
+    display: table-cell;
+    float: none;
+    border: none;
+  }
+
+  .container-fix-md {
+    margin-left: 30px;
+  }
+
+  .dirty-hack-column {
+
+    & > .row {
+      display: table;
+      min-width: 100%;
+    }
+
+    & > .row > *:first-child {
+      padding-top: 10px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .dirty-hack-column {
+    max-width: 95%;
+    margin: auto;
+  }
+}

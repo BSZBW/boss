@@ -16,7 +16,6 @@ swissbib.AdvancedSearch = {
    */
   init: function () {
     if (this.isInAdvancedSearch()) {
-      this.initFromSearchDetails();
       this.initJsTree();
 
       $("#addGroupLink").removeClass("offscreen");
@@ -27,31 +26,17 @@ swissbib.AdvancedSearch = {
    * @return void
    */
   initJsTree: function () {
-    jQuery(".classification-tree").jstree({
-      'plugins': ['search','types'],
-      'core' : {
-        'themes' : {
-          'url': path + '/themes/sbvfrd/js/vendor/jsTree/themes/default/style.css'
-        }
-      },
-      'types' : {
-        'record': {
-          'icon':'fa fa-file'
-        },
-        'collection': {
-          'icon':'fa fa-folder'
-        }
-      }
-    }).bind("select_node.jstree", function (event, data) {
-      var el = jQuery('#' + data.selected[0]);
-
-      el.toggleClass("selected");
-      el.hasClass("selected") ? el.find("input").attr("name", "filter[]") : el.find("input").removeAttr("name");
-
-      if (swissbib.AdvancedSearch.catTreeAutoSend)  swissbib.AdvancedSearch.sendForm(el);
-    });
+    jQuery(".classification-tree").jstree().bind("select_node.jstree", this.onJsTreeSelectNode);
   },
 
+  onJsTreeSelectNode: function (event, data) {
+    var el = jQuery('#' + data.selected[0]);
+
+    el.toggleClass("selected");
+    el.hasClass("selected") ? el.find("input").attr("name", "filter[]") : el.find("input").removeAttr("name");
+
+    if (swissbib.AdvancedSearch.catTreeAutoSend)  swissbib.AdvancedSearch.sendForm(el);
+  },
 
   sendForm: function (el) {
     jQuery(el).parents('form:first').submit();
@@ -67,30 +52,6 @@ swissbib.AdvancedSearch = {
     return location.pathname.indexOf('/Advanced') >= 0;
   },
 
-
-  /**
-   * Initialize search mask from search details
-   *
-   */
-  initFromSearchDetails: function () {
-    var firstGroupIndex, newField, that = this;
-
-    if (this.searchDetails.length) {
-      jQuery.each(this.searchDetails, function (groupIndex, searchGroup) {
-        jQuery.each(searchGroup, function (searchIndex, search) {
-          if (searchIndex == 0) {
-            groupIndex = that.addGroup(search.lookfor, search.field, search.bool);
-          } else {
-            newField = that.addField(groupIndex, search.lookfor, search.field);
-          }
-        })
-      });
-    } else {
-      firstGroupIndex = this.addGroup();
-      this.addField(firstGroupIndex);
-      this.addField(firstGroupIndex);
-    }
-  },
 
 
   /**
@@ -108,13 +69,12 @@ swissbib.AdvancedSearch = {
 
     var groupIndex = this.groupCount;
     var groupHtml = this.buildGroup(groupIndex, join);
-
     // Set to 0 so adding searches knows which one is first.
     this.groupCount++;
     this.fieldCount[groupIndex] = 0;
 
     // Add the new group into the page
-    $("#searchHolder").append(groupHtml);
+    $("#groupPlaceHolder").before(groupHtml);
     // Add the first search field
     this.addField(groupIndex, firstTerm, firstField);
 
@@ -177,7 +137,7 @@ swissbib.AdvancedSearch = {
     var groupIndex = 0,
         that = this;
 
-    $("#searchHolder > .group").each(function (index, group) {
+    $("#advSearchForm .group").each(function (index, group) {
       // If the number of this group doesn't match our running count
       if ($(this).attr("id") != "group" + groupIndex) {
         // Re-number this group
@@ -192,7 +152,6 @@ swissbib.AdvancedSearch = {
     var action = this.groupCount > 1 ? 'show' : 'hide';
     $("#groupJoin")[action]();
     $("#delete_link_0")[action]();
-
   },
 
 
@@ -286,12 +245,21 @@ swissbib.AdvancedSearch = {
     var html = $("#adv-search-field").html(),
         template = Handlebars.compile(html),
         data = {
+          groupIndex: groupIndex,
+          fieldIndex: fieldIndex,
           label: this.buildFieldLabel(groupIndex, fieldIndex),
           term: this.buildFieldTermText(groupIndex, fieldIndex, searchWord),
           selector: this.buildFieldFieldSelector(groupIndex, fieldIndex, matchField)
         };
 
     return template(data);
+  },
+
+
+  removeField: function (groupIndex, fieldIndex) {
+    console.log(groupIndex, fieldIndex);
+    this.fieldCount[groupIndex]--;
+    $('#search_field_row_' + groupIndex + '_' + fieldIndex).remove();
   },
 
 
@@ -397,6 +365,7 @@ swissbib.AdvancedSearch = {
     var html = $("#adv-search-group-searchDetails").html(),
         template = Handlebars.compile(html),
         data = {
+          label: this.buildFieldLabel(groupIndex, this.fieldCount[groupIndex]),
           groupIndex: groupIndex,
           matchLabel: this.searchLabels.searchMatch,
           deleteLabel: this.searchLabels.deleteSearchGroupString,

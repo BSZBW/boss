@@ -1,0 +1,64 @@
+@media (min-width: 992px) {
+  .container {
+    & > .navbar-header {
+      margin-left: -15px;
+    }
+  }
+
+  #sidebar-offcanvas-trigger {
+    display: none;
+  }
+
+  #hierarchyTree {
+    a.jstree-anchor {
+      padding-left: 35px;
+      text-indent: -27px;
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .resultView {
+    .results-top {
+      padding: 0 15px;
+    }
+    .search-controls {
+      padding: 0 15px;
+    }
+  }
+  
+  .main {
+    & > .container > .row.table-sidebar > form,
+    & > .container {
+      & > .row.table-sidebar {
+        & > div.sidebar,
+        & > form > div.sidebar {
+          top: 0;
+        }
+      }
+    }
+  }
+  
+  footer {
+    margin-top: 0;
+  }
+
+  #libraryListSidebar {
+    &.affix {
+      position: relative !important;
+      max-width: none;
+    }
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1200px) {
+  #libraryListSidebar {
+    &.affix {
+      max-width: 212px;
+    }
+  }
+
+  #searchForm {
+    padding-right: 25px;
+  }
+}

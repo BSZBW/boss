@@ -26,8 +26,10 @@
  * @category swissbib_VuFind2
  * @package  RecordDriver
  * @author   Guenter Hipler  <guenter.hipler@unibas.ch>
+ * @author   Oliver Schihin <oliver.schihin@unibas.ch>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     http://www.swissbib.org
+ * @link     http://vufind.org/wiki/vufind2:record_drivers Wiki
+ * @link     http://www.swissbib.org Project Wiki
  */
 
 namespace Swissbib\RecordDriver;
@@ -39,16 +41,6 @@ use VuFind\RecordDriver\SolrMarc as VuFindSolrMarc;
 
 use Swissbib\RecordDriver\Helper\Holdings as HoldingsHelper;
 
-/**
- * enhancement for swissbib MARC records in Solr.
- *
- * @category swissbib_VuFind2
- * @package  RecordDrivers
- * @author   Guenter Hipler  <guenter.hipler@unibas.ch>
- * @author   Oliver Schihin <oliver.schihin@unibas.ch>
- * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     http://www.swissbib.org
- */
 class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
 {
 
@@ -89,6 +81,8 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
 
     protected $protocolWrapper = null;
 
+    protected $multiValuedFRBRField = true;
+
     /**
      * @var    Array    List of all Elements of the description, to figure out whether to show tab or not
      */
@@ -106,6 +100,8 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
     ) {
         parent::__construct($mainConfig, $recordConfig, $searchSettings);
 
+
+        $this->multiValuedFRBRField = isset($searchSettings->General->multiValuedFRBRField) ? $searchSettings->General->multiValuedFRBRField : true;
         $this->protocolWrapper = $protocolWrapper;
     }
 
@@ -126,7 +122,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
         }
 
         // Get a representative publication date, using the view helper:
-        $pubDate = $this->getServiceLocator()->get('viewrenderer')->publicationDateMarc($this->getPublicationDates());
+        $pubDate = $this->getHumanReadablePublicationDates();
 
         // Start an array of OpenURL parameters:
         $params = array(
@@ -134,7 +130,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
             'ctx_enc' => 'info:ofi/enc:UTF-8',
             'rfr_id' => "info:sid/{$coinsID}:generator",
             'rft.title' => $this->getTitle(),
-            'rft.date' => $pubDate
+            'rft.date' => isset($pubDate[0]) ? $pubDate[0] : null,
         );
 
         $this->useOpenUrlFormats = true;
@@ -220,31 +216,31 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
                 break;
             case 'Journal':
                 /* This is probably the most technically correct way to represent
-                 * a journal run as an OpenURL; however, it doesn't work well with
-                 * Zotero, so it is currently commented out -- instead, we just add
-                 * some extra fields and then drop through to the default case.
+                * a journal run as an OpenURL; however, it doesn't work well with
+                * Zotero, so it is currently commented out -- instead, we just add
+                * some extra fields and then drop through to the default case.
                 $params['rft_val_fmt'] = 'info:ofi/fmt:kev:mtx:journal';
                 $params['rft.genre'] = 'journal';
                 $params['rft.jtitle'] = $params['rft.title'];
                 $params['rft.issn'] = $this->getCleanISSN();
                 $params['rft.au'] = $this->getPrimaryAuthor();
                 break;
-                 */
+                */
+                $params['rft_val_fmt'] = 'info:ofi/fmt:kev:mtx:journal';
+                $params['rft.genre'] = 'journal';
                 $params['rft.issn'] = $this->getCleanISSN();
-
                 // Including a date in a title-level Journal OpenURL may be too
                 // limiting -- in some link resolvers, it may cause the exclusion
                 // of databases if they do not cover the exact date provided!
-                unset($params['rft.date']);
-
+                //unset($params['rft.date']);
                 // If we're working with the SFX resolver, we should add a
                 // special parameter to ensure that electronic holdings links
                 // are shown even though no specific date or issue is specified:
-                if (isset($this->mainConfig->OpenURL->resolver)
-                    && strtolower($this->mainConfig->OpenURL->resolver) == 'sfx'
-                ) {
-                    $params['sfx.ignore_date_threshold'] = 1;
-                }
+                //if (isset($this->mainConfig->OpenURL->resolver)
+                // && strtolower($this->mainConfig->OpenURL->resolver) == 'sfx'
+                //) {
+                // $params['sfx.ignore_date_threshold'] = 1;
+                //};                }
             default:
                 $params['rft_val_fmt'] = 'info:ofi/fmt:kev:mtx:dc';
 
@@ -546,7 +542,8 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
 
 
     /**
-     * Returns one of three things: a full URL to a thumbnail preview of the record
+     * Returns one of three things:
+     * a full URL to a thumbnail preview of the record
      * if an image is available in an external system; an array of parameters to
      * send to VuFind's internal cover generator if no fixed URL exists; or false
      * if no thumbnail can be generated.
@@ -635,6 +632,11 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
                 . $field['URL']
                     . '&scale=1&reqServicename=ImageTransformer';
             }
+            elseif ($field['institution'] === 'ECOD' && $field['usage'] === 'THUMBNAIL') {
+                $thumbnailURL = 'https://externalservices.swissbib.ch/services/ImageTransformer?imagePath='
+                    . $field['URL']
+                    . '&scale=1&reqServicename=ImageTransformer';
+            }
         }
         return $thumbnailURL;
     }
@@ -647,27 +649,32 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
 
     protected function getThumbnail_856_1()
     {
-        $field = $this->get950();
-        if ($field['union'] === 'RERO' && $field['tag'] === '856') {
-            if (preg_match('/^.*v_bcu\/media\/images/', $field['sf_u'])) {
+        $fields = $this->get950();
+        if (!$fields) {
+            return array();
+        }
+        foreach ($fields as $field) {
+            if ($field['union'] === 'RERO' && $field['tag'] === '856') {
+                if (preg_match('/^.*v_bcu\/media\/images/', $field['sf_u'])) {
+                    return 'https://externalservices.swissbib.ch/services/ImageTransformer?imagePath='
+                    . $field['sf_u']
+                    . '&scale=1';
+                } elseif (preg_match('/^.*bibliotheques\/iconographie/', $field['sf_u'])) {
+                    return 'https://externalservices.swissbib.ch/services/ImageTransformer?imagePath='
+                    /*return 'https://externalservices.swissbib.ch/services/ProtocolWrapper?targetURL='*/
+                    . $field['sf_u']
+                    . '&scale=1';
+                }
+            } elseif ($field['union'] === 'CCSA' && $field['tag'] === '856') {
+                $URL_thumb = preg_replace('/hi-res.cgi/', 'get_thumb.cgi', $field['sf_u']);
                 return 'https://externalservices.swissbib.ch/services/ImageTransformer?imagePath='
-                . $field['sf_u']
+                . $URL_thumb
                 . '&scale=1';
-            } elseif (preg_match('/^.*bibliotheques\/iconographie/', $field['sf_u'])) {
-                return 'https://externalservices.swissbib.ch/services/ImageTransformer?imagePath='
-                /*return 'https://externalservices.swissbib.ch/services/ProtocolWrapper?targetURL='*/
-                . $field['sf_u']
-                . '&scale=1';
+            } elseif ($field['union'] === 'CHARCH' && $field['tag'] === '856') {
+                $thumb_URL = preg_replace('/SIZE=10/', 'SIZE=30', $field['sf_u']);
+                $URL_thumb = preg_replace('/http/', 'https', $thumb_URL);
+                return $URL_thumb;
             }
-        } elseif ($field['union'] === 'CCSA' && $field['tag'] === '856') {
-            $URL_thumb = preg_replace('/hi-res.cgi/', 'get_thumb.cgi', $field['sf_u']);
-            return 'https://externalservices.swissbib.ch/services/ImageTransformer?imagePath='
-            . $URL_thumb
-            . '&scale=1';
-        } elseif ($field['union'] === 'CHARCH' && $field['tag'] === '856') {
-            $thumb_URL = preg_replace('/SIZE=10/', 'SIZE=30', $field['sf_u']);
-            $URL_thumb = preg_replace('/http/', 'https', $thumb_URL);
-            return $URL_thumb;
             //return 'https://externalservices.swissbib.ch/services/ImageTransformer?imagePath='
             //. $URL_thumb
             //. '&scale=1';
@@ -723,7 +730,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
      */
     protected function get950()
     {
-        return $this->getMarcSubFieldMap(950, array(
+        return $this->getMarcSubFieldMaps(950, array(
             'B' => 'union',
             'P' => 'tag',
             'a' => 'sf_a',
@@ -798,20 +805,9 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
         $formats = $this->getFormatsRaw();
         $found = false;
         $mapping = array(
-            'BK010000' => 'Article',
-            'BK010300' => 'Article',
-            'BK010800' => 'Article',
-            'CR030000' => 'Journal',
-            'CR030300' => 'Journal',
-            'CR030322' => 'Journal',
-            'CR030353' => 'Journal',
-            'CR030500' => 'Journal',
-            'CR030553' => 'Journal',
-            'CR030600' => 'Journal',
-            'CR030619' => 'Journal',
-            'CR030653' => 'Journal',
-            'CR030700' => 'Journal',
-            'CR030753' => 'Journal',
+            'XK01' => 'Article',
+            'XK02' => 'Book',
+            'XR0300' => 'Journal',
         );
 
         // Check each format for all patterns
@@ -862,7 +858,8 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
 
 
     /**
-     * Get years and datetype from field 008 for display
+     * Get years and datetype from field 008
+     * format in calling functions for display and/or output
      *
      * @return  Array
      */
@@ -1176,6 +1173,16 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
     }
 
     /**
+     * Get Dates of Publication and/or Sequential Designation (field 362)
+     *
+     * return @array
+     */
+    public function getContResourceDates()
+    {
+        return $this->getFieldArray('362');
+    }
+
+    /**
      * Get citation / reference note for the record
      *
      * @return array
@@ -1223,7 +1230,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
      */
     public function getGroup()
     {
-        return isset($this->fields['groupid_isn_mv']) ? $this->fields['groupid_isn_mv'][0] : '';
+        return isset($this->fields['groupid_isn_mv']) ?  $this->multiValuedFRBRField ? $this->fields['groupid_isn_mv'][0] : $this->fields['groupid_isn_mv'] : '';
     }
 
 
@@ -1429,44 +1436,97 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
 
 
     /**
-     * Get publishers
+     * Get the publishers of the record.
      *
-     * @param    Boolean $asStrings
-     * @return    Array[]|String[]
+     * @return array
      */
-    public function getPublishers($asStrings = true)
+    public function getPublishers()
     {
-        $data = $this->getMarcSubFieldMaps(260, array(
-            'a' => 'place',
-            'b' => 'name',
-            'c' => 'date',
-            'd' => 'number',
-            'e' => 'place_manufacture',
-            'g' => 'date_manufacture'
-        ));
-
-        if ($asStrings) {
-            $strings = array();
-
-            foreach ($data as $publication) {
-                $string = '';
-
-                if (isset($publication['place'])) {
-                    $string = $publication['place'];
-                }
-                if (isset($publication['name'])) {
-                    $string .= ' : ' . $publication['name'];
-                }
-
-                $strings[] = trim($string);
-            }
-
-            $data = $strings;
-        }
-
-        return $data;
+        return $this->getFieldArray('260', array('b'));
     }
 
+    /**
+     * Get human readable publication dates for display purposes (may not be suitable
+     * for computer processing -- use getPublicationDates() for that).
+     * still using coded data for display in swissbib, reason: consistency
+     *
+     * @return array
+     */
+    public function getHumanReadablePublicationDates()
+    {
+        $codeddata = array();
+        $codeddata = $this->getPublicationDates();
+
+        if (!is_array($codeddata) || sizeof($codeddata) == 0) {
+            return '';
+        }
+
+        if (is_array($codeddata) && sizeof($codeddata) == 1) {
+            return $codeddata[0];
+        }
+
+        $retVal = array();
+
+        $dateType = $codeddata[0];
+        $year1    = $codeddata[1];
+        $year2    = $codeddata[2];
+
+        switch ($dateType)
+        {
+            case 's':
+            case 't':
+            case 'n':
+            case 'e':
+                $retVal[0] = $year1;
+                break;
+
+            case 'c':
+            case 'u':
+                $retVal[0] = $year1 . '-';
+                break;
+
+            case 'd':
+                $retVal[0] = $year1 . '-' . $year2;
+                break;
+
+            case 'p':
+            case 'r':
+                $retVal[0] = $year1 . ' [' . $year2 . ']';
+                break;
+
+            case 'q':
+                if ($year2 === '9999') {
+                    $retVal[0] = $year1;
+                }
+                elseif ($year2 != '9999') {
+                    $retVal[0] = $year1 . ' / ' . $year2;
+                }
+                break;
+
+            case 'm':
+                if ($year2 === '9999') {
+                    $retVal[0] = $year1 . '-';
+                }
+                elseif ($year2 != '9999') {
+                    $retVal[0] = $year1 . '-' . $year2;
+                }
+                break;
+
+            case 'i':
+                if ($year1 === $year2) {
+                    $retVal[0] = $year1;
+                }
+                if ($year2 === '9999') {
+                    $retVal[0] = $year1 . '-';
+                }
+                else {
+                    $retVal[0] = $year1 . '-' . $year2;
+                }
+                break;
+        }
+        $retVal[0] = str_replace('u', '?', $retVal);
+        return $retVal[0];
+    }
 
     /**
      * Get physical description out of the MARC record
@@ -1503,7 +1563,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
      *
      * return @array
      */
-    public function getContResourceDates()
+    public function getDateSpan()
     {
         return $this->getFieldArray('362');
     }
@@ -2036,81 +2096,6 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
         return isset($this->fields['time_indexed']) ? $this->fields['time_indexed'] : '';
     }
 
-    /**
-     * Get all record links related to the current record. Each link is returned as
-     * array.
-     * Format:
-     * array(
-     *        array(
-     *               'title' => label_for_title
-     *               'value' => link_name
-     *               'link'  => link_URI
-     *        ),
-     *        ...
-     * )
-     *
-     * @todo osc: remove this method as soon as the pull request https://github.com/vufind-org/vufind/pull/165 is accepted
-     *
-     * @return null|array
-     */
-    public function getAllRecordLinks()
-    {
-        // Load configurations:
-        $fieldsNames = isset($this->mainConfig->Record->marc_links)
-            ? explode(',', $this->mainConfig->Record->marc_links) : array();
-        $useVisibilityIndicator
-            = isset($this->mainConfig->Record->marc_links_use_visibility_indicator)
-            ? $this->mainConfig->Record->marc_links_use_visibility_indicator : true;
-
-        $retVal = array();
-        foreach ($fieldsNames as $value) {
-            $value = trim($value);
-            $fields = $this->marcRecord->getFields($value);
-            if (!empty($fields)) {
-                foreach ($fields as $field) {
-                    // Check to see if we should display at all
-                    if ($useVisibilityIndicator) {
-                        $visibilityIndicator = $field->getIndicator('1');
-                        if ($visibilityIndicator == '1') {
-                            continue;
-                        }
-                    }
-
-                    // Normalize blank relationship indicator to 0:
-                    $relationshipIndicator = $field->getIndicator('2');
-                    if ($relationshipIndicator == ' ') {
-                        $relationshipIndicator = '0';
-                    }
-
-                    // Assign notes based on the relationship type
-                    switch ($value) {
-                        case '780':
-                            if (in_array($relationshipIndicator, range('0', '7'))) {
-                                $value .= '_' . $relationshipIndicator;
-                            }
-                            break;
-                        case '785':
-                            if (in_array($relationshipIndicator, range('0', '8'))) {
-                                $value .= '_' . $relationshipIndicator;
-                            }
-                            break;
-                    }
-
-                    // Get data for field
-                    $tmp = $this->getFieldData($field, $value);
-                    if (is_array($tmp)) {
-                        $retVal[] = $tmp;
-                    }
-                }
-            }
-        }
-        if (empty($retVal)) {
-            $retVal = null;
-        }
-        return $retVal;
-    }
-
-
 
     /**
      *
@@ -2150,7 +2135,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
         // Found link based on special conditions, stop here
         if ($link) {
             return array(
-                'title' => 'note_' . $fieldIndex,
+                'title' => $this->getRecordLinkNote($field),
                 'value' => $title,
                 'link' => $link
             );
@@ -2212,6 +2197,16 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
         return false;
     }
 
+    /**
+     * Returns true if the record supports real-time AJAX status lookups.
+     *
+     * @return bool
+     */
+    public function supportsAjaxStatus()
+    {
+        return false;
+    }
+
 
     /**
      * @override
@@ -2231,5 +2226,13 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
     public function displayHoldings()
     {
         return true;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function displayLinks()
+    {
+        return false;
     }
 }

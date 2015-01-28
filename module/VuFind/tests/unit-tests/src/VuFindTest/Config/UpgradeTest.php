@@ -45,7 +45,7 @@ class UpgradeTest extends \VuFindTest\Unit\TestCase
      *
      * @var string
      */
-    protected $targetVersion = '2.0';
+    protected $targetVersion = '2.4';
 
     /**
      * Get an upgrade object for the specified source version:
@@ -77,7 +77,7 @@ class UpgradeTest extends \VuFindTest\Unit\TestCase
         // We should always update BulkExport options to latest full set when
         // upgrading a default configuration:
         $this->assertEquals(
-            'MARC:MARCXML:EndNote:EndNoteWeb:RefWorks:BibTeX',
+            'MARC:MARCXML:EndNote:EndNoteWeb:RefWorks:BibTeX:RIS',
             $results['config.ini']['BulkExport']['options']
         );
 
@@ -118,6 +118,39 @@ class UpgradeTest extends \VuFindTest\Unit\TestCase
 
         // Make sure the obsolete Index/local setting is removed:
         $this->assertFalse(isset($results['config.ini']['Index']['local']));
+
+        // Make sure that spelling recommendations are set up appropriately:
+        $this->assertEquals(
+            array('TopFacets:ResultsTop', 'SpellingSuggestions'),
+            $results['searches.ini']['General']['default_top_recommend']
+        );
+        $this->assertTrue(
+            in_array(
+                'SpellingSuggestions',
+                $results['searches.ini']['General']['default_noresults_recommend']
+            )
+        );
+        $this->assertEquals(
+            array(
+                'Author' => array('AuthorFacets', 'SpellingSuggestions'),
+                'CallNumber' => array('TopFacets:ResultsTop')
+            ),
+            $results['searches.ini']['TopRecommendations']
+        );
+        $this->assertEquals(
+            array('SummonDatabases', 'SpellingSuggestions'),
+            $results['Summon.ini']['General']['default_top_recommend']
+        );
+        $this->assertTrue(
+            in_array(
+                'SpellingSuggestions',
+                $results['Summon.ini']['General']['default_noresults_recommend']
+            )
+        );
+        $this->assertEquals(
+            array(),
+            $results['Summon.ini']['TopRecommendations']
+        );
 
         return array('configs' => $results, 'warnings' => $warnings);
     }
@@ -268,6 +301,26 @@ class UpgradeTest extends \VuFindTest\Unit\TestCase
                 . ' removed.',
                 $warnings
             )
+        );
+    }
+
+    /**
+     * Test WorldCat-specific upgrades.
+     *
+     * @return void
+     */
+    public function testWorldCatUpgrades()
+    {
+        $upgrader = $this->getUpgrader('worldcatupgrades');
+        $upgrader->run();
+        $results = $upgrader->getNewConfigs();
+        $this->assertEquals(
+            'Author',
+            $results['WorldCat.ini']['Basic_Searches']['srw.au']
+        );
+        $this->assertEquals(
+            'adv_search_author',
+            $results['WorldCat.ini']['Advanced_Searches']['srw.au']
         );
     }
 

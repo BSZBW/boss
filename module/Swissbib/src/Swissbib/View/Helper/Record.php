@@ -1,6 +1,7 @@
 <?php
 namespace Swissbib\View\Helper;
 
+use VuFind\RecordDriver\Summon;
 use VuFind\View\Helper\Root\Record as VuFindRecord;
 
 /**
@@ -247,24 +248,38 @@ class Record extends VuFindRecord
     
     public function getResponsible($titleStatement, $record)
     {
-        if (isset($titleStatement['statement_responsibility']))
+        if ($record instanceof Summon)
         {
-            return $titleStatement['statement_responsibility'];
+            if ($record->getAuthor()) {
+                return $record->getAuthor();
+            }
         }
-
-        elseif ($record->getPrimaryAuthor(true))
+        else
         {
-            return $record->getPrimaryAuthor();
-        }
+            if (isset($titleStatement['statement_responsibility']))
+            {
+                return $titleStatement['statement_responsibility'];
+            }
 
-        elseif ($record->getSecondaryAuthors(true))
-        {
-            return implode('; ', $record->getSecondaryAuthors());
-        }
+            elseif ($record->getPrimaryAuthor(true))
+            {
+                return $record->getPrimaryAuthor();
+            }
 
-        elseif ($record->getCorporationNames(true))
-        {
-            return implode('; ', $record->getCorporationNames());
+            elseif ($record->getSecondaryAuthors(true))
+            {
+                return implode('; ', $record->getSecondaryAuthors());
+            }
+
+            elseif ($record->getCorporationNames(true))
+            {
+                return implode('; ', $record->getCorporationNames());
+            }
+            else
+            {
+                return '';
+            }
+
         }
     }
 
@@ -280,23 +295,6 @@ class Record extends VuFindRecord
     {
         // Try to build thumbnail:
         $thumb = $this->driver->tryMethod('getThumbnail', array($size));
-
-        // No thumbnail?  Return false:
-        if (empty($thumb)) {
-            if (!empty ($this->config->Content->externalResourcesServer)) {
-                //$urlHelper = $this->getView()->plugin('url');
-                //$urlSrc = $urlHelper('cover-unavailable');
-                //sometimes our app is not the root domain
-                //$position =  strpos($urlSrc,'/Cover');
-                //return  $this->config->Content->externalResourcesServer . substr($urlSrc,$position) ;
-                return $this->config->Content->externalResourcesServer . "/img/noCover2.gif";
-
-            } else {
-                $urlHelper = $this->getView()->plugin('url');
-                return $urlHelper('cover-unavailable') ;
-            }
-
-        }
 
         // Array?  It's parameters to send to the cover generator:
         if (is_array($thumb)) {
@@ -319,6 +317,27 @@ class Record extends VuFindRecord
         // Default case -- return fixed string:
         return $thumb;
     }
+
+	  /**
+		 * Returns css class of media type icon placeholder
+		 *
+	   * @param
+	   * @return string
+	  */
+	public function getThumbnailPlaceholder()
+	{
+		$this->driver->setUseMostSpecificFormat(true);
+
+		$formats = $this->driver->getFormats();
+
+		//Only get Placeholder for first Media Type
+		foreach ($formats as $format)
+		{
+			return $this->getFormatClass($format);
+		}
+
+		return '';
+	}
 
 
     /**

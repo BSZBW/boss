@@ -91,30 +91,6 @@ class Summon extends VuFindSummon implements SwissbibRecordDriver
     /**
      * @return  string
      */
-    public function getImprint()
-    {
-        $imprint = '';
-        $pub_place = $this->getPlacesOfPublication();
-        if (is_array($pub_place) && count($pub_place) > 0) {
-            $imprint = implode(', ', $pub_place);
-            $imprint .= ': ';
-        }
-        $publishers = $this->getPublishers();
-        if (is_array($publishers) && count($publishers) > 0) {
-            $imprint .= implode(', ', $publishers);
-            $imprint .= ', ';
-        }
-        $pub_date = $this->getPublicationDates();
-        if (is_array($pub_date)) {
-            $imprint .= implode('-', $pub_date);
-        }
-
-        return $imprint;
-    }
-
-    /**
-     * @return  string
-     */
     public function getAllSubjectHeadingsAsString()
     {
         $ret = array();
@@ -218,8 +194,18 @@ class Summon extends VuFindSummon implements SwissbibRecordDriver
      */
     public function getCartMathData()
     {
-        // TODO: Implement getCartMathData() method.
+        return null;
     }
+
+    /**
+     * Get highlighted fulltext
+     *
+     * @return    String
+     */
+    public function getHighlightedFulltext() {
+        return null;
+    }
+
 
     /**
      * get group-id from solr-field to display FRBR-Button
@@ -278,6 +264,14 @@ class Summon extends VuFindSummon implements SwissbibRecordDriver
     public function displayHoldings()
     {
         return false;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function displayLinks()
+    {
+        return true;
     }
 
     /**

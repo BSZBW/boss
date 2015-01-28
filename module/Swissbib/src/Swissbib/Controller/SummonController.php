@@ -11,41 +11,6 @@ class SummonController extends VuFindSummonController
 {
 
     /**
-     * Get date range settings for summon
-     * Field is named PublicationDate instead publishDate
-     *
-     * @param    Boolean        $savedSearch
-     * @return    Array
-     */
-    protected function getDateRangeSettings($savedSearch = false, $config = 'facets',
-      $filter = array()
-    ) {
-        // Default to blank strings:
-        $from = $to = '';
-
-        // Check to see if there is an existing range in the search object:
-        if ($savedSearch) {
-            $filters = $savedSearch->getParams()->getFilters();
-            if (isset($filters['PublicationDate'])) {
-                foreach ($filters['PublicationDate'] as $current) {
-                    if ($range = SolrUtils::parseRange($current)) {
-                        $from = $range['from'] == '*' ? '' : $range['from'];
-                        $to = $range['to'] == '*' ? '' : $range['to'];
-                        $savedSearch->getParams()
-                            ->removeFilter('PublicationDate:' . $current);
-                        break;
-                    }
-                }
-            }
-        }
-
-        // Send back the settings:
-        return array($from, $to);
-    }
-
-
-
-    /**
      * Return a Search Results object containing advanced facet information.  This
      * data may come from the cache.
      *
@@ -56,6 +21,14 @@ class SummonController extends VuFindSummonController
         // Check if we have facet results cached, and build them if we don't.
         $cache = $this->getServiceLocator()->get('VuFind\CacheManager')
                 ->getCache('object');
+
+        /**
+         * Loads the Summon Results object. This is necessary because otherwise it would fail to load the object
+         * from cache.
+         */
+        $loadResults = $this->getResultsManager()->get('Summon');
+        $loadParams  = $loadResults->getParams();
+        $loadParams->getOptions();
 
         if (!($results = $cache->getItem('summonSearchAdvancedFacets'))) {
             $results = $this->getResultsManager()->get('Summon');
@@ -78,36 +51,6 @@ class SummonController extends VuFindSummonController
 
         return $results;
     }
-
-    /**
-     * @return mixed|\Zend\View\Model\ViewModel
-     * add information about external IP to view
-     * @todo not yet implemented, doesn't work the way shown below
-     */
-
-    /**
-    public function resultsAction() {
-
-        $view = $this->createViewModel();
-
-        // Handle saved search requests:
-        $savedId = $this->params()->fromQuery('saved', false);
-        if ($savedId !== false) {
-            return $this->redirectToSavedSearch($savedId);
-        }
-
-        $results = $this->getResultsManager()->get($this->searchClassId);
-        $params = $results->getParams();
-
-        // Enable recommendations unless explicitly told to disable them:
-        $noRecommend = $this->params()->fromQuery('noRecommend', false);
-        $params->recommendationsEnabled(!$noRecommend);
-        $params->external = $this->isRestrictedTarget();
-
-        return parent::resultsAction();
-
-    }
-     * /
 
 
     /**
@@ -158,6 +101,15 @@ class SummonController extends VuFindSummonController
         // Check if we have facet results cached, and build them if we don't.
         $cache = $this->getServiceLocator()->get('VuFind\CacheManager')
             ->getCache('object');
+
+        /**
+         * Loads the Summon Results object. This is necessary because otherwise it would fail to load the object
+         * from cache.
+         */
+        $loadResults = $this->getResultsManager()->get('Summon');
+        $loadParams  = $loadResults->getParams();
+        $loadParams->getOptions();
+
         if (!($results = $cache->getItem($cacheName))) {
             // Use advanced facet settings to get summary facets on the front page;
             // we may want to make this more flexible later.  Also keep in mind that
@@ -185,16 +137,30 @@ class SummonController extends VuFindSummonController
     /**
      * Checks if client IP is inside Basel / Berne universities (configurable)
      * used to bring information to the view
-     * @todo add to view model (in method resultsAction()?)
-     * @todo add information to view template on summon tab
      * functionality from sbvf2 (mid august 2014)
      */
     protected function isRestrictedTarget()
     {
     // check if client is inside Basel / Berne universities
-    $external = false;
     $targetsProxy = $this->serviceLocator->get('Swissbib\TargetsProxy\TargetsProxy');
     $external = $targetsProxy->detectTarget() === false ? true : false;
     return $external;
     }
+
+
+    /**
+     * @Override
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function resultsAction()
+    {
+        $viewModel = parent::resultsAction();
+
+        $viewModel->setVariable('htmlLayoutClass', 'resultView');
+        $viewModel->setVariable('external', $this->isRestrictedTarget());
+
+        return $viewModel;
+    }
+
 }

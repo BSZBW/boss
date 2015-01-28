@@ -38,6 +38,8 @@ use VuFind\View\Helper\Root\SearchBox;
 use Swissbib\VuFind\View\Helper\Root\Auth;
 use Swissbib\VuFind\View\Helper\Root\SearchTabs;
 use Swissbib\View\Helper\LayoutClass;
+use Swissbib\View\Helper\IncludeTemplate;
+use Swissbib\View\Helper\TranslateFacets;
 
 
 /**
@@ -106,7 +108,18 @@ class Factory
      */
     public static function getAuth(ServiceManager $sm)
     {
-        return new Auth($sm->getServiceLocator()->get('VuFind\AuthManager'));
+
+        $config = isset($sm->getServiceLocator()->get('VuFind\Config')->get('config')->Authentication->noAjaxLogin) ?
+            $sm->getServiceLocator()->get('VuFind\Config')->get('config')->Authentication->noAjaxLogin->toArray() : array();
+        return new Auth($sm->getServiceLocator()->get('VuFind\AuthManager'), $config);
+    }
+
+
+    public static function getFacetTranslator(ServiceManager $sm)
+    {
+        $config =  $sm->getServiceLocator()->get('VuFind\Config')->get('facets')->Advanced_Settings->translated_facets->toArray();
+        return new TranslateFacets($config);
+
     }
 
     /**
@@ -171,5 +184,15 @@ class Factory
             $sm->getServiceLocator()->get('Swissbib\SearchOptionsPluginManager'),
             $config->get('searchbox')->toArray()
         );
+    }
+
+    /**
+     * @param ServiceManager $sm Service manager.
+     *
+     * @return IncludeTemplate
+     */
+    public static function getIncludeTemplate(ServiceManager $sm)
+    {
+        return new IncludeTemplate();
     }
 }

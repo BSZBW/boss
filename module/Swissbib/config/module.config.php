@@ -225,9 +225,6 @@ return array(
             'urlDisplay'                     => 'Swissbib\View\Helper\URLDisplay',
             'number'                         => 'Swissbib\View\Helper\Number',
             'physicalDescription'            => 'Swissbib\View\Helper\PhysicalDescriptions',
-            'publicationDateMarc'            => 'Swissbib\View\Helper\YearFormatterMarc',
-            'publicationDateSummon'          => 'Swissbib\View\Helper\YearFormatterSummon',
-            'publicationDateWorldCat'        => 'Swissbib\View\Helper\YearFormatterWorldCat',
             'removeHighlight'                => 'Swissbib\View\Helper\RemoveHighlight',
             'subjectHeadingFormatter'        => 'Swissbib\View\Helper\SubjectHeadings',
             'SortAndPrepareFacetList'        => 'Swissbib\View\Helper\SortAndPrepareFacetList',
@@ -287,6 +284,7 @@ return array(
             'recommend' => array(
                 'factories' => array(
                     'favoritefacets' => 'Swissbib\Services\Factory::getFavoriteFacets',
+                    'sidefacets' => 'Swissbib\Recommend\Factory::getSideFacets'
                 ),
             ),
             'recorddriver'             => array(
@@ -299,7 +297,8 @@ return array(
             ),
             'ils_driver'               => array(
                 'factories' => array(
-                    'aleph' => 'Swissbib\VuFind\ILS\Driver\Factory::getAlephDriver'
+                    'aleph' => 'Swissbib\VuFind\ILS\Driver\Factory::getAlephDriver',
+                    'multibackend' => 'Swissbib\VuFind\ILS\Driver\Factory::getMultiBackend',
                 )
             ),
             'hierarchy_driver'         => array(

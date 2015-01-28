@@ -7,6 +7,7 @@ use Zend\I18n\Translator\Translator;
 use VuFind\Crypt\HMAC;
 use VuFind\ILS\Connection as IlsConnection;
 use VuFind\Auth\Manager as AuthManager;
+use VuFind\Auth\ILSAuthenticator as IlsAuth;
 use VuFind\Config\PluginManager as ConfigManager;
 
 use Swissbib\VuFind\ILS\Driver\Aleph;
@@ -26,6 +27,9 @@ class Holdings
 
     /** @var    AuthManager        Check login status and info */
     protected $authManager;
+
+    /** @var IlsAuth  */
+    protected $ilsAuth;
 
     /** @var    ConfigManager    Load configurations */
     protected $configManager;
@@ -145,6 +149,7 @@ class Holdings
         IlsConnection $ilsConnection,
         HMAC $hmac,
         AuthManager $authManager,
+        IlsAuth $ilsAuth,
         ConfigManager $configManager,
         Translator $translator,
         LocationMap $locationMap,
@@ -159,6 +164,7 @@ class Holdings
         $this->configHoldings = $configManager->get('Holdings');
         $this->hmac = $hmac;
         $this->authManager = $authManager;
+        $this->ilsAuth = $ilsAuth;
         $this->translator = $translator;
         $this->locationMap = $locationMap;
         $this->ebooksOnDemand = $ebooksOnDemand;
@@ -195,17 +201,6 @@ class Holdings
         $this->idItem = $idItem;
 
         $this->setHoldingsContent($holdingsXml);
-    }
-
-
-    /**
-     * Get ils driver (aleph)
-     *
-     * @return    Aleph
-     */
-    protected function getIlsDriver()
-    {
-        return $this->ils->getDriver();
     }
 
 
@@ -597,7 +592,8 @@ class Holdings
                 unset($holding['backlink']);
                 $bib = $holding['bib_library'];
                 $resourceId = $bib . $holding['bibsysnumber'];
-                $itemsCount = $this->getIlsDriver()->getHoldingItemCount($resourceId, $holding['institution']);
+                $ilsDriver = $this->ils->getDriver();
+                $itemsCount = $ilsDriver->getHoldingItemCount($resourceId, $holding['institution']);
 
                 $holding['itemsLink'] = array(
                     'count' => $itemsCount,
@@ -704,19 +700,21 @@ class Holdings
         /** @var Aleph $ilsDriver */
         $ilsDriver = $this->ils->getDriver();
         $patron = $this->getPatron();
+        $source = $ilsDriver->getSource($patron['id']);
+        $sourceConfiguration = $ilsDriver->getDriverConfig($source);
 
         $itemId = $item['bibsysnumber'] . $item['sequencenumber'];
         $bib = $item['bib_library'];
         $groupId = $this->buildItemId($item);
 
         $allowedActions = $ilsDriver->getAllowedActionsForItem($patron['id'], $itemId, $groupId, $bib);
-        $host = $ilsDriver->host; // @todo make dev port dynamic
+        $host = $sourceConfiguration['Catalog']['host'];
 
-        if ($allowedActions['photocopyRequest']) {
-            $allowedActions['photocopyRequestLink'] = $this->getPhotoCopyRequestLink($host, $item);
+        if ($allowedActions['photorequest']) {
+            $allowedActions['photoRequestLink'] = $this->getPhotoRequestLink($host, $item);
         }
 
-        if ($allowedActions['bookingRequest']) {
+        if ($allowedActions['bookingrequest']) {
             $allowedActions['bookingRequestLink'] = $this->getBookingRequestLink($host, $item);
         }
 
@@ -731,7 +729,7 @@ class Holdings
      * @param    Array $item
      * @return    String
      */
-    protected function getPhotoCopyRequestLink($host, array $item)
+    protected function getPhotoRequestLink($host, array $item)
     {
         $queryParams = array(
             'func' => 'item-photo-request',
@@ -785,7 +783,7 @@ class Holdings
      */
     protected function getPatron()
     {
-        return $this->authManager->storedCatalogLogin();
+        return $this->ilsAuth->storedCatalogLogin();
     }
 
 

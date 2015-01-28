@@ -59,7 +59,7 @@ var swissbib = {
    * @param    {Element}    ctx        Selector context
    */
   initNavigation: function (ctx) {
-    $("#navigation", ctx).menunav();
+    //$("#navigation", ctx).menunav();
   },
 
 
@@ -439,7 +439,47 @@ var swissbib = {
 
     window.open(fullUrl);
 //      location.href = fullUrl;
-  }
+  },
+
+
+  updatePageForLogin: function() {
+    swissbib.updatePageForLoginParent();
+
+    if($('#user-favorites').length > 0) {
+      Lightbox.addCloseAction(function(){document.location.reload(true);});
+    }
+
+    console.log(window.location.pathname.substring('Search/History'));
+
+    if(window.location.pathname.indexOf('Search/History') !== -1) {
+      Lightbox.addCloseAction(function(){document.location.reload(true);});
+    }
+  },
+    // function for the UserVoice feedback widget in swissbib green
+    UserVoiceFeedback: function() {
+        UserVoice = window.UserVoice || [];
+        (function () {
+            var uv = document.createElement('script');
+            uv.type = 'text/javascript';
+            uv.async = true;
+            uv.src = '//widget.uservoice.com/JtF9LB73G7r3zwkipwE1LA.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(uv, s)
+        })();
+        UserVoice.push(['set', {
+            accent_color: '#6aba2e',
+            trigger_color: 'white',
+            trigger_background_color: 'rgba(46, 49, 51, 0.6)'
+        }]);
+        if (document.getElementById('feedback') != null) {
+          UserVoice.push(['addTrigger', '#feedback', {
+              mode: 'contact'
+          }]);
+        }
+        UserVoice.push(['autoprompt', {}]);
+    },
+
+  updatePageForLoginParent: function() {}
 };
 
 
@@ -448,4 +488,18 @@ var swissbib = {
  */
 $(document).ready(function () {
   swissbib.initOnReady();
+    swissbib.UserVoiceFeedback();
 });
+
+
+/**
+ * overwrite method
+ */
+swissbib.updatePageForLoginParent = updatePageForLogin;
+updatePageForLogin = swissbib.updatePageForLogin;
+
+/**
+ * IE8 base64 support
+ */
+window.btoa = window.btoa || jQuery.base64.encode;
+window.atob = window.atob || jQuery.base64.decode;

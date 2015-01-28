@@ -1,0 +1,136 @@
+<?php
+
+$encodedProviderID = urlencode($this->serverUrl() . "/" . "shibboleth");
+$encodedTarget = urlencode($this->serverUrl() . "/MyResearch/Home");
+$encodedGuestURL = "https://aai.guest-login.ch/idp/profile/SAML2/Unsolicited/SSO?providerId=" . $encodedProviderID . "&target=" . $encodedTarget;
+?>
+
+
+<h2><?= $this->transEsc('login.choose.option') ?></h2>
+<p>&nbsp;</p>
+
+
+<script type="text/javascript"><!--
+    // To use this JavaScript, please access:
+    // https://wayf.switch.ch/SWITCHaai/WAYF/embedded-wayf.js/snippet.html
+    // and copy/paste the resulting HTML snippet to an unprotected web page that
+    // you want the embedded WAYF to be displayed
+
+
+    //////////////////// ESSENTIAL SETTINGS ////////////////////
+
+    // URL of the WAYF to use
+    // Examples: "https://wayf.switch.ch/SWITCHaai/WAYF", "https://wayf-test.switch.ch/aaitest/WAYF";
+    // [Mandatory]
+    var wayf_URL = "https://wayf.switch.ch/SWITCHaai/WAYF";
+
+    // EntityID of the Service Provider that protects this Resource
+    // Examples: "https://econf.switch.ch/shibboleth", "https://dokeos.unige.ch/shibboleth"
+    // [Mandatory]
+    var wayf_sp_entityID =  <?= '"' . $this->serverUrl() . "/shibboleth" . '"'; ?>;
+
+    // Shibboleth Service Provider handler URL
+    // Examples: "https://point.switch.ch/Shibboleth.sso", "https://rr.aai.switch.ch/aaitest/Shibboleth.sso"
+    // [Mandatory, if wayf_use_discovery_service = false]
+    var wayf_sp_handlerURL = <?= '"' . $this->serverUrl() . "/Shibboleth.sso" . '"'; ?>;
+
+    // URL on this resource that the user shall be returned to after authentication
+    // Examples: "https://econf.switch.ch/aai/home", "https://olat.uzh.ch/my/courses"
+    // [Mandatory]
+    var wayf_return_url = <?= '"' . $this->serverUrl() . "/MyResearch/Home" . '"'; ?>;
+
+
+    //more configuration settings see:
+    //shibboleth repository notes/login_form.phtml
+
+
+    //////////////////// RECOMMENDED SETTINGS ////////////////////
+
+    var wayf_hide_categories = new Array("tertiaryb", "uppersecondary");
+
+    var wayf_unhide_idps = new Array();
+
+
+    var wayf_hide_idps = new Array();
+
+
+    //////////////////// ADVANCED SETTINGS ////////////////////
+
+    var wayf_sp_samlDSURL = <?= '"' . $this->serverUrl() . "/Shibboleth.sso/Login" . '"'; ?>;
+
+
+    //////////////////// ADDITIONAL CSS CUSTOMIZATIONS ////////////////////
+
+
+    //-->
+</script>
+
+<noscript>
+    <div class="status_error">
+        <?= $this->transEsc('login.error.no.js') ?>
+    </div>
+</noscript>
+
+
+<table class="data">
+    <colgroup>
+        <col width="60%">
+        <col width="5%">
+        <col width="35%">
+    </colgroup>
+
+    <thead>
+    <tr>
+        <td><h3><?= $this->transEsc('login.aai') ?></h3></td>
+        <td class="nodivider right">&nbsp;</td>
+        <td><h3><?= $this->transEsc('login.guest') ?></h3></td>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr>
+
+        <td>
+            <p>
+                <script type="text/javascript"
+                        src="https://wayf.switch.ch/SWITCHaai/WAYF/embedded-wayf.js"></script>
+            <noscript>
+                <a href="<?= $this->escapeHtml($sessionInitiator) ?>"><?= $this->transEsc("Institutional Login with external WAYF - non Java Script") ?></a>
+            </noscript>
+            </p>
+
+        </td>
+        <td class="nodivider right">&nbsp;</td>
+        <td>
+            <p>
+                <!--
+             with http and https endpoints
+             <input type="button" onclick="window.location = 'https://aai.guest-login.ch/idp/profile/SAML2/Unsolicited/SSO?providerId=https%3A%2F%2Ftestvf.swissbib.ch%2Fshibboleth&target=https%3A%2F%2Ftestvf.swissbib.ch%2FMyResearch%2FHome&shire=https%3A%2F%2Ftestvf.swissbib.ch%2FShibboleth.sso%2FSAML2%2FPOST'" value="Guest Login"/>
+             -->
+
+                <input type="button" onclick="window.location = '<?= $encodedGuestURL ?>'"
+                       value="<?= $this->transEsc('login.guest') ?>"/>
+            </p>
+        </td>
+
+    </tr>
+
+    </tbody>
+</table>
+
+<div class="status information">
+    <p>
+        <?= $this->transEsc('logininfo.line.1') ?>
+    </p>
+    <ul class="list">
+        <li><?= $this->transEsc('logininfo.li.1') ?></li>
+        <li><?= $this->transEsc('logininfo.li.2') ?></li>
+    </ul>
+    <p><?= $this->transEsc('logininfo.line.2') ?></p>
+
+    <p><?= $this->transEsc('logininfo.line.3') ?></p>
+
+    <h3><?= $this->transEsc('logininfo.title.1') ?></h3>
+
+    <p><?= $this->transEsc('logininfo.line.4') ?></p>
+</div>

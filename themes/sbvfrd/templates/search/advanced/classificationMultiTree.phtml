@@ -1,5 +1,5 @@
 <div id="tabbed-tree" class="tabs">
-  <ul>
+  <ul class="recordTabs nav nav-tabs">
     <? foreach ($classificationTrees as $facetKey => $tree): ?>
       <li><a href="#tab-tree-<?= $facetKey ?>"><?= $this->translate($facetKey) ?></a></li>
     <? endforeach ?>

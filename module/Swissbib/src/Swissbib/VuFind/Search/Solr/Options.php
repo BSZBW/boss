@@ -27,4 +27,22 @@ class Options extends VuFindSolrOptions
     {
         $this->defaultSort = $defaultSort;
     }
+
+
+    /**
+     * Translate a string if a translator is available.
+     * We have to override this method because VF2 core doesn't support multiple Textdomains for translations at the moment
+     *
+     * @param string $msg Message to translate
+     *
+     * @return string
+     */
+    public function translate($msg)
+    {
+        return null !== $this->translator
+            ? is_array($msg) && count($msg) == 2 ?  $this->translator->translate($msg[0],$msg[1]) : $this->translator->translate($msg) : $msg;
+    }
+
+
+
 }

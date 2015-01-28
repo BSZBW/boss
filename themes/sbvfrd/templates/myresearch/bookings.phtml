@@ -6,19 +6,70 @@ $this->headTitle($this->translate('Bookings'));
 $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Bookings') . '</li>';
 ?>
 
-<div class="<?= $this->layoutClass('mainbody') ?>">
+<div class="<?= $this->layoutClass('mainbody') ?> resultView">
   <h2><?= $this->transEsc('Bookings') ?></h2>
   <?= $this->flashmessages(); ?>
 
+  <form>
+  <div class="col-xs-10">
   <?php if( sizeof($this->bookings) ): ?>
-    <p><?=$this->transEsc('Your bookings') ?></p>
-    <?=$this->render('myresearch/bookings/itemlist.phtml')?>
+
+  <?php foreach ($this->bookings as $index => $booking): ?>
+      <div class="row result">
+
+    <h2 property="name">
+    <?= $this->escapeHtml($booking['title']) ?>
+    </h2>
+
+    <div class="meta">
+    <? if (!empty($booking['library'])): ?>
+      <span class="label"><strong><?=$this->transEsc('Institution')?>: </strong></span><?=$this->escapeHtml($booking['library'])?>
+      <br />
+    <? endif; ?>
+
+    <? if (!empty($booking['callNumber'])): ?>
+      <span class="label"><strong><?=$this->transEsc('Call Number')?>:</strong></span> <?=$this->escapeHtml($booking['callNumber'])?>
+      <br />
+    <? endif; ?>
+
+    <span class="label"><strong><?=$this->transEsc('pick_up_location') ?>:</strong></span> <?=$this->transEsc($booking['pickupLocation']) ?><br />
+
+    <span class="label"><strong><?=$this->transEsc('date_from') ?>:</strong></span> <?=date('d/m/y H:i', $booking['dateStart']) ?><br />
+
+    <span class="label"><strong><?=$this->transEsc('date_to') ?>:</strong></span> <?=date('d/m/y H:i', $booking['dateEnd']) ?><br />
+    </div>
+    </div>
+
+  <? endforeach; ?>
+
   <?php else: ?>
     <p><?=$this->transEsc('No bookings') ?></p>
   <?php endif; ?>
 
+    </div>
+  </form>
 </div>
 
 <div class="<?= $this->layoutClass('sidebar') ?>">
   <?= $this->context($this)->renderInContext("myresearch/menu.phtml", array('active' => 'bookings')) ?>
 </div>
+
+
+
+<!--<div class="<?/*= $this->layoutClass('mainbody') */?>">
+    <h2><?/*= $this->transEsc('Bookings') */?></h2>
+    <?/*= $this->flashmessages(); */?>
+
+    <?php /*if( sizeof($this->bookings) ): */?>
+        <p><?/*=$this->transEsc('Your bookings') */?></p>
+        <?/*=$this->render('myresearch/bookings/itemlist.phtml')*/?>
+    <?php /*else: */?>
+        <p><?/*=$this->transEsc('No bookings') */?></p>
+    <?php /*endif; */?>
+
+</div>
+
+<div class="<?/*= $this->layoutClass('sidebar') */?>">
+    <?/*= $this->context($this)->renderInContext("myresearch/menu.phtml", array('active' => 'bookings')) */?>
+</div>
+-->

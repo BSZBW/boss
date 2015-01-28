@@ -42,13 +42,22 @@ class Auth extends VFAuthHelper
 {
 
     /**
+     * Authentication classes where Ajax Login is not possible
+     * @var array
+     *
+     */
+    protected $noAjaxConfig;
+
+    /**
      * Constructor
      *
      * @param \VuFind\Auth\Manager $manager Authentication manager
      */
-    public function __construct(\VuFind\Auth\Manager $manager)
+    public function __construct(\VuFind\Auth\Manager $manager, array $noAjaxConfig)
     {
         parent::__construct($manager);
+        $this->noAjaxConfig = $noAjaxConfig;
+
     }
 
     /**
@@ -58,5 +67,12 @@ class Auth extends VFAuthHelper
     {
         return $this->getManager()->getLoginTargets();
     }
+
+
+    public function isAjaxLoginAllowed()
+    {
+        return ! in_array($this->getManager()->getAuthClassForTemplateRendering(),$this->noAjaxConfig) ;
+    }
+
 
 }
