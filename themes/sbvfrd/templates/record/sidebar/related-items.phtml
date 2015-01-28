@@ -42,3 +42,18 @@ $prevTitles = $this->driver->getPreviousTitles(); ?>
             </ul>
         <?php endif; ?>
 <?php endif; ?>
+
+<?php if ($searchClassId === 'Summon'): ?>
+<?php $journalTitle = $this->driver->getContainerTitle(); ?>
+<?php $viewRecord = $this->record($this->driver); ?>
+<?php if (!empty($journalTitle)): ?>
+    <?php $contentDisplayed = true; ?>
+
+    <h4 class="list-group-item title"><?=$this->transEsc('More Summon results')?></h4>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <a href="<?= $viewRecord->getLink('journaltitle', $journalTitle)?>"><?=$this->escapeHtml($journalTitle) ?></a>
+        </li>
+    </ul>
+<?php endif; ?>
+<?php endif; ?>

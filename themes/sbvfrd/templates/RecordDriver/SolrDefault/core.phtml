@@ -39,6 +39,11 @@ if ($searchClassId != 'Summon') {
 else {
     $urls = null;
     $openUrl = null;
+    $link360 = $record->getLink();
+    $openURL = $record->getOpenURL();
+    $linkSFX = $this->openUrl($openURL);
+    $linkSFX_param = 'title = "' . $this->transEsc('articles.linkSFX') . '" target="_blank"';
+    $linkSFX = str_replace("<a ", "<a $linkSFX_param ", $linkSFX);
 }
 ?>
 
@@ -117,7 +122,7 @@ else {
     <? if (!empty($journalTitle)): ?>
       <span class="label"><?=$this->transEsc('Journal Title')?>:</span>
       <span>
-        <a href="<?= $viewRecord->getLink('journaltitle', $journalTitle)?>"><?=$this->escapeHtml($journalTitle)?></a>
+        <?=$this->escapeHtml($journalTitle) . ',' . ' '?>
         <? if (!empty($ref)) { echo $this->escapeHtml($ref); } ?>
       </span><br />
       <? endif; ?>
@@ -164,6 +169,17 @@ else {
             <?=$this->openUrl($openUrl)?><br/>
           <? endif; ?>
         </span><br />
+      <? endif; ?>
+
+      <? if (!empty($link360 || $linkSFX)): ?>
+        <span class="label"><?= $this->transEsc('Get full text') ?>: </span>
+        <a title="<?= $this->transEsc('articles.link360') ?>" class="linkbutton primary icon_link_primary"
+           target="_blank" href="<?= $link360 ?>">
+            <span>get&#160;it</span></a><br/>
+
+        <span class="label">SFX Services:</span>
+        <?= $linkSFX ?>
+        <br/>
       <? endif; ?>
 
       <?php if (!empty($showFRBR) && $showFRBR && !empty($groupID)) : ?>
