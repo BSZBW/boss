@@ -15,7 +15,7 @@ if (!empty($item['opac_note'])) {
 }
 
 if (isset($item['locationMap']) && $item['locationMap']) {
-  $mapLink = '<a href="' . $item['locationMap'] . '" class="holdingMapLink">' . $this->transEsc('Show_Location_Map') . '</a>';
+  $mapLink = '<a href="' . $item['locationMap'] . '" title="' . $this->transEsc('Show_Location_Map') . '" class="holdingMapLink">' . '<i class="fa fa-map-marker"></i></a>';
 }
 
 ?>
@@ -27,8 +27,7 @@ if (isset($item['locationMap']) && $item['locationMap']) {
     <?= $mapLink ?>
     <?php if (isset($item['institutionUrl'])): ?>
       <?php $wrappedURL = $this->redirectProtocolWrapper()->getWrappedURL($item['institutionUrl']) ?>
-      <a href="<?= $this->escapeHtml($wrappedURL) ?>" class="bibinfo" target="_blank"
-         title="<?= $this->transEsc('Library_Information') ?>"></a>
+      <a href="<?= $this->escapeHtml($wrappedURL) ?>" target="_blank" title="<?=$this->transEsc('Library_Information')?>"> <i class="fa fa-info-circle"></i></a>
     <?php endif; ?>
   </td>
   <td><?= $this->escapeHtml($item['signature']) ?></td>
