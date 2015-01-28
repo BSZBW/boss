@@ -306,11 +306,6 @@ return array(
                     'series' => 'Swissbib\VuFind\Hierarchy\Factory::getHierarchyDriverSeries',
                 )
             ),
-            'hierarchy_treerenderer'   => array(
-                'invokables' => array(
-                    'jstree' => 'Swissbib\VuFind\Hierarchy\TreeRenderer\JSTree'
-                )
-            ),
             'hierarchy_treedatasource' =>  array(
                 'factories' => array(
                     'solr' => 'Swissbib\VuFind\Hierarchy\Factory::getSolrTreeDataSource',
