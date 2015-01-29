@@ -29,6 +29,7 @@
 namespace Swissbib\VuFind\Hierarchy;
 use Zend\ServiceManager\ServiceManager;
 use Swissbib\VuFind\Hierarchy\TreeDataSource\Solr as TreeDataSourceSolr;
+use Swissbib\VuFind\Hierarchy\TreeRenderer\JSTree as SwissbibJsTree;
 
 
 
@@ -49,20 +50,46 @@ class Factory
 
     /**
      * @param ServiceManager $sm
-     * @return Solr
+     * @return \Swissbib\VuFind\Hierarchy\TreeDataSource\Solr
      */
     public static function getSolrTreeDataSource(ServiceManager $sm)
     {
         $cacheDir = $sm->getServiceLocator()->get('VuFind\CacheManager')->getCacheDir(false);
 
+        $hierarchyFilters = $sm->getServiceLocator()->get('VuFind\Config')
+            ->get('HierarchyDefault');
+
+        $filters = isset($hierarchyFilters->HierarchyTree->filterQueries)
+            ? $hierarchyFilters->HierarchyTree->filterQueries->toArray()
+            : array();
+
+
         return new TreeDataSourceSolr(
             $sm->getServiceLocator()->get('VuFind\Search'),
-            rtrim($cacheDir, '/') . '/hierarchy'
+            rtrim($cacheDir, '/') . '/hierarchy',
+            $filters
         );
     }
 
     public static function getHierarchyDriverSeries(ServiceManager $sm)
     {
+        //Todo: Question GH:
+        //Why this additional Factory method? Here we use another VuFind Factory method which could be called directly
+        // by the client in need for this type.
         return \VuFind\Hierarchy\Driver\Factory::get($sm->getServiceLocator(), 'HierarchySeries');
+    }
+
+
+    /**
+     * @param ServiceManager $sm
+     * @return \Swissbib\VuFind\Hierarchy\TreeRenderer\JSTree
+     */
+    public static function getJSTree(ServiceManager $sm)
+    {
+        return new SwissbibJsTree(
+            $sm->getServiceLocator()->get('ControllerPluginManager')->get('Url')
+        );
+
+
     }
 }

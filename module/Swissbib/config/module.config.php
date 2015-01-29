@@ -311,6 +311,11 @@ return array(
                     'solr' => 'Swissbib\VuFind\Hierarchy\Factory::getSolrTreeDataSource',
                 )
             ),
+            'hierarchy_treerenderer'   => array(
+                'factories' => array(
+                    'jstree' => 'Swissbib\VuFind\Hierarchy\Factory::getJSTree'
+                )
+            ),
             'recordtab'                => array(
                 'invokables' => array(
                     'articledetails' => 'Swissbib\RecordTab\ArticleDetails',
