@@ -30,6 +30,10 @@ class Solr extends VuFindTreeDataSourceSolr
     /**
      * @inheritDoc
      * @note Just changed the hard limit for child records to prevent timeouts
+     *
+     * @todo : Seit dem Wechsel zu JSON-Hierarchien ist diese Funktion (bzw. die ganze Subklasse) obsolet.
+     *         Falls es notwendig wird, die Limite von 500 Children wieder einzuführen, kann hier eine Funktion
+     *         getChildrenJson erstellt werden. Diese bleibt zu Dokumentationszwecken hier erhalten (osc/30.01.2015)
      */
     protected function getChildren($parentID, &$count)
     {

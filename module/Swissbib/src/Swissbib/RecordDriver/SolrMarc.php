@@ -1653,20 +1653,6 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
 
 
     /**
-     * Get hierarchy type
-     * Directly use driver config
-     *
-     * @return bool|string
-     */
-    public function getHierarchyType()
-    {
-        $type = parent::getHierarchyType();
-
-        return $type ? $type : $this->mainConfig->Hierarchy->driver;
-    }
-
-
-    /**
      * Get marc field
      *
      * @param    Integer $index
