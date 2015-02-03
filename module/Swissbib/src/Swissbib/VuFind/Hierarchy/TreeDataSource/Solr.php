@@ -1,8 +1,37 @@
 <?php
+/**
+ * Hierarchy Tree Data Source (Solr)
+ *
+ * PHP version 5
+ *
+ * Copyright (C) Basel University Library, project swissbib
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ * @category VuFind2
+ * @package  HierarchyTree_DataSource
+ * @author   Oliver Schihin <oliver.schihin@unibas.ch>
+ * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     http://vufind.org/wiki/vufind2:hierarchy_components Wiki
+ * @link     http://www.swissbib.org
+ */
 namespace Swissbib\VuFind\Hierarchy\TreeDataSource;
 
 use VuFind\Hierarchy\TreeDataSource\Solr as VuFindTreeDataSourceSolr;
 use VuFindSearch\Query\Query;
+use VuFindSearch\Service as SearchService;
+use VuFindSearch\ParamBag;
 
 /**
  * Override Solr tree data source
@@ -10,78 +39,89 @@ use VuFindSearch\Query\Query;
  */
 class Solr extends VuFindTreeDataSourceSolr
 {
-    /** New child record limit to prevent timeout */
-    protected $CHILD_LIMIT = 500;
+    /**
+     * Search service
+     *
+     * @var SearchService
+     */
+    protected $searchService;
 
+    /**
+     * Cache directory
+     *
+     * @var string
+     */
+    protected $cacheDir = null;
+
+    /**
+     * Filter queries
+     *
+     * @var array
+     */
+    protected $filters = array();
 
 
     /**
-     * Set limit for child nodes to prevent memory problems
+     * Get Solr Children for JSON
      *
-     * @param    Integer        $limit
-     */
-    public function setTreeChildLimit($limit)
-    {
-        $this->CHILD_LIMIT = intval($limit);
-    }
-
-
-
-    /**
-     * @inheritDoc
-     * @note Just changed the hard limit for child records to prevent timeouts
+     * @param string $parentID The starting point for the current recursion
+     * (equivlent to Solr field hierarchy_parent_id)
+     * @param string &$count   The total count of items in the tree
+     * before this recursion
      *
-     * @todo : Seit dem Wechsel zu JSON-Hierarchien ist diese Funktion (bzw. die ganze Subklasse) obsolet.
-     *         Falls es notwendig wird, die Limite von 500 Children wieder einzuführen, kann hier eine Funktion
-     *         getChildrenJson erstellt werden. Diese bleibt zu Dokumentationszwecken hier erhalten (osc/30.01.2015)
+     * @return string
      */
-    protected function getChildren($parentID, &$count)
+    protected function getChildrenJson($parentID, &$count)
     {
-        $query   = new Query(
+        $query = new Query(
             'hierarchy_parent_id:"' . addcslashes($parentID, '"') . '"'
         );
-        $results = $this->searchService->search('Solr', $query, 0, $this->CHILD_LIMIT);
+        $results = $this->searchService->search(
+            'Solr', $query, 0, 10000,
+            new ParamBag(array('fq' => $this->filters, 'hl' => 'false', 'fl' => 'id, title_in_hierarchy, hierarchy_parent_id, hierarchy_sequence, hierarchy_top_title, title'))
+        );
         if ($results->getTotal() < 1) {
             return '';
         }
-        $xml     = array();
+        $json = array();
         $sorting = $this->getHierarchyDriver()->treeSorting();
 
         foreach ($results->getRecords() as $current) {
             ++$count;
-            if ($sorting) {
-                $positions = $current->getHierarchyPositionsInParents();
-                $titles = $current->getTitlesInHierarchy();
-                if (isset($positions[$parentID])) {
-                    $sequence = $positions[$parentID];
-                }
-                if (is_array($titles)) {
-                    $title = $titles[$parentID];
-                }
-                else {
-                    $title = $current->getTitle();
+
+            $titles = $current->getTitlesInHierarchy();
+            $title = isset($titles[$parentID])
+                ? $titles[$parentID] : $current->getTitle();
+
+            $this->debug("$parentID: " . $current->getUniqueID());
+            $childNode = array(
+                'id' => $current->getUniqueID(),
+                'type' => $current->isCollection()
+                    ? 'collection'
+                    : 'record',
+                'title' => htmlspecialchars($title)
+            );
+            if ($current->isCollection()) {
+                $children = $this->getChildrenJson(
+                    $current->getUniqueID(),
+                    $count
+                );
+                if (!empty($children)) {
+                    $childNode['children'] = $children;
                 }
             }
 
-            $this->debug("$parentID: " . $current->getUniqueID());
-            $xmlNode      = '';
-            $isCollection = $current->isCollection() ? "true" : "false";
-            $xmlNode .= '<item id="' . htmlspecialchars($current->getUniqueID()) .
-                    '" isCollection="' . $isCollection . '"><content><name>' .
-                    htmlspecialchars($title) . '</name></content>';
-            $xmlNode .= $this->getChildren($current->getUniqueID(), $count);
-            $xmlNode .= '</item>';
-            array_push($xml, array((isset($sequence) ? $sequence : 0), $xmlNode));
+            // If we're in sorting mode, we need to create key-value arrays;
+            // otherwise, we can just collect flat values.
+            if ($sorting) {
+                $positions = $current->getHierarchyPositionsInParents();
+                $sequence = isset($positions[$parentID]) ? $positions[$parentID] : 0;
+                $json[] = array($sequence, $childNode);
+            } else {
+                $json[] = $childNode;
+            }
         }
 
-        if ($sorting) {
-            $this->sortNodes($xml, 0);
-        }
-
-        $xmlReturnString = '';
-        foreach ($xml as $node) {
-            $xmlReturnString .= $node[1];
-        }
-        return $xmlReturnString;
+        return $sorting ? $this->sortNodes($json) : $json;
     }
 }

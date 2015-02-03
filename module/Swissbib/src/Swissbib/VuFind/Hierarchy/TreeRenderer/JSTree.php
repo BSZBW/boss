@@ -119,9 +119,9 @@ class JSTree extends VfJsTree implements ServiceLocatorAwareInterface
      */
     protected function transformCollectionXML($context, $mode, $hierarchyID, $recordID)
     {
-        $xmlFile = $this->getDataSource()->getXML($hierarchyID);
+        $jsonFile = $this->getDataSource()->getJSON($hierarchyID);
 
-        if (empty($xmlFile)) {
+        if (empty($jsonFile)) {
             return 'Missing data for tree rendering';
         }
 
