@@ -449,7 +449,7 @@ var swissbib = {
       Lightbox.addCloseAction(function(){document.location.reload(true);});
     }
 
-    console.log(window.location.pathname.substring('Search/History'));
+    //console.log(window.location.pathname.substring('Search/History'));
 
     if(window.location.pathname.indexOf('Search/History') !== -1) {
       Lightbox.addCloseAction(function(){document.location.reload(true);});

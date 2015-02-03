@@ -257,7 +257,9 @@ swissbib.AdvancedSearch = {
 
 
   removeField: function (groupIndex, fieldIndex) {
-    console.log(groupIndex, fieldIndex);
+    //remove console object because of IE8 / IE9 incompatibility
+    //http://stackoverflow.com/questions/690251/what-happened-to-console-log-in-ie8
+    //console.log(groupIndex, fieldIndex);
     this.fieldCount[groupIndex]--;
     $('#search_field_row_' + groupIndex + '_' + fieldIndex).remove();
   },
