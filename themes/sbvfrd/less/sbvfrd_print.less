@@ -89,7 +89,7 @@
 
             }
 
-            /* Dataset Entries */
+            /* Meta Data */
             .meta span
             {
                 display: inline;
@@ -131,18 +131,39 @@
     /* -------------------------------------------------------------------------------------
      Detail (Vollanzeige)
      ======================================================================================*/
-    /* titles */
-    div#record h3 {
-        font-size: 16px;
-        margin-top: 0px;
-        margin-bottom: 0px;
-    }
+    /* Meta Data */
+    div#record > .row {
 
-    div#record h4 {
-        font-size: 13px;
-        font-weight: normal;
-        margin-top: 0;
-        margin-bottom: 8px;
+        #savedLists
+        {
+            display: none;
+        }
+
+        h3 {
+            font-size: 16px;
+
+        }
+
+        h4 {
+            font-size: 13px;
+            font-weight: normal;
+        }
+
+        .meta
+        {
+            font-size: 11px;
+
+            .label
+            {
+                font-size: inherit !important;
+            }
+
+            span
+            {
+                display: inline;
+            }
+        }
+
     }
 
     /* tabs title */
