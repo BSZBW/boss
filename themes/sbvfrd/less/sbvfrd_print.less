@@ -3,10 +3,15 @@
     /* -------------------------------------------------------------------------------------
      General Rules
      ======================================================================================*/
-    body {
-        font-family: 'Open Sans', sans-serif;
-        font-size: 13px;
-        line-height: 1.5;
+
+
+
+
+     * {
+         /*font-family: 'Open Sans', sans-serif;
+         font-size: 11px;
+         line-height: 1;
+         */
 
     }
 
@@ -30,7 +35,14 @@
         font-size: 13px;
         padding-right: 5px;
         border: none;
+        display: inline-block !important;
     }
+
+    /* Pfeil Liste Libraries
+    .a-before {
+        display: none !important;
+    }
+    */
 
     /* -------------------------------------------------------------------------------------
      Lists (Trefferliste/Merkliste)
@@ -39,6 +51,7 @@
 
         div.results-top h1 {
             font-size: 18px;
+            float: none;
 
             i.fa, span {
                 font-size: inherit;
@@ -59,6 +72,11 @@
         .row.result {
             border-top: 1px solid #AAAAAA;
 
+            .col-xs-10
+            {
+                width: 60%;
+            }
+
 
             h2 {
                 font-size: 16px;
@@ -69,6 +87,11 @@
 
             span#subtitle {
 
+            }
+
+            .meta span
+            {
+                display: inline;
             }
 
             /* Media Info */
@@ -89,6 +112,7 @@
                 display: block;
                 position: relative;
                 border: none;
+                max-height: none;
 
                 li a {
                     padding: 0px;
