@@ -101,15 +101,18 @@ class Solr extends VuFindTreeDataSourceSolr
                     : 'record',
                 'title' => htmlspecialchars($title)
             );
-            if ($current->isCollection()) {
-                $children = $this->getChildrenJson(
-                    $current->getUniqueID(),
-                    $count
+            // here, the logic seems to have changed with respect to ::getChildren (creating xml caches). Beforehand, the
+            // building of subchildren were not dependent on the type collection=true/false
+            // commentend this out to get old behaviour
+            //if ($current->isCollection()) {
+            $children = $this->getChildrenJson(
+                $current->getUniqueID(),
+                $count
                 );
-                if (!empty($children)) {
-                    $childNode['children'] = $children;
+            if (!empty($children)) {
+                $childNode['children'] = $children;
                 }
-            }
+            //}
 
             // If we're in sorting mode, we need to create key-value arrays;
             // otherwise, we can just collect flat values.
