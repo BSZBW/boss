@@ -7,6 +7,7 @@ use VuFindSearch\Query\QueryGroup;
 use VuFindSearch\ParamBag;
 
 use Swissbib\Favorites\Manager;
+use VuFind\Search\Solr\SpellingProcessor;
 
 /**
  * Class to extend the core VF2 SOLR functionality related to Solr Results
@@ -21,58 +22,11 @@ class Results extends VuFindSolrResults
 
 
     /**
-     * Create backend parameters
-     * Add facet queries for user institutions
-     *
-     * @param    AbstractQuery    $query
-     * @param    Params            $params
-     * @return    ParamBag
+     * @var SpellingResults
      */
-
-    /*
-     * GH 19.12.2014 test it if we need it
-    protected function createBackendParameters(AbstractQuery $query, Params $params)
-    {
+    protected $sbSuggestions;
 
 
-        //obsolete function
-        //$backendParams = parent::createBackendParameters($query, $params);
-
-        //with SOLR 4.3 AND is no longer the default parameter
-        //$backendParams->add("q.op", "AND");
-
-        //$backendParams = $this->addUserInstitutions($backendParams);
-
-        //return $backendParams;
-    }
-    */
-
-
-    /*
-    GH 19.12.2014: test it if we need it
-
-    protected function createSpellcheckBackendParameters(AbstractQuery $query, Params $params)
-    {
-        $backendParams = parent::createBackendParameters($query, $params);
-
-        //with SOLR 4.3 AND is no longer the default parameter
-        $backendParams->add("q.op", "AND");
-
-        $backendParams->add("spellcheck", "true");
-        $spelling = $query->getAllTerms();
-        if ($spelling) {
-            $backendParams->set('spellcheck.q', $spelling);
-            $this->spellingQuery = $spelling;
-        }
-
-
-
-        //$backendParams = $this->addUserInstitutions($backendParams);
-
-        return $backendParams;
-    }
-
-    */
 
 
     /**
@@ -332,58 +286,53 @@ class Results extends VuFindSolrResults
         $this->responseFacets = $collection->getFacets();
         $this->resultTotal = $collection->getTotal();
 
-        // Process spelling suggestions
-        //$spellcheck = $collection->getSpellcheck();
-        //$this->spellingQuery = $spellcheck->getQuery();
-        //$this->suggestions = $this->getSpellingProcessor()
-        //    ->getSuggestions($spellcheck, $this->getParams()->getQuery());
-
-        // Construct record drivers for all the items in the response:
-        //$this->results = $collection->getRecords();
-
 
         if ($this->resultTotal == 0) {
 
             //we use spellchecking only in case of 0 hits
 
-            //$params = $this->createSpellcheckBackendParameters($query, $this->getParams());
-            //$collectionSpell = $this->getSearchService()
-            //    ->search($this->backendId, $query, $offset, $limit, $params);
-
-            // Process spelling suggestions
-            //$spellcheck = $collectionSpell->getSpellcheck();
-            //$this->processSpelling($spellcheck);
-
             $params = $this->getParams()->getSpellcheckBackendParameters();
             try {
-                $collectionSpelling = $searchService
+                $recordCollectionSpellingQuery = $searchService
                     ->search($this->backendId, $query, $offset, $limit, $params);
             } catch (\VuFindSearch\Backend\Exception\BackendException $e) {
-                // If the query caused a parser error, see if we can clean it up:
-
-
-                //we don't throw spelling exceptions but we should
+                //todo: some kind of logging?
                 throw $e;
 
             }
 
 
-            // Process spelling suggestions
-            $spellcheck = $collectionSpelling->getSpellcheck();
+            // Processing of spelling suggestions
+            $spellcheck = $recordCollectionSpellingQuery->getSpellcheck();
             $this->spellingQuery = $spellcheck->getQuery();
-            $this->suggestions = $this->getSpellingProcessor()
+
+            //GH: I introduced a special type for suggestions provided by the SOLR index
+            //in opposition to the VF2 core implementation where a simple array structure is used
+            //a specialized type makes it much easier to use the suggestions in the view script
+            //the object variable suggestions is already used by VF2 core
+            $this->sbSuggestions = $this->getSpellingProcessor()
                 ->getSuggestions($spellcheck, $this->getParams()->getQuery());
 
-
+            //$this->suggestions = $this->getSpellingProcessor()
+            //    ->getSuggestions($spellcheck, $this->getParams()->getQuery());
 
         }
-
 
         // Construct record drivers for all the items in the response:
         $this->results = $collection->getRecords();
 
 
     }
+
+
+    public function getSpellingProcessor()
+    {
+        if (null === $this->spellingProcessor) {
+            $this->spellingProcessor = $this->getServiceLocator()->get("sbSpellingProcessor");
+        }
+        return $this->spellingProcessor;
+    }
+
 
     /*
      * Utility method to inspect multi domain translation for facets
@@ -421,6 +370,20 @@ class Results extends VuFindSolrResults
 
         return $translateInfo;
     }
+
+    /**
+     * Turn the list of spelling suggestions into an array of urls
+     *   for on-screen use to implement the suggestions.
+     *
+     * @return array Spelling suggestion data arrays
+     */
+    public function getSpellingSuggestions()
+    {
+
+        return $this->sbSuggestions;
+
+    }
+
 
 
 

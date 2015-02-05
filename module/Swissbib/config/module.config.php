@@ -208,6 +208,8 @@ return array(
             'Swissbib\RecordDriver\SolrDefaultAdapter'      =>  'Swissbib\RecordDriver\Factory::getSolrDefaultAdapter',
             'VuFind\Translator'                             =>  'Swissbib\Services\Factory::getTranslator',
             'VuFind\Export'                                 =>  'Swissbib\Services\Factory::getExport',
+            'sbSpellingProcessor'                            =>  'Swissbib\VuFind\Search\Solr\Factory::getSpellchecker',
+            'sbSpellingResults'                            =>  'Swissbib\VuFind\Search\Solr\Factory::getSpellingResults',
 
             'Swissbib\Hierarchy\SimpleTreeGenerator'        =>  'Swissbib\Hierarchy\Factory::getSimpleTreeGenerator',
             'Swissbib\Hierarchy\MultiTreeGenerator'         =>  'Swissbib\Hierarchy\Factory::getMultiTreeGenerator'

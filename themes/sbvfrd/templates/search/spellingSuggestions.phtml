@@ -1,0 +1,60 @@
+<?php
+    $suggestions = $this->results->getSpellingSuggestions();
+    $query = $this->results->getUrlQuery();
+?>
+    <?php if (!empty ($suggestions) &&  !is_array($suggestions) &&
+       $suggestions instanceof Swissbib\VuFind\Search\Solr\SpellingResults &&  $suggestions->hasSuggestions()) : ?>
+
+        <div class="alert alert-info">
+            suggestions for: <?= $suggestions->getSpellingQuery()->getString() ?>
+
+        </div>
+
+        <? if ($suggestions->hasCollocations()) :?>
+            <div class="alert alert-info">
+            <p>Collocation queries</p>
+            <? foreach($suggestions->getCollocationSuggestions() as $collocation) :?>
+                <p><a href="<?=$this->url('search-results')?>?lookfor=<?=urlencode($collocation['query'])?>"><?=$this->escapeHtml($collocation['query']) ?></a></p>
+            <? endforeach ?>
+            </div>
+        <? endif; ?>
+
+        <? if ($suggestions->hasTerms()) :?>
+            <div class="alert alert-info">
+                <p>suggestions based on single terms</p> <p>&nbsp;</p>
+                <? foreach($suggestions->getTermSuggestions() as $key => $termValues) :?>
+                    <div>
+                        <p>suggestions for: <?= $key ?></p>
+                        <? foreach ($termValues as $termValue): ?>
+                            <p><a href="<?=$this->url('search-results')?>?lookfor=<?=urlencode($termValue['query'])?>"><?=$this->escapeHtml($termValue['query']) ?></a></p>
+                        <? endforeach; ?>
+                        <? // paragraph element with nbsp is not really nice - look for better css classes?>
+                        <p>&nbsp;</p>
+
+                    </div>
+                <? endforeach ?>
+            </div>
+        <? endif; ?>
+    <? elseif (!empty ($suggestions) &&  is_array($suggestions)) : ?>
+        <?
+        // we have to expect an array type for suggestions delivered by Summon (actually it seems all the targets implemented by VF2 core deliver array structures for spelling suggestions
+        //which is not really nice...
+        foreach ($suggestions as $key => $suggestionValue):
+        ?>
+
+            <div class="alert alert-info">
+                suggestions for: <?= $key ?>
+                <? foreach ($suggestionValue as $keyValue) : ?>
+                    <? foreach ($keyValue as $value): ?>
+                        <p><a href="<?=$this->url('summon-search')?>?lookfor=<?=urlencode($value['new_term'])?>"><?=$this->escapeHtml($value['new_term']) ?></a></p>
+                    <? endforeach ?>
+
+                <? endforeach; ?>
+
+            </div>
+
+        <?  endforeach; ?>
+    <?php endif; ?>
+
+
+
