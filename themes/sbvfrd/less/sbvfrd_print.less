@@ -30,12 +30,6 @@
         display: inline-block !important;
     }
 
-    /* Pfeil Liste Libraries
-    .a-before {
-        display: none !important;
-    }
-    */
-
     /* -------------------------------------------------------------------------------------
      Lists (Trefferliste/Merkliste)
      ======================================================================================*/
@@ -125,7 +119,6 @@
             }
 
         }
-
     }
 
     /* -------------------------------------------------------------------------------------
@@ -163,22 +156,26 @@
                 display: inline;
             }
         }
-
     }
 
     /* Tabs */
 
+    //make sure titles of selected tabs are unhidden for print
+    ul.recordTabs li.hidden-xs.active
+    {
+        display: block !important;
+    }
+
     div#record-tabs {
         div.tab-pane {
 
+            /* tab-content Exemplare */
             .holdingsBox {
-
                 padding-top: 10px;
 
                 h3 {
                     font-size: 11px;
                     padding-bottom: 5px;
-
                 }
 
                 h4 {
@@ -186,19 +183,22 @@
                 }
             }
 
+            /* tab-content Reihe/Bände */
+            div#treeSearch {
+                display: none;
+            }
+
+            div#hierarchyTree {
+                i {
+                    display: none;
+                }
+
+                a {
+                    font-size: 11px;
+                }
+            }
         }
 
 
     }
-
-    /* tab-content Reihe Bände */
-    /*
-    div#record-tabs div.tab-pane div#treeSearch {
-        display: none;
-    }
-
-    div#record-tabs div.tab-pane div#hierarchyTree i {
-        display: none;
-    }
-*/
 }
