@@ -1899,10 +1899,12 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
      *
      * @return    Translator
      */
+    /*
     protected function getTranslator()
     {
         return $this->getServiceLocator()->get('VuFind/Translator');
     }
+    */
 
 
     /**
