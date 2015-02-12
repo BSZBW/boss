@@ -104,22 +104,6 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
           </div>
         <? endif; ?>
 
-        <? /* Hierarchy tree link */ ?>
-        <? $trees = $this->driver->tryMethod('getHierarchyTrees'); if (!empty($trees)): ?>
-          <? foreach ($trees as $hierarchyID => $hierarchyTitle): ?>
-              <input type="hidden" value="<?=$this->escapeHtmlAttr($hierarchyID)?>" class="hiddenHierarchyId hidden-print" />
-
-              <a class="hidden-print" href="<?=$this->recordLink()->getTabUrl($this->driver, 'HierarchyTree')?>?hierarchy=<?=urlencode($hierarchyID)?>#tabnav" title="<?=$this->transEsc('hierarchy_tree')?>">
-                <span><i class="fa fa-sitemap"></i></span>
-                <span class="hidden-xs hidden-sm"><span class="a-before"></span> <?=$this->transEsc('hierarchy_view_context')?>
-                    <? if (count($trees) > 1): ?>:
-                      <?=$this->escapeHtml($hierarchyTitle)?>
-                    <? endif; ?>
-                </span>
-              </a>
-          <? endforeach; ?>
-      <? endif; ?>
-
       <? if (!empty($showFRBR) && $showFRBR && !empty($groupID) && !strcmp($results->getParams()->getSearchHandler(), 'FRBR') == 0) : ?>
         <a class="hidden-print" href="<?= $this->url('search-results') . '?lookfor=' . $groupID . "&type=FRBR&limit=" . $results->getParams()->getLimit() . "&sort=publishDateSort+desc" ?>"
               class="btn-frbr" title="<?= $this->transEsc('FRBR_Button') ?>">
