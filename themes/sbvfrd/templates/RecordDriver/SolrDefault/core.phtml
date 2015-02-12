@@ -2,6 +2,7 @@
 $record         = $this->driver;
 $viewRecord     = $this->record($record);
 
+$id                   = $record->getUniqueId();
 $shortTitle           = $record->getShortTitle();
 $titleStatement       = $record->getTitleStatement(true);
 $subtitle             = $viewRecord->getSubtitle($titleStatement);
@@ -50,7 +51,7 @@ else {
 <div class="row" vocab="http://schema.org/" resource="#record" typeof="<?=$this->driver->getSchemaOrgFormats()?> Product">
 
   <div class="col-sm-3 hidden-xs">
-    <div class="thumbDetailView">
+    <div class="thumbDetailView hidden-print">
       <? /* Display thumbnail if appropriate: */ ?>
       <? $mediumThumb = $this->record($this->driver)->getThumbnail('medium'); $largeThumb = $this->record($this->driver)->getThumbnail('large'); ?>
       <? if ($mediumThumb): ?>
@@ -181,6 +182,11 @@ else {
         <?= $linkSFX ?>
         <br/>
       <? endif; ?>
+
+      <?php if ($id): ?>
+        <span class="label visible-print-inline"><?= $this->transEsc('Item_ID') ?>:</span>
+        <span class="visible-print-inline"><?= $id ?></span>
+      <?php endif; ?>
 
       <?php if (!empty($showFRBR) && $showFRBR && !empty($groupID)) : ?>
        <span class="hidden-xs">
