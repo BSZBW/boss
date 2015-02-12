@@ -169,16 +169,21 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
                         $params['rft.aucorp '][] = $corporation;
                     }
                 }
-                $publishers = $this->getPublishers();
-                if (count($publishers) > 0) {
-                    if (preg_match('/ : /', $publishers[0])) {
-                        $params['rft.place'] = preg_replace('/ : .*$/', '', $publishers[0]);
-                        $params['rft.pub'] = preg_replace('/^.* : /', '', $publishers[0]);
+
+                $publications = $this->getPublicationDetails();
+                foreach ($publications as $field) {
+                    $pubPlace = $field->getPlace();
+                    $pubName = $field->getName();
+
+                    if (!empty($pubPlace)) {
+                        $params['rft.place'] = preg_replace('/ : .*$/', '', $pubPlace);
                     }
-                    else {
-                        $params['rft.place'] = $publishers[0];
+                    if (!empty($pubName)) {
+                        $params['rft.pub'] = preg_replace('/^.* : /', '', $pubName);
                     }
                 }
+
+
                 $params['rft.edition'] = $this->getEdition();
                 $params['rft.isbn'] = $this->getCleanISBN();
                 break;
@@ -255,16 +260,21 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
                     foreach ($authors as $author) {
                         $params['rft.au'][] = $author;
                     }
-                }                $publishers = $this->getPublishers();
-                if (count($publishers) > 0) {
-                    if (preg_match('/ : /', $publishers[0])) {
-                        $params['rft.place'] = preg_replace('/ : .*$/', '', $publishers[0]);
-                        $params['rft.pub'] = preg_replace('/^.* : /', '', $publishers[0]);
+                }
+
+                $publications = $this->getPublicationDetails();
+                foreach ($publications as $field) {
+                    $pubPlace = $field->getPlace();
+                    $pubName = $field->getName();
+
+                    if (!empty($pubPlace)) {
+                        $params['rft.place'] = preg_replace('/ : .*$/', '', $pubPlace);
                     }
-                    else {
-                        $params['rft.place'] = $publishers[0];
+                    if (!empty($pubName)) {
+                        $params['rft.pub'] = preg_replace('/^.* : /', '', $pubName);
                     }
                 }
+
                 $params['rft.format'] = $format;
                 $langs = $this->getLanguages();
                 if (count($langs) > 0) {
