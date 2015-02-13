@@ -1,3 +1,7 @@
+<?php
+$favoriteLanguages = array('ger', 'eng', 'fre', 'ita');
+?>
+
 <? if (!empty($this->facetList) || !empty($this->checkboxFacets)): ?>
 <div class="row">
   <fieldset class="col-sm-12">
@@ -22,10 +26,23 @@
               }
               natcasesort($sorted);
             ?>
-            <? foreach ($sorted as $i => $display): ?>
-              <? $value = $list['list'][$i]; ?>
+
+            <?php if (strtolower($field)==="language") : ?>
+              <? foreach ($sorted as $index => $display): ?>
+                <? $value = $list['list'][$index]; ?>
+                <? if (in_array($value['value'], $favoriteLanguages)) : ?>
+                  <option value="<?=$this->escapeHtmlAttr(($value['operator'] == 'OR' ? '~' : '') . $field . ':"' . $value['value'] . '"')?>"<?=(isset($value['selected']) && $value['selected'])?' selected="selected"':''?>><?=$this->escapeHtml($display)?></option>
+                <? endif; ?>
+              <? endforeach; ?>
+
+              <optgroup label="<?= $this->transEsc('all_languages') ?>">
+            <?php endif; ?>
+
+              <? foreach ($sorted as $index => $display): ?>
+                <? $value = $list['list'][$index]; ?>
               <option value="<?=$this->escapeHtmlAttr(($value['operator'] == 'OR' ? '~' : '') . $field . ':"' . $value['value'] . '"')?>"<?=(isset($value['selected']) && $value['selected'])?' selected="selected"':''?>><?=$this->escapeHtml($display)?></option>
-            <? endforeach; ?>
+              <? endforeach; ?>
+
           </select>
         </div>
       <? endforeach; ?>
