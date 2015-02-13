@@ -34,11 +34,9 @@
 
 namespace Swissbib\RecordDriver;
 
-use Zend\I18n\Translator\Translator;
+use Zend\I18n\Translator\TranslatorInterface as Translator;
 use Zend\ServiceManager\ServiceLocatorInterface;
-
 use VuFind\RecordDriver\SolrMarc as VuFindSolrMarc;
-
 use Swissbib\RecordDriver\Helper\Holdings as HoldingsHelper;
 
 class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver

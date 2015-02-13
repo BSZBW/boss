@@ -2,7 +2,8 @@
 namespace Swissbib\RecordDriver\Helper;
 
 use Zend\Config\Config;
-use Zend\I18n\Translator\Translator;
+use Zend\I18n\Translator\TranslatorInterface as Translator;
+
 
 use Swissbib\RecordDriver\SolrMarc;
 

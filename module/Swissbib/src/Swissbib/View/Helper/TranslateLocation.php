@@ -1,7 +1,6 @@
 <?php
 namespace Swissbib\View\Helper;
 
-use Zend\I18n\Translator\Translator;
 use Zend\I18n\View\Helper\AbstractTranslatorHelper;
 
 /**
