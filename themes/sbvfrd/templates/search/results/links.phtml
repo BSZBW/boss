@@ -10,11 +10,11 @@ $linkSFX = str_replace("<a ", "<a $linkSFX_param ", $linkSFX);
 
 
 
-    <a title="<?= $this->transEsc('articles.link360') ?>" class="linkbutton primary icon_link_primary"
+    <a title="<?= $this->transEsc('articles.link360') ?>" id="getit" class="linkbutton primary icon_link_primary btn btn-primary"
    target="_blank" href="<?= $link360 ?>">
-      <span class="memorizelistadd"><i class="fa fa-list-ul"></i></span>
-      <span class="hidden-xs hidden-sm"><span class="a-before"></span>get&#160;it</span>
-   </a>
+      <i class="fa fa-share"></i>
+      <span class="hidden-xs hidden-sm">get&#160;it</span>
+   </a></br>
 
     <?= $linkSFX ?>
 
