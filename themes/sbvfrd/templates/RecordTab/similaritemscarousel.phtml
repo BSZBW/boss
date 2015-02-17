@@ -23,7 +23,7 @@
                   <img src="<?=$thumb ?>" title="<?=$data->getTitle() ?>"/>
                 <? else: ?>
                   <? $thumb = $this->record($data)->getThumbnailPlaceholder(); ?>
-                  <div class="thumbico <?= $thumb ?> bigico" title="<?=$data->getTitle() ?>"/>
+                  <div class="thumbico <?= $thumb ?> bigico" title="<?=$data->getTitle() ?>"></div>
                 <? endif; ?>
                 <div class="content">
                   <? $formats = $data->getFormats(); ?>
