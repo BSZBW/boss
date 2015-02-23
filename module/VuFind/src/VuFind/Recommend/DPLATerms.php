@@ -110,8 +110,6 @@ class DPLATerms implements RecommendInterface
     }
 
     /**
-     * setConfig
-     *
      * Store the configuration of the recommendation module.
      *
      * @param string $settings Settings from searches.ini.
@@ -131,6 +129,7 @@ class DPLATerms implements RecommendInterface
      * request.
      *
      * @return void
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function init($params, $request)
@@ -139,8 +138,6 @@ class DPLATerms implements RecommendInterface
     }
 
     /**
-     * process
-     *
      * Called after the Search Results object has performed its main search.  This
      * may be used to extract necessary information from the Search Results object
      * or to perform completely unrelated processing.
@@ -195,7 +192,7 @@ class DPLATerms implements RecommendInterface
             'fields' => implode(',', $this->returnFields),
             'api_key' => $this->apiKey
         );
-        foreach ($filters as $field=>$filter) {
+        foreach ($filters as $field => $filter) {
             if (isset($this->formatMap[$field])) {
                 $params[$this->formatMap[$field]] = implode(',', $filter);
             }
@@ -225,7 +222,7 @@ class DPLATerms implements RecommendInterface
                     'provider' => is_array($doc->dataProvider)
                         ? current($doc->dataProvider)
                         : $doc->dataProvider,
-                    'link' => 'http://dp.la/item/'.$doc->id
+                    'link' => 'http://dp.la/item/' . $doc->id
                 );
                 if (isset($doc->$desc)) {
                     $results[$i]['desc'] = is_array($doc->$desc)

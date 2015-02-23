@@ -57,8 +57,6 @@ class TopFacets extends AbstractFacets
     protected $baseSettings;
 
     /**
-     * setConfig
-     *
      * Store the configuration of the recommendation module.
      *
      * TopFacets:[ini section]:[ini name]
@@ -72,7 +70,7 @@ class TopFacets extends AbstractFacets
     public function setConfig($settings)
     {
         $settings = explode(':', $settings);
-        $mainSection = empty($settings[0]) ? 'ResultsTop':$settings[0];
+        $mainSection = empty($settings[0]) ? 'ResultsTop' : $settings[0];
         $iniName = isset($settings[1]) ? $settings[1] : 'facets';
 
         // Load the desired facet information:
@@ -91,8 +89,6 @@ class TopFacets extends AbstractFacets
     }
 
     /**
-     * init
-     *
      * Called at the end of the Search Params objects' initFromRequest() method.
      * This method is responsible for setting search parameters needed by the
      * recommendation module and for reading any existing search parameters that may

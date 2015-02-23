@@ -224,7 +224,7 @@ class AjaxController extends AbstractBase
 
         // Loop through all the status information that came back
         $statuses = array();
-        foreach ($results as $recordNumber=>$record) {
+        foreach ($results as $recordNumber => $record) {
             // Filter out suppressed locations:
             $record = $this->filterSuppressedLocations($record);
 
@@ -531,7 +531,7 @@ class AjaxController extends AbstractBase
             $headers->addHeaderLine(
                 'Expires', 'Mon, 26 Jul 1997 05:00:00 GMT'
             );
-            $output = array('data'=>$data,'status'=>$status);
+            $output = array('data' => $data,'status' => $status);
             if ('development' == APPLICATION_ENV && count(self::$php_errors) > 0) {
                 $output['php_errors'] = self::$php_errors;
             }
@@ -554,8 +554,8 @@ class AjaxController extends AbstractBase
      */
     public static function storeError($errno, $errstr, $errfile, $errline)
     {
-        self::$php_errors[] = "ERROR [$errno] - ".$errstr."<br />\n"
-            . " Occurred in ".$errfile." on line ".$errline.".";
+        self::$php_errors[] = "ERROR [$errno] - " . $errstr . "<br />\n"
+            . " Occurred in " . $errfile . " on line " . $errline . ".";
         return true;
     }
 
@@ -665,7 +665,7 @@ class AjaxController extends AbstractBase
         // Build data structure for return:
         $tagList = array();
         foreach ($tags as $tag) {
-            $tagList[] = array('tag'=>$tag->tag, 'cnt'=>$tag->cnt);
+            $tagList[] = array('tag' => $tag->tag, 'cnt' => $tag->cnt);
         }
 
         // If we don't have any tags, provide a user-appropriate message:
@@ -683,8 +683,8 @@ class AjaxController extends AbstractBase
      *
      * @param array $fields Solr fields to retrieve data from
      *
-     * @author   Chris Hallberg <crhallberg@gmail.com>
-     * @author   Lutz Biedinger <lutz.biedinger@gmail.com>
+     * @author Chris Hallberg <crhallberg@gmail.com>
+     * @author Lutz Biedinger <lutz.biedinger@gmail.com>
      *
      * @return \Zend\Http\Response
      */
@@ -697,7 +697,7 @@ class AjaxController extends AbstractBase
 
         $facets = $results->getFullFieldFacets($fields, false);
 
-        $markers=array();
+        $markers = array();
         $i = 0;
         $list = isset($facets['long_lat']['data']['list'])
             ? $facets['long_lat']['data']['list'] : array();
@@ -718,8 +718,8 @@ class AjaxController extends AbstractBase
     /**
      * Get entry information on entries tied to a specific map location
      *
-     * @author   Chris Hallberg <crhallberg@gmail.com>
-     * @author   Lutz Biedinger <lutz.biedinger@gmail.com>
+     * @author Chris Hallberg <crhallberg@gmail.com>
+     * @author Lutz Biedinger <lutz.biedinger@gmail.com>
      *
      * @return mixed
      */
@@ -748,8 +748,8 @@ class AjaxController extends AbstractBase
      *
      * @param array $fields Solr fields to retrieve data from
      *
-     * @author   Chris Hallberg <crhallberg@gmail.com>
-     * @author   Till Kinstler <kinstler@gbv.de>
+     * @author Chris Hallberg <crhallberg@gmail.com>
+     * @author Till Kinstler <kinstler@gbv.de>
      *
      * @return \Zend\Http\Response
      */
@@ -878,7 +878,7 @@ class AjaxController extends AbstractBase
         $ids = $this->params()->fromPost('ids', array());
         if (empty($ids)) {
             return $this->output(
-                array('result'=>$this->translate('bulk_error_missing')),
+                array('result' => $this->translate('bulk_error_missing')),
                 self::STATUS_ERROR
             );
         }
@@ -1021,7 +1021,7 @@ class AjaxController extends AbstractBase
         try {
             // Check captcha
             $this->recaptcha()->setErrorMode('throw');
-            $useRecaptcha = $this->recaptcha()->active('sms');
+            $useRecaptcha = $this->recaptcha()->active('email');
             // Process form submission:
             if (!$this->formWasSubmitted('id', $useRecaptcha)) {
                 throw new \Exception('recaptcha_not_passed');
@@ -1031,20 +1031,17 @@ class AjaxController extends AbstractBase
                 $this->params()->fromPost('id'),
                 $this->params()->fromPost('source', 'VuFind')
             );
-            $view = $this->createEmailViewModel();
             $mailer = $this->getServiceLocator()->get('VuFind\Mailer');
+            $view = $this->createEmailViewModel(
+                null, $mailer->getDefaultRecordSubject($record)
+            );
+            $mailer->setMaxRecipients($view->maxRecipients);
+            $cc = $this->params()->fromPost('ccself') && $view->from != $view->to
+                ? $view->from : null;
             $mailer->sendRecord(
                 $view->to, $view->from, $view->message, $record,
-                $this->getViewRenderer()
+                $this->getViewRenderer(), $view->subject, $cc
             );
-            if ($this->params()->fromPost('ccself')
-                && $view->from != $view->to
-            ) {
-                $mailer->sendRecord(
-                    $view->from, $view->from, $view->message, $record,
-                    $this->getViewRenderer()
-                );
-            }
             return $this->output(
                 $this->translate('email_success'), self::STATUS_OK
             );
@@ -1085,20 +1082,26 @@ class AjaxController extends AbstractBase
 
         // Attempt to send the email:
         try {
-            $view = $this->createEmailViewModel();
+            // Check captcha
+            $this->recaptcha()->setErrorMode('throw');
+            $useRecaptcha = $this->recaptcha()->active('email');
+            // Process form submission:
+            if (!$this->formWasSubmitted('url', $useRecaptcha)) {
+                throw new \Exception('recaptcha_not_passed');
+            }
+
             $mailer = $this->getServiceLocator()->get('VuFind\Mailer');
+            $defaultSubject = $this->params()->fromQuery('cart')
+                ? $this->translate('bulk_email_title')
+                : $mailer->getDefaultLinkSubject();
+            $view = $this->createEmailViewModel(null, $defaultSubject);
+            $mailer->setMaxRecipients($view->maxRecipients);
+            $cc = $this->params()->fromPost('ccself') && $view->from != $view->to
+                ? $view->from : null;
             $mailer->sendLink(
                 $view->to, $view->from, $view->message, $url,
-                $this->getViewRenderer(), $this->params()->fromPost('subject')
+                $this->getViewRenderer(), $view->subject, $cc
             );
-            if ($this->params()->fromPost('ccself')
-                && $view->from != $view->to
-            ) {
-                $mailer->sendLink(
-                    $view->from, $view->from, $view->message, $url,
-                    $this->getViewRenderer(), $this->params()->fromPost('subject')
-                );
-            }
             return $this->output(
                 $this->translate('email_success'), self::STATUS_OK
             );
@@ -1305,7 +1308,7 @@ class AjaxController extends AbstractBase
         $ids = $this->params()->fromPost('ids');
         if (empty($ids)) {
             return $this->output(
-                array('result'=>$this->translate('bulk_error_missing')),
+                array('result' => $this->translate('bulk_error_missing')),
                 self::STATUS_ERROR
             );
         }

@@ -6,14 +6,13 @@ use Zend\Console\Console;
 use Zend\EventManager\Event;
 use Zend\Mvc\MvcEvent;
 use Zend\Console\Request as ConsoleRequest;
-use Zend\I18n\Translator\Translator;
+use Zend\I18n\Translator\Translator as TranslatorImpl;
 use Zend\ServiceManager\ServiceManager;
 
 use VuFind\Config\Reader as ConfigReader;
 use VuFind\Auth\Manager;
 
 use Swissbib\Filter\TemplateFilenameFilter;
-use Swissbib\Log\Logger;
 use Swissbib\VuFind\Search\Solr\Options;
 
 class Bootstrapper
@@ -136,7 +135,7 @@ class Bootstrapper
             $locale = $authManager->isLoggedIn()->language;
 
             if ($locale) {
-                /** @var Translator $translator */
+                /** @var TranslatorImpl $translator */
                 $translator = $this->serviceManager->get('VuFind\Translator');
                 $viewModel = $serviceLocator->get('viewmanager')->getViewModel();
 
@@ -171,7 +170,7 @@ class Bootstrapper
         $baseDir = LOCAL_OVERRIDE_DIR . '/languages';
 
         $callback = function ($event) use ($baseDir) {
-            /** @var Translator $translator */
+            /** @var TranslatorImpl $translator */
             $translator = $event->getApplication()->getServiceManager()->get('VuFind\Translator');
             $locale     = $translator->getLocale();
             $fallback    = 'en';
@@ -200,7 +199,7 @@ class Bootstrapper
         $config =& $this->config;
         $callback = function ($event) use ($config) {
 
-            /** @var Translator $translator */
+            /** @var TranslatorImpl $translator */
             $translator = $event->getApplication()->getServiceManager()->get('VuFind\Translator');
             if (isset($config->TextDomains)
                 && isset($config->TextDomains->textDomains)
@@ -224,19 +223,19 @@ class Bootstrapper
     /**
      * Adds text-domain language files
      *
-     * @param Translator $translator  Translator Object
+     * @param TranslatorImpl $translator  Translator Object
      * @param Config     $textDomains Text-domain configuration
      *
      * @return void
      */
-    protected function addTextDomainTranslation(Translator $translator, $textDomains)
+    protected function addTextDomainTranslation($translator, $textDomains)
     {
         // nothing to do if no text-domain is configured
         if (!($textDomains instanceof Config)) {
             return;
         }
 
-        $language = $translator->getLocale();
+        $language =  $translator->getLocale();
 
         foreach ($textDomains as $textDomain) {
             $langFile = $textDomain . '/' . $language . '.ini';

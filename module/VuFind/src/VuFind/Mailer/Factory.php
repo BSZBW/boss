@@ -37,6 +37,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * @author   Demian Katz <demian.katz@villanova.edu>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org/wiki/vufind2:developer_manual Wiki
+ *
  * @codeCoverageIgnore
  */
 class Factory implements \Zend\ServiceManager\FactoryInterface
@@ -54,7 +55,7 @@ class Factory implements \Zend\ServiceManager\FactoryInterface
         $config = $sm->get('VuFind\Config')->get('config');
 
         // Create mail transport:
-        $settings = array (
+        $settings = array(
             'host' => $config->Mail->host, 'port' => $config->Mail->port
         );
         if (isset($config->Mail->username) && isset($config->Mail->password)) {

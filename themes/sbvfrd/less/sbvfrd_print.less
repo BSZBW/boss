@@ -1,0 +1,204 @@
+@media print {
+
+    /* -------------------------------------------------------------------------------------
+     General Rules
+     ======================================================================================*/
+
+    * {
+        font-size: 11px;
+    }
+
+    a, a:link, a:visited {
+        text-decoration: none;
+        color: #000;
+    }
+
+    /* hide buttons */
+    .btn {
+        display: none;
+    }
+
+    /* Hide hidden Parts */
+    .hidden {
+        display: none;
+    }
+
+    .label {
+        font-weight: bold;
+        font-size: 11px;
+        border: none;
+        display: inline-block !important;
+    }
+
+    /* -------------------------------------------------------------------------------------
+     Lists (Trefferliste/Merkliste)
+     ======================================================================================*/
+    div.resultView {
+
+        div.results-top h1 {
+            font-size: 16px;
+            float: none;
+
+            i.fa, span {
+                font-size: inherit;
+            }
+        }
+
+        div.results-top h2 {
+            font-size: 13px;
+            /*
+            margin-top: 5px;
+            margin-bottom: 10px;
+            */
+            span {
+                font-size: inherit;
+            }
+        }
+
+        /* Merklist specific */
+        .form-inline{
+            .checkbox{
+                display: none;
+            }
+        }
+
+        .row.result {
+            border-top: 1px solid #AAAAAA;
+
+            div{
+                .col-xs-10 {
+                    width: 60%;
+                }
+            }
+
+
+            h2 {
+                font-size: 13px;
+                span, a {
+                    font-size: inherit;
+                }
+            }
+
+            span#subtitle {
+
+            }
+
+            /* Meta Data */
+            .meta span
+            {
+                display: inline;
+            }
+
+            a {
+                display: inline;
+            }
+
+            /* Media Info */
+            span.label-info {
+                margin-top: 8px;
+                display: inline-block;
+                padding: 0;
+            }
+
+
+            /* Libraries */
+
+            #dropdownLibraries span {
+                width: inherit;
+            }
+
+            ul.dropdown-menu {
+                display: block;
+                position: relative;
+                border: none;
+                max-height: none;
+
+                li a {
+                    padding: 0px;
+                }
+            }
+
+        }
+    }
+
+    /* -------------------------------------------------------------------------------------
+     Detail (Vollanzeige)
+     ======================================================================================*/
+    /* Meta Data */
+    div#record > .row {
+
+        #savedLists
+        {
+            display: none;
+        }
+
+        h3 {
+            font-size: 16px;
+
+        }
+
+        h4 {
+            font-size: 13px;
+            font-weight: normal;
+        }
+
+        .meta
+        {
+            font-size: 11px;
+
+            .label
+            {
+                font-size: inherit !important;
+            }
+
+            span
+            {
+                display: inline;
+            }
+        }
+    }
+
+    /* Tabs */
+
+    //make sure titles of selected tabs are unhidden for print
+    ul.recordTabs li.hidden-xs.active
+    {
+        display: block !important;
+    }
+
+    div#record-tabs {
+        div.tab-pane {
+
+            /* tab-content Exemplare */
+            .holdingsBox {
+                padding-top: 10px;
+
+                h3 {
+                    font-size: 11px;
+                    padding-bottom: 5px;
+                }
+
+                h4 {
+                    font-size: 12px;
+                }
+            }
+
+            /* tab-content Reihe/Bände */
+            div#treeSearch {
+                display: none;
+            }
+
+            div#hierarchyTree {
+                i {
+                    display: none;
+                }
+
+                a {
+                    font-size: 11px;
+                }
+            }
+        }
+
+
+    }
+}

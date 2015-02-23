@@ -104,19 +104,19 @@ class Horizon extends AbstractBase
         $modifier = isset($sql['modifier']) ? $sql['modifier'] . " " : "";
 
         // Put String Together
-        $sqlString = "select ". $modifier . implode(", ", $sql['expressions']);
-        $sqlString .= " from " .implode(", ", $sql['from']);
+        $sqlString = "select " . $modifier . implode(", ", $sql['expressions']);
+        $sqlString .= " from " . implode(", ", $sql['from']);
         $sqlString .= (!empty($sql['join']))
-            ? " join " .implode(" join ", $sql['join']) : "";
+            ? " join " . implode(" join ", $sql['join']) : "";
         $sqlString .= (!empty($sql['innerJoin']))
-            ? " inner join " .implode(" inner join ", $sql['innerJoin']) : "";
+            ? " inner join " . implode(" inner join ", $sql['innerJoin']) : "";
         $sqlString .= (!empty($sql['leftOuterJoin']))
             ? " left outer join "
                 . implode(" left outer join ", $sql['leftOuterJoin'])
             : "";
-        $sqlString .= " where " .implode(" AND ", $sql['where']);
+        $sqlString .= " where " . implode(" AND ", $sql['where']);
         $sqlString .= (!empty($sql['order']))
-            ? " ORDER BY " .implode(", ", $sql['order']) : "";
+            ? " ORDER BY " . implode(", ", $sql['order']) : "";
 
         return $sqlString;
     }
@@ -128,7 +128,6 @@ class Horizon extends AbstractBase
      * @param string $status Item status code
      *
      * @return array
-     *
      */
     protected function parseStatus($status)
     {
@@ -270,6 +269,7 @@ class Horizon extends AbstractBase
      * @param array  $patron Patron Array
      *
      * @return array Keyed data
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function processHoldingRow($id, $row, $patron)
@@ -387,7 +387,6 @@ class Horizon extends AbstractBase
         return current($status);
     }
 
-
     /**
      * Protected support method for getStatus.
      *
@@ -416,7 +415,7 @@ class Horizon extends AbstractBase
         $bibIDs = implode(',', $idList);
 
         // Where
-        $sqlWhere = array("i.bib# in (" .$bibIDs . ")",
+        $sqlWhere = array("i.bib# in (" . $bibIDs . ")",
                           "i.staff_only = 0");
 
         $sqlArray = array('expressions' => $sqlExpressions,
@@ -511,7 +510,7 @@ class Horizon extends AbstractBase
             $sqlStmt = mssql_query($sql);
             $row = mssql_fetch_assoc($sqlStmt);
             if ($row) {
-                list($lastname,$firstname)=explode(', ', $row['FULLNAME']);
+                list($lastname,$firstname) = explode(', ', $row['FULLNAME']);
                 $user = array('id' => $username,
                               'firstname' => $firstname,
                               'lastname' => $lastname,
@@ -626,7 +625,7 @@ class Horizon extends AbstractBase
                 $expire = $this->dateFormat->convertToDisplayDate(
                     "M d Y", trim($row['REQUEST_EXPIRE'])
                 );
-            } elseif ($row['STATUS']==2) {
+            } elseif ($row['STATUS'] == 2) {
                 // Items that are 'In Transit' have no expiration date.
                 $expire = 'In Transit';
             } else {
@@ -808,8 +807,8 @@ class Horizon extends AbstractBase
 
             $row = mssql_fetch_assoc($sqlStmt);
             if ($row) {
-                list($lastname,$firstname)=explode(', ', $row['FULLNAME']);
-                $profile= array('lastname' => $lastname,
+                list($lastname,$firstname) = explode(', ', $row['FULLNAME']);
+                $profile = array('lastname' => $lastname,
                                 'firstname' => $firstname,
                                 'address1' => $row['ADDRESS1'],
                                 'address2' => $row['ADDRESS2'],
@@ -992,6 +991,7 @@ class Horizon extends AbstractBase
      *                     does not use acquisitions.
      *
      * @return array       Associative array with 'count' and 'results' keys
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getNewItems($page, $limit, $daysOld, $fundId = null)
@@ -1064,7 +1064,6 @@ class Horizon extends AbstractBase
         for ($i = 0; $i < count($foundVersionParts); $i++) {
             $required = intval($requiredVersionParts[$i]);
             $found    = intval($foundVersionParts[$i]);
-
 
             if ($found > $required) {
                 // If found is greater than required stop checking

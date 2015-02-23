@@ -34,7 +34,6 @@ use VuFind\Exception\ILS as ILSException,
     VuFind\ILS\Driver\DriverInterface,
     VuFind\I18n\Translator\TranslatorAwareInterface;
 
-
 /**
  * Catalog Connection Class
  *
@@ -222,7 +221,7 @@ class Connection implements TranslatorAwareInterface
         ) ? $this->getDriver()->getConfig($function, $params) : false;
 
         // See if we have a corresponding check method to analyze the response:
-        $checkMethod = "checkMethod".$function;
+        $checkMethod = "checkMethod" . $function;
         if (!method_exists($this, $checkMethod)) {
             return false;
         }
@@ -293,6 +292,7 @@ class Connection implements TranslatorAwareInterface
      * @return mixed On success, an associative array with specific function keys
      * and values either for cancelling holds via a form or a URL;
      * on failure, false.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function checkMethodcancelHolds($functionConfig, $params)
@@ -327,6 +327,7 @@ class Connection implements TranslatorAwareInterface
      *
      * @return mixed On success, an associative array with specific function keys
      * and values either for renewing items via a form or a URL; on failure, false.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function checkMethodRenewals($functionConfig, $params)
@@ -401,6 +402,7 @@ class Connection implements TranslatorAwareInterface
      * @return mixed On success, an associative array with specific function keys
      * and values either for cancelling requests via a form or a URL;
      * on failure, false.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function checkMethodcancelStorageRetrievalRequests($functionConfig,
@@ -483,6 +485,7 @@ class Connection implements TranslatorAwareInterface
      * @return mixed On success, an associative array with specific function keys
      * and values either for cancelling requests via a form or a URL;
      * on failure, false.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function checkMethodcancelILLRequests($functionConfig, $params)
@@ -528,6 +531,7 @@ class Connection implements TranslatorAwareInterface
      * @return mixed On success, an associative array with specific function keys
      * and values either for cancelling requests via a form or a URL;
      * on failure, false.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function checkMethodchangePassword($functionConfig, $params)

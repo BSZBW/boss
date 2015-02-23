@@ -26,7 +26,6 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org
  */
-
 namespace VuFindSearch\Backend\Solr\Response\Json;
 
 use IteratorAggregate;
@@ -195,7 +194,7 @@ class Spellcheck implements IteratorAggregate, Countable
      *
      * @return integer
      *
-     * @see    http://www.php.net/manual/en/arrayobject.uksort.php
+     * @see http://www.php.net/manual/en/arrayobject.uksort.php
      */
     public function compareTermLength($a, $b)
     {

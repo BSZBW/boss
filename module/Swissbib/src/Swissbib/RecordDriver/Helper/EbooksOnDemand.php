@@ -1,9 +1,6 @@
 <?php
 namespace Swissbib\RecordDriver\Helper;
 
-use Zend\Config\Config;
-use Zend\I18n\Translator\Translator;
-
 use Swissbib\RecordDriver\SolrMarc;
 
 /**

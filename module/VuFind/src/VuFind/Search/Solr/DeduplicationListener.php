@@ -28,7 +28,6 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org   Main Site
  */
-
 namespace VuFind\Search\Solr;
 
 use VuFindSearch\Backend\BackendInterface;
@@ -285,6 +284,7 @@ class DeduplicationListener
      * @param array  $sourcePriority  Array of source priorities keyed by source id
      *
      * @return array Local record data
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function appendDedupRecordFields($localRecordData, $dedupRecordData,

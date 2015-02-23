@@ -85,7 +85,7 @@ class Innovative extends AbstractBase implements
     }
 
     /**
-     * prepID
+     * Prepare ID
      *
      * This function returns the correct record id format as defined
      * in the Innovative.ini file.
@@ -171,7 +171,7 @@ class Innovative extends AbstractBase implements
             $cols = preg_split("/<t(h|d)([^>]*)>/", $row);
 
             // for each th or td section, do the following.
-            for ($i=0; $i < sizeof($cols); $i++) {
+            for ($i = 0; $i < sizeof($cols); $i++) {
                 // replace non blocking space encodings with a space.
                 $cols[$i] = str_replace("&nbsp;", " ", $cols[$i]);
                 // remove html comment tags
@@ -290,6 +290,7 @@ class Innovative extends AbstractBase implements
      *
      * @throws ILSException
      * @return array     An array with the acquisitions data on success.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getPurchaseHistory($id)
@@ -309,6 +310,7 @@ class Innovative extends AbstractBase implements
      * @param array  $details Item details from getHoldings return array
      *
      * @return string         URL to ILS's OPAC's place hold screen.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getHoldLink($id, $details)
@@ -318,7 +320,7 @@ class Innovative extends AbstractBase implements
 
         //Build request link
         $link = $this->config['Catalog']['url'] . '/search?/.b' . $id_ . '/.b' .
-            $id_ . '/1%2C1%2C1%2CB/request~b'. $id_;
+            $id_ . '/1%2C1%2C1%2CB/request~b' . $id_;
         //$link = $this->config['Catalog']['url'] . '/record=b' . $id_;
 
         return $link;

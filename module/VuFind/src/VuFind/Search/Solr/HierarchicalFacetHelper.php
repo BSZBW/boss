@@ -27,8 +27,6 @@
  */
 namespace VuFind\Search\Solr;
 
-use Zend\Mvc\Controller\AbstractActionController;
-
 /**
  * Functions for manipulating facets
  *
@@ -44,8 +42,8 @@ class HierarchicalFacetHelper
      * Helper method for building hierarchical facets:
      * Sort a facet list according to the given sort order
      *
-     * @param array &$facetList Facet list returned from Solr
-     * @param bool  $topLevel   Whether to sort only top level
+     * @param array $facetList Facet list returned from Solr
+     * @param bool  $topLevel  Whether to sort only top level
      *
      * @return void
      */
@@ -91,7 +89,6 @@ class HierarchicalFacetHelper
      * @see http://blog.tekerson.com/2009/03/03/
      * converting-a-flat-array-with-parent-ids-to-a-nested-tree/
      * Based on this example
-     *
      */
     public function buildFacetArray($facet, $facetList, $urlHelper = false)
     {

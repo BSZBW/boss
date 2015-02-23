@@ -308,11 +308,12 @@ class VoyagerRestful extends Voyager implements \VuFindHttp\HttpServiceAwareInte
      * @param array  $params   Optional feature-specific parameters (array)
      *
      * @return array An array with key-value pairs.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getConfig($function, $params = null)
     {
-        if (isset($this->config[$function]) ) {
+        if (isset($this->config[$function])) {
             $functionConfig = $this->config[$function];
         } else {
             $functionConfig = false;
@@ -451,6 +452,7 @@ class VoyagerRestful extends Voyager implements \VuFindHttp\HttpServiceAwareInte
      * @param array $holdingsRow The holdings row to analyze.
      *
      * @return bool Whether an item is holdable
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function isILLRequestAllowed($holdingsRow)
@@ -586,7 +588,7 @@ class VoyagerRestful extends Voyager implements \VuFindHttp\HttpServiceAwareInte
     }
 
     /**
-     * checkRequestIsValid
+     * Check if request is valid
      *
      * This is responsible for determining if an item is requestable
      *
@@ -620,7 +622,7 @@ class VoyagerRestful extends Voyager implements \VuFindHttp\HttpServiceAwareInte
     }
 
     /**
-     * checkStorageRetrievalRequestIsValid
+     * Check if storage retrieval request is valid
      *
      * This is responsible for determining if an item is requestable
      *
@@ -709,6 +711,7 @@ class VoyagerRestful extends Voyager implements \VuFindHttp\HttpServiceAwareInte
      * @throws ILSException
      * @return array        An array of associative arrays with locationID and
      * locationDisplay keys
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getPickUpLocations($patron = false, $holdDetails = null)
@@ -731,7 +734,7 @@ class VoyagerRestful extends Voyager implements \VuFindHttp\HttpServiceAwareInte
                     "as location_name from " .
                     $this->dbName . ".CIRC_POLICY_LOCS, $this->dbName.LOCATION, " .
                     "$this->dbName.REQUEST_GROUP_LOCATION rgl " .
-                    "where CIRC_POLICY_LOCS.PICKUP_LOCATION = 'Y' ".
+                    "where CIRC_POLICY_LOCS.PICKUP_LOCATION = 'Y' " .
                     "and CIRC_POLICY_LOCS.LOCATION_ID = LOCATION.LOCATION_ID " .
                     "and rgl.GROUP_ID=:requestGroupId " .
                     "and rgl.LOCATION_ID = LOCATION.LOCATION_ID";
@@ -741,7 +744,7 @@ class VoyagerRestful extends Voyager implements \VuFindHttp\HttpServiceAwareInte
                     "NVL(LOCATION.LOCATION_DISPLAY_NAME, LOCATION.LOCATION_NAME) " .
                     "as location_name from " .
                     $this->dbName . ".CIRC_POLICY_LOCS, $this->dbName.LOCATION " .
-                    "where CIRC_POLICY_LOCS.PICKUP_LOCATION = 'Y' ".
+                    "where CIRC_POLICY_LOCS.PICKUP_LOCATION = 'Y' " .
                     "and CIRC_POLICY_LOCS.LOCATION_ID = LOCATION.LOCATION_ID";
             }
 
@@ -777,6 +780,7 @@ class VoyagerRestful extends Voyager implements \VuFindHttp\HttpServiceAwareInte
      *
      * @return false|string      The default pickup location for the patron or false
      * if the user has to choose.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getDefaultPickUpLocation($patron = false, $holdDetails = null)
@@ -798,6 +802,7 @@ class VoyagerRestful extends Voyager implements \VuFindHttp\HttpServiceAwareInte
      *
      * @return false|string      The default request group for the patron or false if
      * the user has to choose.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getDefaultRequestGroup($patron = false, $holdDetails = null)
@@ -1051,7 +1056,7 @@ class VoyagerRestful extends Voyager implements \VuFindHttp\HttpServiceAwareInte
         // Add Params
         $queryString = array();
         foreach ($params as $key => $param) {
-            $queryString[] = urlencode($key). "=" . urlencode($param);
+            $queryString[] = urlencode($key) . "=" . urlencode($param);
         }
 
         // Build Hierarchy
@@ -1393,7 +1398,7 @@ EOT;
     protected function checkItemRequests($patronId, $request, $bibId,
         $itemId = false
     ) {
-        if (!empty($bibId) && !empty($patronId) && !empty($request) ) {
+        if (!empty($bibId) && !empty($patronId) && !empty($request)) {
 
             $hierarchy = array();
 
@@ -1423,7 +1428,7 @@ EOT;
 
                 // Valid Response
                 if ($reply == "ok") {
-                    if ($check->$request ) {
+                    if ($check->$request) {
                         $requestAttributes = $check->$request->attributes();
                         if ($requestAttributes['allowed'] == "Y") {
                             return true;
@@ -1452,7 +1457,7 @@ EOT;
         if (empty($patron) || empty($requestData) || empty($requestData['bibId'])
             || empty($type)
         ) {
-            return array('success' => false, 'status' =>"hold_error_fail");
+            return array('success' => false, 'status' => "hold_error_fail");
         }
 
         // Build request
@@ -1997,7 +2002,7 @@ EOT;
      */
     public function getCancelHoldDetails($holdDetails)
     {
-        $cancelDetails = $holdDetails['item_id']."|".$holdDetails['reqnum'];
+        $cancelDetails = $holdDetails['item_id'] . "|" . $holdDetails['reqnum'];
         return $cancelDetails;
     }
 
@@ -2689,7 +2694,7 @@ EOT;
     }
 
     /**
-     * checkILLRequestIsValid
+     * Check if ILL Request is valid
      *
      * This is responsible for determining if an item is requestable
      *
@@ -2776,6 +2781,7 @@ EOT;
      *
      * @return bool|array False if request not allowed, or an array of
      * locations.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getILLPickupLocations($id, $pickupLib, $patron)
@@ -3210,6 +3216,7 @@ EOT;
      *
      * @return bool True if the method can be called with the given parameters,
      * false otherwise.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function supportsMethod($method, $params)

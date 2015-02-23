@@ -2,7 +2,7 @@
 return array(
   'extends' => 'bootstrap3',
 
-  'less'    => array(
+  'less' => array(
     'active' => false,
     'compiled.less'
   ),

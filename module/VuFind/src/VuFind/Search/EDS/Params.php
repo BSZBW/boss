@@ -28,7 +28,6 @@
 namespace VuFind\Search\EDS;
 use VuFindSearch\ParamBag;
 use VuFindSearch\Backend\EDS\SearchRequestModel as SearchRequestModel;
-use VuFind\Search\EDS\QueryAdapter;
 
 /**
  * EDS API Params
@@ -56,10 +55,9 @@ class Params extends \VuFind\Search\Base\Params
     protected $extraFilterList = array();
 
     /**
-     * property to determine if the request using this parameters objects is for
-     * setup only.
+     * Is the request using this parameters objects for setup only?
      *
-     * @var boolean
+     * @var bool
      */
     public $isSetupOnly = false;
 
@@ -112,7 +110,7 @@ class Params extends \VuFind\Search\Base\Params
             $backendParams->set('view', $view);
         }
 
-        $mode= $options->getSearchMode();
+        $mode = $options->getSearchMode();
         if (isset($mode)) {
             $backendParams->set('searchMode', $mode);
         }
@@ -214,22 +212,20 @@ class Params extends \VuFind\Search\Base\Params
         //group limiters with same id together
         $edsLimiters = array();
         foreach ($this->limiters as $limiter) {
-            if (isset($limiter) &&!empty($limiter)) {
+            if (isset($limiter) && !empty($limiter)) {
                 // split the id/value
-                list ($key, $value) = explode(':', $limiter, 2);
+                list($key, $value) = explode(':', $limiter, 2);
                 $value = SearchRequestModel::escapeSpecialCharacters($value);
                 $edsLimiters[$key] = (!isset($edsLimiters[$key]))
-                     ? $value : $edsLimiters[$key].','.$value;
+                     ? $value : $edsLimiters[$key] . ',' . $value;
             }
         }
         if (!empty($edsLimiters)) {
             foreach ($edsLimiters as $key => $value) {
-                $params->add('limiters', $key.':'.$value);
+                $params->add('limiters', $key . ':' . $value);
             }
         }
     }
-
-
 
     /**
      * Set up expanders based on VuFind settings.
@@ -246,14 +242,13 @@ class Params extends \VuFind\Search\Base\Params
             $value = '';
             foreach ($this->expanders as $expander) {
                 $value = (!empty($value))
-                    ? $value.','.$expander : $expander;
+                    ? $value . ',' . $expander : $expander;
             }
             if (!empty($value)) {
                 $params->add('expander', $value);
             }
         }
     }
-
 
     /**
      * Return the value for which search view we use
@@ -346,7 +341,6 @@ class Params extends \VuFind\Search\Base\Params
         return $this->dateFacetSettings;
     }
 
-
     /**
      * Populate common limiters as checkbox facets
      *
@@ -398,7 +392,7 @@ class Params extends \VuFind\Search\Base\Params
         foreach ($this->getOptions()->getViewOptions() as $key => $value) {
             $list[$key] = array(
                 'desc' => $value,
-                'selected' => ($key == $this->getView().'|'.$this->getEdsView())
+                'selected' => ($key == $this->getView() . '|' . $this->getEdsView())
             );
         }
         return $list;

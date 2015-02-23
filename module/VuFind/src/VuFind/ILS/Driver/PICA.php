@@ -202,6 +202,7 @@ class PICA extends DAIA
      * @throws \VuFind\Exception\Date
      * @throws ILSException
      * @return array        Array of the patron's transactions on success.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getMyTransactions($patron)
@@ -259,7 +260,7 @@ class PICA extends DAIA
                     $expiration[] = substr($postit, $position_expire+24, 10);
                     $renewals[] = $this->getRenewals($completeValue);
                     $closing_title = strpos($postit, '</td>', $position_title);
-                    $titles[] = $completeValue." ".substr(
+                    $titles[] = $completeValue . " " . substr(
                         $postit, $position_title+24,
                         ($closing_title-$position_title-24)
                     );
@@ -345,7 +346,7 @@ class PICA extends DAIA
     }
 
     /**
-     * get the number of renewals
+     * Get the number of renewals
      *
      * @param string $barcode Barcode of the medium
      *
@@ -376,6 +377,7 @@ class PICA extends DAIA
      * @param string $recordId Record identifier
      *
      * @return bool            True on success
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function renew($recordId)
@@ -411,6 +413,7 @@ class PICA extends DAIA
      * @throws \VuFind\Exception\Date
      * @throws ILSException
      * @return mixed        Array of the patron's fines on success.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getMyFines($patron)
@@ -477,6 +480,7 @@ class PICA extends DAIA
      * @throws \VuFind\Exception\Date
      * @throws ILSException
      * @return array        Array of the patron's holds on success.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getMyHolds($patron)
@@ -522,7 +526,7 @@ class PICA extends DAIA
             // so its not a valid identifier
             // we need to calculate the checksum
             $checksum = 0;
-            for ($i=0; $i<strlen($value);$i++) {
+            for ($i = 0; $i<strlen($value);$i++) {
                 $checksum += $value[$i]*(9-$i);
             }
             if ($checksum%11 === 1) {
@@ -532,7 +536,7 @@ class PICA extends DAIA
             } else {
                 $checksum = 11 - $checksum%11;
             }
-            $ppns[] = $value.$checksum;
+            $ppns[] = $value . $checksum;
             $position = $pos + 1;
             $position_create = $position;
             for ($n = 0; $n<3; $n++) {
@@ -612,11 +616,10 @@ class PICA extends DAIA
         return array();
     }
 
-
     // protected functions to connect to PICA
 
     /**
-     * post something to a foreign host
+     * Post something to a foreign host
      *
      * @param string $file         POST target URL
      * @param string $data_to_send POST data
@@ -630,7 +633,7 @@ class PICA extends DAIA
         // Parameter verarbeiten
         foreach ($data_to_send as $key => $dat) {
             $data_to_send[$key]
-                = "$key=".rawurlencode(utf8_encode(stripslashes($dat)));
+                = "$key=" . rawurlencode(utf8_encode(stripslashes($dat)));
         }
         $postData = implode("&", $data_to_send);
 
@@ -638,8 +641,8 @@ class PICA extends DAIA
         $out  = "POST $file HTTP/1.1\r\n";
         $out .= "Host: " . $this->catalogHost . "\r\n";
         $out .= "Content-type: application/x-www-form-urlencoded\r\n";
-        $out .= "Content-length: ". strlen($postData) ."\r\n";
-        $out .= "User-Agent: ".$_SERVER["HTTP_USER_AGENT"]."\r\n";
+        $out .= "Content-length: " . strlen($postData) . "\r\n";
+        $out .= "User-Agent: " . $_SERVER["HTTP_USER_AGENT"] . "\r\n";
         $out .= "Connection: Close\r\n";
         $out .= "\r\n";
         $out .= $postData;
@@ -656,9 +659,8 @@ class PICA extends DAIA
         return $data;
     }
 
-
     /**
-     * gets a PPN by its barcode
+     * Gets a PPN by its barcode
      *
      * @param string $barcode Barcode to use for lookup
      *
@@ -682,7 +684,7 @@ class PICA extends DAIA
     }
 
     /**
-     * gets holdings of magazine and journal exemplars
+     * Gets holdings of magazine and journal exemplars
      *
      * @param string $ppn PPN identifier
      *

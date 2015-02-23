@@ -78,15 +78,15 @@ class Evergreen extends AbstractBase
         try {
             $this->db = new PDO(
                 'pgsql:host='
-                .$this->config['Catalog']['hostname']
-                .' user='
-                .$this->config['Catalog']['user']
-                .' dbname='
-                .$this->config['Catalog']['database']
-                .' password='
-                .$this->config['Catalog']['password']
-                .' port='
-                .$this->config['Catalog']['port']
+                . $this->config['Catalog']['hostname']
+                . ' user='
+                . $this->config['Catalog']['user']
+                . ' dbname='
+                . $this->config['Catalog']['database']
+                . ' password='
+                . $this->config['Catalog']['password']
+                . ' port='
+                . $this->config['Catalog']['port']
             );
         } catch (PDOException $e) {
             throw $e;
@@ -278,6 +278,7 @@ HERE;
      *
      * @throws ILSException
      * @return array     An array with the acquisitions data on success.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getPurchaseHistory($id)
@@ -285,7 +286,6 @@ HERE;
         // TODO
         return array();
     }
-
 
     /**
      * Patron Login
@@ -405,11 +405,11 @@ HERE;
         $sql = "select billable_xact_summary.total_owed, " .
                "billable_xact_summary.balance_owed, " .
                "billable_xact_summary.last_billing_type, " .
-               "extract (year from billable_xact_summary.xact_start) ".
+               "extract (year from billable_xact_summary.xact_start) " .
                "as start_year, " .
-               "extract (month from billable_xact_summary.xact_start) ".
+               "extract (month from billable_xact_summary.xact_start) " .
                "as start_month, " .
-               "extract (day from billable_xact_summary.xact_start) ".
+               "extract (day from billable_xact_summary.xact_start) " .
                "as start_day, " .
                "billable_cirulations.target_copy " .
                "from $this->dbName.money.billable_xact_summary " .
@@ -560,7 +560,6 @@ HERE;
         }
     }
 
-
     /**
      * Only one of the following 2 function should be implemented.
      * Placing a hold directly can be done with placeHold.
@@ -635,6 +634,7 @@ HERE;
      *
      * @throws ILSException
      * @return array       Associative array with 'count' and 'results' keys
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getNewItems($page, $limit, $daysOld, $fundId = null)
@@ -797,6 +797,7 @@ HERE;
      *
      * @throws ILSException
      * @return array An array of associative arrays representing reserve items.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function findReserves($course, $inst, $dept)

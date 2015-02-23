@@ -81,7 +81,11 @@ class SearchController extends AbstractSearch
     {
         // If a URL was explicitly passed in, use that; otherwise, try to
         // find the HTTP referrer.
-        $view = $this->createEmailViewModel();
+        $mailer = $this->getServiceLocator()->get('VuFind\Mailer');
+        $view = $this->createEmailViewModel(null, $mailer->getDefaultLinkSubject());
+        $mailer->setMaxRecipients($view->maxRecipients);
+        // Set up reCaptcha
+        $view->useRecaptcha = $this->recaptcha()->active('email');
         $view->url = $this->params()->fromPost(
             'url', $this->params()->fromQuery(
                 'url', $this->getRequest()->getServer()->get('HTTP_REFERER')
@@ -109,23 +113,16 @@ class SearchController extends AbstractSearch
         }
 
         // Process form submission:
-        if ($this->formWasSubmitted('submit')) {
+        if ($this->formWasSubmitted('submit', $view->useRecaptcha)) {
             // Attempt to send the email and show an appropriate flash message:
             try {
                 // If we got this far, we're ready to send the email:
-                $mailer = $this->getServiceLocator()->get('VuFind\Mailer');
+                $cc = $this->params()->fromPost('ccself') && $view->from != $view->to
+                    ? $view->from : null;
                 $mailer->sendLink(
                     $view->to, $view->from, $view->message,
-                    $view->url, $this->getViewRenderer()
+                    $view->url, $this->getViewRenderer(), $view->subject, $cc
                 );
-                if ($this->params()->fromPost('ccself')
-                    && $view->from != $view->to
-                ) {
-                    $mailer->sendLink(
-                        $view->from, $view->from, $view->message,
-                        $view->url, $this->getViewRenderer()
-                    );
-                }
                 $this->flashMessenger()->setNamespace('info')
                     ->addMessage('email_success');
                 return $this->redirect()->toUrl($view->url);
@@ -146,7 +143,7 @@ class SearchController extends AbstractSearch
      */
     protected function getIllustrationSettings($savedSearch = false)
     {
-        $illYes= array(
+        $illYes = array(
             'text' => 'Has Illustrations', 'value' => 1, 'selected' => false
         );
         $illNo = array(
@@ -208,7 +205,7 @@ class SearchController extends AbstractSearch
             foreach ($list['list'] as $key => $value) {
                 // Build the filter string for the URL:
                 $fullFilter = ($value['operator'] == 'OR' ? '~' : '')
-                    . $facet.':"'.$value['value'].'"';
+                    . $facet . ':"' . $value['value'] . '"';
 
                 // If we haven't already found a selected facet and the current
                 // facet has been applied to the search, we should store it as
@@ -596,8 +593,7 @@ class SearchController extends AbstractSearch
     }
 
     /**
-     * Provide OpenSearch suggestions as specified here:
-     *
+     * Provide OpenSearch suggestions as specified at
      * http://www.opensearch.org/Specifications/OpenSearch/Extensions/Suggestions/1.0
      *
      * @return \Zend\Http\Response
@@ -663,6 +659,5 @@ class SearchController extends AbstractSearch
             ? $facetConfig->SpecialFacets->hierarchicalFacetSortOptions->toArray()
             : array();
     }
-
 
 }

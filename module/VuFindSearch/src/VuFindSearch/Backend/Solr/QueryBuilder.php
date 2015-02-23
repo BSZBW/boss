@@ -126,7 +126,7 @@ class QueryBuilder implements QueryBuilderInterface
             $params->set('spellcheck.q', $query->getAllTerms());
         }
 
-        if ($query instanceOf QueryGroup) {
+        if ($query instanceof QueryGroup) {
             $query = $this->reduceQueryGroup($query);
         } else {
             $query->setString(
@@ -301,11 +301,10 @@ class QueryBuilder implements QueryBuilderInterface
      * @return string
      *
      * @see self::reduceQueryGroup()
-     *
      */
     protected function reduceQueryGroupComponents(AbstractQuery $component)
     {
-        if ($component instanceOf QueryGroup) {
+        if ($component instanceof QueryGroup) {
             $reduced = array_map(
                 array($this, 'reduceQueryGroupComponents'), $component->getQueries()
             );
@@ -335,7 +334,6 @@ class QueryBuilder implements QueryBuilderInterface
      * @param SearchHandler $handler Search handler
      *
      * @return string
-     *
      */
     protected function createSearchString($string, SearchHandler $handler = null)
     {

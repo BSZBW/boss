@@ -47,7 +47,7 @@
               <br />
               <? endif; ?>
 
-              <span class="label"><strong><?=$this->transEsc('Checked Out') ?>:</strong></span> <?=$this->escapeHtml($record['checkout']) ?>
+              <span class="label"><strong><?=$this->transEsc('Date') ?>:</strong></span> <?=$this->escapeHtml($record['checkout']) ?>
               <br />
 
               <span class="label"><strong><?=$this->transEsc('Fee') ?>:</strong></span> CHF <?=isset($record['amount']) ? number_format($record['amount'], 2, '.', '\'') : ''?> (<?=isset($record['description']) ? $this->escapeHtml($record['description']) : ''?>)

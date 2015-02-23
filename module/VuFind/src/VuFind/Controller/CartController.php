@@ -38,7 +38,6 @@ use VuFind\Exception\Mail as MailException,
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org   Main Site
  */
-
 class CartController extends AbstractBase
 {
     /**
@@ -201,11 +200,15 @@ class CartController extends AbstractBase
             );
         }
 
-        $view = $this->createEmailViewModel();
+        $view = $this->createEmailViewModel(
+            null, $this->translate('bulk_email_title')
+        );
         $view->records = $this->getRecordLoader()->loadBatch($ids);
+        // Set up reCaptcha
+        $view->useRecaptcha = $this->recaptcha()->active('email');
 
         // Process form submission:
-        if ($this->formWasSubmitted('submit')) {
+        if ($this->formWasSubmitted('submit', $view->useRecaptcha)) {
             // Build the URL to share:
             $params = array();
             foreach ($ids as $current) {
@@ -217,18 +220,13 @@ class CartController extends AbstractBase
             try {
                 // If we got this far, we're ready to send the email:
                 $mailer = $this->getServiceLocator()->get('VuFind\Mailer');
+                $mailer->setMaxRecipients($view->maxRecipients);
+                $cc = $this->params()->fromPost('ccself') && $view->from != $view->to
+                    ? $view->from : null;
                 $mailer->sendLink(
                     $view->to, $view->from, $view->message,
-                    $url, $this->getViewRenderer(), 'bulk_email_title'
+                    $url, $this->getViewRenderer(), $view->subject, $cc
                 );
-                if ($this->params()->fromPost('ccself')
-                    && $view->from != $view->to
-                ) {
-                    $mailer->sendLink(
-                        $view->from, $view->from, $view->message,
-                        $url, $this->getViewRenderer(), 'bulk_email_title'
-                    );
-                }
                 return $this->redirectToSource('info', 'email_success');
             } catch (MailException $e) {
                 $this->flashMessenger()->setNamespace('error')
@@ -340,7 +338,6 @@ class CartController extends AbstractBase
         // Send appropriate HTTP headers for requested format:
         $response = $this->getResponse();
         $response->getHeaders()->addHeaders($this->getExport()->getHeaders($format));
-
 
         // Actually export the records
         $records = $this->getRecordLoader()->loadBatch($ids);

@@ -151,7 +151,7 @@ class Demo extends AbstractBase
         $loc = rand()%count($locations);
         return $returnText
             ? $locations[$loc]['locationDisplay']
-            :$locations[$loc]['locationID'];
+            : $locations[$loc]['locationID'];
     }
 
     /**
@@ -185,7 +185,7 @@ class Demo extends AbstractBase
         $a = $codes[rand()%strlen($codes)];
         $b = rand()%899 + 100;
         $c = rand()%9999;
-        return $a.$b.".".$c;
+        return $a . $b . "." . $c;
     }
 
     /**
@@ -292,9 +292,10 @@ class Demo extends AbstractBase
         $list = new ArrayObject();
         for ($i = 0; $i < $items; $i++) {
             $location = $this->getFakeLoc(false);
+            $randDays = rand() % 10;
             $currentItem = array(
                 "location" => $location,
-                "create"   => date("j-M-y", strtotime("now - ".(rand()%10)." days")),
+                "create"   => date("j-M-y", strtotime("now - {$randDays} days")),
                 "expire"   => date("j-M-y", strtotime("now + 30 days")),
                 "reqnum"   => sprintf("%06d", $i),
                 "item_id" => $i,
@@ -382,7 +383,7 @@ class Demo extends AbstractBase
      */
     public function getSimulatedStatus($id, array $patron = null)
     {
-        $id = $id.""; // make it a string for consistency
+        $id = $id . ""; // make it a string for consistency
         // How many items are there?
         $records = rand()%15;
         $holding = array();
@@ -619,6 +620,7 @@ class Demo extends AbstractBase
      * @param array $patron The patron array from patronLogin
      *
      * @return mixed        Array of the patron's fines on success.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getMyFines($patron)
@@ -633,7 +635,7 @@ class Demo extends AbstractBase
                 // How many days overdue is the item?
                 $day_overdue = rand()%30 + 5;
                 // Calculate checkout date:
-                $checkout = strtotime("now - ".($day_overdue+14)." days");
+                $checkout = strtotime("now - " . ($day_overdue+14) . " days");
                 // 50c a day fine?
                 $fine = $day_overdue * 0.50;
 
@@ -670,6 +672,7 @@ class Demo extends AbstractBase
      * @param array $patron The patron array from patronLogin
      *
      * @return mixed        Array of the patron's holds on success.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getMyHolds($patron)
@@ -688,6 +691,7 @@ class Demo extends AbstractBase
      * @param array $patron The patron array from patronLogin
      *
      * @return mixed        Array of the patron's holds
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getMyStorageRetrievalRequests($patron)
@@ -707,6 +711,7 @@ class Demo extends AbstractBase
      * @param array $patron The patron array from patronLogin
      *
      * @return mixed        Array of the patron's ILL requests
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getMyILLRequests($patron)
@@ -727,6 +732,7 @@ class Demo extends AbstractBase
      * @param array $patron The patron array from patronLogin
      *
      * @return mixed        Array of the patron's transactions on success.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getMyTransactions($patron)
@@ -826,6 +832,7 @@ class Demo extends AbstractBase
      *
      * @return array        An array of associative arrays with locationID and
      * locationDisplay keys
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getPickUpLocations($patron = false, $holdDetails = null)
@@ -854,6 +861,7 @@ class Demo extends AbstractBase
      * placeHold, minus the patron data.
      *
      * @return int
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getHoldDefaultRequiredDate($patron, $holdInfo)
@@ -876,6 +884,7 @@ class Demo extends AbstractBase
      * or may be ignored.
      *
      * @return string A location ID
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getDefaultPickUpLocation($patron = false, $holdDetails = null)
@@ -897,6 +906,7 @@ class Demo extends AbstractBase
      * options or may be ignored.
      *
      * @return false|string      The default request group for the patron.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getDefaultRequestGroup($patron = false, $holdDetails = null)
@@ -917,6 +927,7 @@ class Demo extends AbstractBase
      *
      * @return array  False if request groups not in use or an array of
      * associative arrays with id and name keys
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getRequestGroups($bibId = null, $patron = null)
@@ -997,6 +1008,7 @@ class Demo extends AbstractBase
      * whatever that may mean.
      *
      * @return array       Associative array with 'count' and 'results' keys
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getNewItems($page, $limit, $daysOld, $fundId = null)
@@ -1030,6 +1042,7 @@ class Demo extends AbstractBase
      * @param string $dept   ID from getDepartments (empty string to match all)
      *
      * @return mixed An array of associative arrays representing reserve items.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function findReserves($course, $inst, $dept)
@@ -1270,6 +1283,7 @@ class Demo extends AbstractBase
      * @param patron $patron An array of patron data
      *
      * @return bool True if request is valid, false if not
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function checkRequestIsValid($id, $data, $patron)
@@ -1370,6 +1384,7 @@ class Demo extends AbstractBase
      * @param patron $patron An array of patron data
      *
      * @return bool True if request is valid, false if not
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function checkStorageRetrievalRequestIsValid($id, $data, $patron)
@@ -1468,6 +1483,7 @@ class Demo extends AbstractBase
      * @param patron $patron An array of patron data
      *
      * @return bool True if request is valid, false if not
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function checkILLRequestIsValid($id, $data, $patron)
@@ -1586,6 +1602,7 @@ class Demo extends AbstractBase
      *
      * @return bool|array False if request not allowed, or an array of associative
      * arrays with libraries.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getILLPickupLibraries($id, $patron)
@@ -1621,6 +1638,7 @@ class Demo extends AbstractBase
      * @param array  $patron    Patron
      *
      * @return bool|array False if request not allowed, or an array of locations.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getILLPickupLocations($id, $pickupLib, $patron)
@@ -1727,6 +1745,7 @@ class Demo extends AbstractBase
      *
      * @return array An array of data on the request including
      * whether or not it was successful and a system message (if available)
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function changePassword($details)
@@ -1749,6 +1768,7 @@ class Demo extends AbstractBase
      * @param array  $params   Optional feature-specific parameters (array)
      *
      * @return array An array with key-value pairs.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getConfig($function, $params = null)

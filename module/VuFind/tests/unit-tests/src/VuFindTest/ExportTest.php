@@ -108,7 +108,7 @@ class ExportTest extends \PHPUnit_Framework_TestCase
             "<?xml version=\"1.0\"?>\n"
             . '<collection xmlns="http://www.loc.gov/MARC21/slim">'
             . '<record><id>a</id></record><record><id>b</id></record></collection>',
-            trim (
+            trim(
                 $this->getExport(array(), $config)->processGroup(
                     'foo',
                     array($this->getFakeMARCXML('a'), $this->getFakeMARCXML('b'))
@@ -223,6 +223,24 @@ class ExportTest extends \PHPUnit_Framework_TestCase
             'http://result?src=http%3A%2F%2Fcallback&fallbacktest=default&configtest=that%3Dtrue',
             $export->getRedirectUrl('foo', 'http://callback')
         );
+    }
+
+    /**
+     * Test getLabelForFormat
+     *
+     * @ return void
+     */
+    public function testGetLabel()
+    {
+        $config = [
+            'foo' => [],
+            'bar' => ['label' => 'baz'],
+        ];
+        $export = $this->getExport(array(), $config);
+        // test "use section label as default"
+        $this->assertEquals('foo', $export->getLabelForFormat('foo'));
+        // test "override with label setting"
+        $this->assertEquals('baz', $export->getLabelForFormat('bar'));
     }
 
     /**

@@ -32,8 +32,7 @@
 namespace Swissbib\Services;
 use Zend\ServiceManager\ServiceManager;
 use Swissbib\VuFind\Recommend\FavoriteFacets;
-
-
+use Zend\I18n\Translator\LoaderPluginManager;
 
 /**
  * Factory for Services.
@@ -107,9 +106,18 @@ class Factory
         return $logger;
     }
 
+
+    /**
+     * Construct the translator.
+     *
+     * @param ServiceManager $sm Service manager.
+     *
+     * @return \Zend\I18n\Translator\TranslatorInterface
+     */
+
     public static function getTranslator(ServiceManager $sm)
     {
-        $factory = new \Zend\I18n\Translator\TranslatorServiceFactory();
+        $factory = new \Zend\Mvc\Service\TranslatorServiceFactory();
         $translator = $factory->createService($sm);
 
         // Set up the ExtendedIni plugin:
@@ -124,22 +132,25 @@ class Factory
             LOCAL_OVERRIDE_DIR . '/languages/union',
 
         );
-        //$translator->getPluginManager()->setService(
-        //    'extendedini',
-        //    new \VuFind\I18n\Translator\Loader\ExtendedIni(
-        //        $pathStack, $config->Site->language
-        //    )
-        //);
 
-        //Todo: discuss this issue with VuFind List
-
-        $translator->getPluginManager()->setService(
+        $fallbackLocales = $config->Site->language == 'en'
+            ? 'en'
+            : array($config->Site->language, 'en');
+        try {
+            /** @var  $pm  LoaderPluginManager*/
+            $pm = $translator->getPluginManager();
+        } catch (\Zend\Mvc\Exception\BadMethodCallException $ex) {
+            // If getPluginManager is missing, this means that the user has
+            // disabled translation in module.config.php or PHP's intl extension
+            // is missing. We can do no further configuration of the object.
+            return $translator;
+        }
+        $pm->setService(
             'extendedini',
             new \Swissbib\VuFind\l18n\Translator\Loader\ExtendedIni(
-                $pathStack, $config->Site->language
+                $pathStack, $fallbackLocales
             )
         );
-
 
 
         // Set up language caching for better performance:

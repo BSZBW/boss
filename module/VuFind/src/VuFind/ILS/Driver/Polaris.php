@@ -117,7 +117,7 @@ class Polaris extends AbstractBase implements \VuFindHttp\HttpServiceAwareInterf
      * @throws ILSException
      * @return obj
      */
-    protected function makeRequest($api_query, $http_method="GET",
+    protected function makeRequest($api_query, $http_method = "GET",
         $patronpassword = "", $json = false
     ) {
         // TODO, just make this for this one call
@@ -126,7 +126,7 @@ class Polaris extends AbstractBase implements \VuFindHttp\HttpServiceAwareInterf
 
         $url = $this->ws_host . $this->ws_app . $api_query;
 
-        $signature_text = $http_method.$url.$date.$patronpassword;
+        $signature_text = $http_method . $url . $date . $patronpassword;
         $signature = base64_encode(
             hash_hmac('sha1', $signature_text, $this->ws_api_key, true)
         );
@@ -164,7 +164,7 @@ class Polaris extends AbstractBase implements \VuFindHttp\HttpServiceAwareInterf
     }
 
     /**
-     * return human-readable date from text like Date(1360051200000-0800)
+     * Return human-readable date from text like Date(1360051200000-0800)
      *
      * @param string $jsontime Input
      *
@@ -294,11 +294,12 @@ class Polaris extends AbstractBase implements \VuFindHttp\HttpServiceAwareInterf
      * @param array  $params   Optional feature-specific parameters (array)
      *
      * @return array An array with key-value pairs.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getConfig($function, $params = null)
     {
-        if (isset($this->config[$function]) ) {
+        if (isset($this->config[$function])) {
             $functionConfig = $this->config[$function];
         } else {
             $functionConfig = false;
@@ -343,7 +344,7 @@ class Polaris extends AbstractBase implements \VuFindHttp\HttpServiceAwareInterf
 
         // all activations are for now(), for now.
         // microtime is msec or sec?? seems to have changed
-        $activationdate = '/Date(' . intval(microtime(true) * 1000) .')/';
+        $activationdate = '/Date(' . intval(microtime(true) * 1000) . ')/';
 
         $jsonrequest = array(
             'PatronID' => $holdDetails['patron']['id'],
@@ -388,6 +389,7 @@ class Polaris extends AbstractBase implements \VuFindHttp\HttpServiceAwareInterf
      * @throws ILSException
      * @return array             An array of associative arrays with locationID
      * and locationDisplay keys
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getPickUpLocations($patron = false, $holdDetails = null)
@@ -427,6 +429,7 @@ class Polaris extends AbstractBase implements \VuFindHttp\HttpServiceAwareInterf
      * or may be ignored.
      *
      * @return string           The default pickup location for the patron.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getDefaultPickUpLocation($patron = false, $holdDetails = null)
@@ -465,6 +468,7 @@ class Polaris extends AbstractBase implements \VuFindHttp\HttpServiceAwareInterf
      * whatever that may mean.
      *
      * @return array             Associative array with 'count' and 'results' keys
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getNewItems($page, $limit, $daysOld, $fundId = null)
@@ -482,6 +486,7 @@ class Polaris extends AbstractBase implements \VuFindHttp\HttpServiceAwareInterf
      * @param string $dept   ID from getDepartments (empty string to match all)
      *
      * @return mixed An array of associative arrays representing reserve items.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function findReserves($course, $inst, $dept)
