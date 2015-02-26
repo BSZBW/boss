@@ -1,5 +1,6 @@
 <div class="row">
   <? $account = $this->auth()->getManager(); ?>
+  <? $user = $this->auth()->isLoggedIn(); ?>
   <? if (!isset($this->layout()->renderingError)): ?>
     <div class="col-md-12">
       <div class="collapse navbar-collapse" id="header-collapse">
@@ -25,7 +26,8 @@
             <li class="logoutOptions<? if (!$account->isLoggedIn()): ?> hidden<? endif ?>">
               <a href="<?= $this->url('myresearch-home', array(), array('query' => array('redirect' => 0))) ?>"
                  class="modal-link" title="<?= $this->transEsc("Your Account") ?>"><i
-                    class="fa fa-user"></i><?= $this->transEsc("Your Account") ?></a>
+                    class="fa fa-user"></i><?= $this->transEsc("Your Account") ?>: <?=$this->escapeHtml($user->firstname . ' ' . $user->lastname)?>
+              </a>
             </li>
             <li class="logoutOptions<? if (!$account->isLoggedIn()): ?> hidden<? endif ?>">
               <a href="<?= $this->url('myresearch-logout') ?>" class="modal-link"
