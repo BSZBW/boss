@@ -22,7 +22,6 @@
   <div id="searchForm">
     <div class="search-tabs-box">
     <? if (count($searchtabs) > 0): ?>
-      <span class="search-tabs-label"><?= $this->transEsc('Search In') ?>:</span>
       <?= $this->render('search/searchTabs'); ?>
       <? $withTabsClass = ' tabsVisible' ?>
     <? endif; ?>
@@ -51,7 +50,6 @@
 
     <div class="search-tabs-box">
     <? if (count($searchtabs) > 0): ?>
-      <span class="search-tabs-label"><?= $this->transEsc('Search In') ?>:</span>
       <?= $this->render('search/searchTabs'); ?>
     <? endif; ?>
     </div>
