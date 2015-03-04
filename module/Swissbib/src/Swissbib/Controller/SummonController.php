@@ -3,6 +3,7 @@
 namespace Swissbib\Controller;
 
 use Zend\Session\Container as SessionContainer;
+use Zend\Http\PhpEnvironment\Response;
 
 use VuFind\Solr\Utils as SolrUtils;
 use VuFind\Controller\SummonController as VuFindSummonController;
@@ -153,9 +154,12 @@ class SummonController extends VuFindSummonController
      *
      * @return \Zend\View\Model\ViewModel
      */
-    public function resultsAction()
-    {
+    public function resultsAction() {
         $viewModel = parent::resultsAction();
+
+        if ($viewModel instanceof Response) {
+            return $viewModel;
+        }
 
         $viewModel->setVariable('htmlLayoutClass', 'resultView');
         $viewModel->setVariable('external', $this->isRestrictedTarget());
