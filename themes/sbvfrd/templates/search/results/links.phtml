@@ -3,18 +3,15 @@
 $link360 = $driver->getLink();
 $openURL = $driver->getOpenURL();
 $linkSFX = $this->openUrl($openURL);
-$linkSFX_param = 'title = "' . $this->transEsc('articles.linkSFX') . '" target="_blank"';
+$linkSFX_param = 'title = "' . $this->transEsc('articles.linkSFX') . '" target="_blank" class="linkbutton primary icon_link_primary btn btn-primary hidden-print"';
 $linkSFX = str_replace("<a ", "<a $linkSFX_param ", $linkSFX);
 
 ?>
 
+<a title="<?= $this->transEsc('articles.link360') ?>" id="getit" class="linkbutton primary icon_link_primary btn btn-primary hidden-print" target="_blank" href="<?= $link360 ?>">
+  <i class="fa fa-external-link"></i>
+  <span class="hidden-xs hidden-sm">get&#160;it</span>
+</a>
 
-
-    <a title="<?= $this->transEsc('articles.link360') ?>" id="getit" class="linkbutton primary icon_link_primary btn btn-primary hidden-print"
-   target="_blank" href="<?= $link360 ?>">
-      <i class="fa fa-share"></i>
-      <span class="hidden-xs hidden-sm">get&#160;it</span>
-   </a>
-
-    <?= $linkSFX ?>
+<?= $linkSFX ?>
 
