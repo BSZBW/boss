@@ -48,7 +48,7 @@ class Flashmessages  extends VFFlashmessages {
      *
      * @return string $html
      */
-    public function __invoke()
+/*    public function __invoke()
     {
         $html = '';
         $namespaces = array('error', 'info');
@@ -87,6 +87,26 @@ class Flashmessages  extends VFFlashmessages {
             $this->fm->clearCurrentMessages();
         }
         return $html;
+    }
+*/
+
+    /**
+     * Get the CSS class to correspond with a messenger namespace
+     *
+     * @param string $ns Namespace
+     *
+     * @return string
+     */
+    protected function getClassForNamespace($ns)
+    {
+        $cssClassName = 'alert alert-';
+        if ($ns == 'error') {
+            $ns = 'danger';
+        } elseif ($ns == 'info') {
+            $cssClassName = 'status_';
+        }
+
+        return $cssClassName . $ns;
     }
 
 }
