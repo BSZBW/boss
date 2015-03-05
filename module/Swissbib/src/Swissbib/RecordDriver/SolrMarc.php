@@ -1221,6 +1221,16 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
     }
 
     /**
+     * Get Copy and Version Identification Note
+     *
+     * @return array
+     */
+    public function getCopyIdentificationNote()
+    {
+        return $this->getFieldArray('562', array('c'));
+    }
+
+    /**
      * Get item-specific note for the record (field 590)
      *
      * @return array
