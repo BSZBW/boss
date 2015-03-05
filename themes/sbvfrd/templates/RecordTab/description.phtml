@@ -64,7 +64,8 @@ $prevTitles  = $record->getPreviousTitles();
         <th><?= $this->transEsc('DOI') ?>: </th>
         <td>
             <? foreach ($dois as $field): ?>
-                <a href="http://doi.org/<?= $field ?>" target="_blank"> <?= $this->escapeHtml($field) ?><br/></a>
+                <? $fieldUrl = 'http://doi.org/' . $field; ?>
+                <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL($fieldUrl) ?>" target="_blank"> <?= $this->escapeHtml($field) ?><br/></a>
             <? endforeach; ?>
         </td>
     </tr>
