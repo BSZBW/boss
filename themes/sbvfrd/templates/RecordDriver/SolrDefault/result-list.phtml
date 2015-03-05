@@ -93,15 +93,11 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
 
   <div class="col-xs-1 col-md-3 actions">
     <div>
-        <? if ($this->userlist()->getMode() !== 'disabled'): ?>
-          <a class="btn btn-primary hidden-print" href="<?= $this->recordLink()->getActionUrl($this->driver, 'Save'); ?>" title="<?= $this->transEsc('Add to favorites') ?>">
-            <span class="memorizelistadd"><i class="fa fa-list-ul"></i></span>
-            <span class="hidden-xs hidden-sm"><?= $this->transEsc('Add to favorites') ?></span>
-          </a>
-          <? /* Saved lists */ ?>
-          <div class="savedLists alert alert-info hidden hidden-xs hidden-sm hidden-print">
-            <strong><?=$this->transEsc('Saved in')?>:</strong>
-          </div>
+        <? if ($this->driver->displayHoldings()): ?>
+            <?= $this->render('search/results/available.phtml') ?>
+            <?= $this->render('search/results/libraries.phtml') ?>
+        <? elseif ($this->driver->displayLinks()): ?>
+            <?= $this->render('search/results/links.phtml') ?>
         <? endif; ?>
 
       <? if (!empty($showFRBR) && $showFRBR && !empty($groupID) && !strcmp($results->getParams()->getSearchHandler(), 'FRBR') == 0) : ?>
@@ -112,16 +108,23 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
         </a>
       <? endif; ?>
 
-      <? if ($this->driver->displayHoldings()): ?>
-        <?= $this->render('search/results/available.phtml') ?>
-        <?= $this->render('search/results/libraries.phtml') ?>
-      <? elseif ($this->driver->displayLinks()): ?>
-        <?= $this->render('search/results/links.phtml') ?>
+      <? if ($this->userlist()->getMode() !== 'disabled'): ?>
+        <a class="btn btn-primary hidden-print" href="<?= $this->recordLink()->getActionUrl($this->driver, 'Save'); ?>" title="<?= $this->transEsc('Add to favorites') ?>">
+          <span class="memorizelistadd"><i class="fa fa-list-ul"></i></span>
+          <span class="hidden-xs hidden-sm"><?= $this->transEsc('List') ?></span>
+        </a>
+            <? /* Saved lists */ ?>
+            <div class="savedLists alert alert-info hidden hidden-xs hidden-sm hidden-print">
+                <strong><?=$this->transEsc('Saved in')?>:</strong>
+            </div>
       <? endif; ?>
 
+
+
       <? if ($this->isFavoriteInstitution($record->getInstitutions())): ?>
+         <!--<i class="fa fa-heart"></i>
           <img class="hidden-print" src="<?= $this->basePath('themes/swissbib/images/icon_favorit_library.gif') ?>"
-                 alt="Favourite library icon (heart)" class="favourite-library">
+                 alt="Favourite library icon (heart)" class="favourite-library">-->
       <? endif; ?>
 
     </div>

@@ -5,6 +5,7 @@ $openURL = $driver->getOpenURL();
 $linkSFX = $this->openUrl($openURL);
 $linkSFX_param = 'title = "' . $this->transEsc('articles.linkSFX') . '" target="_blank" class="linkbutton primary icon_link_primary btn btn-primary hidden-print"';
 $linkSFX = str_replace("<a ", "<a $linkSFX_param ", $linkSFX);
+$linkSFX = str_replace("</a", "SFX</a", $linkSFX);
 
 ?>
 
