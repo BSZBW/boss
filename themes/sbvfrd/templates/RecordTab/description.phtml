@@ -171,15 +171,13 @@ $prevTitles  = $record->getPreviousTitles();
   $perfomer   = $record->getPerformerNote();
   $awards     = $record->getAwards();
   $citenotes  = $record->getCitationNotes();
-  $orignotes  = $record->getOriginalVersionNotes();
-  $versnotes  = $record->getCopyIdentificationNote();
   $copynotes  = $record->getCopyNotes();
   $system     = $record->getSystemDetails();
   ?>
 
   <? if (!empty($notes) or !empty($freq) or !empty($contDates) or !empty($diss) or
       !empty($bib) or !empty($access) or !empty($credits) or !empty($awards) or
-      !empty($citenotes) or !empty($orignotes) or !empty($copynotes) or !empty($versnotes) or
+      !empty($citenotes) or !empty($orignotes) or !empty($copynotes) or
       !empty($origtitle) or !empty($perfomer) or !empty($system)): ?>
     <? $contentDisplayed = true; ?>
 
@@ -315,19 +313,7 @@ $prevTitles  = $record->getPreviousTitles();
         </tr>
       <? endif; ?>
 
-      <? /* Disply field 562 */ ?>
-      <? if (!empty($versnotes)): ?>
-          <tr>
-              <th><?= $this->transEsc('Versionsangabe') ?>: </th>
-              <td>
-                  <? foreach ($versnotes as $field): ?>
-                      <?= $this->escapeHtml($field) ?><br/>
-                  <? endforeach; ?>
-              </td>
-          </tr>
-      <? endif; ?>
-
-      <? /* Display copy and version identification note (fields 562 or 590) */ ?>
+      <? /* Display copy and version identification note (fields 562 and 590) */ ?>
       <? if (!empty($copynotes)): ?>
         <tr>
           <th><?= $this->transEsc('Copy_Note') ?>: </th>

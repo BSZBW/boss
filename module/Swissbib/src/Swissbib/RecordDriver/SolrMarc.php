@@ -34,6 +34,7 @@
 
 namespace Swissbib\RecordDriver;
 
+use Zend\Filter\Null;
 use Zend\I18n\Translator\TranslatorInterface as Translator;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use VuFind\RecordDriver\SolrMarc as VuFindSolrMarc;
@@ -1231,13 +1232,19 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
     }
 
     /**
-     * Get item-specific note for the record (field 590)
+     * Get original version note for the record (MARC21: field 562) and item-specific note
+     * for the record (swissbib MARC: field 590)
      *
      * @return array
      */
     public function getCopyNotes()
     {
-        return $this->getFieldArray('590');
+        $f562 = $this->getFieldArray('562', array('c'));
+        $f590 = $this->getFieldArray('590');
+
+        $copynotes = array_merge_recursive($f562, $f590);
+
+        return $copynotes;
     }
 
 
@@ -1252,10 +1259,10 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
     }
 
 
-    /*
-    * Library / Institution Codes
-     *
-    * @return    String[]
+    /**
+    * Get institution codes
+    *
+    * @return array
     */
     public function getInstitutions($extended = false)
     {
