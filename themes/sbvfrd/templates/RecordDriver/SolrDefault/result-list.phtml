@@ -18,6 +18,7 @@ $groupID = $record->getGroup(true);
 $uniqueID = $record->getUniqueID();
 $showFRBR = $this->configAccess()->Site->displayFrbr;
 $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
+$formats = $viewRecord->getFormatList();
 
 ?>
 <div class="<?=$this->driver->supportsAjaxStatus()?'ajaxItem ':''?>col-xs-11 gutter-1">
@@ -85,6 +86,14 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
       <? if ($uniqueID): ?>
         <span class="hidden-xs label"><strong><?= $this->transEsc('Item_ID') ?>:</strong></span>
         <span><?= $uniqueID ?></span><br />
+      <? endif; ?>
+    </div>
+
+    <!-- Medien-Typ -->
+    <div class="meta">
+      <? if (!empty($formats)): ?>
+        <span class="hidden-xs label"><strong><?= $this->transEsc('Format') ?>:</strong></span>
+        <span><?= $formats ?></span><br />
       <? endif; ?>
     </div>
 
