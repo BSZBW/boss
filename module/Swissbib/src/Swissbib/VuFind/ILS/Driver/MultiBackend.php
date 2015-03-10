@@ -123,11 +123,11 @@ class MultiBackend extends VFMultiBackend {
             return $driver->getHoldingHoldingItems(
                 $resourceId,
                 $institutionCode,
-                $offset = 0,
-                $year = 0,
-                $volume = 0,
-                $numItems = 10,
-                $extraRestParams = array()
+                $offset,
+                $year,
+                $volume,
+                $numItems,
+                $extraRestParams
                 );
         }
     }

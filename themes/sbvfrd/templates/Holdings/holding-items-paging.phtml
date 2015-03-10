@@ -4,40 +4,37 @@
 /** @var String $url */
 /** @var Integer $startPage */
 /** @var Integer $endPage */
-
 ?>
 <div class="paging" id="holding-items-popup-paging">
 	<?php if ($pages > 1): ?>
 
-		<?php if($active>1): ?>
+		<?php if($active > 1): ?>
 			<?php if($pages > 5): ?>
-				<a href="<?=$url?>&amp;page=0" title="<?=$this->transEsc('Start Page')?>" class="paging_first"><?=$this->transEsc('Start Page')?></a>
+				<a href="<?="javascript:swissbib.Holdings.openHoldingItemsPopup('" . $url . "&page=0"  . "', '-')"?>" title="<?=$this->transEsc('Start Page')?>" class="paging_first"><?=$this->transEsc('Start Page')?></a>
 			<?php endif; ?>
-			<a href="<?=$url?>&amp;page=<?=$active-1?>" title="<?=$this->transEsc('Prev')?>" class="paging_back"><?=$this->transEsc('Prev')?></a>
+			<a href="<?="javascript:swissbib.Holdings.openHoldingItemsPopup('" . $url . "&page=" . ($active - 1) . "', '-')"?>" title="<?=$this->transEsc('Prev')?>" class="paging_back"><?=$this->transEsc('Prev')?></a>
 		<?php endif; ?>
 
 		<div class="paging_pages">
 			<ul>
 
-				<?php for($pageNum=$startPage; $pageNum<=$endPage; $pageNum++): ?>
-					<?php if($pageNum===$active): ?>
-						<li>
+				<?php for($pageNum = $startPage; $pageNum <= $endPage; $pageNum++): ?>
+					<li  style="list-style-type:none; display:inline; padding-right: 4px;">
+						<?php if($pageNum === $active): ?>
 							<span><?=$pageNum?></span>
-						</li>
-					<?php else: ?>
-						<li>
-							<a title="<?=$this->transEsc('pagination.page')?> <?=$pageNum?>" href="<?=$url?>&amp;page=<?=$pageNum?>"> <?=$pageNum?></a>
-						</li>
-					<?php endif; ?>
+						<?php else: ?>
+							<a href="<?="javascript:swissbib.Holdings.openHoldingItemsPopup('" . $url . "&page=" . $pageNum . "', '-')"?>" title="<?=$this->transEsc('pagination.page')?> <?=$pageNum?>"><?=$pageNum?></a>
+						<?php endif; ?>
+					</li>
 				<?php endfor; ?>
 
 			</ul>
 		</div>
 
-		<?php if($active<$pages): ?>
-			<a class="paging_forward" title="<?=$this->transEsc('Next');?>" href="<?=$url?>&amp;page=<?=$active+1?>"><?=$this->transEsc('Next');?></a>
+		<?php if($active < $pages): ?>
+			<a href="<?="javascript:swissbib.Holdings.openHoldingItemsPopup('" . $url . "&page=" . ($active + 1) . "', '-')"?>" title="<?=$this->transEsc('Next');?>" class="paging_forward"><?=$this->transEsc('Next');?></a>
 			<?php if($pages > 5): ?>
-				<a class="paging_last" title="<?=$this->transEsc('End Page')?>" href="<?=$url?>&amp;page=<?=$pages?>"><?=$this->transEsc('End Page')?></a>
+				<a href="<?="javascript:swissbib.Holdings.openHoldingItemsPopup('" . $url . "&page=" . $pages . "', '-')"?>" title="<?=$this->transEsc('End Page')?>" class="paging_last"><?=$this->transEsc('End Page')?></a>
 			<?php endif; ?>
 		<?php endif; ?>
 
