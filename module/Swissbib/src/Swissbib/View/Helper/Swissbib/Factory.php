@@ -65,16 +65,6 @@ class Factory
 
     }
 
-    public static function getFlashMessages(ServiceManager $sm)
-    {
-        $messenger = $sm->getServiceLocator()->get('ControllerPluginManager')
-            ->get('FlashMessenger');
-
-        return new \Swissbib\VuFind\View\Helper\Root\Flashmessages($messenger);
-
-    }
-
-
     public static function getCitation(ServiceManager $sm)
     {
         return new \Swissbib\VuFind\View\Helper\Root\Citation(
