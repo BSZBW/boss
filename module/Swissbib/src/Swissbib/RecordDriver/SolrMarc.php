@@ -941,6 +941,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
 
     public function getCorporationNames($asString = true)
     {
+        $unit = $units = $corporation = $corporations = $stringCorporations = null;
         $corporations = $this->getAddedCorporateNames();
         //$corporations[] = $this->getMainCorporateName();
 
@@ -949,15 +950,16 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
 
             foreach ($corporations as $corporation) {
                 $name = isset($corporation['name']) ? rtrim($corporation['name'], '.') : '';
-                foreach ($corporation['unit'] as $unit) {
-                    $units = '. ' . $unit;
+                if (isset($corporation['unit'])) {
+                    foreach ($corporation['unit'] as $unit) {
+                        $units = '. ' . $unit;
+                    }
+                    $stringCorporations[] = trim($name . $units);
                 }
-                $stringCorporations[] = trim($name . $units);
             }
-
-            $corporations = $stringCorporations;
+            return $stringCorporations;
         }
-        return $corporations;
+        return false;
     }
 
 
