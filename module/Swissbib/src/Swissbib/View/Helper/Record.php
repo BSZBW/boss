@@ -183,9 +183,7 @@ class Record extends VuFindRecord
 
     public function getSubtitle($titleStatement)
     {
-        if (isset($titleStatement['1parts_amount'])) {
-            $parts_amount        = is_array($titleStatement['parts_amount']) ? implode('. ', $titleStatement['parts_amount']) : $titleStatement['parts_amount'];
-        }
+        $parts = $parts_amount = $parts_name = $title_remainder = null;
 
         if (isset($titleStatement['1parts_name'])) {
             $keys = array_keys($titleStatement);

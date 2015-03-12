@@ -21,6 +21,11 @@ $showFRBR = $this->configAccess()->Site->displayFrbr;
 $groupID  = $this->driver->getGroup(true);
 $theme    = $this->configAccess()->Site->theme;
 
+$urls = null;
+$openUrl = null;
+$link360 = null;
+$linkSFX = null;
+
 if ($searchClassId != 'Summon') {
     if (strcmp(strtolower($theme),'sbvfrdmulti') != 0) {
         $urls = $viewRecord->getExtendedLinkDetails();
@@ -166,8 +171,8 @@ else {
                 <?=$this->escapeHtml($current['desc'])?>
             </a><br/>
           <? endforeach; ?>
-          <? if ($openUrl): ?>
-            <?=$this->openUrl($openUrl)?><br/>
+          <? if ($linkSFX): ?>
+            <?= $linkSFX ?><br/>
           <? endif; ?>
         </span><br />
       <? endif; ?>

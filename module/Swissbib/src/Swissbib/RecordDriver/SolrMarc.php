@@ -699,7 +699,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
     protected function getThumbnail_erara()
     {
         $field = $this->getDOIs();
-        if (preg_match('/^.*e-rara/', $field['0'])) {
+        if (!empty($field) && preg_match('/^.*e-rara/', $field['0'])) {
             $URL_thumb = 'http://www.e-rara.ch/titlepage/doi/'
                 . $field['0']
                 . '/128';
@@ -707,6 +707,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
             . $URL_thumb
             . '&scale=1';
         }
+        return false;
     }
 
     /**
@@ -1064,21 +1065,20 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
                 'b' => 'remainder',
             ));
 
-        foreach ($data as $field)
-        {
-            $string = '';
-            if (isset($field['statement']))
-            {
-                $string = $field['statement'];
+        if (!empty($data)) {
+            foreach ($data as $field) {
+                if (isset($field['statement']))
+                {
+                    $string = $field['statement'];
+                }
+                if (isset($field['remainder']))
+                {
+                    $string .= ' / ' . $field['remainder'];
+                }
             }
-            if (isset($field['remainder']))
-            {
-                $string .= ' / ' . $field['remainder'];
-            }
+            return $string;
         }
-
-        $data = $string;
-        return $data;
+        return false;
     }
 
 
@@ -1107,25 +1107,27 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
                 'e' => 'equinox',
             ));
 
-        foreach ($data as $field) {
-            $string = '';
+        if (!empty($data)) {
+            foreach ($data as $field) {
+                $string = '';
 
-            if (isset($field['scale']))
-            {
-                $string = $field['scale'];
+                if (isset($field['scale']))
+                {
+                    $string = $field['scale'];
+                }
+                if (isset($field['projection']))
+                {
+                    $string .= '; ' . $field['projection'];
+                }
+                if (isset($field['coordinates']))
+                {
+                    $string .= ' - ' . $field['coordinates'];
+                }
             }
-            if (isset($field['projection']))
-            {
-                $string .= '; ' . $field['projection'];
-            }
-            if (isset($field['coordinates']))
-            {
-                $string .= ' - ' . $field['coordinates'];
-            }
+            return $string;
         }
 
-        $data = $string;
-        return $data;
+        return false;
     }
 
 
