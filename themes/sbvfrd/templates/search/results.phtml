@@ -42,7 +42,8 @@
   $recordTotal = $this->recordTotal = $this->results->getResultTotal();
 
   $exportFormats = $this->export()->getBulkOptions();
-  // $exportFormats = array('EndNote', 'BibTeX'); // @todo: konfigurierbar machen, MARCXML aktivieren (funktioniert aktuell nicht)
+  /* $exportFormats = array('EndNote', 'BibTeX'); // @todo: konfigurierbar machen, MARCXML aktivieren (funktioniert aktuell nicht) */
+  /* href="<?=$this->url('cart-doexport')?>?f=<?=$format?>"*/
 ?>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
@@ -70,7 +71,7 @@
               <ul class="dropdown-menu" role="menu">
                 <? foreach ($exportFormats as $format): ?>
                   <li class="<?=$this->export()->getVisibilityClassName($format)?>">
-                    <a <? if ($this->export()->needsRedirect($format)): ?>target="<?=$this->escapeHtmlAttr($format)?>Main" <? endif; ?>href="<?=$this->url('cart-doexport')?>?f=<?=$format?>"><?= $this->transEsc('Export to') ?> <?= $this->escapeHtml($format) ?></a>
+                    <a <? if ($this->export()->needsRedirect($format)): ?>target="<?=$this->escapeHtmlAttr($format)?>Main" <? endif; ?>href="<?=$this->export()->getBulkUrl($this, $format, $ids);?>"><?= $this->transEsc('Export to') ?> <?= $this->escapeHtml($format) ?></a>
                   </li>
                 <? endforeach; ?>
               </ul>
