@@ -23,6 +23,7 @@
   $uniqueID = $record->getUniqueID();
   $showFRBR = $this->configAccess()->Site->displayFrbr;
   $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
+  $formats = $viewRecord->getFormatList();
 
   // Set up some convenience variables:
   $id = $this->driver->getUniqueId();
@@ -88,13 +89,19 @@
             <span class="hidden-xs label"><strong><?= $this->transEsc('Edition') ?>:</strong></span>
             <span><?= $this->escapeHtml($edition) ?></span><br />
         <? endif; ?>
-      <!-- ID -->
-      <? if ($uniqueID): ?>
-        <span class="visible-print-inline">
-          <span class="hidden-xs label"><strong><?= $this->transEsc('Item_ID') ?>:</strong></span>
-          <span><?= $uniqueID ?></span>
-        </span><br />
-      <? endif; ?>
+        <!-- ID -->
+        <? if ($uniqueID): ?>
+          <span class="visible-print-inline">
+            <span class="hidden-xs label"><strong><?= $this->transEsc('Item_ID') ?>:</strong></span>
+            <span><?= $uniqueID ?></span><br />
+          </span>
+        <? endif; ?>
+        <!-- Medien-Typ -->
+        <? if (!empty($formats)): ?>
+          <span class="hidden-xs label"><strong><?= $this->transEsc('Format') ?>:</strong></span>
+          <span><?= $formats ?></span><br />
+        <? endif; ?>
+        <br />
     </div>
 
     <div class="last">
@@ -157,7 +164,7 @@
           <? endif; ?>
         <? endif; */?>
       <br/>
-      <?=str_replace('class="', 'class="label label-info ', $this->record($this->driver)->getFormatList())?>
+
 
       <? if (!$openUrlActive && empty($urls) && $this->driver->supportsAjaxStatus()): ?>
         <span class="status ajax-availability hidden"><?=$this->transEsc('Loading')?>...</span>
