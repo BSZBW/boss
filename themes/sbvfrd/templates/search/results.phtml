@@ -41,8 +41,9 @@
 
   $recordTotal = $this->recordTotal = $this->results->getResultTotal();
 
-  $bulkExportFormats = array('EndNote', 'BibTeX'); // @todo: konfigurierbar machen, MARCXML aktivieren (funktioniert aktuell nicht)
-
+  $exportFormats = $this->export()->getBulkOptions();
+  /* $exportFormats = array('EndNote', 'BibTeX'); // @todo: konfigurierbar machen, MARCXML aktivieren (funktioniert aktuell nicht) */
+  /* href="<?=$this->url('cart-doexport')?>?f=<?=$format?>"*/
 ?>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
@@ -68,8 +69,10 @@
             <!-- Styling & Funktionstests -->
               <a class="export-toggle dropdown-toggle hidden-xs hidden-sm" data-toggle="dropdown" href="<?=$this->recordLink()->getActionUrl($this->driver, 'Export')?>" title=" <?=$this->transEsc('Export Record') ?>"><i class="fa fa-share"></i></a>
               <ul class="dropdown-menu" role="menu">
-                <? foreach ($bulkExportFormats as $bulkExportFormat): ?>
-                  <li class="<?=$this->export()->getVisibilityClassName($bulkExportFormat)?>"><a <? if ($this->export()->needsRedirect($bulkExportFormat)): ?>target="<?=$this->escapeHtmlAttr($bulkExportFormat)?>Main" <? endif; ?>href="<?=$this->recordLink()->getActionUrl($this->driver, 'Export')?>?style=<?=$this->escapeHtmlAttr($bulkExportFormat)?>"><?=$this->transEsc('Export to')?> <?=$this->transEsc($bulkExportFormat)?></a></li>
+                <? foreach ($exportFormats as $format): ?>
+                  <li class="<?=$this->export()->getVisibilityClassName($format)?>">
+                    <a <? if ($this->export()->needsRedirect($format)): ?>target="<?=$this->escapeHtmlAttr($format)?>Main" <? endif; ?>href="<?=$this->export()->getBulkUrl($this, $format, $ids);?>"><?= $this->transEsc('Export to') ?> <?= $this->escapeHtml($format) ?></a>
+                  </li>
                 <? endforeach; ?>
               </ul>
           </div>
@@ -81,7 +84,6 @@
   <? endif; ?>
 
   <?=$this->render('search/spellingSuggestions.phtml')?>
-
 
   <? if ( $recordTotal > 0 ): // only display these at very top if we have results ?>
     <? foreach ($this->results->getRecommendations('top') as $current): ?>

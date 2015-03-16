@@ -113,6 +113,10 @@ var swissbib = {
    * @return    {Element}
    */
   getSelectedTab: function (baseClassname) {
+
+
+      if ($('div.search-tabs-box:has(ul)'))
+
     baseClassname = baseClassname ? baseClassname : 'tabbed';
     // Get selected tab
     var tab = $("#" + baseClassname + " ul li.selected")[0];
@@ -135,7 +139,11 @@ var swissbib = {
   getIdSelectedTab: function (classnamePrefix) {
     classnamePrefix = classnamePrefix ? classnamePrefix : "tabbed";
 
-    var element = this.getSelectedTab(classnamePrefix);
+      if ($('div.search-tabs-box:has(ul)'))
+          //'Summon' : 'VuFind';
+
+
+          var element = this.getSelectedTab(classnamePrefix);
 
     return element ? element.id : false;
   },
@@ -401,13 +409,10 @@ var swissbib = {
 
 
   initBulkExport: function () {
-    var hasResults = $('#content').find('a.singleLink').length > 0,
-        iconElement = $('#pagefunction_save.bulkExport');
+    var hasResults = $('form[name="bulkActionForm"]').find('a.singleLinkForBulk').length > 0;
 
     if (hasResults) {
-      iconElement.find('.menu a').click($.proxy(this.onBulkExportFormatClick, this));
-    } else {
-      iconElement.hide();
+        $('.dropdown-menu[role="menu"] li').click($.proxy(this.onBulkExportFormatClick, this));
     }
   },
 
@@ -419,25 +424,25 @@ var swissbib = {
    * @param    {Object}    event
    */
   onBulkExportFormatClick: function (event) {
-    var driver = this.getIdSelectedTab() === 'tab_summon' ? 'Summon' : 'VuFind';
-    var baseUrl = event.target.href,
+
+
+        var driver = $('div.search-tabs-box:has(ul)').length ? $('div.search-tabs-box li.active').attr('data-searchClass') : 'VuFind';
+        var baseUrl = event.target.href,
         idArgs = [],
         fullUrl,
-        ids = $('#content a.singleLink').map(function () {
+        ids = $('a.singleLinkForBulk').map(function () {
           return driver + '|' + this.href.split('/').pop()
         }).get();
 
-    event.preventDefault();
+        event.preventDefault();
 
-    $.each(ids, function (index, id) {
-      idArgs.push('i[]=' + id);
-    });
+        $.each(ids, function (index, id) {
+          idArgs.push('i[]=' + id);
+        });
 
-    fullUrl = baseUrl + '&' + idArgs.join('&');
+        fullUrl = baseUrl + '&' + idArgs.join('&');
 
-//      console.log(fullUrl);
-
-    window.open(fullUrl);
+        window.open(fullUrl);
 //      location.href = fullUrl;
   },
 
