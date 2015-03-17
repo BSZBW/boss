@@ -9,22 +9,11 @@
 /** @var String $institution */
 
 $baseUrl = $this->url('holdings-holding-items', $baseUrlParams) . '?';
-$fullUrl = $baseUrl;
-
-if ($year) {
-  $fullUrl .= '&year=' . urlencode($year);
-}
-if ($volume) {
-  $fullUrl .= '&volume=' . urlencode($volume);
-}
-if ($volume) {
-  $fullUrl .= '&page=' . $this->escapeHtml($page);
-}
 
 $institutionLabel = $this->zendTranslate($institution, 'institution');
 
 ?>
-  <form id="holdings-items-filter-form" action="<?= $this->escapeHtml($fullUrl) ?>">
+  <form id="holdings-items-filter-form" action="<?= $this->escapeHtml($baseUrl) ?>">
     <input type="hidden" name="page" value="<?= $this->escapeHtml($page) ?>">
 
     <table id="holdings-items-header">
@@ -32,7 +21,7 @@ $institutionLabel = $this->zendTranslate($institution, 'institution');
         <td>
           <?php if (sizeof($filters['years'])): ?>
             <label for="holding-items-filter-year"><?= $this->transEsc('Show year') ?></label>
-            <select id="holding-items-filter-year" name="year" onchange="var year=document.getElementById('holding-items-filter-year').value; swissbib.Holdings.openHoldingItemsPopup('<?= $fullUrl . "&year=" ?>'+year, '-')">
+            <select id="holding-items-filter-year" name="year" onchange="var year=document.getElementById('holding-items-filter-year').value; swissbib.Holdings.openHoldingItemsPopup('<?= $baseUrl . "&year=" ?>'+year, '-')">
               <option value=""><?= $this->transEsc('All years') ?></option>
               <?php foreach ($filters['years'] as $yearValue): ?>
                 <option <?= ($yearValue == $year ? 'selected="selected"' : '') ?>><?= $yearValue ?></option>
@@ -43,7 +32,7 @@ $institutionLabel = $this->zendTranslate($institution, 'institution');
         <td>
           <?php if (sizeof($filters['volumes'])): ?>
             <label for="holding-items-filter-volume"><?= $this->transEsc('Show volumes') ?></label>
-            <select id="holding-items-filter-volume" name="volume" onchange="var volume=document.getElementById('holding-items-filter-volume').value; swissbib.Holdings.openHoldingItemsPopup('<?= $fullUrl . "&volume=" ?>'+volume, '-')">
+            <select id="holding-items-filter-volume" name="volume" onchange="var volume=document.getElementById('holding-items-filter-volume').value; swissbib.Holdings.openHoldingItemsPopup('<?= $baseUrl . "&volume=" ?>'+volume, '-')">
               <option value=""><?= $this->transEsc('All volumes') ?></option>
               <?php foreach ($filters['volumes'] as $volumeValue): ?>
                 <option <?= ($volumeValue == $volume ? 'selected="selected"' : '') ?>><?= $volumeValue ?></option>
@@ -52,7 +41,7 @@ $institutionLabel = $this->zendTranslate($institution, 'institution');
           <?php endif; ?>
         </td>
         <td class="pagingHeader">
-          <?= $this->holdingItemsPaging($fullUrl, $total, $page) ?>
+          <?= $this->holdingItemsPaging($baseUrl, $total, $page) ?>
         </td>
       </tr>
     </table>

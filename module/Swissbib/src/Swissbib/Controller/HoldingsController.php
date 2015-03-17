@@ -72,7 +72,7 @@ class HoldingsController extends BaseController
         /** @var Aleph $aleph */
         $catalog = $this->getILS();
         $holdingItems = $catalog->getHoldingHoldingItems($resourceId, $institution, $offset, $year, $volume, $this->PAGESIZE_HOLDINGITEMS);
-        $totalItems = $catalog->getHoldingItemCount($resourceId, $institution, $year, $volume);
+        $totalItems = $catalog->getHoldingItemCount($resourceId, $institution, $offset, $year, $volume);
         /** @var Holdings $helper */
         $helper = $this->getServiceLocator()->get('Swissbib\HoldingsHelper');
         $dummyHoldingItem = $this->getFirstHoldingItem($idRecord, $institution);

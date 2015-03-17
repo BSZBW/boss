@@ -221,11 +221,11 @@ class Aleph extends VuFindDriver
                     $year = 0,
                     $volume = 0,
                     $numItems = 10,
-                    array $extraRestParams = array()
-    ) {
-        $links    = $this->getHoldingHoldingsLinkList($resourceId, $institutionCode, $offset, $year, $volume, $extraRestParams);
-        $items    = array();
-        $dataMap         = array(
+                    array $extraRestParams = array() )
+    {
+        $links   = $this->getHoldingHoldingsLinkList($resourceId, $institutionCode, $offset, $year, $volume, $extraRestParams);
+        $items   = array();
+        $dataMap = array(
             'title'                 => 'z13-title',
             'author'                => 'z13-author',
             'itemStatus'            => 'z30-item-status',
@@ -233,10 +233,10 @@ class Aleph extends VuFindDriver
             'library'               => 'z30-sub-library',
             'barcode'               => 'z30-barcode',
             'location_expanded'     => 'z30-collection',
-            'location_code'            => 'z30-collection-code',
+            'location_code'         => 'z30-collection-code',
             'description'           => 'z30-description',
-            'raw-sequence-number'    => 'z30-item-sequence',
-            'localid'                => 'z30-doc-number',
+            'raw-sequence-number'   => 'z30-item-sequence',
+            'localid'               => 'z30-doc-number',
             'opac_note'             => 'z30-note-opac',
         );
 
@@ -267,20 +267,20 @@ class Aleph extends VuFindDriver
      */
     public function getResourceFilters($resourceId)
     {
-        $pathElements    = array('record', $resourceId, 'filters');
-        $xmlResponse    = $this->doRestDLFRequest($pathElements);
+        $pathElements = array('record', $resourceId, 'filters');
+        $xmlResponse  = $this->doRestDLFRequest($pathElements);
 
-        $yearNodes        = $xmlResponse->{'record-filters'}->xpath('//year');
-        $years             = array_map('trim', $yearNodes);
+        $yearNodes    = $xmlResponse->{'record-filters'}->xpath('//year');
+        $years        = array_map('trim', $yearNodes);
         sort($years);
 
-        $volumeNodes    = $xmlResponse->{'record-filters'}->xpath('//volume');
-        $volumes    = array_map('trim', $volumeNodes);
+        $volumeNodes  = $xmlResponse->{'record-filters'}->xpath('//volume');
+        $volumes      = array_map('trim', $volumeNodes);
         sort($volumes);
 
         return array(
-            'years'        => $years,
-            'volumes'    => $volumes
+            'years'   => $years,
+            'volumes' => $volumes
         );
     }
 
@@ -295,13 +295,9 @@ class Aleph extends VuFindDriver
      * @param int    $volume
      * @return    Integer
      */
-    public function getHoldingItemCount($resourceId, $institutionCode = '', $year = 0, $volume = 0)
+    public function getHoldingItemCount($resourceId, $institutionCode = '', $offset = 0, $year = 0, $volume = 0)
     {
-        $links    = $this->getHoldingHoldingsLinkList(    $resourceId,
-                                                        $institutionCode,
-                                                        0,
-                                                        $year,
-                                                        $volume);
+        $links = $this->getHoldingHoldingsLinkList( $resourceId, $institutionCode, 0, $year, $volume );
 
         return sizeof($links);
     }
