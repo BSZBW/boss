@@ -53,12 +53,12 @@ class AvailabilityInfo extends AbstractHelper
             switch ($statusfield) {
                 case self::LENDABLE_AVAILABLE:
 
-                    $info = "<div class='availability_ok'>&nbsp;</div>";
+                    $info = "<div class='availability fa-check'>&nbsp;</div>";
                     break;
                 case self::LENDABLE_BORROWED:
 
                     unset($borrowinginformation['due_hour']);
-                    $info = "<div class='availability_notok'>";
+                    $info = "<div class='availability fa-ban'>";
 
                     if ($borrowinginformation['due_date'] === 'on reserve') {
                         $info .= $escapedTranslation('On Reserve') . " (" . $borrowinginformation['no_requests'] . ")";
@@ -72,7 +72,7 @@ class AvailabilityInfo extends AbstractHelper
                     else {
                         foreach ($borrowinginformation as $key => $value) {
                             if (strcmp(trim($value), "") != 0) {
-                                $info .= "<div class='nice'>" . $escapedTranslation($key) . "&nbsp;" . $value . "</div>";
+                                $info .= "<div>" . $escapedTranslation($key) . "&nbsp;" . $value . "</div>";
                             }
                         }
                     }
@@ -83,25 +83,25 @@ class AvailabilityInfo extends AbstractHelper
                 case self::USE_ON_SITE:
 
                     $infotext = $escapedTranslation($statusfield);
-                    $info = "<div class='availability_ok'>" . "$infotext" . "</div>";
+                    $info = "<div class='availability fa-check'><div>" . "$infotext" . "</div></div>";
                     break;
                 case self::LOOK_ON_SITE:
 
                     $infotext = $escapedTranslation($statusfield);
-                    $info = "<div class='availability_moreInfo'><div class='nice'>" . "$infotext" . "</div></div>";
+                    $info = "<div class='availability fa-question'><div>" . "$infotext" . "</div></div>";
                     break;
                 case self::EXHIBITION:
 
                     unset($borrowinginformation['due_hour']);
                     $infotext = $escapedTranslation($statusfield);
-                    $info = "<div class='availability_notok'>Ausstellung";
+                    $info = "<div class='availability fa-ban'>Ausstellung";
 
                     if ($borrowinginformation['due_date'] === 'on reserve') {
                         $info .= $escapedTranslation('On Reserve') . " (" . $borrowinginformation['no_requests'] . ")";
                     } else {
                         foreach ($borrowinginformation as $key => $value) {
                             if (strcmp(trim($value), "") != 0) {
-                                $info .= "<div class='nice'>" . $escapedTranslation($key) . "&nbsp;" . $value . "</div>";
+                                $info .= "<div>" . $escapedTranslation($key) . "&nbsp;" . $value . "</div>";
                             }
                         }
                     }
@@ -111,7 +111,7 @@ class AvailabilityInfo extends AbstractHelper
                     break;
                 case self::INPROCESS:
                     $infotext = $escapedTranslation($statusfield);
-                    $info = "<div class='availability_ok'><div class='nice'>" . "$infotext" . "</div></div>";
+                    $info = "<div class='availability fa-check'><div>" . "$infotext" . "</div></div>";
                     break;
                 case self::ONLINE_AVAILABLE:
 
@@ -122,7 +122,7 @@ class AvailabilityInfo extends AbstractHelper
                 case self::SUBSTITUTE:
 
                 $infotext = $escapedTranslation($statusfield);
-                    $info = "<div class='availability_notok'>" . "$infotext" . "</div>";
+                    $info = "<div class='availability fa-ban'>" . "$infotext" . "</div>";
                     break;
                 default:
                     /**
