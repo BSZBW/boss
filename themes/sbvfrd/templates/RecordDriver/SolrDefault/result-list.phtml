@@ -18,6 +18,7 @@ $groupID = $record->getGroup(true);
 $uniqueID = $record->getUniqueID();
 $showFRBR = $this->configAccess()->Site->displayFrbr;
 $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
+$formats = $viewRecord->getFormatList();
 
 ?>
 <div class="<?=$this->driver->supportsAjaxStatus()?'ajaxItem ':''?>col-xs-11 gutter-1">
@@ -88,7 +89,14 @@ $memorizeLink = $this->recordLink()->getActionUrl($this->driver, 'Save');
       <? endif; ?>
     </div>
 
-    <?=str_replace('class="', 'class="label label-info ', $this->record($this->driver)->getFormatList())?>
+    <!-- Medien-Typ -->
+    <div class="meta">
+      <? if (!empty($formats)): ?>
+        <span class="hidden-xs label"><strong><?= $this->transEsc('Format') ?>:</strong></span>
+        <span><?= $formats ?></span><br />
+      <? endif; ?>
+    </div>
+
   </div>
 
   <div class="col-xs-1 col-md-3 actions">
