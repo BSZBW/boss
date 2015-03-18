@@ -4,15 +4,25 @@
 /** @var String $url */
 /** @var Integer $startPage */
 /** @var Integer $endPage */
+
+$fullUrl = $baseUrl;
+
+if ($year) {
+    $fullUrl .= '&year=' . urlencode($year);
+}
+if ($volume) {
+    $fullUrl .= '&volume=' . urlencode($volume);
+}
+
 ?>
 <div class="paging" id="holding-items-popup-paging">
 	<?php if ($pages > 1): ?>
 
 		<?php if($active > 1): ?>
 			<?php if($pages > 5): ?>
-				<a href="<?="javascript:swissbib.Holdings.openHoldingItemsPopup('" . $url . "&page=0"  . "', '-')"?>" title="<?=$this->transEsc('Start Page')?>" class="paging_first"><?=$this->transEsc('Start Page')?></a>
+				<a href="<?="javascript:swissbib.Holdings.openHoldingItemsPopup('" . $fullUrl . "&page=0"  . "', '-')"?>" title="<?=$this->transEsc('Start Page')?>" class="paging_first"><?=$this->transEsc('Start Page')?></a>
 			<?php endif; ?>
-			<a href="<?="javascript:swissbib.Holdings.openHoldingItemsPopup('" . $url . "&page=" . ($active - 1) . "', '-')"?>" title="<?=$this->transEsc('Prev')?>" class="paging_back"><?=$this->transEsc('Prev')?></a>
+			<a href="<?="javascript:swissbib.Holdings.openHoldingItemsPopup('" . $fullUrl . "&page=" . ($active - 1) . "', '-')"?>" title="<?=$this->transEsc('Prev')?>" class="paging_back"><?=$this->transEsc('Prev')?></a>
 		<?php endif; ?>
 
 		<div class="paging_pages">
@@ -23,7 +33,7 @@
 						<?php if($pageNum === $active): ?>
 							<span><?=$pageNum?></span>
 						<?php else: ?>
-							<a href="<?="javascript:swissbib.Holdings.openHoldingItemsPopup('" . $url . "&page=" . $pageNum . "', '-')"?>" title="<?=$this->transEsc('pagination.page')?> <?=$pageNum?>"><?=$pageNum?></a>
+							<a href="<?="javascript:swissbib.Holdings.openHoldingItemsPopup('" . $fullUrl . "&page=" . $pageNum . "', '-')"?>" title="<?=$this->transEsc('pagination.page')?> <?=$pageNum?>"><?=$pageNum?></a>
 						<?php endif; ?>
 					</li>
 				<?php endfor; ?>
@@ -32,9 +42,9 @@
 		</div>
 
 		<?php if($active < $pages): ?>
-			<a href="<?="javascript:swissbib.Holdings.openHoldingItemsPopup('" . $url . "&page=" . ($active + 1) . "', '-')"?>" title="<?=$this->transEsc('Next');?>" class="paging_forward"><?=$this->transEsc('Next');?></a>
+			<a href="<?="javascript:swissbib.Holdings.openHoldingItemsPopup('" . $fullUrl . "&page=" . ($active + 1) . "', '-')"?>" title="<?=$this->transEsc('Next');?>" class="paging_forward"><?=$this->transEsc('Next');?></a>
 			<?php if($pages > 5): ?>
-				<a href="<?="javascript:swissbib.Holdings.openHoldingItemsPopup('" . $url . "&page=" . $pages . "', '-')"?>" title="<?=$this->transEsc('End Page')?>" class="paging_last"><?=$this->transEsc('End Page')?></a>
+				<a href="<?="javascript:swissbib.Holdings.openHoldingItemsPopup('" . $fullUrl . "&page=" . $pages . "', '-')"?>" title="<?=$this->transEsc('End Page')?>" class="paging_last"><?=$this->transEsc('End Page')?></a>
 			<?php endif; ?>
 		<?php endif; ?>
 

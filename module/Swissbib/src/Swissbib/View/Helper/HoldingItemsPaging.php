@@ -15,7 +15,7 @@ class HoldingItemsPaging extends AbstractHelper
      */
     protected $pageSize = 10;
 
-    public function __invoke($baseUrl, $total, $activePage = 1)
+    public function __invoke($baseUrl, $total, $activePage = 1, $year, $volume)
     {
         $maxPages    = 10;
         $maxReqPages = ceil($total/$this->pageSize);
@@ -27,9 +27,11 @@ class HoldingItemsPaging extends AbstractHelper
         $data = array(
             'pages'     => $maxReqPages,
             'active'    => $activePage,
-            'url'       => $baseUrl,
+            'baseUrl'   => $baseUrl,
             'startPage' => $startPage,
-            'endPage'   => $endPage
+            'endPage'   => $endPage,
+            'year'      => $year,
+            'volume'    => $volume
         );
 
         return $this->getView()->render('Holdings/holding-items-paging', $data);

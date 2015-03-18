@@ -14,8 +14,6 @@ $institutionLabel = $this->zendTranslate($institution, 'institution');
 
 ?>
   <form id="holdings-items-filter-form" action="<?= $this->escapeHtml($baseUrl) ?>">
-    <input type="hidden" name="page" value="<?= $this->escapeHtml($page) ?>">
-
     <table id="holdings-items-header">
       <tr>
         <td>
@@ -41,7 +39,7 @@ $institutionLabel = $this->zendTranslate($institution, 'institution');
           <?php endif; ?>
         </td>
         <td class="pagingHeader">
-          <?= $this->holdingItemsPaging($baseUrl, $total, $page) ?>
+          <?= $this->holdingItemsPaging($baseUrl, $total, $page, $year, $volume) ?>
         </td>
       </tr>
     </table>
