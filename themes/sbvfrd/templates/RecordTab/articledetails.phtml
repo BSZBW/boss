@@ -5,12 +5,6 @@
 $record = $this->driver;
 $viewRecord = $this->record($record);
 
-$link360 = $record->getLink();
-$openURL = $record->getOpenURL();
-$linkSFX = $this->openUrl($openURL);
-$linkSFX_param = 'title = "' . $this->transEsc('articles.linkSFX') . '" target="_blank"';
-$linkSFX = str_replace("<a ", "<a $linkSFX_param ", $linkSFX);
-
 $journalTitle         = $record->getContainerTitle();
 
 $ABSTRACT = trim(implode($record->getSummary()));
@@ -19,27 +13,15 @@ $DATABASE = $record->getDatabaseTitle();
 
 ?>
 <div class="details">
-  <!--<label><?/*= $this->transEsc('Get full text') */?>: </label>
-
-
-    <a title="<?/*= $this->transEsc('articles.link360') */?>" class="linkbutton primary icon_link_primary"
-       target="_blank" href="<?/*= $link360 */?>">
-      <span>get&#160;it</span></a><br/>
-
-
-  <label>SFX Services:</label>
-
-  <?/*= $linkSFX */?>
-
-  <br/>-->
-  <?php /*if ($journalTitle): */?><!--
-  <label><?/*= $this->transEsc('Published in') */?>:</label>
-  <p><a href="<?/*= $viewRecord->getLink('journaltitle', $journalTitle)*/?>"><?/*=$this->escapeHtml($journalTitle) */?></a></p>
-  --><?php /*endif; */?>
 
   <?php if ($ABSTRACT): ?>
     <label><?= $this->transEsc('Summary') ?>:</label>
     <p><?= $this->escapeHtml($ABSTRACT) ?></p>
+  <?php endif; ?>
+
+  <?php if ($journalTitle): ?>
+    <label><?= $this->transEsc('Published in') ?>:</label>
+    <p><a href="<?= $viewRecord->getLink('journaltitle', $journalTitle)?>"><?=$this->escapeHtml($journalTitle) ?></a></p>
   <?php endif; ?>
 
   <?php if ($SUBJECTS): ?>
