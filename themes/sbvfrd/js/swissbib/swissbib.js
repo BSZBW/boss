@@ -412,7 +412,7 @@ var swissbib = {
     var hasResults = $('form[name="bulkActionForm"]').find('a.singleLinkForBulk').length > 0;
 
     if (hasResults) {
-        $('.dropdown-menu[role="menu"] li').click($.proxy(this.onBulkExportFormatClick, this));
+        $('.dropdown-menu[role="export-menu"] li').click($.proxy(this.onBulkExportFormatClick, this));
     }
   },
 

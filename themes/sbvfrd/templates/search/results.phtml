@@ -68,7 +68,7 @@
             <? endif; ?>
             <!-- Styling & Funktionstests -->
               <a class="export-toggle dropdown-toggle hidden-xs hidden-sm" data-toggle="dropdown" href="<?=$this->recordLink()->getActionUrl($this->driver, 'Export')?>" title=" <?=$this->transEsc('Export Record') ?>"><i class="fa fa-share"></i></a>
-              <ul class="dropdown-menu" role="menu">
+              <ul class="dropdown-menu" role="export-menu">
                 <? foreach ($exportFormats as $format): ?>
                   <li class="<?=$this->export()->getVisibilityClassName($format)?>">
                     <a <? if ($this->export()->needsRedirect($format)): ?>target="<?=$this->escapeHtmlAttr($format)?>Main" <? endif; ?>href="<?=$this->export()->getBulkUrl($this, $format, array());?>"><?= $this->transEsc('Export to') ?> <?= $this->escapeHtml($format) ?></a>
