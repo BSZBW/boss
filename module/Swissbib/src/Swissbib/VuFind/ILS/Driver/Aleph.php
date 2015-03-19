@@ -310,13 +310,15 @@ class Aleph extends VuFindDriver
      *
      * @return array An array with key-value pairs.
      */
-    public function getConfig($func)
+    public function getConfig($function, $params = null)
     {
-        if ($func == "Holds") {
-            return $this->config['Holds'];
+        if (isset($this->config[$function])) {
+            $functionConfig = $this->config[$function];
         } else {
-            return array();
+            $functionConfig = false;
         }
+
+        return $functionConfig;
     }
 
 
