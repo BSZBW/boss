@@ -775,4 +775,88 @@ class Aleph extends VuFindDriver
             // Return list without sort keys
         return array_values($fines);
     }
+
+    /**
+     * Change Password
+     *
+     * Attempts to change patron password (PIN code)
+     *
+     * @param array $details An array of patron id and old and new password:
+     *
+     * 'patron'      The patron array from patronLogin
+     * 'oldPassword' Old password
+     * 'newPassword' New password
+     *
+     * @return array An array of data on the request including
+     * whether or not it was successful and a system message (if available)
+     */
+    public function changePassword($details)
+    {
+        $patron = $details['patron'];
+        //$id = htmlspecialchars($patron['id'], ENT_COMPAT, 'UTF-8');
+        //$lastname = htmlspecialchars($patron['lastname'], ENT_COMPAT, 'UTF-8');
+        //$ubId = htmlspecialchars($this->ws_patronHomeUbId, ENT_COMPAT, 'UTF-8');
+        $oldPIN = trim(
+            htmlspecialchars($details['oldPassword'], ENT_COMPAT, 'UTF-8')
+        );
+        if ($oldPIN === '') {
+            // Voyager requires the PIN code to be set even if it was empty
+            $oldPIN = '     ';
+        }
+        $newPIN = trim(
+            htmlspecialchars($details['newPassword'], ENT_COMPAT, 'UTF-8')
+        );
+        //$barcode = htmlspecialchars($patron['cat_username'], ENT_COMPAT, 'UTF-8');
+
+        $xml =  <<<EOT
+post_xml=<?xml version = "1.0" encoding = "UTF-8"?>
+<get-pat-pswd>
+    <password_parameters>
+        <old-password>$oldPIN</old-password>
+        <new-password>$newPIN</new-password>
+    </password_parameters>
+</get-pat-pswd>
+EOT;
+//POST http://alephtest.unibas.ch:1891/rest-dlf/patron/A0550632/patronInformation/password
+        $this->doRestDLFRequest(
+            [
+                'patron', $patron['id'], 'patronInformation', 'password'
+            ],
+            null, 'POST', $xml
+        );
+
+        /*$result = $this->makeRequest(
+            ['ChangePINService' => false], [], 'POST', $xml
+        );
+
+        $result->registerXPathNamespace(
+            'ser', 'http://www.endinfosys.com/Voyager/serviceParameters'
+        );
+        $error = $result->xpath("//ser:message[@type='error']");
+        if (!empty($error)) {
+            $error = reset($error);
+            $code = $error->attributes()->errorCode;
+            $exceptionNamespace = 'com.endinfosys.voyager.patronpin.PatronPIN.';
+            if ($code == $exceptionNamespace . 'ValidateException') {
+                return [
+                    'success' => false, 'status' => 'authentication_error_invalid'
+                ];
+            }
+            if ($code == $exceptionNamespace . 'ValidateUniqueException') {
+                return [
+                    'success' => false, 'status' => 'password_error_not_unique'
+                ];
+            }
+            if ($code == $exceptionNamespace . 'ValidateLengthException') {
+                // This issue should not be encountered if the settings are correct.
+                // Log an error and let through for an exception
+                $this->error(
+                    'ValidateLengthException encountered when trying to'
+                    . ' change patron PIN. Verify PIN length settings.'
+                );
+            }
+            throw new ILSException((string)$error);
+        }*/
+        return ['success' => true, 'status' => 'change_password_ok'];
+    }
 }
