@@ -163,7 +163,10 @@ class Solr extends VuFindTreeDataSourceSolr
              }
 
              // Sort arrays with precision of up to 6 decimals
-             return bccomp($first, $second, 6);
+             return $first === $second ? 0 : $first < $second ? -1 : 1;
+             //don't use bccomp. needs a special compiler configuration for PHP (works on Ubuntu but not on RedHat host (PHP version 5.4 as well as 5.5)
+             //PHP 5.5 was tested by myself on sb-vf16
+             //return bccomp($first, $second, 6);
        };
         usort($array, $sorter);
 
