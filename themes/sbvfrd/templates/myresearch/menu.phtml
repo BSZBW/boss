@@ -43,7 +43,7 @@
               <?=$this->transEsc('changeaddress') ?>
               <span class="pull-right"><i class="fa fa-home"></i></span>
             </a>
-            <a href="<?=$loginlink ?>" class="list-group-item" target="_blank">
+            <a href="<?=$this->url('myresearch-changepassword')?>" class="list-group-item<?=$this->active == 'holds' ? ' active' : ''?>">
               <?=$this->transEsc('Change Password') ?>
               <span class="pull-right"><i class="fa fa-lock"></i></span>
             </a>
