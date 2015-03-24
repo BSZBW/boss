@@ -1,4 +1,26 @@
-<h1>Anmelden</h1>
+<h1>Benutzerkonto, My swissbib</h1>
+<p>Ihr Benutzerkonto („My swissbib“) [Link Anmeldung] informiert Sie über Ihre Ausleihen, Bestellungen sowie Erinnerungen/Gebühren. Über das Konto können Sie ausgeliehene Medien verlängern sowie Ihre persönlichen Daten [Link zu Adress-/PW-Änderung] und <a href="<?= $this->url('myresearch-settings'); ?>"><?= $this->transEsc('My_Search_Settings') ?></a> ändern.</p>
+<h2>Noch kein Konto?</h2>
+<p><a href="http://aleph.unibas.ch/F/?func=bor-new-0" target="_blank"><?= $this->transEsc('Create New Account') ?></a> (oder vor Ort in einer der IDS-Ausleihbibliotheken in <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://www.ub.unibas.ch/bibliotheksnetz/verbund-basel/bibliotheken-im-verbund/liste-der-bibliotheken') ?>" target="_blank">Basel</a> oder <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://www.ub.unibe.ch/content/ueber_uns/bibliotheken_der_ub/berner_ids_bibliotheken') ?>" target="_blank">Bern</a>)</p>
+<p>Benutzerausweise einer anderen <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://www.informationsverbund.ch/21.0.html') ?>" target="_blank" title="IDS-Bibliothek">IDS-Bibliothek</a> sind auch für swissbib Basel Bern <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://www.informationsverbund.ch/6.0.html') ?>" target="_blank">gültig</a>, ebenso die Studierenden- und Mitarbeitendenausweise der Universitäten Basel und Bern.</p>
+<h2>Passwort vergessen</h2>
+<p>Kontaktieren Sie Ihre <a href="<?= $this->basePath('Libraries') ?>" title="Liste der Institutionen">Bibliothek</a>.</p>
+<h2>Benutzerausweis verloren</h2>
+<p>Bitte kommen Sie bei einer der IDS-Ausleihbibliotheken vorbei: <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://www.ub.unibas.ch/bibliotheksnetz/verbund-basel/bibliotheken-im-verbund/liste-der-bibliotheken') ?>" target="_blank">Region Basel</a>, <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://www.ub.unibe.ch/content/ueber_uns/bibliotheken_der_ub/berner_ids_bibliotheken') ?>" target="_blank">Region Bern</a>. Ein Ersatz ist kostenpflichtig und wir benötigen dazu einen amtlichen Ausweis.</p>
+<h1>Persönliche Einstellungen</h1>
+<h2>Gespeicherte Suchen</h2>
+<p>Wenn Sie nicht angemeldet sind, werden Ihre Suchen gespeichert, bis Sie den Browser schliessen. Wenn Sie sich anmelden [Link Anmeldung], können Sie Ihre Suchanfragen längerfristig speichern, um sie bei Bedarf zu wiederholen.</p>
+<h2>Einstellungen</h2>
+<p>Sie können die Sprache der Suchoberfläche, die angezeigte Anzahl Treffer pro Seite sowie das Sortierungskriterium für die Trefferliste nach Ihren Vorlieben einstellen. Die Einstellungen sind nur wirksam, wenn Sie angemeldet [Link Anmeldung] sind.</p>
+<h2>Favoriten</h2>
+<p>Um eine Bibliothek als Ihren Favoriten zu markieren, benutzen Sie entweder die Suche unter <a href="<?=$this->url('myresearch-favorite-institutions')?>"><?=$this->transEsc('mylibraries')?></a> oder klicken Sie in einer Titelanzeige bei der entsprechenden Bibliothek auf <i class="fa fa-heart-o"></i>. In der Liste der Suchergebnisse sind Ihre Favoriten-Bibliotheken mit <i class="fa fa-heart"></i> markiert. Wenn Sie angemeldet sind [Link Anmeldung] können Sie die Suchergebnisse nach Vorhandensein in Ihren Favoritenbibliotheken filtern.</p>
+<h2>Merklisten</h2>
+<p>Wenn Sie sich anmelden [Link Anmeldung], können Sie Titel auf Merklisten speichern, indem Sie auf <i class="fa fa-list-ul"></i> klicken.</p>
+
+
+
+
+<!--<h1>Anmelden</h1>
 <p>Melden Sie sich mit der Benutzernummer und dem Passwort an, das Sie bereits bisher für Ausleihen im Verbund IDS Basel
     Bern benutzt haben.</p>
 
@@ -55,6 +77,6 @@
 <p>Sprache der Katalogoberfläche, Anzahl Treffer pro Seite</p>
 
 <h2>Konto IDS Basel Bern</h2>
-<p>Ausleihfunktionen</p>
+<p>Ausleihfunktionen</p>-->
 
 

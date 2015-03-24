@@ -1,4 +1,107 @@
 <h1>Suchen</h1>
+[Film einfache Suche verlinken/einbetten]
+
+<h2>Suchbegriffe kombinieren</h2>
+<p>Boolsche Operatoren (AND, OR, NOT) erlauben es, Suchbegriffe logisch miteinander zu verknüpfen. Boolsche Operatoren werden groß geschrieben.</p>
+<table class="table table-striped">
+    <tbody>
+    <tr>
+        <td><i>joyce ulysses</i></td>
+        <td>Beide Begriffe kommen vor</td>
+    </tr>
+    <tr>
+        <td><i>joyce AND ulysses</i></td>
+        <td>Beide Begriffe kommen im selben Feld vor</td>
+    </tr>
+    <tr>
+        <td><i>joyce OR ulysses</i></td>
+        <td>Einer der beiden Begriffe kommt vor</td>
+    </tr>
+    <tr>
+        <td><i>joyce NOT ulysses</i></td>
+        <td><i>joyce</i> kommt vor, nicht aber <i>ulysses</i></td>
+    </tr>
+    <tr>
+        <td>Komplexere Kombinationen</td>
+        <td>Siehe <a href="<?= $this->url('help-page', array('topic' => 'Advanced')) ?>">Hilfe - Erweiterte Suche</a>.
+        </td>
+    </tr>
+    </tbody>
+</table>
+</br>
+<h2>Phrasensuche mit Anführungszeichen</h2>
+
+<table class="table table-striped">
+    <tbody>
+    <tr>
+        <td><i>"street art"</i></td>
+        <td>Die beiden Wörter müssen direkt hintereinander stehen.</td>
+    </tr>
+    <tr>
+        <td><i>"street art"~5</i></td>
+        <td>Die beiden Wörter müssen innerhalb von 5 Wörtern Abstand vorkommen.</td>
+    </tr>
+    <tr>
+        <td><i>"PZB E 62 2:6"</i></td>
+        <td>Signatur</td>
+    </tr>
+    </tbody>
+</table>
+</br>
+<h2>Platzhalter</h2>
+
+<table class="table table-striped">
+    <tbody>
+    <tr>
+        <td rowspan="2">*</td>
+        <td rowspan="2">ersetzt beliebig viele Zeichen</td>
+        <td><i>cultur*</i></td>
+        <td>culture, cultura, cultural, culturally etc.</td>
+    </tr>
+    <tr>
+        <td><i>Fr*ib*urg</i></td>
+        <td>Fribourg, Freiburg etc.</td>
+    </tr>
+    <tr>
+        <td rowspan="2">?</td>
+        <td rowspan="2">ersetzt genau ein Zeichen</td>
+        <td><i>wom?n</i></td>
+        <td>woman, women etc.</td>
+    </tr>
+    <tr>
+        <td><i>Lind??ist</i></td>
+        <td>Lindquist, Lindkvist, Lindqvist ecc.</td>
+    </tr>
+    <tr>
+        <td>~</td>
+        <td>wenn Sie die genaue<br/>Schreibweise nicht kennen</td>
+        <td><i>Tschaikowski~</i></td>
+        <td>Tschaikowski, Tchaïkovski, Čajkovskij etc.</td>
+    </tr>
+    </tbody>
+</table>
+
+<h2>Sortierung</h2>
+<p>Die Treffer sind standardmässig nach Relevanz sortiert. Sie können nach Datum oder auch nach Urheber und Titel sortiert werden.</p>
+
+<h2>Suche einschränken</h2>
+<p>Benutzen Sie die Filter in der Spalte rechts neben Ihren Suchergebnissen, um die Trefferanzahl einzuschränken, z.B. nach Sprache, besitzender Bibliothek, Online-Zugang, Themenbereich etc.</p>
+
+<h2>Erweiterte Suche</h2>
+<p>In der erweiterten Suche können Sie Stichwörter aus verschiedenen Feldern miteinander kombinieren, z.B. ein Stichwort aus dem Titel mit einem Verfassernamen:</p>
+[Screenshot]
+
+<p>Um die Suchbegriffe zu kombinieren, stehen die Boolschen Operatoren AND, OR, NOT zur Verfügung:</p>
+[Screenshot]
+
+<p>Mittels Suche verfeinern können Sie Ihre Suchergebnisse direkt nach verschiedenen Kriterien filtern lassen (Sprache, Format, besitzende Bibliothek, Erscheinungsjahr).</p>
+<p>Beispiel: Suche nach Büchern des Verfassers Begon, im Titel soll Oekologie oder Ecology vorkommen, die Bücher sollen auf Deutsch oder Englisch verfasst, zwischen 2005 und 2015 erschienen und in der Hauptbibliothek der UB Basel vorhanden sein.</p>
+[Screenshot]
+
+
+
+
+<!--<h1>Suchen</h1>
 </br>
 <h2>Kombinieren</h2>
 </br>
@@ -98,7 +201,7 @@
 <p><img src="<?= $this->basePath('themes/swissbib/css/themes/orange/img/icon_pagefunctions_rss.gif') ?>"
         alt="Neue Einträge zu dieser Suche per Feed gemeldet bekommen"> Feed abonnieren</p>
 -->
-</br>
+<!--</br>
 <h1>Link zum Volltext</h1>
 <p>Der Zugang zum Volltext funktioniert oft nur aus dem Netz der Universität, die den Inhalt lizenziert hat. Melden Sie sich deshalb über VPN an, wenn Sie sich nicht auf dem Campus befinden.</p>
 
@@ -110,4 +213,4 @@
     <li><img src="<?= $this->basePath('themes/swissbib/images/sfx.gif') ?>" alt="Link zu SFX Services"> = Link zum
         Volltext, Artikelbestellung, Bestandesnachweis Schweiz
     </li>
-</ul>
+</ul>-->
