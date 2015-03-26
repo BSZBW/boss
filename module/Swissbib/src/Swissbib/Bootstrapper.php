@@ -272,8 +272,11 @@ class Bootstrapper
                     // Add all found files
                 foreach ($languageFiles as $languageFile) {
                     list($network, $locale) = explode('-', basename($languageFile, '.ini'));
-
-                    $translator->addTranslationFile('ExtendedIni', $languageFile, 'location-' . $network, $locale);
+                    //GH (26.3.2015): in the past we initialized the translator by using the absolute path of the language file
+                    //by now we have to use only the filename. At the moment I don't zhe background of this and I don't have enough
+                    // time to take a look on it. Second thing: At the moment I don't have any idea why the other structured language file
+                    //of swissbib (not flat as used in VuFind) seems to work...
+                    $translator->addTranslationFile('ExtendedIni', basename($languageFile), 'location-' . $network, $locale);
                 }
             }
         };
