@@ -12,10 +12,11 @@
 ?>
 <ul class="nav nav-pills hidden-print">
   <? if (count($this->driver->getCitationFormats()) > 0): ?>
-    <li><a id="cite-record" class="modal-link <?=$controllerClass?>" href="<?=$this->url('record-cite', array('id'=>$id)) ?>" title="<?=$this->transEsc('Cite this')?>"><i class="fa fa-pencil"></i></a></li>
+    <li><a id="cite-record" class=" <?=$controllerClass?>" href="<?=$this->url('record-cite', array('id'=>$id)) ?>" title="<?=$this->transEsc('Cite this')?>"><i class="fa fa-pencil"></i></a></li>
   <? endif; ?>
   <?php $mailID = $this->auth()->isAjaxLoginAllowed() ? 'id="mail-record"' : '' ?>
-  <li><a <?= $mailID  ?>  class="modal-link <?=$controllerClass?>" href="<?=$this->url('record-email', array('id'=>$id)) ?>" title="<?=$this->transEsc('Email this')?>"><i class="fa fa-envelope"></i></a></li>
+    <?php $mailID =  '' ?>
+  <li><a <?= $mailID  ?>  class="s <?=$controllerClass?>" href="<?=$this->url('record-email', array('id'=>$id)) ?>" title="<?=$this->transEsc('Email this')?>"><i class="fa fa-envelope"></i></a></li>
 
   <? $exportFormats = $this->export()->getFormatsForRecord($this->driver); ?>
   <? if(count($exportFormats) > 0): ?>

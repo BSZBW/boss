@@ -39,7 +39,8 @@
                 <a href="<?= $this->escapeHtmlAttr($sessionInitiator) ?>"><i
                       class="fa fa-sign-in"></i><?= $this->transEsc("Institutional Login") ?></a>
               <? else: ?>
-                <a href="<?= $this->url('myresearch-userlogin') ?>" class="modal-link"
+                  <?php $useModalPopupClass = $this->auth()->isAjaxLoginAllowed() ? 'class="modal-link"' : '' ?>
+                <a href="<?= $this->url('myresearch-userlogin') ?>" <?= $useModalPopupClass ?>
                    title="<?= $this->transEsc("Login") ?>"><i
                       class="fa fa-sign-in"></i><?= $this->transEsc("Login") ?></a>
               <? endif; ?>
