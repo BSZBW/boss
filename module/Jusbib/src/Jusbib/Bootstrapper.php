@@ -1,10 +1,56 @@
 <?php
 namespace Jusbib;
 
-use \Swissbib\Bootstrapper as SwissbibBootstrapper;
 
-class Bootstrapper extends SwissbibBootstrapper
+
+use Zend\Mvc\MvcEvent;
+use VuFind\Config\Reader as ConfigReader;
+
+
+
+class Bootstrapper
 {
+
+    protected $config;
+
+    protected $event;
+
+    protected $events;
+    /**
+     * @var \Zend\Mvc\ApplicationInterface
+     */
+    protected $application;
+
+    /**
+     * @var \Zend\ServiceManager\ServiceLocatorInterface
+     */
+    protected $serviceManager;
+
+
+    /**
+     * @param MvcEvent $event
+     */
+    public function __construct(MvcEvent $event)
+    {
+        $this->event  = $event;
+    }
+
+
+    /**
+     * Bootstrap
+     * Automatically discovers and evokes all class methods with names starting with 'init'
+     */
+    public function bootstrap()
+    {
+        $methods = get_class_methods($this);
+
+        foreach ($methods as $method) {
+            if (substr($method, 0, 4) == 'init') {
+                $this->$method();
+            }
+        }
+    }
+
 
     /**
      * Set up plugin managers.

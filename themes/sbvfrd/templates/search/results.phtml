@@ -57,8 +57,8 @@
         <div class="searchtools">
           <div class="searchtools hidden-print">
             <a href="<?=$this->results->getUrlQuery()->setViewParam('rss')?>" title="<?=$this->transEsc('Get RSS Feed')?>"><i class="fa fa-rss"></i></a>
-            <?php $mailClass = $this->auth()->isAjaxLoginAllowed() ?>
-            <a href="<?=$this->url('search-email')?>" class="<?= $this->auth()->isAjaxLoginAllowed() ?> mailSearch modal-link" id="mailSearch<?=$this->escapeHtmlAttr($this->results->getSearchId())?>" title="<?=$this->transEsc('Email this Search')?>"><i class="fa fa-envelope" ></i></a>
+            <?php $mailClass = $this->auth()->isAjaxLoginAllowed() ? 'class="mailSearch modal-link"' : '' ?>
+            <a href="<?=$this->url('search-email')?>" <?= $mailClass ?> id="mailSearch<?=$this->escapeHtmlAttr($this->results->getSearchId())?>" title="<?=$this->transEsc('Email this Search')?>"><i class="fa fa-envelope" ></i></a>
             <? if (is_numeric($this->results->getSearchId())): ?>
               <? if ($this->results->isSavedSearch()): ?>
                 <a href="<?=$this->url('myresearch-savesearch')?>?delete=<?=urlencode($this->results->getSearchId())?>" title="<?=$this->transEsc('save_search_remove')?>"><i class="fa fa-minus-square"></i></a>

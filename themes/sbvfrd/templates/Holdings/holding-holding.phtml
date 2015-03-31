@@ -4,7 +4,7 @@
 /** @var String $recordTitle */
 
 if (isset($holding['locationMap']) && $holding['locationMap']) {
-  $mapLink = '<a href="' . $holding['locationMap'] . '" class="holdingMapLink">' . $this->transEsc('Show_Location_Map') . '</a>';
+  $mapLink = '<a href="' . $holding['locationMap'] . '" class="holdingMapLink">' . '"title="' . "$this->transEsc('Show_Location_Map')" . '<i class="fa fa-map-marker"></i></a>';;
 } else {
   $mapLink = '';
 }
@@ -36,7 +36,8 @@ if (!empty($holding['opac_note'])) {
     <?=$this->escapeHtml($holding['locationLabel'])?>
     <?=$mapLink?>
     <?php  if (isset($holding['institutionUrl']) && !empty($holding['institutionUrl'])): ?>
-      <a href="<?=$this->escapeHtml($holding['institutionUrl'])?>" class="bibinfo" target="_blank" title="<?=$this->transEsc('Library_Information')?>"></a>
+        <?php $wrappedURL = $this->redirectProtocolWrapper()->getWrappedURL($holding['institutionUrl']) ?>
+        <a href="<?= $this->escapeHtml($wrappedURL) ?>" target="_blank" title="<?=$this->transEsc('Library_Information')?>"> <i class="fa fa-info-circle"></i></a>
     <?php endif; ?>
   </td>
   <td><?=$this->escapeHtml($holding['signature'])?></td>
