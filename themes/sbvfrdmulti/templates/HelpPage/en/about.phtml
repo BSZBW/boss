@@ -1,9 +1,39 @@
-<h1>About swissbib</h1>
+<h1>Über swissbib Basel Bern</h1>
+<p>swissbib Basel Bern verzeichnet über 7 Mio. Titel aus über 200 <a href="<?= $this->basePath('Libraries') ?>" title="Liste der Institutionen">wissenschaftlichen Bibliotheken in Basel und Bern</a> (Bibliotheken der Universitäten Basel und Bern, Nationalbibliothek, einige Spezialbibliotheken sowie Fachhochschulbibliotheken).</p>
+<p>Das Projekt wird getragen vom <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://www.informationsverbund.ch/21.0.html') ?>" target="_blank">Verbund IDS Basel Bern</a> und nutzt Infrastruktur und Know How des gesamtschweizerischen Metakatalogs <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('https://www.swissbib.ch') ?>" target="_blank" title="swissbib">swissbib</a>.</p>
+
+<h2>Was findet man in swissbib Basel Bern?</h2>
+<p>In swissbib Basel Bern können zwei separate Datenbanken durchsucht werden:</p>
+<p><strong>Bücher & mehr</strong></p>
+<ul>
+    <li>Verschiedenste Medien wie Bücher/E-Books, Zeitschriften/E-Journals, Zeitungen, CD/DVD, Datenbanken etc. Verzeichnet sind die <strong>Titel</strong> dieser Medien, <strong>i.d.R. nicht einzelne Artikel oder Kapitel</strong> daraus.</li>
+    <li>Retrodigitalisierte wissenschaftliche Zeitschriften aus der Schweiz (Projekt retro.seals), mit Direktzugang zu den digitalen Artikeltexten.</li>
+</ul>
+<p><strong>Artikel & mehr</strong></p>
+<ul>
+    <li><strong>Artikel, Buchkapitel, Textbeiträge</strong> etc. aus zahlreichen E-Journals, E-Books und Datenbanken, die von den Universitäten Basel bzw. Bern zur Verfügung gestellt werden. In den meisten Fällen kann von einem Universitätsstandort aus direkt auf den elektronischen Volltext zugegriffen werden.</li>
+    <li>Elektronische Ressourcen, die frei im Internet und somit auch ausserhalb der Universitäten Basel und Bern zugänglich sind.</li>
+</ul>
+<p>Titel, zu denen kein direkter Volltextzugang besteht, können Sie via <i class="fa fa-external-link"></i> SFX-Services bei Ihrer Bibliothek bestellen.</p>
+
+<h2>Kontakt</h2>
+<p>Gerne unterstützen wir Sie bei der Recherche und beim Bestellen in unserem Katalog oder nehmen Ihre Anregungen und Kritik entgegen:</p>
+<ul>
+    <li>Fragen zu Ihrem Konto oder zu bestimmten Werken: Wenden Sie sich bitte an Ihre Stammbibliothek bzw. die <a href="<?= $this->basePath('Libraries') ?>" title="Liste der Institutionen">Bibliothek</a>, die das Werk besitzt.</li>
+    <li>Fragen und Anregungen zur Suchoberfläche swissbib Basel Bern: <a id="feedbackLink" class="modal-link" href="<?= $this->url('feedback-home') ?>"><?= $this->transEsc("menu.contact") ?></a></li>
+</ul>
+
+<h2>News</h2>
+Abonnieren Sie unseren <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://swissbib-baselbern.blogspot.ch') ?>" target="_blank">Blog</a>.
+
+
+
+<!--<h1>About swissbib</h1>
 
 <h2>Contact</h2>
 <ul class="list">
     <li>For questions about your account please contact <a href="http://www.ub.unibas.ch/ids-basel-bern/ausleihbibliotheken/" target="_blank">your library</a>.</li>
-    <li>For questions about a certain work please contact the <a href="<?= $this->url('libraries-index') ?>">owning library</a> directly.</li>
+    <li>For questions about a certain work please contact the <a href="<?/*= $this->url('libraries-index') */?>">owning library</a> directly.</li>
     <li>To contact swissbib Basel Bern write to <a href="mailto:swissbib-baselbern@unibas.ch">swissbib-baselbern@unibas.ch</a> or post a comment in our <a href="http://swissbib-baselbern.blogspot.ch" target="_blank">blog</a>.</li>
 </ul>
 
@@ -15,14 +45,14 @@
 
 <h2>Books &amp; more</h2>
 <ul class="list">
-<li>The scientific libraries in <a href="<?= $this->url('libraries-index') ?>#nav_0">Basel</a> and <a href="<?= $this->url('libraries-index') ?>#nav_1">Bern</a></li>
+<li>The scientific libraries in <a href="<?/*= $this->url('libraries-index') */?>#nav_0">Basel</a> and <a href="<?/*= $this->url('libraries-index') */?>#nav_1">Bern</a></li>
 <li><a href="http://retro.seals.ch" target="_blank">retro.seals</a>: retrodigitized scientific journals
-</li>  
-</ul>    
+</li>
+</ul>
 <h2>Articles &amp; more</h2>
 <ul class="list">
     <li>Content of e-journals, e-books and databases licenced by the university libraries of Basel and/or Bern. In most cases you have access to the full text if you are on campus of the university or logged in via VPN.</li>
     <li>Free online ressources.</li>
-    <li>If the full text is not avaliable online you can order a copy using the <img src="<?= $this->basePath('themes/swissbib/images/sfx.gif') ?>"> <i>link to library services</i></li>
+    <li>If the full text is not avaliable online you can order a copy using the <img src="<?/*= $this->basePath('themes/swissbib/images/sfx.gif') */?>"> <i>link to library services</i></li>
     <li>For more information see <a href="http://www.proquest.com/products-services/The-Summon-Service.html" target="_blank">the info site of ProQuest</a>.</li>
-</ul>
+</ul>-->

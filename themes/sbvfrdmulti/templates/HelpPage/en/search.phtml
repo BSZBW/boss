@@ -1,7 +1,10 @@
-<h1>Search</h1>
-</br>
+<h1>Suchen</h1>
+<p>In swissbib Basel Bern können zwei separate Datenbanken durchsucht werden: <strong>Bücher & mehr</strong> sowie <strong>Artikel & mehr</strong> (siehe auch <a href="<?= $this->url('help-page', array('topic' => 'about')); ?>"><?= $this->transEsc('helppage.about') ?></a>). Wählen Sie durch Klick auf den entsprechenden Reiter oberhalb des Suchschlitzes aus, in welcher Datenmenge Sie suchen wollen.</p>
+
+[Film einfache Suche verlinken/einbetten]
+
 <h2>Combine</h2>
-</br>
+<br />
 <table class="table table-striped">
     <tbody>
     <tr>
@@ -22,11 +25,11 @@
     </tr>
     <tr>
         <td>More complex searches</td>
-        <td>See <a href="<?= $this->url('help-page', array('topic' => 'Advanced')) ?>">Help - Advanced search</a>.</td>
+        <td>See <a class="help-link" href="<?=$this->url('help-home')?>?topic=search" title="<?=$this->transEsc('Help with Search Operators')?>"><?=$this->transEsc("Help with Search Operators")?></a>.</td>
     </tr>
     </tbody>
 </table>
-</br>
+<br />
 <h2>Phrase search, using quotation marks</h2>
 
 <table class="table table-striped">
@@ -39,13 +42,13 @@
         <td><i>"street art"~5</i></td>
         <td>Both terms must be present within 5 words.</td>
     </tr>
-      <tr>
+    <tr>
         <td><i>"PZB E 62 2:6"</i></td>
         <td>Call numbers</td>
     </tr>
     </tbody>
 </table>
-</br>
+<br />
 <h2>Truncation</h2>
 
 <table class="table table-striped">
@@ -60,7 +63,7 @@
         <td><i>Fr*ib*urg</i></td>
         <td>Fribourg, Freiburg etc.</td>
     </tr>
-      <tr>
+    <tr>
         <td rowspan="2">?</td>
         <td rowspan="2">replaces exactly one letter</td>
         <td><i>wom?n</i></td>
@@ -79,34 +82,20 @@
     </tbody>
 </table>
 
-</br>
-<h1>Results</h1>
-<h2>Refine search</h2>
-<p>Use the filters in the left hand column of your result list or <i>Advanced search</i>.</p>
+<h2>Suche einschränken</h2>
+<p>Benutzen Sie die Filter in der Spalte rechts neben Ihren Suchergebnissen, um die Trefferanzahl einzuschränken, z.B. nach Sprache, besitzender Bibliothek, Online-Zugang, Themenbereich etc.</p>
+[ev. Screenshot]
 
-<h2>Repeat or save search</h2>
-<ul class="list">
-    <li>Clicking on <i>Articles & more</i> will repeat your search in <a
-            href="http://www.serialssolutions.com/en/services/summon/content" target="_blank">Summon</a>.
-    </li>
-    <li><a href="<?= $this->url('search-history') ?>">My swissbib - Saved searches</a></li>
-</ul>
+<p>In Artikel & mehr können Sie eine Trefferliste in der rechten Spalte ausweiten, indem Sie auch Artikel ohne Volltext oder auch Zeitungsartikel in die Suchergebnisse einbeziehen. Sie können die Trefferliste zudem einschränken auf peer reviewed, d.h. wissenschaftlich begutachtete Texte.</p>
+[Screenshot]
 
-<!--
-<h3>Feed notification about new titles that match your search</h3>
-<p><img src="<?= $this->basePath('themes/swissbib/css/themes/orange/img/icon_pagefunctions_rss.gif') ?>"
-        alt="get feed of new items matching this search"> Subscribe to feed</p>
--->
-</br>
-<h1>Full text</h1>
-<p>Access to full text is often only possible from the university having licenced the content. Log in via VPN if you're not on campus.</p></p>
+<h2>Erweiterte Suche</h2>
+<p>In der erweiterten Suche können Sie Stichwörter aus verschiedenen Feldern miteinander kombinieren, z.B. ein Stichwort aus dem Titel mit einem Verfassernamen.</p>
 
-<h2>Articles &amp; more</h2>
-<ul class="list">
-    <li><i>get it</i> = link to full text</li>
-    <li><img src="<?= $this->basePath('themes/swissbib/images/sfx.gif') ?>" alt="SFX Services"> = link to full text
-        and/or other sfx services
-    </li>
-</ul>         
-         
-      
+<p>Um die Suchbegriffe zu kombinieren, stehen die Boolschen Operatoren AND, OR, NOT zur Verfügung.</p>
+
+<p>Mittels Suche verfeinern können Sie Ihre Suchergebnisse direkt nach verschiedenen Kriterien filtern lassen (Sprache, Format, besitzende Bibliothek, Erscheinungsjahr).</p>
+<p><strong>Beispiel:</strong> Suche nach Büchern des Verfassers Begon, im Titel soll Oekologie oder Ecology vorkommen, die Bücher sollen auf Deutsch oder Englisch verfasst, zwischen 2005 und 2015 erschienen und in der Hauptbibliothek der UB Basel vorhanden sein.</p>
+<a href="<?= $this->basePath('themes/sbvfrdmulti/images/HelpPage/de/advancedsearch.png') ?>" class="help">
+    <img class="img-responsive" src="<?= $this->basePath('themes/sbvfrdmulti/images/HelpPage/de/advancedsearch.png') ?>" alt="Zoom">
+</a>
