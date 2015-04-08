@@ -626,20 +626,6 @@ class Holdings
         return $this->ebooksOnDemand ? $this->ebooksOnDemand->getEbooksOnDemandLink($item, $recordDriver, $this) : false;
     }
 
-    /**
-     * Get back link for IDSSG (self-developed-non-aleph-request)
-     * Currently only a wrapper for Aleph
-     *
-     * @param    String $networkCode
-     * @param    String $institutionCode
-     * @param    Array $item
-     * @param    Array $data
-     * @return    String
-     */
-    protected function getBackLinkIDSSG($networkCode, $institutionCode, array $item, array $data)
-    {
-        return $this->getBackLinkAleph($networkCode, $institutionCode, $item, $data);
-    }
 
     /**
      * Build location map link
@@ -872,6 +858,40 @@ class Holdings
         return $this->compileString($data['pattern'], $values);
     }
 
+    /**
+     * Get backlink for IDSBB
+     *
+     * set link to orange view of swissbib
+     *
+     * @param    String $networkCode
+     * @param    String $institutionCode
+     * @param    Array $item
+     * @param    Array $data
+     * @return    String
+     */
+    protected function getBackLinkIDSBB($networkCode, $institutionCode, $item, array $data) {
+        $values = [
+            'id' => $this->idItem,
+            'sub-library-code' => $institutionCode,
+            'network' => $networkCode,
+        ];
+        return $this->compileString($data['pattern'], $values);
+    }
+
+    /**
+     * Get back link for IDSSG (self-developed-non-aleph-request)
+     * Currently only a wrapper for Aleph
+     *
+     * @param    String $networkCode
+     * @param    String $institutionCode
+     * @param    Array $item
+     * @param    Array $data
+     * @return    String
+     */
+    protected function getBackLinkIDSSG($networkCode, $institutionCode, array $item, array $data)
+    {
+        return $this->getBackLinkAleph($networkCode, $institutionCode, $item, $data);
+    }
 
     /**
      * Get back link for virtua
