@@ -627,7 +627,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
                 . '&scale=1';
             }
             elseif ($field['ADM'] === 'ZAD50') {
-                if (preg_match('/^.*thumbnail/', $field['directory'])) {
+                if (array_key_exists('directory',$field) && preg_match('/^.*thumbnail/', $field['directory'])) {
                     $dirpath = preg_replace('/^.*thumbnail/', '', $field['directory']);
                     $dirpath = empty($dirpath) ? $dirpath : substr($dirpath, 1) . '/';
                     $thumbnailURL = 'https://externalservices.swissbib.ch/services/ImageTransformer?imagePath=http://opac.nebis.ch/thumb_zb/'
