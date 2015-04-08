@@ -2135,7 +2135,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
      * @param    \File_MARC_Data_Field $field
      * @param    String $fieldIndex
      */
-    protected function getFieldData($field, $fieldIndex)
+    protected function getFieldData($field)
     {
         // Make sure that there is a t field to be displayed:
         if ($title = $field->getSubfield('t')) {
@@ -2174,7 +2174,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
         }
 
         // Fallback to base method if no custom field found
-        return parent::getFieldData($field, $fieldIndex);
+        return parent::getFieldData($field);
     }
 
 
