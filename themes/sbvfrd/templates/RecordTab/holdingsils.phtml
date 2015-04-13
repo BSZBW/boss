@@ -17,18 +17,25 @@ $this->headTitle($this->translate('Holdings') . ': ' . $this->driver->getBreadcr
     <? foreach ($holdings as $groupCode => $group): ?>
     <!-- begin: group -->
     <div class="panel panel-default" id="holdings-<?= $groupCode ?>">
-      <div class="panel-heading" role="tab" id="headingOne">
+      <!-- begin: heading -->
+      <div class="panel-heading" role="tab" id="heading-<?= $groupCode ?>">
         <h4 class="panel-title">
-          <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse-<?= $groupCode ?>" aria-expanded="true" aria-controls="collapse-<?= $groupCode ?>">
             <? if (is_array($group['label'])): ?>
               <? $group['label'] = implode('', array_unique($group['label'])); ?>
             <? endif; ?>
             <span><?= $this->zendTranslate($group['label']) ?></span>
           </a>
         </h4>
-
       </div>
+      <!-- end: heading -->
+      <!-- begin: content -->
+      <div id="collapse-<?= $groupCode ?>" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-<?= $groupCode ?>">
+        <div class="panel-body">
 
+        </div>
+      </div>
+      <!-- end: content -->
     </div>
     <!-- end: group -->
 
