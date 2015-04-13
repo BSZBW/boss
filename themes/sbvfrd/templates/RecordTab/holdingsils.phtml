@@ -13,6 +13,33 @@ $this->headTitle($this->translate('Holdings') . ': ' . $this->driver->getBreadcr
 ?>
 <? if ($holdings): ?>
 
+  <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <? foreach ($holdings as $groupCode => $group): ?>
+    <!-- begin: group -->
+    <div class="panel panel-default" id="holdings-<?= $groupCode ?>">
+      <div class="panel-heading" role="tab" id="headingOne">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            <? if (is_array($group['label'])): ?>
+              <? $group['label'] = implode('', array_unique($group['label'])); ?>
+            <? endif; ?>
+            <span><?= $this->zendTranslate($group['label']) ?></span>
+          </a>
+        </h4>
+
+      </div>
+
+    </div>
+    <!-- end: group -->
+
+    <? endforeach; ?>
+
+  </div>
+
+
+
+  <!-- old code below - remove after redesign -->
+
   <? foreach ($holdings as $groupCode => $group): ?>
     <!-- begin: innerbox <?= $groupCode ?> -->
     <div class="innerbox grey holdingsBox" id="holdings-<?= $groupCode ?>">
