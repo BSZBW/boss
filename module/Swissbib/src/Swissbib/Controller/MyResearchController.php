@@ -103,7 +103,7 @@ class MyResearchController extends VuFindMyResearchController
     /** @var User $user */
     $user = $this->getUser();
 
-    if ($this->getRequest()->isPost()) {
+    if ($this->getRequest()->isPost() && $this->params()->fromPost('myResearchSettingsForm')) {
       $language = $this->params()->fromPost('language');
       $maxHits = $this->params()->fromPost('max_hits');
       $defaultSort = $this->params()->fromPost('default_sort');

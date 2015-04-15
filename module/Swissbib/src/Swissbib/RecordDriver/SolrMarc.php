@@ -636,12 +636,12 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
                         . '&scale=1';
                 }
             }
-            elseif ($field['institution'] === 'E45' && $field['usage'] === 'VIEW') {
+            elseif (isset($field['institution']) &&  $field['institution'] === 'E45' && $field['usage'] === 'VIEW') {
                 $thumbnailURL = 'https://externalservices.swissbib.ch/services/ImageTransformer?imagePath='
                 . $field['URL']
                     . '&scale=1&reqServicename=ImageTransformer';
             }
-            elseif ($field['institution'] === 'ECOD' && $field['usage'] === 'THUMBNAIL') {
+            elseif (isset($field['institution']) && $field['institution'] === 'ECOD' && $field['usage'] === 'THUMBNAIL') {
                 $thumbnailURL = 'https://externalservices.swissbib.ch/services/ImageTransformer?imagePath='
                     . $field['URL']
                     . '&scale=1&reqServicename=ImageTransformer';

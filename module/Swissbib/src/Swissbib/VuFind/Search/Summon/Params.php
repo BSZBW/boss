@@ -12,12 +12,52 @@ use SerialsSolutions_Summon_Query as SummonQuery,
 class Params extends VFSummonParams
 {
 
+    use \Swissbib\VuFind\Search\Helper\PersonalSettingsHelper;
+
     /**
      * @var array
      */
     protected $dateRange = array(
         'isActive' => false
     );
+
+
+    /**
+     * Pull the page size parameter or set to default
+     *
+     * @param \Zend\StdLib\Parameters $request Parameter object representing user
+     * request.
+     *
+     * @return void */
+    public function initLimit($request)
+    {
+
+        $auth = $this->serviceLocator->get('VuFind\AuthManager');
+        $defLimit = $this->getOptions()->getDefaultLimit();
+        $limitOptions = $this->getOptions()->getLimitOptions();
+        $view = $this->getView();
+        $this->handleLimit($auth, $request,$defLimit, $limitOptions, $view );
+    }
+
+
+    /**
+     * Get the value for which type of sorting to use
+     *
+     * @param \Zend\StdLib\Parameters $request Parameter object representing user
+     * request.
+     *
+     * @return string
+     */
+    protected function initSort($request)
+    {
+        $auth = $this->serviceLocator->get('VuFind\AuthManager');
+        $defaultSort = $this->getOptions()->getDefaultSortByHandler();
+
+        $this->setSort($this->handleSort($auth,$request,$defaultSort, $this->getSearchClassId()));
+    }
+
+
+
 
 
     public function getSearchClassId()
