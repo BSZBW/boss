@@ -203,6 +203,14 @@ else {
           </a>
        </span><br />
       <?php endif; ?>
+        <?php if ($highlightedFulltext): ?>
+
+                <span class="label"><?= $this->transEsc('fulltexthighlight') ?>: </span>
+                <span><br />
+                <?= $this->highlight($highlightedFulltext) ?></span>
+
+        <?php endif; ?>
+
     </div>
     <?/* End Main Details */?>
   </div>
