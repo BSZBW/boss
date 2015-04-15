@@ -37,7 +37,8 @@ trait PersonalSettingsHelper {
         $requestParams = $request->toArray();
         if ($user && $user->max_hits)
         {
-            if (array_key_exists('limitControlElement',$requestParams))
+            if (array_key_exists('limitControlElement',$requestParams) || (array_key_exists('page',$requestParams) &&
+                    ((int) $requestParams['page']) > 1))
             {
                 if (array_key_exists('limit',$requestParams))
                 {
