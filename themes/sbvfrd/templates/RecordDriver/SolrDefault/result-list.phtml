@@ -110,9 +110,9 @@ $formats = $viewRecord->getFormatList();
 
       <? if (!empty($showFRBR) && $showFRBR && !empty($groupID) && !strcmp($results->getParams()->getSearchHandler(), 'FRBR') == 0) : ?>
         <a class="btn btn-primary btn-frbr hidden-print" href="<?= $this->url('search-results') . '?lookfor=' . $groupID . "&type=FRBR&limit=" . $results->getParams()->getLimit() . "&sort=publishDateSort+desc" ?>"
-           title="<?= $this->transEsc('FRBR_Button') ?>">
+           title="<?= $this->transEsc('Other Editions') ?>">
           <span><i class="fa fa-eye"></i></span>
-          <span class="hidden-xs hidden-sm"><?= $this->transEsc('FRBR_Button') ?></span>
+          <span class="hidden-xs hidden-sm"><?= $this->transEsc('Other Editions') ?></span>
         </a>
       <? endif; ?>
 

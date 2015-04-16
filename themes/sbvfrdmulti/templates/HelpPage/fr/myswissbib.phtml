@@ -1,4 +1,23 @@
-<h1>Se connecter</h1>
+<h1>Benutzerkonto / My swissbib</h1>
+<p>Ihr Benutzerkonto (<a href="<?= $this->url('myresearch-userlogin') ?>">My swissbib</a>) informiert Sie über Ihre Ausleihen, Bestellungen sowie Erinnerungen/Gebühren. Über das Konto können Sie ausgeliehene Medien verlängern sowie Ihre persönlichen <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://aleph.unibas.ch/F/?func=file&file_name=login-session&con_lng') ?>"> Daten</a> und <a href="<?= $this->url('myresearch-settings'); ?>"><?= $this->transEsc('My_Search_Settings') ?></a> ändern.</p>
+<h2>Noch kein Konto?</h2>
+<p><a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://aleph.unibas.ch/F/?func=bor-new-0') ?>" target="_blank"><?= $this->transEsc('Create New Account') ?></a> (oder vor Ort in einer der IDS-Bibliotheken in <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://www.ub.unibas.ch/bibliotheksnetz/verbund-basel/bibliotheken-im-verbund/liste-der-bibliotheken') ?>" target="_blank">Basel</a> oder <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://www.ub.unibe.ch/content/ueber_uns/bibliotheken_der_ub/berner_ids_bibliotheken') ?>" target="_blank">Bern</a>)</p>
+<p>Benutzerausweise einer anderen <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://www.informationsverbund.ch/21.0.html') ?>" target="_blank" title="IDS-Bibliothek">IDS-Bibliothek</a> sind auch für swissbib Basel Bern <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://www.informationsverbund.ch/6.0.html') ?>" target="_blank">gültig</a>, ebenso die Studierenden- und Mitarbeitendenausweise der Universitäten Basel und Bern.</p>
+<h2>Passwort vergessen</h2>
+<p>Kontaktieren Sie Ihre <a href="<?= $this->basePath('Libraries') ?>" title="Liste der Institutionen">Bibliothek</a>.</p>
+<h2>Benutzerausweis verloren</h2>
+<p>Bitte kommen Sie bei einer der IDS-Bibliotheken vorbei: <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://www.ub.unibas.ch/bibliotheksnetz/verbund-basel/bibliotheken-im-verbund/liste-der-bibliotheken') ?>" target="_blank">Region Basel</a>, <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://www.ub.unibe.ch/content/ueber_uns/bibliotheken_der_ub/berner_ids_bibliotheken') ?>" target="_blank">Region Bern</a>. Ein Ersatz ist kostenpflichtig und wir benötigen dazu einen amtlichen Ausweis.</p>
+<h1>Persönliche Einstellungen</h1>
+<h2>Gespeicherte Suchen</h2>
+<p>Wenn Sie nicht angemeldet sind, werden Ihre Suchen gespeichert, bis Sie den Browser schliessen. Wenn Sie sich anmelden, können Sie Ihre Suchanfragen längerfristig speichern, um sie bei Bedarf zu wiederholen.</p>
+<h2>Einstellungen</h2>
+<p>Sie können die Sprache der Suchoberfläche, die angezeigte Anzahl Treffer pro Seite sowie das Sortierungskriterium für die Trefferliste nach Ihren Vorlieben einstellen. Die Einstellungen sind nur wirksam, wenn Sie angemeldet sind.</p>
+<h2>Favoriten</h2>
+<p>Um eine Bibliothek als Ihren Favoriten zu markieren, benutzen Sie entweder die Suche unter <a href="<?=$this->url('myresearch-favorite-institutions')?>"><?=$this->transEsc('mylibraries')?></a> oder klicken Sie in einer Titelanzeige bei der entsprechenden Bibliothek auf <i class="fa fa-heart-o"></i>. In der Liste der Suchergebnisse sind Ihre Favoriten-Bibliotheken mit <i class="fa fa-heart"></i> markiert. Wenn Sie angemeldet sind können Sie die Suchergebnisse nach Vorhandensein in Ihren Favoritenbibliotheken filtern.</p>
+<h2>Merklisten</h2>
+<p>Wenn Sie sich anmelden, können Sie Titel auf Merklisten speichern, indem Sie auf <i class="fa fa-list-ul"></i> klicken.</p>
+
+<!--<h1>Se connecter</h1>
 <p>Si vous avez une carte d'utilisateur valable dans l'IDS Basel Bern vous pouvez vous connecter avec votre
     login habituel.</p>
 <!--
@@ -11,11 +30,11 @@
     <li>NEBIS</li>
     <li>St. Galler Bibliotheksnetz</li>
 </ul>
--->
+
 
 <h2>Pas de carte?</h2>
 <p><a href="http://aleph.unibas.ch/F/?func=bor-new-0&CON_LNG=FRE"
-      target="_blank"><?= $this->transEsc('Create New Account') ?></a></p>
+      target="_blank"><?/*= $this->transEsc('Create New Account') */?></a></p>
 
 <h2>Pourqoi se connecter?</h2>
 <p>Différentes fonctions de prêt, bibliothèques favorites, listes, recherches sauvegardées et paramètres enregistrés
@@ -39,19 +58,19 @@
 
 <h2>Favoris</h2>
 <p>Afin de sauvegarder une bibliothèque dans les favoris, utilisez <i>Mon swissbib - Favoris</i> ou cliquez sur le <img
-        src="<?= $this->basePath('themes/swissbib/images/icon_favorit_library.gif') ?>"
-        alt="<?= $this->transEsc('mylibraries.add')?>"
-        title="<?= $this->transEsc('mylibraries.add')?>"> dans le catalogue. Ces bibliothèques sont mises en évidence par un <img
-        src="<?= $this->basePath('/themes/swissbib/images/icon_favorit_library.gif') ?>"
+        src="<?/*= $this->basePath('themes/swissbib/images/icon_favorit_library.gif') */?>"
+        alt="<?/*= $this->transEsc('mylibraries.add')*/?>"
+        title="<?/*= $this->transEsc('mylibraries.add')*/?>"> dans le catalogue. Ces bibliothèques sont mises en évidence par un <img
+        src="<?/*= $this->basePath('/themes/swissbib/images/icon_favorit_library.gif') */?>"
         alt="Favorit"> dans la liste de résultats et peuvent être choisies comme filtre.
 </p>
 
 <h2>Listes de sélection</h2>
 <ul class="list">
     <li>Lorsque vous vous connectez, vous pouvez sauvegarder des titres sur des listes de sélection par ce symbole: <br />
-        <img src="<?= $this->basePath('themes/swissbibmulti/css/img/icon_notepad_add.gif') ?>"
-             alt="<?= $this->transEsc('memorizelistadd')?>"
-             title="<?= $this->transEsc('memorizelistadd')?>">
+        <img src="<?/*= $this->basePath('themes/swissbibmulti/css/img/icon_notepad_add.gif') */?>"
+             alt="<?/*= $this->transEsc('memorizelistadd')*/?>"
+             title="<?/*= $this->transEsc('memorizelistadd')*/?>">
     </li>
     <li>Lorsque vous sauvegardez un titre et que vous créez en même temps une nouvelle liste de sélection, vous devez
         cliquer deux fois sur <i>Sauvegarder</i>.
@@ -65,3 +84,4 @@
 
 <h2>Compte IDS Basel Bern</h2>
 <p>Votre compte</p>
+-->

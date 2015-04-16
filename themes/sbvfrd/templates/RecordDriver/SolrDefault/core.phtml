@@ -198,11 +198,19 @@ else {
          <a href="<?=
           $this->url('search-results') . '?lookfor=' . $groupID . "&type=FRBR"
           . "&sort=publishDateSort+desc" ?>"
-             class="btn btn-primary icon_show" title="<?= $this->transEsc('FRBR_Button') ?>">
-              <span><?= $this->transEsc('FRBR_Button') ?></span>
+             class="btn btn-primary icon_show" title="<?= $this->transEsc('Other Editions') ?>">
+              <span><?= $this->transEsc('Other Editions') ?></span>
           </a>
        </span><br />
       <?php endif; ?>
+        <?php if ($highlightedFulltext): ?>
+
+                <span class="label"><?= $this->transEsc('fulltexthighlight') ?>: </span>
+                <span><br />
+                <?= $this->highlight($highlightedFulltext) ?></span>
+
+        <?php endif; ?>
+
     </div>
     <?/* End Main Details */?>
   </div>
