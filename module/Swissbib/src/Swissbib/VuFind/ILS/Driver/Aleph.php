@@ -795,15 +795,15 @@ class Aleph extends VuFindDriver
     public function changePassword($details)
     {
         $patron = $details['patron'];
-        $oldPIN = $details['oldPassword'];
-        $newPIN = $details['newPassword'];
+        $oldPIN = rawurlencode(htmlspecialchars(mb_strtoupper($details['oldPassword'], 'UTF-8'), ENT_COMPAT, 'UTF-8'));
+        $newPIN = rawurlencode(htmlspecialchars(mb_strtoupper($details['newPassword'], 'UTF-8'), ENT_COMPAT, 'UTF-8'));
 
         $xml =  <<<EOT
 post_xml=<?xml version = "1.0" encoding = "UTF-8"?>
 <get-pat-pswd>
     <password_parameters>
-        <old-password><![CDATA[$oldPIN]]></old-password>
-        <new-password><![CDATA[$newPIN]]></new-password>
+        <old-password>$oldPIN</old-password>
+        <new-password>$newPIN</new-password>
     </password_parameters>
 </get-pat-pswd>
 EOT;
