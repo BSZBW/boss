@@ -40,7 +40,7 @@ class Params extends VuFindSolrParams
      * request.
      *
      * @return void */
-    public function initLimit($request)
+    protected function initLimit($request)
     {
 
 
@@ -51,6 +51,17 @@ class Params extends VuFindSolrParams
         $this->handleLimit($auth, $request,$defLimit, $limitOptions, $view );
 
     }
+
+    /*
+     * GH: we need this method to call initLimit (which is protected in base class and shouldn't be changed only because
+     * of hacks relaed to silly personal settings (although is possible in the current PHP version)
+     *
+     */
+    public function initLimitAdvancedSearch($request)
+    {
+        $this->initLimit($request);
+    }
+
 
 
     /**

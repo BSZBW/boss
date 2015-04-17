@@ -29,7 +29,7 @@ class Params extends VFSummonParams
      * request.
      *
      * @return void */
-    public function initLimit($request)
+    protected function initLimit($request)
     {
 
         $auth = $this->serviceLocator->get('VuFind\AuthManager');
@@ -58,6 +58,15 @@ class Params extends VFSummonParams
 
 
 
+    /*
+     * GH: we need this method to call initLimit (which is protected in base class and shouldn't be changed only because
+     * of hacks relaed to silly personal settings (although is possible in the current PHP version)
+     *
+     */
+    public function initLimitAdvancedSearch($request)
+    {
+        $this->initLimit($request);
+    }
 
 
     public function getSearchClassId()

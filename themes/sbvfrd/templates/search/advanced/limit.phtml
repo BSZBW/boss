@@ -1,0 +1,21 @@
+<?
+    // Set up convenience variables:
+    $limitList = $this->options->getLimitOptions();
+
+    // GH: Because we have to deal with config settings for logged in users we can't take the VF2 procedure
+    // (with lastLimit) rather we have to take the initialized values out of the Params type for this purpose
+    //params differentiate between these mode
+    //$lastLimit = $this->options->getLastLimit();
+    $paramsLimit = $this->params->getLimit();
+    $defaultLimit = empty($paramsLimit) ? $this->options->getDefaultLimit() : $paramsLimit;
+?>
+<? if (count($limitList) > 1): ?>
+  <fieldset class="col-sm-4">
+    <legend><?=$this->transEsc('Results per page')?></legend>
+    <select id="limit" name="limit" class="form-control">
+      <? foreach ($limitList as $limitVal): ?>
+        <option value="<?=$this->escapeHtmlAttr($limitVal)?>"<?=($limitVal == $defaultLimit) ? 'selected="selected"' : ''?>><?=$this->escapeHtml($limitVal)?></option>
+      <? endforeach; ?>
+    </select>
+  </fieldset>
+<? endif; ?>

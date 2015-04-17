@@ -56,6 +56,10 @@
 
     <form role="search" name="searchForm" id="advSearchForm" method="get" action="<?=$this->url($this->options->getSearchAction())?>">
       <input type="hidden" name="sort" value="relevance">
+      <!-- we need this additional field to recognize explicitly search requests out of this context to handle personal settings
+      related to sort and limit
+      -->
+      <input type="hidden" name="advancedSearchFormRequest" value="advancedSearchFormRequest"/>
 
       <div class="clearfix">
         <p class="lead pull-left"><?=$this->transEsc('Advanced Search')?></p>
