@@ -77,6 +77,19 @@
         $this->layout()->searchbox = $this->render('search/searchbox.phtml');
       }
     ?>
+
+    <?
+    /*
+     * there seems to be a bug in the displayLanguageOption view helper (part of header.phtml template)
+     * Background (although there is a clone operation of the translator within the helper, the trait used get an instance of the modified
+     * translator with native as language setting. This causes a wrong translation in the templates afterwards (breadcrumb and footer)
+     * At first we should test it then we could a write a bug report
+     */
+    $breadcrumb = $this->render('layout/breadcrumb');
+    $footer = $this->render('footer.phtml');
+
+    ?>
+
     <header role="banner" class="hidden-print">
       <div class="container navbar">
         <a class="sr-only" href="#content"><?=$this->transEsc('Skip to content') ?></a>
@@ -86,7 +99,7 @@
 
     <div role="main" class="main">
       <div class="container container-table-fix-md breadcrumbWrapper">
-        <?=$this->render('layout/breadcrumb') ?>
+        <?=$breadcrumb ?>
       </div>
       <div class="container container-table-fix-md">
         <div class="row row-table-fix-md table-sidebar">
@@ -101,7 +114,7 @@
     </div>
     <footer role="contentinfo" class="hidden-print">
       <div class="container">
-        <?=$this->render('footer.phtml')?>
+        <?=$footer?>
       </div>
     </footer>
     <!-- MODAL IN CASE WE NEED ONE -->
