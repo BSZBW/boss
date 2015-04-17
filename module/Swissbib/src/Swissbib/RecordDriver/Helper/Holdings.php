@@ -886,7 +886,7 @@ class Holdings
      *
      * set link to NEBIS Primo View
      *
-     * @todo get user language and ad it to backlink
+     * @todo get user language and add it to backlink
      * @param    String $networkCode
      * @param    String $institutionCode
      * @param    Array $item
@@ -894,11 +894,9 @@ class Holdings
      * @return    String
      */
     protected function getBackLinkNEBIS($networkCode, $institutionCode, $item, array $data) {
-        if (!empty($item['localid'])) {
-            $values = [
-                'bib-system-number' => $item['bibsysnumber'],
+        $values = [
+            'bib-system-number' => $item['bibsysnumber'],
             ];
-        }
         return $this->compileString($data['pattern'], $values);
     }
 
