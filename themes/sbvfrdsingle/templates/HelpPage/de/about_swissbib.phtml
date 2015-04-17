@@ -2,8 +2,9 @@
 <h2>Was ist swissbib</h2>
 <p>
     Swissbib ist ein nationaler Katalog, der Ihnen die Möglichkeit gibt, die Bibliotheken der Schweizer Universitäten, Fachhochschulen,
-    Forschungsanstalten und die Schweizerische Nationalbibliothek zentral zu durchsuchen. Sie benutzen swissbib für die Suche und
-    die Trefferanzeige. Weiter informiert sie swissbib, in welchen Bibliotheken die von Ihnen gefundene Titel vorhanden sind.
+    Forschungsanstalten, die Schweizerische Nationalbibliothek und zahlreiche weitere Institutionen zentral zu durchsuchen.
+    Sie benutzen swissbib für die Suche und die Trefferanzeige. Weiter informiert sie swissbib, in welchen Bibliotheken die von
+    Ihnen gefundene Titel vorhanden sind.
 </p>
 
 <h2>Was finde ich in swissbib</h2>
@@ -16,14 +17,14 @@
 <h2>Wie suche ich in swissbib</h2>
 <p>
     Swissbib bietet einen einfachen Sucheinstieg <a class="help-link" href="<?=$this->url('help-home')?>?topic=search" title="<?= $this->transEsc('Search Tips') ?>">mit vielen Extras</a>
-    und eine <a class="help-link" href="<?=$this->url('help-home')?>?topic=advsearch" title="<?= $this->transEsc('Search Tips') ?>">erweiterte Suche</a>. Die Trefferlisten sind nach
+    und eine <a href="<?= $this->url('search-advanced') ?>" class="advancedSearchLink" title="<?= $this->transEsc('Advanced Search') ?>">erweiterte Suche</a>. Die Trefferlisten sind nach
     einer transparent eingestellten Relevanz gegliedert und können auch nach Autor, Titel oder Jahr sortiert werden. Die Facetten oder Filter ermöglichen Ihnen eine Einschränkung nach
     verschiedenen Kriterien.
 </p>
 
 <h2>Wo erhalte ich den gewünschten Titel</h2>
 <p>
-    Hinter dem Symbol <i class="fa fa-institution"></i> finden Sie die Anzahl und Namen der besitzenden Bibliotheken. Ein Klick auf die gewünschte Bibliothek liefert
+    Hinter dem Symbol <i class="fa fa-institution"></i> finden Sie die Anzahl und, nach einem Klick, die Namen der besitzenden Bibliotheken. Ein Klick auf die gewünschte Bibliothek liefert
     weitere Informationen. Falls es sich beim Dokument um eine frei zugängliche digitale Ressource handelt, wird unter dem Symbol <i class="fa fa-external-link"></i> ein
     direkter Link angeboten.
 </p>
@@ -41,9 +42,9 @@
     <li>Favoritenbibliotheken einmal definieren und dann immer wieder nutzen</li>
     <li>Merklisten über einen längeren Zeitraum speichern</li>
     <li>Die Suchoberfläche konfigurieren (Sprache, Listenlänge)</li>
-    <!-- <li>Nutzerdaten für die Ausleihe in Bibliotheken hinterlegen</li> -->
 </ul>
-<p>Wenn Sie sich <strong>nicht</strong> anmelden, verlieren Sie alle Einstellungen, wenn Sie den Browser schliessen.</p>
+<p>
+    Wenn Sie sich <strong>nicht</strong> anmelden, verlieren Sie alle Einstellungen, wenn Sie den Browser schliessen.
 </p>
 
 <h2>Wie funktioniert die Anmeldung in swissbib</h2>
@@ -53,7 +54,7 @@
 <ul class="list">
     <li>
         <strong>switchAAI:</strong> Für Studierende und das Personal von Universitäten, Fachhochschulen und weiteren
-        Institutionen nutzen wir den nationalen Dienst von switch. Dieses Login wird von den Universitäten bereitgestellt und
+        Institutionen nutzen wir den nationalen Dienst von switch. Dieses Login wird von diesen Institutionen bereitgestellt und
         von Studierenden auch für andere Dienste wie VPN oder Lernplattformen genutzt
         (<a href="https://www.switch.ch/services/aai/" target="_blank" title="Info zu switchAAI">Mehr Informationen</a>).
     </li>

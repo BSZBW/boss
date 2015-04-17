@@ -798,23 +798,26 @@ class Holdings
      */
     protected function getBackLink($networkCode, $institutionCode, array $item)
     {
-        //item has url (subfield u)
+        //return it, if the item has an url included in subfield u
         if (!empty($item['holding_url'])) return $item['holding_url'];
 
         $method = false;
         $data = array();
 
-        if (isset($this->configHoldings->Backlink->{$networkCode})) { // Has the network its own backlink type
+        // Check if the network has its own backlink type
+        if (isset($this->configHoldings->Backlink->{$networkCode})) {
             $method = 'getBackLink' . ucfirst($networkCode);
             $data = array(
                 'pattern' => $this->configHoldings->Backlink->{$networkCode}
             );
-        } else { // no custom type
-            if (isset($this->networks[$networkCode])) { // is network even configured?
+        // no custom type for network
+        } else {
+            // check if network is even configured
+            if (isset($this->networks[$networkCode])) {
                 $networkType = strtoupper($this->networks[$networkCode]['type']);
                 $method = 'getBackLink' . ucfirst($networkType);
 
-                // Has the network type (aleph, virtua, etc) a general link?
+                // Has the network type  general link by its system (aleph, virtua, etc)
                 if (isset($this->configHoldings->Backlink->$networkType)) {
                     $data = array(
                         'pattern' => $this->configHoldings->Backlink->$networkType
@@ -875,6 +878,25 @@ class Holdings
             'sub-library-code' => $institutionCode,
             'network' => $networkCode,
         ];
+        return $this->compileString($data['pattern'], $values);
+    }
+
+    /**
+     * Get backlink for NEBIS
+     *
+     * set link to NEBIS Primo View
+     *
+     * @todo get user language and add it to backlink
+     * @param    String $networkCode
+     * @param    String $institutionCode
+     * @param    Array $item
+     * @param    Array $data
+     * @return    String
+     */
+    protected function getBackLinkNEBIS($networkCode, $institutionCode, $item, array $data) {
+        $values = [
+            'bib-system-number' => $item['bibsysnumber'],
+            ];
         return $this->compileString($data['pattern'], $values);
     }
 
