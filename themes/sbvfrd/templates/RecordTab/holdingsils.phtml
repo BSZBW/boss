@@ -12,6 +12,7 @@ $this->headTitle($this->translate('Holdings') . ': ' . $this->driver->getBreadcr
 
 ?>
 <? if ($holdings): ?>
+
   <? foreach ($holdings as $groupCode => $group): ?>
     <!-- begin: innerbox <?= $groupCode ?> -->
     <div class="innerbox grey holdingsBox" id="holdings-<?= $groupCode ?>">
