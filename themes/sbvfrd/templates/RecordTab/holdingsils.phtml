@@ -12,68 +12,6 @@ $this->headTitle($this->translate('Holdings') . ': ' . $this->driver->getBreadcr
 
 ?>
 <? if ($holdings): ?>
-
-  <div class="panel-group" id="groups" role="tablist" aria-multiselectable="true">
-    <? foreach ($holdings as $groupCode => $group): ?>
-    <!-- begin: group -->
-    <div class="panel panel-default" id="group-<?= $groupCode ?>">
-      <!-- begin: group heading -->
-      <div class="panel-heading" role="tab" id="heading-<?= $groupCode ?>">
-        <h4 class="panel-title">
-          <a data-toggle="collapse" data-parent="#groups" href="#collapse-<?= $groupCode ?>" aria-expanded="true" aria-controls="collapse-<?= $groupCode ?>">
-            <? if (is_array($group['label'])): ?>
-              <? $group['label'] = implode('', array_unique($group['label'])); ?>
-            <? endif; ?>
-            <span><?= $this->zendTranslate($group['label']) ?></span>
-          </a>
-        </h4>
-      </div>
-      <!-- end: group heading -->
-      <!-- begin: group content -->
-      <div id="collapse-<?= $groupCode ?>" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-<?= $groupCode ?>">
-        <div class="panel-body">
-
-          <div class="panel-group" id="institutions-<?= $groupCode ?>" role="tablist" aria-multiselectable="true">
-          <? foreach ($group['institutions'] as $institutionCode => $institution): ?>
-
-            <!-- begin: institution -->
-            <div class="panel panel-default" id="institution-<?= $institutionCode ?>">
-              <!-- begin: institution heading -->
-              <div class="panel-heading" role="tab" id="heading-<?= $institutionCode ?>">
-                <h4 class="panel-title">
-                  <a data-toggle="collapse" data-parent="#institutions-<?= $groupCode ?>" href="#collapse-<?= $institutionCode ?>" aria-expanded="true" aria-controls="collapse-<?= $institutionCode ?>">
-                    <?= $this->escapeHtml($this->zendTranslate($institution['label'], 'institution')) ?>
-                  </a>
-                </h4>
-              </div>
-              <!-- end: institution heading -->
-
-              <!-- begin: institution content -->
-              <div id="collapse-<?= $institutionCode ?>" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-<?= $institutionCode ?>">
-                <div class="panel-body">
-                </div>
-              </div>
-              <!-- end: institution content -->
-            </div>
-            <!-- end: institution -->
-
-          <? endforeach; ?>
-          </div>
-
-        </div>
-      </div>
-      <!-- end: group content -->
-    </div>
-    <!-- end: group -->
-
-    <? endforeach; ?>
-
-  </div>
-
-
-
-  <!-- old code below - remove after redesign -->
-
   <? foreach ($holdings as $groupCode => $group): ?>
     <!-- begin: innerbox <?= $groupCode ?> -->
     <div class="innerbox grey holdingsBox" id="holdings-<?= $groupCode ?>">
