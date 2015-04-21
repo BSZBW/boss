@@ -25,6 +25,13 @@
 @state-info-bg:                  @highlight-color;
 @state-info-border:              darken(spin(@state-info-bg, -10), 7%);
 
+//== Tables
+//
+//## Customizes the `.table` component with basic values, each used across all table variations.
+
+@table-bg-accent:               #ededed;
+
+
 //== Form states and alerts
 //
 //## Define colors for form feedback states and, by default, alerts.
@@ -81,6 +88,18 @@
   border-color: @link-color;
   border-radius: 2px;
   text-decoration: none;
+  &.disabled,
+  &[disabled],
+  fieldset[disabled] & {
+    &,
+    &:hover,
+    &:focus,
+    &.focus,
+    &:active,
+    &.active {
+      background-color: @theme-color;
+    }
+  }
 }
 
 .mixin-btn-primary-active {
