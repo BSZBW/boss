@@ -1,4 +1,4 @@
-<? $loginlink = 'http://aleph.unibas.ch/F/?func=file&file_name=login-session&con_lng' . $lang; ?>
+<? $loginlink = 'http://aleph.unibas.ch/F/?func=file&file_name=login-session'; ?>
 
 <h4 class="list-group-item title"><?=$this->transEsc('Your Account')?></h4>
 <ul class="list-group">
@@ -26,7 +26,7 @@
 <ul class="list-group">
   <? if ($this->auth()->isLoggedIn()): ?>
     <? foreach ($this->auth()->getLoginTargets() as $target): ?>
-      <? $class = in_array($this->active, array('checkedout', 'holds', 'storageRetrievalRequests', 'ILLRequests', 'fines', 'photocopies', 'bookings', 'profile')) ?
+      <? $class = in_array($this->active, array('changepassword', 'checkedout', 'holds', 'storageRetrievalRequests', 'ILLRequests', 'fines', 'photocopies', 'bookings', 'profile')) ?
           'collapse in' : 'collapse'; ?>
       <a class="list-group-item title collapsed" data-toggle="collapse" href="#collapse<?= $target ?>">
         <?= $this->transEsc($target); ?>
@@ -43,7 +43,7 @@
               <?=$this->transEsc('changeaddress') ?>
               <span class="pull-right"><i class="fa fa-home"></i></span>
             </a>
-            <a href="<?=$loginlink ?>" class="list-group-item" target="_blank">
+            <a href="<?=$this->url('myresearch-changepassword')?>" class="list-group-item<?=$this->active == 'changepassword' ? ' active' : ''?>">
               <?=$this->transEsc('Change Password') ?>
               <span class="pull-right"><i class="fa fa-lock"></i></span>
             </a>
