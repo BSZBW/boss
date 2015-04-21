@@ -3,7 +3,7 @@
     <ul>
         <li><a href="#q1">Was ist der kürzeste Weg zur Übersicht meiner Ausleihen?</a>
         <li><a href="#q2">Kann ich im Bestand einer bestimmten Bibliothek suchen?</a></li>
-        <li><a href="#q3">Können Sie mir ein bestimmtes Werk per Post senden?</a></li>
+        <li><a href="#q3">Können Sie mir ein bestimmtes Medium per Post senden?</a></li>
         <li><a href="#q4">Warum funktioniert der Link zum Volltext bei E-Books und Artikeln nicht immer?</a></li>
         <li><a href="#q5">Kann ich Resultate in Literaturverwaltungsprogramme exportieren?</a></li>
         <li><a href="#q6">Das Richtige nicht gefunden?</a></li>
@@ -11,94 +11,40 @@
         <li><a href="#q8">Ist Ihre Frage nicht dabei?</a></li>
     </ul>
 </nav>
-
-
 <br />
 <dl>
-<dt><a name="q1"></a>Was ist der kürzeste Weg zur Übersicht meiner Ausleihen?</dt>
-<dd><p><a href="<?= $this->url('myresearch-userlogin') ?>">Anmelden</a>, dann auf My swissbib klicken (oben rechts).</p></dd>
-
-<dt><a name="q2"></a>Kann ich im Bestand einer bestimmten Bibliothek suchen?</dt>
-<dd><p>Ihre Suchergebnisse lassen sich rechts unter Suche verfeinern nach der gewünschten Bibliothek eingrenzen. Alternativ können Sie die Bibliothek in der Erweiterten Suche auswählen. Bibliotheken können als sogenannte <a href="<?=$this->url('myresearch-favorite-institutions')?>"><?=$this->transEsc('mylibraries')?></a> unter My swissbib dauerhaft gespeichert werden.</p></dd>
-<dt><a name="q3"></a>Können Sie mir ein bestimmtes Werk per Post senden?</dt>
-<dd><p>Einige Bibliotheken schicken Ihnen die Medien an Ihre Postadresse oder zum Abholen an eine von Ihnen gewünschte Bibliothek. Nach erfolgter Anmeldung klicken Sie beim gewünschten Titel unter Exemplar auf Bestellen: je nach Bibliothek werden unterschiedliche Abholstandorte angeboten. Siehe Details unter <a href="<?= $this->url('help-page', array('topic' => 'delivery')); ?>"><?= $this->transEsc('helppage.delivery') ?></a>.</p></dd>
-<dt><a name="q4"></a>Warum funktioniert der Link zum Volltext bei E-Books und Artikeln nicht immer?</dt>
-<dd><p>Der Zugang zum Volltext funktioniert oft nur aus dem Netz der Universität, die den Inhalt lizenziert hat.</p></dd>
-<dd><p>Als Universitätsangehörige melden Sie sich über VPN (<a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://mobile.unibas.ch') ?>" target="_blank">Basel</a>, <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://www.vpn.unibe.ch') ?>" target="_blank">Bern</a>) an, wenn Sie sich nicht auf dem Campus befinden, und schränken Sie Ihre Suchergebnisse auf der rechten Seite mit dem Filter Uni Basel online bzw. Uni Bern online ein.</p></dd>
-<dt><a name="q5"></a>Kann ich Resultate in Literaturverwaltungsprogramme exportieren?</dt>
-<dd><p>Ja. Klicken Sie entweder auf der Ebene der Suchergebnisse oder auf der Ebene des einzelnen Titels auf das Export-Symbol <i class="fa fa-share"></i>.</p></dd>
-<dt><a name="q6"></a>Das Richtige nicht gefunden?</dt>
-<dd>
-    <ul>
-    <li>Erweitern Sie Ihre Suche auf <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('https://www.swissbib.ch') ?>" target="_blank" title="swissbib">swissbib.ch</a> (ganze Schweiz) und bestellen Sie bequem aus <a href="<?= $this->url('help-page', array('topic' => 'delivery')); ?>">IDS-Kurierbibliotheken</a>.</li>
-    <li>Schicken Sie uns Ihren Fernleihauftrag: Bestellformular <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://www.ub.unibas.ch/ub-hauptbibliothek/dienstleistungen/ausleihe/kurier-und-fernleihe/fernleihformular') ?>" target="_blank">UB Basel</a> / <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://www.ub.unibe.ch/content/bestellen__ausleihen/fernleihe/bestellformular') ?>" target="_blank">UB Bern</a></li>
-    <li>Schicken Sie uns Ihren Anschaffungsvorschlag: <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://www.ub.unibas.ch/ub-hauptbibliothek/dienstleistungen/ausleihe/anschaffungsvorschlag') ?>" target="_blank">UB Basel</a> / <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://www.ub.unibe.ch/content/bestellen__ausleihen/anschaffungsvorschlaege') ?>" target="_blank">UB Bern</a></li>
-    </ul>
-</dd>
-<dt><a name="q7"></a>Wo kann ich sonst noch suchen?</dt>
-<dd>
-    <ul>
-    <li><a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('https://www.swissbib.ch') ?>" target="_blank" title="swissbib">swissbib</a>: Katalog aller Schweizer Hochschulbibliotheken</li>
-    <li><a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://aleph.unibas.ch/ALEPH') ?>" target="_blank" title="swissbib">ALEPH-Katalog</a>: der klassische Katalog des IDS Basel Bern, der für die Suche nach gewissen Spezialbeständen (historisches Material, Musikalien) empfohlen wird</li>
-    <li><a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://aleph.unibas.ch/F/?func=option-update-lng&file_name=find-b&p_con_lng=GER&local_base=dsv05') ?>" target="_blank" title="swissbib">Verbundkatalog HAN</a>: Verzeichnis für Handschriften, Archive und Nachlässe (Basel, Bern, Luzern, Solothurn und St.Gallen)</li>
-    </ul>
-</dd>
-<dt><a name="q8"></a>Ist Ihre Frage nicht dabei?</dt>
-<dd><p>Gerne unterstützen wir Sie bei der Recherche und beim Bestellen in unserem Katalog oder nehmen Ihre Anregungen und Kritik entgegen:</p>
-    <ul>
-    <li>Fragen zu Ihrem Konto oder zu bestimmten Werken: Wenden Sie sich bitte an Ihre Stammbibliothek bzw. die <a href="<?= $this->basePath('Libraries') ?>" title="Liste der Institutionen">Bibliothek</a>, die das Werk besitzt.</li>
-    <li>Fragen und Anregungen zur Suchoberfläche swissbib Basel Bern: <a id="feedbackLink" class="modal-link" href="<?= $this->url('feedback-home') ?>"><?= $this->transEsc("menu.contact") ?></a></li>
-    </ul>
-</dd>
-</dl>    
-
-
-<!--<h1>FAQ</h1>
-<h2>Suchen, Erweiterte Suche</h2>
-<ul class="list">
-    <li>
-        <strong>Kann ich im Bestand einer bestimmten Bibliothek suchen?</strong>
-        <br/>Entweder die gewünschte Bibliothek als Favorit markieren und in der Trefferliste <i>Suche verfeinern - Favoriten</i> benutzen oder <i>Erweiterte Suche - Suche verfeinern - Bibliothek</i>.
-    </li>
-    <li>
-        <strong>Warum funktioniert der Link zum Volltext bei E-Books und Artikeln nicht immer?</strong>
-        <br/>Der Zugang zum Volltext funktioniert oft nur aus dem Netz der Universität, die den Inhalt lizenziert hat. Melden Sie sich deshalb über VPN an, wenn Sie sich nicht auf dem Campus befinden.
-    </li>
-</ul>
-
-<h2>Bestellen</h2>
-<ul class="list">
-    <li>
-        <strong>Können Sie mir ein bestimmtes Werk per Post senden?</strong>
-        <br/>Wählen Sie die Bibliothek, bei der Sie bestellen möchten. Klicken Sie auf <i>Bestellen</i>. Wenn Postversand an Ihre Adresse möglich ist, können Sie die Option bei <i>Abholort/Lieferadresse</i> wählen.
-    </li>
-</ul>
-
-<h2>My swissbib</h2>
-<ul class="list">
-    <li>
-        <strong>Was ist der kürzeste Weg zur Übersicht meiner Ausleihen?</strong>
-        <br/><i>Anmelden</i>, dann auf <i>Konto: Ihr Name</i> klicken.
-    </li>
-</ul>
-
-<h2>Ist Ihre Frage nicht dabei?</h2>
-<ul class="list">
-    <li>
-        Für Fragen zu Ihrem Konto wenden Sie sich bitte an <a href="http://www.ub.unibas.ch/ids-basel-bern/ausleihbibliotheken/" target="_blank">Ihre Bibliothek</a>.
-    </li>
-    <li>
-        Für Fragen zu bestimmten Werken wenden Sie sich bitte an die <a href="<?= $this->url('libraries-index') ?>">besitzende Bibliothek</a>.
-        <br/>Link aus dem Katalog: Klicken Sie auf das Icon <img src="<?= $this->basePath('themes/swissbibmulti/css/img/icon_link-external.gif') ?>" alt="Bibliotheksinformation"> bei Standort.
-    </li>
-    <li>
-        Kontakt swissbib Basel Bern: E-Mail an <a href="mailto:swissbib-baselbern@unibas.ch">swissbib-baselbern@unibas.ch</a> oder Kommentar im <a href="http://swissbib-baselbern.blogspot.ch" target="_blank">Blog</a>.
-    </li>
-</ul>
-
-<h2>Das Richtige nicht gefunden?</h2>
-<ul class="list">
-    <li>Erweitern Sie Ihre Suche auf <a href="https://www.swissbib.ch/" target="_blank">swissbib.ch</a> (ganze Schweiz) und bestellen Sie bequem aus <a href="http://www.ub.unibas.ch/ids-basel-bern/ids-kurierbibliotheken/" target="_blank">IDS-Kurierbibliotheken.</a></li>
-    <li>Schicken Sie uns Ihren Fernleihauftrag: Bestellformular <a href="http://www.ub.unibas.ch/ub-hauptbibliothek/dienstleistungen/ausleihe/kurier-und-fernleihe/fernleihformular/" target="_blank">UB Basel</a> / <a href="http://www.ub.unibe.ch/content/bestellen__ausleihen/fernleihe/bestellformular/index_ger.html" target="_blank">UB Bern</a></li>
-    <li>Schicken Sie uns Ihren Anschaffungsvorschlag: Anschaffungsvorschlag <a href="http://www.ub.unibas.ch/ub-hauptbibliothek/dienstleistungen/ausleihe/anschaffungsvorschlag/" target="_blank">UB Basel</a> / <a href="http://www.ub.unibe.ch/content/bestellen__ausleihen/anschaffungsvorschlaege/index_ger.html" target="_blank">UB Bern</a></li>
-</ul>-->
+    <dt><a name="q1"></a>Was ist der kürzeste Weg zur Übersicht meiner Ausleihen?</dt>
+    <dd><p><a href="<?= $this->url('myresearch-userlogin') ?>">Anmelden</a>, dann auf My swissbib klicken (oben rechts).</p></dd>
+    <dt><a name="q2"></a>Kann ich im Bestand einer bestimmten Bibliothek suchen?</dt>
+    <dd><p>Ihre Suchergebnisse lassen sich rechts unter Suche verfeinern nach der gewünschten Bibliothek eingrenzen. Alternativ können Sie die Bibliothek in der Erweiterten Suche auswählen. Bibliotheken können als sogenannte <a href="<?=$this->url('myresearch-favorite-institutions')?>"><?=$this->transEsc('mylibraries')?></a> unter My swissbib dauerhaft gespeichert werden.</p></dd>
+    <dt><a name="q3"></a>Können Sie mir ein bestimmtes Medium per Post senden?</dt>
+    <dd><p>Einige Bibliotheken schicken Ihnen die Medien an Ihre Postadresse oder zum Abholen an eine von Ihnen gewünschte Bibliothek. Nach erfolgter Anmeldung klicken Sie beim gewünschten Titel unter Exemplar auf Bestellen: je nach Bibliothek werden unterschiedliche Abholstandorte angeboten. Siehe Details unter <a href="<?= $this->url('help-page', array('topic' => 'delivery')); ?>"><?= $this->transEsc('helppage.delivery') ?></a>.</p></dd>
+    <dt><a name="q4"></a>Warum funktioniert der Link zum Volltext bei E-Books und Artikeln nicht immer?</dt>
+    <dd><p>Der Zugang zum Volltext funktioniert oft nur aus dem Netz der Universität, die den Inhalt lizenziert hat.</p></dd>
+    <dd><p>Als Universitätsangehörige melden Sie sich über VPN (<a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://mobile.unibas.ch') ?>" target="_blank">Basel</a>, <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://www.vpn.unibe.ch') ?>" target="_blank">Bern</a>) an, wenn Sie sich nicht auf dem Campus befinden, und schränken Sie Ihre Suchergebnisse auf der rechten Seite mit dem Filter Uni Basel online bzw. Uni Bern online ein.</p></dd>
+    <dt><a name="q5"></a>Kann ich Resultate in Literaturverwaltungsprogramme exportieren?</dt>
+    <dd><p>Ja. Klicken Sie entweder auf der Ebene der Suchergebnisse oder auf der Ebene des einzelnen Titels auf das Export-Symbol <i class="fa fa-share"></i>.</p></dd>
+    <dt><a name="q6"></a>Das Richtige nicht gefunden?</dt>
+    <dd>
+        <ul>
+            <li>Erweitern Sie Ihre Suche auf <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('https://www.swissbib.ch') ?>" target="_blank" title="swissbib">swissbib.ch</a> (ganze Schweiz) und bestellen Sie bequem aus <a href="<?= $this->url('help-page', array('topic' => 'delivery')); ?>">IDS-Kurierbibliotheken</a>.</li>
+            <li>Schicken Sie uns Ihren Fernleihauftrag: Bestellformular <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://www.ub.unibas.ch/ub-hauptbibliothek/dienstleistungen/ausleihe/kurier-und-fernleihe/fernleihformular') ?>" target="_blank">UB Basel</a> / <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://www.ub.unibe.ch/content/bestellen__ausleihen/fernleihe/bestellformular') ?>" target="_blank">UB Bern</a></li>
+            <li>Schicken Sie uns Ihren Anschaffungsvorschlag: <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://www.ub.unibas.ch/ub-hauptbibliothek/dienstleistungen/ausleihe/anschaffungsvorschlag') ?>" target="_blank">UB Basel</a> / <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://www.ub.unibe.ch/content/bestellen__ausleihen/anschaffungsvorschlaege') ?>" target="_blank">UB Bern</a></li>
+        </ul>
+    </dd>
+    <dt><a name="q7"></a>Wo kann ich sonst noch suchen?</dt>
+    <dd>
+        <ul>
+            <li><a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('https://www.swissbib.ch') ?>" target="_blank" title="swissbib">swissbib</a>: Bestände aller Schweizer Hochschulbibliotheken</li>
+            <li><a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://aleph.unibas.ch/ALEPH') ?>" target="_blank" title="swissbib">Katalog IDS Basel Bern</a>: für die Suche nach gewissen Spezialbeständen (historisches Material, Musikalien) empfohlen</li>
+            <li><a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://aleph.unibas.ch/F/?func=option-update-lng&file_name=find-b&p_con_lng=GER&local_base=dsv05') ?>" target="_blank" title="swissbib">Verbundkatalog HAN</a>: Verzeichnis für Handschriften, Archive und Nachlässe (Appenzell Ausserrhoden, Basel, Bern, Luzern, Solothurn und St.Gallen)</li>
+        </ul>
+    </dd>
+    <dt><a name="q8"></a>Ist Ihre Frage nicht dabei?</dt>
+    <dd><p>Gerne unterstützen wir Sie bei der Recherche und beim Bestellen in unserem Katalog oder nehmen Ihre Anregungen und Kritik entgegen:</p>
+        <ul>
+            <li>Fragen zu Ihrem Konto oder zu bestimmten Medien: Wenden Sie sich bitte an Ihre Stammbibliothek bzw. die <a href="<?= $this->basePath('Libraries') ?>" title="Liste der Institutionen">Bibliothek</a>, die das Medium besitzt.</li>
+            <li>Fragen und Anregungen zur Suchoberfläche swissbib Basel Bern: <a id="feedbackLink" class="modal-link" href="<?= $this->url('feedback-home') ?>"><?= $this->transEsc("menu.contact") ?></a></li>
+        </ul>
+    </dd>
+</dl>
