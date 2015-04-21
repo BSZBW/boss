@@ -35,21 +35,28 @@ trait PersonalSettingsHelper {
         $user = $manager->isLoggedIn();
 
         $requestParams = $request->toArray();
-        if ($user && $user->max_hits)
+        if ($user)
         {
-            if (array_key_exists('limitControlElement',$requestParams) || array_key_exists('advancedSearchFormRequest',$requestParams) ||
-                (array_key_exists('page',$requestParams) &&
-                    ((int) $requestParams['page']) > 1))
+            //in case user changed the the limit with a UI control on the result list or the advanced search page
+            //we want to serialize the new value in database
+            if (array_key_exists('limitControlElement',$requestParams) || array_key_exists('advancedSearchFormRequest',$requestParams))
             {
                 if (array_key_exists('limit',$requestParams))
                 {
+                    $user->max_hits = (int) $requestParams['limit'];
+                    $user->save();
                     $limit =  $requestParams['limit'];
                 } else {
                     $limit = $tLimit = $request->get('limit') != $defaultLimit ? $request->get('limit') : $defaultLimit;
                 }
             } else
             {
-                $limit = $user->max_hits;
+                //check if there is a stored value in database. If not use the request or default value
+                if ($user->max_hits) {
+                    $limit = $user->max_hits;
+                } else {
+                    $limit  =  $tLimit = $request->get('limit') != $defaultLimit ? $request->get('limit') : $defaultLimit;
+                }
             }
         } else {
             $limit  =  $tLimit = $request->get('limit') != $defaultLimit ? $request->get('limit') : $defaultLimit;
@@ -77,23 +84,35 @@ trait PersonalSettingsHelper {
     {
         $user = $manager->isLoggedIn();
         $requestParams = $request->toArray();
-        if ($user && $user->default_sort)
+        if ($user)
         {
+            //in case user changed the the sort settings on the result list with a specialized UI control
+            //we want to serialize the new value in database
             if (array_key_exists('sortControlElement',$requestParams))
             {
                 if (array_key_exists('sort',$requestParams))
                 {
                     $sort =  $requestParams['sort'];
+                    $dbSort = unserialize($user->default_sort);
+                    $dbSort[$target] = $requestParams['sort'];
+                    $user->default_sort = serialize($dbSort);
+                    $user->save();
                 } else {
                     $tSort = $request->get('sort');
                     $sort = !empty($tSort) ? $tSort : $defaultSort;
                 }
             } else
             {
-                $userDefaultSort = unserialize($user->default_sort);
-                $userDefaultSort = $userDefaultSort[$target];
-
-                $sort = $userDefaultSort;
+                //check if there is a value stored for sort in the database
+                //if not use the request or default value
+                if ($user->default_sort) {
+                    $userDefaultSort = unserialize($user->default_sort);
+                    $userDefaultSort = $userDefaultSort[$target];
+                    $sort = $userDefaultSort;
+                } else {
+                    $tSort = $request->get('sort');
+                    $sort = !empty($tSort) ? $tSort : $defaultSort;
+                }
             }
         } else {
             $sort = $request->get('sort');
