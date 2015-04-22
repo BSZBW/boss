@@ -103,7 +103,7 @@ class MyResearchController extends VuFindMyResearchController
     /** @var User $user */
     $user = $this->getUser();
 
-    if ($this->getRequest()->isPost()) {
+    if ($this->getRequest()->isPost() && $this->params()->fromPost('myResearchSettingsForm')) {
       $language = $this->params()->fromPost('language');
       $maxHits = $this->params()->fromPost('max_hits');
       $defaultSort = $this->params()->fromPost('default_sort');
@@ -316,6 +316,48 @@ class MyResearchController extends VuFindMyResearchController
 
     return $view;
   }
+
+    public function logoutAction()
+    {
+        $config = $this->getConfig();
+        if (isset($config->Site->logOutRoute)) {
+            $logoutTarget = $this->getServerUrl($config->Site->logOutRoute);
+        } else {
+            $logoutTarget = $this->getRequest()->getServer()->get('HTTP_REFERER');
+            if (empty($logoutTarget)) {
+                $logoutTarget = $this->getServerUrl('home');
+            }
+
+            // If there is an auth_method parameter in the query, we should strip
+            // it out. Otherwise, the user may get stuck in an infinite loop of
+            // logging out and getting logged back in when using environment-based
+            // authentication methods like Shibboleth.
+            $logoutTarget = preg_replace(
+                '/([?&])auth_method=[^&]*&?/', '$1', $logoutTarget
+            );
+            $logoutTarget = rtrim($logoutTarget, '?');
+        }
+
+
+        if (count(preg_grep('/Search\/Results|Summon\/Search/',[$logoutTarget])) > 0 )
+        {
+            //GH: It might happen (depends on context) that limit and sort query parameter are still
+            //part of the former URL when user called the logout function (logoutTarget) and contains sort
+            // or limit parameter customized by the user. This is not desired especially at access points in the public space
+            //But we have to be careful: we should append additional default parameters only for Solr or Summon
+            // search Routes
+            $solrResultsManager = $this->getServiceLocator()->get('Swissbib\SearchResultsPluginManager')->get('Solr');
+            $options = $solrResultsManager->getParams()->getOptions();
+            $defaultSort = $options->getDefaultSortByHandler();
+            $defaultLimit = $options->getDefaultLimit();
+            $logoutTarget .= '&limit=' . $defaultLimit .'&sort=' . $defaultSort;
+
+        }
+
+        return $this->redirect()
+            ->toUrl($this->getAuthManager()->logout($logoutTarget));
+    }
+
 
   /**
    * User login action -- clear any previous follow-up information prior to

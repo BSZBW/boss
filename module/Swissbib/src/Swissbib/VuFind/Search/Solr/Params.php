@@ -3,12 +3,14 @@ namespace Swissbib\VuFind\Search\Solr;
 
 use VuFind\Search\Solr\Params as VuFindSolrParams;
 use VuFindSearch\ParamBag;
+use Swissbib\Favorites\Manager;
 
 /*
  * Class to extend the core VF2 SOLR functionality related to Parameters
  */
 class Params extends VuFindSolrParams
 {
+    use \Swissbib\VuFind\Search\Helper\PersonalSettingsHelper;
 
     /**
      * @var array
@@ -30,6 +32,52 @@ class Params extends VuFindSolrParams
         return 'Solr';
     }
 
+
+    /**
+     * Pull the page size parameter or set to default
+     *
+     * @param \Zend\StdLib\Parameters $request Parameter object representing user
+     * request.
+     *
+     * @return void */
+    protected function initLimit($request)
+    {
+
+
+        $auth = $this->serviceLocator->get('VuFind\AuthManager');
+        $defLimit = $this->getOptions()->getDefaultLimit();
+        $limitOptions = $this->getOptions()->getLimitOptions();
+        $view = $this->getView();
+        $this->handleLimit($auth, $request,$defLimit, $limitOptions, $view );
+
+    }
+
+    /*
+     * GH: we need this method to call initLimit (which is protected in base class and shouldn't be changed only because
+     * of hacks relaed to silly personal settings (although is possible in the current PHP version)
+     *
+     */
+    public function initLimitAdvancedSearch($request)
+    {
+        $this->initLimit($request);
+    }
+
+
+
+    /**
+     * Get the value for which type of sorting to use
+     *
+     * @param \Zend\StdLib\Parameters $request Parameter object representing user
+     * request.
+     *
+     * @return string
+     */
+    protected function initSort($request)
+    {
+        $auth = $this->serviceLocator->get('VuFind\AuthManager');
+        $defaultSort = $this->getOptions()->getDefaultSortByHandler();
+        $this->setSort($this->handleSort($auth,$request,$defaultSort,$this->getSearchClassId()));
+    }
 
 
     /**

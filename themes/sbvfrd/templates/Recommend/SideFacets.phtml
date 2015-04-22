@@ -140,11 +140,19 @@ JS;
               <?=$this->escapeHtml($thisFacet['displayText'])?>
             </a>
           <? else: ?>
-            <? $addURL = $this->currentPath().$results->getUrlQuery()->addFacet($title, $thisFacet['value'], $thisFacet['operator']); ?>
+
+            <?
+               //$thisFacet is often not set and causes a lot of logging
+               $tOperator = isset($thisFacet['operator']) ? $thisFacet['operator'] : null;
+               $addURL = $this->currentPath().$results->getUrlQuery()->addFacet($title, $thisFacet['value'], !empty($tOperator) ? $tOperator : null);
+
+            ?>
+
             <? if ($allowExclude): ?>
               <li class="list-group-item facet<?=$thisFacet['operator'] ?><? if ($i>$cluster['displayLimit']): ?> <?=$moreClass ?><?endif ?>">
             <? else: ?>
-              <a href="<?=$addURL ?>" class="list-group-item facet<?=$thisFacet['operator'] ?><? if ($i>$cluster['displayLimit']): ?> <?=$moreClass ?><?endif ?>">
+              <? $tOperatorClass = isset($thisFacet['operator']) ? 'facet' . $thisFacet['operator'] : 'facet'; ?>
+              <a href="<?=$addURL ?>" class="list-group-item <?=$tOperatorClass ?><? if ($i>$cluster['displayLimit']): ?> <?=$moreClass ?><?endif ?>">
             <? endif; ?>
             <span class="badge">
               <?=$this->localizedNumber($thisFacet['count'])?>
@@ -155,7 +163,7 @@ JS;
             <? if ($allowExclude): ?>
               <a href="<?=$addURL ?>">
             <? endif; ?>
-            <? if($thisFacet['operator'] == 'OR'): ?>
+            <? if(isset($thisFacet['operator']) && $thisFacet['operator'] == 'OR'): ?>
               <i class="fa fa-square-o"></i>
             <? endif; ?>
             <?=$this->escapeHtml($thisFacet['displayText'])?>

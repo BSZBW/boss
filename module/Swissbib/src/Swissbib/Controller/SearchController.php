@@ -10,6 +10,7 @@ use VuFind\Controller\SearchController as VuFindSearchController;
 use VuFind\Search\Results\PluginManager as VuFindSearchResultsPluginManager;
 
 use Swissbib\VuFind\Search\Results\PluginManager as SwissbibSearchResultsPluginManager;
+use Zend\Stdlib\Parameters;
 
 /**
  * @package       Swissbib
@@ -66,7 +67,14 @@ class SearchController extends VuFindSearchController
         $viewModel->options     = $this->getServiceLocator()->get('Swissbib\SearchOptionsPluginManager')->get($this->searchClassId);
         $results                = $this->getResultsManager()->get($this->searchClassId);
 
-        $viewModel->setVariable('params', $results->getParams());
+        $params = $results->getParams();
+        $requestParams = new Parameters(
+            $this->getRequest()->getQuery()->toArray()
+            + $this->getRequest()->getPost()->toArray()
+        );
+        //GH: We need this initialization only to handle personal limit an sort settings for logged in users
+        $params->initLimitAdvancedSearch($requestParams);
+        $viewModel->setVariable('params', $params);
 
         $mainConfig = $this->getServiceLocator()->get('Vufind\Config')->get('config');
         $viewModel->adv_search_activeTabId = $mainConfig->Site->adv_search_activeTabId;
