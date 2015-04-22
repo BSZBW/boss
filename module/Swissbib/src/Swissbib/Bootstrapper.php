@@ -155,6 +155,34 @@ class Bootstrapper
     }
 
 
+    /**
+     * set headers no-cache in case it is configured
+     * we need this functionality especially after the deployment of new versions
+     * with significant CSS changes
+     * then we want to suppress the browser caching for a limited period of time
+     */
+    protected function initNoCache()
+    {
+        $config =& $this->config;
+
+        if (isset($config->Site->header_no_cache) &&  $config->Site->header_no_cache) {
+            $callback = function ($event) {
+                $response = $event->getApplication()->getResponse();
+                //for expires use date in the past
+                $response->getHeaders()->addHeaders(array(
+                    'Cache-Control' => 'no-cache, no-store, must-revalidate',
+                    'Pragma' => 'no-cache',
+                    'Expires' => 'Thu, 1 Jan 2015 00:00:00 GMT'
+                ));
+
+
+            };
+
+            $this->events->attach('dispatch', $callback, -500);
+        }
+    }
+
+
 
     /*
      * Set fallback locale to english
