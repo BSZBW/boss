@@ -90,8 +90,8 @@ class Record extends VuFindRecord
 
         foreach ($linksInLocalFields as $linkData) {
 
-            $linkID = $linkData['subfields']['u'];
-            $linkDescription = $linkData['subfields']['z'];
+            $linkID = isset($linkData['subfields']['u']) ? $linkData['subfields']['u'] : null ;
+            $linkDescription = isset($linkData['subfields']['z']) ? $linkData['subfields']['z'] : null;
             if ($linkID) {
                 if (! $linkDescription) {
                     $linkDescription = $linkID;

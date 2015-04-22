@@ -13,7 +13,6 @@ use VuFind\Config\Reader as ConfigReader;
 use VuFind\Auth\Manager;
 
 use Swissbib\Filter\TemplateFilenameFilter;
-use Swissbib\VuFind\Search\Solr\Options;
 
 class Bootstrapper
 {
@@ -152,6 +151,34 @@ class Bootstrapper
 
                 $this->events->attach('dispatch', $callback, 8000);
             }
+        }
+    }
+
+
+    /**
+     * set headers no-cache in case it is configured
+     * we need this functionality especially after the deployment of new versions
+     * with significant CSS changes
+     * then we want to suppress the browser caching for a limited period of time
+     */
+    protected function initNoCache()
+    {
+        $config =& $this->config;
+
+        if (isset($config->Site->header_no_cache) &&  $config->Site->header_no_cache) {
+            $callback = function ($event) {
+                $response = $event->getApplication()->getResponse();
+                //for expires use date in the past
+                $response->getHeaders()->addHeaders(array(
+                    'Cache-Control' => 'no-cache, no-store, must-revalidate',
+                    'Pragma' => 'no-cache',
+                    'Expires' => 'Thu, 1 Jan 2015 00:00:00 GMT'
+                ));
+
+
+            };
+
+            $this->events->attach('dispatch', $callback, -500);
         }
     }
 
@@ -301,7 +328,7 @@ class Bootstrapper
         $serviceLocator    = $this->event->getApplication()->getServiceManager();
         /** @var \Swissbib\Log\Logger $logger */
         $logger    = $serviceLocator->get('Swissbib\Logger');
-        /** @var Translator $translator */
+        /** @var TranslatorImpl $translator */
         $translator = $serviceLocator->get('VuFind\Translator');
 
         /**
@@ -352,63 +379,4 @@ class Bootstrapper
     }
 
 
-
-    /**
-     * Add user defined default limit for search
-     */
-    protected function initDefaultSearchLimit()
-    {
-        /** @var ServiceManager $serviceLocator */
-        $serviceLocator    = $this->event->getApplication()->getServiceManager();
-        /** @var Manager $authManager */
-        $authManager    = $serviceLocator->get('VuFind\AuthManager');
-
-        if ($authManager->isLoggedIn()) {
-            $userLimit = $authManager->isLoggedIn()->max_hits;
-
-            if ($userLimit) {
-                /** @var Options $searchOptions */
-                $searchOptions =  $serviceLocator->get('Swissbib\SearchResultsPluginManager')->get($this->getActiveTab())->getOptions();
-
-                $searchOptions->setDefaultLimit($userLimit);
-            }
-        }
-    }
-
-
-
-  /**
-   *  Add user defined default sort for search
-   */
-  protected function initDefaultSort() {
-      /** @var ServiceManager $serviceLocator */
-      $serviceLocator    = $this->event->getApplication()->getServiceManager();
-      /** @var Manager $authManager */
-      $authManager    = $serviceLocator->get('VuFind\AuthManager');
-
-      if ($authManager->isLoggedIn()) {
-        $userDefaultSort = unserialize($authManager->isLoggedIn()->default_sort);
-        $userDefaultSort = $userDefaultSort[$this->getActiveTab()];
-
-        if ($userDefaultSort !== "") {
-            /** @var Options $searchOptions */
-            $searchOptions =  $serviceLocator->get('Swissbib\SearchResultsPluginManager')->get($this->getActiveTab())->getOptions();
-
-            $searchOptions->setDefaultSort($userDefaultSort);
-        }
-      }
-    }
-
-
-
-  /**
-   * @return String
-   */
-  protected function getActiveTab() {
-        if (strpos($this->application->getRequest()->getRequestUri(), '/Summon/') !== false) {
-            return 'Summon';
-        } else {
-            return 'Solr';
-        }
-    }
 }

@@ -1053,9 +1053,9 @@ class Holdings
 
 
     /**
-     * Get bib info link
-     * Get false if not found
-     * Array contains url and host value
+     * Get URL for library website (bibinfo)
+     * false if not found or scheme not ok
+     * Array with only url if scheme is ok
      *
      * @param    String $institutionCode
      * @return    Array|Boolean
@@ -1067,13 +1067,16 @@ class Holdings
         if ($bibInfoLink === $institutionCode) {
             $bibInfoLink = false;
         } else {
-            $url = parse_url($bibInfoLink);
-            $bibInfoLink = array(
-                'url' => $bibInfoLink,
-                'host' => $url['host']
-            );
+            $scheme = parse_url($bibInfoLink, PHP_URL_SCHEME);
+            if (preg_match('/http/', $scheme)) {
+                $bibInfoLink = [
+                    'url' => $bibInfoLink,
+                ];
+            }
+            else {
+                $bibInfoLink = false;
+            }
         }
-
         return $bibInfoLink;
     }
 

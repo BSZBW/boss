@@ -7,6 +7,7 @@ use Zend\Http\PhpEnvironment\Response;
 
 use VuFind\Solr\Utils as SolrUtils;
 use VuFind\Controller\SummonController as VuFindSummonController;
+use Zend\Stdlib\Parameters;
 
 class SummonController extends VuFindSummonController
 {
@@ -147,6 +148,34 @@ class SummonController extends VuFindSummonController
     $external = $targetsProxy->detectTarget() === false ? true : false;
     return $external;
     }
+
+
+
+    /**
+     * Render advanced search
+     *
+     * @return    ViewModel
+     */
+    public function advancedAction()
+    {
+        $viewModel              = parent::advancedAction();
+
+        //GH: We need this initialization only to handle personal limit an sort settings for logged in users
+        $viewModel->options     = $this->getServiceLocator()->get('Swissbib\SearchOptionsPluginManager')->get($this->searchClassId);
+        $results                = $this->getResultsManager()->get($this->searchClassId);
+        $params = $results->getParams();
+        $requestParams = new Parameters(
+            $this->getRequest()->getQuery()->toArray()
+            + $this->getRequest()->getPost()->toArray()
+        );
+
+        $params->initLimitAdvancedSearch($requestParams);
+        $viewModel->setVariable('params', $params);
+
+
+        return $viewModel;
+    }
+
 
 
     /**
