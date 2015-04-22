@@ -1053,9 +1053,9 @@ class Holdings
 
 
     /**
-     * Get bib info link
-     * Get false if not found
-     * Array contains url and host value
+     * Get URL for library website (bibinfo)
+     * false if not found or scheme not ok
+     * Array with only url if scheme is ok
      *
      * @param    String $institutionCode
      * @return    Array|Boolean
