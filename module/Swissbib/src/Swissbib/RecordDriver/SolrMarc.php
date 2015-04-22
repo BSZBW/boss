@@ -626,7 +626,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
                 . $field['filename']
                 . '&scale=1';
             }
-            elseif ($field['ADM'] === 'ZAD50') {
+            elseif (isset($field['ADM']) &&  $field['ADM'] === 'ZAD50') {
                 if (array_key_exists('directory',$field) && preg_match('/^.*thumbnail/', $field['directory'])) {
                     $dirpath = preg_replace('/^.*thumbnail/', '', $field['directory']);
                     $dirpath = empty($dirpath) ? $dirpath : substr($dirpath, 1) . '/';
@@ -1579,7 +1579,9 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
         if ($asStrings) {
             $strings = array();
             foreach ($descriptions as $description) {
-                $strings[] = $description['extent'][0];
+                if (isset($description['extent']) && isset($description['extent'][0])) {
+                    $strings[] = $description['extent'][0];
+                }
             }
             $descriptions = $strings;
         }
