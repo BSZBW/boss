@@ -13,7 +13,6 @@ use VuFind\Config\Reader as ConfigReader;
 use VuFind\Auth\Manager;
 
 use Swissbib\Filter\TemplateFilenameFilter;
-use Swissbib\VuFind\Search\Solr\Options;
 
 class Bootstrapper
 {
@@ -301,7 +300,7 @@ class Bootstrapper
         $serviceLocator    = $this->event->getApplication()->getServiceManager();
         /** @var \Swissbib\Log\Logger $logger */
         $logger    = $serviceLocator->get('Swissbib\Logger');
-        /** @var Translator $translator */
+        /** @var TranslatorImpl $translator */
         $translator = $serviceLocator->get('VuFind\Translator');
 
         /**
@@ -352,63 +351,4 @@ class Bootstrapper
     }
 
 
-
-    /**
-     * Add user defined default limit for search
-     */
-    protected function initDefaultSearchLimit()
-    {
-        /** @var ServiceManager $serviceLocator */
-        $serviceLocator    = $this->event->getApplication()->getServiceManager();
-        /** @var Manager $authManager */
-        $authManager    = $serviceLocator->get('VuFind\AuthManager');
-
-        if ($authManager->isLoggedIn()) {
-            $userLimit = $authManager->isLoggedIn()->max_hits;
-
-            if ($userLimit) {
-                /** @var Options $searchOptions */
-                $searchOptions =  $serviceLocator->get('Swissbib\SearchResultsPluginManager')->get($this->getActiveTab())->getOptions();
-
-                $searchOptions->setDefaultLimit($userLimit);
-            }
-        }
-    }
-
-
-
-  /**
-   *  Add user defined default sort for search
-   */
-  protected function initDefaultSort() {
-      /** @var ServiceManager $serviceLocator */
-      $serviceLocator    = $this->event->getApplication()->getServiceManager();
-      /** @var Manager $authManager */
-      $authManager    = $serviceLocator->get('VuFind\AuthManager');
-
-      if ($authManager->isLoggedIn()) {
-        $userDefaultSort = unserialize($authManager->isLoggedIn()->default_sort);
-        $userDefaultSort = $userDefaultSort[$this->getActiveTab()];
-
-        if ($userDefaultSort !== "") {
-            /** @var Options $searchOptions */
-            $searchOptions =  $serviceLocator->get('Swissbib\SearchResultsPluginManager')->get($this->getActiveTab())->getOptions();
-
-            $searchOptions->setDefaultSort($userDefaultSort);
-        }
-      }
-    }
-
-
-
-  /**
-   * @return String
-   */
-  protected function getActiveTab() {
-        if (strpos($this->application->getRequest()->getRequestUri(), '/Summon/') !== false) {
-            return 'Summon';
-        } else {
-            return 'Solr';
-        }
-    }
 }
