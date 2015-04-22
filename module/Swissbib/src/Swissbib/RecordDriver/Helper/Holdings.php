@@ -1067,13 +1067,16 @@ class Holdings
         if ($bibInfoLink === $institutionCode) {
             $bibInfoLink = false;
         } else {
-            $url = parse_url($bibInfoLink);
-            $bibInfoLink = array(
-                'url' => $bibInfoLink,
-                'host' => $url['host']
-            );
+            $scheme = parse_url($bibInfoLink, PHP_URL_SCHEME);
+            if (preg_match('/http/', $scheme)) {
+                $bibInfoLink = [
+                    'url' => $bibInfoLink,
+                ];
+            }
+            else {
+                $bibInfoLink = false;
+            }
         }
-
         return $bibInfoLink;
     }
 
