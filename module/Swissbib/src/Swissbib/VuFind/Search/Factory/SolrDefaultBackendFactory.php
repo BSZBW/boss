@@ -38,8 +38,7 @@ namespace Swissbib\VuFind\Search\Factory;
 use Swissbib\VuFind\Search\Backend\Solr\LuceneSyntaxHelper;
 use Swissbib\VuFind\Search\Solr\InjectSwissbibSpellingListener;
 use VuFind\Search\Factory\SolrDefaultBackendFactory as VuFindSolrDefaultBackendFactory;
-use VuFind\Search\Solr\V4\ErrorListener;
-use Swissbib\VuFindSearch\Backend\Solr\Backend;
+use VuFindSearch\Backend\Solr\Backend;
 
 use Swissbib\Highlight\SolrConfigurator as HighlightSolrConfigurator;
 use VuFindSearch\Backend\Solr\Connector;

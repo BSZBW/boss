@@ -21,7 +21,7 @@ class Options extends VuFindSolrOptions
 
 
     /**
-     * @param String    $sort
+     * @param String    $defaultSort
      */
     public function setDefaultSort($defaultSort)
     {
@@ -32,15 +32,19 @@ class Options extends VuFindSolrOptions
     /**
      * Translate a string if a translator is available.
      * We have to override this method because VF2 core doesn't support multiple Textdomains for translations at the moment
+     * @override
      *
-     * @param string $msg Message to translate
+     * @param string $str     String to translate
+     * @param array  $tokens  Tokens to inject into the translated string
+     * @param string $default Default value to use if no translation is found (null
+     * for no default).
      *
      * @return string
      */
-    public function translate($msg)
+    public function translate($str, $tokens = [], $default = null)
     {
         return null !== $this->translator
-            ? is_array($msg) && count($msg) == 2 ?  $this->translator->translate($msg[0],$msg[1]) : $this->translator->translate($msg) : $msg;
+            ? is_array($str) && count($str) == 2 ?  $this->translator->translate($str[0],$str[1]) : $this->translator->translate($str) : $str;
     }
 
 

@@ -278,7 +278,7 @@ class Summon extends VuFindSummon implements SwissbibRecordDriver
      * @param string $size
      * @return array|bool|string
      */
-    public function getThumbnail($size) {
+    public function getThumbnail($size = 'small') {
         return parent::getThumbnail('small');
     }
 
