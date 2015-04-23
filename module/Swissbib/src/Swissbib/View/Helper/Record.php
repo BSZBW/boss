@@ -100,16 +100,20 @@ class Record extends VuFindRecord
      * get corrected URLs
      * changes content in URL, at the moment, just one case from helveticarchives
      *
-     * @param $urls
-     * @return mixed
+     * @param $urlArray
+     *
+     * @return array
      */
     private function getCorrectedURLS($urlArray)
     {
+        $newUrlArray = array();
+
         foreach ($urlArray as $url) {
             $url['url'] = preg_replace('/www\.helveticarchives\.ch\/getimage/', 'www.helveticarchives.ch/bild', $url['url']);
             $newUrlArray[] = $url;
-            }
-            return $newUrlArray;
+        }
+
+        return $newUrlArray;
     }
 
     /**
