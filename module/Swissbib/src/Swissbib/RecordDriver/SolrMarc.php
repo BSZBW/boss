@@ -337,7 +337,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
 
         // Which fields/subfields should we check for URLs?
         $fieldsToCheck = array(
-            '856' => array('u', 'z'), // Standard URL
+            '856' => array('u', '3', 'z'), // Standard URL
             '956' => array('u', 'y'), // Standard URL
             //'555' => array('a')         // Cumulative index/finding aids
         );
@@ -354,6 +354,11 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
                         $tSubField = end($subfields);
 
                         $descSubField = $url->getSubfield($tSubField);
+
+                        // if no content in subfield z/y, try subfield 3
+                        if (!$descSubField) {
+                            $descSubField = $url->getSubfield('3');
+                        }
 
                         $desc = $address;
                         if ($descSubField) {

@@ -1,4 +1,36 @@
 <?php
+
+/**
+ * swissbib / VuFind swissbib enhancements
+ *
+ * PHP version 5
+ *
+ * Copyright (C) project swissbib, University Library Basel, Switzerland
+ * http://www.swissbib.org  / http://www.swissbib.ch / http://www.ub.unibas.ch
+ *
+ * Date: 23.04.2015
+
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ * @category swissbib_VuFind2
+ * @package  View Helper
+ * @author   Guenter Hipler  <guenter.hipler@unibas.ch>
+ * @author   Oliver Schihin <oliver.schihin@unibas.ch>
+ * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     http://vufind.org/wiki/vufind2:record_drivers Wiki
+ * @link     http://www.swissbib.org Project Wiki
+ */
 namespace Swissbib\View\Helper;
 
 use VuFind\RecordDriver\Summon;
@@ -38,6 +70,8 @@ class Record extends VuFindRecord
      */
     private function createUniqueLinks($urlArray) {
 
+        $urlArray = $this->getCorrectedURLS($urlArray);
+
         $config = $this->driver->getServiceLocator()->get('VuFind\Config')->get('config');
         if ( $config ) {
             $config = $config->get('Record');
@@ -60,6 +94,22 @@ class Record extends VuFindRecord
         }
 
         return $collectedArrays;
+    }
+
+    /**
+     * get corrected URLs
+     * changes content in URL, at the moment, just one case from helveticarchives
+     *
+     * @param $urls
+     * @return mixed
+     */
+    private function getCorrectedURLS($urlArray)
+    {
+        foreach ($urlArray as $url) {
+            $url['url'] = preg_replace('/www\.helveticarchives\.ch\/getimage/', 'www.helveticarchives.ch/bild', $url['url']);
+            $newUrlArray[] = $url;
+            }
+            return $newUrlArray;
     }
 
     /**
@@ -91,7 +141,13 @@ class Record extends VuFindRecord
         foreach ($linksInLocalFields as $linkData) {
 
             $linkID = isset($linkData['subfields']['u']) ? $linkData['subfields']['u'] : null ;
-            $linkDescription = isset($linkData['subfields']['z']) ? $linkData['subfields']['z'] : null;
+            if (isset($linkData['subfields']['z'])) {
+                $linkDescription = $linkData['subfields']['z'];
+            }
+            elseif (isset($linkData['subfields']['3'])) {
+                $linkDescription = $linkData['subfields']['3'];
+            }
+            else $linkDescription = null;
             if ($linkID) {
                 if (! $linkDescription) {
                     $linkDescription = $linkID;
@@ -148,14 +204,12 @@ class Record extends VuFindRecord
             if (!isset($link['desc'])) {
                 $link['desc'] = $link['url'];
             }
-
             return $link;
         };
 
         return $this->createUniqueLinks(array_map($formatLink, $collectedLinks));
-
-
     }
+
 
 
 
