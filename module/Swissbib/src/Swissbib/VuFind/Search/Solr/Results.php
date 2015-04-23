@@ -340,12 +340,10 @@ class Results extends VuFindSolrResults
      */
     protected function isFieldToTranslate($field)
     {
-
-
         $translateInfo = array();
 
         //getTranslatedFacets returns the entries in Advanced_Settings -> translated_facets
-        $refValuesToTranslate =&  $this->getOptions()->getTranslatedFacets();
+        $refValuesToTranslate = $this->getOptions()->getTranslatedFacets();
         //is the current field a facet which should be translated?
         //we have to use this customized filter mechanism because facets going to be translated are indicated in conjunction with their domain facetName:domainName
         $fieldToTranslateInArray =  array_filter($refValuesToTranslate,function ($passedValue) use ($field){
