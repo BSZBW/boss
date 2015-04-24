@@ -20,9 +20,7 @@ class TranslateFacets extends SwissbibTranslate
 
     public function __construct($translatedFacets = array())
     {
-
         $this->translatedFacets = $translatedFacets;
-
     }
 
 
@@ -50,8 +48,6 @@ class TranslateFacets extends SwissbibTranslate
 
         return $translate ? strstr($fieldToEvaluate,':') === FALSE ? $this->processTranslation($facetValue) :
             $this->processTranslation(substr($fieldToEvaluate,strpos( $fieldToEvaluate,':') + 1) . '::' .   $facetValue) : $facetValue;
-
-
     }
 
 
