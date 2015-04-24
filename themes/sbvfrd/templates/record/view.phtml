@@ -18,6 +18,10 @@
   $this->layout()->breadcrumbs = '<li>' . $this->getLastSearchLink($this->transEsc('Search'), '', '</li> ') .
     '<li class="active">' . $this->recordLink()->getBreadcrumb($this->driver) . '</li> ';
   $this->layout()->title = $this->driver->getShortTitle();
+
+  $sidebarContent = $this->render('record/sidebar/sidebar');
+  $sidebarContentWithoutComments = preg_replace('/<!--(.*)-->|\\n/Us', '', $sidebarContent);
+  $showSidebar = !empty($sidebarContentWithoutComments);
 ?>
 <div class="<?=$this->layoutClass('mainbody')?>">
    <? $col = '12'; $colSM = '12' ?>
@@ -110,11 +114,11 @@
   <span class="Z3988" title="<?=$this->escapeHtmlAttr($this->driver->getOpenURL())?>"></span>
 </div>
 
-<?
-$sidebarContent = $this->render('record/sidebar/sidebar');
-$sidebarContentWithoutComments = preg_replace('/<!--(.*)-->|\\n/Us', '', $sidebarContent);
-?>
-
-<div class="<?=$this->layoutClass('sidebar') . (empty($sidebarContentWithoutComments) ? ' invisible': '') ?>">
-  <?= $sidebarContent;?>
-</div>
+<? if ($showSidebar): ?>
+    <div class="<?=$this->layoutClass('sidebar') ?>">
+        <?= $sidebarContent;?>
+    </div>
+<? else: ?>
+    <div class="<?=$this->layoutClass('sidebar') . ' invisible' ?>"></div>
+    <script>OffCanvas.isActive = false;</script>
+<? endif; ?>

@@ -3,6 +3,7 @@
  * @type {{sidebar: null, button: null, body: null, init: init, initOffCanvas: initOffCanvas, toggleOffCanvas: toggleOffCanvas, enableTransition: enableTransition}}
  */
 var OffCanvas = {
+  isActive: true,
   sidebar: null,
   button: null,
   icon: null,
@@ -12,7 +13,7 @@ var OffCanvas = {
    * Initialize Off-Canvas handling
    */
   init: function () {
-    OffCanvas.initOffCanvas();
+    if (OffCanvas.isActive) OffCanvas.initOffCanvas();
   },
 
   /**
@@ -29,9 +30,8 @@ var OffCanvas = {
       OffCanvas.main = $(".main");
       OffCanvas.header = $("header");
 
+      OffCanvas.button.removeClass('hidden');
       OffCanvas.button.click(OffCanvas.toggleOffCanvas);
-    } else {
-      OffCanvas.button.hide();
     }
   },
 
