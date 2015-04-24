@@ -163,6 +163,10 @@ class Bootstrapper
      */
     protected function initNoCache()
     {
+        // call to get headers not supported in cli mode:
+        if (Console::isConsole()) {
+            return;
+        }
         $config =& $this->config;
 
         if (isset($config->Site->header_no_cache) &&  $config->Site->header_no_cache) {
