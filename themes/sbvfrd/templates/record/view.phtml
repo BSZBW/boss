@@ -110,6 +110,11 @@
   <span class="Z3988" title="<?=$this->escapeHtmlAttr($this->driver->getOpenURL())?>"></span>
 </div>
 
-<div class="<?=$this->layoutClass('sidebar')?>">
-  <?=$this->render('record/sidebar/sidebar');?>
+<?
+$sidebarContent = $this->render('record/sidebar/sidebar');
+$sidebarContentWithoutComments = preg_replace('/<!--(.*)-->|\\n/Us', '', $sidebarContent);
+?>
+
+<div class="<?=$this->layoutClass('sidebar') . (empty($sidebarContentWithoutComments) ? ' invisible': '') ?>">
+  <?= $sidebarContent;?>
 </div>
