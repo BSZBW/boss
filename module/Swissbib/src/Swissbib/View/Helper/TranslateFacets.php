@@ -49,7 +49,6 @@ class TranslateFacets extends SwissbibTranslate
         $fieldToEvaluate = $translate ? current($fieldToTranslateInArray) : null;
 
         return $translate ? strstr($fieldToEvaluate,':') === FALSE ? $this->processTranslation($facetValue) :
-            //$this->processTranslation(array($facetValue , substr($fieldToEvaluate,strpos( $fieldToEvaluate,':') + 1 )))  : $facetValue;
             $this->processTranslation(substr($fieldToEvaluate,strpos( $fieldToEvaluate,':') + 1) . '::' .   $facetValue) : $facetValue;
 
 
