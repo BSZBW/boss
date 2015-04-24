@@ -26,9 +26,21 @@ class TranslateFacets extends SwissbibTranslate
     }
 
 
-
-    public function __invoke($facetName,$facetValue)
+    /*
+     * @param array  $str     Must be an array because we need multiple values ['facetName' => 'name', 'facetValue' => 'value']
+     * @param array  $tokens  Tokens to inject into the translated string
+     * @param string $default Default value to use if no translation is found (null
+     * for no default).
+     *
+     * @return string
+     */
+    public function __invoke($str, $tokens = array(), $default = null)
     {
+        if (!is_array($str)) return '';
+
+        $facetName = $str['facetName'];
+        $facetValue = $str['facetValue'];
+
         $fieldToTranslateInArray =  array_filter($this->translatedFacets,function ($passedValue) use ($facetName){
             return $passedValue === $facetName || count(preg_grep ( "/" .$facetName . ":" . "/", array ($passedValue))) > 0;
         }) ;
