@@ -62,9 +62,11 @@ $formats = $viewRecord->getFormatList();
     <div class="meta">
         <? if ($hostitems): ?>
             <? foreach ($hostitems as $hostitem): ?>
-                <span class="hidden-xs label"><strong><?= $this->transEsc('note_773') ?>:</strong></span>
-                <? $text = array_key_exists('related', $hostitem) ? $hostitem['title'] . ', ' . $hostitem['related'] : $hostitem['title'] ?>
-                <span><?= $this->escapeHtml($text) ?></span><br />
+                <? if (array_key_exists('title', $hostitem)): ?>
+                    <span class="hidden-xs label"><strong><?= $this->transEsc('note_773') ?>:</strong></span>
+                    <? $text = array_key_exists('related', $hostitem) ? $hostitem['title'] . ', ' . $hostitem['related'] : $hostitem['title'] ?>
+                    <span><?= $this->escapeHtml($text) ?></span><br />
+                <? endif; ?>
             <? endforeach; ?>
         <? endif; ?>
         <? if ($journalTitle): ?>
