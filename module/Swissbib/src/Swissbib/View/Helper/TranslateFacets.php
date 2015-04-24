@@ -18,6 +18,9 @@ class TranslateFacets extends SwissbibTranslate
     private $translatedFacets = array();
 
 
+    /**
+     * @param array $translatedFacets
+     */
     public function __construct($translatedFacets = array())
     {
         $this->translatedFacets = $translatedFacets;
