@@ -1,16 +1,16 @@
 <h1>Services</h1>
 <p>
-    swissbib bietet folgende weitere Dienste an:
+    swissbib offers the following additional services:
 </p>
 
-<h2>Suchbox</h2>
+<h2>Search box</h2>
 <p>
-    Die Suchbox können Sie in Ihre Webseite einbauen und damit einen Zugang auf swissbib anbieten. Die Suchparameter der Box sind konfigurierbar
-    (Filter nach Bibliothek, Format, etc.). Den Code verschiedener Suchboxen finden Sie unter
-    <a href="https://github.com/swissbib/vufind/tree/master/sbDocumentation/boxes_links" target="_blank">diesem Link</a>. Sie können die Boxen
-    nach ihren Bedürfnissen anpassen (Hintergrundfarbe, gewählter Filter, Code, etc.).
+    The search box can be built into your website to offer access to swissbib. The search parameter of the box are configurable (Filter by
+    library, format, etc.). The code of different search boxes can be found under
+    <a href="https://github.com/swissbib/vufind/tree/master/sbDocumentation/boxes_links" target="_blank">this link</a>.
+    You can adapt the boxes according to your needs (background color, chosen filters, codes, etc.).
 </p>
-<p><b>Beispiel einer Suchbox</b></p>
+<p><b>Search box example</b></p>
 
 <html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -23,19 +23,19 @@
         <img alt="logo" src="https://raw.githubusercontent.com/swissbib/vufind/development/themes/sbvfrd/images/logo_swissbib.png" />
         <label for="searchForm_lookfor"></label>
         <input style="padding:2px 2px 2px 2px; background-color:#FFFFFF; border: 2px transparent; border-radius:2px;" id="searchForm_lookfor" type="text" name="lookfor" size="40" value="" class="autocomplete searcher:Solr typeSelector:searchForm_type"/>
-        <input type="submit" name="submit" value="Suchen" formtarget="_blank" /><br />
+        <input type="submit" name="submit" value="Search" formtarget="_blank" /><br />
         <div style="padding-left: 198px; padding-top:5px">
             <input class="applied-filter" id="applied_filter_1" name="filter[]" type="checkbox" checked="checked" value="&#x7E;format&#x3A;&quot;XP010000&quot;" />
-            <label for="applied_filter_1">Suche nach Kartenmaterial</label>
+            <label for="applied_filter_1">Search for maps</label>
         </div>
     </form>
 </div>
 </body>
 </html>
 
-<h2>Suchschnittstelle</h2>
+<h2>Search interface</h2>
 <p>
-    Für eigene Suchdienste über den Datenbestand von swissbib kann die SRU-Schnittstelle genutzt werden. Die Schnittstelle ist unter der
-    Adresse <a href="http://sru.swissbib.ch/sru/form" target="_blank">sru.swissbib.ch</a> frei erreichbar. Eine Dokumentation findet sich
-    im <a href="http://www.swissbib.org/wiki/index.php?title=SRU" target="_blank">Projekt-Wiki</a>.
+    For search services on the swissbib dataset, the SRU interface can be used. The interface implements the SRU search protocol and is available freely
+    under the address <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://sru.swissbib.ch/sru/form')?>" target="_blank">sru.swissbib.ch</a>.
+    A documentation is available on a <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://www.swissbib.org/wiki/index.php?title=SRU')?>" target="_blank">wiki page</a>.
 </p>
