@@ -8,7 +8,7 @@ $this->layout()->breadcrumbs = '<li>' . $this->getLastSearchLink($this->transEsc
     . '<li class="active">' . $this->transEsc('request_place_text') . '</li>';
 ?>
 <p class="lead"><?=$this->transEsc('request_place_text')?></p>
-<p><?=$this->transEsc('hold_text4') ?> <a href="http://www.ub.unibas.ch/ids-basel-bern/kosten-lieferfristen" target="_blank" ><?=$this->transEsc('hold_text5')?></a>.</p><br/>
+<p><?=$this->transEsc('hold_text4') ?> <a href="<?= $this->url('help-page', array('topic' => 'delivery')); ?>" target="_blank"><?=$this->transEsc('hold_text5')?></a>.</p><br/>
 <? if ($this->helpText): ?>
     <p class="helptext"><?=$this->helpText?></p>
 <? endif; ?>
