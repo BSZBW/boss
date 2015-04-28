@@ -93,7 +93,9 @@ class ExtendedIni extends VFExtendedIni
             ? $this->loadLanguageFile($locale . '.ini')
             : $this->loadLanguageFile($filename);
 
+        //do we need the fallbacks in multi domain environment for translations?
         // Load fallback data, if any:
+        /*
         if (!empty($this->fallbackLocales)) {
             foreach ($this->fallbackLocales as $fallbackLocale) {
                 $newData = $this->loadLanguageFile($fallbackLocale . '.ini');
@@ -101,6 +103,7 @@ class ExtendedIni extends VFExtendedIni
                 $data = $newData;
             }
         }
+        */
 
         return $data;
     }
@@ -123,23 +126,99 @@ class ExtendedIni extends VFExtendedIni
         }
 
         $data = false;
-        foreach ($this->pathStack as $path) {
-            $fullFilePath = file_exists($filename)
-                ? $filename : $path . '/' . $filename;
+        $matchesLocation = [];
+        if (file_exists($filename)) {
 
-            if ($fullFilePath && file_exists($fullFilePath)) {
-                //$this->reader->getTextDomain($path . '/' . $filename);
-                //s. d374b404e4e4dea5a7f2b2edf83605d98e07175e
-                //todo GH: discuss it on VuFind List and ask for current status Pull request multi doamin
-                $current = $this->reader->getTextDomain($fullFilePath);
-                //$current = $this->languageFileToTextDomain($fullFilePath);
-                if ($data === false) {
-                    $data = $current;
-                } else {
-                    $data->merge($current);
+            //is the case with native.ini translations
+            $data = $this->reader->getTextDomain($filename);
+        } elseif (preg_match('/(.*?-.*?)\\.ini/',$filename,$matchesLocation)) {
+
+            //GH: this is a big hack to fetch the multi domain location translations
+            //compare comment in config_base.ini
+            $wholeFileName = array_filter($matchesLocation, function ($arrValue) {
+                return preg_match("#ini#",$arrValue);
+            });
+
+            if (is_array($wholeFileName) && count($wholeFileName) == 1)
+            {
+                foreach ($this->pathStack as $path) {
+
+                    if (preg_match('/location$/', $path)) {
+
+                        $fullFilePath = $path . '/' . $wholeFileName[0];
+
+                        if ($fullFilePath && file_exists($fullFilePath)) {
+
+                            $current = $this->reader->getTextDomain($fullFilePath);
+                            if ($data === false) {
+                                $data = $current;
+                            } else {
+                                $data->merge($current);
+                            }
+                        }
+                    }
+
+                }
+
+            }
+
+        } else {
+
+            //simple VuFind translation
+            //we have to collect the translation files in APP_BASE/languages and
+            //APP_BASE/locale/languages
+            if (!preg_match('/\//',$filename))
+            {
+                foreach ($this->pathStack as $path) {
+
+                    if (preg_match('/languages$/', $path)) {
+
+                        $fullFilePath = $path . '/' . $filename;
+
+                        if ($fullFilePath && file_exists($fullFilePath)) {
+
+                            $current = $this->reader->getTextDomain($fullFilePath);
+                            if ($data === false) {
+                                $data = $current;
+                            } else {
+                                $data->merge($current);
+                            }
+                        }
+                    }
+
+                }
+            } else {
+                //we are dealing with a specialized domain
+                //if we are dealing with a multi domain translation the filename contains a slash character
+                //compare the initialization method initSpecialTranslations in Bootstrapper
+                $matches = [];
+                preg_match('/(.*?)\\//',$filename,$matches);
+                foreach ($this->pathStack as $path) {
+
+                    $found = array_filter($matches, function ($arrValue) use ($path) {
+                        return preg_match("#{$arrValue}#",$path);
+                    });
+                    if (count($found) > 0) {
+                        $test = strrpos($filename,"/");
+                        $fileNameWithoutPath = $test ? substr($filename,$test + 1) : $filename;
+                        //preg_match('//',$filename,$matches);
+                        $fullFilePath = $path . '/' . $fileNameWithoutPath;
+                        if ($fullFilePath && file_exists($fullFilePath)) {
+
+                            $current = $this->reader->getTextDomain($fullFilePath);
+                            if ($data === false) {
+                                $data = $current;
+                            } else {
+                                $data->merge($current);
+                            }
+                        }
+
+                    }
+
                 }
             }
         }
+
         if ($data === false) {
             throw new InvalidArgumentException("Ini file '{$filename}' not found");
         }
