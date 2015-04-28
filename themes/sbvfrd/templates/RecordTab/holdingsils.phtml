@@ -52,7 +52,11 @@ $this->headTitle($this->translate('Holdings') . ': ' . $this->driver->getBreadcr
         <? if (is_array($group['label'])): ?>
           <? $group['label'] = implode('', array_unique($group['label'])); ?>
         <? endif; ?>
+        <? if ($group['label'] == 'mylibraries'): ?>
+          <span><?= $this->zendTranslate($group['label']) ?></span>
+          <? else: ?>
           <span><?= $this->zendTranslate($group['label'], 'group') ?></span>
+        <? endif; ?>
       </h3>
 
       <div class="holding-group-<?= $groupCode ?>">
