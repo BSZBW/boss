@@ -83,10 +83,13 @@ class SolrConfigurator
                         $lastSearch = $this->memory->retrieve();
                         if ($lastSearch) {
                             $urlParams = parse_url($lastSearch);
-                            parse_str($urlParams['query'], $queryParams);
 
-                            if (isset($queryParams['lookfor'])) {
-                                $params->set('hl.q', '*:"' . addslashes($queryParams['lookfor']) . '"');
+                            if (isset($urlParams['query'])) {
+                                parse_str($urlParams['query'], $queryParams);
+
+                                if (isset($queryParams['lookfor'])) {
+                                    $params->set('hl.q', '*:"' . addslashes($queryParams['lookfor']) . '"');
+                                }
                             }
                         }
                     }
