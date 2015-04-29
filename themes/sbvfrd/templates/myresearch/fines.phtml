@@ -53,11 +53,11 @@
               <span class="label"><strong><?=$this->transEsc('Fee') ?>:</strong></span> CHF <?=isset($record['amount']) ? number_format($record['amount'], 2, '.', '\'') : ''?> (<?=isset($record['description']) ? $this->escapeHtml($record['description']) : ''?>)
               <br/>
           </div>
-    </div>
+        </div>
    <? endforeach; ?>
+      </div>
+    </form>
   <? endif; ?>
-  </div>
- </form>
 </div>
 
 <div class="<?=$this->layoutClass('sidebar')?>">
