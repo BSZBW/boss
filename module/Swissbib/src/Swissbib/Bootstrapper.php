@@ -208,7 +208,7 @@ class Bootstrapper
             $translator->setFallbackLocale($fallback);
                 // Add file for fallback locale if not already en
             if ($locale !== $fallback) {
-                $translator->addTranslationFile('ExtendedIni', $baseDir . '/' . $fallback. '.ini', 'default', $fallback);
+                $translator->addTranslationFile('ExtendedIni', null, 'default', $fallback);
             }
         };
 
