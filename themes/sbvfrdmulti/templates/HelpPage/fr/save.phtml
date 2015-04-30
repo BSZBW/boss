@@ -1,102 +1,25 @@
-<h1>Bestellen / Online-Zugriff</h1>
-<h2>Medien bestellen</h2>
+<h1>Ordering / Online-access</h1>
+<h2>Ordering books etc.</h2>
 [Film Bestellen verlinken/einbetten / Screenshot dann ev. nicht mehr nötig?]
 <ul>
-    <li>In Bücher & mehr klicken Sie auf den Titel des Mediums, das Sie bestellen möchten.</li>
-    <li>Wählen Sie unter Exemplare eine Bibliothek aus.</li>
-    <li>Klicken Sie Anmelden unter dem Bibliotheksnamen (falls Sie noch nicht angemeldet sind).</li>
-    <li>Wählen Sie Bestellen oder Kopie bestellen.</li>
-    <li>Je nach Bibliothek werden unterschiedliche Abhol- und Liefermöglichkeiten angeboten. Siehe Details unter <a href="<?= $this->url('help-page', array('topic' => 'delivery')); ?>"><?= $this->transEsc('helppage.delivery') ?></a></li>
-    <li>Wenn keine dieser Optionen angezeigt wird, kann das Medium nicht online bestellt werden. Ein Klick auf das Icon <i class="fa fa-info-circle"></i> unterhalb Standort zeigt Öffnungszeiten und Adresse der Bibliothek.</li>
+    <li>In Books & more click on the title you want to order.</li>
+    <li>Choose the library to order from.</li>
+    <li>Click log in below the library's name.</li>
+    <li>Choose order or order copy.</li>
+    <li>Retrieval and delivery options vary depending on the library. Check details for more information <a href="<?= $this->url('help-page', array('topic' => 'delivery')); ?>"><?= $this->transEsc('helppage.delivery') ?></a></li>
+    <li>If no options appear the item cannot be ordered from this library. Click on the icon <i class="fa fa-info-circle"></i> below location for library opening hours and address.</li>
 </ul>
-<h2>Auf elektronische Ressourcen zugreifen</h2>
-<p>In Bücher & mehr können Sie eine Trefferliste mit dem Filter auf der rechten Seite auf Titel einschränken, die online verfügbar sind. Nach Klick auf einen Titel finden Sie unter Online Zugang den Link zum elektronischen Text.</p>
-[ev. Screenshot]
-<p>In Artikel & mehr gelangen Sie wie folgt zum elektronischen Volltext:</p>
-<p><i class="fa fa-external-link"></i> get-it: Führt aus der Trefferliste i.d.R. direkt zum elektronischen Volltext.</p>
-<p><i class="fa fa-external-link"></i> SFX-Services: Führt Sie via SFX-Menü zum Volltext oder zu Bestellmöglichkeiten.</p>
-<p>Als Nicht-Universitätsangehörige haben Sie von ausserhalb der Uni-Netzwerke nur eingeschränkten Zugang auf elektronische Volltexte. Via <i class="fa fa-external-link"></i> SFX-Services können Sie bei Ihrer Bibliothek eine Kopie des gewünschten Textes bestellen (kostenpflichtig, siehe <a href="<?= $this->url('help-page', array('topic' => 'delivery')); ?>"><?= $this->transEsc('helppage.delivery') ?></a>).</p>
-<p>Als Studierende/Angehörige der Universität Basel oder Bern können Sie sich prinzipiell von überall her per VPN (<a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://mobile.unibas.ch') ?>" target="_blank">Basel</a>, <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://www.vpn.unibe.ch') ?>" target="_blank">Bern</a>) ins entsprechende Rechnernetz einwählen.</p>
-<h2>Titel und Listen speichern, weiterverarbeiten</h2>
-<p><i class="fa fa-list-ul"></i> Diesen Titel auf einer Merkliste speichern</p>
-<p><i class="fa fa-plus-square"></i> Diese Suchanfrage speichern</p>
-<p><i class="fa fa-rss"></i> Neue Einträge zu dieser Suchanfrage per Feed gemeldet bekommen</p>
-<p><i class="fa fa-envelope"></i> Diesen Titel/diese Trefferliste per E-Mail versenden</p>
-<p><i class="fa fa-share"></i> Diesen Titel/diese Trefferliste in ein Literaturverwaltungsprogramm exportieren</p>
-<p><i class="fa fa-pencil"></i> Zitiervorschläge für diesen Titel anzeigen</p>
-
-<!--<h1>Sauvegarder</h1>
-
-<table class="table table-striped">
-	<tbody>
-	<tr>
-        <td><img src="<?/*= $this->basePath('themes/swissbibmulti/css/img/icon_notepad_add.gif') */?>"
-                 alt="<?/*= $this->transEsc('memorizelistadd')*/?>"
-                 title="<?/*= $this->transEsc('memorizelistadd')*/?>">
-        </td>
-		<td>Sauvegarder des titre dans votre <strong>listes de sélection</strong></td>
-	</tr>
-	<tr>
-        <td>
-            <img src="<?/*= $this->basePath('themes/swissbibmulti/css/img/icon_pagefunctions_rss.gif') */?>"
-                 alt="<?/*= $this->transEsc('Get RSS Feed')*/?>"
-                 title="<?/*= $this->transEsc('Get RSS Feed')*/?>">
-        </td>
-		<td>Recevoir par <strong>feed</strong> les nouveaux titres correspondants à votre recherche</td>
-	</tr>
-    <tr>
-        <td>
-            <img src="<?/*= $this->basePath('themes/swissbibmulti/css/img/icon_pagefunctions_perma.gif') */?>"
-                 alt="<?/*= $this->transEsc('Cite this')*/?>"
-                 title="<?/*= $this->transEsc('Cite this')*/?>">
-        </td>
-        <td><strong>Citer</strong> les résultats</td>
-    </tr>
-
-    <tr>
-        <td>
-            <img src="<?/*= $this->basePath('themes/swissbibmulti/css/img/icon_pagefunctions_print.gif') */?>"
-                 alt="<?/*= $this->transEsc('Print')*/?>"
-                 title="<?/*= $this->transEsc('Print')*/?>"">
-        </td>
-		<td><strong>Imprimer</strong> les résultats</td>
-	</tr>
-	<tr>
-        <td>
-            <img src="<?/*= $this->basePath('themes/swissbibmulti/css/img/icon_pagefunctions_send.gif') */?>"
-                 alt="<?/*= $this->transEsc('Email this')*/?>"
-                 title="<?/*= $this->transEsc('Email this')*/?>">
-        </td>
-		<td>Envoyer les résultats par <strong>mail</strong></td>
-		</tr>
-	<tr>
-        <td>
-            <img src="<?/*= $this->basePath('themes/swissbibmulti/css/img/icon_pagefunctions_save.gif') */?>"
-                 alt="<?/*= $this->transEsc('Export Items')*/?>"
-                 title="<?/*= $this->transEsc('Export Items')*/?>">
-        </td>
-		<td><strong>Exporter</strong> les résultats sous différents formats</td>
-	</tr>
-	</tbody>
-</table>
-
-<h2>Commander</h2>
-
-<div class="row">
-  <div class="col-sm-6">
-    <a href="<?/*= $this->basePath('themes/swissbibmulti/images/HelpPage/fr/order.png') */?>" class="help">
-      <img class="img-responsive" src="<?/*= $this->basePath('themes/swissbibmulti/images/HelpPage/fr/order_small.png') */?>" alt="Zoom">
-    </a>
-  </div>
-  <div class="col-sm-6">
-    <ul class="list">
-      <li>Cliquez sur le titre.</li>
-      <li>Choisissez une bibliothèque sous <i>Exemplaire</i>.</li>
-      <li>Sous le nom de la bibliothèque cliquez sur <i>Se connecter</i>.</li>
-      <li>Cliquez sur <i>Commander</i> ou <i>Commander une copie</i>.</li>
-      <li>Si aucune de ses options apparait, le document ne peut être commandé online. Un clic sur l'image <img src="<?/*= $this->basePath('themes/swissbibmulti/css/img/icon_link-external.gif') */?>" alt="Informations sur la bibliothèque"> sous Localisation affiche les horaires d'ouverture et l'adresse de la bibliothèque.</li>
-    </ul>
-  </div>
-</div>
-    
--->
+<h2>Access to electronic resources</h2>
+<p>In Books & more search results can be filtered by choosing the available online choice. Click on a title to get direct access to the electronic full-text.</p>
+<p>Articles & more offers the following options for full-text access:</p>
+<p><i class="fa fa-external-link"></i> get-it: links directly to the full-text.</p>
+<p><i class="fa fa-external-link"></i> SFX-Services: links to full-text access via the SFX menu. If no full-text is available alternative ordering options become available.</p>
+<p>Access to electronic full-text from outside the university network is restricted for private customers. Nevertheless, via <i class="fa fa-external-link"></i> SFX-Services it is possible to order a copy of the text from your library (for a fee, see <a href="<?= $this->url('help-page', array('topic' => 'delivery')); ?>"><?= $this->transEsc('helppage.delivery') ?></a>).</p>
+<p>Students and staff members of universities of Basel and Bern can connect to the university network via VPN from anywhere (<a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://mobile.unibas.ch') ?>" target="_blank">Basel</a>, <a href="<?= $this->redirectProtocolWrapper()->getWrappedURL('http://www.vpn.unibe.ch') ?>" target="_blank">Bern</a>).</p>
+<h2>Saving and editing titles and lists</h2>
+<p><i class="fa fa-list-ul"></i> Save this title into a list</p>
+<p><i class="fa fa-plus-square"></i> Save this search result permanently</p>
+<p><i class="fa fa-rss"></i> Get notified via RSS feed if new results have become available for your search</p>
+<p><i class="fa fa-envelope"></i> Forward this title/these results via e-mail</p>
+<p><i class="fa fa-share"></i> Export this title/these results with the help of reference management software</p>
+<p><i class="fa fa-pencil"></i> Show citation styles for this title</p>
