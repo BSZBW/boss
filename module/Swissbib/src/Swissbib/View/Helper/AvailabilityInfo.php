@@ -11,7 +11,9 @@ class AvailabilityInfo extends AbstractHelper
     /** Expected status codes */
     const LENDABLE_AVAILABLE = "lendable_available"; // generell ausleihbar und vorhandene Exemplare
     const LENDABLE_BORROWED = "lendable_borrowed"; // generell ausleihbar, jedoch bereits ausgeliehene Exemplare
+    const LENDABLESHORT = "lendableShort"; // Kurzausleihe (1-7 Tage)
     const USE_ON_SITE = "use-on-site"; // vor Ort einsehbare Exemplare (Lesesaal)
+    const LIBRARYINFO = "libraryInfo"; // Siehe Bibliotheksinformation
     const LOOK_ON_SITE = "lookOnSite"; // Informationsabruf über das lokale System (fallback)
     const EXHIBITION = "exhibition"; // nicht einsehbar, extern ausgestellt (mit Datum bis)
     const INPROCESS = "inProcess";
@@ -80,11 +82,74 @@ class AvailabilityInfo extends AbstractHelper
                     $info .= "</div>";
 
                     break;
+
+                case self::LENDABLESHORT:
+                    if (!empty($borrowinginformation['due_date'])) {
+                        unset($borrowinginformation['due_hour']);
+                        $infotext = $escapedTranslation($statusfield);
+                        $info = "<div class='availability fa-ban'><div>" . "$infotext" . "</div>";
+
+                        if ($borrowinginformation['due_date'] === 'on reserve') {
+                            $info .= $escapedTranslation('On Reserve') . " (" . $borrowinginformation['no_requests'] . ")";
+                        } elseif ($borrowinginformation['due_date'] === 'claimed returned') {
+                            $info .= $escapedTranslation('Claimed Returned');
+                        } elseif ($borrowinginformation['due_date'] === 'lost') {
+                            $info .= $escapedTranslation('Lost');
+                        } else {
+                            foreach ($borrowinginformation as $key => $value) {
+                                if (strcmp(trim($value), "") != 0) {
+                                    $info .= "<div>" . $escapedTranslation($key) . "&nbsp;" . $value . "</div>";
+                                }
+                            }
+                        }
+                        $info .= "</div>";
+                    }
+
+
+                    elseif (empty($borrowinginformation['due_date'])) {
+                        $infotext = $escapedTranslation($statusfield);
+                        $info = "<div class='availability fa-check'><div>" . "$infotext" . "</div></div>";
+                    }
+
+                    break;
+
+
                 case self::USE_ON_SITE:
 
                     $infotext = $escapedTranslation($statusfield);
                     $info = "<div class='availability fa-check'><div>" . "$infotext" . "</div></div>";
                     break;
+
+                case self::LIBRARYINFO:
+                    if (!empty($borrowinginformation['due_date'])) {
+                        unset($borrowinginformation['due_hour']);
+                        $infotext = $escapedTranslation($statusfield);
+                        $info = "<div class='availability fa-ban'><div>" . "$infotext" . "</div>";
+
+                        if ($borrowinginformation['due_date'] === 'on reserve') {
+                            $info .= $escapedTranslation('On Reserve') . " (" . $borrowinginformation['no_requests'] . ")";
+                        } elseif ($borrowinginformation['due_date'] === 'claimed returned') {
+                            $info .= $escapedTranslation('Claimed Returned');
+                        } elseif ($borrowinginformation['due_date'] === 'lost') {
+                            $info .= $escapedTranslation('Lost');
+                        } else {
+                            foreach ($borrowinginformation as $key => $value) {
+                                if (strcmp(trim($value), "") != 0) {
+                                    $info .= "<div>" . $escapedTranslation($key) . "&nbsp;" . $value . "</div>";
+                                }
+                            }
+                        }
+                        $info .= "</div>";
+                    }
+
+
+                    elseif (empty($borrowinginformation['due_date'])) {
+                        $infotext = $escapedTranslation($statusfield);
+                        $info = "<div>" . "$infotext" . "</div>";
+                    }
+
+                    break;
+
                 case self::LOOK_ON_SITE:
 
                     $infotext = $escapedTranslation($statusfield);
