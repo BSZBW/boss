@@ -1,5 +1,5 @@
 <div class="<?=$this->layoutClass('sidebar')?>">
-    <? if ($hasDefaultsApplied): ?>
+    <? if (isset($hasDefaultsApplied) && $hasDefaultsApplied): ?>
         <input type="hidden" name="dfApplied" value="1" />
     <? endif ?>
     <? if (!empty($searchFilters)): ?>
