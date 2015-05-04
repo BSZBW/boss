@@ -68,39 +68,15 @@
       </li>
       <div id="side-collapse-<?=$this->escapeHtmlAttr($title) ?>" class="collapse<? if(!in_array($title, $collapsedFacets)): ?> in<? endif ?>">
         <? if (isset($rangeFacets[$title])): ?>
-          <li class="list-group-item">
-            <form action="" name="<?=$this->escapeHtmlAttr($title)?>Filter" id="<?=$this->escapeHtmlAttr($title)?>Filter">
-              <?=$results->getUrlQuery()->asHiddenFields(array('page' => "/./", 'filter' => "/^{$title}:.*/"))?>
-              <input type="hidden" name="<?=$this->escapeHtmlAttr($rangeFacets[$title]['type'])?>range[]" value="<?=$this->escapeHtmlAttr($title)?>"/>
-              <div class="row">
-                <div class="col-sm-6">
-                  <label for="<?=$this->escapeHtmlAttr($title)?>from">
-                    <?=$this->transEsc('date_from')?>:
-                  </label>
-                  <input type="text" maxlength="4" class="form-control" name="<?=$this->escapeHtmlAttr($title)?>from" id="<?=$this->escapeHtmlAttr($title)?>from" value="<?=isset($rangeFacets[$title]['values'][0])?$this->escapeHtmlAttr($rangeFacets[$title]['values'][0]):''?>" />
-                </div>
-                <div class="col-sm-6">
-                  <label for="<?=$this->escapeHtmlAttr($title)?>to">
-                    <?=$this->transEsc('date_to')?>:
-                  </label>
-                  <input type="text" maxlength="4" class="form-control" name="<?=$this->escapeHtmlAttr($title)?>to" id="<?=$this->escapeHtmlAttr($title)?>to" value="<?=isset($rangeFacets[$title]['values'][1])?$this->escapeHtmlAttr($rangeFacets[$title]['values'][1]):''?>" />
-                </div>
-              </div>
-              <? if ($rangeFacets[$title]['type'] == 'date'): ?>
-                <div class="slider-container"><input type="text" class="hidden" id="<?=$this->escapeHtmlAttr($title)?><?=$this->escapeHtml($rangeFacets[$title]['type'])?>Slider"/></div>
-              <? endif; ?>
-              <input class="btn btn-default" type="submit" value="<?=$this->transEsc('Set')?>"/>
-            </form>
-          </li>
           <? if ($rangeFacets[$title]['type'] == 'date'): ?>
             <? $this->headScript()->appendFile('vendor/bootstrap-slider.js'); ?>
             <?
-              $min = !empty($rangeFacets[$title]['values'][0]) ? min($rangeFacets[$title]['values'][0], 1400) : 1400;
-              $future = date('Y', time()+31536000);
-              $max = !empty($rangeFacets[$title]['values'][1]) ? max($future, $rangeFacets[$title]['values'][1]) : $future;
-              $low  = !empty($rangeFacets[$title]['values'][0]) ? $rangeFacets[$title]['values'][0] : $min;
-              $high = !empty($rangeFacets[$title]['values'][1]) ? $rangeFacets[$title]['values'][1] : $max;
-              $script = <<<JS
+            $min = !empty($rangeFacets[$title]['values'][0]) ? min($rangeFacets[$title]['values'][0], 1450) : 1450;
+            $future = date('Y', time()+31536000);
+            $max = !empty($rangeFacets[$title]['values'][1]) ? max($future, $rangeFacets[$title]['values'][1]) : $future;
+            $low  = !empty($rangeFacets[$title]['values'][0]) ? $rangeFacets[$title]['values'][0] : $min;
+            $high = !empty($rangeFacets[$title]['values'][1]) ? $rangeFacets[$title]['values'][1] : $max;
+            $script = <<<JS
 $(document).ready(function() {
   var fillTexts = function() {
   var v = {$this->escapeHtmlAttr($title)}dateSlider.getValue();
@@ -122,6 +98,30 @@ JS;
             ?>
             <?= $this->inlineScript(\Zend\View\Helper\HeadScript::SCRIPT, $script, 'SET'); ?>
           <? endif; ?>
+          <li class="list-group-item">
+            <form action="" name="<?=$this->escapeHtmlAttr($title)?>Filter" id="<?=$this->escapeHtmlAttr($title)?>Filter">
+              <?=$results->getUrlQuery()->asHiddenFields(array('page' => "/./", 'filter' => "/^{$title}:.*/"))?>
+              <input type="hidden" name="<?=$this->escapeHtmlAttr($rangeFacets[$title]['type'])?>range[]" value="<?=$this->escapeHtmlAttr($title)?>"/>
+              <div class="row">
+                <div class="col-sm-6">
+                  <label for="<?=$this->escapeHtmlAttr($title)?>from">
+                    <?=$this->transEsc('date_from')?>:
+                  </label>
+                  <input type="text" maxlength="4" class="form-control" name="<?=$this->escapeHtmlAttr($title)?>from" id="<?=$this->escapeHtmlAttr($title)?>from" value="<?=isset($rangeFacets[$title]['values'][0])?$this->escapeHtmlAttr($rangeFacets[$title]['values'][0]):''?>" placeholder="<?= $rangeFacets[$title]['type'] == 'date' ? $min : '' ?>" />
+                </div>
+                <div class="col-sm-6">
+                  <label for="<?=$this->escapeHtmlAttr($title)?>to">
+                    <?=$this->transEsc('date_to')?>:
+                  </label>
+                  <input type="text" maxlength="4" class="form-control" name="<?=$this->escapeHtmlAttr($title)?>to" id="<?=$this->escapeHtmlAttr($title)?>to" value="<?=isset($rangeFacets[$title]['values'][1])?$this->escapeHtmlAttr($rangeFacets[$title]['values'][1]):''?>" placeholder="<?= $rangeFacets[$title]['type'] == 'date' ? $max : '' ?>" />
+                </div>
+              </div>
+              <? if ($rangeFacets[$title]['type'] == 'date'): ?>
+                <div class="slider-container"><input type="text" class="hidden" id="<?=$this->escapeHtmlAttr($title)?><?=$this->escapeHtml($rangeFacets[$title]['type'])?>Slider"/></div>
+              <? endif; ?>
+              <input class="btn btn-default" type="submit" value="<?=$this->transEsc('Set')?>"/>
+            </form>
+          </li>
         <? else: ?>
           <? foreach ($cluster['list'] as $i=>$thisFacet): ?>
             <?
