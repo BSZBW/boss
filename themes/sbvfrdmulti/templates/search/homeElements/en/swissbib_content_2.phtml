@@ -1,8 +1,5 @@
 <div class="home-content-box">
   <h2 class="lead">Need help?</h2>
-
-  <p>
-    First steps with swissbib. Searching, ordering and customising...
-  </p>
-  <a href="<?= $this->url('help-page', array('topic' => 'myswissbib')); ?>" class="btn btn-link">More Info</a>
+    <p><iframe width="230" height="160" src="<?= $this->redirectProtocolWrapper()->getWrappedURL('https://tube.switch.ch/embed/8e47b4c8') ?>" style="border:none" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></p>
+  <a href="<?= $this->url('help-page', array('topic' => 'search')); ?>" class="btn btn-link">More Info</a>
 </div>
