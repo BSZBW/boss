@@ -681,9 +681,9 @@ class Holdings
         $label = '';
 
         // Has informations with translation?
-        if (isset($item['location_code']) && isset($item['institution_chb']) && isset($item['network'])) {
+        if (isset($item['location_code']) && isset($item['institution']) && isset($item['network'])) {
             // @todo keep strtolower or fix in tab40.sync
-            $labelKey = strtolower($item['institution_chb'] . '_' . $item['location_code']);
+            $labelKey = strtolower($item['institution'] . '_' . $item['location_code']);
             $textDomain = 'location-' . strtolower($item['network']);
             $translated = $this->translator->translate($labelKey, $textDomain);
 
