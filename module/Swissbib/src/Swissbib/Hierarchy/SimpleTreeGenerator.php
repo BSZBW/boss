@@ -100,7 +100,8 @@ class SimpleTreeGenerator {
         if (is_array($cachedTree))  return $cachedTree;
         if ($treeKey === '')        return $this->generatePageTree($this->orderAndFilter($facets));
 
-        $tree = $this->generatePageTree($this->orderAndFilter($facets));
+        $orderedAndFilteredFacets = $this->orderAndFilter($facets);
+        $tree = $this->generatePageTree($orderedAndFilteredFacets);
         $this->objectCache->setItem($cacheTreeId, $tree);
 
         return $tree;
