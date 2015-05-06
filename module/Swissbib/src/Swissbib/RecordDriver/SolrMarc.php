@@ -1992,7 +1992,8 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
 
     /**
      * Get table of content
-     * This method is also used to check whether data for tab is available and the tab should be displayed
+     * This method is used to check whether data for tab is available and the tab should be displayed
+     * Differs functionally from parent as we display more information in toc.phtml
      *
      * @return    String[]
      */
@@ -2098,7 +2099,7 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
 
     /**
      * Get content summary
-     * From fields 520.a
+     * From fields 520
      *
      * @return    String[]
      */

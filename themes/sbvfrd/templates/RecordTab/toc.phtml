@@ -1,0 +1,28 @@
+<?
+// Set page title.
+$this->headTitle($this->translate('Table of Contents') . ': ' . $this->driver->getBreadcrumb());
+
+$tableOfContent = $this->driver->getTableOfContent();
+$contentSummary = $this->driver->getContentSummary();
+?>
+
+<?php if (empty($tableOfContent) && empty($contentSummary)): ?>
+    <?=$this->transEsc("Table of Contents unavailable")?>.
+<?php else: ?>
+    <?php if (!empty($tableOfContent)): ?>
+        <strong><?=$this->transEsc('toc.content')?>: </strong>
+        <ul class="toc">
+            <? foreach ($tableOfContent as $line): ?>
+                <li><?=$this->escapeHtml($line)?></li>
+            <? endforeach; ?>
+        </ul>
+    <?php endif; ?>
+    <?php if (!empty($contentSummary)): ?>
+        <strong><?=$this->transEsc('toc.summary')?>: </strong>
+        <ul class="toc">
+            <? foreach ($contentSummary as $line): ?>
+                <li><?=$this->escapeHtml($line)?></li>
+            <? endforeach; ?>
+        </ul>
+    <? endif; ?>
+<? endif; ?>
