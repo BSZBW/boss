@@ -509,10 +509,10 @@ var swissbib = {
     });
 
     if (elementHeight > sidebarHeight) {
-      parentElement.addClass('bg-grey');
-      parentElement.children('div:first-of-type').addClass('bg-white');
+      parentElement.removeClass('bg-white').addClass('bg-grey');
+      parentElement.children('div:first-of-type').removeClass('bg-grey').addClass('bg-white');
     } else {
-      parentElement.addClass('bg-white');
+      parentElement.removeClass('bg-grey').addClass('bg-white');
     }
   }
 };
@@ -525,6 +525,8 @@ $(document).ready(function () {
   swissbib.initOnReady();
     swissbib.UserVoiceFeedback();
 });
+
+$(document).ajaxComplete(swissbib.initBackgrounds);
 
 
 /**
