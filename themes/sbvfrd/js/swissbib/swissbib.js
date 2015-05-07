@@ -510,6 +510,7 @@ var swissbib = {
 
     if (elementHeight > sidebarHeight) {
       parentElement.addClass('bg-grey');
+      parentElement.children('div:first-of-type').addClass('bg-white');
     } else {
       parentElement.addClass('bg-white');
     }
