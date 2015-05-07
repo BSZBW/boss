@@ -29,6 +29,8 @@ var swissbib = {
     var contextContent = $("#content");
     var contextAll = $("#header, #search, #main");
 
+    this.initBackgrounds();
+
     // Init UI elements
     this.initNavigation(contextHeader);
 
@@ -484,7 +486,34 @@ var swissbib = {
         UserVoice.push(['autoprompt', {}]);
     },
 
-  updatePageForLoginParent: function() {}
+  updatePageForLoginParent: function() {},
+
+  /**
+   *
+   */
+  initBackgrounds: function () {
+    var sidebarHeight = 0,
+        elementHeight = 0,
+        parentElement = $('.dirty-hack-column > .row').first();
+
+    parentElement.children().each(function(index, element) {
+        if($(element).hasClass('sidebar')) {
+          sidebarHeight = $(element).outerHeight(true);
+        } else {
+          var tempHeight = $(element).outerHeight(true);
+
+          if (tempHeight > elementHeight) {
+            elementHeight = tempHeight;
+          }
+        }
+    });
+
+    if (elementHeight > sidebarHeight) {
+      parentElement.addClass('bg-grey');
+    } else {
+      parentElement.addClass('bg-white');
+    }
+  }
 };
 
 

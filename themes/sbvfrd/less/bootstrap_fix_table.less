@@ -1,6 +1,7 @@
 @media (min-width: 992px) {
   .container-table-fix-md {
     display: table;
+    table-layout: fixed;
     padding-left: 0;
     padding-right: 0
   }
@@ -11,7 +12,6 @@
 
   .col-table-fix-md {
     display: table-cell;
-    float: none;
     border: none;
   }
 
@@ -20,14 +20,28 @@
   }
 
   .dirty-hack-column {
-
     & > .row {
       display: table;
-      min-width: 100%;
+      min-width: 102%;
+      table-layout: fixed;
     }
 
-    & > .row > *:first-child {
-      padding-top: 10px;
+    & > .row {
+      &  > *:first-child {
+        padding-top: 10px;
+      }
+
+      &.bg-grey {
+        background-color: @sidebar-background-color;
+
+        & > *:first-child {
+          background-color: @white;
+        }
+      }
+
+      &.bg-white {
+        background-color: @white;
+      }
     }
   }
 }
