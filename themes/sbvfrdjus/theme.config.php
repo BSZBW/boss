@@ -1,4 +1,4 @@
 <?php
 return array(
-    'extends' => 'sbvfrdsingle',
+    'extends' => 'sbvfrd',
 );
