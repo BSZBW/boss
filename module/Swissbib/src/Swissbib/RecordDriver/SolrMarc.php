@@ -864,11 +864,17 @@ class SolrMarc extends VuFindSolrMarc implements SwissbibRecordDriver
      */
     public function getMostSpecificFormat()
     {
-        $formatsRaw = $this->fields["format_str_mv"];
-        natsort($formatsRaw);
-        $formatsRaw = array_values(array_reverse($formatsRaw));
+        if (isset($this->fields["format_str_mv"])) {
+            $formatsRaw = $this->fields["format_str_mv"];
+            natsort($formatsRaw);
+            $formatsRaw = array_values(array_reverse($formatsRaw));
 
-        return array($formatsRaw[0]);
+            return array($formatsRaw[0]);
+
+        } else {
+            return [];
+        }
+
     }
 
 
