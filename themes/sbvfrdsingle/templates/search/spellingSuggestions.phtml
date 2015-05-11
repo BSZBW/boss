@@ -15,7 +15,7 @@ $query = $this->results->getUrlQuery();
     $suggestions instanceof Swissbib\VuFind\Search\Solr\SpellingResults &&  $suggestions->hasSuggestions()) : ?>
 
     <div class="alert">
-        <p><?=$this->transEsc('Your search terms')?>: <?= $suggestions->getSpellingQuery()->getString() ?></p>
+        <p><?=$this->transEsc('Your search terms')?>: <?= $suggestions->getSpellingQuery()->getAllTerms() ?></p>
     </div>
 
     <div class="alert">
