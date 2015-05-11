@@ -444,11 +444,11 @@ class Holdings
      * Check whether network is supported
      *
      * @param    String $networkCode
-     * @return    Boolean
+     * @return   Boolean
      */
     protected function isRestfulNetwork($networkCode)
     {
-        return isset($this->configHoldings->Restful->{$networkCode});
+        return isset($this->configHoldings->Restful->{$networkCode}) && $this->configHoldings->Restful->{$networkCode} == true ?: false;
     }
 
 
