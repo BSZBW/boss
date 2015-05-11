@@ -95,6 +95,8 @@ $encodedGuestURL = "https://aai.guest-login.ch/idp/profile/SAML2/Unsolicited/SSO
                 <script type="text/javascript"
                         src="https://wayf.switch.ch/SWITCHaai/WAYF/embedded-wayf.js"></script>
             <noscript>
+
+                <? $sessionInitiator = empty($sessionInitiator) ? '' : $sessionInitiator; // initialize variable?>
                 <a href="<?= $this->escapeHtml($sessionInitiator) ?>"><?= $this->transEsc("Institutional Login with external WAYF - non Java Script") ?></a>
             </noscript>
             </p>
