@@ -21,6 +21,10 @@
 <? if ($this->searchType == 'advanced'): ?>
   <div id="searchForm">
     <div class="search-tabs-box">
+    <?
+        //initialize variable, otherwise we will get a notice in log
+        $withTabsClass = '';
+    ?>
     <? if (count($searchtabs) > 0): ?>
       <?= $this->render('search/searchTabs'); ?>
       <? $withTabsClass = ' tabsVisible' ?>
