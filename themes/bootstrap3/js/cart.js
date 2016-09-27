@@ -49,14 +49,28 @@ VuFind.register('cart', function Cart() {
   }
 
   function updateCount() {
-    var items = _getItems();
+    var items = VuFind.cart.getFullItems();
     $('#cartItems strong').html(items.length);
+    if (items.length === parseInt(VuFind.translate('bookbagMax'))) {
+      $('#cartItems .full').removeClass('hidden');
+    } else {
+      $('#cartItems .full').addClass('hidden');
+    }
+
+    $('.title .cart-indicator').remove();
+    for(var i=0; i<items.length; i++) {
+      var parts = items[i].split('|');
+      $('[value="'+parts[1]+'"]').parent().find('a.title').append('<i class="cart-indicator fa fa-suitcase text-muted"></i>');
+    }
   }
 
   function addItem(id, _source) {
     var source = _source || VuFind.defaultSearchBackend;
     var cartItems = _getItems();
     var cartSources = _getSources();
+    if (cartItems.length >= parseInt(VuFind.translate('bookbagMax'))) {
+      return false;
+    }
     var sIndex = cartSources.indexOf(source);
     if (sIndex < 0) {
       // Add source to source cookie
@@ -66,7 +80,7 @@ VuFind.register('cart', function Cart() {
     } else {
       cartItems[cartItems.length] = String.fromCharCode(65 + sIndex) + id;
     }
-    Cookies.setItem(_COOKIE, $.unique(cartItems).join(_COOKIE_DELIM), false, '/', _COOKIE_DOMAIN);
+    Cookies.setItem(_COOKIE, _uniqueArray(cartItems).join(_COOKIE_DELIM), false, '/', _COOKIE_DOMAIN);
     updateCount();
     return true;
   }
@@ -116,7 +130,7 @@ VuFind.register('cart', function Cart() {
   var _cartNotificationTimeout = false;
   function _registerUpdate($form) {
     if ($form) {
-      $("#updateCart, #bottom_updateCart").unbind('click').click(function cartUpdate(){
+      $("#updateCart, #bottom_updateCart").unbind('click').click(function cartUpdate() {
         var elId = this.id;
         var selectedBoxes = $("input[name='ids[]']:checked", $form);
         var selected = [];
@@ -124,27 +138,21 @@ VuFind.register('cart', function Cart() {
           selected[i] = this.value;
         });
         if (selected.length > 0) {
-          var inCart = 0;
           var msg = "";
           var orig = getFullItems();
           $(selected).each(function cartCheckedItemsAdd() {
-            for (var x in orig) {
-              if (this === orig[x]) {
-                inCart++;
-                return;
-              }
-            }
             var data = this.split('|');
             addItem(data[1], data[0]);
           });
           var updated = getFullItems();
           var added = updated.length - orig.length;
+          var inCart = selected.length - added;
           msg += added + " " + VuFind.translate('itemsAddBag');
+          if (updated.length >= parseInt(VuFind.translate('bookbagMax'))) {
+            msg += "<br/>" + VuFind.translate('bookbagFull');
+          }
           if (inCart > 0 && orig.length > 0) {
             msg += "<br/>" + inCart + " " + VuFind.translate('itemsInBag');
-          }
-          if (updated.length >= VuFind.translate('bookbagMax')) {
-            msg += "<br/>" + VuFind.translate('bookbagFull');
           }
           $('#' + elId).data('bs.popover').options.content = msg;
           $('#cartItems strong').html(updated.length);
@@ -174,8 +182,9 @@ VuFind.register('cart', function Cart() {
         var $parent = $(this).parent();
         $parent.find('.cart-add.correct,.cart-remove.correct').removeClass('correct hidden');
         $parent.find('.cart-add').click(function cartAddClick() {
-          addItem(currentId, currentSource);
-          $parent.find('.cart-add,.cart-remove').toggleClass('hidden');
+          if(addItem(currentId, currentSource)) {
+            $parent.find('.cart-add,.cart-remove').toggleClass('hidden');
+          }
         });
         $parent.find('.cart-remove').click(function cartRemoveClick() {
           removeItem(currentId, currentSource);
@@ -188,6 +197,7 @@ VuFind.register('cart', function Cart() {
       _registerUpdate($form);
     }
     $("#updateCart, #bottom_updateCart").popover({content: '', html: true, trigger: 'manual'});
+    updateCount();
   }
 
   // Reveal
