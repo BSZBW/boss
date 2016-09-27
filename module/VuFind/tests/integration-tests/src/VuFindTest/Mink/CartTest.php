@@ -110,7 +110,7 @@ class CartTest extends \VuFindTest\Unit\MinkTestCase
             $content = $page->find('css', '.popover-content');
             if (is_object($content)) {
                 $this->assertEquals(
-                    '0 item(s) added to your Book Bag<br/>2 item(s) are either '
+                    '0 item(s) added to your Book Bag 2 item(s) are either '
                     . 'already in your Book Bag or could not be added',
                     $content->getText()
                 );
