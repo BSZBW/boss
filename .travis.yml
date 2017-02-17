@@ -20,4 +20,7 @@ cache:
     - $HOME/.composer/cache
 
 script:
-  - vendor/bin/phing phpunitfast phpcs-console php-cs-fixer-dryrun eslint
+  - vendor/bin/phing phpunit phpcs-console php-cs-fixer-dryrun eslint
+
+after_script:
+  - vendor/bin/phing codacy
