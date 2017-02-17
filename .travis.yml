@@ -9,7 +9,6 @@ env:
   - VUFIND_HOME=$PWD VUFIND_LOCAL_DIR=$PWD/local
 
 before_script:
-  - phpenv config-rm xdebug.ini
   - phpenv rehash
   - composer install
   - npm install -g eslint@"<3.0.0"
