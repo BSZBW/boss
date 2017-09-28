@@ -74,9 +74,6 @@ footer hr { display: none; }
 footer p { margin: 0; }
 footer ul { padding-left: 30px; }
 
-/* --- Browse --- */
-[id^=list].list-group .col-sm-9 { margin: 0; }
-
 /* --- Channels --- */
 .channel,
 .channel-title.no-results { margin-bottom: 2rem; }
@@ -92,7 +89,6 @@ body.offcanvas {
     box-shadow: 0 0 2px #000;
     color: @brand-primary;
   }
-  .sidebar .list-group { color: #000; }
   &.active .sidebar { color: #FFF; }
   &.active .offcanvas-toggle { box-shadow: none; }
 }
@@ -128,8 +124,8 @@ ul.random.image li img { margin: 0 auto; }
 /* --- Sidebar --- */
 .sidebar {
   .facet-group { margin-bottom: 5px; }
-  .facet-group label.list-group-item { padding-left: 26px; }
-  .facet-group label.list-group-item input[type=checkbox] { margin-top: 2px; }
+  .facet-group label.facet { padding-left: 26px; }
+  .facet-group label.facet input[type=checkbox] { margin-top: 2px; }
 
   .facet { padding: 7px 10px 6px; }
   .facet.active,
