@@ -53,16 +53,16 @@ class Factory
      */
     public static function getSolr(ServiceManager $sm)
     {
-        $cacheDir = $sm->getServiceLocator()->get('VuFind\CacheManager')
+        $cacheDir = $sm->get('VuFind\CacheManager')
             ->getCacheDir(false);
-        $hierarchyFilters = $sm->getServiceLocator()->get('VuFind\Config')
+        $hierarchyFilters = $sm->get('VuFind\Config')
             ->get('HierarchyDefault');
         $filters = isset($hierarchyFilters->HierarchyTree->filterQueries)
           ? $hierarchyFilters->HierarchyTree->filterQueries->toArray()
           : [];
-        $solr = $sm->getServiceLocator()->get('VuFind\Search\BackendManager')
+        $solr = $sm->get('VuFind\Search\BackendManager')
             ->get('Solr')->getConnector();
-        $formatterManager = $sm->getServiceLocator()
+        $formatterManager = $sm
             ->get('VuFind\HierarchyTreeDataFormatterPluginManager');
         return new Solr(
             $solr, $formatterManager, rtrim($cacheDir, '/') . '/hierarchy',
