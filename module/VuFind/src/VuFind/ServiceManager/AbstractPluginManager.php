@@ -28,7 +28,7 @@
 namespace VuFind\ServiceManager;
 
 use Zend\ServiceManager\AbstractPluginManager as Base;
-use Zend\ServiceManager\Exception\RuntimeException as ServiceManagerRuntimeException;
+use Zend\ServiceManager\Exception\InvalidServiceException;
 
 /**
  * VuFind Plugin Manager
@@ -69,18 +69,39 @@ abstract class AbstractPluginManager extends Base
      *
      * @param mixed $plugin Plugin to validate
      *
-     * @throws ServiceManagerRuntimeException if invalid
+     * @throws InvalidServiceException if invalid
      * @return void
      */
     public function validate($plugin)
     {
         $expectedInterface = $this->getExpectedInterface();
         if (!($plugin instanceof $expectedInterface)) {
-            throw new ServiceManagerRuntimeException(
+            throw new InvalidServiceException(
                 'Plugin ' . get_class($plugin) . ' does not belong to '
                 . $expectedInterface
             );
         }
+    }
+
+    /**
+     * Retrieve a plugin
+     *
+     * @param string $name Name of plugin
+     *
+     * @return mixed
+     */
+    public function get($name)
+    {
+        // Hack for backward compatibility with services defined under
+        // ServiceManager v2. TODO: set up aliases and/or normalize code to
+        // eliminate the need for this:
+        $lower = strtolower($name);
+        if ($name != $lower
+            && (isset($this->services[$lower]) || isset($this->factories[$lower]))
+        ) {
+            $name = $lower;
+        }
+        return parent::get($name);
     }
 
     /**
