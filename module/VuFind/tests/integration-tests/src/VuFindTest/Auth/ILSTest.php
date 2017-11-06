@@ -79,7 +79,9 @@ class ILSTest extends \VuFindTest\Unit\DbTestCase
             return $this->markTestSkipped('Continuous integration not running.');
         }
         $this->driver = $this->createMock('VuFind\ILS\Driver\Sample');
-        $driverManager = new \VuFind\ILS\Driver\PluginManager();
+        $driverManager = new \VuFind\ILS\Driver\PluginManager(
+            $this->getServiceManager()
+        );
         $driverManager->setService('Sample', $this->driver);
         $mockConfigReader = $this->createMock('VuFind\Config\PluginManager');
         $mockConfigReader->expects($this->any())->method('get')
