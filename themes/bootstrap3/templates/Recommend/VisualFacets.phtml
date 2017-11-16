@@ -17,6 +17,7 @@
         $secondlevelinfo['name'] = $secondlevelfacet['value'];
         $secondlevelinfo['size'] = $secondlevelfacet['count'];
         $secondlevelinfo['field'] = $secondlevelfacet['field'];
+        $secondlevelinfo['parentfield'] = $toplevelinfo['field'];
         $secondlevelinfo['parentlevel'] = $toplevelinfo['name'];
         array_push($toplevelchildren, $secondlevelinfo);
       }
@@ -160,6 +161,7 @@
           more.size = morefacet/totalbyfirstpivot * facetdata.size;
           more.field = "topic_facet";
           more.count = morecount;
+          more.parentfield = facetdata.field;
           more.parentlevel = facetdata.name;
           pivotdata.children[facetindex].children.push(more);
         }
@@ -171,9 +173,9 @@
         .enter().append("a")
       .attr("href", function(d) {
         if (d.parentlevel && d.name != "<?=$this->transEsc('More Topics')?>") {
-          return window.location + "&filter[]=" + d.field + ":\"" + d.name + "\"&filter[]=callnumber-first:\"" + d.parentlevel + "\"&view=list";
+          return window.location + "&filter[]=" + d.field + ":\"" + d.name + "\"&filter[]=" + d.parentfield + ":\"" + d.parentlevel + "\"&view=list";
         } else if (d.name == "<?=$this->transEsc('More Topics')?>") {
-          return window.location + "&filter[]=callnumber-first:\"" + d.parentlevel + "\"";
+          return window.location + "&filter[]=" + d.parentfield + ":\"" + d.parentlevel + "\"";
         } else if (d.name != "theData") {
           return window.location + "&filter[]=" + d.field + ":\"" + d.name + "\"";
         }
