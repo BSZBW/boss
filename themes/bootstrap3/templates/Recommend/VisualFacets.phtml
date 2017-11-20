@@ -232,7 +232,7 @@ function settext() {
 function setscreenreader() {
   this.attr("class", "sr-only")
   .text(function(d) {
-    if (d.field == "topic_facet") {
+    if (typeof d.parentfield !== "undefined") {
       return "<?=$this->transEsc('visual_facet_parent')?> " + d.parentlevel;
     } else {
       return "";
