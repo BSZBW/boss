@@ -159,7 +159,7 @@
           var more = new Object();
           more.name = "<?=$this->transEsc('More Topics')?>";
           more.size = morefacet/totalbyfirstpivot * facetdata.size;
-          more.field = "topic_facet";
+          more.field = ""; // this value doesn't matter, since parent field will be linked.
           more.count = morecount;
           more.parentfield = facetdata.field;
           more.parentlevel = facetdata.name;
