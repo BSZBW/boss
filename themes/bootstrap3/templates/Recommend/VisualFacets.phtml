@@ -143,7 +143,7 @@
         // Stop! Using this algorithm, sometimes all of the topics wind
         // up in a "More" facet, which leads to a confusing display. If
         // that happens, just display the top level, with no topic
-        // boxes inside the callnumber-first box.
+        // boxes inside the main box.
 
         if (morefacet == totalbyfirstpivot) {
           var onechild = new Object();
@@ -205,10 +205,27 @@ function position() {
 
 function settext() {
   this.text(function(d) {
-    if (!d.children && d.field == "callnumber-first") {return "";}
-    if (d.field == "callnumber-first") {return d.name + " (" + d.count + ")"; }
-    if (d.field == "topic_facet" && d.name == "<?=$this->transEsc('More Topics')?>") {var topics = "<?=$this->translate('more_topics')?>"; return topics.replace("%%count%%", d.count); }
-    if (d.field == "topic_facet") {return d.name + " (" + d.count + ")"; }
+    // Is this a top-level box?
+    var onTop = (typeof d.parentfield === "undefined");
+
+    // Case 1: top with no children -- no text!
+    if (!d.children && onTop) {
+        return "";
+    }
+
+    // Case 2: top-level field with contents:
+    if (onTop) {
+        return d.name + " (" + d.count + ")";
+    }
+
+    // Case 3: "More Topics" special-case collapsed block:
+    if (d.name == "<?=$this->transEsc('More Topics')?>") {
+        var topics = "<?=$this->translate('more_topics')?>";
+        return topics.replace("%%count%%", d.count);
+    }
+
+    // Csae 4 (default): Standard second-level field
+    return d.name + " (" + d.count + ")";
   });
 }
 
@@ -225,9 +242,20 @@ function setscreenreader() {
 
 function settitle() {
   this.attr("title", function(d) {
-    if (d.field == "callnumber-first") {return d.name + " (" + d.count + " <?=$this->transEsc('items')?>)"; }
-    if (d.field == "topic_facet" && d.name == "<?=$this->transEsc('More Topics')?>") {return d.count + " <?=$this->transEsc('More Topics')?>"; }
-    if (d.field == "topic_facet") {var on_topic = "<?=$this->translate('on_topic')?>"; return d.name + " (" + on_topic.replace("%%count%%", d.count) + ")"; }
+    // Case 1: Top-level field
+    if (typeof d.parentfield === "undefined") {
+        return d.name + " (" + d.count + " <?=$this->transEsc('items')?>)";
+    }
+    // Case 2: "More Topics" special-case collapsed block:
+    if (d.name == "<?=$this->transEsc('More Topics')?>") {
+        return d.count + " <?=$this->transEsc('More Topics')?>";
+    }
+
+    // Case 3: Standard second-level field
+    if (typeof d.field !== "undefined") {
+        var on_topic = "<?=$this->translate('on_topic')?>";
+        return d.name + " (" + on_topic.replace("%%count%%", d.count) + ")";
+    }
   });
 
 }
