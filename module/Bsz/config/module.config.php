@@ -90,6 +90,11 @@ $config = [
                     'solr' => 'Bsz\Search\Options\Factory::getSolr'
                 ],                
             ],
+            'search_backend' => [
+                'factories' => [
+                    'Solr' => 'Bsz\Search\Factory\SolrDefaultBackendFactory',
+                ]
+            ],
             'search_results' => [
                 'abstract_factories' => ['Bsz\Search\Results\PluginFactory'],
                 'factories' => [

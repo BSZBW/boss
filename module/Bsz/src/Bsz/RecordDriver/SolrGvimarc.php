@@ -1523,5 +1523,30 @@ class SolrGvimarc extends SolrMarc
         return false;
     }
 
+    /**
+     * Dedup Functions
+     *
+     * @return boolean
+     */
+    
+    public function isSubRecord() {
+        return isset($this->fields['_isSubRecord']) ? $this->fields['_isSubRecord'] : false;
+    }
+    public function getSubRecords() {
+        return isset($this->fields['_subRecords']) ? $this->fields['_subRecords'] : null;
+    }
+    public function hasSubRecords() {
+        if (null !== ($collection = $this->getSubRecords())) {
+            return 0 < $collection->count();
+        }
+        return false;
+    }
+    
+    public function getGroupID()
+    {
+    	// return $this->getSingleValuedField("test_matchkey_2");
+        return isset($this->fields['test_matchkey_2']) ?
+                $this->fields['test_matchkey_2'] : [];
+    }
 
 }

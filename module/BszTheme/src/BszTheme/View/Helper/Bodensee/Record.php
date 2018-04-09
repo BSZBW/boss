@@ -398,7 +398,18 @@ class Record extends \VuFind\View\Helper\Root\Record
     {
         return count($this->ppns) > 0;
     }
-    
-    
+
+
+    /**
+     * Render a sub record to be displayed in a search result list.
+     *
+     * @author <dku@outermedia.de>
+     * @return string the rendered sub record
+     */
+    public function getSubRecord() {
+
+        return $this->renderTemplate('result-list.phtml');
+    }
+
     
 }
