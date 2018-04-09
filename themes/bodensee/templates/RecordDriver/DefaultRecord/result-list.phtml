@@ -69,7 +69,7 @@ $uniqueIdReg = preg_replace('/\((.*)-(.*)\)(.*)/', '\1\2\3', $uniqueId);
         <? endif ?>    
     </div>
     
-    <div class="col-xs-10">
+    <div class="col-xs-9">
        
         <div>    
             <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title getFull" data-view="<?=$this->params->getOptions()->getListViewOption() ?>">
@@ -182,8 +182,7 @@ $uniqueIdReg = preg_replace('/\((.*)-(.*)\)(.*)/', '\1\2\3', $uniqueId);
         <? endif; ?> 
     <? endif; ?>
     
-    
-    
+  
         <?= str_replace('class="', 'class="label  label-info ', $this->record($this->driver)->getFormatList()); ?>
         
       <? if (false === $hasSubRecords): ?>
@@ -297,6 +296,19 @@ $uniqueIdReg = preg_replace('/\((.*)-(.*)\)(.*)/', '\1\2\3', $uniqueId);
     <? // edit dku: https://github.com/marius300482/meta/issues/161 ?>
     <? if (false && true === $isSubRecord): ?></div><? endif; ?>
 </div>
+
+
+<? if (false === $isSubRecord): ?>
+     <div class="col-xs-2">
+        <div class="hidden-print">
+            <? if ($this->cart()->isActiveInSearch() && $this->params->getOptions()->supportsCart() && $this->cart()->isActive()): ?>
+                <?=$this->render('record/cart-buttons.phtml', ['id' => $this->driver->getUniqueId(), 'source' => $this->driver->getSourceIdentifier()]); ?><br/>
+            <? endif; ?>    
+        </div>
+    </div>
+<? endif; ?>
+
+
 <? // DKU: display sub records ?>
 <? if (true === $hasSubRecords): ?>
     <? // Closing parent <div> (parent tpl file) to get out of .result context. ?>
@@ -331,3 +343,5 @@ $uniqueIdReg = preg_replace('/\((.*)-(.*)\)(.*)/', '\1\2\3', $uniqueId);
             </div>
         </div>
 <? endif; ?>
+
+  
