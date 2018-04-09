@@ -1529,13 +1529,18 @@ class SolrGvimarc extends SolrMarc
      * @return boolean
      */
     
-    public function isSubRecord() {
+    public function isSubRecord() 
+    {
         return isset($this->fields['_isSubRecord']) ? $this->fields['_isSubRecord'] : false;
     }
-    public function getSubRecords() {
+    
+    public function getSubRecords() 
+    {
         return isset($this->fields['_subRecords']) ? $this->fields['_subRecords'] : null;
     }
-    public function hasSubRecords() {
+    
+    public function hasSubRecords() 
+    {
         if (null !== ($collection = $this->getSubRecords())) {
             return 0 < $collection->count();
         }
