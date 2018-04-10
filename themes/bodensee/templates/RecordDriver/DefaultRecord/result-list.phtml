@@ -45,7 +45,7 @@
           <?=$this->record($this->driver)->getTitleHtml()?>
         </a>
       </div>
-      
+
       <div>
         <? $journalTitle = $this->driver->getContainerTitle(); $summDate = $this->driver->getPublicationDates(); ?>
         <? if($this->driver->isCollection()): ?>
@@ -74,31 +74,31 @@
             <? $publications = $this->driver->getPublicationDetails(); if (!empty($publications)): ?>
                 <? $count = 0 ?>
                     <strong><?=$this->transEsc('Published')?>: </strong> 
-                    <? if (!empty($publications[0])): ?>
+                    <?php if (!empty($publications[0])): ?>
                         <? foreach ($publications as $field): ?>                        
-                            <? if($count > 0):?>; <?endif;?>
+                            <?php if($count > 0):?>; <?endif;?>
                             <span property="publisher" typeof="Organization">
-                                <? $pubPlace = $field->getPlace(); if (!empty($pubPlace)): ?>
+                                <?php $pubPlace = $field->getPlace(); if (!empty($pubPlace)): ?>
                                     <span property="location"><?=$this->escapeHtml($pubPlace)?></span>
-                                <? endif; ?>
-                                <? $pubName = $field->getName(); if (!empty($pubName)): ?>
+                                <?php endif; ?>
+                                <?php $pubName = $field->getName(); if (!empty($pubName)): ?>
                                     <span property="name"><?=$this->escapeHtml($pubName)?></span>
                                 <? endif; ?>
                             </span>
-                            <? $pubDate = $field->getDate(); if (!empty($pubDate)): ?>
+                            <?php $pubDate = $field->getDate(); if (!empty($pubDate)): ?>
                                 <span property="publicationDate"><?=$this->escapeHtml($pubDate)?></span>
                             <? endif; ?>
                             <? $count++ ?>
                         <? endforeach; ?>
-                    <? else: ?>
-                        <? if (!empty($summDate) && isset($summDate[0])): ?>
+                    <?php else: ?>
+                        <?php if (!empty($summDate) && isset($summDate[0])): ?>
                             <?= $this->escapeHtml($summDate[0])?>
-                        <? endif; ?>
-                    <? endif; ?>
-          <? endif; ?>
-
-            
-          <? endif; ?>
+                        <?php endif; ?>
+                    <?php endif; ?>
+          <?php endif; ?>
+      
+      
+          <?php endif; ?>
 
           <? $summInCollection = $this->driver->getContainingCollections(); if (!empty($summInCollection)): ?>
             <? foreach ($summInCollection as $collId => $collText): ?>
@@ -229,26 +229,31 @@
       
       
       <? if ($hasSubRecords): ?>
-      <? $rand = rand(1, 10000)?>
-      <a data-toggle="collapse" href="#subrecords-<?=$rand?>"
-          class="btn btn-info btn-xs">
-          <i class="fa fa-caret fa-caret-down"></i>
-          <?=$this->transEsc('show_duplicates')?>
-          <span class="badge"><?=$subRecordsCount?></span>
-      </a>
-      <div id="subrecords-<?=$rand?>" class="collapse">
-            <? foreach ($subRecords as $sub): ?>              
-                <div class="row"> 
-         
-                    <div class="col-xs-12">
-                        <a href="<?=$this->recordLink()->getUrl($sub)?>"><?=$sub->getNetwork()?></a>
+      <?php 
+        $rand = rand(1, 10000);
+        $pgid = 'accordion-'.$rand;
+        $pid = 'panel-'.$rand.'-';
+        
+      ?>
+      <div class="panel-group duplicates" id="<?=$pgid?>">
+        <?php foreach ($subRecords as $count => $sub): ?>      
+        <div class="panel panel-default">
+            <div class="panel-heading">                
+                <a data-toggle="collapse" data-parent="<?=$pgid?>" href="#<?=$pid.$count?>" class="panel-title show">
+                    <?=$sub->getNetwork()?>
+                </a>
+               
+            </div>
+            <div id="<?=$pid.$count?>" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <a href="<?=$this->recordLink()->getUrl($sub)?>">
                         <?=$this->record($sub)->getTitleHtml()?>
-                        
-                    </div>                      
+                    </a>
                 </div>
-            <? endforeach; ?>          
-       
-      </div>      
+            </div>
+        </div>
+        <?php endforeach; ?>
+      </div>
       <? endif; ?>
       
 
