@@ -74,31 +74,31 @@
             <? $publications = $this->driver->getPublicationDetails(); if (!empty($publications)): ?>
                 <? $count = 0 ?>
                     <strong><?=$this->transEsc('Published')?>: </strong> 
-                    <?php if (!empty($publications[0])): ?>
+                    <? if (!empty($publications[0])): ?>
                         <? foreach ($publications as $field): ?>                        
-                            <?php if($count > 0):?>; <?endif;?>
+                            <? if($count > 0):?>; <?endif;?>
                             <span property="publisher" typeof="Organization">
-                                <?php $pubPlace = $field->getPlace(); if (!empty($pubPlace)): ?>
+                                <? $pubPlace = $field->getPlace(); if (!empty($pubPlace)): ?>
                                     <span property="location"><?=$this->escapeHtml($pubPlace)?></span>
-                                <?php endif; ?>
-                                <?php $pubName = $field->getName(); if (!empty($pubName)): ?>
+                                <? endif; ?>
+                                <? $pubName = $field->getName(); if (!empty($pubName)): ?>
                                     <span property="name"><?=$this->escapeHtml($pubName)?></span>
                                 <? endif; ?>
                             </span>
-                            <?php $pubDate = $field->getDate(); if (!empty($pubDate)): ?>
+                            <? $pubDate = $field->getDate(); if (!empty($pubDate)): ?>
                                 <span property="publicationDate"><?=$this->escapeHtml($pubDate)?></span>
                             <? endif; ?>
                             <? $count++ ?>
                         <? endforeach; ?>
-                    <?php else: ?>
-                        <?php if (!empty($summDate) && isset($summDate[0])): ?>
+                    <? else: ?>
+                        <? if (!empty($summDate) && isset($summDate[0])): ?>
                             <?= $this->escapeHtml($summDate[0])?>
-                        <?php endif; ?>
-                    <?php endif; ?>
-          <?php endif; ?>
+                        <? endif; ?>
+                    <? endif; ?>
+          <? endif; ?>
       
       
-          <?php endif; ?>
+          <? endif; ?>
 
           <? $summInCollection = $this->driver->getContainingCollections(); if (!empty($summInCollection)): ?>
             <? foreach ($summInCollection as $collId => $collText): ?>
@@ -228,33 +228,6 @@
       <? endif; ?>
       
       
-      <? if ($hasSubRecords): ?>
-      <?php 
-        $rand = rand(1, 10000);
-        $pgid = 'accordion-'.$rand;
-        $pid = 'panel-'.$rand.'-';
-        
-      ?>
-      <div class="panel-group duplicates" id="<?=$pgid?>">
-        <?php foreach ($subRecords as $count => $sub): ?>      
-        <div class="panel panel-default">
-            <div class="panel-heading">                
-                <a data-toggle="collapse" data-parent="<?=$pgid?>" href="#<?=$pid.$count?>" class="panel-title show">
-                    <?=$sub->getNetwork()?>
-                </a>
-               
-            </div>
-            <div id="<?=$pid.$count?>" class="panel-collapse collapse">
-                <div class="panel-body">
-                    <a href="<?=$this->recordLink()->getUrl($sub)?>">
-                        <?=$this->record($sub)->getTitleHtml()?>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <?php endforeach; ?>
-      </div>
-      <? endif; ?>
       
 
       <div class="result-formats">
@@ -324,5 +297,38 @@
   </div>
   <? if ($thumbnail && $thumbnailAlignment == 'right'): ?>
     <?=$thumbnail ?>
-  <? endif ?>
+  <? endif; ?>
+  
+<? if ($hasSubRecords): ?>
+<?php 
+  $rand = rand(1, 10000);
+  $pgid = 'accordion-'.$rand;
+  $pid = 'panel-'.$rand.'-';
+
+?>
+<div class="row">
+    <div class="col-xs-11 col-xs-offset-1">
+        <div class="panel-group duplicates" id="<?=$pgid?>">
+          <?php foreach ($subRecords as $count => $sub): ?>      
+          <div class="panel panel-default panel-sm">
+              <div class="panel-heading">                
+                  <a data-toggle="collapse" data-parent="<?=$pgid?>" href="#<?=$pid.$count?>" class="panel-title show">
+                      <?=$sub->getNetwork()?>
+                  </a>
+
+              </div>
+              <div id="<?=$pid.$count?>" class="panel-collapse collapse">
+                  <div class="panel-body">
+                      <a href="<?=$this->recordLink()->getUrl($sub)?>">
+                          <?=$this->record($sub)->getTitleHtml()?>
+                      </a>
+                  </div>
+              </div>
+          </div>
+          <?php endforeach; ?>
+        </div>
+        
+    </div>
+</div>
+<? endif; ?>
 </div>
