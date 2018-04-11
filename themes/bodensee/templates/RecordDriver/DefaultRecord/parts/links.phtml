@@ -7,23 +7,25 @@
             <span class="test"><?=$this->driver->getNetwork() ?></span> 
         </div>          
 <? endif; ?>      
-<div class="callnumAndLocation ajax-availability hidden">
-<? if ($this->driver->supportsAjaxStatus()): ?>
-    <strong class="hideIfDetailed"><?=$this->transEsc('Call Number')?>:</strong>
-    <span class="callnumber ajax-availability hidden">
-        <?=$this->transEsc('Loading')?>...<br/>
-    </span>
-    <strong><?=$this->transEsc('Located')?>:</strong>
-    <span class="location ajax-availability hidden">
-        <?=$this->transEsc('Loading')?>...
-    </span>
-    <div class="locationDetails"></div>
-<? else: ?>
-    <? $summCallNo = $this->driver->getCallNumber(); if (!empty($summCallNo)): ?>
-        <strong><?=$this->transEsc('Call Number')?>:</strong> <?=$this->escapeHtml($summCallNo)?>
+<? if (!$this->driver->isSubRecord()): ?>
+    <div class="callnumAndLocation ajax-availability hidden">
+    <? if ($this->driver->supportsAjaxStatus()): ?>
+        <strong class="hideIfDetailed"><?=$this->transEsc('Call Number')?>:</strong>
+        <span class="callnumber ajax-availability hidden">
+            <?=$this->transEsc('Loading')?>...<br/>
+        </span>
+        <strong><?=$this->transEsc('Located')?>:</strong>
+        <span class="location ajax-availability hidden">
+            <?=$this->transEsc('Loading')?>...
+        </span>
+        <div class="locationDetails"></div>
+    <? else: ?>
+        <? $summCallNo = $this->driver->getCallNumber(); if (!empty($summCallNo)): ?>
+            <strong><?=$this->transEsc('Call Number')?>:</strong> <?=$this->escapeHtml($summCallNo)?>
+        <? endif; ?>
     <? endif; ?>
+    </div>
 <? endif; ?>
-</div>
 <? /* We need to find out if we're supposed to display an OpenURL link ($this->openUrlActive),
     but even if we don't plan to display the link, we still want to get the $openUrl
     value for use in generating a COinS (Z3988) tag -- see bottom of file.
