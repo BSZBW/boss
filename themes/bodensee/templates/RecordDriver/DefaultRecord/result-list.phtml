@@ -92,85 +92,16 @@
         <span property="bookEdition"><?=$this->escapeHtml($edition)?></span>          
       </div>      
       <? endif; ?>
-      
-      <?= $this->record($this->driver)->getFisLink()?>
-      <? if($this->client()->isIsilSession()
-            && !$this->driver->tryMethod('isFisBildung')
-            && strlen($this->driver->getNetwork()) > 0): ?>
-            <div class="ill-source">                
-                <strong><?=$this->transEsc('Network')?>:</strong>
-                <span class="test"><?=$this->driver->getNetwork() ?></span> 
-            </div>          
-      <? endif; ?>
-      
-      <div class="callnumAndLocation ajax-availability hidden">
-        <? if ($this->driver->supportsAjaxStatus()): ?>
-          <strong class="hideIfDetailed"><?=$this->transEsc('Call Number')?>:</strong>
-          <span class="callnumber ajax-availability hidden">
-            <?=$this->transEsc('Loading')?>...<br/>
-          </span>
-          <strong><?=$this->transEsc('Located')?>:</strong>
-          <span class="location ajax-availability hidden">
-            <?=$this->transEsc('Loading')?>...
-          </span>
-          <div class="locationDetails"></div>
-        <? else: ?>
-          <? $summCallNo = $this->driver->getCallNumber(); if (!empty($summCallNo)): ?>
-            <strong><?=$this->transEsc('Call Number')?>:</strong> <?=$this->escapeHtml($summCallNo)?>
-          <? endif; ?>
-        <? endif; ?>
-      </div>
-
-      <? /* We need to find out if we're supposed to display an OpenURL link ($openUrlActive),
-            but even if we don't plan to display the link, we still want to get the $openUrl
-            value for use in generating a COinS (Z3988) tag -- see bottom of file.
-          */
-        $openUrl = $this->openUrl($this->driver, 'results');
-        $openUrlActive = $openUrl->isActive();
-        // Account for replace_other_urls setting
-        $urls = $this->record($this->driver)->getLinkDetails($openUrlActive);
-        if (!is_array($urls)) $urls = array();
-        $localUrls = $this->driver->getLocalUrls(); ?>            
-        <? // Show local Urls ?>
-        <? if (!empty($localUrls[0]['url'])): ?>
-            <div>
-              <? foreach ($localUrls as $current):  ?>
-                <? $pos = strpos($current['label'], ' | '); ?>
-                <? $len = strlen($current['label']); ?>
-                <? if ($this->client()->is('local_url_help_regex')): ?>
-                    <a class="external" href="<?=str_replace('http://dx.doi.org', 'https://doi.org', $current['url'])?>"><?=$pos ? $this->transEsc(substr($current['label'], 0, $pos)) : $this->transEsc($current['label'])?></a>  <?=$pos ? preg_replace($this->client()->getHelpRegEx(), "<a class='external' href='".$this->client()->getHelpUrl()."'>".$this->client()->getHelpGroups()."</a>",  $this->transEsc(substr($current['label'], $pos+3, $len)) ): ''?><br/>
-                <? else: ?>                        
-                    <a class="external" href="<?=str_replace('http://dx.doi.org', 'https://doi.org', $current['url'])?>"><?=$pos ? $this->transEsc(substr($current['label'], 0, $pos)) : $this->transEsc($current['label'])?></a> <?=$pos ? $this->transEsc(substr($current['label'], $pos+3, $len)) : ''?><br/>
-                <? endif; ?>                    
-              <? endforeach; ?>
-            </div>
-        <? else: ?>
-        <? // Show SWB-links ?>        
-            <? if(!$this->driver->isCollection()): ?>
-                <? if (count($urls) > 2): ?>
-                    <? $urls = array_slice($urls, 0, 3) ?>
-                <? endif; ?>
-                <? foreach ($urls as $current): ?>
-                    <a href="<?=$this->escapeHtmlAttr($this->proxyUrl($current['url']))?>" class="fulltext external"><?=($current['url'] == $current['desc']) ? $this->transEsc('Get full text') : $this->transEsc($current['desc'])?></a><br/>
-                <? endforeach; ?>
-            <? endif; ?>
-        <? endif; ?>      
-
-      <? // JOP resp. Redi Linkresolver  
-         // see VuFind/View/Helper/Bodensee/OpenUrl.php 
-         //     themes/bodensee/Helpers/openurl.phtml
-         //     openurl.js
-      ?>
-      <? if ($openUrlActive): ?>
-          <?=$openUrl->renderTemplate() ?>
-      <? endif; ?>
-      
-      
-      
-
+      <? $openUrl = $this->openUrl($this->driver, 'results');
+         $openUrlActive = $openUrl->isActive();            
+      echo $this->render('RecordDriver/DefaultRecord/parts/links.phtml', [
+        'driver' => $this->driver,
+        'openUrl' => $openUrl,
+        'openUrlActive' => $openUrlActive,
+        'hiddenFilterString' => $hiddenFilterString                                            
+      ])?>
       <div class="result-formats">
         <?=$this->record($this->driver)->getFormatList() ?>
-
         <? if (!$openUrlActive && empty($urls) && $this->driver->supportsAjaxStatus()): ?>
           <span class="status ajax-availability hidden">
             <span class="label label-default"><?=$this->transEsc('Loading')?>...</span>
@@ -240,7 +171,7 @@
 
         ?>
         &nbsp;
-        <a class="result-link-label btn btn-xs btn-primary" data-toggle="collapse" href="#<?=$pgid?>">
+        <a class="result-link-label btn btn-sm btn-primary" data-toggle="collapse" href="#<?=$pgid?>">
             <i class="result-link-icon fa fa-arrow-down"></i>
             <?=$this->transEsc('show_duplicates')?>
             <span class="badge"><?=$subRecordsCount?></span>
@@ -258,13 +189,23 @@
     <div class="col-xs-11 col-xs-offset-1">
         <div class="panel-group duplicates collapse" id="<?=$pgid?>">
             <?php foreach ($subRecords as $count => $sub): ?>      
-            <div class="panel panel-default panel-sm">
-                <div class="panel-heading">                
-                    <a data-toggle="collapse" data-parent="<?=$pgid?>" href="#<?=$pid.$count?>" class="panel-title text-link">
-                        <?=$sub->getNetwork()?>
-                    </a>
+            <div class="panel panel-default">
+                <?php 
+                    $dates = $sub->getPublicationDates();
+                    $date = array_shift($dates);
+                    $edition = $sub->getEdition();
+                    $header = [
+                        $this->escapeHtml($sub->getNetwork()),
+                        //$this->escapeHtml($date),
+                        $this->escapeHtml($edition)
+                    ];
+                ?>
+                <? if (count($header) > 0 && $this->client()->is('show_dup_panel_headings')): ?>
+                <div class="panel-heading" data-toggle="collapse" data-parent="" href="#<?=$pid.$count?>">
+                    <strong><?=implode(' &ndash; ', array_filter($header))?></strong>
                 </div>
-                <div id="<?=$pid.$count?>" class="panel-collapse collapse <? if ($count == 0):?>in <? endif; ?>">
+                <? endif; ?>
+                <div id="<?=$pid.$count?>" class="panel-collapse collapse <? if (!$this->client()->is('show_dup_panel_headings')):?>in <? endif; ?>">
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-sm-2">
@@ -281,16 +222,31 @@
                                     <?=$this->record($sub)->getTitleHtml()?>
                                 </a><br/>
                                 <?=$this->render('RecordDriver/DefaultRecord/parts/author.phtml', [
-                                        'driver' => $this->driver,
+                                        'driver' => $sub,
                                         'hiddenFilterString' => $hiddenFilterString                                            
                                         ])?>
-                                <? $edition = $sub->getEdition(); if (!empty($edition)): ?>
-                                <div>
-                                <strong><?=$this->transEsc('Edition')?>: </strong>
-                                    <span property="bookEdition"><?=$this->escapeHtml($edition)?></span>          
-                                </div>      
+                                <?php $openUrl = $this->openUrl($sub, 'results');
+                                 $openUrlActive = $openUrl->isActive();            
+                                 echo $this->render('RecordDriver/DefaultRecord/parts/links.phtml', [
+                                   'driver' => $sub,
+                                   'openUrl' => $openUrl,
+                                   'openUrlActive' => $openUrlActive,
+                                   'hiddenFilterString' => $hiddenFilterString                                            
+                                 ])?>
+                                <? if (!empty($edition)): ?>
+                                    <div>                                    
+                                    <strong><?=$this->transEsc('Edition')?>: </strong>
+                                        <span property="bookEdition"><?=$this->escapeHtml($edition)?></span>          
+                                    </div>      
                                 <? endif; ?>
-                              
+                                <div class="result-formats">
+                                    <?=$this->record($this->driver)->getFormatList() ?>
+                                    <? if (!$openUrlActive && empty($urls) && $this->driver->supportsAjaxStatus()): ?>
+                                      <span class="status ajax-availability hidden">
+                                        <span class="label label-default"><?=$this->transEsc('Loading')?>...</span>
+                                      </span>
+                                    <? endif; ?>
+                                </div>
                             </div>
                         </div>
                     </div>

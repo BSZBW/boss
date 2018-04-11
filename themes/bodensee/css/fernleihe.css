@@ -11382,6 +11382,12 @@ h4,
 .btn-bookbag-toggle {
   list-style-type: none;
 }
+.duplicates.collapse {
+  margin-top: 15px;
+}
+.duplicates.collapse .panel .panel-heading {
+  cursor: pointer;
+}
 /*Icons im Smartphone Modus groß und ohne Text*/
 .finger-friendly-icons a,
 .finger-friendly-icons button,
