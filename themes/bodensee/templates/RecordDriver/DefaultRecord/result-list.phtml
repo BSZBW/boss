@@ -114,68 +114,48 @@
       </div>
     </div>
     <div class="result-links hidden-print">
-      <? /* Display qrcode if appropriate: */ ?>
-      <? if ($QRCode = $this->record($this->driver)->getQRCode("results")): ?>
-        <?
-          // Add JS Variables for QrCode
-          $this->jsTranslations()->addStrings(['qrcode_hide' => 'qrcode_hide', 'qrcode_show' => 'qrcode_show']);
-        ?>
-        <span class="hidden-xs">
-          <i class="fa fa-fw fa-qrcode" aria-hidden="true"></i> <a href="<?=$this->escapeHtmlAttr($QRCode);?>" class="qrcodeLink"><?=$this->transEsc('qrcode_show')?></a>
-          <div class="qrcode hidden">
-            <script type="text/template" class="qrCodeImgTag">
-              <img alt="<?=$this->transEsc('QR Code')?>" src="<?=$this->escapeHtmlAttr($QRCode);?>"/>
-            </script>
-          </div><br/>
-        </span>
-      <? endif; ?>
+        <ul class="nav nav-pills nav-stacked">
+            <? if ($this->cart()->isActiveInSearch() && $this->params->getOptions()->supportsCart() && $this->cart()->isActive()): ?>
+              <?=$this->render('record/cart-buttons.phtml', ['id' => $this->driver->getUniqueId(), 'source' => $this->driver->getSourceIdentifier()]); ?>
+            <? endif; ?>            
+            <? if ($this->userlist()->getMode() !== 'disabled'): ?>
+                <? if ($this->permission()->allowDisplay('feature.Favorites')): ?>
+                    <? /* Add to favorites */ ?>
+                    <li>
+                        <a href="<?=$this->recordLink()->getActionUrl($this->driver, 'Save')?>" data-lightbox class="save-record result-link-label" data-id="<?=$this->escapeHtmlAttr($this->driver->getUniqueId()) ?>">
+                            <i class="result-link-icon fa fa-fw fa-star" aria-hidden="true"></i>
+                            <?=$this->transEsc('Add to favorites')?>
+                        </a>                 
+                    </li>
+                <? elseif ($block = $this->permission()->getAlternateContent('feature.Favorites')): ?>
+                    <?=$block?>
+                <? endif; ?>
+                <? /* Saved lists */ ?>
+                <li class="savedLists hidden">
+                    <strong><?=$this->transEsc("Saved in")?>:</strong>   
+                </li>
+                
+    
+            <? endif; ?>
+            <? if ($hasSubRecords): ?>
+              <?php 
+                $rand = rand(1, 10000);
+                $pgid = 'accordion-'.$rand;
+                $pid = 'panel-'.$rand.'-';
+            ?>
+            <li>
+                <a class="result-link-label duplicates-toggle" data-toggle="collapse" href="#<?=$pgid?>">
+                      <i class="result-link-icon fa fa-arrow-down"></i>
+                      <?=$this->transEsc('show_duplicates')?>
+                      <span class="badge"><?=$subRecordsCount?></span>
+                </a>
+                    
+            </li>
 
-      <? if ($this->cart()->isActiveInSearch() && $this->params->getOptions()->supportsCart() && $this->cart()->isActive()): ?>
-        <?=$this->render('record/cart-buttons.phtml', ['id' => $this->driver->getUniqueId(), 'source' => $this->driver->getSourceIdentifier()]); ?><br/>
-      <? endif; ?>
+            <? endif; ?>
+        </ul>
 
-      <? if ($this->userlist()->getMode() !== 'disabled'): ?>
-        <? if ($this->permission()->allowDisplay('feature.Favorites')): ?>
-          <? /* Add to favorites */ ?>
-          <i class="result-link-icon fa fa-fw fa-star" aria-hidden="true"></i>
-          <a href="<?=$this->recordLink()->getActionUrl($this->driver, 'Save')?>" data-lightbox class="save-record result-link-label" data-id="<?=$this->escapeHtmlAttr($this->driver->getUniqueId()) ?>"><?=$this->transEsc('Add to favorites')?></a><br/>
-        <? elseif ($block = $this->permission()->getAlternateContent('feature.Favorites')): ?>
-          <?=$block?>
-        <? endif; ?>
-        <? /* Saved lists */ ?>
-        <div class="savedLists">
-          <strong><?=$this->transEsc("Saved in")?>:</strong>
-        </div>
-      <? endif; ?>
 
-      <? /* Hierarchy tree link */ ?>
-      <? $trees = $this->driver->tryMethod('getHierarchyTrees'); if (!empty($trees)): ?>
-        <? foreach ($trees as $hierarchyID => $hierarchyTitle): ?>
-          <div class="hierarchyTreeLink">
-            <input type="hidden" value="<?=$this->escapeHtmlAttr($hierarchyID)?>" class="hiddenHierarchyId" />
-            <i class="result-link-icon fa fa-fw fa-sitemap" aria-hidden="true"></i>
-            <a class="hierarchyTreeLinkText result-link-label" data-lightbox href="<?=$this->recordLink()->getTabUrl($this->driver, 'HierarchyTree')?>?hierarchy=<?=urlencode($hierarchyID)?>#tabnav" title="<?=$this->transEsc('hierarchy_tree')?>" data-lightbox-href="<?=$this->recordLink()->getTabUrl($this->driver, 'AjaxTab')?>?hierarchy=<?=urlencode($hierarchyID)?>" data-lightbox-post="tab=hierarchytree">
-              <?=$this->transEsc('hierarchy_view_context')?><? if (count($trees) > 1): ?>: <?=$this->escapeHtml($hierarchyTitle)?><? endif; ?>
-            </a>
-          </div>
-        <? endforeach; ?>
-      <? endif; ?>
-      <? if ($hasSubRecords): ?>
-        <br/>
-        <?php 
-          $rand = rand(1, 10000);
-          $pgid = 'accordion-'.$rand;
-          $pid = 'panel-'.$rand.'-';
-
-        ?>
-        &nbsp;
-        <a class="result-link-label btn btn-sm btn-primary" data-toggle="collapse" href="#<?=$pgid?>">
-            <i class="result-link-icon fa fa-arrow-down"></i>
-            <?=$this->transEsc('show_duplicates')?>
-            <span class="badge"><?=$subRecordsCount?></span>
-        </a>
-        
-      <? endif; ?>
     </div>
   </div>
   <? if ($thumbnail && $thumbnailAlignment == 'right'): ?>
