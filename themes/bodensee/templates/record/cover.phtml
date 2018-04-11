@@ -4,7 +4,7 @@
 ?>
 <? if ($cover): ?>
   <? if ($this->link): ?><a href="<?=$this->escapeHtmlAttr($this->link)?>"><? endif; ?>
-  <img <? if ($linkPreview): ?>data-linkpreview="true" <? endif; ?>class="recordcover <?=$icon?>" src="<?=$this->escapeHtmlAttr($cover); ?>"/>
+  <img <? if ($linkPreview): ?>data-linkpreview="true" <? endif; ?>class="img-responsive recordcover <?=$icon?>" src="<?=$this->escapeHtmlAttr($cover); ?>"/>
   <? if ($this->link): ?></a><? endif; ?>
 <? else: ?>
   <div class="recordcover unavailable <?=$this->mapper()->mapIcon($this->driver->getFormats())?> medium">     

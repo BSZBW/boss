@@ -1,0 +1,185 @@
+<div>
+<a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title getFull" data-view="<?=$this->params->getOptions()->getListViewOption() ?>">
+  <?=$this->record($this->driver)->getTitleHtml()?>
+</a>
+</div>      
+<div>
+  <? $journalTitle = $this->driver->getContainerTitle(); $summDate = $this->driver->getPublicationDates(); ?>
+  <? if($this->driver->isCollection()): ?>
+      <? $summDate = $this->driver->getPublicationDates(); if (!empty($summDate) && isset($summDate[0])): ?>
+      <strong><?=$this->transEsc('Published in') . '</strong> <a href="' . $this->record($this->driver)->getLink('journaltitle', str_replace(array('{{{{START_HILITE}}}}', '{{{{END_HILITE}}}}'), '', $journalTitle)) . '">' . $this->highlight($journalTitle) . '</a>';?>
+      <?=count($summDate) > 0? ' (' . $this->escapeHtml($summDate[0]) . ')' : ''?>               
+      <? endif; ?>        
+  <? else: ?>
+    <? $summAuthors = $this->driver->getDeduplicatedAuthors(); if (!empty($summAuthors)): ?>
+      <? $gnd_author = preg_replace('/\(.*\)/', '', $this->driver->getPrimaryAuthorGND()); ?>
+      <? if ($summAuthors['main'] != ''): ?>
+          <strong><?=$this->transEsc('by')?></strong>
+          <a class="author" href="<?=$this->url('search-results')?>?lookfor=<?=urlencode($summAuthors['main'])?>&amp;type=Author<?= $hiddenFilterString ?>"><?=$this->escapeHtml($summAuthors['main'])?></a>
+          <? if ($gnd_author != ''): ?>
+              (<a class="hidden-print searchLink" href="<?=$this->url('search-results')?>?lookfor=gnd_from:<?= $gnd_author ?>&amp;type=AllFields<?= $hiddenFilterString ?>">GND-ID</a><span class="visible-print">GND-ID: <?=$gnd_author?></span>)
+          <? endif; ?>
+          <br/>
+      <? endif; ?>
+    <? endif; ?>
+      <? if (!empty($journalTitle) && ($this->driver->isJournal() || $this->driver->isArticle())): ?>
+      <?/* TODO: handle highlighting more elegantly here */ ?>
+      <strong><?=$this->transEsc('Published in') . '</strong> <a href="' . $this->record($this->driver)->getLink('journaltitle', str_replace(array('{{{{START_HILITE}}}}', '{{{{END_HILITE}}}}'), '', $journalTitle)) . '">' . $this->highlight($journalTitle) . '</a>';?>
+      <?=count($summDate) > 0? ' (' . $this->escapeHtml($summDate[0]) . ')' : ''?>
+    <? else: ?>
+      <?=!empty($summAuthor) ? '<br />' : ''?>
+      <? $publications = $this->driver->getPublicationDetails(); if (!empty($publications)): ?>
+          <? $count = 0 ?>
+              <strong><?=$this->transEsc('Published')?>: </strong> 
+              <? if (!empty($publications[0])): ?>
+                  <? foreach ($publications as $field): ?>                        
+                      <? if($count > 0):?>; <?endif;?>
+                      <span property="publisher" typeof="Organization">
+                          <? $pubPlace = $field->getPlace(); if (!empty($pubPlace)): ?>
+                              <span property="location"><?=$this->escapeHtml($pubPlace)?></span>
+                          <? endif; ?>
+                          <? $pubName = $field->getName(); if (!empty($pubName)): ?>
+                              <span property="name"><?=$this->escapeHtml($pubName)?></span>
+                          <? endif; ?>
+                      </span>
+                      <? $pubDate = $field->getDate(); if (!empty($pubDate)): ?>
+                          <span property="publicationDate"><?=$this->escapeHtml($pubDate)?></span>
+                      <? endif; ?>
+                      <? $count++ ?>
+                  <? endforeach; ?>
+              <? else: ?>
+                  <? if (!empty($summDate) && isset($summDate[0])): ?>
+                      <?= $this->escapeHtml($summDate[0])?>
+                  <? endif; ?>
+              <? endif; ?>
+    <? endif; ?>
+
+
+    <? endif; ?>
+
+    <? $summInCollection = $this->driver->getContainingCollections(); if (!empty($summInCollection)): ?>
+      <? foreach ($summInCollection as $collId => $collText): ?>
+        <div>
+          <b><?=$this->transEsc("in_collection_label")?></b>
+          <a class="ckText" href="<?=$this->url('collection', array('id' => $collId))?>?recordID=<?=urlencode($this->driver->getUniqueID())?>">
+            <?=$this->escapeHtml($collText)?>
+          </a>
+        </div>
+      <? endforeach; ?>
+    <? endif; ?>
+  <? endif; ?>
+</div>        
+
+<? if(!$this->driver->isCollection()): ?>
+  <? if ($snippet = $this->driver->getHighlightedSnippet()): ?>
+    <? if (!empty($snippet['caption'])): ?>
+      <strong><?=$this->transEsc($snippet['caption']) ?>:</strong> ';
+    <? endif; ?>
+    <? if (!empty($snippet['snippet'])): ?>
+      <span class="quotestart">&#8220;</span>...<?=$this->highlight($snippet['snippet']) ?>...<span class="quoteend">&#8221;</span><br/>
+    <? endif; ?>
+  <? endif; ?>
+<? endif; ?>
+
+<?
+/* Display information on duplicate records if available */
+if ($dedupData = $this->driver->getDedupData()): ?>
+  <div class="dedupInformation">
+  <?
+    $i = 0;
+    foreach ($dedupData as $source => $current) {
+      if (++$i == 1) {
+        ?><span class="currentSource"><a href="<?=$this->recordLink()->getUrl($this->driver)?>"><?=$this->transEsc("source_$source", [], $source)?></a></span><?
+      } else {
+        if ($i == 2) {
+          ?> <span class="otherSources">(<?=$this->transEsc('Other Sources')?>: <?
+        } else {
+          ?>, <?
+        }
+        ?><a href="<?=$this->recordLink()->getUrl($current['id'])?>"><?=$this->transEsc("source_$source", [], $source)?></a><?
+      }
+    }
+    if ($i > 1) {
+      ?>)</span><?
+    }?>
+  </div>
+<? endif; ?>
+
+<? $edition = $this->driver->getEdition(); if (!empty($edition)): ?>
+<div>
+  <strong><?=$this->transEsc('Edition')?>: </strong>
+  <span property="bookEdition"><?=$this->escapeHtml($edition)?></span>          
+</div>      
+<? endif; ?>
+
+<?= $this->record($this->driver)->getFisLink()?>
+<? if($this->client()->isIsilSession()
+      && !$this->driver->tryMethod('isFisBildung')
+      && strlen($this->driver->getNetwork()) > 0): ?>
+      <div class="ill-source">                
+          <strong><?=$this->transEsc('Network')?>:</strong>
+          <span class="test"><?=$this->driver->getNetwork() ?></span> 
+      </div>          
+<? endif; ?>
+
+<div class="callnumAndLocation ajax-availability hidden">
+  <? if ($this->driver->supportsAjaxStatus()): ?>
+    <strong class="hideIfDetailed"><?=$this->transEsc('Call Number')?>:</strong>
+    <span class="callnumber ajax-availability hidden">
+      <?=$this->transEsc('Loading')?>...<br/>
+    </span>
+    <strong><?=$this->transEsc('Located')?>:</strong>
+    <span class="location ajax-availability hidden">
+      <?=$this->transEsc('Loading')?>...
+    </span>
+    <div class="locationDetails"></div>
+  <? else: ?>
+    <? $summCallNo = $this->driver->getCallNumber(); if (!empty($summCallNo)): ?>
+      <strong><?=$this->transEsc('Call Number')?>:</strong> <?=$this->escapeHtml($summCallNo)?>
+    <? endif; ?>
+  <? endif; ?>
+</div>
+
+<? /* We need to find out if we're supposed to display an OpenURL link ($openUrlActive),
+      but even if we don't plan to display the link, we still want to get the $openUrl
+      value for use in generating a COinS (Z3988) tag -- see bottom of file.
+    */
+  $openUrl = $this->openUrl($this->driver, 'results');
+  $openUrlActive = $openUrl->isActive();
+  // Account for replace_other_urls setting
+  $urls = $this->record($this->driver)->getLinkDetails($openUrlActive);
+  if (!is_array($urls)) $urls = array();
+  $localUrls = $this->driver->getLocalUrls(); ?>            
+  <? // Show local Urls ?>
+  <? if (!empty($localUrls[0]['url'])): ?>
+      <div>
+        <? foreach ($localUrls as $current):  ?>
+          <? $pos = strpos($current['label'], ' | '); ?>
+          <? $len = strlen($current['label']); ?>
+          <? if ($this->client()->is('local_url_help_regex')): ?>
+              <a class="external" href="<?=str_replace('http://dx.doi.org', 'https://doi.org', $current['url'])?>"><?=$pos ? $this->transEsc(substr($current['label'], 0, $pos)) : $this->transEsc($current['label'])?></a>  <?=$pos ? preg_replace($this->client()->getHelpRegEx(), "<a class='external' href='".$this->client()->getHelpUrl()."'>".$this->client()->getHelpGroups()."</a>",  $this->transEsc(substr($current['label'], $pos+3, $len)) ): ''?><br/>
+          <? else: ?>                        
+              <a class="external" href="<?=str_replace('http://dx.doi.org', 'https://doi.org', $current['url'])?>"><?=$pos ? $this->transEsc(substr($current['label'], 0, $pos)) : $this->transEsc($current['label'])?></a> <?=$pos ? $this->transEsc(substr($current['label'], $pos+3, $len)) : ''?><br/>
+          <? endif; ?>                    
+        <? endforeach; ?>
+      </div>
+  <? else: ?>
+  <? // Show SWB-links ?>        
+      <? if(!$this->driver->isCollection()): ?>
+          <? if (count($urls) > 2): ?>
+              <? $urls = array_slice($urls, 0, 3) ?>
+          <? endif; ?>
+          <? foreach ($urls as $current): ?>
+              <a href="<?=$this->escapeHtmlAttr($this->proxyUrl($current['url']))?>" class="fulltext external"><?=($current['url'] == $current['desc']) ? $this->transEsc('Get full text') : $this->transEsc($current['desc'])?></a><br/>
+          <? endforeach; ?>
+      <? endif; ?>
+  <? endif; ?>      
+
+<? // JOP resp. Redi Linkresolver  
+   // see VuFind/View/Helper/Bodensee/OpenUrl.php 
+   //     themes/bodensee/Helpers/openurl.phtml
+   //     openurl.js
+?>
+<? if ($openUrlActive): ?>
+    <?=$openUrl->renderTemplate() ?>
+<? endif; ?>

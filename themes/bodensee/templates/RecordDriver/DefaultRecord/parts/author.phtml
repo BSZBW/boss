@@ -1,0 +1,63 @@
+<div>
+<? $journalTitle = $this->driver->getContainerTitle(); $summDate = $this->driver->getPublicationDates(); ?>
+<? if($this->driver->isCollection()): ?>
+    <? $summDate = $this->driver->getPublicationDates(); if (!empty($summDate) && isset($summDate[0])): ?>
+        <strong><?=$this->transEsc('Published in') . '</strong> <a href="' . $this->record($this->driver)->getLink('journaltitle', str_replace(array('{{{{START_HILITE}}}}', '{{{{END_HILITE}}}}'), '', $journalTitle)) . '">' . $this->highlight($journalTitle) . '</a>';?>
+        <?=count($summDate) > 0? ' (' . $this->escapeHtml($summDate[0]) . ')' : ''?>               
+    <? endif; ?>        
+<? else: ?>
+    <? $summAuthors = $this->driver->getDeduplicatedAuthors(); if (!empty($summAuthors)): ?>
+    <? $gnd_author = preg_replace('/\(.*\)/', '', $this->driver->getPrimaryAuthorGND()); ?>
+    <? if ($summAuthors['main'] != ''): ?>
+        <strong><?=$this->transEsc('by')?></strong>
+        <a class="author" href="<?=$this->url('search-results')?>?lookfor=<?=urlencode($summAuthors['main'])?>&amp;type=Author<?= $hiddenFilterString ?>"><?=$this->escapeHtml($summAuthors['main'])?></a>
+        <? if ($gnd_author != ''): ?>
+            (<a class="hidden-print searchLink" href="<?=$this->url('search-results')?>?lookfor=gnd_from:<?= $gnd_author ?>&amp;type=AllFields<?= $hiddenFilterString ?>">GND-ID</a><span class="visible-print">GND-ID: <?=$gnd_author?></span>)
+        <? endif; ?>
+        <br/>
+    <? endif; ?>
+<? endif; ?>
+<? if (!empty($journalTitle) && ($this->driver->isJournal() || $this->driver->isArticle())): ?>
+    <?/* TODO: handle highlighting more elegantly here */ ?>
+    <strong><?=$this->transEsc('Published in') . '</strong> <a href="' . $this->record($this->driver)->getLink('journaltitle', str_replace(array('{{{{START_HILITE}}}}', '{{{{END_HILITE}}}}'), '', $journalTitle)) . '">' . $this->highlight($journalTitle) . '</a>';?>
+    <?=count($summDate) > 0? ' (' . $this->escapeHtml($summDate[0]) . ')' : ''?>
+<? else: ?>
+    <?=!empty($summAuthor) ? '<br />' : ''?>
+    <? $publications = $this->driver->getPublicationDetails(); if (!empty($publications)): ?>
+    <? $count = 0 ?>
+    <strong><?=$this->transEsc('Published')?>: </strong> 
+    <? if (!empty($publications[0])): ?>
+        <? foreach ($publications as $field): ?>                        
+            <? if($count > 0):?>; <?endif;?>
+                <span property="publisher" typeof="Organization">
+                <? $pubPlace = $field->getPlace(); if (!empty($pubPlace)): ?>
+                <span property="location"><?=$this->escapeHtml($pubPlace)?></span>
+            <? endif; ?>
+            <? $pubName = $field->getName(); if (!empty($pubName)): ?>
+                <span property="name"><?=$this->escapeHtml($pubName)?></span>
+            <? endif; ?>
+            </span>
+            <? $pubDate = $field->getDate(); if (!empty($pubDate)): ?>
+                <span property="publicationDate"><?=$this->escapeHtml($pubDate)?></span>
+            <? endif; ?>
+            <? $count++ ?>
+        <? endforeach; ?>
+    <? else: ?>
+        <? if (!empty($summDate) && isset($summDate[0])): ?>
+            <?= $this->escapeHtml($summDate[0])?>
+        <? endif; ?>
+    <? endif; ?>
+<? endif; ?>
+<? endif; ?>
+<? $summInCollection = $this->driver->getContainingCollections(); if (!empty($summInCollection)): ?>
+    <? foreach ($summInCollection as $collId => $collText): ?>
+        <div>
+            <b><?=$this->transEsc("in_collection_label")?></b>
+            <a class="ckText" href="<?=$this->url('collection', array('id' => $collId))?>?recordID=<?=urlencode($this->driver->getUniqueID())?>">
+            <?=$this->escapeHtml($collText)?>
+            </a>
+        </div>
+    <? endforeach; ?>
+<? endif; ?>
+<? endif; ?>
+</div>   
