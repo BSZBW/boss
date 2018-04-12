@@ -93,16 +93,14 @@
       </div>      
       <? endif; ?>
       <? $openUrl = $this->openUrl($this->driver, 'results');
-         $openUrlActive = $openUrl->isActive();            
-      echo $this->render('RecordDriver/DefaultRecord/parts/links.phtml', [
-        'driver' => $this->driver,
-        'openUrl' => $openUrl,
-        'openUrlActive' => $openUrlActive,
-        'hiddenFilterString' => $hiddenFilterString                                            
-      ])?>
-      <div class="result-formats">
+        $openUrlActive = $openUrl->isActive();            
+        echo $this->render('RecordDriver/DefaultRecord/parts/links.phtml', [
+            'driver' => $this->driver,
+            'hiddenFilterString' => $hiddenFilterString                                            
+        ])?>
+        <div class="result-formats">
         <?=$this->record($this->driver)->getFormatList() ?>
-        <? if (!$openUrlActive && empty($urls) && $this->driver->supportsAjaxStatus()): ?>
+        <? if (empty($urls) && $this->driver->supportsAjaxStatus()): ?>
           <span class="status ajax-availability hidden">
             <span class="label label-default"><?=$this->transEsc('Loading')?>...</span>
           </span>
@@ -147,7 +145,7 @@
                 <a class="result-link-label duplicates-toggle" data-toggle="collapse" href="#<?=$pgid?>">
                       <i class="result-link-icon fa fa-arrow-down"></i>
                       <?=$this->transEsc('show_duplicates')?>
-                      <span class="badge"><?=$subRecordsCount?></span>
+                      <span class="badge pull-right"><?=$subRecordsCount?></span>
                 </a>
                     
             </li>
@@ -203,8 +201,10 @@
                                         'driver' => $sub,
                                         'hiddenFilterString' => $hiddenFilterString                                            
                                         ])?>
-                                <?php $openUrl = $this->openUrl($sub, 'results');
-                                 $openUrlActive = $openUrl->isActive();            
+                                <?php //$openUrl = $this->openUrl($sub, 'results');
+                                 $openUrl = null;
+                                 $openUrlActive = null;
+                                 //$openUrlActive = $openUrl->isActive();            
                                  echo $this->render('RecordDriver/DefaultRecord/parts/links.phtml', [
                                    'driver' => $sub,
                                    'openUrl' => $openUrl,
@@ -218,12 +218,7 @@
                                     </div>      
                                 <? endif; ?>
                                 <div class="result-formats">
-                                    <?=$this->record($this->driver)->getFormatList() ?>
-                                    <? if (!$openUrlActive && empty($urls) && $this->driver->supportsAjaxStatus()): ?>
-                                      <span class="status ajax-availability hidden">
-                                        <span class="label label-default"><?=$this->transEsc('Loading')?>...</span>
-                                      </span>
-                                    <? endif; ?>
+                                    <?=$this->record($sub)->getFormatList() ?>            
                                 </div>
                             </div> <!-- end of "content" column -->
                         </div> <!-- end row -->
