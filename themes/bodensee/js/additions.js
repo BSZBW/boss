@@ -22,7 +22,8 @@ function showmore() {
 
 function bootstrapTooltip() {
 
-      $('[data-toggle="tooltip"]').tooltip({
+       $("body").tooltip({ 
+          selector: '[data-toggle=tooltip]',
           delay: {
               'show': 500,
               'hide': 100,

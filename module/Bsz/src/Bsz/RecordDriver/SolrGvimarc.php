@@ -903,14 +903,11 @@ class SolrGvimarc extends SolrMarc
         return isset($this->fields['long_lat']) ? $this->fields['long_lat'] : false;
     }
 
-    /**
-     * Get information on records deduplicated with this one
-     *
-     * @return array Array keyed by source id containing record id
-     */
-    public function getDedupData()
+
+    
+    public function getGroupField()
     {
-        return isset($this->fields['dedup_data']) ? $this->fields['dedup_data'] : array();
+        return isset($this->fields['test_matchkey_2']) ? $this->fields['test_matchkey_2'] : [];        
     }
 
     public function getBreadcrumb()

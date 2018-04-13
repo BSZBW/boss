@@ -193,7 +193,11 @@
                                 <?=$subCover?>
                               
                             </div>
-                            <div class="col-xs-8 col-sm-10">                             
+                            <div class="col-xs-8 col-sm-10">    
+                                <? if(\Bsz\Debug::isInternal()): ?>
+                                <span data-toggle="tooltip" class="text-danger dedup-info" data-placement="auto top" title="<?=$this->escapeHtmlAttr($sub->getGroupField())?>"><i class="fa fa-question-circle"></i></span>
+                                <? endif; ?>
+                                
                                 <a href="<?=$this->recordLink()->getUrl($sub)?>">
                                     <?=$this->record($sub)->getTitleHtml()?>
                                 </a><br/>
