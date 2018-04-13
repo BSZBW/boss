@@ -1,7 +1,7 @@
 <?php
 
 namespace Bsz\Search\Solr;
-use VuFindSearch\ParamBag;
+use VuFindSearch\ParamBag, Bsz\Config;
 
 /**
  * Description of Params
@@ -64,7 +64,22 @@ class Params extends \VuFind\Search\Solr\Params
     public function getBackendParameters()
     {
         $backendParams = new ParamBag();
-        $backendParams->add('year', (int)date('Y')+1);            
+        $backendParams->add('year', (int)date('Y')+1);      
+        
+        // Fetch group params for deduplication
+        $config = $this->configLoader->get('config');
+        $index = $config->get('Index');
+        $group = (bool)$index->get('group');        
+        if ($group === true) {
+            $backendParams->add('group', 'true');
+
+            $group_field = (null !== $index->get('group.field'))? $index->get('group.field'): '';
+            $backendParams->add('group.field', $group_field);
+
+            $group_limit = (null !== $index->get('group.limit'))? $index->get('group.limit'): '';
+            $backendParams->add('group.limit', $group_limit);
+        }
+        
 
         // Spellcheck
         $backendParams->set(
