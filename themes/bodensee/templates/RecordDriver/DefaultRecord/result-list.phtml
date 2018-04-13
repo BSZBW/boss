@@ -41,6 +41,9 @@
   <div class="media-body">
     <div class="result-body">
       <div>
+          <? if(\Bsz\Debug::isInternal()): ?>
+            <span data-toggle="tooltip" class="text-danger dedup-info" data-placement="auto top" title="<?=$this->escapeHtmlAttr($this->driver->getGroupField())?>"><i class="fa fa-question-circle"></i></span>
+            <? endif; ?>
         <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title getFull" data-view="<?=$this->params->getOptions()->getListViewOption() ?>">
           <?=$this->record($this->driver)->getTitleHtml()?>
         </a>
@@ -196,7 +199,7 @@
                             <div class="col-xs-8 col-sm-10">    
                                 <? if(\Bsz\Debug::isInternal()): ?>
                                 <span data-toggle="tooltip" class="text-danger dedup-info" data-placement="auto top" title="<?=$this->escapeHtmlAttr($sub->getGroupField())?>"><i class="fa fa-question-circle"></i></span>
-                                <? endif; ?>
+                                <? endif; ?>                               
                                 
                                 <a href="<?=$this->recordLink()->getUrl($sub)?>">
                                     <?=$this->record($sub)->getTitleHtml()?>
