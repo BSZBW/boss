@@ -197,7 +197,7 @@
                               
                             </div>
                             <div class="col-xs-8 col-sm-10">    
-                                <? if(\Bsz\Debug::isInternal()): ?>
+                                <? if(\Bsz\Debug::isInternal() || true): ?>
                                 <span data-toggle="tooltip" class="text-danger dedup-info" data-placement="auto top" title="<?=$this->escapeHtmlAttr($sub->getGroupField())?>"><i class="fa fa-question-circle"></i></span>
                                 <? endif; ?>                               
                                 

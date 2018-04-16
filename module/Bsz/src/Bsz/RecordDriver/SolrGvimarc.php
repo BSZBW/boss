@@ -904,10 +904,18 @@ class SolrGvimarc extends SolrMarc
     }
 
 
-    
+    /**
+     * 
+     * @return string
+     */
     public function getGroupField()
-    {
-        return isset($this->fields['test_matchkey_2']) ? $this->fields['test_matchkey_2'] : [];        
+    {   
+        $conf = $this->client->get('Index')->get('group.field');
+        if (is_string($conf) && isset($this->fields[$conf])) {
+            return $this->fields[$conf];
+        }
+        return '';
+      
     }
 
     public function getBreadcrumb()
@@ -1542,13 +1550,7 @@ class SolrGvimarc extends SolrMarc
             return 0 < $collection->count();
         }
         return false;
-    }
-    
-    public function getGroupID()
-    {
-    	// return $this->getSingleValuedField("test_matchkey_2");
-        return isset($this->fields['test_matchkey_2']) ?
-                $this->fields['test_matchkey_2'] : [];
-    }
+    }    
+
 
 }
