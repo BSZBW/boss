@@ -41,7 +41,7 @@
   <div class="media-body">
     <div class="result-body">
       <div>
-          <? if(\Bsz\Debug::isInternal()): ?>
+          <? if(\Bsz\Debug::isInternal() || true): ?>
             <span data-toggle="tooltip" class="text-danger dedup-info" data-placement="auto top" title="<?=$this->escapeHtmlAttr($this->driver->getGroupField())?>"><i class="fa fa-question-circle"></i></span>
             <? endif; ?>
         <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title getFull" data-view="<?=$this->params->getOptions()->getListViewOption() ?>">
