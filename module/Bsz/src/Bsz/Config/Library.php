@@ -199,8 +199,10 @@ class Library
     {
         $isils = [];
         if (isset($this->isil_availability)) {
-            $raw = $this->isil_availability;            
-            $isils = explode(',', $raw);
+            $raw = $this->isil_availability;        
+            if (!empty($raw)) {
+                $isils = explode(',', $raw);                
+            }
         }
         $isils[] = $this->getIsil();
         return array_unique($isils);
