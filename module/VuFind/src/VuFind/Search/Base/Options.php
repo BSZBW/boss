@@ -126,7 +126,7 @@ abstract class Options implements TranslatorAwareInterface
      *
      * @var int
      */
-    protected $defaultLimit = 20;
+    protected $defaultLimit = 10;
 
     /**
      * Available limit options
