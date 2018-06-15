@@ -39,6 +39,65 @@ namespace VuFind\Autocomplete;
 class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
 {
     /**
+     * Default plugin aliases.
+     *
+     * @var array
+     */
+    protected $aliases = [
+        'none' => 'VuFind\Autocomplete\None',
+        'oclcidentities' => 'VuFind\Autocomplete\OCLCIdentities',
+        'search2' => 'VuFind\Autocomplete\Search2',
+        'search2cn' => 'VuFind\Autocomplete\Search2CN',
+        'solr' => 'VuFind\Autocomplete\Solr',
+        'solrauth' => 'VuFind\Autocomplete\SolrAuth',
+        'solrcn' => 'VuFind\Autocomplete\SolrCN',
+        'solrreserves' => 'VuFind\Autocomplete\SolrReserves',
+        'tag' => 'VuFind\Autocomplete\Tag',
+        // for legacy 1.x compatibility
+        'noautocomplete' => 'None',
+        'oclcidentitiesautocomplete' => 'OCLCIdentities',
+        'solrautocomplete' => 'Solr',
+        'solrauthautocomplete' => 'SolrAuth',
+        'solrcnautocomplete' => 'SolrCN',
+        'solrreservesautocomplete' => 'SolrReserves',
+        'tagautocomplete' => 'Tag',
+    ];
+
+    /**
+     * Default plugin factories.
+     *
+     * @var array
+     */
+    protected $factories = [
+        'VuFind\Autocomplete\None' => 'Zend\ServiceManager\Factory\InvokableFactory',
+        'VuFind\Autocomplete\OCLCIdentities' =>
+        'Zend\ServiceManager\Factory\InvokableFactory',
+        'VuFind\Autocomplete\Search2' => 'VuFind\Autocomplete\SolrFactory',
+        'VuFind\Autocomplete\Search2CN' => 'VuFind\Autocomplete\SolrFactory',
+        'VuFind\Autocomplete\Solr' => 'VuFind\Autocomplete\SolrFactory',
+        'VuFind\Autocomplete\SolrAuth' => 'VuFind\Autocomplete\SolrFactory',
+        'VuFind\Autocomplete\SolrCN' => 'VuFind\Autocomplete\SolrFactory',
+        'VuFind\Autocomplete\SolrReserves' => 'VuFind\Autocomplete\SolrFactory',
+        'VuFind\Autocomplete\Tag' => 'Zend\ServiceManager\Factory\InvokableFactory',
+    ];
+
+    /**
+     * Constructor
+     *
+     * Make sure plugins are properly initialized.
+     *
+     * @param mixed $configOrContainerInstance Configuration or container instance
+     * @param array $v3config                  If $configOrContainerInstance is a
+     * container, this value will be passed to the parent constructor.
+     */
+    public function __construct($configOrContainerInstance = null,
+        array $v3config = []
+    ) {
+        $this->addAbstractFactory('VuFind\Autocomplete\PluginFactory');
+        parent::__construct($configOrContainerInstance, $v3config);
+    }
+
+    /**
      * Return the name of the base class or interface that plug-ins must conform
      * to.
      *
