@@ -699,7 +699,7 @@ class SolrGvimarc extends SolrMarc
      */
     public function getSummary()
     {
-        $summaryCodes = ['501', '502', '515', '520'];
+        $summaryCodes = ['501', '502', '505', '515', '520'];
         $summary = [];
         foreach ($summaryCodes as $sc) {
             $tmp = $this->getFieldArray($sc, ['a', 'b', 'c', 'd'], true, ', ');
