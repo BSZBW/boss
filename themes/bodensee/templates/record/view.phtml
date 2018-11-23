@@ -2,6 +2,9 @@
   // Set up standard record scripts:
   $this->headScript()->appendFile("record.js");
   $this->headScript()->appendFile("check_save_statuses.js");
+  $this->headScript()->appendFile("vendor/jquery.tablesorter.min.js");
+  
+  
   // Activate Syndetics Plus if necessary:
   if ($this->syndeticsPlus()->isActive()) {
     $this->headScript()->appendFile($this->syndeticsPlus()->getScript());

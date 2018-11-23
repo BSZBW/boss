@@ -9,13 +9,17 @@
 ?>
 <? if(isset($content) && count($content) > 0): ?>
 <? $rand = rand(0, 9999)?>
-<table class="table table-striped table-condensed">
-    <tr>
-        <th class="col-xs-8"><?=$this->transEsc('Title')?></th>        
-        <th class="col-xs-1"><?=$this->transEsc('Year')?></th>
-        <th class="col-xs-1"><?=$this->transEsc('volume_tab')?></th>
-        <th class="col-xs-2"><?=$this->transEsc('Author')?></th>        
-    </tr>
+<table class="table table-striped table-condensed tablesorter tablesorter-bootstrap">
+    <thead>
+        <tr>
+            <th class="col-xs-8"><?=$this->transEsc('Title')?></th>        
+            <th class="col-xs-1"><?=$this->transEsc('Year')?></th>
+            <th class="col-xs-1"><?=$this->transEsc('volume_tab')?></th>
+            <th class="col-xs-2"><?=$this->transEsc('Author')?></th>        
+        </tr>        
+    </thead>
+    <tbody>
+        
     <? $count = 1; foreach ($content as $result): ?>
         <tr <? if ($count > 10): ?> class="showmore-<?=$rand?> collapse multi-collapse"<? endif; ?>>
             <td><a class="internal"  href="<?=$this->recordLink()->getUrl($result)?>"><?=$this->string()->cleanEsc($result->getTitle())?> <?=$this->string()->cleanEsc($result->getTitleSection())?></a></td>
@@ -26,18 +30,24 @@
         <? $count++ ?>  
     <? endforeach; ?>    
     <? if ($count > 10): ?>
-        <tfoot>
-            <tr><td>
-                <button id="more-volumeslist" onclick="return moreChildren('volumeslist')" class="btn btn-info btn-xs" data-toggle="collapse" data-target=".showmore-<?=$rand?>" aria-expanded="false">
-                    <?=$this->transEsc('Showmore')?>
-                </button>    
-                <button onclick="return lessChildren('volumeslist')" class="btn btn-info btn-xs hidden volumeslist" data-toggle="collapse" data-target=".showmore-<?=$rand?>" aria-expanded="false">
-                    <?=$this->transEsc('Showless')?>
-                </button>    
-            </td></tr>
-        </tfoot>
+    </tbody>
+    <tfoot>
+        <tr><td>
+            <button id="more-volumeslist" onclick="return moreChildren('volumeslist')" class="btn btn-info btn-xs" data-toggle="collapse" data-target=".showmore-<?=$rand?>" aria-expanded="false">
+                <?=$this->transEsc('Showmore')?>
+            </button>    
+            <button onclick="return lessChildren('volumeslist')" class="btn btn-info btn-xs hidden volumeslist" data-toggle="collapse" data-target=".showmore-<?=$rand?>" aria-expanded="false">
+                <?=$this->transEsc('Showless')?>
+            </button>    
+        </td></tr>
+    </tfoot>
     <? endif; ?>        
 </table>
 <? else: ?>
 <p><?=$this->transEsc('nohit_heading')?></p>
 <? endif; ?>
+<script type="text/javascript">
+    $(document).ready(function() {
+       $('.tablesorter').tablesorter(); 
+    });
+</script>

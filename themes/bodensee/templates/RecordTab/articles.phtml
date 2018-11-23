@@ -8,20 +8,24 @@
 ?>
 <? if(isset($content) && count($content) > 0): ?>
 <? $rand = rand(0, 9999)?>
-<table class="table table-striped table-condensed">
-    <tr>
-        <th class="col-xs-8"><?=$this->transEsc('Title')?></th>        
-        <th class="col-xs-1"><?=$this->transEsc('Year')?></th>
-        <th class="col-xs-2"><?=$this->transEsc('Author')?></th>        
-    </tr>
-    <? $count = 1; foreach ($content as $result): ?>
-    <tr <? if ($count > 10): ?> class="showmore-<?=$rand?> collapse multi-collapse"<? endif; ?>>
-        <td><a class="internal"  href="<?=$this->recordLink()->getUrl($result, $this->overrideRecordLink)?>"><?=$this->string()->cleanEsc($result->getTitle())?> <?=$this->string()->cleanEsc($result->getTitleSection())?></a></td>
-        <td><?=implode(', ',$result->getPublicationDates())?></td>
-        <td><?=$result->getPrimaryAuthor()?></td>
-    </tr>
+<table class="table table-striped table-condensed tablesorter">
+    <thead>
+        <tr>
+            <th class="col-xs-8"><?=$this->transEsc('Title')?></th>        
+            <th class="col-xs-1"><?=$this->transEsc('Year')?></th>
+            <th class="col-xs-2"><?=$this->transEsc('Author')?></th>        
+        </tr>        
+    </thead>
+    <tbody>        
+        <? $count = 1; foreach ($content as $result): ?>
+        <tr <? if ($count > 10): ?> class="showmore-<?=$rand?> collapse multi-collapse"<? endif; ?>>
+            <td><a class="internal"  href="<?=$this->recordLink()->getUrl($result, $this->overrideRecordLink)?>"><?=$this->string()->cleanEsc($result->getTitle())?> <?=$this->string()->cleanEsc($result->getTitleSection())?></a></td>
+            <td><?=implode(', ',$result->getPublicationDates())?></td>
+            <td><?=$result->getPrimaryAuthor()?></td>
+        </tr>
     <? $count++ ?>  
     <? endforeach; ?>
+    </tbody>
     <? if ($count > 10): ?> 
         <tfoot>
             <tr><td>
@@ -38,3 +42,9 @@
 <? else: ?>
 <p><?=$this->transEsc('nohit_heading')?></p>
 <? endif; ?>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+       $('.tablesorter').tablesorter(); 
+    });
+</script>
