@@ -43,11 +43,13 @@
     </tfoot>
     <? endif; ?>        
 </table>
+<script type="text/javascript">
+    $(document).ready(function() {
+       $('.tablesorter').tablesorter({
+            sortList : [[1,1]]
+       }); 
+    });
+</script>
 <? else: ?>
 <p><?=$this->transEsc('nohit_heading')?></p>
 <? endif; ?>
-<script type="text/javascript">
-    $(document).ready(function() {
-       $('.tablesorter').tablesorter(); 
-    });
-</script>
