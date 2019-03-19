@@ -21,15 +21,15 @@
   $thumbnailAlignment = $this->record($this->driver)->getThumbnailAlignment('result');
   if ($cover):
     ob_start(); ?>
-    <div class="col-xs-3 col-sm-3 col-md-2 hidden-print record-cover">
+    <div class="col-xs-2 col-sm-3 col-md-2 hidden-print record-cover">
       <?=$cover ?>
     </div>
     <? $thumbnail = ob_get_contents(); ?>
   <? ob_end_clean(); ?>
   <? else: ?>
     <div class="hidden-print recordcover unavailable <?=$this->mapper()->mapIcon($this->driver->getFormats())?>">     
-        <span class=""></span>
-    </div>
+            <span class=""></span>
+        </div>
 <? endif; ?>
 
 <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID())?>" class="hiddenId" />
@@ -37,7 +37,7 @@
   <? if ($thumbnail && $thumbnailAlignment == 'left'): ?>
     <?=$thumbnail ?>
   <? endif ?>
-  <div class="col-xs-6 col-sm-6 col-md-7 record-content">
+  <div class="col-xs-6 col-sm-5 col-md-7 record-content">
         <?=$this->render('RecordDriver/SolrDefault/parts/dedup-tooltip.phtml', ['driver' => $this->driver])?>  
         <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title getFull" data-view="<?=$this->params->getOptions()->getListViewOption() ?>">
           <?=$this->record($this->driver)->getTitleHtml()?>
@@ -108,7 +108,7 @@
       </div>
     
   </div>
-<div class="col-xs-3 col-sm-3 col-md-3 record-links hidden-print">
+<div class="col-xs-4 col-sm-4 col-md-3 record-links hidden-print">
     <ul class="nav nav-pills nav-stacked">
         <? if ($this->cart()->isActiveInSearch() && $this->params->getOptions()->supportsCart() && $this->cart()->isActive()): ?>
           <?=$this->render('record/cart-buttons.phtml', ['id' => $this->driver->getUniqueId(), 'source' => $this->driver->getSourceIdentifier()]); ?>
