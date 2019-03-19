@@ -3,16 +3,6 @@
     margin-right: auto;
     display: block;
 }
-.row.result {
-    //can be a cover or a placeholder
-    img.recordcover {
-        
-    }
-    //always a placeholder
-    div.recordcover {
-        width: 70px;
-    }
-}
 // Keep the image from getting out of control
 .media-right.img-responsive { 
     max-height: 600px; 
@@ -20,21 +10,14 @@
 }
 
 
-.recordcover.unavailable.small {    
-    /* min-width: 4.3em; */
-    width: 60px;
-}
-.recordcover.unavailable.medium {
-    /* min-width: 4.3em; */
-    width: 100px;
-}
 .bsz {
     background-position: center;
-    background-size: contain;
+    background-size: 50%;
     background-repeat: no-repeat;    
-    width: auto;
+    width: 100%;    
     height: auto;
-    min-height: 5em;    
+    min-width: 100%;
+    min-height: 4em;    
 }
 .bsz.bsz-book {
     background-image: url('/themes/bodensee/images/formats/book.svg');
