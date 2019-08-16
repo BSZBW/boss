@@ -63,13 +63,8 @@ class DedupCheckboxFactory
         if (!empty($options)) {
             throw new \Exception('Unexpected options passed to factory.');
         }
-//        $pm = $container->get(\VuFind\AjaxHandler\PluginManager::class);
-//        return new DedupCheckbox($pm);        
+    
         return new $requestedName(
-            $container->get(\VuFind\Session\Settings::class),
-            $container->get(\VuFind\Resolver\Driver\PluginManager::class),
-            $container->get('ViewRenderer'),
-            $container->get(\VuFind\Config\PluginManager::class)->get('config'),
             $container->get('Bsz\Config\Dedup')
         );
     }
