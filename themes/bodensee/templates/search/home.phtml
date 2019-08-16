@@ -74,15 +74,10 @@ JS;
             <p><?=$this->translate('homepage_text')?></p>
           <? else: ?>
             <p><?=$this->transEsc('homepage_text')?></p>
-          <? endif; ?>
-            
+          <? endif; ?>        
           
-          
-          <? if($this->client()->isIsilSession() && !$this->client()->hasIsilSession()): ?>
-          <p><?=$this->translate('ill_select_library')?></p>
-          <? endif; ?>
           <? if ($this->client()->isIsilSession()): ?>
-              <?=$this->partial('bsz/illdropdown.phtml')?>
+              <?=$this->partial('bsz/illselector.phtml')?>
           <? endif; ?>
           <? // Set Maintenance hints with SetEnv MAINTENANCE_MODE "..." in httpd-vufind.conf ?>
         </div>

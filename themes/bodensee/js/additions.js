@@ -307,6 +307,13 @@ function datepicker() {
 
 }
 
+function typeaheadLibraries() {
+    $('.typeahead').typeahead({
+        source: ['Test', 'Foo', 'Bar', 'Foobar'],
+    });
+    
+}
+
 /*
 * this is executed after site is loaded
 * main loop
@@ -317,6 +324,7 @@ $(document).ready(function() {
   externalLinks();
   bootstrapTooltip();
   modalPopup();
+  typeaheadLibraries();
   keyboardShortcuts();
   remoteModal();
   duplicates();

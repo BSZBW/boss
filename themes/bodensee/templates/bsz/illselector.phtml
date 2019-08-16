@@ -1,0 +1,18 @@
+<? 
+    $this->headScript(\Zend\View\Helper\HeadScript::FILE, 'vendor/bootstrap-typeahead.min.js'); 
+  
+?>
+<div class="jumbotron">
+    <? if($this->client()->isIsilSession() && !$this->client()->hasIsilSession()): ?>
+          <p><?=$this->translate('ill_select_library')?></p>
+    <? endif; ?>
+    <form class="form-horizontal" method="POST">
+        <div class="input-group">
+            <input type="text" class="form-control typeahead" data-provide="typeahead" autocomplete="off" />
+            <div class="input-group-btn">                
+                <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i></button>        
+            </div>            
+        </div>
+    </form>
+      
+</div>
