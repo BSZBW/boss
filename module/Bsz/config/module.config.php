@@ -197,9 +197,11 @@ $config = [
             'ajaxhandler' => [
                 'factories' => [
                      'Bsz\AjaxHandler\DedupCheckbox' => 'Bsz\AjaxHandler\DedupCheckboxFactory',
+                     'Bsz\AjaxHandler\LibrariesTypeahead' => 'Bsz\AjaxHandler\LibrariesTypeaheadFactory',
                 ],
                 'aliases' => [
-                    'dedupCheckbox' => 'Bsz\AjaxHandler\DedupCheckbox'
+                    'dedupCheckbox' => 'Bsz\AjaxHandler\DedupCheckbox',
+                    'librariesTypeahead' => 'Bsz\AjaxHandler\LibrariesTypeahead'
                 ]
             ],            
             'resolver_driver' => [

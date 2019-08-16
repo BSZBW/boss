@@ -243,7 +243,6 @@ function duplicates() {
     // handle checkbox to enable/disable grouping
     $('#dedup-checkbox').change(function(e) {
         var status = this.checked;
-        console.log(status);
         $.ajax({
            dataType: 'json',
            method: 'POST',
@@ -308,9 +307,18 @@ function datepicker() {
 }
 
 function typeaheadLibraries() {
-    $('.typeahead').typeahead({
-        source: ['Test', 'Foo', 'Bar', 'Foobar'],
-    });
+    console.log('test');
+    if (typeof $.fn.typeahead !== 'undefined') {
+        $('.typeahead').typeahead({
+            source: function (val, process){
+                return $.ajax({
+                    url: VuFind.path + '/AJAX/JSON?method=librariesTypeahead&q='+val,
+                    method: 'GET',
+                });
+            }        
+
+        });        
+    }
     
 }
 
