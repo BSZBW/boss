@@ -316,6 +316,7 @@ function typeaheadLibraries() {
                     url: url+val,
                     method: "GET",
                     success: function(data) {
+
                         return process(data.data);
                     },
                     dataType: "json"

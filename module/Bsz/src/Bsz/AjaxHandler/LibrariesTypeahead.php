@@ -42,7 +42,24 @@ class LibrariesTypeahead extends \VuFind\AjaxHandler\AbstractBase {
         
         if ($params->fromQuery('q') !== '') {
             $query = $params->fromQuery('q');
+//            $dbresult = $this->libraries->getActiveByName($query);
+//            foreach($dbresult as $row) {
+//                
         }
-        return $this->formatResponse([$query], 200);  
+        $arrReturn = [
+            [
+                'id' => 1,
+                'name' => 'Winkler, Stefan',
+            ],
+            [
+                'id' => 1,
+                'name' => 'Kleiber, Ulrich',
+            ],
+            [
+                 'id' => 2,
+                'name' => 'Amzar, Cornelius',
+            ]
+        ];
+        return $this->formatResponse($arrReturn, 200);  
     }
 }
