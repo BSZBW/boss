@@ -249,19 +249,17 @@ class Libraries extends TableGateWay
     public function getActiveByName($name) {
         
         $sql = new Sql($this->getAdapter());
-        $select = $sql->select('isil', 'name', 'fk_country')
+        $select = $sql->select()
             ->from('libraries')
             ->order('libraries.name')
             ->order('isil');
         $select->where->
                 and
                 ->equalTo('is_ill_active', 1)
-                ->equalTo('libraries.name', '%'.$name.'%');
+                ->like('libraries.name', '%'.$name.'%');
 
-
-        $results = $this->selectWith($select);
-        
-        return $results;;
+        $results = $this->selectWith($select);        
+        return $results;
     }
 
 }
