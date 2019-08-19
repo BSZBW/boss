@@ -323,6 +323,17 @@ function typeaheadLibraries() {
                 });
  
             },
+            items: 'all',        
+            afterSelect: function(item) {
+                var url2 = VuFind.path + '/Bsz/saveIsil/'+item.id;
+                $.ajax({
+                    url: url2,
+                    method: 'GET',
+                    success: function() {
+                        location.reload();                        
+                    }
+                });
+            }
             
         });
     }
