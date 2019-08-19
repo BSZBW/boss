@@ -38,12 +38,18 @@ class LibrariesTypeahead extends \VuFind\AjaxHandler\AbstractBase {
         $this->libraries = $libraries;
     }
     
+    /**
+     * Returns a JSON list of libraries that match the name
+     * 
+     * @param Params $params
+     * @return HTTP Response
+     */
     public function handleRequest(Params $params) {
         
         $json = [];
         $code = 500;
-        if ($params->fromQuery('q') !== '') {
-            $query = $params->fromQuery('q');
+        $query = $params->fromQuery('q');
+        if (!empty($query)) {
             $dbresult = $this->libraries->getActiveByName($query);                
             $code = 200;
             foreach ($dbresult as $library) {
@@ -53,8 +59,7 @@ class LibrariesTypeahead extends \VuFind\AjaxHandler\AbstractBase {
                 ];
             }       
         }
-        return $this->formatResponse($json, $code);  
-        
+        return $this->formatResponse($json, $code);         
 
     }
 }

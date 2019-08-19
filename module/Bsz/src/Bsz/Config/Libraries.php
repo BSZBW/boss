@@ -245,7 +245,12 @@ class Libraries extends TableGateWay
         }
         return true;
     }
-    
+    /**
+     * Returns all active ill libraries that matches the given name
+     * 
+     * @param string $name
+     * @return array
+     */
     public function getActiveByName($name) {
         
         $sql = new Sql($this->getAdapter());
@@ -261,5 +266,4 @@ class Libraries extends TableGateWay
         $results = $this->selectWith($select);        
         return $results;
     }
-
 }
