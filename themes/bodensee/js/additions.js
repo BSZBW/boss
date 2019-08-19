@@ -307,17 +307,23 @@ function datepicker() {
 }
 
 function typeaheadLibraries() {
-    console.log('test');
+    var url = VuFind.path + '/AJAX/JSON?method=librariesTypeahead&q=';
+    
     if (typeof $.fn.typeahead !== 'undefined') {
         $('.typeahead').typeahead({
-            source: function (val, process){
+            source: function (val, process) {
                 return $.ajax({
-                    url: VuFind.path + '/AJAX/JSON?method=librariesTypeahead&q='+val,
-                    method: 'GET',
+                    url: url+val,
+                    method: "GET",
+                    success: function(data) {
+                        return process(data.data);
+                    },
+                    dataType: "json"
                 });
-            }        
-
-        });        
+ 
+            },
+            
+        });
     }
     
 }

@@ -5,6 +5,8 @@
 <div class="jumbotron">
     <? if($this->client()->isIsilSession() && !$this->client()->hasIsilSession()): ?>
           <p><?=$this->translate('ILL::select_library')?></p>
+    <? else: ?>
+          <p><?=$this->transEsc('ILL::update_library')?></p>
     <? endif; ?>
     <form class="form-horizontal" method="POST">
         <div class="input-group">
