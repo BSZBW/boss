@@ -136,7 +136,7 @@
         <? endif; ?>
         <? if ( $library !== null): ?>
             <? $url =  $library->hasCustomUrl() ? $library->getCustomUrl() : $this->url('record-freeform'); ?>
-            <a data-toggle="tooltip " title="<?=$this->transEsc('ill_free_form_tooltip')?>" class="<?=$library->hasCustomUrl()? 'external' : 'internal' ?> hasicon" href="<?=$url?>"><i class="fa fa-file-o"></i><span class="text"><?=$this->transEsc('ill_request_free_form')?></span></a>            
+            <a data-toggle="tooltip " title="<?=$this->transEsc('ILL::free_form_tooltip')?>" class="<?=$library->hasCustomUrl()? 'external' : 'internal' ?> hasicon" href="<?=$url?>"><i class="fa fa-file-o"></i><span class="text"><?=$this->transEsc('ILL::request_free_form')?></span></a>            
         <? endif; ?>
 
       </div>

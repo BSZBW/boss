@@ -24,7 +24,7 @@
         <input type="hidden" id="submitType" name="cancelSelected" value="1"/>
         <input type="hidden" id="cancelConfirm" name="confirm" value="0"/>
         <div class="btn-group">
-          <input id="cancelSelected" name="cancelSelected" type="submit" value="<?=$this->transEsc("ill_request_cancel_selected") ?>" class="btn btn-default dropdown-toggle" data-toggle="dropdown"/>
+          <input id="cancelSelected" name="cancelSelected" type="submit" value="<?=$this->transEsc("ILL::request_cancel_selected") ?>" class="btn btn-default dropdown-toggle" data-toggle="dropdown"/>
           <ul class="dropdown-menu">
             <li class="disabled"><a><?=$this->transEsc("confirm_ill_request_cancel_selected_text") ?></a></li>
             <li><a href="#" onClick="$('#cancelConfirm').val(1);$('#submitType').attr('name','cancelSelected');$(this).parents('form').submit(); return false;"><?=$this->transEsc('confirm_dialog_yes') ?></a></li>
@@ -32,7 +32,7 @@
           </ul>
         </div>
         <div class="btn-group">
-          <input id="cancelAll" name="cancelAll" type="submit" value="<?=$this->transEsc("ill_request_cancel_all") ?>" class="btn btn-default dropdown-toggle" data-toggle="dropdown"/>
+          <input id="cancelAll" name="cancelAll" type="submit" value="<?=$this->transEsc("ILL::request_cancel_all") ?>" class="btn btn-default dropdown-toggle" data-toggle="dropdown"/>
           <ul class="dropdown-menu">
             <li class="disabled"><a><?=$this->transEsc("confirm_ill_request_cancel_all_text") ?></a></li>
             <li><a href="#" onClick="$('#cancelConfirm').val(1);$('#submitType').attr('name','cancelAll');$(this).parents('form').submit(); return false;"><?=$this->transEsc('confirm_dialog_yes') ?></a></li>
@@ -152,16 +152,16 @@
               <div class="text-success"><?=$this->transEsc("request_in_transit") . (is_string($ilsDetails['in_transit']) ? ': ' . $this->transEsc('institution_' . $ilsDetails['in_transit'], [], $ilsDetails['in_transit']) : '') ?></div>
             <?php endif; ?>
             <?php if (isset($ilsDetails['processed']) && $ilsDetails['processed']): ?>
-              <div class="text-success"><?=$this->transEsc("ill_request_processed") . (is_string($ilsDetails['processed']) ? ': ' . $ilsDetails['processed'] : '') ?></div>
+              <div class="text-success"><?=$this->transEsc("ILL::request_processed") . (is_string($ilsDetails['processed']) ? ': ' . $ilsDetails['processed'] : '') ?></div>
             <?php endif; ?>
             <?php if (isset($ilsDetails['available']) && $ilsDetails['available']): ?>
-              <div class="text-success"><?=$this->transEsc("ill_request_available") ?></div>
+              <div class="text-success"><?=$this->transEsc("ILL::request_available") ?></div>
             <?php endif; ?>
             <?php if (isset($ilsDetails['canceled']) && $ilsDetails['canceled']): ?>
-              <div class="text-success"><?=$this->transEsc("ill_request_canceled") . (is_string($ilsDetails['canceled']) ? ': ' . $ilsDetails['canceled'] : '') ?></div>
+              <div class="text-success"><?=$this->transEsc("ILL::request_canceled") . (is_string($ilsDetails['canceled']) ? ': ' . $ilsDetails['canceled'] : '') ?></div>
             <?php endif; ?>
             <?php if (isset($ilsDetails['cancel_link'])): ?>
-              <p><a href="<?=$this->escapeHtmlAttr($ilsDetails['cancel_link']) ?>"><?=$this->transEsc("ill_request_cancel") ?></a></p>
+              <p><a href="<?=$this->escapeHtmlAttr($ilsDetails['cancel_link']) ?>"><?=$this->transEsc("ILL::request_cancel") ?></a></p>
             <?php endif; ?>
           </div>
           <?php if ($thumbnail && $thumbnailAlignment == 'right'): ?>

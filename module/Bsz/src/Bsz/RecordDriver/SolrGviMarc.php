@@ -1164,25 +1164,25 @@ class SolrGviMarc extends SolrMarc implements Definition
         foreach ($parent as $k => $item) {
             $ill_status = '';
             switch ($item['availability']) {
-                case 'a': $ill_status = 'ill_status_a';
+                case 'a': $ill_status = 'ILL::status_a';
                      break;
-                case 'b': $ill_status = 'ill_status_b';
+                case 'b': $ill_status = 'ILL::status_b';
                      break;
-                case 'c': $ill_status = 'ill_status_c';
+                case 'c': $ill_status = 'ILL::status_c';
                      break;
-                case 'd': $ill_status = 'ill_status_d';
+                case 'd': $ill_status = 'ILL::status_d';
                      break;
-                case 'e': $ill_status = 'ill_status_e';
+                case 'e': $ill_status = 'ILL::status_e';
                      break;
                 case 'n':
                 case 'N':
-                     $ill_status = 'ill_status_N';
+                     $ill_status = 'ILL::status_N';
                      break;
                 case 'l':
                 case 'L':                     
-                     $ill_status = 'ill_status_L';
+                     $ill_status = 'ILL::status_L';
                      break;                 
-                default: $ill_status = 'ill_status_d';
+                default: $ill_status = 'ILL::status_d';
             }
             $item['availability'] = $ill_status;
             $return[] = $item;

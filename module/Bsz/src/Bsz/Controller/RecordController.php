@@ -164,11 +164,11 @@ class RecordController extends \VuFind\Controller\RecordController
                     $success = $this->parseResponse($message);    
 
                 } catch (\Exception $ex) {
-                    $this->flashMessenger()->addErrorMessage('ill_request_error_technical');
+                    $this->flashMessenger()->addErrorMessage('request_error_technical');
                     $this->logError($params['Sigel'].': Error while parsing HTML response from ZFL server');
                 }
             } else { // wrong credentials
-                $this->flashMessenger()->addErrorMessage('ill_request_error_blocked');
+                $this->flashMessenger()->addErrorMessage('request_error_blocked');
                 $this->logError($params['Sigel'].': ILL request blocked. Checkauth failed');
                 $success = false;
             }
@@ -321,11 +321,11 @@ class RecordController extends \VuFind\Controller\RecordController
 
             } catch (\Exception $ex) {
                 $this->logError($params['Sigel'].': Error while parsing XML'.$ex->getMessage());
-                $this->flashMessenger()->addErrorMessage('ill_request_error_technical');
+                $this->flashMessenger()->addErrorMessage('request_error_technical');
             }
             $status = (isset($xml->status) && $xml->status == 'FLOK');            
         } else {
-            $this->flashMessenger()->addErrorMessage('ill_request_error_blocked');
+            $this->flashMessenger()->addErrorMessage('request_error_blocked');
             $this->logError('ILL request blocked. Sigel not found ');
             $status = false;
         }
@@ -347,7 +347,7 @@ class RecordController extends \VuFind\Controller\RecordController
         if ((bool)preg_match('/Bestell-Id:\s*(\d*)/', $html->textContent, $id) === true ) {
             $this->orderId = $id[1];
             // Order is successfull
-            $this->flashMessenger()->addSuccessMessage('ill_request_submit_ok');
+            $this->flashMessenger()->addSuccessMessage('request_submit_ok');
             return true;
         } else {
             // order not successfull - disable error reporting because 

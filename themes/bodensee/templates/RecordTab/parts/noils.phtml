@@ -21,7 +21,7 @@
     <dd><?=$this->escapeHtml($row['storage'])?></dd>
 <? endif; ?>        
 <? if (!empty($row['availability'])): ?>
-    <dt><?=$this->transEsc('ill_indicator')?>:</dt>
+    <dt><?=$this->transEsc('ILL::indicator')?>:</dt>
     <dd><?=$this->transEsc($row['availability'])?></dd>
 <? endif; ?>
 <? if (!empty($row['notes'])): ?>

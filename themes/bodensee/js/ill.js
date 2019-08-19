@@ -31,7 +31,7 @@ function illFormLogic() {
             if ($('.flash-message').length === 0) {
                 $('#form-ill').prepend($('<div>', {
                     class: 'flash-message alert alert-danger',
-                    text: VuFind.translate('ill_form_error')
+                    text: VuFind.translate('ILL::form_error')
                 }));
             }
         }
@@ -115,7 +115,7 @@ function appendValidator() {
             costs: function($el) {
                 var costs = $el.val();
                 if((costs < 8 && costs > 0) || costs < 0 ) {
-                    return VuFind.translate('ill_costs_error');
+                    return VuFind.translate('ILL::costs_error');
                 }
             },
             ejahr: function($el) {
@@ -134,7 +134,7 @@ function appendValidator() {
 function validateYear($el) {1
     var year = $el.val();
     if (!/^\d\d\d\d$/g.test(year)) {
-        return VuFind.translate('ill_error_year')
+        return VuFind.translate('ILL::error_year')
     }
 }
 

@@ -1,11 +1,11 @@
 <?
-  $this->headTitle($this->translate('ill_request_title'));
+  $this->headTitle($this->translate('ILL::request_title'));
   $this->headScript()->appendFile("vendor/bootstrap-datepicker.js");   
   $this->headScript()->appendFile("vendor/bootstrap-datepicker.".$this->layout()->userLang.".min.js");    
   $this->headScript()->appendFile("ill.js");     
 
   $this->layout()->breadcrumbs = '<li>' . $this->searchMemory()->getLastSearchLink($this->transEsc('Search'), '', '</li> ')
-    . '<li class="active">' . $this->transEsc('ill_request_title') . '</li>';
+    . '<li class="active">' . $this->transEsc('ILL::request_title') . '</li>';
   $collapse = 'panel-collapse collapse';
   // avoid notices when using free form
   $params = !isset($params) ? [] : $params;
@@ -24,8 +24,8 @@
     <noscript><p class="alert alert-danger"><?=$this->transEsc('Please enable JavaScript.')?></p></noscript>    
     <?=$this->flashmessages()?>
     <? if ($success && !empty($this->orderId) && $this->orderId > 0):?>
-    <p><?=$this->transEsc('ill_request_submit_ok_text')?><strong><?=$this->escapeHtml($this->orderId)?></strong></p>
-    <p><?=$this->transEsc('ill_request_submit_ok_text_2')?></p>
+    <p><?=$this->transEsc('ILL::request_submit_ok_text')?><strong><?=$this->escapeHtml($this->orderId)?></strong></p>
+    <p><?=$this->transEsc('ILL::request_submit_ok_text_2')?></p>
     <? endif; ?>
     <? if (!isset($success) || !$success): ?>
     <form class="<?=$type?> form-horizontal" id="form-ill" action="<?=$this->recordLink()->getUrl($this->driver)?>/ILLForm" method="POST" role="form">
@@ -63,7 +63,7 @@
                 <div class="col-sm-1 col-xs-2">
                     <input type="checkbox" required="true" class="" id="agree-commercial-use" name="agree-commerial-use"/>
                 </div>
-                <label class="control-label col-xs-10 col-sm-11" for="agree-commercial-use">* <?=$this->transEsc('ill_commercial_use')?></label>
+                <label class="control-label col-xs-10 col-sm-11" for="agree-commercial-use">* <?=$this->transEsc('ILL::commercial_use')?></label>
             </div>
             <div class="form-group form-group-sm"> 
                 <div class="col-sm-12">

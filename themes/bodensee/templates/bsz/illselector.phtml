@@ -4,7 +4,7 @@
 ?>
 <div class="jumbotron">
     <? if($this->client()->isIsilSession() && !$this->client()->hasIsilSession()): ?>
-          <p><?=$this->translate('ill_select_library')?></p>
+          <p><?=$this->translate('ILL::select_library')?></p>
     <? endif; ?>
     <form class="form-horizontal" method="POST">
         <div class="input-group">

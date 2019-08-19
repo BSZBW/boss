@@ -21,7 +21,7 @@
             <span for="ill-copy"><?=$this->transEsc('paperdata')?></span>
         </div>
         <div class="col-sm-6 col-sm-offset-6 col-xs-8 col-xs-offset-4">
-            <span class="help-block"><?=$this->transEsc('ill_help_copie_rent')?></span>            
+            <span class="help-block"><?=$this->transEsc('ILL::help_copie_rent')?></span>            
         </div>
     </div>    
     <div class="form-group form-group-sm">
@@ -104,12 +104,12 @@
         <input type="checkbox" class="" id="ill-copy" name="Kopie" <? if (isset($params['Kopie'])):?>checked=""<? endif; ?>/>
     </div>
 </div>
-<? if (!$this->client()->is('ill_no_cost')): ?>
+<? if (!$this->client()->is('ILL::no_cost')): ?>
 <div class=" form-group form-group-sm">
     <label class="control-label col-sm-<?=$labelSize?>" for="ill-costs"><?=$this->transEsc('costs')?>*</label>
     <div class="col-sm-<?=$inputSize?>">
-        <input type="number" class="form-control" id="ill-costs" required="true" min="0" max="30" value="<?=isset($params['MaxKostenKopie']) ? $params['MaxKostenKopie'] : 8 ?>" name="MaxKostenKopie" data-costs="true" data-error="<?=$this->transEsc('ill_costs_error')?>" style="max-width: 6em;"/>
-        <span class="help-block with-errors"><?=$this->transEsc('ill_help_costs')?></span>
+        <input type="number" class="form-control" id="ill-costs" required="true" min="0" max="30" value="<?=isset($params['MaxKostenKopie']) ? $params['MaxKostenKopie'] : 8 ?>" name="MaxKostenKopie" data-costs="true" data-error="<?=$this->transEsc('ILL::costs_error')?>" style="max-width: 6em;"/>
+        <span class="help-block with-errors"><?=$this->transEsc('ILL::help_costs')?></span>
     </div>
 </div>
 <? endif; ?>
