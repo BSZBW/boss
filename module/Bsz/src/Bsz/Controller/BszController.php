@@ -30,38 +30,12 @@ class BszController extends \VuFind\Controller\AbstractBase {
     /**
      * Write isil into Session 
      */
-    public function saveIsilAction() {        
+    public function saveIsilAction()
+    {        
+        /**
+         * TODO: Use the new AjaxHandler here and just do the redirect here
+         */
       
-        $isilsRoute = explode(',', $this->params()->fromRoute('isil'));       
-        $isilsGet = (array)$this->params()->fromQuery('isil');
-        $isils = array_merge($isilsRoute, $isilsGet);
-
-        if(!is_array($isils)) {
-            $isils = (array)$isils;
-        }
-        foreach ($isils as $key => $isil) {
-            if (strlen($isil) < 1) {
-                unset($isils[$key]);
-            } 
-        }
-        if (count($isils) == 0) {
-            throw new \Bsz\Exception('parameter isil missing');
-        }
-        if (count($isils) > 0) {
-            $container = new Container(
-                'fernleihe', $this->serviceLocator->get('VuFind\SessionManager')
-            );
-            $container->offsetSet('isil', $isils);     
-            $uri= $this->getRequest()->getUri();
-            $cookie = new \Zend\Http\Header\SetCookie(
-                    'isil', 
-                    implode(',', $isils), 
-                    time() + 14 * 24* 60 * 60, 
-                    '/',
-                    $uri->getHost() );
-            $header = $this->getResponse()->getHeaders();
-            $header->addHeader($cookie);
-        } 
         $referer = $this->params()->fromQuery('referer');
         // try to get referer from param
         if (empty($referer)) {
