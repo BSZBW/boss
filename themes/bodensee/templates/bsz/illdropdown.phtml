@@ -3,13 +3,13 @@
 <a class="dropdown-toggle btn library-toggle" id="libraryselector-<?=$rand?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" title="<?=implode(', ', $this->client()->getIsils())?>">    
     <span class="caret"></span><?=$this->transEsc('Bibliothek')?>
 </a>
-    <ul class="dropdown-menu column-2" aria-labelledby="libraryselector-<?=$rand?>" role="menu">
+    <ul class="dropdown-menu column-2 library-selector" aria-labelledby="libraryselector-<?=$rand?>" role="menu">
         <li role="presentation" class="dropdown-header"><?=$this->escapeHtml('Baden-Württemberg')?></li>
         <? foreach ($this->libraries()->getByCountryId(\Bsz\Config\Libraries::ID_BAWUE) as $library): ?>
         <? $isil = $library->getIsil();
            $url = $this->url('saveisil',['isil' => $isil] )?>
         <li role="none presentation" <? if (in_array($isil, $this->client()->getIsils())): ?>class="active"<? endif;?>>
-            <a role="menuitem" href="<?=$this->escapeHtmlAttr($url)?>"><?=$this->escapeHtml($this->truncate($library->getName(), $truncate))?></a>
+            <a role="menuitem" href="<?=$this->escapeHtmlAttr($url)?>"  data-isil="<?=$this->escapeHtmlAttr($isil)?>"><?=$this->escapeHtml($this->truncate($library->getName(), $truncate))?></a>
         </li>
         <? endforeach; ?>
         <li role="none presentation" class="dropdown-header"><?=$this->escapeHtml('Saarland')?></li>
@@ -17,7 +17,7 @@
             <? $isil = $library->getIsil();
             $url = $this->url('saveisil',['isil' => $isil] )?>
             <li role="presentation" <? if (in_array($isil, $this->client()->getIsils())): ?>class="active"<? endif;?>>
-                <a role="menuitem" href="<?=$this->escapeHtmlAttr($url)?>"><?=$this->escapeHtml($this->truncate($library->getName(), $truncate))?></a>
+                <a role="menuitem" href="<?=$this->escapeHtmlAttr($url)?>"  data-isil="<?=$this->escapeHtmlAttr($isil)?>"><?=$this->escapeHtml($this->truncate($library->getName(), $truncate))?></a>
             </li>
         <? endforeach; ?>
         <li role="none presentation" class="dropdown-header"><?=$this->escapeHtml('Sachsen')?></li>
@@ -25,7 +25,7 @@
             <?  $isil = $library->getIsil();
                 $url = $this->url('saveisil',['isil' => $isil] )?>
             <li role="presentation" <? if (in_array($isil, $this->client()->getIsils())): ?>class="active"<? endif;?>>
-                <a role="menuitem" href="<?=$this->escapeHtmlAttr($url)?>"><?=$this->escapeHtml($this->truncate($library->getName(), $truncate))?></a>
+                <a role="menuitem" href="<?=$this->escapeHtmlAttr($url)?>"  data-isil="<?=$this->escapeHtmlAttr($isil)?>"><?=$this->escapeHtml($this->truncate($library->getName(), $truncate))?></a>
             </li>
         <? endforeach; ?>
    

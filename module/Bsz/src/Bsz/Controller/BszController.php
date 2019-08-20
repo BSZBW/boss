@@ -32,10 +32,8 @@ class BszController extends \VuFind\Controller\AbstractBase {
      */
     public function saveIsilAction()
     {        
-        /**
-         * TODO: Use the new AjaxHandler here and just do the redirect here
-         */
-      
+        die(__CLASS__ . '::' . __METHOD__);
+
         $referer = $this->params()->fromQuery('referer');
         // try to get referer from param
         if (empty($referer)) {

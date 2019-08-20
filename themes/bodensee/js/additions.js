@@ -338,6 +338,23 @@ function typeaheadLibraries() {
     
 }
 
+function librarySelect() {
+    $('.library-selector a').click(function(e) {
+        var isil = $(this).attr('data-isil');
+        $.ajax({
+                url:   VuFind.path + '/AJAX/JSON?method=saveIsil&isil='+isil,
+                method: 'GET',
+                success: function() {
+                    console.log('hier');
+                    // reload, so the saved info appears in HTML
+                    window.location.reload(true);               
+                }
+        });
+        e.preventDefault();
+        
+    });
+}
+
 /*
 * this is executed after site is loaded
 * main loop
@@ -351,6 +368,7 @@ $(document).ready(function() {
     if ($.fn.typeahead) {
         typeaheadLibraries();      
     }
+    librarySelect();
     keyboardShortcuts();
     remoteModal();
     duplicates();
