@@ -50,6 +50,10 @@ class Factory {
     {
         return new SaveIsil(
             $container->get('Bsz\Config\Libraries'),
+            new \Zend\Session\Container(
+                'fernleihe',
+                $container->get(\Zend\Session\SessionManager::class)
+            ),
             $container->get('Response'),
             $container->get('Request')->getUri()->getHost()
         );

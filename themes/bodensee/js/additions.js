@@ -328,7 +328,8 @@ function typeaheadLibraries() {
                 url: baseurl + 'saveIsil&isil='+item.id,
                 method: 'GET',
                 success: function() {
-                    window.location.reload(true);                      
+                    // reload, so the saved info appears in HTML
+                    window.location.reload(true);               
                 }
             });
         }
