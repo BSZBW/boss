@@ -12,7 +12,7 @@ use \Zend\Mvc\Controller\Plugin\Params,
     Bsz\Config\Libraries,
     \Zend\Session\Container,
     \Zend\Http\Response,
-    \Zend\Http\Header\Setcookie;
+    \Zend\Http\Header\SetCookie;
 
 
 /**
@@ -39,11 +39,15 @@ class SaveIsil extends \VuFind\AjaxHandler\AbstractBase
      */
     protected $response;
     
+    protected $host;
     
-    public function __construct(Libraries $libraries, Response $response ) 
+    
+    public function __construct(Libraries $libraries, Response $response, $host) 
     {
         $this->libraries = $libraries;
         $this->response = $response;
+        $this->host = $host;
+        
         
     }
     
@@ -62,13 +66,12 @@ class SaveIsil extends \VuFind\AjaxHandler\AbstractBase
         if (count($isils) > 0) {
             $container = new Container('fernleihe');
             $container->offsetSet('isil', $isils);     
-            $uri= $this->getRequest()->getUri();
-            $cookie = new Setcookie(
+            $cookie = new SetCookie(
                     'isil', 
                     implode(',', $isils), 
                     time() + 14 * 24* 60 * 60, 
                     '/',
-                    $uri->getHost() );
+                    $thi->host);
             $header = $this->response->getHeaders();
             $header->addHeader($cookie);
         } 

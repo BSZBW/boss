@@ -8,8 +8,7 @@
 
 namespace Bsz\AjaxHandler;
 
-use Interop\Container\ContainerInterface,
-    Zend\ServiceManager\Factory\FactoryInterface;
+use Interop\Container\ContainerInterface;
 /**
  * Factory for BSZ AjaxHandlers
  *
@@ -23,9 +22,8 @@ class Factory {
      * @return \Bsz\AjaxHandler\LibrariesTypeahead
      */
     
-    public function getLibrariesTypeahead(ContainerInterface $container)
+    public static function getLibrariesTypeahead(ContainerInterface $container)
     {
-        
         return new LibrariesTypeahead(
             $container->get('Bsz\Config\Libraries')
         );
@@ -37,9 +35,9 @@ class Factory {
      * @return \Bsz\AjaxHandler\Dedupcheckbox
      */
     
-    public function getDedupCheckbox(ContainerInterface $container)
+    public static function getDedupCheckbox(ContainerInterface $container)
     {
-        return new Dedupcheckbox(
+        return new DedupCheckbox(
             $container->get('Bsz\Config\Dedup')
         );
     }
@@ -48,11 +46,12 @@ class Factory {
      * @param ContainerInterface $container
      * @return \Bsz\AjaxHandler\SaveIsil
      */
-    public function getSaveIsil(ContainerInterface $container)
+    public static function getSaveIsil(ContainerInterface $container)
     {
         return new SaveIsil(
             $container->get('Bsz\Config\Libraries'),
-            $container->get('Response')
+            $container->get('Response'),
+            $container->get('Request')->getUri()->getHost()
         );
     }
     

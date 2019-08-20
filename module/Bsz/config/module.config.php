@@ -196,9 +196,9 @@ $config = [
             ],
             'ajaxhandler' => [
                 'factories' => [
-                     'Bsz\AjaxHandler\DedupCheckbox' => 'Bsz\AjaxHandler\Factory::getDedupCheckbox()',
-                     'Bsz\AjaxHandler\SaveIsil' => 'Bsz\AjaxHandler\Factory::getSaveIsil()',
-                     'Bsz\AjaxHandler\LibrariesTypeahead' => 'Bsz\AjaxHandler\Factory::getLibrariesTypeahead()',
+                     'Bsz\AjaxHandler\DedupCheckbox' =>      'Bsz\AjaxHandler\Factory::getDedupCheckbox',
+                     'Bsz\AjaxHandler\SaveIsil' =>           'Bsz\AjaxHandler\Factory::getSaveIsil',
+                     'Bsz\AjaxHandler\LibrariesTypeahead' => 'Bsz\AjaxHandler\Factory::getLibrariesTypeahead',
                     
                 ],
                 'aliases' => [

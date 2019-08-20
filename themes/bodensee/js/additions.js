@@ -250,7 +250,7 @@ function duplicates() {
            data: { 'status': status },
            success: function() {
                // reload the page 
-               location.reload();
+               window.location.reload(true);
            }
    
   })
@@ -306,37 +306,34 @@ function datepicker() {
 
 }
 
-function typeaheadLibraries() {
-    var url = VuFind.path + '/AJAX/JSON?method=librariesTypeahead&q=';
-    
-    if (typeof $.fn.typeahead !== 'undefined') {
-        $('.typeahead').typeahead({
-            source: function (val, process) {
-                return $.ajax({
-                    url: url+val,
-                    method: "GET",
-                    success: function(data) {
+function typeaheadLibraries() {    
+    var baseurl = VuFind.path + '/AJAX/JSON?method=';
+    $('.typeahead').typeahead({
+        source: function (val, process) {
+            return $.ajax({
+                url: baseurl+'librariesTypeahead&q='+val,
+                method: "GET",
+                success: function(data) {
 
-                        return process(data.data);
-                    },
-                    dataType: "json"
-                });
- 
-            },
-            items: 'all',        
-            afterSelect: function(item) {
-                var url2 = VuFind.path + '/Bsz/saveIsil/'+item.id;
-                $.ajax({
-                    url: url2,
-                    method: 'GET',
-                    success: function() {
-                        location.reload();                        
-                    }
-                });
-            }
-            
-        });
-    }
+                    return process(data.data);
+                },
+                dataType: "json"
+            });
+
+        },
+        items: 'all',        
+        afterSelect: function(item) {
+   
+            $.ajax({
+                url: baseurl + 'saveIsil&isil='+item.id,
+                method: 'GET',
+                success: function() {
+                    window.location.reload(true);                      
+                }
+            });
+        }
+
+    });    
     
 }
 
@@ -346,22 +343,24 @@ function typeaheadLibraries() {
 */
 
 $(document).ready(function() {
-  avoidEmptySearch();
-  externalLinks();
-  bootstrapTooltip();
-  modalPopup();
-  typeaheadLibraries();
-  keyboardShortcuts();
-  remoteModal();
-  duplicates();
-  showmore();
-  searchclear();
-  $('[data-toggle="popover"]').popover({
-      trigger: 'click focus'
-  });
-  if ($.fn.mark) {
-    performMark();      
-  }
-  openUrlTooltip();
-  checkAdvSearch();
+    avoidEmptySearch();
+    externalLinks();
+    bootstrapTooltip();
+    modalPopup();
+    if ($.fn.typeahead) {
+        typeaheadLibraries();      
+    }
+    keyboardShortcuts();
+    remoteModal();
+    duplicates();
+    showmore();
+    searchclear();
+    $('[data-toggle="popover"]').popover({
+        trigger: 'click focus'
+    });
+    if ($.fn.mark) {
+        performMark();      
+    }
+    openUrlTooltip();
+    checkAdvSearch();
 });
