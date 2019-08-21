@@ -314,23 +314,20 @@ function typeaheadLibraries() {
             return $.ajax({
                 url: baseurl+'librariesTypeahead&q='+val,
                 method: "GET",
+                dataType: 'json',  
                 success: function(data) {
-
                     return process(data.data);
-                },
-                dataType: "json"    
+                }
             });
 
         },
-        afterSelect: function(item) {
-   
+        afterSelect: function(item) {   
             $.ajax({
                 url: baseurl + 'saveIsil&isil='+item.id,
                 method: 'GET',
                 dataType: 'json',
                 success: function() {
-                    // reload, so the saved info appears in HTML
-                    window.location.reload(true);               
+                    window.location = VuFind.path;        
                 }
             });
         }
@@ -347,8 +344,7 @@ function librarySelect() {
                 method: 'GET',
                 dataType: 'json',                
                 success: function() {
-                    // reload, so the saved info appears in HTML
-                    window.location.reload(true);               
+                    window.location = VuFind.path;            
                 }
         });
         e.preventDefault();
