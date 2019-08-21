@@ -3,12 +3,12 @@
   
 ?>
 <? if ($this->client()->hasIsilSession()):?>
-<p><?=$this->transEsc('ILL::update_library')?> <button class="btn btn-info btn-xs" data-toggle="collapse" data-target="#library-typeahead"><?=$this->transEsc('button_change_library')?> <i class="fa fa-caret-down"></i></button></p>
+<p><?=$this->transEsc('ILL::update_library')?> <button class="btn btn-info btn-xs" data-toggle="collapse" data-target="#library-typeahead"><?=$this->transEsc('ILL::button_change_library')?> <i class="fa fa-caret-down"></i></button></p>
 <? endif; ?>
 <div class="well collapse<? if (!$this->client()->hasIsilSession()):?> in<?endif;?>" id="library-typeahead">
     <p><?=$this->translate('ILL::select_library')?></p>
     <form class="form-horizontal" method="POST">
-            <input type="text" class="form-control typeahead" data-provide="typeahead" autocomplete="off" placeholder="<?=$this->transEsc('placeholder_typeahead')?>"/>     
+            <input type="text" class="form-control typeahead" data-provide="typeahead" autocomplete="off" placeholder="<?=$this->transEsc('ILL::placeholder_typeahead')?>"/>     
 
     </form>      
 </div>
