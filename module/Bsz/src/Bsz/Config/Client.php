@@ -58,8 +58,8 @@ class Client extends \Zend\Config\Config
      * @return string
      */
     public function __toString() {
-        $isils = $this->getIsils();
-        return array_shift($isils);
+        $isils = $this->getIsils();        
+        return implode('',$isils);
     }
     
     public function appendContainer(Container $container) {
