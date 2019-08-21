@@ -52,6 +52,16 @@ class Client extends \Zend\Config\Config
      */
     protected $container;
     
+    /**
+     * This method is used if object is casted to string
+     * 
+     * @return string
+     */
+    public function __toString() {
+        $isils = $this->getIsils();
+        return array_shift($isils);
+    }
+    
     public function appendContainer(Container $container) {
         $this->container = $container;
     }

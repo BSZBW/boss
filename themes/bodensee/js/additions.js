@@ -327,6 +327,7 @@ function typeaheadLibraries() {
             $.ajax({
                 url: baseurl + 'saveIsil&isil='+item.id,
                 method: 'GET',
+                dataType: 'json',
                 success: function() {
                     // reload, so the saved info appears in HTML
                     window.location.reload(true);               
@@ -344,8 +345,8 @@ function librarySelect() {
         $.ajax({
                 url:   VuFind.path + '/AJAX/JSON?method=saveIsil&isil='+isil,
                 method: 'GET',
+                dataType: 'json',                
                 success: function() {
-                    console.log('hier');
                     // reload, so the saved info appears in HTML
                     window.location.reload(true);               
                 }
