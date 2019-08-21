@@ -257,7 +257,8 @@ class Libraries extends TableGateWay
         $select = $sql->select()
             ->from('libraries')
             ->order('libraries.name')
-            ->order('isil');
+            ->order('name')
+            ->limit(20);
         $select->where->
                 and
                 ->equalTo('is_ill_active', 1)

@@ -309,6 +309,7 @@ function datepicker() {
 function typeaheadLibraries() {    
     var baseurl = VuFind.path + '/AJAX/JSON?method=';
     $('.typeahead').typeahead({
+        items: 'all',        
         source: function (val, process) {
             return $.ajax({
                 url: baseurl+'librariesTypeahead&q='+val,
@@ -317,11 +318,10 @@ function typeaheadLibraries() {
 
                     return process(data.data);
                 },
-                dataType: "json"
+                dataType: "json"    
             });
 
         },
-        items: 'all',        
         afterSelect: function(item) {
    
             $.ajax({
