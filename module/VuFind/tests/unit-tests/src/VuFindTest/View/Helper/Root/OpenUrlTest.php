@@ -305,9 +305,7 @@ class OpenUrlTest extends ViewHelperTestCase
     protected function getOpenUrl($rules = null, $config = [], $mockContext = null)
     {
         if (null === $rules) {
-            $json = __DIR__
-                . '/../../../../../../../../../config/vufind/OpenUrlRules.json';
-            $rules = json_decode(file_get_contents($json), true);
+            $rules = $this->getFixture('defaults.json');
         }
         if (null === $mockContext) {
             $mockContext = $this->getMockContext();
