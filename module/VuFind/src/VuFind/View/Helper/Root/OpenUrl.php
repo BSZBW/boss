@@ -31,7 +31,6 @@ use Exception;
 use VuFind\RecordDriver;
 use VuFind\Resolver\Connection;
 use VuFind\Resolver\Driver\PluginManager;
-use Zend\View\Helper\AbstractHelper;
 
 /**
  * OpenUrl view helper
@@ -42,12 +41,12 @@ use Zend\View\Helper\AbstractHelper;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
-class OpenUrl extends AbstractHelper
+class OpenUrl extends \Zend\View\Helper\AbstractHelper
 {
     /**
      * Context helper
      *
-     * @var Context
+     * @var \VuFind\View\Helper\Root\Context
      */
     protected $context;
 

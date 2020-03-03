@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection Annotator */
+
 /**
  * Local database-driven URL shortener.
  *
