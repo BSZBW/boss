@@ -31,6 +31,9 @@ use Exception;
 use PHPUnit\Framework\TestCase;
 use VuFind\Db\Table\Shortlinks;
 use VuFind\UrlShortener\Database;
+use Zend\Db\Adapter\Adapter;
+use Zend\Db\Adapter\Driver\ConnectionInterface;
+use Zend\Db\Adapter\Driver\DriverInterface;
 use Zend\Db\ResultSet;
 
 /**
@@ -48,19 +51,19 @@ class DatabaseTest extends TestCase
     /**
      * Get the object to test.
      *
-     * @param object $table Database table object/mock
+     * @param  object $table Database table object/mock
      *
      * @return Database
      */
     public function getShortener($table)
     {
-        return new Database('http://foo', $table);
+        return new Database('http://foo', $table, 'RAnD0mVuFindSa!t');
     }
 
     /**
      * Get the mock table object.
      *
-     * @param array $methods Methods to mock.
+     * @param  array $methods Methods to mock.
      *
      * @return object
      */
@@ -72,11 +75,48 @@ class DatabaseTest extends TestCase
             ->getMock();
     }
 
+    /**
+     * Test that the shortener works correctly under "happy path."
+     *
+     * @return void
+     *
+     * @throws Exception
+     */
     public function testShortener()
     {
-        $table = $this->getMockTable(['insert', 'select']);
+        $connection = $this->getMockBuilder(ConnectionInterface::class)
+            ->setMethods(
+                [
+                    'beginTransaction', 'commit', 'connect', 'getResource',
+                    'isConnected', 'getCurrentSchema', 'disconnect', 'rollback',
+                    'execute', 'getLastGeneratedValue'
+                ]
+            )->disableOriginalConstructor()
+            ->getMock();
+        $connection->expects($this->once())->method('beginTransaction');
+        $connection->expects($this->once())->method('commit');
+        $driver = $this->getMockBuilder(DriverInterface::class)
+            ->setMethods(
+                [
+                    'getConnection', 'getDatabasePlatformName', 'checkEnvironment',
+                    'createStatement', 'createResult', 'getPrepareType',
+                    'formatParameterName', 'getLastGeneratedValue'
+                ]
+            )->disableOriginalConstructor()
+            ->getMock();
+        $driver->expects($this->once())->method('getConnection')
+            ->will($this->returnValue($connection));
+        $adapter = $this->getMockBuilder(Adapter::class)
+            ->setMethods(['getDriver'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $adapter->expects($this->once())->method('getDriver')
+            ->will($this->returnValue($driver));
+        $table = $this->getMockTable(['insert', 'select', 'getAdapter']);
         $table->expects($this->once())->method('insert')
             ->with($this->equalTo(['path' => '/bar', 'hash' => 'a1e7812e2']));
+        $table->expects($this->once())->method('getAdapter')
+            ->will($this->returnValue($adapter));
         $mockResults = $this->getMockBuilder(ResultSet::class)
             ->setMethods(['count', 'current'])
             ->disableOriginalConstructor()
@@ -94,6 +134,7 @@ class DatabaseTest extends TestCase
      * Test that resolve is supported.
      *
      * @return void
+     *
      * @throws Exception
      */
     public function testResolution()
@@ -120,11 +161,11 @@ class DatabaseTest extends TestCase
      * @return void
      *
      * @throws Exception
-     * @expectedException        Exception
-     * @expectedExceptionMessage Shortlink could not be resolved: abcd12?
      */
     public function testResolutionOfBadInput()
     {
+        $this->expectExceptionMessage('Shortlink could not be resolved: abcd12?');
+
         $table = $this->getMockTable(['select']);
         $mockResults = $this->getMockBuilder(ResultSet::class)
             ->setMethods(['count'])
