@@ -18,7 +18,8 @@ need to set up symlinks to `config` and `local` dirs.
 
 * `git remote add vufind https://github.com/vufind-org/vufind`
 * Remove `config` and `local` symlinks temporarily
-* `git pull vufind master`
+* `git fetch -a vufind` to get all the branches and tags known to git
+* `git pull vufind <tag> or <branch>`
 * resolve conflicts if any
 * look for new config options with `diff` and move them to our own repo. 
 * delete the `local` and `config` dirs and restore the Symlinks again
