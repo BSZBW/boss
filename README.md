@@ -14,20 +14,14 @@ Because we maintain many installations, we needed store the configurations in Gi
 too. For security reasons, the configs are in their own private repository and you 
 need to set up symlinks to `config` and `local` dirs. 
 
-See our [online installation documentation](https://vufind.org/wiki/installation) 
-for step-by-step instructions for installing from packaged releases to popular 
-platforms.
+## Upgrade
 
-VuFind's [packaged releases](http://vufind-org.github.io/vufind/downloads.html) have
-all dependencies included. If you are installing directly from a Git checkout, 
-you will need to load these dependencies manually using the [Composer](https://getcomposer.org) tool by running `composer install` from the VuFind home directory.
-
-
-## Documentation and Support
-The VuFind community maintains a detailed [wiki](http://vufind.org/wiki) containing
- information on using and customizing the software. The VuFind website also lists [sources of community and commercial support](http://vufind-org.github.io/vufind/support.html).
+* `git remote add vufind https://github.com/vufind-org/vufind`
+* Remove `config` and `local` symlinks temporarily
+* `git pull vufind master`
+* resolve conflicts if any
+* look for new config options with `diff` and move them to our own repo. 
+* delete the `local` and `config` dirs and restore the Symlinks again
+* Run unit tests
 
 
-## Contributing
-See our [developers handbook](https://vufind.org/wiki/development) for more
-information.
