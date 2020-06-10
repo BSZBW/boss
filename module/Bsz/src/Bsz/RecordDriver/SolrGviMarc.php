@@ -1050,7 +1050,7 @@ class SolrGviMarc extends SolrMarc implements Definition
     public function getLocalHoldings()
     {
         $holdings = [];
-        $f924 = $this->getField924(false, true);
+        $f924 = $this->getField924(true);
         $isils = $this->mainConfig->getIsilAvailability();
 
         // Building a regex pattern

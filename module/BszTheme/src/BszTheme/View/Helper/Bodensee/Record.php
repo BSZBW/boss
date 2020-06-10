@@ -343,7 +343,7 @@ class Record extends \VuFind\View\Helper\Root\Record
             // check the found records for local available isils
             $isils = [];
             foreach ($parallel->getResults() as $record) {
-                $f924 = $record->getField924(true);
+                $f924 = $record->getField924();
                 $recordIsils = array_keys($f924);
                 $isils = array_merge($isils, $recordIsils);
             }

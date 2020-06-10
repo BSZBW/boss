@@ -234,13 +234,13 @@ class Holding
                 $libraries = [];
                 $record instanceof \Bsz\RecordDriver\SolrGviMarc;
                 $ppn = $record->getPPN();
-                $f924 = $record->getField924(true, true);
+                $f924 = $record->getField924(true);
 
                 // iterate through all found 924 entries
                 // ISILs are unified here - information is being dropped!
-                foreach ($f924 as $isil => $field) {
+                foreach ($f924 as $field) {
                     $libraries[] = [
-                        'isil' => $isil,
+                        'isil' => $field['isil'],
                         'callnumber' => $field['g'] ?? '',
                         'issue' => $field['z'] ?? ''
                     ];

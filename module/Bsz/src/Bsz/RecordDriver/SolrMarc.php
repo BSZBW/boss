@@ -56,11 +56,12 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
      * @param type $recordConfig
      * @param type $searchSettings
      */
-    public function __construct(FormatMapper $mapper,
-                                Client $mainConfig = null,
-                                $recordConfig = null,
-                                $searchSettings = null)
-    {
+    public function __construct(
+        FormatMapper $mapper,
+        Client $mainConfig = null,
+        $recordConfig = null,
+        $searchSettings = null
+    ) {
         parent::__construct($mainConfig, $recordConfig, $searchSettings);
         $this->mapper = $mapper;
     }
@@ -453,14 +454,12 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
     /**
      * Get Content of 924 as array: isil => array of subfields
      *
-     * @param boolean $isilAsKey uses ISILs as array keys - be carefull,
-     * information is dropped
      * @param boolean $recurringSubfields allow recurring subfields
      *
      * @return array
-     *
+     * @throws File_MARC_Exception
      */
-    public function getField924($isilAsKey = true, $recurringSubfields = false)
+    public function getField924($recurringSubfields = false)
     {
         $f924 = $this->getMarcRecord()->getFields('924');
         $result = [];
@@ -470,8 +469,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
             $isil = null;
             foreach ($subfields as $subfield) {
                 if ($subfield->getCode() == 'b') {
-                    $isil = trim($subfield->getData());
-                    $tmpSubfields[$subfield->getCode()] = $isil;
+                    $tmpSubfields['isil'] = trim($subfield->getData());
                 } elseif ($subfield->getCode() == 'd') {
                     $ill_status = '';
                     $ill_icon = '';
@@ -483,7 +481,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
                             $ill_icon = 'fa-copy';
                             break;
                         case 'c': $ill_status = 'ILL::status_c';
-                            $ill_icon = 'fa-check text-success    ';
+                            $ill_icon = 'fa-check text-success';
                             break;
                         case 'd': $ill_status = 'ILL::status_d';
                             $ill_icon = 'fa-times text-danger';
@@ -515,11 +513,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
                     $tmpSubfields[$subfield->getCode()] .= ' | ' . $subfield->getData();
                 }
             }
-            if (isset($isil) && $isilAsKey) {
-                $result[$isil] = $tmpSubfields;
-            } else {
-                $result[] = $tmpSubfields;
-            }
+            $result[] = $tmpSubfields;
         }
         return $result;
     }
@@ -572,7 +566,9 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
                 // When indexing over HTTP, SolrMarc may use entities instead of
                 // certain control characters; we should normalize these:
                 $marc = str_replace(
-                    ['#29;', '#30;', '#31;'], ["\x1D", "\x1E", "\x1F"], $marc
+                    ['#29;', '#30;', '#31;'],
+                    ["\x1D", "\x1E", "\x1F"],
+                    $marc
                 );
                 $marc = new File_MARC($marc, File_MARC::SOURCE_STRING);
             }
