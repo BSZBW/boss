@@ -19,6 +19,7 @@
  */
 namespace Bsz\Controller;
 
+use Exception;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 
@@ -43,11 +44,13 @@ class Factory implements FactoryInterface
      * creating a service.
      * @throws ContainerException if any other error occurs
      */
-    public function __invoke(ContainerInterface $container, $requestedName,
+    public function __invoke(
+        ContainerInterface $container,
+        $requestedName,
         array $options = null
     ) {
         if (!empty($options)) {
-            throw new \Exception('Unexpected options sent to factory.');
+            throw new Exception('Unexpected options sent to factory.');
         }
         return new $requestedName($container);
     }
@@ -62,6 +65,21 @@ class Factory implements FactoryInterface
     public static function getRecordController(ContainerInterface $container)
     {
         return new RecordController(
+            $container,
+            $container->get('VuFind\Config')->get('config')
+        );
+    }
+    /**
+     * Construct the ILLRecordController.
+     *
+     * @param ContainerInterface $container Service manager.
+     *
+     * @return RecordController
+     */
+    public static function getILLRecordController(ContainerInterface $container)
+    {
+        die('ENDE2');
+        return new ILLRecordController(
             $container,
             $container->get('VuFind\Config')->get('config')
         );

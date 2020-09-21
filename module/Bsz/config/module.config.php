@@ -23,6 +23,7 @@ namespace Bsz\Module\Config;
 
 use Bsz\Controller\Factory;
 use Bsz\Route\RouteGenerator;
+use VuFind\RecordDriver\IlsAwareDelegatorFactory;
 
 $config = [
 
@@ -30,6 +31,7 @@ $config = [
         'factories' => [
             'Bsz\Controller\SearchController' => Factory::class,
             'Bsz\Controller\RecordController' => 'Bsz\Controller\Factory::getRecordController',
+            'Bsz\Controller\ILLRecordController' => 'Bsz\Controller\Factory::getILLRecordController',
             'Bsz\Controller\EdsrecordController' => Factory::class,
             'Bsz\Controller\MyResearchController' => Factory::class,
             'Bsz\Controller\HoldingController' => Factory::class,
@@ -43,11 +45,13 @@ $config = [
             'Shib' => 'Bsz\Controller\ShibController',
             'Bsz' => 'Bsz\Controller\BszController',
             'Test' => 'Bsz\Controller\TestController',
+            'ILLRecord' => 'Bsz\Controller\ILLRecord',
+
             // overwriting
-            'VuFind\Controller\SearchController'    => 'Bsz\Controller\SearchController',
-            'VuFind\Controller\RecordController'    => 'Bsz\Controller\RecordController',
-            'VuFind\Controller\EdsrecordController'    => 'Bsz\Controller\EdsrecordController',
-            'VuFind\Controller\MyResearchController'   => 'Bsz\Controller\MyResearchController'
+            'VuFind\Controller\SearchController' => 'Bsz\Controller\SearchController',
+            'VuFind\Controller\RecordController' => 'Bsz\Controller\RecordController',
+            'VuFind\Controller\EdsrecordController' => 'Bsz\Controller\EdsrecordController',
+            'VuFind\Controller\MyResearchController' => 'Bsz\Controller\MyResearchController'
         ]
     ],
     'router' => [
@@ -163,20 +167,20 @@ $config = [
                     'VuFind\RecordDriver\EDS'       => 'Bsz\RecordDriver\EDS',
                 ],
                 'delegators' => [
-                    'Bsz\RecordDriver\SolrMarc'        => [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
-                    'Bsz\RecordDriver\SolrGviMarc'      => [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
-                    'Bsz\RecordDriver\SolrFindexMarc'   => [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
-                    'Bsz\RecordDriver\SolrGviMarcDE627'=> [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
-                    'Bsz\RecordDriver\SolrGviMarcDE101' => [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
-                    'Bsz\RecordDriver\SolrGviMarcDE576' => [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
-                    'Bsz\RecordDriver\SolrGviMarcDE600' => [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
-                    'Bsz\RecordDriver\SolrGviMarcDE601' => [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
-                    'Bsz\RecordDriver\SolrGviMarcDE602' => [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
-                    'Bsz\RecordDriver\SolrGviMarcDE603' => [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
-                    'Bsz\RecordDriver\SolrGviMarcDE604' => [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
-                    'Bsz\RecordDriver\SolrGviMarcDE605' => [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
-                    'Bsz\RecordDriver\SolrGviMarcDE627' => [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
-                    'Bsz\RecordDriver\SolrGviMarcATOBV' => [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
+                    'Bsz\RecordDriver\SolrMarc' => [IlsAwareDelegatorFactory::class],
+                    'Bsz\RecordDriver\SolrGviMarc' => [IlsAwareDelegatorFactory::class],
+                    'Bsz\RecordDriver\SolrFindexMarc' => [IlsAwareDelegatorFactory::class],
+                    'Bsz\RecordDriver\SolrGviMarcDE627' => [IlsAwareDelegatorFactory::class],
+                    'Bsz\RecordDriver\SolrGviMarcDE101' => [IlsAwareDelegatorFactory::class],
+                    'Bsz\RecordDriver\SolrGviMarcDE576' => [IlsAwareDelegatorFactory::class],
+                    'Bsz\RecordDriver\SolrGviMarcDE600' => [IlsAwareDelegatorFactory::class],
+                    'Bsz\RecordDriver\SolrGviMarcDE601' => [IlsAwareDelegatorFactory::class],
+                    'Bsz\RecordDriver\SolrGviMarcDE602' => [IlsAwareDelegatorFactory::class],
+                    'Bsz\RecordDriver\SolrGviMarcDE603' => [IlsAwareDelegatorFactory::class],
+                    'Bsz\RecordDriver\SolrGviMarcDE604' => [IlsAwareDelegatorFactory::class],
+                    'Bsz\RecordDriver\SolrGviMarcDE605' => [IlsAwareDelegatorFactory::class],
+                    'Bsz\RecordDriver\SolrGviMarcDE627' => [IlsAwareDelegatorFactory::class],
+                    'Bsz\RecordDriver\SolrGviMarcATOBV' => [IlsAwareDelegatorFactory::class],
                 ]
             ],
             'recordtab' => [
@@ -267,6 +271,7 @@ $staticRoutes = [
 ];
 $recordRoutes = [
     'record' => 'Record',
+    'illrecord' => 'ILLRecord'
 ];
 
 $routeGenerator = new RouteGenerator();
