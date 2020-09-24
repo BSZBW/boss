@@ -179,7 +179,6 @@ $config = [
                     'Bsz\RecordDriver\SolrGviMarcDE603' => [IlsAwareDelegatorFactory::class],
                     'Bsz\RecordDriver\SolrGviMarcDE604' => [IlsAwareDelegatorFactory::class],
                     'Bsz\RecordDriver\SolrGviMarcDE605' => [IlsAwareDelegatorFactory::class],
-                    'Bsz\RecordDriver\SolrGviMarcDE627' => [IlsAwareDelegatorFactory::class],
                     'Bsz\RecordDriver\SolrGviMarcATOBV' => [IlsAwareDelegatorFactory::class],
                 ]
             ],
@@ -190,14 +189,12 @@ $config = [
                     'Bsz\RecordTab\Articles' => 'Bsz\RecordTab\Factory::getArticles',
                     'Bsz\RecordTab\Notes' => 'Bsz\RecordTab\Factory::getNotes',
                     'Bsz\RecordTab\Libraries' => 'Bsz\RecordTab\Factory::getLibraries',
-                    'Bsz\RecordTab\HoldingsILS' => 'Bsz\RecordTab\Factory::getHoldingsILS',
                     'Bsz\RecordTab\InterlibraryLoan' => 'Bsz\RecordTab\Factory::getInterLibraryLoan',
                 ],
                 'aliases' => [
                     'VuFind\RecordTab\HoldingsILS' => 'Bsz\RecordTab\HoldingsILS',
                     'Articles' => 'Bsz\RecordTab\Articles',
                     'Volumes' => 'Bsz\RecordTab\Volumes',
-                    'Articles' => 'Bsz\RecordTab\Articles',
                     'Notes' => 'Bsz\RecordTab\Notes',
                     'Libraries' => 'Bsz\RecordTab\Libraries',
                     'InterlibraryLoan' => 'Bsz\RecordTab\InterlibraryLoan',
@@ -270,8 +267,8 @@ $staticRoutes = [
     'Shib/Wayf', 'Shib/Redirect',
 ];
 $recordRoutes = [
-    'record' => 'Record',
-    'illrecord' => 'ILLRecord'
+    'illrecord' => 'ILLRecord',
+//    'record' => 'Record'
 ];
 
 $routeGenerator = new RouteGenerator();

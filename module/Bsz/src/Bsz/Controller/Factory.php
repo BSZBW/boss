@@ -74,11 +74,11 @@ class Factory implements FactoryInterface
      *
      * @param ContainerInterface $container Service manager.
      *
-     * @return RecordController
+     * @return ILLRecordController
      */
     public static function getILLRecordController(ContainerInterface $container)
     {
-        die('ENDE2');
+        die('Factory not reached');
         return new ILLRecordController(
             $container,
             $container->get('VuFind\Config')->get('config')

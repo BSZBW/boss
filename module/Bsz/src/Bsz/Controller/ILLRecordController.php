@@ -21,10 +21,12 @@
 
 namespace Bsz\Controller;
 
-class ILLRecordController extends RecordController
+use Zend\Log\LoggerAwareInterface as LoggerAwareInterface;
+
+class ILLRecordController extends RecordController implements LoggerAwareInterface
 {
     public function homeAction()
     {
-        die('ENDE');
+        die('controller not reached');
     }
 }
