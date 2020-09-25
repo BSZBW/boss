@@ -19,11 +19,17 @@
  *
  */
 
-namespace Bsz\Controller;
+namespace Bsz\Record;
 
-use Zend\Log\LoggerAwareInterface as LoggerAwareInterface;
+use Bsz\Recommend\SideFacets as SideFacets;
+use Interop\Container\ContainerInterface;
 
-class ILLRecordController extends RecordController implements LoggerAwareInterface
+class Factory
 {
-
+    public static function getRouter(ContainerInterface $container)
+    {
+        return new Router(
+            $container->get('Bsz\Config\Client')
+        );
+    }
 }

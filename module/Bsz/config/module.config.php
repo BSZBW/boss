@@ -45,7 +45,7 @@ $config = [
             'Shib' => 'Bsz\Controller\ShibController',
             'Bsz' => 'Bsz\Controller\BszController',
             'Test' => 'Bsz\Controller\TestController',
-            'ILLRecord' => 'Bsz\Controller\ILLRecord',
+            'ILLRecord' => 'Bsz\Controller\ILLRecordController',
 
             // overwriting
             'VuFind\Controller\SearchController' => 'Bsz\Controller\SearchController',
@@ -77,16 +77,17 @@ $config = [
     'service_manager' => [
         'factories' => [
             'Bsz\Config\Client'     => 'Bsz\Config\Factory::getClient',
-            'Bsz\Config\Libraries'  => 'Bsz\Config\Factory::getLibrariesTable',
-            'Bsz\Config\Dedup'  => 'Bsz\Config\Factory::getDedup',
+            'Bsz\Config\Libraries' => 'Bsz\Config\Factory::getLibrariesTable',
+            'Bsz\Config\Dedup' => 'Bsz\Config\Factory::getDedup',
             'LibrariesTableGateway' => 'Bsz\Config\Factory::getLibrariesTableGateway',
             'PlacesTableGateway' => 'Bsz\Config\Factory::getPlacesTableGateway',
-            'Bsz\ILL\Holding'    => 'Bsz\ILL\Factory::getHolding',
+            'Bsz\ILL\Holding' => 'Bsz\ILL\Factory::getHolding',
             'Bsz\Parser\OpenUrl' => 'Bsz\Parser\Factory::getOpenUrlParser',
             'Bsz\SearchTabsHelper' => 'Bsz\Service\Factory::getSearchTabsHelper',
             'Bsz\Auth\Manager' => 'Bsz\Auth\Factory::getManager',
             'Bsz\RecordDriver\PluginManager' => 'Bsz\RecordDriver\PluginManagerFactory',
             'Bsz\ILL\Logic' => 'Bsz\ILL\Factory::getIllLogic',
+            'Bsz\Record\Router' => 'Bsz\Record\Factory::getRouter',
 
         ],
         'invokables' => [
@@ -94,9 +95,10 @@ $config = [
             'Bsz\Config\Library'    => 'Bsz\Config\Library',
         ],
         'aliases' => [
-            'VuFind\SearchTabsHelper'   => 'Bsz\SearchTabsHelper',
-            'VuFind\Auth\Manager'           => 'Bsz\Auth\Manager',
-            'VuFind\RecordDriver\PluginManager' => 'Bsz\RecordDriver\PluginManager'
+            'VuFind\SearchTabsHelper' => 'Bsz\SearchTabsHelper',
+            'VuFind\Auth\Manager' => 'Bsz\Auth\Manager',
+            'VuFind\RecordDriver\PluginManager' => 'Bsz\RecordDriver\PluginManager',
+            'VuFind\RecordRouter' => 'Bsz\Record\Router',
 
         ]
     ],

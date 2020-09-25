@@ -18,6 +18,10 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+namespace Bsz\Record;
+
+use Bsz\RecordDriver\SolrGviMarc;
+use VuFind\RecordDriver\AbstractBase;
 
 /**
  * Class Router
@@ -30,12 +34,13 @@ class Router extends \VuFind\Record\Router
     /**
      * Get routing details (route name and parameters array) to link to a record.
      *
-     * @param \VuFind\RecordDriver\AbstractBase|string $driver      Record driver
-     * representing record to link to, or source|id pipe-delimited string
-     * @param string                                   $routeSuffix Suffix to add
-     * to route name
-     * @param array                                    $extraParams Extra parameters
-     * for route
+     * @param AbstractBase|string $driver Record driver
+     *                                    representing record to link to, or
+     *                                    source|id pipe-delimited string
+     * @param string $routeSuffix         Suffix to add
+     *                                    to route name
+     * @param array $extraParams          Extra parameters
+     *                                    for route
      *
      * @return array
      */
@@ -43,13 +48,19 @@ class Router extends \VuFind\Record\Router
         $driver,
         $routeSuffix = '',
         $extraParams = []
-    ) {
+    )
+    {
         // Extract source and ID from driver or string:
         if (is_object($driver)) {
             $source = $driver->getSourceIdentifier();
             $id = $driver->getUniqueId();
         } else {
             list($source, $id) = $this->extractSourceAndId($driver);
+        }
+
+        $ill = false;
+        if ($driver instanceof SolrGviMarc && !$driver->hasLocalHoldings()) {
+            $ill = true;
         }
 
         // Build URL parameters:
@@ -59,7 +70,9 @@ class Router extends \VuFind\Record\Router
         // Determine route based on naming convention (default VuFind route is
         // the exception to the rule):
         $routeBase = ($source == DEFAULT_SEARCH_BACKEND)
-            ? 'ill' : strtolower($source . 'lllrecord');
+            ? 'record' : strtolower($source . 'record');
+
+        $routeBase = $ill ? 'ill' . $routeBase : $routeBase;
 
         return [
             'params' => $params, 'route' => $routeBase . $routeSuffix
