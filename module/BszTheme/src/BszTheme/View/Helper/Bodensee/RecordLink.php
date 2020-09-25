@@ -21,10 +21,11 @@ namespace BszTheme\View\Helper\Bodensee;
 
 use Bsz\RecordDriver\Definition as Def;
 use Bsz\RecordDriver\SolrMarc;
+use VuFind\Record\Router;
+use Zend\Config\Config;
 
 /**
  * Extension of Root RecordLink Helper
- *
  * @author Cornelius Amzar <cornelius.amzar@bsz-bw.de>
  */
 class RecordLink extends \VuFind\View\Helper\Root\RecordLink
@@ -40,7 +41,7 @@ class RecordLink extends \VuFind\View\Helper\Root\RecordLink
      */
     protected $baseUrl;
 
-    public function __construct(\VuFind\Record\Router $router, \Zend\Config\Config $config, $baseUrl = null)
+    public function __construct(Router $router, Config $config, $baseUrl = null)
     {
         parent::__construct($router);
         $this->baseUrl = $baseUrl;
@@ -76,7 +77,7 @@ class RecordLink extends \VuFind\View\Helper\Root\RecordLink
 
     /**
      *
-     * @param \BszTheme\View\Helper\Bodensee\Bsz\RecordDriver\SolrMarc $driver
+     * @param Bsz\RecordDriver\SolrMarc $driver
      * @param type $url
      * @return array
      */
@@ -140,4 +141,5 @@ class RecordLink extends \VuFind\View\Helper\Root\RecordLink
         }
         return $this->getView()->render('Helpers/singleauthor.phtml', $params);
     }
+
 }

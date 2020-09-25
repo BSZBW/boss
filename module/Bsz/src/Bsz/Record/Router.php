@@ -48,8 +48,7 @@ class Router extends \VuFind\Record\Router
         $driver,
         $routeSuffix = '',
         $extraParams = []
-    )
-    {
+    ) {
         // Extract source and ID from driver or string:
         if (is_object($driver)) {
             $source = $driver->getSourceIdentifier();
@@ -77,5 +76,50 @@ class Router extends \VuFind\Record\Router
         return [
             'params' => $params, 'route' => $routeBase . $routeSuffix
         ];
+    }
+
+    /**
+     * Get routing details to display a particular tab.
+     *
+     * @param AbstractBase|string $driver                     Record driver
+     * representing record to link to, or source|id pipe-delimited string
+     * @param string                                   $tab   Action to access
+     * @param array                                    $query Optional query params
+     *
+     * @return array
+     */
+    public function getTabRouteDetails($driver, $tab = null, $query = [])
+    {
+        $route = $this->getRouteDetails(
+            $driver,
+            '',
+            empty($tab) ? [] : ['tab' => $tab]
+        );
+        // Add the options and query elements only if we need a query to avoid
+        // an empty element in the route definition:
+        if ($query) {
+            $route['options']['query'] = $query;
+        }
+
+        // If collections are active and the record route was selected, we need
+        // to check if the driver is actually a collection; if so, we should switch
+        // routes.
+        if ($this->config->Collections->collections ?? false) {
+            $routeConfig = isset($this->config->Collections->route)
+                ? $this->config->Collections->route->toArray() : [];
+            $collectionRoutes
+                = array_merge(['record' => 'collection'], $routeConfig);
+            $routeName = $route['route'];
+            if ($collectionRoute = ($collectionRoutes[$routeName] ?? null)) {
+                if (!is_object($driver)) {
+                    // Avoid loading the driver. Set a flag so that if the link is
+                    // used, record controller will check for redirection.
+                    $route['options']['query']['checkRoute'] = 1;
+                } elseif (true === $driver->tryMethod('isCollection')) {
+                    $route['route'] = $collectionRoute;
+                }
+            }
+        }
+        return $route;
     }
 }
