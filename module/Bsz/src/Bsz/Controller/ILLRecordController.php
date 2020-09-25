@@ -21,9 +21,18 @@
 
 namespace Bsz\Controller;
 
-use Zend\Log\LoggerAwareInterface as LoggerAwareInterface;
-
-class ILLRecordController extends RecordController implements LoggerAwareInterface
+class ILLRecordController extends RecordController
 {
+    /**
+     * Always return InterlibraryLoan tab
+     * @return string
+     */
+    protected function getDefaultTab()
+    {
+        parent::getDefaultTab();
+        $this->defaultTab = 'InterlibraryLoan';
+        return $this->defaultTab;
+    }
+
 
 }
