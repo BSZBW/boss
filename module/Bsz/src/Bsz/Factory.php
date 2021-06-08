@@ -19,33 +19,16 @@
  *
  */
 
-namespace BszTheme\View\Helper\Bodensee;
+namespace Bsz;
 
-use Zend\View\Helper\AbstractHelper;
+use Interop\Container\ContainerInterface;
 
-class AntiBot extends AbstractHelper
+class Factory
 {
-    protected $antibot;
-    protected $active;
-
-    public function __construct(\Bsz\AntiBot $antibot)
+    public static function getAntiBot(ContainerInterface $container)
     {
-        $this->antibot = $antibot;
-        $this->active = count($antibot->getForms()) > 0 ?? false; ;
+        $client = $container->get('Bsz\Config\Client');
+        $config = $client->get('AntiBot');
+        return new AntiBot($config);
     }
-
-    public function active()
-    {
-        return $this->active;
-    }
-
-    public function html()
-    {
-        return $this->getView()->render('Helpers/antibot.phtml', [
-            'hash' => $this->antibot->generateTimeHash('foo')
-        ]);
-    }
-
-
-
 }

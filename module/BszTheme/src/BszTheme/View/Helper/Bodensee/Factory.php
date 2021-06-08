@@ -236,8 +236,7 @@ class Factory
 
     public static function getAntiBot(ContainerInterface $container)
     {
-        $client = $container->get('Bsz\Config\Client');
-        $config = $client->get('AntiBot');
-        return new AntiBot($config);
+        $ab = $container->get('Bsz\AntiBot');
+        return new AntiBot($ab);
     }
 }

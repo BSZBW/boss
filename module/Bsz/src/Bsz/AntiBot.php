@@ -19,33 +19,32 @@
  *
  */
 
-namespace BszTheme\View\Helper\Bodensee;
+namespace Bsz;
 
-use Zend\View\Helper\AbstractHelper;
+use Zend\Config\Config;
 
-class AntiBot extends AbstractHelper
+class AntiBot
 {
-    protected $antibot;
-    protected $active;
+    protected $config;
 
-    public function __construct(\Bsz\AntiBot $antibot)
+    public function __construct(Config $config)
     {
-        $this->antibot = $antibot;
-        $this->active = count($antibot->getForms()) > 0 ?? false; ;
+        $this->config = $config;
     }
 
-    public function active()
+    public function getForms()
     {
-        return $this->active;
+        return explode(',', $this->config->forms);
     }
 
-    public function html()
+    public function generateTimeHash($key)
     {
-        return $this->getView()->render('Helpers/antibot.phtml', [
-            'hash' => $this->antibot->generateTimeHash('foo')
-        ]);
+        $time = new \DateTime();
+        $cipher = 'aes-128-cbc';
+
+        if (in_array($cipher, openssl_get_cipher_methods())) {
+            return openssl_encrypt($time->getTimestamp(), $cipher, $key, 0, 'changemeeeeeeeee');
+        }
+        throw new Exception('Cipher method not found');
     }
-
-
-
 }

@@ -83,6 +83,7 @@ $config = [
             'Bsz\Auth\Manager' => 'Bsz\Auth\Factory::getManager',
             'Bsz\RecordDriver\PluginManager' => 'Bsz\RecordDriver\PluginManagerFactory',
             'Bsz\ILL\Logic' => 'Bsz\ILL\Factory::getIllLogic',
+            'Bsz\AntiBot' => 'Bsz\Factory::getAntiBot',
 
         ],
         'invokables' => [
@@ -92,7 +93,8 @@ $config = [
         'aliases' => [
             'VuFind\SearchTabsHelper'   => 'Bsz\SearchTabsHelper',
             'VuFind\Auth\Manager'           => 'Bsz\Auth\Manager',
-            'VuFind\RecordDriver\PluginManager' => 'Bsz\RecordDriver\PluginManager'
+            'VuFind\RecordDriver\PluginManager' => 'Bsz\RecordDriver\PluginManager',
+            'AntiBot'                   => 'Bsz\AntiBot'
 
         ]
     ],
