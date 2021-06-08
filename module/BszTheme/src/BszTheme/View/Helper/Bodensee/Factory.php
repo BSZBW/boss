@@ -233,4 +233,11 @@ class Factory
             $client->get('Mapongo')
         );
     }
+
+    public static function getAntiBot(ContainerInterface $container)
+    {
+        $client = $container->get('Bsz\Config\Client');
+        $config = $client->get('AntiBot');
+        return new AntiBot($config);
+    }
 }

@@ -77,6 +77,7 @@ class Module
                 'IllForm' =>        'BszTheme\View\Helper\Bodensee\Factory::getIllForm',
                 'libraries' =>      'BszTheme\View\Helper\Factory::getLibraries',
                 'mapongo' =>      'BszTheme\View\Helper\Bodensee\Factory::getMapongo',
+                'antibot' =>      'BszTheme\View\Helper\Bodensee\Factory::getAntiBot',
             ],
             'invokables' => [
                 'string' => 'BszTheme\View\Helper\StringHelper',
