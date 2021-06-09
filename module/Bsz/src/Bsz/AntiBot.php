@@ -40,10 +40,16 @@ class AntiBot
     public function generateTimeHash($key)
     {
         $time = new \DateTime();
-        $cipher = 'aes-128-cbc';
+        $cipher = $this->config->get('cipher');
 
         if (in_array($cipher, openssl_get_cipher_methods())) {
-            return openssl_encrypt($time->getTimestamp(), $cipher, $key, 0, 'changemeeeeeeeee');
+            return openssl_encrypt(
+                $time->getTimestamp(),
+                $cipher,
+                $key,
+                0,
+                $this->config->get('iv')
+            );
         }
         throw new Exception('Cipher method not found');
     }
