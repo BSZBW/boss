@@ -16,7 +16,7 @@ $this->headTitle()->setPrefix($this->transEsc('ILL::Resigning'));
             <label class="control-label col-sm-4" for="network"><?=$this->transEsc('Network')?></label>
             <div class="btn-group col-sm-8" data-toggle="buttons" id="network">
                 <?php foreach ($this->allNetworks as $name => $isil): ?>
-                    <label class="btn btn-default <?php if(in_array($name, $this->selectedNetworks)):?>active<?php endif; ?>"><input type="checkbox" <?php if(in_array($name, $this->selectedNetworks)):?>checked="checked" <?php endif; ?>name="hiddenFilters[]" value="consortium:<?=$this->escapeHtml($isil)?>" autocomplete="off"><?=$this->escapeHtml($name)?></label>
+                    <label class="btn btn-default <?php if(in_array($name, $this->selectedNetworks)):?>active<?php endif; ?>"><input type="checkbox" <?php if(in_array($name, $this->selectedNetworks)):?>checked="checked" <?php endif; ?>name="filter[]" value="~consortium:<?=$this->escapeHtml($isil)?>" autocomplete="off"><?=$this->escapeHtml($name)?></label>
                 <?php endforeach; ?>
             </div>
         </div>
