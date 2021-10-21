@@ -3,21 +3,21 @@
     /*padding-left: 10px;*/
     i {
         text-decoration: none !important;
-        cursor: pointer;        
+        cursor: pointer;
         @media (max-width: @screen-sm-min) {
             font-size: @finger-friendly-size;
-        }        
+        }
     }
     .text {
         &:extend(.hidden-xs);
-    }    
+    }
 }
 .finger-friendly-icons a {
     padding-right: 10px;
     i.text-default {
         color: @gray !important;
     }
-} 
+}
 
 /*
 Buttons verkleinern und mit Rand versehen
@@ -29,14 +29,14 @@ Buttons verkleinern und mit Rand versehen
     div.checkbox {
         display: inline !important;
         margin-left: 0 !important;
-    }    
+    }
 }
 form[name=bulkActionForm] {
     button {
         margin-right: 0.2em;
     }
 }
-  
+
 form[name=cartForm] input.btn {
     margin: px 0 !important;
 }
@@ -45,7 +45,7 @@ form#publishDateFilter {
     .btn.btn-default {
         &:extend(.btn-sm);
         margin-top: 10px;
-        
+
     }
 }
 
@@ -60,7 +60,7 @@ form[name=feedback] {
         @media (min-width: @screen-md-min){
             column-count: 2;
             -webkit-column-count: 2;
-            -moz-column-count: 2;            
+            -moz-column-count: 2;
         }
         li.dropdown-header {
             font-weight: bold;
@@ -74,10 +74,10 @@ form[name=feedback] {
                 padding-bottom: 0.5em;
             }
             max-width: 100%;
-            
+
         }
-        
-    }    
+
+    }
 }
 .scrollable-menu {
     height: auto;
@@ -85,6 +85,21 @@ form[name=feedback] {
     overflow-x: hidden;
 }
 
-input[type=text].form-control, select.form-control {
+input[type=text].form-control, select.form-control, .delete-input {
     background-color: rgba(255,255,255, 0.6);
+    border: 0;
+}
+#searchForm {
+    .btn {
+        border-radius: 0;
+    }
+    .input-group :first-child .btn {
+        border-top-left-radius: @border-radius-base;
+        border-bottom-left-radius: @border-radius-base;
+    }
+    .input-group :last-child .btn {
+        border-top-right-radius: @border-radius-base;
+        border-bottom-right-radius: @border-radius-base;
+    }
+
 }

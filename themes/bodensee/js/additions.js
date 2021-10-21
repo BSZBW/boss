@@ -170,8 +170,9 @@ function avoidEmptySearch() {
         if (lookfor.length === 0) {
             href = href.replace('Results', 'Home');
             href = href.replace('/EDS/Search', '/EDS/Home');
+            href = href.replace('/Summon/Search', '/Summon/Home');
         } else {
-            href = href.replace('Home', 'Results')+'?lookfor='+lookfor;
+            href = href.replace('Home', 'Results');
         }
         // this is like clicking the manipulated link
         window.location.href = href;
