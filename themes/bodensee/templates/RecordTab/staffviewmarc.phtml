@@ -5,11 +5,11 @@ use VuFind\XSLT\Processor;
 
 $this->headTitle($this->translate('Staff View') . ': ' . $this->driver->getBreadcrumb());
 ?>
-<?php if (Debug::isInternal() && $this->driver->tryMethod('getGroupField') !== ''): ?>
+<?php if ($this->driver->tryMethod('getGroupField') !== ''): ?>
     <table class="table citation table-striped">
         <tr>
-            <th width="15%">Dedup-Key</th>
-            <td><?=$this->escapeHtmlAttr($this->driver->tryMethod('getGroupField'))?></td>
+            <th width="15%">Match-Key</th>
+            <td><?=$this->escapeHtmlAttr($this->driver->getGroupField())?></td>
         </tr>
     </table>
 <?php endif; ?>
