@@ -4,12 +4,13 @@ use Bsz\Debug;
 use VuFind\XSLT\Processor;
 
 $this->headTitle($this->translate('Staff View') . ': ' . $this->driver->getBreadcrumb());
+$content = $this->driver->tryMethod('getGroupField');
 ?>
-<?php if ($this->driver->tryMethod('getGroupField') !== ''): ?>
+<?php if ($content !== false && $content != ''): ?>
     <table class="table citation table-striped">
         <tr>
             <th width="15%">Match-Key</th>
-            <td><?=$this->escapeHtmlAttr($this->driver->getGroupField())?></td>
+            <td><?=$this->escapeHtmlAttr($content)?></td>
         </tr>
     </table>
 <?php endif; ?>
