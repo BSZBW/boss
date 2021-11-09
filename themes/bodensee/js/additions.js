@@ -5,6 +5,8 @@ function   performMark(selector = '.markjs') {
     if (typeof input_simple !== 'undefined' && input_simple.trim() !== '') {
         // remove boole expressions with AND OR NOT when capitalletters and seperated from words
         lookfor = input_simple.replace(/((\sOR\s))|((\sAND\s))|((\sNOT\s))/g, ' ');
+        // remove single numbers - they will appear everywhere
+        lookfor = lookfor.replace(/\s\d\s/g, ' ');
     } else if (typeof input_adv !== 'undefined'  && input_adv.trim() !== '') {
         lookfor = input_adv;
         var mapObj = {
