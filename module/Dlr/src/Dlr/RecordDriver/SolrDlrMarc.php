@@ -79,21 +79,21 @@ class SolrDlrMarc extends SolrMarc
     }
 
     /**
-     * get all formats from solr field format
+     * Get formats from
      * @return array
      */
     public function getFormats() : array
     {
-        $formats = [];
-        if (isset($this->fields['format'])) {
-            $formats = $this->fields['format'];
+        if ($this->formats === null && isset($this->formatConfig)) {
+            $formats = [];
+            if ($this->isElectronic()) {
+                $formats[] = 'Online';
+            }
+            $formats[] = $this->getFormatMarc();
+            $formats[] = $this->getFormatRda();
+            $this->formats = $this->simplifyFormats($formats);
         }
-        // Vorläufiger Workaround um die Reihen auf Berichte zu mappen
-        $keys = array_keys($formats, 'Serial');
-        foreach ($keys as $key) {
-            $formats[$key] = 'Report';
-        }
-        return $formats;
+        return $this->formats ?? [];
     }
 
     /**
