@@ -116,7 +116,7 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
             if ($this->checkAuth($params)) {
                 // remove password from TAN field
                 unset($params['Passwort']);
-//                $params['Bemerkung'] = str_replace("\n", ' ', $params['Bemerkung']);
+                $params['Bemerkung'] = str_replace(["\n", "\r\n"], ' ', $params['Bemerkung']);
 
                 // free form uses a Jahr field which must be copies into Jahrgang und EJahr
                 if (isset($params['Jahr'])) {
