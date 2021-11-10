@@ -40,15 +40,12 @@ trait MarcFormatTrait
 
     /**
      * Evaluate marc format fields as configured in MarcFormats.yaml
-     *
      * @return string
-     *
      * @throws Exception
      */
     public function getFormatMarc()
     {
         foreach ($this->formatConfig as $format => $settings) {
-
             $results = [];
 
             foreach ($settings as $setting) {
@@ -63,43 +60,9 @@ trait MarcFormatTrait
                     $params = [$setting['subfield']];
                 }
 
-                $method = 'get'.$setting['field'];
+                $method = 'get' . $setting['field'];
 
                 $content = $this->tryMethod($method, $params);
-                $results[] = $this->checkValue($content, $setting['value']);
-
-                // Better performance, stop checking if first test failed
-                if (end($results) == false) {
-                    continue;
-                } elseif (count($results) == count($settings) && !in_array(false, $results)) {
-                    $format = preg_replace('/\d/', '', $format);
-                    return $format;
-                }
-            }
-        }
-        return '';
-    }
-
-
-    /**
-     * Evaluate RDA format fields as configured in MarcFormatsRDA.yaml
-     *
-     * @return string
-     *
-     * @throws Exception
-     */
-    public function getFormatRda()
-    {
-        foreach ($this->formatConfigRda as $format => $settings) {
-
-            $results = [];
-
-            foreach ($settings as $setting) {
-                if (!isset($setting['method'])) {
-                    throw new Exception('RDA format mappings must have a method entry. ');
-                }
-
-                $content = $this->tryMethod($setting['method']);
                 $results[] = $this->checkValue($content, $setting['value']);
 
                 // Better performance, stop checking if first test failed
@@ -134,7 +97,7 @@ trait MarcFormatTrait
         }
         foreach ($allowed as $a) {
             $a = str_replace(['/', '[', ']'], '', $a);
-            $regex = '/^'.$a.'/i';
+            $regex = '/^' . $a . '/i';
             if (preg_match($regex, $value)) {
                 return true;
             }
@@ -142,9 +105,38 @@ trait MarcFormatTrait
         return false;
     }
 
+    /**
+     * Evaluate RDA format fields as configured in MarcFormatsRDA.yaml
+     * @return string
+     * @throws Exception
+     */
+    public function getFormatRda()
+    {
+        foreach ($this->formatConfigRda as $format => $settings) {
+            $results = [];
+
+            foreach ($settings as $setting) {
+                if (!isset($setting['method'])) {
+                    throw new Exception('RDA format mappings must have a method entry. ');
+                }
+
+                $content = $this->tryMethod($setting['method']);
+                $results[] = $this->checkValue($content, $setting['value']);
+
+                // Better performance, stop checking if first test failed
+                if (end($results) == false) {
+                    continue;
+                } elseif (count($results) == count($settings) && !in_array(false, $results)) {
+                    $format = preg_replace('/\d/', '', $format);
+                    return $format;
+                }
+            }
+        }
+        return '';
+    }
+
     public function simplifyFormats(array $formats)
     {
-
         $formats = array_filter($formats);
         $formats = array_unique($formats);
         $formats = array_values($formats);
@@ -160,33 +152,125 @@ trait MarcFormatTrait
     }
 
     /**
-     * Is this record an electronic item
+     * Helper method to remove a value from an array
      *
+     * @param array $array
+     * @param string|int $remove
+     *
+     * @return array
+     */
+    protected function removeFromArray(array $array, $remove)
+    {
+        foreach ($array as $k => $v) {
+            if ($v == $remove) {
+                unset($array[$k]);
+            }
+        }
+        return $array;
+    }
+
+    /**
+     * Nach der Dokumentation des Fernleihportals
      * @return boolean
      */
 
-    public function isElectronic() : bool
+    public function isArticle(): bool
     {
-        $f007 = $this->get007('/^cr/i');
-        $f008 = $this->get008(23);
-        $f338 = $this->getRdaCarrier();
-        $f300 = $this->get300('a');
-
-
-        if (count($f007) > 0 || $f008 === 'o' || $f338 == 'cr' || $f300 == '1 online resource') {
+        // A = Aufsätze aus Monographien
+        // B = Aufsätze aus Zeitschriften (wird aber wohl nicht genutzt))
+        $leader = $this->getLeader(7);
+        if ($leader == 'a' || $leader == 'b') {
             return true;
         }
         return false;
     }
 
     /**
-     * Everything that is not electronical is automatically physical.
+     * Get Leader at $pos
      *
-     * @return bool
+     * @param int $pos
+     *
+     * @return string
      */
-    public function isPhysical() : bool
+    protected function getLeader(int $pos): string
     {
-        return !$this->isElectronic();
+        $leader = $this->getMarcRecord()->getLeader();
+        $retval = $leader ?? '';
+        if (strlen($leader) > $pos - 1) {
+            $retval = $leader{$pos};
+        }
+        return $retval;
+    }
+
+    /**
+     * Is this a book serie?
+     * @return boolean
+     */
+    public function isMonographicSerial(): bool
+    {
+        $f008 = null;
+        $f008_21 = '';
+        $f008 = $this->get008(21);
+        if ($this->isSerial() && $f008 == 'm') {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Get a specified position of 008 or empty string
+     *
+     * @param int $pos
+     *
+     * @return string
+     */
+
+    protected function get008(int $pos = null): string
+    {
+        $f008 = $this->getMarcRecord()->getField("008", false);
+        $retval = '';
+
+        if (is_object($f008)) {
+            $data = $f008->getData();
+            $retval = $data ?? '';
+
+            if (isset($pos) && strlen($data) >= $pos + 1) {
+                $retval = $data{$pos};
+            }
+        }
+        return strtolower($retval);
+    }
+
+    /**
+     * General serial items. More exact is:
+     * isJournal(), isNewspaper() isMonographicSerial()
+     * @return boolean
+     */
+    public function isSerial(): bool
+    {
+        $leader = $this->getMarcRecord()->getLeader();
+        $leader_7 = $leader{7};
+        if ($leader_7 === 's') {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Ist der Titel ein Buch, das schließt auch eBooks mit ein!
+     * Wertet den Leader aus
+     * @return boolean
+     */
+    public function isPrintBook()
+    {
+        $leader = $this->getMarcRecord()->getLeader();
+        $leader_7 = $leader{7};
+        $f007 = $this->get007();
+
+        if ($this->isPhysical() && $leader_7 == 'm' && preg_match('/^t/i', $f007)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -197,7 +281,7 @@ trait MarcFormatTrait
      * @return array
      */
 
-    protected function get007($pattern = '/.*/') : array
+    protected function get007($pattern = '/.*/'): array
     {
         $f007 = $this->getMarcRecord()->getFields("007");
         $retval = [];
@@ -213,51 +297,35 @@ trait MarcFormatTrait
     }
 
     /**
-     * GEt RDA carrier code (field 336)
-     *
-     * @return array
+     * Everything that is not electronical is automatically physical.
+     * @return bool
      */
-
-    protected function getRdaContent() : array
+    public function isPhysical(): bool
     {
-        $sub = '';
-        $fields = $this->getMarcRecord()->getFields(336);
-        $retval = [];
-
-        foreach ($fields as $field) {
-            if (is_object($field)) {
-                $sub = $field->getSubfield('b');
-                $retval[] = is_object($sub) ? strtolower($sub->getData()) : '';
-            }
-
-        }
-        return $retval;
+        return !$this->isElectronic();
     }
 
     /**
-     * GEt RDA media code (field 337)
-     * @return array
+     * Is this record an electronic item
+     * @return boolean
      */
 
-    protected function getRdaMedia(): array
+    public function isElectronic(): bool
     {
-        $sub = '';
-        $fields = $this->getMarcRecord()->getFields(337);
-        $retval = [];
+        $f007 = $this->get007('/^cr/i');
+        $f008 = $this->get008(23);
+        $f338 = $this->getRdaCarrier();
+        $f300 = $this->get300('a');
 
-        foreach ($fields as $field) {
-            if (is_object($field)) {
-                $sub = $field->getSubfield('b');
-                $retval[] = is_object($sub) ? strtolower($sub->getData()) : '';
-            }
 
+        if (count($f007) > 0 || $f008 === 'o' || $f338 == 'cr' || $f300 == '1 online resource') {
+            return true;
         }
-        return $retval;
+        return false;
     }
 
     /**
      * Get RDA content code (field 338)
-     *
      * @return array
      */
 
@@ -272,7 +340,6 @@ trait MarcFormatTrait
                 $sub = $field->getSubfield('b');
                 $retval[] = is_object($sub) ? strtolower($sub->getData()) : '';
             }
-
         }
         return $retval;
     }
@@ -295,6 +362,125 @@ trait MarcFormatTrait
     }
 
     /**
+     * Ist der Titel ein EBook?
+     * Wertet die Felder 007/00, 007/01 und Leader 7 aus
+     * @return boolean
+     */
+    public function isElectronicBook(): bool
+    {
+        $f007 = $this->get007('/^cr/i');
+        $leader = $this->getLeader(7);
+
+        if ($this->isElectronic() && $leader == 'm') {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Ist der Titel ein Buch, das schließt auch eBooks mit ein!
+     * Wertet den Leader aus
+     * @return boolean
+     */
+    public function isPhysicalBook(): bool
+    {
+        $f007 = $this->get007('/^t/i');
+        $leader = $this->getLeader(7);
+
+        if ($leader == 'm' && count($f007) > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * is this a Journal, implies it's a serial
+     * @return boolean
+     */
+    public function isJournal(): bool
+    {
+        $f008 = $this->get008(21);
+
+        if ($this->isSerial() && $f008 == 'p') {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * iIs this a Newspaper?
+     * @return boolean
+     */
+    public function isNewspaper(): bool
+    {
+        $f008 = $this->get008(21);
+
+        if ($this->isSerial() && $f008 == 'n') {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Determine  if a record is freely available.
+     * Indicator 2 references to the record itself.
+     * @return boolean
+     */
+    public function isFree(): bool
+    {
+        $f856 = $this->getMarcRecord()->getFields(856);
+        foreach ($f856 as $field) {
+            $z = $field->getSubfield('z');
+            if (is_string($z) && $field->getIndicator(2) == 0
+                && preg_match('/^kostenlos|kostenfrei$/i', $z)
+            ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * GEt RDA carrier code (field 336)
+     * @return array
+     */
+
+    protected function getRdaContent(): array
+    {
+        $sub = '';
+        $fields = $this->getMarcRecord()->getFields(336);
+        $retval = [];
+
+        foreach ($fields as $field) {
+            if (is_object($field)) {
+                $sub = $field->getSubfield('b');
+                $retval[] = is_object($sub) ? strtolower($sub->getData()) : '';
+            }
+        }
+        return $retval;
+    }
+
+    /**
+     * GEt RDA media code (field 337)
+     * @return array
+     */
+
+    protected function getRdaMedia(): array
+    {
+        $sub = '';
+        $fields = $this->getMarcRecord()->getFields(337);
+        $retval = [];
+
+        foreach ($fields as $field) {
+            if (is_object($field)) {
+                $sub = $field->getSubfield('b');
+                $retval[] = is_object($sub) ? strtolower($sub->getData()) : '';
+            }
+        }
+        return $retval;
+    }
+
+    /**
      * @param $subfield
      *
      * @return array
@@ -310,199 +496,7 @@ trait MarcFormatTrait
                 $sub = $field->getSubfield($subfield);
                 $retval[] = is_object($sub) ? strtolower($sub->getData()) : '';
             }
-
         }
         return $retval;
-    }
-
-    /**
-     * Get a specified position of 008 or empty string
-     *
-     * @param int $pos
-     *
-     * @return string
-     */
-
-    protected function get008(int $pos = null) : string
-    {
-        $f008 = $this->getMarcRecord()->getField("008", false);
-        $retval = '';
-
-        if (is_object($f008)) {
-            $data = $f008->getData();
-            $retval = $data ?? '';
-
-            if (isset($pos) && strlen($data) >= $pos + 1) {
-                $retval = $data{$pos};
-            }
-        }
-        return strtolower($retval);
-    }
-
-    /**
-     * Get Leader at $pos
-     *
-     * @param int $pos
-     *
-     * @return string
-     */
-    protected function getLeader(int $pos) : string
-    {
-        $leader = $this->getMarcRecord()->getLeader();
-        $retval= $leader ?? '';
-        if (strlen($leader) > $pos - 1) {
-            $retval = $leader{$pos};
-        }
-        return $retval;
-    }
-
-    /**
-     * Nach der Dokumentation des Fernleihportals
-     * @return boolean
-     */
-
-    public function isArticle(): bool
-    {
-
-        // A = Aufsätze aus Monographien
-        // B = Aufsätze aus Zeitschriften (wird aber wohl nicht genutzt))
-        $leader = $this->getLeader(7);
-        if ($leader == 'a' || $leader == 'b') {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Is this a book serie?
-     * @return boolean
-     */
-    public function isMonographicSerial() : bool
-    {
-        $f008 = null;
-        $f008_21 = '';
-        $f008 = $this->get008(21);
-        if ($this->isSerial() && $f008 == 'm') {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * General serial items. More exact is:
-     * isJournal(), isNewspaper() isMonographicSerial()
-     *
-     * @return boolean
-     */
-    public function isSerial() : bool
-    {
-        $leader = $this->getMarcRecord()->getLeader();
-        $leader_7 = $leader{7};
-        if ($leader_7 === 's') {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Ist der Titel ein EBook?
-     * Wertet die Felder 007/00, 007/01 und Leader 7 aus
-     *
-     * @return boolean
-     */
-    public function isEBook() : bool
-    {
-        $f007 = $this->get007('/^cr/i');
-        $leader = $this->getLeader(7);
-
-        if ($leader == 'm') {
-            if (count($f007) > 0) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Ist der Titel ein Buch, das schließt auch eBooks mit ein!
-     * Wertet den Leader aus
-     *
-     * @return boolean
-     */
-    public function isPhysicalBook() : bool
-    {
-        $f007 = $this->get007('/^t/i');
-        $leader = $this->getLeader(7);
-
-        if ($leader == 'm' && count($f007) > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * is this a Journal, implies it's a serial
-     *
-     * @return boolean
-     */
-    public function isJournal() : bool
-    {
-        $f008 = $this->get008(21);
-
-        if ($this->isSerial() && $f008 == 'p') {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * iIs this a Newspaper?
-     *
-     * @return boolean
-     */
-    public function isNewspaper() : bool
-    {
-        $f008 = $this->get008(21);
-
-        if ($this->isSerial() && $f008 == 'n') {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Determine  if a record is freely available.
-     * Indicator 2 references to the record itself.
-     *
-     * @return boolean
-     */
-    public function isFree() : bool
-    {
-        $f856 = $this->getMarcRecord()->getFields(856);
-        foreach ($f856 as $field) {
-            $z = $field->getSubfield('z');
-            if (is_string($z) && $field->getIndicator(2) == 0
-                && preg_match('/^kostenlos|kostenfrei$/i', $z)
-            ) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * @param array $array
-     * @param $remove
-     *
-     * @return array
-     */
-    protected function removeFromArray(array $array, $remove)
-    {
-        foreach ($array as $k => $v) {
-            if ($v == $remove) {
-                unset($array[$k]);
-            }
-        }
-        return $array;
     }
 }

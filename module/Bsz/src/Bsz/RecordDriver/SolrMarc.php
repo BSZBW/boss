@@ -101,9 +101,11 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
         return $matches;
     }
 
+
     /**
      * is this item a collection
      * @return bool
+     * @deprecated the differences between "parts" and "collections" is not clear
      * @throws File_MARC_Exception
      */
     public function isCollection() : bool
@@ -121,6 +123,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
     /**
      * is this item part of a collection?
      *
+     * @deprecated the differences between "parts" and "collections" is not clear
      * @return boolean
      */
     public function isPart() : bool
@@ -166,179 +169,6 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
             $this->formats = $this->simplifyFormats($formats);
         }
         return $this->formats ?? [];
-    }
-
-    /**
-     * Nach der Dokumentation des Fernleihportals
-     *
-     * @return boolean
-     */
-    public function isArticle()
-    {
-        $leader = $this->getMarcRecord()->getLeader();
-        $leader_7 = $leader{7};
-        // A = Aufsätze aus Monographien
-        // B = Aufsätze aus Zeitschriften (wird aber wohl nicht genutzt))
-        if ($leader_7 === 'a' || $leader_7 === 'b') {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * General serial items. More exact is:
-     * isJournal(), isNewspaper() isMonographicSerial()
-     * @return boolean
-     */
-    public function isSerial()
-    {
-        $leader = $this->getMarcRecord()->getLeader();
-        $leader_7 = $leader{7};
-        if ($leader_7 === 's') {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Is this a book serie?
-     * @return boolean
-     */
-    public function isMonographicSerial()
-    {
-        $f008 = null;
-        $f008_21 = '';
-        $f008 = $this->getMarcRecord()->getFields("008", false);
-
-        foreach ($f008 as $field) {
-            $data = $field->getData();
-            if (strlen($data) >= 21) {
-                $f008_21 = $data{21};
-            }
-        }
-        if ($this->isSerial() && $f008_21 == 'm') {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Ist der Titel ein EBook?
-     * Wertet die Felder 007/00, 007/01 und Leader 7 aus
-     * @return boolean
-     */
-    public function isEBook()
-    {
-        $f007 = $leader = null;
-        $leader_7 = '';
-        $f007 = $this->get007();
-        $leader = $this->getMarcRecord()->getLeader();
-        $leader_7 = $leader{7};
-        if ($leader_7 == 'm') {
-            if (preg_match('/^cr/i', $f007)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Ist der Titel ein EBook?
-     * Wertet die Felder 007/00, 007/01 und Leader 7 aus
-     * @return boolean
-     */
-    public function isElectronic()
-    {
-        $f007 = $leader = null;
-        $f007 = $this->get007();
-
-        if (preg_match('/^c/i', $f007)) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Ist der Titel ein Buch, das schließt auch eBooks mit ein!
-     * Wertet den Leader aus
-     * @return boolean
-     */
-    public function isBook()
-    {
-        $leader = $this->getMarcRecord()->getLeader();
-        $leader_7 = $leader{7};
-        $f007 = $this->get007();
-
-        if ($leader_7 == 'm' && preg_match('/^t/i', $f007)) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * is this a Journal, implies it's a serial
-     *
-     * @return boolean
-     */
-    public function isJournal()
-    {
-        $f008 = null;
-        $f008_21 = '';
-        $f008 = $this->getMarcRecord()->getFields("008", false);
-
-        foreach ($f008 as $field) {
-            $data = $field->getData();
-            if (strlen($data) >= 21) {
-                $f008_21 = $data{21};
-            }
-        }
-        if ($this->isSerial() && $f008_21 == 'p') {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * iIs this a Newspaper?
-     *
-     * @return boolean
-     */
-    public function isNewspaper()
-    {
-        $f008 = null;
-        $f008_21 = '';
-        $f008 = $this->getMarcRecord()->getFields("008", false);
-
-        foreach ($f008 as $field) {
-            $data = $field->getData();
-            if (strlen($data) >= 21) {
-                $f008_21 = $data{21};
-            }
-        }
-        if ($this->isSerial() && $f008_21 == 'n') {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Determine  if a record is freely available.
-     * Indicator 2 references to the record itself.
-     *
-     * @return boolean
-     */
-    public function isFree()
-    {
-        $f856 = $this->getMarcRecord()->getFields(856);
-        foreach ($f856 as $field) {
-            $z = $field->getSubfield('z');
-            if (is_string($z) && $field->getIndicator(2) == 0
-                && preg_match('/^kostenlos|kostenfrei$/i', $z)
-            ) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
@@ -480,7 +310,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
         } elseif ($this->isSerial()) {
             // Newspapers, Journals
             return 'Journal';
-        } elseif ($this->isEBook() || in_array('Book', $formats)) {
+        } elseif ($this->isElectronicBook() || in_array('Book', $formats)) {
             return 'Book';
         } elseif (count($formats) > 0) {
             return array_shift($formats);

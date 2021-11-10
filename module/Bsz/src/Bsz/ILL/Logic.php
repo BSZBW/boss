@@ -111,7 +111,7 @@ class Logic
         if ($this->driver->isElectronic()) {
             if ($this->driver->isJournal() || $this->driver->isNewspaper()) {
                 $format = static::FORMAT_EJOURNAL;
-            } elseif ($this->driver->isEBook()) {
+            } elseif ($this->driver->isElectronicBook()) {
                 $format = static::FORMAT_EBOOK;
             }
         } else {
