@@ -16,7 +16,7 @@ $localUrls = $this->driver->tryMethod('getLocalUrls');
 ?>
 
 <?php // Show local Urls
-if (count($localUrls) > 0 || count($urls) > 0):
+if ((isset($localurls) && count($localUrls)) > 0 || (isset($urls) && count($urls) > 0)):
 ?>
 
     <dt><?=$this->transEsc('links_label')?></dt>

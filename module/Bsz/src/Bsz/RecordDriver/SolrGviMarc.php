@@ -719,7 +719,7 @@ class SolrGviMarc extends SolrMarc implements Constants
         }
 
         if ($this->isArticle() ||
-            $this->isEBook() ||
+            $this->isElectronicBook() ||
             $this->isSerial() ||
             $this->isCollection()
         ) {
@@ -731,21 +731,6 @@ class SolrGviMarc extends SolrMarc implements Constants
     public function getNetwork()
     {
         return 'NoNetwork';
-    }
-
-    /**
-     * General serial items. More exact is:
-     * isJournal(), isNewspaper() isMonographicSerial()
-     * @return boolean
-     */
-    public function isSerial()
-    {
-        $leader = $this->getMarcRecord()->getLeader();
-        $leader_7 = strtoupper($leader{7});
-        if ($leader_7 === 'S') {
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -1026,50 +1011,6 @@ class SolrGviMarc extends SolrMarc implements Constants
             $scale = $this->getFieldArray("034", ['b']);
         }
         return array_shift($scale);
-    }
-
-    /**
-     * is this a Journal, implies it's a serial
-     * @return boolean
-     */
-    public function isJournal()
-    {
-        $f008 = null;
-        $f008_21 = '';
-        $f008 = $this->getMarcRecord()->getFields("008", false);
-
-        foreach ($f008 as $field) {
-            $data = strtoupper($field->getData());
-            if (strlen($data) >= 21) {
-                $f008_21 = $data{21};
-            }
-        }
-        if ($this->isSerial() && $f008_21 == 'P') {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * iIs this a Newspaper?
-     * @return boolean
-     */
-    public function isNewspaper()
-    {
-        $f008 = null;
-        $f008_21 = '';
-        $f008 = $this->getMarcRecord()->getFields("008", false);
-
-        foreach ($f008 as $field) {
-            $data = strtoupper($field->getData());
-            if (strlen($data) >= 21) {
-                $f008_21 = $data{21};
-            }
-        }
-        if ($this->isSerial() && $f008_21 == 'N') {
-            return true;
-        }
-        return false;
     }
 
     /**
