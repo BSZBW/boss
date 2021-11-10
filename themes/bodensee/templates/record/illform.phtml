@@ -14,7 +14,7 @@
         if ($this->driver->isJournal()) { $type = 'journal';}
         elseif ($this->driver->isContainerMonography()) { $type = 'article-book';}
         elseif ($this->driver->isArticle()) {$type = 'article';}
-        elseif ($this->driver->isEBook()) {$type = 'ebook';}
+        elseif ($this->driver->isElectronicBook()) {$type = 'ebook';}
     } else {
         $type = 'free';
     }
