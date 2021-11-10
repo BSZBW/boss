@@ -23,6 +23,7 @@ namespace Dlr\RecordDriver;
 
 use Exception;
 use Interop\Container\ContainerInterface;
+use VuFind\Config\YamlReader;
 use VuFind\ILS\Connection;
 use VuFind\ILS\Logic\Holds;
 use VuFind\ILS\Logic\TitleHolds;
@@ -66,6 +67,14 @@ class Factory extends SolrDefaultFactory
             $container->get(Holds::class),
             $container->get(TitleHolds::class)
         );
+
+        if (method_exists($driver, 'attachFormatConfig')) {
+            $yamlReader = $container->get(YamlReader::class);
+            $formatConfig = $yamlReader->get('MarcFormats.yaml');
+            $formatConfigRda = $yamlReader->get('MarcFormatsRDA.yaml');
+
+            $driver->attachFormatConfig($formatConfig, $formatConfigRda);
+        }
 
         $driver->attachSearchService($container->get('VuFind\Search'));
         $driver->attachSearchRunner($container->get('VuFind\SearchRunner'));
