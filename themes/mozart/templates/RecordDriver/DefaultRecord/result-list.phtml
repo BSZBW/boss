@@ -62,16 +62,6 @@ $coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'sm
                            'hiddenFilterString' => $hiddenFilterString])?>
 
 
-        <?php if (!$this->driver->isCollection()): ?>
-          <?php if ($snippet = $this->driver->getHighlightedSnippet()): ?>
-            <?php if (!empty($snippet['caption'])): ?>
-              <dt><?=$this->transEsc($snippet['caption']) ?></dt> ';
-            <?php endif; ?>
-            <?php if (!empty($snippet['snippet'])): ?>
-              <dd class="quotestart">&#8220;</dd>...<?=$this->highlight($snippet['snippet']) ?>...<dd class="quoteend">&#8221;</dd><br/>
-            <?php endif; ?>
-          <?php endif; ?>
-        <?php endif; ?>
         <?php /* Display information on duplicate records if available */?>
         <?php if ($dedupData = $this->driver->getDedupData()): ?>
             <?php $i = 0 ?>
