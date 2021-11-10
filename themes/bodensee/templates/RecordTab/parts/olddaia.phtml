@@ -2,7 +2,7 @@
     <?php $check = (isset($row['check']) && $row['check']); ?>
     <?php $checkStorageRetrievalRequest = (isset($row['checkStorageRetrievalRequest']) && $row['checkStorageRetrievalRequest']); ?>
     <?php $checkILLRequest = (isset($row['checkILLRequest']) && $row['checkILLRequest']); ?>
-    <?php if (isset($row['barcode']) && $row['barcode'] != "" && !$this->driver->isEBook()): ?>
+    <?php if (isset($row['barcode']) && $row['barcode'] != "" && !$this->driver->isElectronicBook()): ?>
  <div class="row">
     <div class="col-sm-12">
     <dl class="dl-horizontal">
