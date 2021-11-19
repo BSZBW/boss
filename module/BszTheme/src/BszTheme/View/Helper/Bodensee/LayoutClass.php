@@ -57,14 +57,18 @@ class LayoutClass extends \VuFind\View\Helper\Bootstrap3\LayoutClass
         case 'mainbody_foldout':
             return 'col-sm-12 col-md-9';
         case 'mainbody':
-            return $this->sidebarOnLeft ? 'col-sm-9 col-sm-push-3' : 'col-sm-9';
+            return $this->sidebarOnLeft
+                ? 'col-sm-8 col-sm-push-4 col-md-9 col-md-push-3'
+                : 'col-sm-8 col-md-9';
         case 'mainbody_details':
-            return $this->sidebarOnLeft ? 'col-sm-12' : 'col-sm-12';
+            return $this->sidebarOnLeft
+                ? 'col-sm-12'
+                : 'col-sm-12';
             break;
         case 'sidebar':
             return $this->sidebarOnLeft
-                ? 'sidebar col-sm-3 col-sm-pull-9 hidden-print'
-                : 'sidebar col-sm-3 hidden-print';
+                ? 'sidebar col-sm-4 col-sm-pull-8 col-md-3 col-md-pull-9 hidden-print'
+                : 'sidebar col-sm-4 col-md-3 hidden-print';
         case 'offcanvas-row':
             if (!$this->offcanvas) {
                 return "";
