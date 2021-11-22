@@ -1,4 +1,3 @@
-<div>
 <? $containerId = $this->driver->tryMethod('getContainerId');
    $summDate = $this->driver->getPublicationDates();
    $summAuthors = $this->driver->getDeduplicatedAuthors(['role', 'gnd', 'live']);
@@ -78,4 +77,3 @@
 
     <? endforeach; ?>
 <? endif; ?>
-</div>
