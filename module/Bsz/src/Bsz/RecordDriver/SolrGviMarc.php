@@ -1153,8 +1153,7 @@ class SolrGviMarc extends SolrMarc implements Constants
     public function getVolume()
     {
         $fields = [
-            830 => ['v'],
-            773 => ['g']
+            245 => ['p'],
         ];
         $volumes = preg_replace("/\/$/", "", $this->getFieldsArray($fields));
         return array_shift($volumes);
