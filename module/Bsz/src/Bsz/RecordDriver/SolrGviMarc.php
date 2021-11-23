@@ -1147,7 +1147,7 @@ class SolrGviMarc extends SolrMarc implements Constants
     }
 
     /**
-     * Returns Volume number
+     * Returns Volume title
      * @return String
      */
     public function getVolume()
