@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f0a6b6e98bf73fa157f98d7d98185378",
+    "content-hash": "250d67b6c840a44620eba87f579720be",
     "packages": [
         {
             "name": "ahand/mobileesp",
@@ -442,12 +442,12 @@
             "time": "2021-10-03T12:00:00+00:00"
         },
         {
-            "name": "finc/bsz-grouping",
-            "version": "dev-feature-grouping-module",
-            "dist": {
-                "type": "path",
-                "url": "bsz-grouping",
-                "reference": "05cb9f27b13701c6392d2b37754b8c7076bc9785"
+            "name": "finc/vufind-results-grouping",
+            "version": "v0.1",
+            "source": {
+                "type": "git",
+                "url": "https://git.sc.uni-leipzig.de/ubl/finc/packages/vufind-results-grouping",
+                "reference": "c37d8d5d7660d45add7fb519d04ea9302f1eb920"
             },
             "require": {
                 "php": ">=7.1"
@@ -456,33 +456,31 @@
             "extra": {
                 "vufind": {
                     "themes": {
-                        "res/mixin": "bsz-grouping"
+                        "res/mixin": "vufind-results-grouping"
                     }
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "BszGrouping\\": "src/"
+                    "VuFindResultsGrouping\\": "src/"
                 }
             },
-            "scripts": {
-                "test": [
-                    "phpunit --bootstrap vendor/autoload.php tests"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-2.0"
             ],
             "authors": [
+                {
+                    "name": "Cornelius Amzar",
+                    "email": "cornelius.amzar@bsz-bw.de"
+                },
                 {
                     "name": "Dorian Merz",
                     "email": "merz@ub.uni-leipzig.de"
                 }
             ],
             "description": "Result Grouping in VuFind result list",
-            "transport-options": {
-                "relative": true
-            }
+            "time": "2021-11-12T11:36:43+00:00"
         },
         {
             "name": "ghislainf/zf2-whoops",
@@ -2682,6 +2680,55 @@
             "description": "VuFind HTTP service library",
             "homepage": "https://vufind.org/",
             "time": "2018-05-23T17:51:55+00:00"
+        },
+        {
+            "name": "wikimedia/composer-merge-plugin",
+            "version": "v1.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wikimedia/composer-merge-plugin.git",
+                "reference": "81c6ac72a24a67383419c7eb9aa2b3437f2ab100"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wikimedia/composer-merge-plugin/zipball/81c6ac72a24a67383419c7eb9aa2b3437f2ab100",
+                "reference": "81c6ac72a24a67383419c7eb9aa2b3437f2ab100",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.0",
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "composer/composer": "~1.0.0",
+                "jakub-onderka/php-parallel-lint": "~0.8",
+                "phpunit/phpunit": "~4.8|~5.0",
+                "squizlabs/php_codesniffer": "~2.1.0"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.3.x-dev"
+                },
+                "class": "Wikimedia\\Composer\\MergePlugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "Wikimedia\\Composer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bryan Davis",
+                    "email": "bd808@wikimedia.org"
+                }
+            ],
+            "description": "Composer plugin to merge multiple composer.json files",
+            "time": "2017-04-25T02:31:25+00:00"
         },
         {
             "name": "yajra/laravel-pdo-via-oci8",
@@ -6116,16 +6163,16 @@
         },
         {
             "name": "pdepend/pdepend",
-            "version": "2.10.1",
+            "version": "2.10.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pdepend/pdepend.git",
-                "reference": "30452fdabb3dfca89f4bf977abc44adc5391e062"
+                "reference": "c8c1d2af43fb8c2b5387d50e9c42a9c56de13686"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pdepend/pdepend/zipball/30452fdabb3dfca89f4bf977abc44adc5391e062",
-                "reference": "30452fdabb3dfca89f4bf977abc44adc5391e062",
+                "url": "https://api.github.com/repos/pdepend/pdepend/zipball/c8c1d2af43fb8c2b5387d50e9c42a9c56de13686",
+                "reference": "c8c1d2af43fb8c2b5387d50e9c42a9c56de13686",
                 "shasum": ""
             },
             "require": {
@@ -6165,7 +6212,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-10-11T12:15:18+00:00"
+            "time": "2021-11-16T20:05:32+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -7245,16 +7292,16 @@
         },
         {
             "name": "sebastian/exporter",
-            "version": "3.1.3",
+            "version": "3.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/exporter.git",
-                "reference": "6b853149eab67d4da22291d36f5b0631c0fd856e"
+                "reference": "0c32ea2e40dbf59de29f3b49bf375176ce7dd8db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/exporter/zipball/6b853149eab67d4da22291d36f5b0631c0fd856e",
-                "reference": "6b853149eab67d4da22291d36f5b0631c0fd856e",
+                "url": "https://api.github.com/repos/sebastianbergmann/exporter/zipball/0c32ea2e40dbf59de29f3b49bf375176ce7dd8db",
+                "reference": "0c32ea2e40dbf59de29f3b49bf375176ce7dd8db",
                 "shasum": ""
             },
             "require": {
@@ -7263,7 +7310,7 @@
             },
             "require-dev": {
                 "ext-mbstring": "*",
-                "phpunit/phpunit": "^6.0"
+                "phpunit/phpunit": "^8.5"
             },
             "type": "library",
             "extra": {
@@ -7314,7 +7361,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-11-30T07:47:53+00:00"
+            "time": "2021-11-11T13:51:24+00:00"
         },
         {
             "name": "sebastian/finder-facade",
@@ -8642,8 +8689,7 @@
     "stability-flags": {
         "ahand/mobileesp": 20,
         "ghislainf/zf2-whoops": 20,
-        "pear/validate_ispn": 20,
-        "finc/bsz-grouping": 20
+        "pear/validate_ispn": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
