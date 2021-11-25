@@ -76,7 +76,7 @@ $config = [
         'factories' => [
             'Bsz\Config\Client'     => 'Bsz\Config\Factory::getClient',
             'Bsz\Config\Libraries'  => 'Bsz\Config\Factory::getLibrariesTable',
-            'BszGrouping\Config\Dedup'  => 'BszGrouping\Config\Factory::getDedup',
+            'VuFindResultsGrouping\Config\Grouping'  => 'VuFindResultsGrouping\Config\Factory::getGrouping',
             'LibrariesTableGateway' => 'Bsz\Config\Factory::getLibrariesTableGateway',
             'PlacesTableGateway' => 'Bsz\Config\Factory::getPlacesTableGateway',
             'Bsz\ILL\Holding'    => 'Bsz\ILL\Factory::getHolding',
@@ -203,7 +203,7 @@ $config = [
             ],
             'search_backend' => [
                 'factories' => [
-                    'Solr' => 'BszGrouping\Search\Factory\SolrDefaultBackendFactory',
+                    'Solr' => 'VuFindResultsGrouping\Search\Factory\SolrDefaultBackendFactory',
                     'EDS' => 'Bsz\Search\Factory\EdsBackendFactory',
                 ],
             ],
@@ -230,13 +230,13 @@ $config = [
             ],
             'ajaxhandler' => [
                 'factories' => [
-                    'BszGrouping\AjaxHandler\DedupCheckbox' =>      'BszGrouping\AjaxHandler\Factory::getDedupCheckbox',
+                    'VuFindResultsGrouping\AjaxHandler\DedupCheckbox' =>      'VuFindResultsGrouping\AjaxHandler\Factory::getDedupCheckbox',
                     'Bsz\AjaxHandler\SaveIsil' =>           'Bsz\AjaxHandler\Factory::getSaveIsil',
                     'Bsz\AjaxHandler\LibrariesTypeahead' => 'Bsz\AjaxHandler\Factory::getLibrariesTypeahead',
 
                 ],
                 'aliases' => [
-                    'dedupCheckbox' => 'BszGrouping\AjaxHandler\DedupCheckbox',
+                    'dedupCheckbox' => 'VuFindResultsGrouping\AjaxHandler\DedupCheckbox',
                     'saveIsil' => 'Bsz\AjaxHandler\SaveIsil',
                     'librariesTypeahead' => 'Bsz\AjaxHandler\LibrariesTypeahead'
                 ]

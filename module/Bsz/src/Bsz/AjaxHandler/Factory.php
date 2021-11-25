@@ -36,7 +36,7 @@ class Factory
     public static function getDedupCheckbox(ContainerInterface $container)
     {
         return new DedupCheckbox(
-            $container->get('BszGrouping\Config\Dedup')
+            $container->get('VuFindResultsGrouping\Config\Grouping')
         );
     }
 

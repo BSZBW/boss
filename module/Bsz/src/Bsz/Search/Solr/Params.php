@@ -1,7 +1,7 @@
 <?php
 namespace Bsz\Search\Solr;
 
-use BszGrouping\Config\Dedup;
+use VuFindResultsGrouping\Config\Grouping;
 use VuFind\Config\PluginManager;
 use VuFindSearch\ParamBag;
 

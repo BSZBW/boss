@@ -22,7 +22,7 @@
 namespace Bsz\RecordDriver;
 
 use Bsz\Exception;
-use BszGrouping\RecordDriver\SubrecordTrait;
+use VuFindResultsGrouping\RecordDriver\SubrecordTrait;
 use File_MARC_Exception;
 use VuFind\RecordDriver\IlsAwareTrait;
 use VuFind\RecordDriver\MarcReaderTrait;

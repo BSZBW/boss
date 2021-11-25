@@ -40,7 +40,7 @@ class Factory
     {
         $config = $container->get('VuFind\Config');
         $options = $container->get('VuFind\SearchOptionsPluginManager')->get('solr');
-        $dedup = $container->get('BszGrouping\Config\Dedup');
+        $dedup = $container->get('VuFindResultsGrouping\Config\Grouping');
         $params = new Params($options, $config, null, $dedup);
 
         return $params;
