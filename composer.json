@@ -74,7 +74,6 @@
         "zendframework/zendservice-recaptcha": "3.2.0",
         "zf-commons/zfc-rbac": "2.6.3",
         "ezyang/htmlpurifier": "4.13",
-        "finc/bsz-grouping": "@dev"
     },
     "require-dev": {
         "behat/mink": "1.7.1",
@@ -91,10 +90,4 @@
         "post-install-cmd": "@phing-install-dependencies",
         "post-update-cmd": "@phing-install-dependencies"
     },
-    "repositories": [
-        {
-          "type": "path",
-          "url": "bsz-grouping"
-        }
-    ]
 }
