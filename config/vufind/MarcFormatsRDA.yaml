@@ -1,0 +1,45 @@
+# Articles recognized as books if thios is enabled
+#Book:
+#  - method: getRdaContent
+#    value: txt
+Video_Disc:
+  - method: getRdaContent
+    value: tdi
+  - method: getRdaCarrier
+    value: vd
+Video_Cassette:
+  - method: getRdaContent
+    value: tdi
+  - method: getRdaCarrier
+    value: vf
+Video:
+  - method: getRdaContent
+    value: tdi
+SpokenWord:
+  - method: getRdaContent
+    value: spw
+MusicalScore:
+  - method: getRdaContent
+    value: ntm
+MusicRecording_Disc:
+  - method: getRdaContent
+    value: ptm, prm
+  - method: getRdaCarrier
+    value: sd
+SoundRecording:
+  - method: getRdaContent
+    value: snd
+#VisualMedia:
+#  - method: getRdaContent
+#    value: sti
+Object:
+  - method: getRdaContent
+    value: tdf
+  - method: getRdaCarrier
+    value: nr
+#Map:
+#  - method: getRdaContent
+#    value: cri, crn
+
+
+
