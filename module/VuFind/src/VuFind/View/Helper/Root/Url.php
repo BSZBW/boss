@@ -52,7 +52,7 @@ class Url extends \Zend\View\Helper\Url
      *
      * @param Request $request Request object for GET parameters
      */
-    public function __construct(Request $request)
+    public function __construct(Request $request = null)
     {
         $this->request = $request;
     }
@@ -95,8 +95,12 @@ class Url extends \Zend\View\Helper\Url
      */
     public function addQueryParameters($params, $reuseMatchedParams = true)
     {
-        $requestQuery = $this->request->getQuery()->toArray();
-        $options = ['query' => array_merge($requestQuery, $params)];
+        $requestQuery = (null !== $this->request)
+            ? $this->request->getQuery()->toArray() : [];
+        $options = [
+            'query' => array_merge($requestQuery, $params),
+            'normalize_path' => false, // fix for VUFIND-1392
+        ];
         return $this->__invoke(null, [], $options, $reuseMatchedParams);
     }
 }
