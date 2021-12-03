@@ -496,7 +496,6 @@ class UpgradeTest extends \VuFindTest\Unit\TestCase
         $upgrader = $this->getUpgrader('primo');
         $upgrader->run();
         $expectedWarnings = [];
-        xdebug_var_dump($upgrader->getWarnings());
         $this->assertEquals($expectedWarnings, $upgrader->getWarnings());
         $results = $upgrader->getNewConfigs();
         $this->assertEquals(
