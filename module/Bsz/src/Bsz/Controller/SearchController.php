@@ -60,7 +60,8 @@ class SearchController extends \VuFind\Controller\SearchController
     protected function processAdvancedFacets(
         $facetList,
         $searchObject = false,
-        $hierarchicalFacets = []
+        $hierarchicalFacets = [],
+        $hierarchicalFacetsSortOptions = []
     ) {
         // Process the facets
         $facetHelper = null;
@@ -73,7 +74,11 @@ class SearchController extends \VuFind\Controller\SearchController
             // to a flat array according to the hierarchy
             if (in_array($facet, $hierarchicalFacets)) {
                 $tmpList = $list['list'];
-                $facetHelper->sortFacetList($tmpList, true);
+
+                $sort = $hierarchicalFacetsSortOptions[$facet]
+                    ?? $hierarchicalFacetsSortOptions['*'] ?? 'top';
+
+                $facetHelper->sortFacetList($tmpList, $sort);
                 $tmpList = $facetHelper->buildFacetArray(
                     $facet,
                     $tmpList
