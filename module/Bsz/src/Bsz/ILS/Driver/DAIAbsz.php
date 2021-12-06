@@ -271,36 +271,39 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
         }
         // if one or more items exist, iterate and build result-item
         if (array_key_exists('item', $daiaArray)) {
-            $number = 0;
-            foreach ($daiaArray['item'] as $item) {
-                $result_item = [];
-                $result_item['id'] = $id;
-                $result_item['item_id'] = $item['id'];
-                // custom DAIA field used in getHoldLink()
-                $result_item['ilslink']
-                    = ($item['href'] ?? $doc_href);
-                // count items
-                $number++;
-                $result_item['number'] = $this->getItemNumber($item, $number);
-                // set default value for barcode
-                $result_item['barcode'] = $this->getItemBarcode($item);
-                // set default value for part
-                $result_item['part'] = $this->getItemPart($item);
-                $result_item['about'] = $this->getItemAbout($item);
+                $number = 0;
+                foreach ($daiaArray['item'] as $item) {
+                        $result_item = [];
+                        $result_item['id'] = $id;
+                        $result_item['item_id'] = $item['id'];
+                        // custom DAIA field used in getHoldLink()
+                        $result_item['ilslink']
+                            = ($item['href'] ?? $doc_href);
+                        // count items
+                        $number++;
+                        $result_item['number'] = $this->getItemNumber($item, $number);
+                        // set default value for barcode
+                        $result_item['barcode'] = $this->getItemBarcode($item);
+                        // set default value for part
+                        $result_item['part'] = $this->getItemPart($item);
+                        $result_item['about'] = $this->getItemAbout($item);
 
-                // set default value for reserve
-                $result_item['reserve'] = $this->getItemReserveStatus($item);
-                // get callnumber
-                $result_item['callnumber'] = $this->getItemCallnumber($item);
-                // get location
-                $result_item['location'] = $this->getItemLocation($item);
-                // get location link
-                //$result_item['locationhref'] = $this->getItemLocationLink($item);
-                // status and availability will be calculated in own function
-                $result_item = $this->getItemStatus($item) + $result_item;
-                // add result_item to the result array
-                $result[] = $result_item;
-            } // end iteration on item
+                        // set default value for reserve
+                        $result_item['reserve'] = $this->getItemReserveStatus($item);
+                        // get callnumber
+                        $result_item['callnumber'] = $this->getItemCallnumber($item);
+                        // get location
+                        $result_item['location'] = $this->getItemLocation($item);
+                        // get location link
+                        //$result_item['locationhref'] = $this->getItemLocationLink($item);
+                        // status and availability will be calculated in own function
+                        $result_item = $this->getItemStatus($item) + $result_item;
+
+                        // add result_item to the result array
+                        if ($this->getItemMessage($item) !== "withdrawn") {
+                            $result[] = $result_item;
+                        }
+                } // end iteration on item
         }
 
         return $result;
