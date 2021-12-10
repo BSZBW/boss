@@ -77,4 +77,23 @@ trait ItemTrait
     {
         return $item['storage']['href'] ?? false;
     }
+
+    /**
+     * Returns the value for item "message" in VuFind getStatus/getHolding array
+     *
+     * @param array $item Array with DAIA item data
+     *
+     * @return string
+     */
+    protected function getItemMessage($item)
+    {
+        $message = "";
+        if (isset($item['message'])
+            && array_key_exists('content', $item['message'][0])
+        ) {
+            $message = $item['message'][0]['content'];
+        }
+
+        return $message;
+    }
 }
