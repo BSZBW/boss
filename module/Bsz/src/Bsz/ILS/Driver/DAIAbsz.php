@@ -157,12 +157,14 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
      *
      * @return xml or json object
      * @throws ILSException
+     *
+     * xml-format not supported by BSZ daia server any more
      */
     protected function doHTTPRequest($id)
     {
         $contentTypes = [
-            "xml"  => "application/xml",
             "json" => "application/json",
+            //"xml"  => "application/xml",
         ];
 
         $http_headers = [
@@ -176,12 +178,12 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
 
             $params = [
                 "id" => $this->daiaIdPrefix . $ppn,
-                "format" => $this->daiaResponseFormat,
+                //"format" => $this->daiaResponseFormat,
             ];
         } else {
             $params = [
                 "id" => $this->daiaIdPrefix . $id,
-                "format" => $this->daiaResponseFormat,
+                //"format" => $this->daiaResponseFormat,
             ];
         }
 
