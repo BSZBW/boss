@@ -450,6 +450,7 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
      */
     public function hasHoldings($id)
     {
+        return true;
         $holdings = $this->getHolding($id);
 
         if (isset($holdings) && count($holdings) > 0) {
@@ -518,13 +519,21 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
      */
     private function addArticleItem($doc_id)
     {
+        $doc_id = preg_replace('/koha:biblionumber:/', '', $doc_id);
+
+
         $return = [
             'id'        => $doc_id,
             'callnumber'=> 'Online',
             'location'  => 'Dokumentenlieferdienst',
-            'href'      => 'https://elk-wue.bsz-bw.de/cgi-bin/koha/opac-request-article.pl'.$doc_id,
-            'availability'  => 'openaccess',
-            'status'    => true
+            'ilslink'      => 'https://elk-wue.bsz-bw.de/cgi-bin/koha/opac-request-article.pl?biblionumber='.$doc_id,
+            'link'      => 'https://elk-wue.bsz-bw.de/cgi-bin/koha/opac-request-article.pl?biblionumber='.$doc_id,
+            'availability'  => 'online',
+            'status'    => 'Available',
+            'checkILLRequest' => true,
+            'checkStorageRetrievalRequest' => true,
+            'barcode'         => 'foobar',
+            'requests_placed' => 1,
         ];
         return $return;
     }

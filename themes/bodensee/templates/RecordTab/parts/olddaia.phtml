@@ -16,7 +16,7 @@
         <?php if (isset($row['use_unknown_message']) && $row['use_unknown_message']): ?>
             <dd class="text-muted"><?=$this->transEsc("status_unknown_message")?></dd>
         <?php else: ?>
-                <?php if ($row['availability']): ?>
+                <?php if (isset($row['availability']) && $row['availability'] !== 'online'): ?>
                   <?php /* Begin Available Items (Holds) */ ?>
                     <dd class="text-success"><?=$this->transEsc("Available")?><link property="availability" href="http://schema.org/InStock" /></dd>
                     <dd>
@@ -31,6 +31,10 @@
                     <a class="<?=$check ? 'checkRequest' : ''?> external hasicon inlineblock " data-name="aDIS BOSS2" data-size="md" href="<?=$this->recordLink()->getRequestUrl($row['link'])?>"><i class="fa fa-flag"></i>&nbsp;<?=$this->transEsc($check ? "Check Recall" : "Recall This")?></a>
                   <?php endif; ?>
                    </dd>
+                <?php elseif(isset($row['availability']) && $row['availability'] === 'online'): ?>
+                    <dd class="text-success"><?=$this->transEsc("Available Online")?><link property="availability" href="http://schema.org/InStock" /></dd>
+                    <dd><a href=<?=$row['link']?> class="external hasicon"><i class="fa fa-globe"></i> <?=$this->transEsc('Order Article')?></a></dd>
+
                 <?php else: ?>
                   <?php /* Begin Unavailable Items (Recalls) */ ?>
                   <dd class="text-danger"><?php if (strlen($row['status']) > 0):?> <?= $this->transEsc($row['status']) ?> <?php else: ?> <?= $this->transEsc("unavailable") ?> <?php endif; ?>
