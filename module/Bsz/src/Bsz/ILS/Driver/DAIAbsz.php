@@ -308,6 +308,10 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
                 } // end iteration on item
         }
 
+        if (empty($result)) {
+            $result[] = $this->addArticleItem($doc_id);
+        }
+
         return $result;
     }
 
@@ -454,6 +458,9 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
                 if ($holding['callnumber'] == 'Unknown') {
                     return false;
                 }
+                if ($holding['callnumber'] == 'Online') {
+                    return true;
+                }
             }
             return true;
         }
@@ -500,5 +507,25 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
             return parent::convertDaiaXmlToJson($daiaResponse);
         }
         return '';
+    }
+
+    /**
+     * Add a new item for articles which do not have items by default
+     *
+     * @param $doc_id
+     *
+     * @return array
+     */
+    private function addArticleItem($doc_id)
+    {
+        $return = [
+            'id'        => $doc_id,
+            'callnumber'=> 'Online',
+            'location'  => 'Dokumentenlieferdienst',
+            'href'      => 'https://elk-wue.bsz-bw.de/cgi-bin/koha/opac-request-article.pl'.$doc_id,
+            'availability'  => 'openaccess',
+            'status'    => true
+        ];
+        return $return;
     }
 }
