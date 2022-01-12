@@ -151,102 +151,6 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
     }
 
     /**
-     * Perform an HTTP request.
-     *
-     * @param string $id id for query in daia
-     *
-     * @return xml or json object
-     * @throws ILSException
-     *
-     * xml-format not supported by BSZ daia server any more
-     */
-    protected function doHTTPRequest($id)
-    {
-        $contentTypes = [
-            "json" => "application/json",
-            //"xml"  => "application/xml",
-        ];
-
-        $http_headers = [
-            "Content-type: " . $contentTypes[$this->daiaResponseFormat],
-            "Accept: " . $contentTypes[$this->daiaResponseFormat]
-        ];
-
-        if ($this->parsePpn || strpos($id, ')') !== false) {
-            $end = strpos($id, ')');
-            $ppn = substr($id, $end + 1);
-
-            $params = [
-                "id" => $this->daiaIdPrefix . $ppn,
-                //"format" => $this->daiaResponseFormat,
-            ];
-        } else {
-            $params = [
-                "id" => $this->daiaIdPrefix . $id,
-                //"format" => $this->daiaResponseFormat,
-            ];
-        }
-
-        try {
-            $result = $this->httpService->get(
-                $this->baseUrl,
-                $params, null, $http_headers
-            );
-        } catch (\Exception $e) {
-            throw new \VuFind\Exception\ILS($e->getMessage());
-        }
-
-        if (!$result->isSuccess()) {
-            // throw ILSException disabled as this will be shown in VuFind-Frontend
-            //throw new ILSException('HTTP error ' . $result->getStatusCode() .
-            //                       ' retrieving status for record: ' . $id);
-            // write to Debug instead
-            $this->debug(
-                'HTTP status ' . $result->getStatusCode() .
-                ' received, retrieving availability information for record: ' . $id
-            );
-
-            // return false as DAIA request failed
-            return false;
-        }
-        return $result->getBody();
-    }
-
-    /**
-     * Get Status
-     *
-     * This is responsible for retrieving the status information of a certain
-     * record.
-     *
-     * @param string $id The record id to retrieve the holdings for
-     *
-     * @return mixed     On success, an associative array with the following keys:
-     * id, availability (boolean), status, location, reserve, callnumber.
-     */
-    public function getStatus($id)
-    {
-        if (!array_key_exists($id, $this->holdings)) {
-            try {
-                $rawResult = $this->doHTTPRequest($this->generateURI($id));
-                // extract the DAIA document for the current id from the
-                // HTTPRequest's result
-                $doc = $this->extractDaiaDoc($id, $rawResult);
-                if ($doc !== null) {
-                    // parse the extracted DAIA document and return the status info
-                    $this->holdings[$id] = $this->parseDaiaDoc($id, $doc);
-                    return $this->holdings[$id];
-                } else {
-                    $this->holdings[$id] = [];
-                }
-            } catch (ILSException $e) {
-                $this->debug($e->getMessage());
-            }
-        } else {
-            return $this->holdings[$id];
-        }
-    }
-
-    /**
      * Parse an array with DAIA status information.
      *
      * @param string $id        Record id for the DAIA array.
@@ -443,58 +347,12 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
         return $return;
     }
 
-    /**
-     * Needed to hide holdings tab if empty
-     * @param string $id
-     * @return boolean
-     */
-    public function hasHoldings($id)
-    {
-        return true;
-        $holdings = $this->getHolding($id);
-
-        if (isset($holdings) && count($holdings) > 0) {
-            // Filter out unwanted statuses
-            foreach ($holdings as $holding) {
-                if ($holding['callnumber'] == 'Unknown') {
-                    return false;
-                }
-                if ($holding['callnumber'] == 'Online') {
-                    return true;
-                }
-            }
-            return true;
-        }
-        // No holdings found
-        return false;
-    }
-
     public function translationEnabled()
     {
         if (isset($this->config['DAIA']['noTranslation'])) {
             return false;
         }
         return true;
-    }
-
-    public function getNewItems()
-    {
-        return [];
-    }
-
-    public function getDepartments()
-    {
-        return [];
-    }
-
-    public function getInstructors()
-    {
-        return [];
-    }
-
-    public function getCourses()
-    {
-        return [];
     }
 
     /**
@@ -537,4 +395,42 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
         ];
         return $return;
     }
+
+    /**
+     * Needed to hide holdings tab if empty
+     * @param string $id
+     * @return boolean
+     */
+    public function hasHoldings($id)
+    {
+        // we can't query DAIA without an ISIL.
+        if (empty($this->isil)) {
+            return false;
+        }
+        $holdings = $this->getHolding($id);
+        if (count($holdings) > 0) {
+            return true;
+        } else {
+            throw new ILSException('no holdings');
+        }
+        return false;
+    }
+
+
+    /**
+     * Generate a DAIA URI necessary for the query, but remove network Prefix from
+     * PPN.
+     *
+     * @param string $id Id of the record whose DAIA document should be queried
+     *
+     * @return string     URI of the DAIA document
+     * @see http://gbv.github.io/daia/daia.html#query-parameters
+     */
+    protected function generateURI($id)
+    {
+        // remove the braces to get a pure ppn.
+        $id = preg_replace('/\(.*\)/', '', $id);
+        return parent::generateURI($id);
+    }
+
 }
