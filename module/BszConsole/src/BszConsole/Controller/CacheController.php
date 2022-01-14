@@ -23,6 +23,7 @@ namespace BszConsole\Controller;
 
 use Zend\Console\Console;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class CacheController
@@ -32,8 +33,32 @@ use Zend\Mvc\Controller\AbstractActionController;
  */
 class CacheController extends AbstractActionController
 {
-    public function cleanAction()
+    protected $basepath;
+    protected $localdirs;
+
+    public function __construct(ServiceLocatorInterface $sm)
     {
-        print 'foo';
+        // This controller should only be accessed from the command line!
+        if (PHP_SAPI != 'cli') {
+            throw new \Exception('Access denied to command line tools.');
+        }
+        $this->serviceLocator = $sm;
+
+        $this->basepath = defined(LOCAL_CACHE_DIR)
+            ? getenv('LOCAL_CACHE_DIR')
+            : '/data/boss/cache';
+        $this->localdirs = array_filter(
+            glob($this->basepath.'/*'), 'is_dir'
+        );
+    }
+    public function showAction()
+    {
+        $output = [];
+
+        foreach ($this->localdirs as $local) {
+            exec('du -sh '.$LOCAL, $output);
+            print $output[0];
+        }
+
     }
 }
