@@ -10,7 +10,7 @@ $config = [
 
         ],
         'aliases' => [
-            'cache' => 'BszConsole\Controller\CacheController',
+            'bosscache' => 'BszConsole\Controller\CacheController',
         ],
     ],
     'console' => [
@@ -42,7 +42,8 @@ $config = [
 
 $routes = [
     //'compile/less' => 'compile less [--force] [<source>] [<target>]',
-    'cache/clean'  => 'cache clean'
+    'bosscache/clean'  => 'bosscache clean',
+    'bosscache/show'  => 'bosscache show'
 ];
 $routeGenerator = new \VuFindConsole\Route\RouteGenerator();
 $routeGenerator->addRoutes($config, $routes);

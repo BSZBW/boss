@@ -36,6 +36,11 @@ class CacheController extends AbstractActionController
     protected $basepath;
     protected $localdirs;
 
+    /**
+     * @param ServiceLocatorInterface $sm
+     *
+     * @throws \Exception
+     */
     public function __construct(ServiceLocatorInterface $sm)
     {
         // This controller should only be accessed from the command line!
@@ -51,14 +56,55 @@ class CacheController extends AbstractActionController
             glob($this->basepath.'/*'), 'is_dir'
         );
     }
+
+    /**
+     * Show cache folder sizes
+     */
     public function showAction()
     {
         $output = [];
+        foreach ($this->localdirs as $local) {
+            exec('du -sh '.$local, $output);
+        }
+        print implode("\n", $output);
+    }
+
+    /**
+     * Clean the cache     *
+     */
+    public function cleanAction()
+    {
 
         foreach ($this->localdirs as $local) {
-            exec('du -sh '.$LOCAL, $output);
-            print $output[0];
+            $subdirs = array_filter(glob($local.'/*'), 'is_dir');
+            foreach ($subdirs as $sub) {
+                $subsub = array_filter(glob($sub.'/*'), 'is_dir');
+                foreach ($subsub as $s) {
+                    static::delete_files($s);
+                }
+            }
         }
+        print "Deleted BOSS caches\n";
 
+    }
+
+    /**
+     * Delete files and folders recursive
+     *
+     * @param $target
+     */
+    private static function delete_files($target) {
+        if(is_dir($target)){
+            //GLOB_MARK adds a slash to directories returned
+            $files = glob( $target . '*', GLOB_MARK );
+
+            foreach( $files as $file ){
+                static::delete_files( $file );
+            }
+
+            rmdir( $target );
+        } elseif(is_file($target)) {
+            unlink( $target );
+        }
     }
 }
