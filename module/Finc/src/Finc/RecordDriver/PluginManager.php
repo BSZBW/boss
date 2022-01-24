@@ -29,6 +29,7 @@ class PluginManager extends \VuFind\RecordDriver\PluginManager
         $key = $keyPrefix . ucwords(
             $data['record_format'] ?? $data['recordtype'] ?? $defaultKeySuffix
         );
+        $keyPrefix = 'Search2' ? 'Solr' : $keyPrefix;
         $recordType = $this->has($key) ? $key : $keyPrefix . $defaultKeySuffix;
 
         // Build the object:
