@@ -251,4 +251,30 @@ class SolrDlrMarc extends SolrMarc
         }
         return $dates;
     }
+
+    /**
+     * Sanitize and clean urls
+     * @return array
+     */
+    public function getUrls()
+    {
+        $parent = parent::getUrls();
+        $forbidden = [
+            'lib\.myilibrary\.com',
+            'lib\.myilibrary\.com',
+            'lib\.myilibrary\.com'
+        ];
+        $regex = '/'.implode('|', $forbidden).'/';
+        foreach ($parent as $k => $url) {
+            if (preg_match('/^http/', $url['desc'])) {
+                $contents = parse_url($url['url']);
+                // avoid ugly url strings in output
+                $parent[$k]['desc'] = $contents['host'];
+            }
+            if (preg_match($regex, $url['url'])) {
+                unset($parent[$k]);
+            }
+        }
+        return $parent;
+    }
 }
