@@ -26,6 +26,8 @@ class PluginManager extends \VuFind\RecordDriver\PluginManager
     public function getSolrRecord($data, $keyPrefix = 'Solr',
         $defaultKeySuffix = 'Default'
     ) {
+        $keyPrefix = 'Search2' ? 'Solr' : $keyPrefix;
+
         $key = $keyPrefix . ucwords(
             $data['record_format'] ?? $data['recordtype'] ?? $defaultKeySuffix
         );

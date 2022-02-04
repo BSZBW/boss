@@ -16,7 +16,7 @@ rem SOLR_HOME
 rem   Home of the Solr indexes and configurations.
 rem
 rem SOLR_PORT
-rem   Network port for Solr. Defaults to 8080.
+rem   Network port for Solr. Defaults to 8983.
 rem
 rem JAVA_HOME
 rem   Home of Java installation (not directly used by this script, but passed along to

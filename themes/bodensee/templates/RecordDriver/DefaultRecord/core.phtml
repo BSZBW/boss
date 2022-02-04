@@ -328,7 +328,7 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
                     <tr>
                       <th><?=$this->transEsc('External Resources')?>: </th>
                       <td><? foreach ($urls as $current): ?>
-                              <a class="external" href="<?=$this->escapeHtmlAttr($this->proxyUrl($current['url']))?>"><?=$this->transEsc($current['desc'])?></a><br/>
+                              <a class="external" href="<?=$this->wayfless($current['url'], $this->client()->getIsils(), )?>"><?=$this->transEsc($current['desc'])?></a><br/>
                           <? endforeach; ?></td>
                     </tr>
                 <? endif; ?>

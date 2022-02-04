@@ -233,4 +233,10 @@ class Factory
             $client->get('Mapongo')
         );
     }
+
+    public static function getWayfless(ContainerInterface $container)
+    {
+        $config = $container->get('Bsz\Config\Client')->get('WAYFless');
+        return new Wayfless($config);
+    }
 }
