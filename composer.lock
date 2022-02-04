@@ -62,16 +62,16 @@
         },
         {
             "name": "bacon/bacon-qr-code",
-            "version": "2.0.4",
+            "version": "2.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Bacon/BaconQrCode.git",
-                "reference": "f73543ac4e1def05f1a70bcd1525c8a157a1ad09"
+                "reference": "7190fc6c20370e0e93da6717b182b8249d5b8e71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Bacon/BaconQrCode/zipball/f73543ac4e1def05f1a70bcd1525c8a157a1ad09",
-                "reference": "f73543ac4e1def05f1a70bcd1525c8a157a1ad09",
+                "url": "https://api.github.com/repos/Bacon/BaconQrCode/zipball/7190fc6c20370e0e93da6717b182b8249d5b8e71",
+                "reference": "7190fc6c20370e0e93da6717b182b8249d5b8e71",
                 "shasum": ""
             },
             "require": {
@@ -80,8 +80,9 @@
                 "php": "^7.1 || ^8.0"
             },
             "require-dev": {
-                "phly/keep-a-changelog": "^1.4",
+                "phly/keep-a-changelog": "^2.1",
                 "phpunit/phpunit": "^7 | ^8 | ^9",
+                "spatie/phpunit-snapshot-assertions": "^4.2.9",
                 "squizlabs/php_codesniffer": "^3.4"
             },
             "suggest": {
@@ -107,7 +108,7 @@
             ],
             "description": "BaconQrCode is a QR code generator for PHP.",
             "homepage": "https://github.com/Bacon/BaconQrCode",
-            "time": "2021-06-18T13:26:35+00:00"
+            "time": "2022-01-31T00:43:09+00:00"
         },
         {
             "name": "cap60552/php-sip2",
@@ -475,10 +476,6 @@
             ],
             "authors": [
                 {
-                    "name": "Balázs Németh",
-                    "email": "zsilbi@zsilbi.hu"
-                },
-                {
                     "name": "Ghislain de Fontenay",
                     "homepage": "http://www.ghislainf.me/",
                     "role": "Developer"
@@ -486,6 +483,10 @@
                 {
                     "name": "Filipe Dobreira",
                     "homepage": "https://github.com/filp"
+                },
+                {
+                    "name": "Balázs Németh",
+                    "email": "zsilbi@zsilbi.hu"
                 },
                 {
                     "name": "Andreas Frömer",
@@ -7452,6 +7453,7 @@
             ],
             "description": "FinderFacade is a convenience wrapper for Symfony's Finder component.",
             "homepage": "https://github.com/sebastianbergmann/finder-facade",
+            "abandoned": true,
             "time": "2020-01-16T08:08:45+00:00"
         },
         {
@@ -8648,22 +8650,25 @@
         },
         {
             "name": "theseer/fdomdocument",
-            "version": "1.6.6",
+            "version": "1.6.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/theseer/fDOMDocument.git",
-                "reference": "6e8203e40a32a9c770bcb62fe37e68b948da6dca"
+                "reference": "5cddd4f9076a9a2b85c5135935bba2dcb3ed7574"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/theseer/fDOMDocument/zipball/6e8203e40a32a9c770bcb62fe37e68b948da6dca",
-                "reference": "6e8203e40a32a9c770bcb62fe37e68b948da6dca",
+                "url": "https://api.github.com/repos/theseer/fDOMDocument/zipball/5cddd4f9076a9a2b85c5135935bba2dcb3ed7574",
+                "reference": "5cddd4f9076a9a2b85c5135935bba2dcb3ed7574",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
                 "lib-libxml": "*",
                 "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "php": ">=7.3"
             },
             "type": "library",
             "autoload": {
@@ -8684,7 +8689,7 @@
             ],
             "description": "The classes contained within this repository extend the standard DOM to use exceptions at all occasions of errors instead of PHP warnings or notices. They also add various custom methods and shortcuts for convenience and to simplify the usage of DOM.",
             "homepage": "https://github.com/theseer/fDOMDocument",
-            "time": "2017-06-30T11:53:12+00:00"
+            "time": "2022-01-25T23:10:35+00:00"
         },
         {
             "name": "theseer/tokenizer",
@@ -8731,12 +8736,12 @@
             "version": "1.9.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/webmozart/assert.git",
+                "url": "https://github.com/webmozarts/assert.git",
                 "reference": "bafc69caeb4d49c39fd0779086c03a3738cbb389"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozart/assert/zipball/bafc69caeb4d49c39fd0779086c03a3738cbb389",
+                "url": "https://api.github.com/repos/webmozarts/assert/zipball/bafc69caeb4d49c39fd0779086c03a3738cbb389",
                 "reference": "bafc69caeb4d49c39fd0779086c03a3738cbb389",
                 "shasum": ""
             },

@@ -2,11 +2,11 @@
     <?php $check = (isset($row['check']) && $row['check']); ?>
     <?php $checkStorageRetrievalRequest = (isset($row['checkStorageRetrievalRequest']) && $row['checkStorageRetrievalRequest']); ?>
     <?php $checkILLRequest = (isset($row['checkILLRequest']) && $row['checkILLRequest']); ?>
-    <?php if (isset($row['barcode']) && $row['barcode'] != "" && !$this->driver->isElectronicBook()): ?>
+    <?php if (!$this->driver->isElectronicBook()): ?>
  <div class="row">
     <div class="col-sm-12">
     <dl class="dl-horizontal">
-        <?php if (isset($row['callnumber'])): ?>
+        <?php if (!empty($row['callnumber'])): ?>
         <dt><?=$this->transEsc('Call Number')?>:</dt>
         <dd><?=$row['callnumber']?></dd>
         <?php endif; ?>
@@ -55,8 +55,6 @@
                 <?php endif; ?>
               <?php endif; ?>
 
-            <dd>
-            </dd>
             <?php if (isset($row['part'][0]) && strlen($row['part'][0]) > 0): ?>
                 <dd><?=$this->escapeHtml($row['part'])?></dd>
             <?php endif; ?>

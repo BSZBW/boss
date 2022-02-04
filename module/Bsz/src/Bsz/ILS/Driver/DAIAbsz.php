@@ -382,7 +382,7 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
 
         $return = [
             'id'        => $doc_id,
-            'callnumber'=> 'Online',
+            'callnumber'=> '',
             'location'  => 'Dokumentenlieferdienst',
             'ilslink'      => 'https://elk-wue.bsz-bw.de/cgi-bin/koha/opac-request-article.pl?biblionumber='.$doc_id,
             'link'      => 'https://elk-wue.bsz-bw.de/cgi-bin/koha/opac-request-article.pl?biblionumber='.$doc_id,
@@ -390,8 +390,7 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
             'status'    => 'Available',
             'checkILLRequest' => true,
             'checkStorageRetrievalRequest' => true,
-            'barcode'         => 'foobar',
-            'requests_placed' => 1,
+            'requests_placed' => 0,
         ];
         return $return;
     }
