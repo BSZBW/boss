@@ -386,7 +386,7 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
             'location'  => 'Dokumentenlieferdienst',
             'ilslink'      => 'https://elk-wue.bsz-bw.de/cgi-bin/koha/opac-request-article.pl?biblionumber='.$doc_id,
             'link'      => 'https://elk-wue.bsz-bw.de/cgi-bin/koha/opac-request-article.pl?biblionumber='.$doc_id,
-            'availability'  => 'online',
+            'availability'  => 'article',
             'status'    => 'Available',
             'checkILLRequest' => true,
             'checkStorageRetrievalRequest' => true,

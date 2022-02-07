@@ -61,6 +61,10 @@
             <?php if (isset($row['about']) && count($row['about']) > 0): ?>
                 <dd> <?=$this->escapeHtml(implode(', ', $row['about']))?></dd>
             <?php endif; ?>
+            <?php if (isset($row['availability']) && $row['availability'] === 'article'): ?>
+                <dt></dt>
+                <dd><a href=<?=$row['link']?> class="external hasicon"><i class="fa fa-globe"></i> <?=$this->transEsc('Order Article')?></a></dd>
+            <?php endif; ?>
           </dl>
     </div>
 </div>
