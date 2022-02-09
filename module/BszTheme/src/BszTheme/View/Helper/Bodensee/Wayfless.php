@@ -52,7 +52,7 @@ class Wayfless extends AbstractHelper
 
         foreach ($this->cfg->get($this->libtag) as $raw) {
             list($search, $replace) = explode('#', $raw);
-            if ($this->cfg->get('regex') && preg_match('/1'.$search.'/i', $link)) {
+            if ($this->cfg->get('regex') && preg_match('/'.$search.'/i', $link)) {
                 $return = preg_replace('/'.$search.'/i', $replace, $link);
             } elseif(strpos($link, $search) !== FALSE) {
                 $return = str_replace($search, $replace, $link)        ;
