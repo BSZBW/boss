@@ -148,11 +148,16 @@ class BszController extends AbstractBase
      */
     public function libraryAction()
     {
-        $client = $this->serviceLocator->get(Client::class);
-        $libraries = $this->serviceLocator->get(Libraries::class);
-        $library = $libraries->getFirstActive($client->getIsils());
-        $homepage = $library->getHomepage();
-        return $this->redirect()->toUrl($homepage);
+
+            $client = $this->serviceLocator->get(Client::class);
+            $libraries = $this->serviceLocator->get(Libraries::class);
+            $library = $libraries->getFirstActive($client->getIsils());
+            if ($library instanceof Bsz\Config\Library) {
+                $homepage = $library->getHomepage();
+                return $this->redirect()->toUrl($homepage);
+            } else {
+                throw new Exception('Please select a library first');
+            }
     }
 
     /**
