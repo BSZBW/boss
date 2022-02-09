@@ -44,7 +44,7 @@ if ((isset($localurls) && count($localUrls)) > 0 || (isset($urls) && count($urls
             <?php endforeach; ?>
         <?php elseif (count($urls) > 0 && !$this->driver->isCollection()): ?>
             <?php foreach ($urls as $current): ?>
-                <a href="<?= $this->escapeHtmlAttr($this->proxyUrl($current['url'])) ?>"
+                <a href="<?= $this->wayfless($current['url']) ?>"
                    class="fulltext external"><?= ($current['url'] == $current['desc']) ? $this->transEsc('Get full text') : $this->transEsc($current['desc']) ?></a>
                 <br/>
             <?php endforeach; ?>

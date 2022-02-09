@@ -236,7 +236,10 @@ class Factory
 
     public static function getWayfless(ContainerInterface $container)
     {
-        $config = $container->get('Bsz\Config\Client')->get('WAYFless');
-        return new Wayfless($config);
+        $config = $container->get('Bsz\Config\Client');
+        return new Wayfless(
+            $config->get('WAYFless'),
+            $config->getTag()
+        );
     }
 }

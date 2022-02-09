@@ -26,14 +26,35 @@ use Zend\View\Helper\AbstractHelper;
 class Wayfless extends AbstractHelper
 {
     protected $cfg;
+    protected $libtag;
 
-    public function __construct(\Bsz\Config\Client $cfg)
+
+    /**
+     * @param \Bsz\Config\Client $cfg
+     *
+     * @param string $libtag
+     */
+    public function __construct(\Bsz\Config\Client $cfg, string $libtag)
     {
         $this->cfg = $cfg;
+        $this->libtag = $libtag;
     }
 
-    public function __invoke($link, $library)
+
+    /**
+     * @param string $link
+     *
+     * @return string
+     */
+    public function __invoke(string $link) : string
     {
+        foreach ($this->cfg->get($this->libtag) as $raw) {
+            list($search, $replace) = explode('#', $raw);
+            $search = str_replace('.', '\.', $search);
+            if (preg_match('/'.$search.'/i', $link)) {
+                return preg_replace('/'.$search.'/i', $replace, $link);
+            }
+        }
         return $link;
     }
 }
