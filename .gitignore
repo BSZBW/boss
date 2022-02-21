@@ -28,6 +28,13 @@ data/
 
 #/solr/
 #/solr/vendor
-#import/solrmarc.log
-#import/solrmarc.log*
-#import/*
+import/solrmarc.log
+import/solrmarc.log*
+/harvest/elib
+/harvest/Koha
+/harvest/NTRS
+/solr/vufind/biblio/index
+/solr/vufind/biblio/spellchecker
+/solr/vufind/biblio/spellShingle
+/solr/vufind/logs
+/solr/vufind/biblio/index/

@@ -185,8 +185,8 @@
          -->
 
     <!-- VuFind uses the default Solr settings for filterCache, which should produce a high
-         hit rate. You can carefully adjust the filterCache and check the hit ratio in 
-         admin>plugins>stats -->  
+         hit rate. You can carefully adjust the filterCache and check the hit ratio in
+         admin>plugins>stats -->
     <filterCache
       class="solr.FastLRUCache"
       size="512"
@@ -306,7 +306,8 @@
   <requestDispatcher handleSelect="true" >
     <!--Make sure your system has some authentication before enabling remote streaming!  -->
     <requestParsers enableRemoteStreaming="true"
-                    multipartUploadLimitInKB="2048000"
+                    enableStreamBody="true"
+                    multipartUploadLimitInKBStreamBody="2048000"
                     formdataUploadLimitInKB="2048"/>
 
     <!-- Set HTTP caching related parameters (for proxy caches and clients).
@@ -369,9 +370,9 @@
       <str name="spellcheck.count">20</str>
       <str name="q.op">AND</str>
       <str name="df">allfields</str>
-      <!-- Enable split on whitespace to prevent switching from term centric to field 
-           centric search if different field types return different analysis (such as 
-           synonyms or stopwords). Note the downside that sow=true prevents 
+      <!-- Enable split on whitespace to prevent switching from term centric to field
+           centric search if different field types return different analysis (such as
+           synonyms or stopwords). Note the downside that sow=true prevents
            multi-word synonyms from working properly.
            See the following links for more information:
            https://opensourceconnections.com/blog/2018/02/20/edismax-and-multiterm-synonyms-oddities/
@@ -402,9 +403,9 @@
       <str name="spellcheck.count">20</str>
       <str name="q.op">AND</str>
       <str name="df">allfields</str>
-      <!-- Enable split on whitespace to prevent switching from term centric to field 
-           centric search if different field types return different analysis (such as 
-           synonyms or stopwords). Note the downside that sow=true prevents 
+      <!-- Enable split on whitespace to prevent switching from term centric to field
+           centric search if different field types return different analysis (such as
+           synonyms or stopwords). Note the downside that sow=true prevents
            multi-word synonyms from working properly.
            See the following links for more information:
            https://opensourceconnections.com/blog/2018/02/20/edismax-and-multiterm-synonyms-oddities/
@@ -428,9 +429,9 @@
       <str name="lowercaseOperators">false</str>
       <str name="q.op">AND</str>
       <str name="df">allfields</str>
-      <!-- Enable split on whitespace to prevent switching from term centric to field 
-           centric search if different field types return different analysis (such as 
-           synonyms or stopwords). Note the downside that sow=true prevents 
+      <!-- Enable split on whitespace to prevent switching from term centric to field
+           centric search if different field types return different analysis (such as
+           synonyms or stopwords). Note the downside that sow=true prevents
            multi-word synonyms from working properly.
            See the following links for more information:
            https://opensourceconnections.com/blog/2018/02/20/edismax-and-multiterm-synonyms-oddities/

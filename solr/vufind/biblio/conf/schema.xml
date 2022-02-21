@@ -13,6 +13,8 @@
     </fieldType>
     <fieldType name="text" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
+        <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-specials.txt"/>
+        <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-umlauts.txt" />
         <tokenizer class="solr.ICUTokenizerFactory"/>
         <filter class="solr.WordDelimiterGraphFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="1" catenateNumbers="1" catenateAll="0" splitOnCaseChange="1"/>
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"/>
@@ -22,6 +24,8 @@
         <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
       </analyzer>
       <analyzer type="query">
+        <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-specials.txt"/>
+        <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-umlauts.txt" />
         <tokenizer class="solr.ICUTokenizerFactory"/>
         <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
         <filter class="solr.WordDelimiterGraphFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0" splitOnCaseChange="1"/>
@@ -35,23 +39,31 @@
     <!-- Text Field without Stemming and Synonyms -->
     <fieldType name="textProper" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
+        <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-specials.txt"/>
+        <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-umlauts.txt" />
         <tokenizer class="solr.ICUTokenizerFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
         <filter class="solr.WordDelimiterGraphFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="1" catenateNumbers="1" catenateAll="0"/>
         <filter class="solr.ICUFoldingFilterFactory"/>
-        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"/>
+        <!--filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"/-->
         <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
       </analyzer>
       <analyzer type="query">
+        <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-specials.txt"/>
+        <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-umlauts.txt" />
         <tokenizer class="solr.ICUTokenizerFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
         <filter class="solr.WordDelimiterGraphFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0"/>
         <filter class="solr.ICUFoldingFilterFactory"/>
-        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"/>
+        <!--filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"/-->
         <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
       </analyzer>
     </fieldType>
     <!-- Basic Text Field for use with Spell Correction -->
     <fieldType name="textSpell" class="solr.TextField" positionIncrementGap="100">
       <analyzer>
+        <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-specials.txt"/>
+        <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-umlauts.txt" />
         <tokenizer class="solr.ICUTokenizerFactory"/>
         <filter class="solr.WordDelimiterGraphFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0"/>
         <filter class="solr.ICUFoldingFilterFactory"/>
@@ -62,6 +74,8 @@
     <!-- More advanced spell checking field. -->
     <fieldType name="textSpellShingle" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
+        <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-specials.txt"/>
+        <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-umlauts.txt" />
         <tokenizer class="solr.ICUTokenizerFactory"/>
         <filter class="solr.ICUFoldingFilterFactory"/>
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"/>
@@ -69,6 +83,8 @@
         <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
       </analyzer>
       <analyzer type="query">
+        <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-specials.txt"/>
+        <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-umlauts.txt" />
         <tokenizer class="solr.ICUTokenizerFactory"/>
         <filter class="solr.ICUFoldingFilterFactory"/>
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"/>
@@ -108,11 +124,22 @@
       </analyzer>
     </fieldType>
     <fieldType name="date" class="solr.DatePointField" sortMissingLast="true" omitNorms="true"/>
+
+    <!-- DLRsearch -->
+    <fieldType name="Year" class="solr.TrieIntField"
+               sortMissingLast="true"
+               indexed="true"
+               stored="true"
+               required="false"
+               multiValued="true"/>
+
     <fieldType name="random" class="solr.RandomSortField" indexed="true" />
     <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true" omitNorms="true"/>
     <!-- add geo field to handle geographic search and display capabilities -->
     <fieldType name="geo" class="solr.SpatialRecursivePrefixTreeFieldType" distErrPct="0.025" maxDistErr="0.000009" distanceUnits="degrees" />
   </types>
+
+
  <fields>
    <!-- Required by Solr 4.x -->
    <field name="_version_" type="long" indexed="true" stored="true"/>
@@ -223,11 +250,30 @@
    <field name="is_hierarchy_title" type="string" indexed="true" stored="true" multiValued="false"/>
    <field name="title_in_hierarchy" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="hierarchy_browse" type="string" indexed="true" stored="false" multiValued="true"/>
+
    <!-- Used for loading correct record driver -->
-   <field name="record_format" type="string" indexed="true" stored="true"/>
+   <!--field name="record_format" type="string" indexed="true" stored="true"/-->
+   <!-- Used for loading correct record driver -->
+   <field name="recordtype" type="string" indexed="true" stored="true"/>
    <!-- Tracking fields to keep track of oldest and most recent index times -->
+
    <field name="first_indexed" type="date" indexed="true" stored="true" docValues="true"/>
    <field name="last_indexed" type="date" indexed="true" stored="true" docValues="true"/>
+
+   <!-- DLRsearch -->
+   <field name="institution_id" type="textFacet" multiValued="true" indexed="true" stored="true"/>
+   <field name="consortium" type="textFacet" />
+   <field name="publish_date" type="Year" />
+   <field name="publish_date_sort" type="Year" multiValued="false" />
+   <field name="rights" type="textFacet" />
+   <field name="source" type="textFacet" />
+   <field name="location" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="cn_source" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="cn_sort" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="del" type="string" indexed="true" stored="true" multiValued="false"/>
+   <field name="department" type="textFacet"/>
+   <field name="institute" type="string" indexed="true" stored="true" multiValued="true"/>
+
    <!-- Dynamic fields for customization without schema modification -->
    <dynamicField name="*_date" type="date" indexed="true" stored="true" docValues="true"/>
    <dynamicField name="*_date_mv" type="date" indexed="true" stored="true" multiValued="true" docValues="true"/>
@@ -246,6 +292,7 @@
    <dynamicField name="*_geo" type="geo" indexed="true" stored="true" multiValued="false" />
    <dynamicField name="*_geo_mv" type="geo" indexed="true" stored="true" multiValued="true" />
    <dynamicField name="*_autocomplete" type="text_autocomplete" indexed="true" stored="true" multiValued="false"/>
+
  </fields>
  <uniqueKey>id</uniqueKey>
  <!-- CopyFields for Spelling -->
