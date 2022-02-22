@@ -28,13 +28,7 @@ class Wayfless extends AbstractHelper
     protected $cfg;
     protected $libtag;
 
-
-    /**
-     * @param \Bsz\Config\Client $cfg
-     *
-     * @param string $libtag
-     */
-    public function __construct(\Bsz\Config\Client $cfg, string $libtag)
+    public function __construct(\Bsz\Config\Client $cfg, $libtag)
     {
         $this->cfg = $cfg;
         $this->libtag = $libtag;
@@ -50,14 +44,15 @@ class Wayfless extends AbstractHelper
     {
         $return = $link;
 
-        foreach ($this->cfg->get($this->libtag) as $raw) {
-            list($search, $replace) = explode('#', $raw);
-            if ($this->cfg->get('regex') && preg_match('/'.$search.'/i', $link)) {
-                $return = preg_replace('/'.$search.'/i', $replace, $link);
-            } elseif(strpos($link, $search) !== FALSE) {
-                $return = str_replace($search, $replace, $link)        ;
+        if ($this->cfg->offsetExists($this->libtag)) {
+            foreach ($this->cfg->get($this->libtag) as $raw) {
+                list($search, $replace) = explode('#', $raw);
+                if ($this->cfg->get('regex') && preg_match('/'.$search.'/i', $link)) {
+                    $return = preg_replace('/'.$search.'/i', $replace, $link);
+                } elseif(strpos($link, $search) !== FALSE) {
+                    $return = str_replace($search, $replace, $link)        ;
+                }
             }
-
         }
         return $return;
     }
