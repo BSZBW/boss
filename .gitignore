@@ -25,9 +25,8 @@ data/
 /themes/**/css/
 /themes/**/make/
 /config
-
 #/solr/
-#/solr/vendor
+/solr/vendor
 import/solrmarc.log
 import/solrmarc.log*
 /harvest/elib

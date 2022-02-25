@@ -315,6 +315,7 @@ class UpgradeTest extends \VuFindTest\Unit\TestCase
             'The [WorldCat] xISSN_secret setting is no longer used and has been removed.',
             'The Editions related record module is no longer supported due to OCLC\'s xID API shutdown. It has been removed from your settings.',
             'The WorldCatEditions related record module is no longer supported due to OCLC\'s xID API shutdown. It has been removed from your settings.',
+            'WARNING: Could not find DAIA.ini file; check your ILS driver configuration.'
         ];
         $this->assertEquals($expectedWarnings, $upgrader->getWarnings());
     }
@@ -495,7 +496,9 @@ class UpgradeTest extends \VuFindTest\Unit\TestCase
     {
         $upgrader = $this->getUpgrader('primo');
         $upgrader->run();
-        $expectedWarnings = [];
+        $expectedWarnings = [
+            'WARNING: Could not find DAIA.ini file; check your ILS driver configuration.',
+        ];
         $this->assertEquals($expectedWarnings, $upgrader->getWarnings());
         $results = $upgrader->getNewConfigs();
         $this->assertEquals(
