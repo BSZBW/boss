@@ -35,7 +35,7 @@
        that you fully re-index after changing this setting as it can
        affect both how text is indexed and queried.
   -->
-  <luceneMatchVersion>8.11.1</luceneMatchVersion>
+  <luceneMatchVersion>7.3.1</luceneMatchVersion>
 
   <!-- <lib/> directives can be used to instruct Solr to load any Jars
        identified and use them to resolve any "plugins" specified in
@@ -74,6 +74,9 @@
     -->
   <lib dir="${solr.install.dir:../../../..}/contrib/extraction/lib" regex=".*\.jar" />
   <lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-cell-\d.*\.jar" />
+
+  <lib dir="${solr.install.dir:../../../..}/contrib/clustering/lib/" regex=".*\.jar" />
+  <lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-clustering-\d.*\.jar" />
 
   <lib dir="${solr.install.dir:../../../..}/contrib/langid/lib/" regex=".*\.jar" />
   <lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-langid-\d.*\.jar" />
@@ -367,17 +370,14 @@
          be based on the last SolrCore to be initialized.
 
       -->
-    <maxBooleanClauses>${solr.max.booleanClauses:1024}</maxBooleanClauses>
+    <maxBooleanClauses>1024</maxBooleanClauses>
 
 
     <!-- Solr Internal Query Caches
 
-         There are four implementations of cache available for Solr:
-         LRUCache, based on a synchronized LinkedHashMap, 
-         LFUCache and FastLRUCache, based on a ConcurrentHashMap, and CaffeineCache -
-         a modern and robust cache implementation. Note that in Solr 9.0
-         only CaffeineCache will be available, other implementations are now
-         deprecated.
+         There are two implementations of cache available for Solr,
+         LRUCache, based on a synchronized LinkedHashMap, and
+         FastLRUCache, based on a ConcurrentHashMap.
 
          FastLRUCache has faster gets and slower puts in single
          threaded operation and thus is generally faster than LRUCache
@@ -404,7 +404,8 @@
            autowarmCount - the number of entries to prepopulate from
                and old cache.
       -->
-    <filterCache size="512"
+    <filterCache class="solr.FastLRUCache"
+                 size="512"
                  initialSize="512"
                  autowarmCount="0"/>
 
@@ -416,7 +417,8 @@
             maxRamMB - the maximum amount of RAM (in MB) that this cache is allowed
                        to occupy
       -->
-    <queryResultCache size="512"
+    <queryResultCache class="solr.LRUCache"
+                      size="512"
                       initialSize="512"
                       autowarmCount="0"/>
 
@@ -426,7 +428,8 @@
          document).  Since Lucene internal document ids are transient,
          this cache will not be autowarmed.
       -->
-    <documentCache size="512"
+    <documentCache class="solr.LRUCache"
+                   size="512"
                    initialSize="512"
                    autowarmCount="0"/>
 
@@ -437,7 +440,8 @@
          even if not configured here.
       -->
     <!--
-       <fieldValueCache size="512"
+       <fieldValueCache class="solr.FastLRUCache"
+                        size="512"
                         autowarmCount="128"
                         showItems="32" />
       -->
@@ -453,6 +457,7 @@
       -->
     <!--
        <cache name="myUserCache"
+              class="solr.LRUCache"
               size="4096"
               initialSize="1024"
               autowarmCount="1024"
@@ -551,62 +556,6 @@
     <useColdSearcher>false</useColdSearcher>
 
   </query>
-
-  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     Circuit Breaker Section - This section consists of configurations for
-     circuit breakers
-     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-  <circuitBreaker class="solr.CircuitBreakerManager" enabled="true">
-    <!-- Enable Circuit Breakers
-
-    Circuit breakers are designed to allow stability and predictable query
-    execution. They prevent operations that can take down the node and cause
-    noisy neighbour issues.
-
-    This flag is the uber control switch which controls the activation/deactivation of all circuit
-    breakers. At the moment, the only circuit breaker (max JVM circuit breaker) does not have its
-    own specific configuration. However, if a circuit breaker wishes to be independently configurable,
-    they are free to add their specific configuration but need to ensure that this flag is always
-    respected - this should have veto over all independent configuration flags.
-    -->
-
-    <!-- Memory Circuit Breaker Control Flag
-
-    Use the following flag to control the behaviour of this circuit breaker
-    -->
-    <str name="memEnabled">true</str>
-
-    <!-- Memory Circuit Breaker Threshold In Percentage
-
-    Specific configuration for max JVM heap usage circuit breaker. This configuration defines the
-    threshold percentage of maximum heap allocated beyond which queries will be rejected until the
-    current JVM usage goes below the threshold. The valid value range for this parameter is 50 - 95.
-
-    Consider a scenario where the max heap allocated is 4 GB and memoryCircuitBreakerThresholdPct is
-    defined as 75. Threshold JVM usage will be 4 * 0.75 = 3 GB. Its generally a good idea to keep this value between 75 - 80% of maximum heap
-    allocated.
-
-    If, at any point, the current JVM heap usage goes above 3 GB, queries will be rejected until the heap usage goes below 3 GB again.
-    If you see queries getting rejected with 503 error code, check for "Circuit Breakers tripped"
-    in logs and the corresponding error message should tell you what transpired (if the failure
-    was caused by tripped circuit breakers).
-    -->
-    <str name="memThreshold">75</str>
-
-    <!-- CPU Based Circuit Breaker Control Flag
-
-    Use the following flag to control the behaviour of this circuit breaker
-    -->
-    <str name="cpuEnabled">true</str>
-
-    <!-- CPU Based Circuit Breaker Triggering Threshold
-
-    The triggering threshold is defined in units of CPU utilization. The configuration to control this is as below:
-    -->
-    <str name="cpuThreshold">75</str>
-
-
-  </circuitBreaker>
 
 
   <!-- Request Dispatcher
@@ -1023,6 +972,8 @@
     </arr>
   </requestHandler>
 
+  <!-- Clustering Component. (Omitted here. See the default Solr example for a typical configuration.) -->
+
   <!-- Terms Component
 
        http://wiki.apache.org/solr/TermsComponent
@@ -1210,13 +1161,23 @@
     <processor class="solr.ParseDoubleFieldUpdateProcessorFactory"/>
     <processor class="solr.ParseDateFieldUpdateProcessorFactory">
       <arr name="format">
-        <str>yyyy-MM-dd['T'[HH:mm[:ss[.SSS]][z</str>
-        <str>yyyy-MM-dd['T'[HH:mm[:ss[,SSS]][z</str>
-        <str>yyyy-MM-dd HH:mm[:ss[.SSS]][z</str>
-        <str>yyyy-MM-dd HH:mm[:ss[,SSS]][z</str>
-        <str>[EEE, ]dd MMM yyyy HH:mm[:ss] z</str>
-        <str>EEEE, dd-MMM-yy HH:mm:ss z</str>
-        <str>EEE MMM ppd HH:mm:ss [z ]yyyy</str>
+        <str>yyyy-MM-dd'T'HH:mm:ss.SSSZ</str>
+        <str>yyyy-MM-dd'T'HH:mm:ss,SSSZ</str>
+        <str>yyyy-MM-dd'T'HH:mm:ss.SSS</str>
+        <str>yyyy-MM-dd'T'HH:mm:ss,SSS</str>
+        <str>yyyy-MM-dd'T'HH:mm:ssZ</str>
+        <str>yyyy-MM-dd'T'HH:mm:ss</str>
+        <str>yyyy-MM-dd'T'HH:mmZ</str>
+        <str>yyyy-MM-dd'T'HH:mm</str>
+        <str>yyyy-MM-dd HH:mm:ss.SSSZ</str>
+        <str>yyyy-MM-dd HH:mm:ss,SSSZ</str>
+        <str>yyyy-MM-dd HH:mm:ss.SSS</str>
+        <str>yyyy-MM-dd HH:mm:ss,SSS</str>
+        <str>yyyy-MM-dd HH:mm:ssZ</str>
+        <str>yyyy-MM-dd HH:mm:ss</str>
+        <str>yyyy-MM-dd HH:mmZ</str>
+        <str>yyyy-MM-dd HH:mm</str>
+        <str>yyyy-MM-dd</str>
       </arr>
     </processor>
     <processor class="solr.AddSchemaFieldsUpdateProcessorFactory">

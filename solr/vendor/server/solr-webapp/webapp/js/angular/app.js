@@ -15,68 +15,21 @@
  limitations under the License.
 */
 
-/* SOLR-14120: Providing a manual definition for the methods 'includes' and 'startsWith' to support Internet Explorer 11. */
-if (!String.prototype.includes) {
-  String.prototype.includes = function(search, start) { 'use strict';
-  if (search instanceof RegExp) {
-    throw TypeError('first argument must not be a RegExp');
-  } 
-  if (start === undefined) { start = 0; }
-    return this.indexOf(search, start) !== -1;
-  };
-}
-if (!Array.prototype.includes) {
-  Object.defineProperty(Array.prototype, "includes", {
-    enumerable: false,
-    value: function(obj) {
-    var newArr = this.filter(function(el) {
-      return el == obj;
-    });
-    return newArr.length > 0;
-    }
-  });
-}
-if (!String.prototype.startsWith) {
-  Object.defineProperty(String.prototype, 'startsWith', {
-    value: function(search, rawPos) {
-    var pos = rawPos > 0 ? rawPos|0 : 0;
-    return this.substring(pos, pos + search.length) === search;
-    }
-  });
-}
-
 var solrAdminApp = angular.module("solrAdminApp", [
   "ngResource",
   "ngRoute",
   "ngCookies",
   "ngtimeago",
   "solrAdminServices",
-  "localytics.directives",
-  "ab-base64"
+  "localytics.directives"
 ]);
 
 solrAdminApp.config([
-  '$locationProvider', function($locationProvider) {
-    $locationProvider.hashPrefix('');
-}])
-.config([
   '$routeProvider', function($routeProvider) {
     $routeProvider.
       when('/', {
         templateUrl: 'partials/index.html',
         controller: 'IndexController'
-      }).
-      when('/unknown', {
-        templateUrl: 'partials/unknown.html',
-        controller: 'UnknownController'
-      }).
-      when('/login', {
-        templateUrl: 'partials/login.html',
-        controller: 'LoginController'
-      }).
-      when('/login/:route', {
-        templateUrl: 'partials/login.html',
-        controller: 'LoginController'
       }).
       when('/~logging', {
         templateUrl: 'partials/logging.html',
@@ -118,13 +71,9 @@ solrAdminApp.config([
         templateUrl: 'partials/cluster_suggestions.html',
         controller: 'ClusterSuggestionsController'
       }).
-      when('/:core/core-overview', {
+      when('/:core', {
         templateUrl: 'partials/core_overview.html',
         controller: 'CoreOverviewController'
-      }).
-      when('/:core/alias-overview', {
-        templateUrl: 'partials/alias_overview.html',
-        controller: 'AliasOverviewController'
       }).
       when('/:core/collection-overview', {
         templateUrl: 'partials/collection_overview.html',
@@ -188,17 +137,8 @@ solrAdminApp.config([
         templateUrl: 'partials/segments.html',
         controller: 'SegmentsController'
       }).
-      when('/~schema-designer', {
-        templateUrl: 'partials/schema-designer.html',
-        controller: 'SchemaDesignerController'
-      }).
-      when('/~security', {
-        templateUrl: 'partials/security.html',
-        controller: 'SecurityController'
-      }).
       otherwise({
-        templateUrl: 'partials/unknown.html',
-        controller: 'UnknownController'
+        redirectTo: '/'
       });
 }])
 .constant('Constants', {
@@ -339,26 +279,24 @@ solrAdminApp.config([
         },
         link: function(scope, element, attrs) {
             scope.$watch("data", function(newValue, oldValue) {
-              if (newValue && !jQuery.isEmptyObject(newValue)) {
+                if (newValue) {
                   var treeConfig = {
-                    'core' : {
-                      'animation' : 0,
-                      'worker': false
-                    }
+                      "plugins" : [ "themes", "json_data", "ui" ],
+                      "json_data" : {
+                        "data" : scope.data,
+                        "progressive_render" : true
+                      },
+                      "core" : {
+                        "animation" : 0
+                      }
                   };
 
                   var tree = $(element).jstree(treeConfig);
-
-                  // This is done to ensure that the data can be refreshed if it is updated behind the scenes.
-                  // Putting the data in the treeConfig makes it stack and doesn't update.
-                  $(element).jstree(true).settings.core.data = scope.data;
-                  $(element).jstree(true).refresh();
-
-                  $(element).jstree('open_node','li:first');
+                  tree.jstree('open_node','li:first');
                   if (tree) {
                       element.bind("select_node.jstree", function (event, data) {
                           scope.$apply(function() {
-                            scope.onSelect({url: data.node.a_attr.href, data: data});
+                              scope.onSelect({url: data.args[0].href, data: data});
                           });
                       });
                   }
@@ -377,7 +315,7 @@ solrAdminApp.config([
     }
   };
 })
-.factory('httpInterceptor', function($q, $rootScope, $location, $timeout, $injector) {
+.factory('httpInterceptor', function($q, $rootScope, $timeout, $injector) {
   var activeRequests = 0;
 
   var started = function(config) {
@@ -388,12 +326,7 @@ solrAdminApp.config([
       delete $rootScope.exceptions[config.url];
     }
     activeRequests++;
-    if (sessionStorage.getItem("auth.header")) {
-      config.headers['Authorization'] = sessionStorage.getItem("auth.header");
-    }
-    if (!config.timeout) {
-      config.timeout = 10000;
-    }
+    config.timeout = 10000;
     return config || $q.when(config);
   };
 
@@ -410,11 +343,6 @@ solrAdminApp.config([
         $rootScope.$broadcast('connectionStatusInactive');
       },2000);
     }
-    if (!$location.path().startsWith('/login') && !$location.path().startsWith('/unknown')) {
-      sessionStorage.removeItem("http401");
-      sessionStorage.removeItem("auth.state");
-      sessionStorage.removeItem("auth.statusText");
-    }
     return response || $q.when(response);
   };
 
@@ -426,12 +354,6 @@ solrAdminApp.config([
     if (rejection.config.headers.doNotIntercept) {
         return rejection;
     }
-
-    // Some page controllers, such as Schema Designer, handle errors internally to provide a better user experience than the global error handler
-    var isHandledByPageController =
-        (rejection.config.url && rejection.config.url.startsWith("/api/schema-designer/")) ||
-        (rejection.status === 403 && $location.path() === "/~security");
-
     if (rejection.status === 0) {
       $rootScope.$broadcast('connectionStatusActive');
       if (!$rootScope.retryCount) $rootScope.retryCount=0;
@@ -439,46 +361,16 @@ solrAdminApp.config([
       var $http = $injector.get('$http');
       var result = $http(rejection.config);
       return result;
-    } else if (rejection.status === 401 && !isHandledByPageController) {
-      // Authentication redirect
-      var headers = rejection.headers();
-      var wwwAuthHeader = headers['www-authenticate'];
-      sessionStorage.setItem("auth.wwwAuthHeader", wwwAuthHeader);
-      sessionStorage.setItem("auth.authDataHeader", headers['x-solr-authdata']);
-      sessionStorage.setItem("auth.statusText", rejection.statusText);
-      sessionStorage.setItem("http401", "true");
-      sessionStorage.removeItem("auth.scheme");
-      sessionStorage.removeItem("auth.realm");
-      sessionStorage.removeItem("auth.username");
-      sessionStorage.removeItem("auth.header");
-      sessionStorage.removeItem("auth.state");
-      if ($location.path().includes('/login')) {
-        if (!sessionStorage.getItem("auth.location")) {
-          sessionStorage.setItem("auth.location", "/");
-        }
-      } else {
-        sessionStorage.setItem("auth.location", $location.path());
-        $location.path('/login');
-      }
     } else {
-      // some controllers prefer to handle errors internally
-      if (!isHandledByPageController) {
-        if (rejection.data.error) {
-          $rootScope.exceptions[rejection.config.url] = rejection.data.error;
-        } else if (rejection.data.message) {
-          $rootScope.exceptions[rejection.config.url] = {msg:rejection.data.message+" from "+rejection.data.url};
-        }
-      }
+      $rootScope.exceptions[rejection.config.url] = rejection.data.error;
     }
     return $q.reject(rejection);
-  };
+  }
 
   return {request: started, response: ended, responseError: failed};
 })
 .config(function($httpProvider) {
   $httpProvider.interceptors.push("httpInterceptor");
-  // Force BasicAuth plugin to serve us a 'Authorization: xBasic xxxx' header so browser will not pop up login dialogue
-  $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 })
 .directive('fileModel', function ($parse) {
     return {
@@ -496,7 +388,7 @@ solrAdminApp.config([
     };
 });
 
-solrAdminApp.controller('MainController', function($scope, $route, $rootScope, $location, Cores, Collections, System, Ping, Constants, SchemaDesigner) {
+solrAdminApp.controller('MainController', function($scope, $route, $rootScope, $location, Cores, Collections, System, Ping, Constants) {
 
   $rootScope.exceptions={};
 
@@ -507,7 +399,6 @@ solrAdminApp.controller('MainController', function($scope, $route, $rootScope, $
   $scope.refresh = function() {
       $scope.cores = [];
       $scope.collections = [];
-      $scope.aliases = [];
   }
 
   $scope.refresh();
@@ -518,9 +409,6 @@ solrAdminApp.controller('MainController', function($scope, $route, $rootScope, $
       delete $scope.currentCore;
       for (key in data.status) {
         var core = data.status[key];
-        if (core.name.startsWith("._designer_")) {
-          continue;
-        }
         $scope.cores.push(core);
         if ((!$scope.isSolrCloud || pageType == Constants.IS_CORE_PAGE) && core.name == currentCoreName) {
             $scope.currentCore = core;
@@ -530,79 +418,29 @@ solrAdminApp.controller('MainController', function($scope, $route, $rootScope, $
       $scope.initFailures = data.initFailures;
     });
 
-    $scope.isSchemaDesignerEnabled = true;
     System.get(function(data) {
       $scope.isCloudEnabled = data.mode.match( /solrcloud/i );
 
-      var currentCollectionName = $route.current.params.core;
-      delete $scope.currentCollection;
       if ($scope.isCloudEnabled) {
-        Collections.list(function (cdata) {
-          Collections.listaliases(function (adata) {
-            $scope.aliases = [];
-            for (var key in adata.aliases) {
-              props = {};
-              if (key in adata.properties) {
-                props = adata.properties[key];
-              }
-              var alias = {name: key, collections: adata.aliases[key], type: 'alias', properties: props};
-              $scope.aliases.push(alias);
-              if (pageType == Constants.IS_COLLECTION_PAGE && alias.name == currentCollectionName) {
-                $scope.currentCollection = alias;
-              }
+        Collections.list(function (data) {
+          $scope.collections = [];
+          var currentCollectionName = $route.current.params.core;
+          delete $scope.currentCollection;
+          for (key in data.collections) {
+            var collection = {name: data.collections[key]};
+            $scope.collections.push(collection);
+            if (pageType == Constants.IS_COLLECTION_PAGE && collection.name == currentCollectionName) {
+              $scope.currentCollection = collection;
             }
-            $scope.collections = [];
-            for (key in cdata.collections) {
-              if (cdata.collections[key].startsWith("._designer_")) {
-                continue; // ignore temp designer collections
-              }
-              var collection = {name: cdata.collections[key], type: 'collection'};
-              $scope.collections.push(collection);
-              if (pageType == Constants.IS_COLLECTION_PAGE && collection.name == currentCollectionName) {
-                $scope.currentCollection = collection;
-              }
-            }
-
-            $scope.aliases_and_collections = $scope.aliases;
-            if ($scope.aliases.length > 0) {
-              $scope.aliases_and_collections = $scope.aliases_and_collections.concat({name:'-----'});
-            }
-            $scope.aliases_and_collections = $scope.aliases_and_collections.concat($scope.collections);
-
-            SchemaDesigner.get({path: "configs"}, function (ignore) {
-              // no-op, just checking if we have access to this path
-            }, function(e) {
-              if (e.status === 401 || e.status === 403) {
-                $scope.isSchemaDesignerEnabled = false;
-              }
-            });
-          });
-        });
+          }
+        })
       }
 
-      $scope.showEnvironment = data.environment !== undefined;
-      if (data.environment) {
-        $scope.environment = data.environment;
-        var env_labels = {'prod': 'Production', 'stage': 'Staging', 'test': 'Test', 'dev': 'Development'};
-        $scope.environment_label = env_labels[data.environment];
-        if (data.environment_label) {
-          $scope.environment_label = data.environment_label;
-        }
-        if (data.environment_color) {
-          $scope.environment_color = data.environment_color;
-        }
-      }
     });
 
     $scope.showingLogging = page.lastIndexOf("logging", 0) === 0;
     $scope.showingCloud = page.lastIndexOf("cloud", 0) === 0;
     $scope.page = page;
-    $scope.currentUser = sessionStorage.getItem("auth.username");
-    $scope.http401 = sessionStorage.getItem("http401");
-  };
-
-  $scope.isMultiDestAlias = function(selectedColl) {
-    return selectedColl && selectedColl.type === 'alias' && selectedColl.collections.includes(',');
   };
 
   $scope.ping = function() {
@@ -618,16 +456,12 @@ solrAdminApp.controller('MainController', function($scope, $route, $rootScope, $
   }
 
   $scope.showCore = function(core) {
-    $location.url("/" + core.name + "/core-overview");
+    $location.url("/" + core.name);
   }
 
   $scope.showCollection = function(collection) {
-    if (collection.type === 'collection') {
-      $location.url("/" + collection.name + "/collection-overview")
-    } else if (collection.type === 'alias') {
-      $location.url("/" + collection.name + "/alias-overview")
-    }
-  };
+    $location.url("/" + collection.name + "/collection-overview")
+  }
 
   $scope.$on('$routeChangeStart', function() {
       $rootScope.exceptions = {};

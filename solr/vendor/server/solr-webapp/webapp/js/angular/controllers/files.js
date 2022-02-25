@@ -15,8 +15,8 @@
  limitations under the License.
 */
 
-var contentTypeMap = { xml : 'application/xml', html : 'application/xml', js : 'application/javascript', json : 'application/json', css : 'text/plain' };
-var languages = {js: "javascript", xml:"xml", xsl:"xml", vm: "xml", html: "xml", json: "json"};
+var contentTypeMap = { xml : 'text/xml', html : 'text/html', js : 'text/javascript', json : 'application/json', 'css' : 'text/css' };
+var languages = {js: "javascript", xml:"xml", xsl:"xml", vm: "xml", html: "xml", json: "json", css: "css"};
 
 solrAdminApp.controller('FilesController',
     function($scope, $rootScope, $routeParams, $location, Files, Constants) {
@@ -31,9 +31,9 @@ solrAdminApp.controller('FilesController',
 
             var process = function (path, tree) {
                 var params = {core: $routeParams.core};
-                if (path.slice(-1) === '/') {
+                if (path.slice(-1) == '/') {
                     params.file = path.slice(0, -1);
-                } else if (path!=='') {
+                } else if (path!='') {
                     params.file = path;
                 }
 
@@ -48,30 +48,32 @@ solrAdminApp.controller('FilesController',
 
                         if (filedata.directory) {
                             file = file + "/";
-                            if ($scope.file && $scope.file.indexOf(path + file) === 0) {
-                                state = {"opened": true};
+                            if ($scope.file && $scope.file.indexOf(path + file) == 0) {
+                                state = "open";
                             } else {
-                                state = {"opened": false};
+                                state = "closed";
                             }
                             children = [];
                             process(path + file, children);
                         }
                         tree.push({
-                            text: file,
-                            a_attr: { id: path + file},
+                            data: {
+                                title: file,
+                                attr: { id: path + file}
+                            },
                             children: children,
                             state: state
                         });
                     }
                 });
-            };
+            }
             $scope.tree = [];
             process("", $scope.tree);
 
-            if ($scope.file && $scope.file !== '' && $scope.file.split('').pop()!=='/') {
+            if ($scope.file && $scope.file != '' && $scope.file.split('').pop()!='/') {
                 var extension;
-                if ($scope.file === "managed-schema") {
-                  extension = 'xml';
+                if ($scope.file == "managed-schema") {
+                  extension = contentTypeMap['xml'];
                 } else {
                   extension = $scope.file.match( /\.(\w+)$/)[1] || '';
                 }
@@ -90,7 +92,7 @@ solrAdminApp.controller('FilesController',
         };
 
         $scope.showTreeLink = function(data) {
-            var file = data.node.a_attr.id;
+            var file = data.args[0].id;
             $location.search({file:file});
         };
 

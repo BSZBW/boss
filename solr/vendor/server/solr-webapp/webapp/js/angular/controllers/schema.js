@@ -150,8 +150,7 @@ solrAdminApp.controller('SchemaController',
 
                 $scope.newField = {
                     stored: "true",
-                    indexed: "true",
-                    uninvertible: "true"
+                    indexed: "true"
                 }
                 delete $scope.addErrors;
             }

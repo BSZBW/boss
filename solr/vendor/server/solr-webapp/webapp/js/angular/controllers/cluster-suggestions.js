@@ -43,10 +43,10 @@ function($scope, $http, Constants) {
             x.loading = false;
             x.done = true;
             x.run=true;
-            $scope.msg = "Command Submitted Successfully!";
+            $scope.msg = "Post Data Submitted Successfully!";
         }, function (response) {
             x.failed=true;
-            $scope.msg = "Service does not exist";
+            $scope.msg = "Service not Exists";
             $scope.statusval = response.status;
             $scope.statustext = response.statusText;
             $scope.headers = response.headers();

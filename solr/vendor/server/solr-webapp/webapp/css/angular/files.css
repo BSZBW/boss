@@ -36,7 +36,9 @@ limitations under the License.
 #content #files #file-content
 {
   float: right;
+  position: relative;
   width: 78%;
+  min-height: 100px
 }
 
 #content #files .show #file-content
@@ -48,6 +50,4 @@ limitations under the License.
 {
   border: 1px solid transparent;
   padding: 2px;
-  overflow: auto;
-  max-height: 600px;
 }

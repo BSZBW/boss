@@ -35,7 +35,7 @@
        that you fully re-index after changing this setting as it can
        affect both how text is indexed and queried.
   -->
-  <luceneMatchVersion>8.11.1</luceneMatchVersion>
+  <luceneMatchVersion>7.3.1</luceneMatchVersion>
 
   <!-- <lib/> directives can be used to instruct Solr to load any Jars
        identified and use them to resolve any "plugins" specified in
@@ -243,7 +243,7 @@
 
          Setting the value to true will instruct the underlying Lucene
          IndexWriter to write its info stream to solr's log. By default,
-         this is enabled here, and controlled through log4j2.xml
+         this is enabled here, and controlled through log4j.properties.
       -->
      <infoStream>true</infoStream>
   </indexConfig>
@@ -372,17 +372,14 @@
          be based on the last SolrCore to be initialized.
 
       -->
-    <maxBooleanClauses>${solr.max.booleanClauses:1024}</maxBooleanClauses>
+    <maxBooleanClauses>1024</maxBooleanClauses>
 
 
     <!-- Solr Internal Query Caches
 
-         There are four implementations of cache available for Solr:
-         LRUCache, based on a synchronized LinkedHashMap, 
-         LFUCache and FastLRUCache, based on a ConcurrentHashMap, and CaffeineCache -
-         a modern and robust cache implementation. Note that in Solr 9.0
-         only CaffeineCache will be available, other implementations are now
-         deprecated.
+         There are two implementations of cache available for Solr,
+         LRUCache, based on a synchronized LinkedHashMap, and
+         FastLRUCache, based on a ConcurrentHashMap.
 
          FastLRUCache has faster gets and slower puts in single
          threaded operation and thus is generally faster than LRUCache
@@ -409,7 +406,8 @@
            autowarmCount - the number of entries to prepopulate from
                and old cache.
       -->
-    <filterCache size="512"
+    <filterCache class="solr.FastLRUCache"
+                 size="512"
                  initialSize="512"
                  autowarmCount="0"/>
 
@@ -418,7 +416,8 @@
          Caches results of searches - ordered lists of document ids
          (DocList) based on a query, a sort, and the range of documents requested.
       -->
-    <queryResultCache size="512"
+    <queryResultCache class="solr.LRUCache"
+                     size="512"
                      initialSize="512"
                      autowarmCount="0"/>
 
@@ -428,12 +427,14 @@
          document).  Since Lucene internal document ids are transient,
          this cache will not be autowarmed.
       -->
-    <documentCache size="512"
+    <documentCache class="solr.LRUCache"
+                   size="512"
                    initialSize="512"
                    autowarmCount="0"/>
 
     <!-- custom cache currently used by block join -->
     <cache name="perSegFilter"
+      class="solr.search.LRUCache"
       size="10"
       initialSize="0"
       autowarmCount="10"
@@ -446,7 +447,8 @@
          even if not configured here.
       -->
     <!--
-       <fieldValueCache size="512"
+       <fieldValueCache class="solr.FastLRUCache"
+                        size="512"
                         autowarmCount="128"
                         showItems="32" />
       -->
@@ -462,6 +464,7 @@
       -->
     <!--
        <cache name="myUserCache"
+              class="solr.LRUCache"
               size="4096"
               initialSize="1024"
               autowarmCount="1024"
