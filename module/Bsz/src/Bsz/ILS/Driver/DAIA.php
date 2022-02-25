@@ -52,63 +52,6 @@ class DAIA extends \VuFind\ILS\Driver\DAIA
         }
     }
 
-/* Perform an HTTP request.
-*
-* @param string $id id for query in daia
-*
-* @return xml or json object
-* @throws ILSException
-*/
-    protected function doHTTPRequest($id)
-    {
-        $contentTypes = [
-            "xml"  => "application/xml",
-            "json" => "application/json",
-        ];
-
-        $http_headers = [
-            "Content-type: " . $contentTypes[$this->daiaResponseFormat],
-            "Accept: " . $contentTypes[$this->daiaResponseFormat]
-        ];
-
-        $ppn = $id;
-        // cut the braces away
-        if (strpos($id, ')') !== false) {
-            $end = strpos($id, ')');
-            $ppn = substr($id, $end + 1);
-        }
-
-        $params = [
-            "id" => $ppn,
-        ];
-
-        try {
-            $result = $this->httpService->get(
-                $this->baseUrl,
-                $params,
-                null,
-                $http_headers
-            );
-        } catch (Exception $e) {
-            throw new ILSException($e->getMessage());
-        }
-
-        if (!$result->isSuccess()) {
-            // throw ILSException disabled as this will be shown in VuFind-Frontend
-            //throw new ILSException('HTTP error ' . $result->getStatusCode() .
-            //                       ' retrieving status for record: ' . $id);
-            // write to Debug instead
-            $this->debug(
-                'HTTP status ' . $result->getStatusCode() .
-                ' received, retrieving availability information for record: ' . $id
-            );
-
-            // return false as DAIA request failed
-            return false;
-        }
-        return $result->getBody();
-    }
-
     /**
      * Generate a DAIA URI necessary for the query, but remove network Prefix from
      * PPN.
