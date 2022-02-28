@@ -476,6 +476,10 @@
             ],
             "authors": [
                 {
+                    "name": "Balázs Németh",
+                    "email": "zsilbi@zsilbi.hu"
+                },
+                {
                     "name": "Ghislain de Fontenay",
                     "homepage": "http://www.ghislainf.me/",
                     "role": "Developer"
@@ -483,10 +487,6 @@
                 {
                     "name": "Filipe Dobreira",
                     "homepage": "https://github.com/filp"
-                },
-                {
-                    "name": "Balázs Németh",
-                    "email": "zsilbi@zsilbi.hu"
                 },
                 {
                     "name": "Andreas Frömer",
@@ -8689,6 +8689,7 @@
             ],
             "description": "The classes contained within this repository extend the standard DOM to use exceptions at all occasions of errors instead of PHP warnings or notices. They also add various custom methods and shortcuts for convenience and to simplify the usage of DOM.",
             "homepage": "https://github.com/theseer/fDOMDocument",
+            "abandoned": true,
             "time": "2022-01-25T23:10:35+00:00"
         },
         {
