@@ -1,6 +1,6 @@
 // Switch on/off highlighting visibility using
-// background color in alpha channel 
-// rgba(255,255,0,0) = off, 
+// background color in alpha channel
+// rgba(255,255,0,0) = off,
 // rgba(255,255,0,1) = maximum saturation
 
 // decent gray gradient
@@ -18,7 +18,7 @@
 }
 
 .nav-tabs > li:not(.active) > a {
-    background-color: #444444;    
+    background-color: #444444;
     color: #fff;
     font-weight: 700;
 }
@@ -27,7 +27,7 @@
     border-top: 1px solid #444;
     border-left: 1px solid #444;
     border-right: 1px solid #444;
-    font-weight: 700;    
+    font-weight: 700;
 }
 
 .nav-tabs > li:not(.active) > a:hover {
@@ -35,7 +35,7 @@
     color: @brand-primary;
     border-top: 1px solid #444;
     border-left: 1px solid #444;
-    border-right: 1px solid #444;    
+    border-right: 1px solid #444;
     font-weight: 700;
 }
 
@@ -60,10 +60,6 @@ header {
   }
 }
 
-a:focus, a:hover {
-    text-decoration: none;
-}
-
 h2 {
   @media (min-width: 768px) {
     font-size: 28px;
@@ -72,6 +68,10 @@ h2 {
   @media (max-width: 767px) {
     font-size: 20px;
   }
+}
+
+h3 {
+    color: #312557;
 }
 
 /**
@@ -91,7 +91,7 @@ RecordTabs get another styling than searchTabs because their background is white
     border-radius: @border-radius-base;
     i.fa {
         //Make the button exactly same size as the main search button
-        font-size: 1.2em; 
+        font-size: 1.2em;
     }
     &:hover {
         text-decoration: none;
@@ -129,3 +129,6 @@ header .navbar-form input[type="text"] {
   }
 }
 
+mark {
+  color: #312557;
+}
