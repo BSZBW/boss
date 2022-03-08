@@ -167,4 +167,12 @@ class Factory
 
         return new InterlibraryLoan($container->get(Logic::class), $library, $illmode, $dienst, $orderid);
     }
+
+    public static function getBibTip(ContainerInterface $container)
+    {
+        $client = $container->get('Bsz\Config\Client');
+        return new BibTip($client->get('BibTip')->get('script'));
+    }
+
+
 }
