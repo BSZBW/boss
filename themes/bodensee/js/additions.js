@@ -545,7 +545,7 @@ $(document).ready(function() {
     deleteInput();
 
     $(document).on('scroll', function() {
-        console.log('scroll');
+        //console.log('scroll');
         recordCoverAjax();
     });
 });
