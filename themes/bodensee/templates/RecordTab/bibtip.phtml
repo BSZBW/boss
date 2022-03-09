@@ -1,0 +1,14 @@
+<?php
+$this->headTitle($this->translate('BibTip') . ': ' . $this->driver->getBreadcrumb());
+$content = $this->tab->getContent();
+//$this->headScript()->offsetSetFile(100, $content['scriptsrc'], 'text/javascript', ['defer' => 'async' ]);
+
+?>
+<script src="<?=$content['scriptsrc']?>" type="text/javascript" async="async" />
+
+<bibtip-reclist
+    data-bibtip-docid="<?=$this->escapeHtml($this->driver->getPPN())?>"
+    data-bibtip-gtins="<?=$this->transEsc($this->driver->getGTIN())?>"
+    data-bibtip-isbns="<?=$this->escapeHtml(implode(', ', $this->driver->getISBNs()))?>"
+    data-bibtip-short-title="<?=$this->escapeHtml($this->driver->getShortTitle())?>">
+</bibtip-reclist>
