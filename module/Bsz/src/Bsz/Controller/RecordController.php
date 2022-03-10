@@ -406,6 +406,10 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
             }
         }
 
+        if ($client->get('BibTip')->offsetExists('script')) {
+            $view->bibtipurl = $client->get('BibTip')->get('script');
+        }
+
         return $view;
     }
 
