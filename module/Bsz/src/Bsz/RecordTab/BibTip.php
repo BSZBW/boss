@@ -41,7 +41,7 @@ class BibTip extends AbstractBase
      */
     public function isActive()
     {
-        return isset($this->scriptsrc);
+        return true;
     }
 
     /**
@@ -50,13 +50,6 @@ class BibTip extends AbstractBase
     public function getDescription()
     {
         return 'BibTip';
-    }
-
-    public function getContent()
-    {
-        return [
-            'scriptsrc' => $this->scriptsrc,
-        ];
     }
 
 }

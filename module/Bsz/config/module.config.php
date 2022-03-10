@@ -193,7 +193,6 @@ $config = [
                     'Bsz\RecordTab\Libraries' => 'Bsz\RecordTab\Factory::getLibraries',
                     'Bsz\RecordTab\HoldingsILS' => 'Bsz\RecordTab\Factory::getHoldingsILS',
                     'Bsz\RecordTab\InterlibraryLoan' => 'Bsz\RecordTab\Factory::getInterLibraryLoan',
-                    'Bsz\RecordTab\BibTip' => 'Bsz\RecordTab\Factory::getBibTip',
                 ],
                 'aliases' => [
                     'VuFind\RecordTab\HoldingsILS' => 'Bsz\RecordTab\HoldingsILS',
@@ -203,7 +202,6 @@ $config = [
                     'Notes' => 'Bsz\RecordTab\Notes',
                     'Libraries' => 'Bsz\RecordTab\Libraries',
                     'InterlibraryLoan' => 'Bsz\RecordTab\InterlibraryLoan',
-                    'BibTip' => 'Bsz\RecordTab\BibTip',
                 ]
             ],
             'search_backend' => [
