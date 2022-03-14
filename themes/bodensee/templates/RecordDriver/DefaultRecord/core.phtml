@@ -263,6 +263,37 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
                 </tr>
             <? endif; ?>
 
+            <? $relatedItems = $this->driver->tryMethod('getRelatedItems'); if (!empty($relatedItems)): ?>
+                <tr>
+                    <th><?=$this->transEsc('Contains')?>: </th>
+                    <td>
+                        <ul>
+                            <? foreach ($relatedItems as $item): ?>
+                                <li>
+                                    <? if (isset($item['author']) && !empty($item['author'])): ?>
+                                        <span property="author"><?=$this->escapeHtml($item['author'])?>: </span>
+                                    <? endif; ?>
+                                    <? if (isset($item['title']) && !empty($item['title'])): ?>
+                                        <span property="title">
+                        <? if (isset($item['id']) && !empty($item['id'])): ?>
+                            <a href="<?=$this->url('search-results')?>?lookfor=ctrlnum:%22(Horizon)<?= $item['id'];?>%22">
+                                <?=$this->escapeHtml($item['title'])?>;
+                            </a>
+                        <? else: ?>
+                            <?=$this->escapeHtml($item['title'])?>;</a>
+                        <? endif; ?>
+                        </span>
+                                    <? endif; ?>
+                                    <? if (isset($item['edition']) && !empty($item['edition'])): ?>
+                                        <span property="edition"><?=$this->escapeHtml($item['edition'])?></span>
+                                    <? endif; ?>
+                                </li>
+                            <? endforeach; ?>
+                        </ul>
+                    </td>
+                </tr>
+            <? endif; ?>
+
             <? $edition = $this->driver->getEdition();
             $editionol = $this->driver->tryMethod('getEditionOl');
             if (!empty($edition)): ?>
