@@ -193,8 +193,7 @@ class SolrDlrMarc extends SolrMarc
                 $languages[] = $matches[1];
             }
         }
-
-        return $languages;
+        return array_unique($languages);
     }
 
     /**
