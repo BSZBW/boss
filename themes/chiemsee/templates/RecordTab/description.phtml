@@ -6,15 +6,6 @@
     $isbn = $this->driver->getCleanISBN();
 ?>
 <table class="table table-striped" summary="<?=$this->transEsc('Description')?>">
-  <? $langs = $this->driver->getLanguages(); if (!empty($langs)): ?>
-  <? $contentDisplayed = true; ?>
-    <tr>
-      <th><?=$this->transEsc('Language')?>: </th>
-      <? $count = 0 ?>
-      <td><? foreach ($langs as $lang): ?><? if($count > 0):?>; <?endif;?><?= $this->transEsc($lang)?><? $count++?><? endforeach; ?>
-      </td>
-    </tr>
-  <? endif; ?>
   <? $summ = $this->driver->getSummary(); if (!empty($summ)): ?>
     <? $contentDisplayed = true; ?>
     <tr>
