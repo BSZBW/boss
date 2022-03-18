@@ -10,11 +10,11 @@
 @gray-base:              #000;
 @gray-darker:            lighten(@gray-base, 13.5%); // #222
 @gray-dark:              lighten(@gray-base, 20%);   // #333
-@gray:                   lighten(@gray-base, 33.5%); // #555
-@gray-light:             lighten(@gray-base, 60%);   // #999
-@gray-lighter:           lighten(@gray-base, 93.5%); // #eee
+@gray:                   #aaaebc; // #555
+@gray-light:             #d6dde6;  // #999
+@gray-lighter:           lighten(#d6dde6, 7%); // #eee
 
-@brand-primary:         #11969b;
+@brand-primary:         #263953;
 @brand-success:         #11969b;
 @brand-info:            #555;
 @brand-warning:         #DD5600;
@@ -28,10 +28,10 @@
 //** Background color for `<body>`.
 @body-bg:               #fff;
 //** Global text color on `<body>`.
-@text-color:            @gray;
+@text-color:            #263953;
 
 //** Global textual link color.
-@link-color:            @brand-primary;
+@link-color:            #ff8300;
 //** Link hover color set via `darken()` function.
 @link-hover-color:      darken(@link-color, 15%);
 //** Link hover decoration.
@@ -42,13 +42,13 @@
 //
 //## Font, line-height, and color for body text, headings, and more.
 
-@font-family-sans-serif:  "Ubuntu", Helvetica, Arial, sans-serif;
+@font-family-sans-serif:  "Lucida Sans Unicode", "Lucida Grande", Verdana, Arial, Helvetica, sans-serif;
 @font-family-serif:       Georgia, "Times New Roman", Times, serif;
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
 @font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace;
 @font-family-base:        @font-family-sans-serif;
 
-@font-size-base:          14px;
+@font-size-base:          12px;
 @font-size-large:         ceil((@font-size-base * 1.25)); // ~18px
 @font-size-small:         ceil((@font-size-base * 0.91)); // ~13px
 
@@ -68,7 +68,7 @@
 @headings-font-family:    @font-family-base;
 @headings-font-weight:    500;
 @headings-line-height:    1.1;
-@headings-color:          @brand-primary;
+@headings-color:          #ff8300;
 
 
 //== Iconography
@@ -710,7 +710,7 @@
 
 //** Border color for elements within panels
 @panel-inner-border:          #ddd;
-@panel-footer-bg:             #f5f5f5;
+@panel-footer-bg:             #263953;
 
 @panel-default-text:          @text-color;
 @panel-default-border:        #ddd;
