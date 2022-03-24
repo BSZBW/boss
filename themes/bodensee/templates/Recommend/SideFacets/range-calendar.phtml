@@ -14,12 +14,12 @@
                 <?php $extraInputAttribs = ($this->facet['type'] == 'date') ? 'maxlength="4" ' : ''; ?>
                 <div class="col-sm-12">
                     <div class="input-group input-daterange">
-                        <input type="text" class="form-control datepicker-facet"
+                        <input type="text" class="form-control"
                                name="<?= $this->escapeHtmlAttr($this->title) ?>from"
                                id="<?= $this->escapeHtmlAttr($this->title) ?>from"
                                value="<?= isset($this->facet['values'][0]) ? $this->escapeHtmlAttr($this->facet['values'][0]) : '' ?>" <?= $extraInputAttribs ?>/>
                         <label class="input-group-addon" for="<?= $this->escapeHtmlAttr($this->title) ?>to">
-                            <?= $this->transEsc('date_to') ?>:
+                            <?= $this->transEsc('date_to') ?>
                         </label>
                         <input type="text" class="form-control"
                                name="<?= $this->escapeHtmlAttr($this->title) ?>to"

@@ -280,20 +280,22 @@ function openUrlTooltip() {
   *
   */
 function datepicker() {
-    $('.datepicker').datepicker({
-        language: $('html').attr('lang'),
-        weekStart: 1,
-        format: 'dd.mm.yyyy',
-        allowInputToggle: true,
-        orientation: 'bottom'
-    });
+    // $('.datepicker').datepicker({
+    //     language: $('html').attr('lang'),
+    //     weekStart: 1,
+    //     format: 'dd.mm.yyyy',
+    //     allowInputToggle: true,
+    //     orientation: 'bottom'
+    // });
     $('.input-daterange input').each(function() {
          $(this).datepicker({
              language: $('html').attr('lang'),
              weekStart: 1,
              format: 'dd.mm.yyyy',
              allowInputToggle: true,
-             orientation: 'bottom'
+             orientation: 'bottom',
+             maxViewMode: 'years',
+             keepEmptyValues: true
          });
     });
 
