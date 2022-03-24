@@ -288,16 +288,14 @@ function datepicker() {
     //     orientation: 'bottom'
     // });
     $('.input-daterange').datepicker({
-             language: $('html').attr('lang'),
-             weekStart: 1,
-             format: 'dd.mm.yyyy',
-             allowInputToggle: true,
-             orientation: 'bottom',
-             maxViewMode: 'years',
-             keepEmptyValues: true
+            language: $('html').attr('lang'),
+            weekStart: 1,
+            format: 'dd.mm.yyyy',
+            allowInputToggle: true,
+            orientation: 'bottom',
+            maxViewMode: 'years',
+            keepEmptyValues: false,
     });
-
-
     // workaround: Addon does not open the datepicker by default
     $('.input-group.date .input-group-addon').click(function(){
        $(this).parent().find('input.datepicker').datepicker('show');

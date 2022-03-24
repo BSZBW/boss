@@ -1,6 +1,9 @@
 <?php
     $this->headScript()->appendFile("vendor/bootstrap-datepicker.js");
     $this->headScript()->appendFile("vendor/bootstrap-datepicker.".$this->layout()->userLang.".min.js");
+    $currentDate = new DateTime();
+    $startDate = $currentDate->sub(new DateInterval('P1M'));
+
 ?>
 <div class="facet">
     <div class="row">
@@ -17,14 +20,14 @@
                         <input type="text" class="form-control"
                                name="<?= $this->escapeHtmlAttr($this->title) ?>from"
                                id="<?= $this->escapeHtmlAttr($this->title) ?>from"
-                               value="<?= isset($this->facet['values'][0]) ? $this->escapeHtmlAttr($this->facet['values'][0]) : '' ?>" <?= $extraInputAttribs ?>/>
+                               value="<?= !empty($this->facet['values'][0]) ? $this->escapeHtmlAttr($this->facet['values'][0]) : $startDate->format('d.m.Y')?>" <?= $extraInputAttribs ?>/>
                         <label class="input-group-addon" for="<?= $this->escapeHtmlAttr($this->title) ?>to">
                             <?= $this->transEsc('date_to') ?>
                         </label>
                         <input type="text" class="form-control"
                                name="<?= $this->escapeHtmlAttr($this->title) ?>to"
                                id="<?= $this->escapeHtmlAttr($this->title) ?>to"
-                               value="<?= isset($this->facet['values'][1]) ? $this->escapeHtmlAttr($this->facet['values'][1]) : '' ?>" <?= $extraInputAttribs ?>/>
+                               value="<?= !empty($this->facet['values'][1]) ? $this->escapeHtmlAttr($this->facet['values'][1]) : $currentDate->format('d.m.Y')?>" <?= $extraInputAttribs ?>/>
                      </div>
                 </div>
             </div>
