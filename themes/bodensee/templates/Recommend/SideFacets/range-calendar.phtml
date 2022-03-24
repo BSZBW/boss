@@ -11,7 +11,7 @@
                    name="<?= $this->escapeHtmlAttr($this->facet['type']) ?>range[]"
                    value="<?= $this->escapeHtmlAttr($this->title) ?>"/>
             <div class="date-fields">
-                <?php $extraInputAttribs = ($this->facet['type'] == 'date') ? 'maxlength="4" ' : ''; ?>
+                <?php $extraInputAttribs = ($this->facet['type'] == 'date') ? '' : ''; ?>
                 <div class="col-sm-12">
                     <div class="input-group input-daterange">
                         <input type="text" class="form-control"
