@@ -15,7 +15,6 @@ function   performMark(selector = '.markjs') {
             "Verfasser:":"", "Author:":"",
             "Schlagwort:":"", "Subject:":"",
             "Verlag:":"", "Publisher:":"",
-            "Serie:":"", "Series:":"",
             "UND":"", "AND":"",
             "NICHT":"", "NOT":"",
             "ODER":"", "OR":""
@@ -288,6 +287,16 @@ function datepicker() {
         allowInputToggle: true,
         orientation: 'bottom'
     });
+    $('.input-daterange input').each(function() {
+         $(this).datepicker({
+             language: $('html').attr('lang'),
+             weekStart: 1,
+             format: 'dd.mm.yyyy',
+             allowInputToggle: true,
+             orientation: 'bottom'
+         });
+    });
+
     // workaround: Addon does not open the datepicker by default
     $('.input-group.date .input-group-addon').click(function(){
        $(this).parent().find('input.datepicker').datepicker('show');
