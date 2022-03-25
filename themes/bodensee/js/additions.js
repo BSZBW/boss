@@ -280,21 +280,25 @@ function openUrlTooltip() {
   *
   */
 function datepicker() {
-    // $('.datepicker').datepicker({
-    //     language: $('html').attr('lang'),
-    //     weekStart: 1,
-    //     format: 'dd.mm.yyyy',
-    //     allowInputToggle: true,
-    //     orientation: 'bottom'
-    // });
+    var date = new Date().toLocaleDateString();
+    console.log(date);
+    $('.datepicker').datepicker({
+        language: $('html').attr('lang'),
+        weekStart: 1,
+        format: 'dd.mm.yyyy',
+        allowInputToggle: true,
+        orientation: 'bottom'
+    });
     $('.input-daterange').datepicker({
             language: $('html').attr('lang'),
             weekStart: 1,
             format: 'dd.mm.yyyy',
+            endDate: date,
             allowInputToggle: true,
             orientation: 'bottom',
             maxViewMode: 'years',
             keepEmptyValues: false,
+        forceParse: true,
     });
     // workaround: Addon does not open the datepicker by default
     $('.input-group.date .input-group-addon').click(function(){

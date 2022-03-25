@@ -1,8 +1,22 @@
 <?php
     $this->headScript()->appendFile("vendor/bootstrap-datepicker.js");
     $this->headScript()->appendFile("vendor/bootstrap-datepicker.".$this->layout()->userLang.".min.js");
-    $currentDate = new DateTime();
-    $startDate = $currentDate->sub(new DateInterval('P1M'));
+
+    // see https://www.php.net/manual/en/datetime.createfromformat.php
+    $dateFormat = 'Y-m-d?G:i:s?';
+
+    // Date format in Solr YYYY-MM-DDThh:mm:ssZ
+    if (!empty($this->facet['values'][0])) {
+        $startDate = DateTime::createFromFormat($dateFormat, $this->facet['values'][0]);
+    } else {
+        $startDate = new DateTime();
+        $startDate->sub(new DateInterval('P12M'));
+    }
+    if (!empty($this->facet['values'][1])) {
+        $endDate = DateTime::createFromFormat($dateFormat, $this->facet['values'][1]);
+    } else {
+        $endDate = new DateTime();
+    }
 
 ?>
 <div class="facet">
@@ -20,14 +34,14 @@
                         <input type="text" class="form-control"
                                name="<?= $this->escapeHtmlAttr($this->title) ?>from"
                                id="<?= $this->escapeHtmlAttr($this->title) ?>from"
-                               value="<?= !empty($this->facet['values'][0]) ? $this->escapeHtmlAttr($this->facet['values'][0]) : $startDate->format('d.m.Y')?>" <?= $extraInputAttribs ?>/>
+                               value="<?=$this->escapeHtmlAttr($startDate->format('d.m.Y'))?>" <?= $extraInputAttribs ?>/>
                         <label class="input-group-addon" for="<?= $this->escapeHtmlAttr($this->title) ?>to">
                             <?= $this->transEsc('date_to') ?>
                         </label>
                         <input type="text" class="form-control"
                                name="<?= $this->escapeHtmlAttr($this->title) ?>to"
                                id="<?= $this->escapeHtmlAttr($this->title) ?>to"
-                               value="<?= !empty($this->facet['values'][1]) ? $this->escapeHtmlAttr($this->facet['values'][1]) : $currentDate->format('d.m.Y')?>" <?= $extraInputAttribs ?>/>
+                               value="<?=$this->escapeHtmlAttr($endDate->format('d.m.Y'))?>" <?= $extraInputAttribs ?>/>
                      </div>
                 </div>
             </div>
