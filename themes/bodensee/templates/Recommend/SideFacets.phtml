@@ -48,8 +48,10 @@
         <?=$this->transEsc($cluster['label'])?>
       </button>
       <div id="side-collapse-<?=$this->escapeHtmlAttr($title) ?>" class="collapse<? if(!in_array($title, $collapsedFacets)): ?> in<? endif ?>">
-        <? if (isset($rangeFacets[$title])): ?>
+        <? if (isset($rangeFacets[$title]) && $rangeFacets[$title]['type'] === 'fulldate'): ?>
           <?=$this->context($this)->renderInContext('Recommend/SideFacets/range-calendar.phtml', ['title' => $title, 'facet' => $rangeFacets[$title]]); ?>
+        <? elseif (isset($rangeFacets[$title]) && $rangeFacets[$title]['type'] === 'date'): ?>
+              <?=$this->context($this)->renderInContext('Recommend/SideFacets/range-slider.phtml', ['title' => $title, 'facet' => $rangeFacets[$title]]); ?>
         <? else: ?>
           <? $contextVars = [
             'allowExclude' => $this->recommend->excludeAllowed($title),
