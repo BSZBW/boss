@@ -15,7 +15,6 @@ function   performMark(selector = '.markjs') {
             "Verfasser:":"", "Author:":"",
             "Schlagwort:":"", "Subject:":"",
             "Verlag:":"", "Publisher:":"",
-            "Serie:":"", "Series:":"",
             "UND":"", "AND":"",
             "NICHT":"", "NOT":"",
             "ODER":"", "OR":""
@@ -281,12 +280,26 @@ function openUrlTooltip() {
   *
   */
 function datepicker() {
+    var date = new Date().toLocaleDateString();
+    console.log(date);
     $('.datepicker').datepicker({
         language: $('html').attr('lang'),
         weekStart: 1,
         format: 'dd.mm.yyyy',
         allowInputToggle: true,
         orientation: 'bottom'
+    });
+    $('.input-daterange').datepicker({
+        language: $('html').attr('lang'),
+        weekStart: 1,
+        format: 'dd.mm.yyyy',
+        startDate: '01.01.1800',
+        endDate: date,
+        allowInputToggle: true,
+        orientation: 'bottom',
+        maxViewMode: 'years',
+        keepEmptyValues: false,
+        forceParse: true,
     });
     // workaround: Addon does not open the datepicker by default
     $('.input-group.date .input-group-addon').click(function(){
@@ -545,7 +558,7 @@ $(document).ready(function() {
     deleteInput();
 
     $(document).on('scroll', function() {
-        console.log('scroll');
+        //console.log('scroll');
         recordCoverAjax();
     });
 });

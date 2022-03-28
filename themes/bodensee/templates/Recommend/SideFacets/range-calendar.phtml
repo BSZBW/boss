@@ -1,0 +1,63 @@
+<?php
+    $this->headScript()->appendFile("vendor/bootstrap-datepicker.js");
+    $this->headScript()->appendFile("vendor/bootstrap-datepicker.".$this->layout()->userLang.".min.js");
+
+    // see https://www.php.net/manual/en/datetime.createfromformat.php
+    $dateFormat = 'Y-m-d?G:i:s?';
+
+    // Date format in Solr YYYY-MM-DDThh:mm:ssZ
+    if (!empty($this->facet['values'][0])) {
+        $startDate = DateTime::createFromFormat($dateFormat, $this->facet['values'][0]);
+    }
+    if (!empty($this->facet['values'][1])) {
+        $endDate = DateTime::createFromFormat($dateFormat, $this->facet['values'][1]);
+    }
+
+?>
+<div class="facet">
+    <div class="row">
+        <form name="<?= $this->escapeHtmlAttr($this->title) ?>Filter"
+              id="<?= $this->escapeHtmlAttr($this->title) ?>Filter">
+            <?= $results->getUrlQuery()->asHiddenFields(['page' => "/./", 'filter' => "/^{$this->title}:.*/"]) ?>
+            <input type="hidden"
+                   name="<?= $this->escapeHtmlAttr($this->facet['type']) ?>range[]"
+                   value="<?= $this->escapeHtmlAttr($this->title) ?>"/>
+            <div class="date-fields">
+                <?php $extraInputAttribs = ($this->facet['type'] == 'date') ? '' : ''; ?>
+                <div class="col-sm-12">
+                    <div class="input-group input-daterange">
+                        <input type="text" class="form-control"
+                               name="<?= $this->escapeHtmlAttr($this->title) ?>from"
+                               id="<?= $this->escapeHtmlAttr($this->title) ?>from"
+                               value="<?php if (isset($startdate)):?><?=$this->escapeHtmlAttr($startDate->format('d.m.Y'))?><?php endif ?>" <?= $extraInputAttribs ?>/>
+                        <label class="input-group-addon" for="<?= $this->escapeHtmlAttr($this->title) ?>to">
+                            <?= $this->transEsc('date_to') ?>
+                        </label>
+                        <input type="text" class="form-control"
+                               name="<?= $this->escapeHtmlAttr($this->title) ?>to"
+                               id="<?= $this->escapeHtmlAttr($this->title) ?>to"
+                               value="<?php if (isset($enddate)):?><?=$this->escapeHtmlAttr($endDate->format('d.m.Y'))?><?php endif ?>" <?= $extraInputAttribs ?>/>
+                     </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+
+                <?php if ($this->facet['type'] == 'date'): ?>
+                    <div class="slider-container col-sm-12"><input type="text"
+                                                                   class="hidden"
+                                                                   id="<?= $this->escapeHtmlAttr($this->title) ?><?= $this->escapeHtml($this->facet['type']) ?>Slider"/>
+                    </div>
+                <?php endif; ?>
+                <input class="btn btn-primary btn-xs" type="submit"
+                       value="<?= $this->transEsc('Set') ?>"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('document').ready(function() {
+        // see additions.js
+        datepicker();
+    });
+</script>
