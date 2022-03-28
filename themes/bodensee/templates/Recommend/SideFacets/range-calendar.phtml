@@ -8,14 +8,9 @@
     // Date format in Solr YYYY-MM-DDThh:mm:ssZ
     if (!empty($this->facet['values'][0])) {
         $startDate = DateTime::createFromFormat($dateFormat, $this->facet['values'][0]);
-    } else {
-        $startDate = new DateTime();
-        $startDate->sub(new DateInterval('P12M'));
     }
     if (!empty($this->facet['values'][1])) {
         $endDate = DateTime::createFromFormat($dateFormat, $this->facet['values'][1]);
-    } else {
-        $endDate = new DateTime();
     }
 
 ?>
@@ -34,14 +29,14 @@
                         <input type="text" class="form-control"
                                name="<?= $this->escapeHtmlAttr($this->title) ?>from"
                                id="<?= $this->escapeHtmlAttr($this->title) ?>from"
-                               value="<?=$this->escapeHtmlAttr($startDate->format('d.m.Y'))?>" <?= $extraInputAttribs ?>/>
+                               value="<?php if (isset($startdate)):?><?=$this->escapeHtmlAttr($startDate->format('d.m.Y'))?><?php endif ?>" <?= $extraInputAttribs ?>/>
                         <label class="input-group-addon" for="<?= $this->escapeHtmlAttr($this->title) ?>to">
                             <?= $this->transEsc('date_to') ?>
                         </label>
                         <input type="text" class="form-control"
                                name="<?= $this->escapeHtmlAttr($this->title) ?>to"
                                id="<?= $this->escapeHtmlAttr($this->title) ?>to"
-                               value="<?=$this->escapeHtmlAttr($endDate->format('d.m.Y'))?>" <?= $extraInputAttribs ?>/>
+                               value="<?php if (isset($enddate)):?><?=$this->escapeHtmlAttr($endDate->format('d.m.Y'))?><?php endif ?>" <?= $extraInputAttribs ?>/>
                      </div>
                 </div>
             </div>

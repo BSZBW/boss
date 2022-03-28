@@ -290,14 +290,15 @@ function datepicker() {
         orientation: 'bottom'
     });
     $('.input-daterange').datepicker({
-            language: $('html').attr('lang'),
-            weekStart: 1,
-            format: 'dd.mm.yyyy',
-            endDate: date,
-            allowInputToggle: true,
-            orientation: 'bottom',
-            maxViewMode: 'years',
-            keepEmptyValues: false,
+        language: $('html').attr('lang'),
+        weekStart: 1,
+        format: 'dd.mm.yyyy',
+        startDate: '01.01.1800',
+        endDate: date,
+        allowInputToggle: true,
+        orientation: 'bottom',
+        maxViewMode: 'years',
+        keepEmptyValues: false,
         forceParse: true,
     });
     // workaround: Addon does not open the datepicker by default
