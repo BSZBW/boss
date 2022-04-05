@@ -213,7 +213,7 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
         }
 
         if (empty($result) && strpos($doc_id, 'koha:biblionumber:' ) !== false) {
-            $result[] = $this->addArticleItem($doc_id);
+//            $result[] = $this->addArticleItem($doc_id);
         }
 
         return $result;

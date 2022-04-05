@@ -476,10 +476,6 @@
             ],
             "authors": [
                 {
-                    "name": "Balázs Németh",
-                    "email": "zsilbi@zsilbi.hu"
-                },
-                {
                     "name": "Ghislain de Fontenay",
                     "homepage": "http://www.ghislainf.me/",
                     "role": "Developer"
@@ -487,6 +483,10 @@
                 {
                     "name": "Filipe Dobreira",
                     "homepage": "https://github.com/filp"
+                },
+                {
+                    "name": "Balázs Németh",
+                    "email": "zsilbi@zsilbi.hu"
                 },
                 {
                     "name": "Andreas Frömer",
