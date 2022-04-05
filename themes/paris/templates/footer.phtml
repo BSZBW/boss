@@ -1,0 +1,37 @@
+<div class="container-fluid">
+    <div class="container">
+        <div class="row">
+            <?php
+            $count = $this->client()->get('Footer')->get('boxes');
+            for ($i = 1; $i <= $count; $i++) {
+                if ($this->client()->get('FooterBox' . $i) !== null) {
+                    echo $this->partial('bsz/well.phtml', [
+                        'count' => $count,
+                        'settings' => $this->client()->get('FooterBox' . $i)
+                    ]);
+                }
+            }
+
+            ?>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <small><?php if ($this->client()->is('show_bw_logo')): ?><img
+                    src="<?= $this->imageLink('logo/bw_white.svg') ?>" alt="Baden-Württemberg" style="width: 40px;"
+                    /><?php endif ?><?= $this->transEsc('footer_custom_text') ?>
+                &ndash;
+                <a href="https://wiki.bsz-bw.de/display/BOSS/Roadmap"
+                        class="external"><?= $this->escapeHtml($this->client()->getVersion()) ?></a>
+                &copy; <?= date('Y') ?> <a href="https://www.bsz-bw.de"
+                                           class="external hasicon">BSZ</a>
+                powered by <a href="https://vufind.org" class="external">VuFind</a> 6, <a
+                        href="https://www.agv-gvi.de/" class="external">GVI</a>, Covers
+                &copy; <a href="https://Buchhandel.de" class="external">Buchhandel.de</a>
+            </small>
+        </div>
+    </div>
+</div>
+

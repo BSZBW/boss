@@ -1,0 +1,54 @@
+/**
+Schriftgrößen verkleinern
+**/
+@media (max-width: @screen-sm-min) {
+    @font-size-reduce-factor: 0.90;
+/*    ul, li, a, p, dt, dd{
+        font-size: @font-size-base * @font-size-reduce-factor;
+    }*/
+    h1 {
+        font-size: @font-size-reduce-factor * @font-size-h1;
+    }
+    h2 {
+        font-size: @font-size-reduce-factor * @font-size-h2;
+    }
+    h3 {
+        font-size: @font-size-reduce-factor * @font-size-h3;
+    }
+    h4 {
+        font-size: @font-size-reduce-factor * @font-size-h4;
+    }
+    h5 {
+        font-size: @font-size-reduce-factor * @font-size-h4;
+    }
+}
+//Bookcover bündig mit Titel
+@media (min-width: @screen-xs-max) {
+    a.cover {
+        margin-top: 2em;
+        display: block;
+    }
+}
+
+//Larger Checkboxes on small devices
+@media (max-width: @screen-xs-max) {
+    input[type=checkbox] {
+        transform: scale(1.5);
+        -webkit-transform: scale(1.5);
+        margin-right: .8em;
+    }
+}
+//header {
+//    // make search bar bigger on large screens
+//    @media (min-width: @screen-lg-min) {
+//        .navbar-form #searchForm_lookfor {
+//            min-width: 420px;
+//        }
+//    }
+//    @media (min-width: @screen-sm-min) and (max-width: @screen-md-max) {
+//        .navbar-form #searchForm_lookfor {
+//            min-width: 490px;
+//        }
+//    }
+//}
+

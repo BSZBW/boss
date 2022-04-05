@@ -1,0 +1,24 @@
+<div class="navbar navbar-fixed-top">
+    <div class="container-fluid navbar-default">
+        <div class="row">
+            <div class="col-xs-6 col-sm-3 col-md-3 col-lg-2 navbar-brand">
+                <?=$this->clientAsset()->getLogoHtml(false)?>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-7 col-lg-8">
+                <?=$this->context($this)->renderInContext('menu.phtml', []); ?>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid navbar-searchbar">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-md-10 col-lg-8">
+                    <?php if ($this->layout()->searchbox !== false && !$this->client()->is('disable_searchbar')): ?>
+                       <?=$this->layout()->searchbox ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
