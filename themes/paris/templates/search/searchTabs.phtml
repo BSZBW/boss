@@ -1,0 +1,25 @@
+<?php if (count($searchTabs) > 0): ?>
+    <ul class="nav nav-tabs" role="menu">
+        <?php foreach ($searchTabs as $tab): ?>
+            <?php if ($this->permission()->allowDisplay($tab['permission'])): ?>
+                <li<?= $tab['selected'] ? ' class="active"' : '' ?>
+                        id="<?= $this->transEsc(strtolower($tab['id'])) ?>"
+                        role="none presentation">
+                    <a <?= $tab['selected'] ? '' : 'href="' . $this->escapeHtmlAttr($tab['url']) . '"' ?>>
+                        <i class="fa <?= $this->escapeHtmlAttr($tab['icon']) ?>"></i>
+                        <span class="text"><?= $this->transEsc($tab['label']); ?></span></a>
+                </li>
+            <?php elseif ($block = $this->permission()->getAlternateContent($tab['permission'])): ?>
+                <?= $block ?>
+            <?php endif; ?>
+        <?php endforeach; ?>
+        <?php if ($this->client()->is('advanced_search_in_tabs')):?>
+            <li class="">
+                <a class="text-link" href="<?=$this->url('search-advanced')?>" >
+                    <span class="text"><?= $this->transEsc("Advanced Search") ?></span>
+                    <i class="fa fa-chevron-right"></i>
+                </a>
+            </li>
+        <?php endif; ?>
+    </ul>
+<?php endif; ?>
