@@ -213,7 +213,7 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
         }
 
         if (empty($result) && strpos($doc_id, 'koha:biblionumber:' ) !== false) {
-//            $result[] = $this->addArticleItem($doc_id);
+            $result[] = $this->addArticleItem($doc_id);
         }
 
         return $result;
@@ -406,7 +406,7 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
     public function hasHoldings($id)
     {
         // we can't query DAIA without an ISIL.
-        if (empty($this->isil) && strpos($this->baseUrl, 'DE-') === false) {
+         if (empty($this->isil) && strpos($this->baseUrl, 'DE-') === false) {
             return false;
         }
         $holdings = $this->getHolding($id);
