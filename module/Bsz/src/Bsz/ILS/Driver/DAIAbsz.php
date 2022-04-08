@@ -377,21 +377,24 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
      */
     private function addArticleItem($doc_id)
     {
-        $doc_id = preg_replace('/koha:biblionumber:/', '', $doc_id);
+        $return = [];
 
+        if (strpos($this->baseUrl, 'DE-Stg117') !== false) {
 
-        $return = [
-            'id'        => $doc_id,
-            'callnumber'=> '',
-            'location'  => 'Dokumentenlieferdienst',
-            'ilslink'      => 'https://elk-wue.bsz-bw.de/cgi-bin/koha/opac-request-article.pl?biblionumber='.$doc_id,
-            'link'      => 'https://elk-wue.bsz-bw.de/cgi-bin/koha/opac-request-article.pl?biblionumber='.$doc_id,
-            'availability'  => 'article',
-            'status'    => 'Available',
-            'checkILLRequest' => true,
-            'checkStorageRetrievalRequest' => true,
-            'requests_placed' => 0,
-        ];
+            $doc_id = preg_replace('/koha:biblionumber:/', '', $doc_id);
+            $return = [
+                'id'        => $doc_id,
+                'callnumber'=> '',
+                'location'  => 'Dokumentenlieferdienst',
+                'ilslink'      => 'https://elk-wue.bsz-bw.de/cgi-bin/koha/opac-request-article.pl?biblionumber='.$doc_id,
+                'link'      => 'https://elk-wue.bsz-bw.de/cgi-bin/koha/opac-request-article.pl?biblionumber='.$doc_id,
+                'availability'  => 'article',
+                'status'    => 'Available',
+                'checkILLRequest' => true,
+                'checkStorageRetrievalRequest' => true,
+                'requests_placed' => 0,
+            ];
+        }
         return $return;
     }
 
@@ -403,7 +406,7 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
     public function hasHoldings($id)
     {
         // we can't query DAIA without an ISIL.
-        if (empty($this->isil)) {
+         if (empty($this->isil) && strpos($this->baseUrl, 'DE-') === false) {
             return false;
         }
         $holdings = $this->getHolding($id);

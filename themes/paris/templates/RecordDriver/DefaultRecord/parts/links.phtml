@@ -1,0 +1,63 @@
+<?php  /* We need to find out if we're supposed to display an OpenURL link ($openUrlActive),
+    but even if we don't plan to display the link, we still want to get the $openUrl
+    value for use in generating a COinS (Z3988) tag -- see bottom of file.
+*/
+
+// Account for replace_other_urls setting
+$openUrl = $this->openUrl($this->driver, 'results');
+$openUrlActive = $openUrl->isActive();
+// global urls from 856
+$urls = $this->record($this->driver)->getLinkDetails($openUrlActive);
+$urls = array_slice($urls, 0, 3);
+
+// local urls from 924
+$localUrls = $this->driver->tryMethod('getLocalUrls');
+
+?>
+
+<?php // Show local Urls
+if ((isset($localurls) && count($localUrls)) > 0 || (isset($urls) && count($urls) > 0)):
+?>
+
+    <dt><?=$this->transEsc('links_label')?></dt>
+    <dd>
+        <?php if (!empty($localUrls[0]['url'])): ?>
+            <?php foreach ($localUrls as $current): ?>
+                <?php if (is_array($current['label'])):?>
+                    <a class="external"
+                       href="<?= $current['url'] ?>"
+                       <?php if (!$this->client()->is('local_url_help_regex') && isset($current['label'][1])): ?>title="<?= $this->transEsc($current['label'][1]) ?>"
+                       data-toggle="tooltip"<?php endif ?>
+                    ><?= $this->transEsc($current['label'][0]) ?></a>
+                    <?php if ($this->client()->is('local_url_help_regex') && isset($current['label'][1])): ?>
+                        <?php $htmllink = preg_replace(
+                            $this->client()->getHelpRegEx(),
+                            "<a class='external' href='" . $this->client()->getHelpUrl() . "'>" . $this->client()->getHelpGroups() . "</a>",
+                            $this->transEsc($current['label'][1])
+                        ) ?>
+                        <?= $htmllink ?>
+                        <br/>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <a class="external" href="<?=$current['url']?>"><?=$this->transEsc($current['label'])?></a>
+                <?php endif ?>
+            <?php endforeach; ?>
+        <?php elseif (count($urls) > 0 && !$this->driver->isCollection()): ?>
+            <?php foreach ($urls as $current): ?>
+                <a href="<?= $this->wayfless($current['url']) ?>"
+                   class="fulltext external"><?= ($current['url'] == $current['desc']) ? $this->transEsc('Get full text') : $this->transEsc($current['desc']) ?></a>
+                <br/>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </dd>
+<?php endif; ?>
+
+<?php // JOP resp. Redi Linkresolver
+// see VuFind/View/Helper/Bodensee/OpenUrl.php
+//     themes/bodensee/Helpers/openurl.phtml
+//     openurl.js
+?>
+<?php if ($openUrlActive): ?>
+    <?= $openUrl->renderTemplate() ?>
+<?php endif; ?>
+<?= $this->driver->supportsCoinsOpenUrl() ? '<span class="Z3988" title="' . $this->escapeHtmlAttr($this->driver->getCoinsOpenUrl()) . '"></span>' : '' ?>

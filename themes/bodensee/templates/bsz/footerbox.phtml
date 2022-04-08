@@ -6,7 +6,7 @@ endif;?>
 <?php if (!$this->client()->is('disable_footer') || $boxNo === 3): ?>
   <?php $links = $this->client()->getFooterLinks($boxNo); ?>
   <div class="<?=$colwidth?>">
-    <div class="well">          
+    <div class="well">
         <h5><?=$heading?></h5>
     <?php if ($links): ?>
     <ul>
@@ -26,7 +26,7 @@ endif;?>
                 $url = $link;
                 //$url = $this->url($link);
             endif; ?>
-            
+
             <li><a href="<?=$url?>" class="<?= $external ? 'external' : 'internal'?>" <?= $external ? 'target="boss"' : ''?>><?=$this->transEsc($translation)?></a></li>
         <?php endforeach; ?>
         <?php if ($boxNo == 3 && $this->client()->is('help_link')): ?>

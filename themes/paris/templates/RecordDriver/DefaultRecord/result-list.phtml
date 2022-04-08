@@ -1,0 +1,251 @@
+<?php
+/*
+ * Copyright 2021 (C) Bibliotheksservice-Zentrum Baden-
+ * Württemberg, Konstanz, Germany
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ */
+
+$hasSubRecords = $this->driver->tryMethod('hasSubRecords');
+    $subRecords = $this->driver->tryMethod('getSubRecords');
+    $subRecordsCount = 0;
+    if ($subRecords) {
+        $subRecordsCount = sizeof($subRecords);
+    }
+    $isSubRecord = $this->driver->tryMethod('isSubRecord');
+    $uniqueId = $this->driver->getUniqueId();
+
+    $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassId);
+    $hiddenFilterString = '';
+    foreach ($hiddenFilters as $key => $filter) {
+        foreach ($filter as $value) {
+            $hiddenFilterString .= '&hiddenFilters[]=' . $this->escapeHtmlAttr($key) . ':' . $this->escapeHtmlAttr($value);
+        }
+    }
+$coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'small', $this->recordLink()->getUrl($this->driver));
+    $cover = $coverDetails['html'];
+?>
+
+
+    <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2 hidden-print">
+        <a href="<?=$this->recordLink()->getUrl($this->driver)?>">
+            <?=$cover ?>
+        </a>
+    </div> <!-- end cover col -->
+    <div class="col-xs-9 col-sm-10 col-md-7 col-lg-8 col-no-left-padding">
+        <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID())?>" class="hiddenId" />
+        <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getSourceIdentifier())?>" class="hiddenSource" />
+        <span class="" style="float:left;"><?=$this->recordNumber?></span>.
+        <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title getFull markjs" data-view="<?=$this->params->getOptions()->getListViewOption() ?>">
+            <?=$this->record($this->driver)->getTitleHtml()?>
+        </a>
+        <?php if ($titlesection = $this->driver->getTitleSection()):?>
+            / <?= $titlesection ?>
+        <?php endif; ?>
+        <dl class="dl-horizontal">
+
+        <?=$this->render('RecordDriver/DefaultRecord/parts/author.phtml', [
+                           'driver' => $this->driver,
+                           'hiddenFilterString' => $hiddenFilterString])?>
+
+
+        <?php /* Display information on duplicate records if available */?>
+        <?php if ($dedupData = $this->driver->getDedupData()): ?>
+            <?php $i = 0 ?>
+            <?php foreach ($dedupData as $source => $current): ?>
+                <?php if (++$i == 1):?>
+                <span class="currentSource"><a href="<?=$this->recordLink()->getUrl($this->driver)?>"><?=$this->transEsc("source_$source", [], $source)?></a></span>
+                <?php else: ?>
+                    <?php if ($i == 2): ?>
+                        <dt class="otherSources">(<?=$this->transEsc('Other Sources')?>:
+                    <?php else: ?>,
+                    <?php endif; ?>
+                    <a href="<?=$this->recordLink()->getUrl($current['id'])?>"><?=$this->transEsc("source_$source", [], $source)?></a>
+                <?php endif; ?>
+            <?php endforeach; ?>
+            <?php if ($i > 1): ?>
+                 )</dt>
+            <?php endif; ?>
+        <?php endif; ?>
+        <?php $edition = $this->driver->getEdition(); if (!empty($edition)): ?>
+                <dt><?=$this->transEsc('Edition')?></dt>
+                <dd property="bookEdition"><?=$this->escapeHtml($edition)?></dd>
+        <?php endif; ?>
+        <?php if ($this->searchTabs()->isILL() && strlen($this->driver->tryMethod('getConsortium')) > 0): ?>
+                <dt><?= $this->transEsc('Network') ?></dt>
+                <dd><?= $this->driver->getConsortium() ?></dd>
+        <?php endif; ?>
+        <?= $this->render('RecordDriver/DefaultRecord/parts/links.phtml', [
+            'driver' => $this->driver,
+            'hiddenFilterString' => $hiddenFilterString,
+            'area' => 'results']) ?>
+        </dl>
+        <?php if ($this->ils()->getDriverClass() !== 'Bsz\ILS\Driver\NoILS'): ?>
+            <div class="callnumAndLocation ajax-availability hidden">
+                <?php if ($this->driver->supportsAjaxStatus()): ?>
+                    <strong class="hideIfDetailed"><?= $this->transEsc('Call Number') ?>
+                        :</strong>
+                    <span class="callnumber ajax-availability hidden">
+                    <?= $this->transEsc('Loading') ?>...<br/>
+                </span>
+                    <dt><?= $this->transEsc('Located') ?></dt>
+                    <dd class="location ajax-availability hidden">
+                    <?=$this->transEsc('Loading')?>...
+                </dd>
+                <div class="locationDetails"></div>
+            <?php endif; ?>
+            </div>
+        <?php endif; ?>
+
+        <div class="result-formats">
+            <?=$this->record($this->driver)->getFormatList() ?>
+            <?php if (empty($urls) && $this->driver->supportsAjaxStatus()): ?>
+                <span class="status ajax-availability hidden">
+                    <span class="label label-default"><?=$this->transEsc('Loading')?>...</span>
+                </span>
+            <?php endif; ?>
+        </div>
+        <div class="result-previews">
+            <?=$this->record($this->driver)->getPreviews()?>
+        </div>
+
+    </div> <!-- end content col -->
+    <div class="col-xs-9 col-sm-9 col-md-3 col-lg-2 hidden-print col-xs-offset-3 col-sm-offset-2 col-no-left-padding">
+        <ul class="nav nav-pills">
+            <?php if ($this->cart()->isActiveInSearch() && $this->params->getOptions()->supportsCart() && $this->cart()->isActive()): ?>
+              <?=$this->render('record/cart-buttons.phtml', ['id' => $this->driver->getUniqueId(), 'source' => $this->driver->getSourceIdentifier()]); ?>
+            <?php endif; ?>
+            <?php if ($this->userlist()->getMode() !== 'disabled'): ?>
+                <?php if ($this->permission()->allowDisplay('feature.Favorites')): ?>
+                    <?php /* Add to favorites */ ?>
+                    <li>
+                        <a href="<?=$this->recordLink()->getActionUrl($this->driver, 'Save')?>" data-lightbox class="btn save-record result-link-label" data-id="<?=$this->escapeHtmlAttr($this->driver->getUniqueId()) ?>">
+                            <i class="result-link-icon fa fa-fw fa-star" aria-hidden="true"></i>
+                            <span class="text"><?=$this->transEsc('Add to favorites')?></span>
+                        </a>
+                    </li>
+                <?php elseif ($block = $this->permission()->getAlternateContent('feature.Favorites')): ?>
+                    <?=$block?>
+                <?php endif; ?>
+                <?php /* Saved lists */ ?>
+                <li>
+                    <div class="savedLists hidden">
+                        <strong><?=$this->transEsc("Saved in")?>:</strong>
+                    </div>
+                </li>
+            <?php endif; ?>
+            <?php /*Dedup button*/ ?>
+            <?php if ($hasSubRecords): ?>
+                <?php
+                  $rand = rand(1, 10000);
+                  $pgid = 'accordion-' . $rand;
+                  $pid = 'panel-' . $rand . '-';
+            ?>
+                <li class="btn-dedup-toggle">
+                    <a class="btn result-link-label duplicates-toggle" data-toggle="collapse" href="#<?=$pgid?>">
+                          <i class="result-link-icon fa fa-arrow-down"></i>
+                        <span class="hide-me">
+                          <?=$this->transEsc('show_duplicates')?>
+                          <span class="badge pull-right"><?=$subRecordsCount?></span>
+                    </a>
+                </li>
+            <?php endif; ?>
+        </ul>
+    </div> <!-- end buttons col -->
+    <!-- Begin subrecords -->
+    <?php if ($hasSubRecords): ?>
+    <div class="row">
+        <div class="col-xs-11 col-xs-offset-1">
+            <div class="panel-group duplicates collapse" id="<?=$pgid?>">
+                <?php foreach ($subRecords as $count => $sub): ?>
+                <div class="panel panel-default">
+                    <?php
+                        $dates = $sub->getPublicationDates();
+                        $date = array_shift($dates);
+                        $edition = $sub->getEdition();
+                        $header = [
+                            $this->escapeHtml($this->driver->tryMethod('$sub->getNetwork()')),
+                            //$this->escapeHtml($date),
+                            $this->escapeHtml($edition)
+                        ];
+                    ?>
+                    <?php if (count($header) > 0 && $this->client()->is('show_dup_panel_headings')): ?>
+                    <div class="panel-heading" data-toggle="collapse" data-parent="" href="#<?=$pid . $count?>">
+                        <strong><?=implode(' &ndash; ', array_filter($header))?></strong>
+                    </div>
+                    <?php endif; ?>
+                    <div id="<?=$pid . $count?>" class="panel-collapse collapse <?php if (!$this->client()->is('show_dup_panel_headings')):?>in <?php endif; ?>">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-xs-4 col-sm-2">
+                                    <?php
+                                      $subCoverDetails = $this->record($sub)->getCoverDetails('result-list', 'small', $this->recordLink()->getUrl($this->driver));
+                                      $subCover = $subCoverDetails['html'];
+
+                                    ?>
+                                    <?=$subCover?>
+
+                                </div>
+                                <div class="col-xs-8 col-sm-10">
+                                    <a class="title markjs" href="<?=$this->recordLink()->getUrl($sub)?>">
+                                        <?=$this->record($sub)->getTitleHtml()?>
+                                    </a>
+                                    <?php if ($titlesection = $sub->getTitleSection()):?>
+                                        / <?= $titlesection ?>
+                                    <?php endif; ?>
+                                    <dl class="dl-horizontal">
+                                    <?=$this->render('RecordDriver/DefaultRecord/parts/author.phtml', [
+                                            'driver' => $sub,
+                                            'hiddenFilterString' => $hiddenFilterString
+                                            ])?>
+                                    <?php //$openUrl = $this->openUrl($sub, 'results');
+                                     $openUrl = null;
+                                     $openUrlActive = null;
+                                     //$openUrlActive = $openUrl->isActive();
+                                     echo $this->render('RecordDriver/DefaultRecord/parts/links.phtml', [
+                                       'driver' => $sub,
+                                       'openUrl' => $openUrl,
+                                       'openUrlActive' => $openUrlActive,
+                                       'hiddenFilterString' => $hiddenFilterString
+                                     ])?>
+                                    <?php if (!empty($edition)): ?>
+                                        <dt><?=$this->transEsc('Edition')?></dt>
+                                        <dd><span property="bookEdition" class="markjs"><?=$this->escapeHtml($edition)?></span></dd>
+                                        <?php endif; ?>
+                                    <?php if (strlen($this->driver->tryMethod('getConsortium')) > 0): ?>
+                                        <div class="ill-source">
+                                            <dt><?= $this->transEsc('Network') ?></dt>
+                                            <dd><?= $sub->getConsortium() ?></dd>
+                                        </div>
+                                    <?php endif; ?>
+                                    <div class="result-formats">
+                                        <?=$this->record($sub)->getFormatList() ?>
+                                    </div>
+
+                                    </dl>
+                                </div> <!-- end of "content" column -->
+                            </div> <!-- end row -->
+                        </div> <!-- end panel-body -->
+                    </div> <!-- end colllappsible part -->
+                </div> <!-- end panel -->
+               <?php endforeach; ?>
+            </div> <!-- end panel group -->
+        </div> <!--end column -->
+    </div><!--end row -->
+    <!-- end subrecords -->
+    <?php endif; ?>
+
+
