@@ -1,27 +1,20 @@
 <?php
 /**
  * ILS Driver for VuFind to query availability information via DAIA.
- *
  * Based on the proof-of-concept-driver by Till Kinstler, GBV.
  * Relaunch of the daia driver developed by Oliver Goldschmidt.
- *
  * PHP version 5
- *
  * Copyright (C) Jochen Lienhard 2014.
- *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
  * @category VuFind2
  * @package  ILS_Drivers
  * @author   Jochen Lienhard <lienhard@ub.uni-freiburg.de>
@@ -30,13 +23,14 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org/wiki/vufind2:building_an_ils_driver Wiki
  */
+
 namespace Bsz\ILS\Driver;
 
+use Exception;
 use VuFind\Exception\ILS as ILSException;
 
 /**
  * ILS Driver for VuFind to query availability information via DAIA.
- *
  * @category VuFind2
  * @package  ILS_Drivers
  * @author   Jochen Lienhard <lienhard@ub.uni-freiburg.de>
@@ -59,7 +53,6 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
 
     /**
      * Flag to enable multiple DAIA-queries
-     *
      * @var bool
      */
     protected $multiQuery = false;
@@ -75,12 +68,10 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
 
     /**
      * Initialize the driver.
-     *
      * Validate configuration and perform all resource-intensive tasks needed to
      * make the driver active.
-     *
-     * @throws ILSException
      * @return void
+     * @throws ILSException
      */
     public function init()
     {
@@ -126,18 +117,15 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
 
     /**
      * Get Hold Link
-     *
      * The goal for this method is to return a URL to a "place hold" web page on
      * the ILS OPAC. This is used for ILSs that do not support an API or method
      * to place Holds.
-     *
      * Uses the mobile version of aDIS by exchanging a number
      *
-     * @param string $id      The id of the bib record
-     * @param array  $details Item details from getHoldings return array
+     * @param string $id     The id of the bib record
+     * @param array $details Item details from getHoldings return array
      *
      * @return string         URL to ILS's OPAC's place hold screen.
-     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getHoldLink($id, $details)
@@ -150,11 +138,41 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
         return $details['ilslink'];
     }
 
+    public function translationEnabled()
+    {
+        if (isset($this->config['DAIA']['noTranslation'])) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Needed to hide holdings tab if empty
+     *
+     * @param string $id
+     *
+     * @return boolean
+     */
+    public function hasHoldings($id)
+    {
+        // we can't query DAIA without an ISIL.
+        if (empty($this->isil) && strpos($this->baseUrl, 'DE-') === false) {
+            return false;
+        }
+        $holdings = $this->getHolding($id);
+        if (count($holdings) > 0) {
+            return true;
+        } else {
+            throw new ILSException('no holdings');
+        }
+        return false;
+    }
+
     /**
      * Parse an array with DAIA status information.
      *
-     * @param string $id        Record id for the DAIA array.
-     * @param array  $daiaArray Array with raw DAIA status information.
+     * @param string $id       Record id for the DAIA array.
+     * @param array $daiaArray Array with raw DAIA status information.
      *
      * @return array            Array with VuFind compatible status information.
      */
@@ -177,42 +195,43 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
         }
         // if one or more items exist, iterate and build result-item
         if (array_key_exists('item', $daiaArray)) {
-                $number = 0;
-                foreach ($daiaArray['item'] as $item) {
-                        $result_item = [];
-                        $result_item['id'] = $id;
-                        $result_item['item_id'] = $item['id'];
-                        // custom DAIA field used in getHoldLink()
-                        $result_item['ilslink']
-                            = ($item['href'] ?? $doc_href);
-                        // count items
-                        $number++;
-                        $result_item['number'] = $this->getItemNumber($item, $number);
-                        // set default value for barcode
-                        $result_item['barcode'] = $this->getItemBarcode($item);
-                        // set default value for part
-                        $result_item['part'] = $this->getItemPart($item);
-                        $result_item['about'] = $this->getItemAbout($item);
+            $number = 0;
+            foreach ($daiaArray['item'] as $item) {
+                $result_item = [];
+                $result_item['id'] = $id;
+                $result_item['item_id'] = $item['id'];
+                // custom DAIA field used in getHoldLink()
+                $result_item['ilslink']
+                    = ($item['href'] ?? $doc_href);
+                // count items
+                $number++;
+                $result_item['number'] = $this->getItemNumber($item, $number);
+                // set default value for barcode
+                $result_item['barcode'] = $this->getItemBarcode($item);
+                // set default value for part
+                $result_item['part'] = $this->getItemPart($item);
+                $result_item['about'] = $this->getItemAbout($item);
 
-                        // set default value for reserve
-                        $result_item['reserve'] = $this->getItemReserveStatus($item);
-                        // get callnumber
-                        $result_item['callnumber'] = $this->getItemCallnumber($item);
-                        // get location
-                        $result_item['location'] = $this->getItemLocation($item);
-                        // get location link
-                        //$result_item['locationhref'] = $this->getItemLocationLink($item);
-                        // status and availability will be calculated in own function
-                        $result_item = $this->getItemStatus($item) + $result_item;
+                // set default value for reserve
+                $result_item['reserve'] = $this->getItemReserveStatus($item);
+                // get callnumber
+                $result_item['callnumber'] = $this->getItemCallnumber($item);
+                // get location
+                $result_item['location'] = $this->getItemLocation($item);
+                // get location link
+                //$result_item['locationhref'] = $this->getItemLocationLink($item);
+                // status and availability will be calculated in own function
+                $result_item = $this->getItemStatus($item) + $result_item;
 
-                        // add result_item to the result array
-                        if ($this->getItemMessage($item) !== "withdrawn") {
-                            $result[] = $result_item;
-                        }
-                } // end iteration on item
+                // add result_item to the result array
+                if ($this->getItemMessage($item) !== "withdrawn") {
+                    $result[] = $result_item;
+                }
+            } // end iteration on item
         }
-
-        if (empty($result) && strpos($doc_id, 'koha:biblionumber:' ) !== false) {
+        $message = $daiaArray['message'][0]['content'] ?? null;
+        if (empty($result) && $message === 'Monographic Component part, Text'
+            && strpos($doc_id, 'koha:biblionumber:') !== false) {
             $result[] = $this->addArticleItem($doc_id);
         }
 
@@ -238,6 +257,10 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
             foreach ($item['message'] as $msg) {
                 if ($msg['lang'] == 'en') {
                     $message = trim($msg['content']);
+                    $pos = strpos($message, ', ');
+                    if ($pos !== false) {
+                        $message = substr($message, 0, $pos);
+                    }
                 }
             }
         }
@@ -307,9 +330,10 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
                     try {
                         $duedate = $this->dateConverter
                             ->convertToDisplayDate(
-                                'Y-m-d', $unavailable['expected']
+                                'Y-m-d',
+                                $unavailable['expected']
                             );
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                         $this->debug('Date conversion failed: ' . $e->getMessage());
                         $duedate = null;
                     }
@@ -339,33 +363,12 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
             $return['ilslink'] = $availableLink;
         }
 
-        $return['status']          = $status;
-        $return['availability']    = $availability;
-        $return['duedate']         = $duedate;
+        $return['status'] = $status;
+        $return['availability'] = $availability;
+        $return['duedate'] = $duedate;
         $return['requests_placed'] = $queue;
 
         return $return;
-    }
-
-    public function translationEnabled()
-    {
-        if (isset($this->config['DAIA']['noTranslation'])) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Avois parsing an empty response - this may happen on ill portal if DAIA
-     * is not configured correctly.
-     * @param type $daiaResponse
-     */
-    protected function convertDaiaXmlToJson($daiaResponse)
-    {
-        if ($daiaResponse != false && !empty($daiaResponse)) {
-            return parent::convertDaiaXmlToJson($daiaResponse);
-        }
-        return '';
     }
 
     /**
@@ -380,16 +383,15 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
         $return = [];
 
         if (strpos($this->baseUrl, 'DE-Stg117') !== false) {
-
             $doc_id = preg_replace('/koha:biblionumber:/', '', $doc_id);
             $return = [
-                'id'        => $doc_id,
-                'callnumber'=> '',
-                'location'  => 'Dokumentenlieferdienst',
-                'ilslink'      => 'https://elk-wue.bsz-bw.de/cgi-bin/koha/opac-request-article.pl?biblionumber='.$doc_id,
-                'link'      => 'https://elk-wue.bsz-bw.de/cgi-bin/koha/opac-request-article.pl?biblionumber='.$doc_id,
-                'availability'  => 'article',
-                'status'    => 'Available',
+                'id' => $doc_id,
+                'callnumber' => '',
+                'location' => 'Dokumentenlieferdienst',
+                'ilslink' => 'https://elk-wue.bsz-bw.de/cgi-bin/koha/opac-request-article.pl?biblionumber=' . $doc_id,
+                'link' => 'https://elk-wue.bsz-bw.de/cgi-bin/koha/opac-request-article.pl?biblionumber=' . $doc_id,
+                'availability' => 'article',
+                'status' => 'Available',
                 'checkILLRequest' => true,
                 'checkStorageRetrievalRequest' => true,
                 'requests_placed' => 0,
@@ -399,25 +401,18 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
     }
 
     /**
-     * Needed to hide holdings tab if empty
-     * @param string $id
-     * @return boolean
+     * Avois parsing an empty response - this may happen on ill portal if DAIA
+     * is not configured correctly.
+     *
+     * @param type $daiaResponse
      */
-    public function hasHoldings($id)
+    protected function convertDaiaXmlToJson($daiaResponse)
     {
-        // we can't query DAIA without an ISIL.
-         if (empty($this->isil) && strpos($this->baseUrl, 'DE-') === false) {
-            return false;
+        if ($daiaResponse != false && !empty($daiaResponse)) {
+            return parent::convertDaiaXmlToJson($daiaResponse);
         }
-        $holdings = $this->getHolding($id);
-        if (count($holdings) > 0) {
-            return true;
-        } else {
-            throw new ILSException('no holdings');
-        }
-        return false;
+        return '';
     }
-
 
     /**
      * Generate a DAIA URI necessary for the query, but remove network Prefix from
@@ -434,5 +429,4 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
         $id = preg_replace('/\(.*\)/', '', $id);
         return parent::generateURI($id);
     }
-
 }
