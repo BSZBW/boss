@@ -27,7 +27,7 @@
                   <?php if (isset($row['ILLRequestLink']) && $row['ILLRequestLink']): ?>
                     <a class="hasicon <?=$checkILLRequest ? 'checkILLRequest ' : ''?>inlineblock external placeILLRequest" data-name="aDIS BOSS2" data-size="md" href="<?=$this->recordLink()->getRequestUrl($row['ILLRequestLink'])?>"  title="<?=$this->transEsc($checkILLRequest ? "ill_request_check_text" : "ill_request_place_text")?>"><i class="fa fa-flag"></i>&nbsp;<?=$this->transEsc($checkILLRequest ? "ill_request_check_text" : "ill_request_place_text")?></a>
                   <?php endif; ?>
-                  <?php if ($this->client()->is('always_place_hold')): ?>
+                  <?php if ($this->client()->is('always_place_hold') && $row['availability'] !== 'article'): ?>
                     <a class="<?=$check ? 'checkRequest' : ''?> external hasicon inlineblock " data-name="aDIS BOSS2" data-size="md" href="<?=$this->recordLink()->getRequestUrl($row['link'])?>"><i class="fa fa-flag"></i>&nbsp;<?=$this->transEsc($check ? "Check Recall" : "Recall This")?></a>
                   <?php endif; ?>
                    </dd>
