@@ -211,7 +211,9 @@ class Params extends \VuFind\Search\Base\Params
                 }
                 $fieldPrefix = $this->getFacetPrefixForField($facetField);
                 if (!empty($fieldPrefix)) {
-                    $facetSet["f.{$facetField}.facet.prefix"] = $fieldPrefix;
+                    // $facetSet["f.{$facetField}.facet.prefix"] = $fieldPrefix;
+                    // Bsp.: &facet.field={!key=fivs facet.prefix=fivs}topic_browse
+                    $facetField = '{!key=' . $fieldPrefix . ' facet.prefix=' . $fieldPrefix . '}' . $facetField;
                 }
                 $fieldMatches = $this->getFacetMatchesForField($facetField);
                 if (!empty($fieldMatches)) {
