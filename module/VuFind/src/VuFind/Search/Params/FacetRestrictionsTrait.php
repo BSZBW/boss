@@ -65,7 +65,8 @@ trait FacetRestrictionsTrait
     protected function initFacetRestrictionsFromConfig(Config $config = null)
     {
         foreach ($config->facet_prefix_by_field ?? [] as $k => $v) {
-            $this->facetPrefixByField[$k] = $v;
+            $k = preg_replace('/\.\d$/', '', $k);
+            $this->facetPrefixByField[$k][] = $v;
         }
         foreach ($config->facet_matches_by_field ?? [] as $k => $v) {
             $this->facetMatchesByField[$k] = $v;
@@ -101,11 +102,11 @@ trait FacetRestrictionsTrait
      *
      * @param string $field Field to look up
      *
-     * @return string
+     * @return array
      */
-    protected function getFacetPrefixForField($field)
+    protected function  getFacetPrefixForField($field)
     {
-        $prefix = $this->facetPrefixByField[$field] ?? '';
+        $prefix = $this->facetPrefixByField[$field] ?? [];
         return $prefix;
     }
 
