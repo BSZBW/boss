@@ -222,16 +222,16 @@ class Params extends \VuFind\Search\Base\Params
                         $facetField = '{!key=' . $fieldPrefix . ' facet.prefix=' . $fieldPrefix . '}' . $fieldname;
                         $prefixList[] =  $fieldPrefix;
                     }
-                    $fieldMatches = $this->getFacetMatchesForField($facetField);
-                    if (!empty($fieldMatches)) {
-                        $facetSet["f.{$facetField}.facet.matches"] = $fieldMatches;
-                    }
-                    if ($this->getFacetOperator($facetField) == 'OR') {
-                        $facetField = '{!ex=' . $facetField . '_filter}' . $facetField;
-                    }
-                    if ( !in_array($facetField, $prefixList)) {
-                        $facetSet['field'][] = $facetField;
-                    }
+                }
+                $fieldMatches = $this->getFacetMatchesForField($facetField);
+                if (!empty($fieldMatches)) {
+                    $facetSet["f.{$facetField}.facet.matches"] = $fieldMatches;
+                }
+                if ($this->getFacetOperator($facetField) == 'OR') {
+                    $facetField = '{!ex=' . $facetField . '_filter}' . $facetField;
+                }
+                if ( !in_array($facetField, $prefixList)) {
+                    $facetSet['field'][] = $facetField;
                 }
             }
             if ($this->facetContains != null) {
