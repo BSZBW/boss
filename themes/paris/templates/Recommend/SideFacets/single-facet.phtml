@@ -19,12 +19,14 @@
   if ($this->facet['operator'] == 'AND') {
     $classList[] = 'facetAND';
   }
-
   $displayText = '-';
   if (!empty($this->facet['displayText'])) {
     $displayText = $this->escapeHtml($this->facet['displayText']);
   } elseif (!empty($this->facet['value'])) {
     $displayText = $this->escapeHtml($this->facet['value']);
+  }
+  if (($pos = strpos($displayText, ':')) !== false) {
+      $displayText = substr($displayText, $pos + 1 );
   }
   $displayText = '<span class="facet-value">' . $displayText . '</span>';
 
