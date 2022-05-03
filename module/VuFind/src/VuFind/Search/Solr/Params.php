@@ -201,8 +201,6 @@ class Params extends \VuFind\Search\Base\Params
     {
         // Build a list of facets we want from the index
         $facetSet = [];
-        // List of used prefixes
-        $prefixList = [];
 
         if (!empty($this->facetConfig)) {
             $facetSet['limit'] = $this->facetLimit;
@@ -211,27 +209,18 @@ class Params extends \VuFind\Search\Base\Params
                 if ($fieldLimit != $this->facetLimit) {
                     $facetSet["f.{$facetField}.facet.limit"] = $fieldLimit;
                 }
-
                 $fieldPrefix = $this->getFacetPrefixForField($facetField);
                 if (!empty($fieldPrefix)) {
-                    // facet_prefix_by_field[fivr] = topic_browse
-                    // &facet.field={!key=fivs facet.prefix=fivs}topic_browse
-                    $facetField = '{!key=' . $facetField . ' facet.prefix=' . $facetField . '}' . $fieldPrefix;
-                    //$prefixList[] =  $facetField;
+                    $facetSet["f.{$facetField}.facet.prefix"] = $fieldPrefix;
                 }
-
                 $fieldMatches = $this->getFacetMatchesForField($facetField);
                 if (!empty($fieldMatches)) {
                     $facetSet["f.{$facetField}.facet.matches"] = $fieldMatches;
                 }
-
                 if ($this->getFacetOperator($facetField) == 'OR') {
                     $facetField = '{!ex=' . $facetField . '_filter}' . $facetField;
                 }
-
-                if ( !in_array($facetField, $prefixList)) {
-                    $facetSet['field'][] = $facetField;
-                }
+                $facetSet['field'][] = $facetField;
             }
             if ($this->facetContains != null) {
                 $facetSet['contains'] = $this->facetContains;

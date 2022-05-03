@@ -49,6 +49,13 @@ trait FacetRestrictionsTrait
     protected $facetPrefixByField = [];
 
     /**
+     * Per-multifield facet prefix
+     *
+     * @var array
+     */
+    protected $facetPrefixByMultiField = [];
+
+    /**
      * Per-field facet matches
      *
      * @var array
@@ -64,6 +71,9 @@ trait FacetRestrictionsTrait
      */
     protected function initFacetRestrictionsFromConfig(Config $config = null)
     {
+        foreach ($config->facet_prefix_by_multi_field ?? [] as $k => $v) {
+            $this->facetPrefixByMultiField[$k] = $v;
+        }
         foreach ($config->facet_prefix_by_field ?? [] as $k => $v) {
             $this->facetPrefixByField[$k] = $v;
         }
@@ -82,6 +92,18 @@ trait FacetRestrictionsTrait
     public function setFacetPrefixByField(array $new)
     {
         $this->facetPrefixByField = $new;
+    }
+
+    /**
+     * Set Facet Prefix by MultiField
+     *
+     * @param array $new Associative array of $multifield name => $limit
+     *
+     * @return void
+     */
+    public function setFacetPrefixByMultiField(array $new)
+    {
+        $this->facetPrefixByMultiField = $new;
     }
 
     /**
@@ -121,4 +143,20 @@ trait FacetRestrictionsTrait
         $matches = $this->facetMatchesByField[$field] ?? '';
         return $matches;
     }
+
+    /**
+     * Get the facet prefix for the specified multifield
+     *
+     * used by DFI
+     *
+     * @param string $field MultiField to look up
+     *
+     * @return array
+     */
+    protected function  getFacetPrefixForMultiField($field)
+    {
+        $multifieldprefix = $this->facetPrefixByMultiField[$field] ?? [];
+        return $multifieldprefix;
+    }
+
 }
