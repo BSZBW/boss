@@ -59,24 +59,25 @@
     </div>
 </div>
 
-
-  <?php foreach ($holding['items'] as $row): ?>
-    <?php if ($row['status'] != 'For reference' &&
-           $row['status'] != 'Lost' &&
-           $row['status'] != 'Missing' &&
-           $row['status'] != 'Permanent on loan'):
-           $recallButtonCounter++;
-       endif;
-    ?>
-    <?php if ($this->ils()->getDriverClass() == 'Bsz\ILS\Driver\DAIA'): //start of new/adis DAIA code?>
-        <?=$this->render('RecordTab/parts/adisdaia.phtml', ['row' => $row, 'driver' => $this->driver, 'recallButtonCounter' => $recallButtonCounter])?>
-    <?php elseif ($this->ils()->getDriverClass() == 'Bsz\ILS\Driver\DAIAbsz'): // start of old DAIA code?>
-        <?=$this->render('RecordTab/parts/olddaia.phtml', ['row' => $row, 'driver' => $this->driver])?>
-    <?php elseif ($this->ils()->getDriverClass() == 'Bsz\ILS\Driver\NoILS'): // NoILS?>
-        <?=$this->render('RecordTab/parts/noils.phtml', ['row' => $row, 'driver' => $this->driver, 'tab' => $this->tab, 'holding' => $holding])?>
-    <?php endif; // End of old DAIA code?>
-
-  <?php endforeach; ?>
+    <?php $knownLocations = []; ?>
+    <?php foreach ($holding['items'] as $row): ?>
+        <?php if (!in_array($row['location'], $knownLocations)): ?>
+            <?php $knownLocations[] = $row['location'] ?>
+            <?php if ($row['status'] != 'For reference' &&
+               $row['status'] != 'Lost' &&
+               $row['status'] != 'Missing' &&
+               $row['status'] != 'Permanent on loan'):
+               $recallButtonCounter++;
+            endif; ?>
+            <?php if ($this->ils()->getDriverClass() == 'Bsz\ILS\Driver\DAIA'): //start of new/adis DAIA code?>
+                <?=$this->render('RecordTab/parts/adisdaia.phtml', ['row' => $row, 'driver' => $this->driver, 'recallButtonCounter' => $recallButtonCounter])?>
+            <?php elseif ($this->ils()->getDriverClass() == 'Bsz\ILS\Driver\DAIAbsz'): // start of old DAIA code?>
+                <?=$this->render('RecordTab/parts/olddaia.phtml', ['row' => $row, 'driver' => $this->driver])?>
+            <?php elseif ($this->ils()->getDriverClass() == 'Bsz\ILS\Driver\NoILS'): // NoILS?>
+                <?=$this->render('RecordTab/parts/noils.phtml', ['row' => $row, 'driver' => $this->driver, 'tab' => $this->tab, 'holding' => $holding])?>
+            <?php endif; // End of old DAIA code?>
+        <?php endif; ?>
+    <?php endforeach; ?>
 <?php endforeach; ?>
 <?php endif; ?>
 
