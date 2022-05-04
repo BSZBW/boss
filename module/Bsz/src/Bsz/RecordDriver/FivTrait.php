@@ -77,6 +77,30 @@ trait FivTrait {
         }
         return array_unique($classificationList);
     }
+    /**
+     * Get an array with FIV classification
+     * @returns array
+     */
+    public function getDFIClassification()
+    {
+        $classificationList = [];
+
+        foreach ($this->getMarcRecord()->getFields('936') as $field) {
+            $suba = $field->getSubField('a');
+            $sub2 = $field->getSubfield('2');
+            if ($suba && $sub2 && $field->getIndicator(1) == 'f'
+                && $field->getIndicator(2) == 'i'
+            ) {
+                $sub2data = $field->getSubfield('2')->getData();
+                if (preg_match('/^fivw/', $sub2data)) {
+                    $data = $suba->getData();
+                    $data = preg_replace('/!.*!|:/i', '', $data);
+                    $classificationList[] = $data;
+                }
+            }
+        }
+        return array_unique($classificationList);
+    }
 }
 
 
