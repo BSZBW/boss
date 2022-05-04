@@ -3,7 +3,7 @@
     ? $this->urlBase . $this->url->removeFacet($this->group, $this->facet['value'], $this->facet['operator'])
     : $this->urlBase . $this->url->addFacet($this->group, $this->facet['value'], $this->facet['operator']);
 
-  $toggleUrl = str_replace(['=fivr', '=fivs'],  '=topic_browse', $toggleUrl);
+  $toggleUrl = str_replace(['=fivr', '=fivs', '=fivt', '=fiva'],  '=topic_browse', $toggleUrl);
   $hasSubLinks = $this->exclude && !$this->facet['isApplied'];
 
   $classList = ['facet', 'js-facet-item'];
@@ -25,9 +25,17 @@
   } elseif (!empty($this->facet['value'])) {
     $displayText = $this->escapeHtml($this->facet['value']);
   }
+  // Cleanup of facet displayText
   if (($pos = strpos($displayText, ':')) !== false) {
       $displayText = substr($displayText, $pos + 1 );
   }
+  if (($pos = strpos($displayText, 'fivt ')) !== false) {
+      $displayText = substr($displayText, $pos + 5 );
+  }
+  if (($pos = strpos($displayText, 'fiva ')) !== false) {
+    $displayText = substr($displayText, $pos + 5 );
+  }
+
   $displayText = '<span class="facet-value">' . $displayText . '</span>';
 
   if ($this->facet['operator'] == 'OR') {
