@@ -27,6 +27,7 @@ class SolrFindexMarc extends SolrMarc implements Constants
     use HelperTrait;
     use ContainerTrait;
     use MarcFormatTrait;
+    use FivTrait;
 
     /**
      * Returns consortium
