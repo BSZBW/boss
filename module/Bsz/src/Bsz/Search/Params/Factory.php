@@ -34,22 +34,6 @@ use VuFind\ILS\Logic\TitleHolds;
  */
 class Factory
 {
-    /**
-     * Factory for Solr params object.
-     *
-     * @param ContainerInterface $container
-     *
-     * @return \VuFind\Search\Solr\Params
-     */
-    public static function getSolr(ContainerInterface $container)
-    {
-        $config = $container->get('VuFind\Config');
-        $options = $container->get('VuFind\SearchOptionsPluginManager')->get('solr');
-        $dedup = $container->get('Bsz\Config\Dedup');
-        $params = new Params($options, $config, null, $dedup);
-
-        return $params;
-    }
 
     /**
      * Create an object
