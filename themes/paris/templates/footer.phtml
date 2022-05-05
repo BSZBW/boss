@@ -22,7 +22,6 @@
             <small><?php if ($this->client()->is('show_bw_logo')): ?><img
                     src="<?= $this->imageLink('logo/bw_white.svg') ?>" alt="Baden-Württemberg" style="width: 40px;"
                     /><?php endif ?><?= $this->transEsc('footer_custom_text') ?>
-                &ndash;
                 <a href="https://wiki.bsz-bw.de/display/BOSS/Roadmap"
                         class="external"><?= $this->escapeHtml($this->client()->getVersion()) ?></a>
                 &copy; <?= date('Y') ?> <a href="https://www.bsz-bw.de"
