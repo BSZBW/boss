@@ -19,8 +19,6 @@
  */
 namespace Bsz\Search\Params;
 
-use Bsz\Search\Solr\Params as Params;
-use Bsz\Search2\Solr\Params as Search2Params;
 use Interop\Container\ContainerInterface;
 use VuFind\Config\YamlReader;
 use VuFind\ILS\Connection;
@@ -55,7 +53,7 @@ class Factory
         $config = $container->get('VuFind\Config');
         $options = $container->get('VuFind\SearchOptionsPluginManager')->get('solr');
         $dedup = $container->get('Bsz\Config\Dedup');
-        $params = new Params($options, $config, null, $dedup);
+        $params = new $requestedName($options, $config, null, $dedup);
 
         return $params;
     }
