@@ -212,7 +212,7 @@ $config = [
             ],
             'search_params'  => [
                 'factories' => [
-                    'Bsz\Search\Solr\Params' => 'Bsz\Search\Params\Factory::getSolr'
+                    'Bsz\Search\Solr\Params' => 'Bsz\Search\Params\Factory'
                 ],
                 'aliases' => [
                     'VuFind\Search\Solr\Params' => 'Bsz\Search\Solr\Params'

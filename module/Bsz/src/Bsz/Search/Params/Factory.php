@@ -19,8 +19,13 @@
  */
 namespace Bsz\Search\Params;
 
-use Bsz\Search\Solr\Params;
+use Bsz\Search\Solr\Params as Params;
+use Bsz\Search2\Solr\Params as Search2Params;
 use Interop\Container\ContainerInterface;
+use VuFind\Config\YamlReader;
+use VuFind\ILS\Connection;
+use VuFind\ILS\Logic\Holds;
+use VuFind\ILS\Logic\TitleHolds;
 
 /**
  * BSz Search params Factory
@@ -37,6 +42,31 @@ class Factory
      * @return \VuFind\Search\Solr\Params
      */
     public static function getSolr(ContainerInterface $container)
+    {
+        $config = $container->get('VuFind\Config');
+        $options = $container->get('VuFind\SearchOptionsPluginManager')->get('solr');
+        $dedup = $container->get('Bsz\Config\Dedup');
+        $params = new Params($options, $config, null, $dedup);
+
+        return $params;
+    }
+
+    /**
+     * Create an object
+     *
+     * @param ContainerInterface $container Service manager
+     * @param string $requestedName         Service being created
+     * @param null|array $options           Extra options (optional)
+     *
+     * @return object
+     * @throws ServiceNotFoundException if unable to resolve the service.
+     * @throws ServiceNotCreatedException if an exception is raised when
+     * creating a service.
+     * @throws ContainerException if any other error occurs
+     */
+    public function __invoke(ContainerInterface $container, $requestedName,
+                             array $options = null
+    )
     {
         $config = $container->get('VuFind\Config');
         $options = $container->get('VuFind\SearchOptionsPluginManager')->get('solr');
