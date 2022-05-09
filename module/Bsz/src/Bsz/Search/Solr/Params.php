@@ -29,7 +29,7 @@ class Params extends \VuFind\Search\Solr\Params
         HierarchicalFacetHelper $facetHelper = null,
         Dedup $dedup = null
     ) {
-        parent::__construct($options, $configLoader);
+        parent::__construct($options, $configLoader, $facetHelper);
         $this->dedup = $dedup;
     }
 
