@@ -212,12 +212,12 @@ $config = [
             ],
             'search_params'  => [
                 'factories' => [
-                    'Bsz\Search\Solr\Params' => 'Bsz\Search\Params\Factory',
-                    'Bsz\Search\Search2\Params' => 'Bsz\Search\Params\Factory'
+                    'Bsz\Search\Solr\Params' =>     'Bsz\Search\Params\Factory',
+                    //'Bsz\Search\Search2\Params' =>  'Bsz\Search\Params\Factory'
                 ],
                 'aliases' => [
-                    'VuFind\Search\Solr\Params' => 'Bsz\Search\Solr\Params',
-                    'VuFind\Search\Search2\Params' => 'Bsz\Search\Search2\Params',
+                    'VuFind\Search\Solr\Params' =>      'Bsz\Search\Solr\Params',
+                    //'VuFind\Search\Search2\Params' =>   'Bsz\Search\Search2\Params',
                 ]
             ],
             'ils_driver' => [
