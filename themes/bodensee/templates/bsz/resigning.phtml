@@ -22,9 +22,9 @@ $this->headTitle()->setPrefix($this->transEsc('ILL::Resigning'));
         </div>
 
         <?=$this->context($this)->renderInContext('bsz/input.phtml', [
-                'title' => 'adv_search_title',
-                'field'  => 'Title',
-                'value'  => $this->params['titel'] ?? ''])?>
+            'title' => 'PPN',
+            'field'  => 'PPN',
+            'value'  => $this->params['ppn'] ?? ''])?>
         <?=$this->context($this)->renderInContext('bsz/input.phtml', [
             'title' => 'adv_search_journaltitle',
             'field'  => 'JournalTitle',
