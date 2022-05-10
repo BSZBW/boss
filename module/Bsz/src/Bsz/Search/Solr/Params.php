@@ -3,6 +3,7 @@ namespace Bsz\Search\Solr;
 
 use Bsz\Config\Dedup;
 use VuFind\Config\PluginManager;
+use VuFind\Search\Solr\HierarchicalFacetHelper;
 use VuFindSearch\ParamBag;
 
 /**
@@ -16,18 +17,18 @@ class Params extends \VuFind\Search\Solr\Params
     protected $limit = 10;
 
     /**
-     * Params constructor.
+     * Constructor
      *
-     * @param $options
-     * @param PluginManager $configLoader
-     * @param HierarchicalFacetHelper|null $facetHelper
-     * @param Dedup|null $dedup
+     * @param \VuFind\Search\Base\Options  $options      Options to use
+     * @param \VuFind\Config\PluginManager $configLoader Config loader
+     * @param HierarchicalFacetHelper      $facetHelper  Hierarchical facet helper
+     * @param Dedup                        $dedup
      */
     public function __construct(
         $options,
         PluginManager $configLoader,
-        HierarchicalFacetHelper $facetHelper = null,
-        Dedup $dedup = null
+        Dedup $dedup = null,
+        HierarchicalFacetHelper $facetHelper = null
     ) {
         parent::__construct($options, $configLoader, $facetHelper);
         $this->dedup = $dedup;

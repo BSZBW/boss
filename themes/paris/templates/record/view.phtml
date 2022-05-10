@@ -30,9 +30,9 @@ use Zend\View\Helper\HeadScript;
 <?php if (isset($this->scrollData) && ($this->scrollData['previousRecord'] || $this->scrollData['nextRecord'])): ?>
 <div class="col-sm-2 col-sm-offset-5 text-center">
     <a class="backtosearch text-link"
-       title="<?= $this->transEsc('Back to Search') ?>"
+       title="<?= $this->transEsc('Back to Search Results') ?>"
        href="<?= $this->searchMemory()->getLastSearchUrl('', '', '', false) ?>">
-       <i class="fa fa-chevron-left"></i> <?=$this->transEsc('Back to Search')?>
+       <i class="fa fa-chevron-left"></i> <?=$this->transEsc('Back to Search Results')?>
     </a>
 </div>
 <div class="col-sm-4 col-sm-offset-4">

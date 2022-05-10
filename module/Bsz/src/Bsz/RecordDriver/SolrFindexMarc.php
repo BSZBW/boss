@@ -155,6 +155,21 @@ class SolrFindexMarc extends SolrMarc implements Constants
         return $urls;
     }
 
-
+    public function getSeriesIds()
+    {
+        $fields = [
+            830 => ['w'],
+        ];
+        $ids = [];
+        $array_clean = [];
+        $array = $this->getFieldsArray($fields);
+        foreach ($array as $subfields) {
+            $ids = explode(' ', $subfields);
+            if (preg_match('/^((?!DE-576|DE-609|DE-600.*-).)*$/', $ids[0])) {
+                $array_clean[] = substr($ids[0], 8);
+            }
+        }
+        return $array_clean;
+    }
 
 }
