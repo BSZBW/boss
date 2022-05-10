@@ -28,6 +28,7 @@ use VuFind\Search\Solr\HierarchicalFacetHelper;
 class Params extends \VuFind\Search\Search2\Params
 {
     protected $dedup;
+    protected $limit = 10;
 
     /**
      * Params constructor.
@@ -40,8 +41,8 @@ class Params extends \VuFind\Search\Search2\Params
     public function __construct(
         $options,
         PluginManager $configLoader,
-        HierarchicalFacetHelper $facetHelper = null,
-        Dedup $dedup = null
+        Dedup $dedup = null,
+        HierarchicalFacetHelper $facetHelper = null
     ) {
         parent::__construct($options, $configLoader, $facetHelper);
         $this->dedup = $dedup;

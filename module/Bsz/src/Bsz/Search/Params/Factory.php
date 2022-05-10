@@ -50,11 +50,16 @@ class Factory
                              array $options = null
     )
     {
-        $config = $container->get('VuFind\Config');
-        $options = $container->get('VuFind\SearchOptionsPluginManager')->get('solr');
+        // Replace trailing "Params" with "Options" to get the options service:
+        $parts = explode('\\', $requestedName);
+        $type = $parts[2] ?? 'Solr';
+        $optionsObj = $container->get('VuFind\SearchOptionsPluginManager')->get($type);
+        $configLoader = $container->get(\VuFind\Config\PluginManager::class);
+        // Clone the options instance in case caller modifies it:
         $dedup = $container->get('Bsz\Config\Dedup');
-        $params = new $requestedName($options, $config, null, $dedup);
 
-        return $params;
+        return new $requestedName(
+            clone $optionsObj, $configLoader, $dedup, ...($options ?: [])
+        );
     }
 }
