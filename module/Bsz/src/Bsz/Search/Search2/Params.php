@@ -22,6 +22,7 @@
 namespace Bsz\Search\Search2;
 
 use Bsz\Config\Dedup;
+use DateTime;
 use VuFind\Config\PluginManager;
 use VuFind\Search\Solr\HierarchicalFacetHelper;
 
@@ -112,5 +113,31 @@ class Params extends \VuFind\Search\Search2\Params
         }
         return $facetSet;
     }
+    /**
+     * Format a single filter for use in getFilterList().
+     *
+     * @param string $field     Field name
+     * @param string $value     Field value
+     * @param string $operator  Operator (AND/OR/NOT)
+     * @param bool   $translate Should we translate the label?
+     *
+     * @return array
+     */
+    protected function formatFilterListEntry($field, $value, $operator, $translate)
+    {
+        $parent = parent::formatFilterListEntry($field, $value, $operator, $translate);
+
+        if ($field == 'publishDateDaySort_date') {
+            $string = preg_replace('/T00:00:00Z/', '', $parent['displayText']);
+            $from = substr($string, 0, 10);
+            $to = substr($string, 11, 10);
+
+            $dateFrom = new DateTime($from);
+            $dateTo = new DateTime($to);
+            $parent['displayText'] = $dateFrom->format('d.m.Y') . '-' . $dateTo->format('d.m.Y');
+        }
+        return $parent;
+    }
+
 
 }
