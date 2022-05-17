@@ -180,7 +180,6 @@ $config = [
                     'Bsz\RecordDriver\SolrGviMarcDE603' => [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
                     'Bsz\RecordDriver\SolrGviMarcDE604' => [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
                     'Bsz\RecordDriver\SolrGviMarcDE605' => [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
-                    'Bsz\RecordDriver\SolrGviMarcDE627' => [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
                     'Bsz\RecordDriver\SolrGviMarcATOBV' => [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
                 ]
             ],
@@ -191,14 +190,12 @@ $config = [
                     'Bsz\RecordTab\Articles' => 'Bsz\RecordTab\Factory::getArticles',
                     'Bsz\RecordTab\Notes' => 'Bsz\RecordTab\Factory::getNotes',
                     'Bsz\RecordTab\Libraries' => 'Bsz\RecordTab\Factory::getLibraries',
-                    'Bsz\RecordTab\HoldingsILS' => 'Bsz\RecordTab\Factory::getHoldingsILS',
                     'Bsz\RecordTab\InterlibraryLoan' => 'Bsz\RecordTab\Factory::getInterLibraryLoan',
                 ],
                 'aliases' => [
                     'VuFind\RecordTab\HoldingsILS' => 'Bsz\RecordTab\HoldingsILS',
                     'Articles' => 'Bsz\RecordTab\Articles',
                     'Volumes' => 'Bsz\RecordTab\Volumes',
-                    'Articles' => 'Bsz\RecordTab\Articles',
                     'Notes' => 'Bsz\RecordTab\Notes',
                     'Libraries' => 'Bsz\RecordTab\Libraries',
                     'InterlibraryLoan' => 'Bsz\RecordTab\InterlibraryLoan',
