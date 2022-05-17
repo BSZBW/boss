@@ -53,8 +53,6 @@ class Ezb extends \VuFind\Resolver\Driver\Ezb
             $openURL = $this->downgradeOpenUrl($parsed);
         }
 
-        $openURL .= '&sid=bsz:zdb&pid=' . urlencode($this->pid);
-
         // Make the call to the EZB and load results
         $url = $this->baseUrl . '?' . $openURL;
 
