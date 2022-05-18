@@ -29,6 +29,7 @@ namespace Findex\RecordDriver;
 use Bsz\Exception;
 use Bsz\RecordDriver\Constants;
 use Bsz\RecordDriver\ContainerTrait;
+use Bsz\RecordDriver\FivTrait;
 use Bsz\RecordDriver\HelperTrait;
 use Bsz\RecordDriver\MarcFormatTrait;
 use Bsz\RecordDriver\SolrMarc;
