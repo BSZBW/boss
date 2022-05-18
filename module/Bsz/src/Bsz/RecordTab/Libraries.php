@@ -39,7 +39,7 @@ class Libraries extends AbstractBase
     /**
      * @var array
      */
-    protected $f924;
+    protected $content;
     /**
      * @var bool
      */
@@ -69,17 +69,17 @@ class Libraries extends AbstractBase
     public function isActive()
     {
         $parent = parent::isActive();
-        if (null === $this->f924) {
-            $this->f924 = $this->driver->tryMethod('getField924');
+        if (null === $this->content) {
+            $this->content = $this->driver->tryMethod('getField924');
         }
         if ($this->swbonly) {
-            foreach ($this->f924 as $k => $field) {
+            foreach ($this->content as $k => $field) {
                 if (isset($field['region']) && strtoupper($field['region']) !== 'BSZ') {
-                    unset($this->f924[$k]);
+                    unset($this->content[$k]);
                 }
             }
         }
-        if ($parent && $this->f924) {
+        if ($parent && $this->content) {
             return true;
         }
         return false;
@@ -87,20 +87,20 @@ class Libraries extends AbstractBase
 
     public function getContent()
     {
-        if (null === $this->f924) {
-            $this->f924 = $this->driver->tryMethod('getField924');
+        if (null === $this->content) {
+            $this->content = $this->driver->tryMethod('getField924');
         }
-        if (is_array($this->f924)) {
-            foreach ($this->f924 as $k => $f924) {
+        if (is_array($this->content)) {
+            foreach ($this->content as $k => $f924) {
                 $library = $this->libraries->getByIsil($f924['isil']);
                 if ($library instanceof Library) {
-                    $this->f924[$k]['name'] = $library->getName();
-                    $this->f924[$k]['opacurl'] = $library->getOpacUrl();
-                    $this->f924[$k]['homepage'] = $library->getHomepage();
+                    $this->content[$k]['name'] = $library->getName();
+                    $this->content[$k]['opacurl'] = $library->getOpacUrl();
+                    $this->content[$k]['homepage'] = $library->getHomepage();
                 }
             }
         }
-        return $this->f924;
+        return $this->content;
     }
 
     public function isVisible()
