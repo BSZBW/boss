@@ -55,7 +55,7 @@ if (!empty($fivsubjects) && $this->client()->is('show_fiv')): ?>
     <?php $contentDisplayed = true; ?>
     <tr>
         <th>
-            <span class="text-nowrap"><?= $this->abbrev('FIV') ?>-<?= $this->transEsc('Main Topics') ?>:</span>
+            <span class="text-nowrap"><?= $this->transEsc('Main Topics') ?>:</span>
         </th>
         <?php if (is_array($fivsubjects)): ?>
             <?php $count = 0; ?>
@@ -71,7 +71,7 @@ if (!empty($fivsubjects) && $this->client()->is('show_fiv')): ?>
     <?php $contentDisplayed = true; ?>
     <tr>
         <th>
-            <span class="text-nowrap"><?= $this->abbrev('FIV') ?>-<?= $this->transEsc('Partial Aspects') ?>:</span>
+            <span class="text-nowrap"><?= $this->transEsc('Partial Aspects') ?>:</span>
         </th>
         <?php if (is_array($fivsubjects)): ?>
             <?php $count = 0; ?>
