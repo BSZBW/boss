@@ -39,6 +39,14 @@ $config = [
                     'Findex\RecordDriver\SolrFindexMarc' => [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
                 ]
             ],
+            'recordtab' => [
+                'factories' => [
+                    'Findex\RecordTab\Libraries' => 'Findex\RecordTab\Factory::getLibraries',
+                ],
+                'aliases' => [
+                    'Libraries' => 'Findex\RecordTab\Libraries',
+                ]
+            ],
         ],
     ]
 
