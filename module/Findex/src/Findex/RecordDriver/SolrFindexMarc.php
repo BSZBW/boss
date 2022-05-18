@@ -151,8 +151,10 @@ class SolrFindexMarc extends SolrMarc implements Constants
         //url = 856u:555u
 
         $urls = [];
-        $urlFields = array_merge($this->getMarcRecord()->getFields('856'),
-                $this->getMarcRecord()->getFields('555'));
+        $urlFields = array_merge(
+            $this->getMarcRecord()->getFields('856'),
+            $this->getMarcRecord()->getFields('555')
+        );
         foreach ($urlFields as $f) {
             $f instanceof File_MARC_Data_Field;
             $url = [];
@@ -197,4 +199,59 @@ class SolrFindexMarc extends SolrMarc implements Constants
         return $array_clean;
     }
 
+    /**
+     * Get Content of 924 as array: isil => array of subfields
+     * @return array
+     *
+     */
+    public function getField980()
+    {
+        $f980 = $this->getMarcRecord()->getFields('980');
+
+        // map subfield codes to human-readable descriptions
+        $mappings = [
+            'a' => 'local_idn',
+            'x' => 'isil',
+            'c' => 'region',
+            'd' => 'call_number',
+            'k' => 'url',
+            'l' => 'url_label',
+            'z' => 'issue'
+        ];
+
+        $result = [];
+
+        foreach ($f980 as $field) {
+            $subfields = $field->getSubfields();
+            $arrsub = [];
+
+            foreach ($subfields as $subfield) {
+                $code = $subfield->getCode();
+                $data = $subfield->getData();
+
+                if (array_key_exists($code, $mappings)) {
+                    $mapping = $mappings[$code];
+                    if (array_key_exists($mapping, $arrsub)) {
+                        // recurring subfields are temporarily concatenated to a string
+                        $data = $arrsub[$mapping] . ' | ' . $data;
+                    }
+                    $arrsub[$mapping] = $data;
+                }
+            }
+
+            // fix missing isil fields to avoid upcoming problems
+            if (!isset($arrsub['isil'])) {
+                $arrsub['isil'] = '';
+            }
+            // handle recurring subfields - convert them to array
+            foreach ($arrsub as $k => $sub) {
+                if (strpos($sub, ' | ')) {
+                    $split = explode(' | ', $sub);
+                    $arrsub[$k] = $split;
+                }
+            }
+            $result[] = $arrsub;
+        }
+        return $result;
+    }
 }

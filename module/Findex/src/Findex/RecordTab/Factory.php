@@ -21,7 +21,6 @@
 
 namespace Findex\RecordTab;
 
-use Bsz\RecordTab\Libraries;
 use Interop\Container\ContainerInterface;
 
 class Factory
