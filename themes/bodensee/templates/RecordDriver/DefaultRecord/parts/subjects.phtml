@@ -99,7 +99,7 @@ if (!empty($dficlassification) && $this->client()->is('show_dfi')): ?>
                 <a data-toggle="tooltip" data-placement="right" data-html="true"
                    href="<?= $this->record($this->driver)->getLink('dficlassification', $notation, $this->searchClassId) ?>"
                    class="searchicon"
-                   title="<?= $this->transEsc($notation) ?>"><?= $notation ?></a>
+                   title="<?= $this->transEsc($notation) ?>"><?=$this->transEsc('FIV::'.strtolower($notation)) ?></a>
             </span>
                 <?php endforeach; ?>
             </td>
