@@ -101,6 +101,36 @@ trait FivTrait {
         }
         return array_unique($classificationList);
     }
+
+    /**
+     * Get an array with FIV classification
+     * @returns array
+     */
+    public function getDFISubject()
+    {
+        $subjectList = [];
+        $arrsub = [];
+
+        foreach ($this->getMarcRecord()->getFields('982') as $field) {
+            $suba = $field->getSubField('a');
+            $subx = $field->getSubfield('x');
+            if ($suba && $subx) {
+                $subxdata = $field->getSubfield('x')->getData();
+                if ($subxdata == 'DE-Lg3') {
+                    $data = $field->getSubfield('a')->getData();
+                    $subjectList[] = $data;
+                }
+            }
+        }
+        // handle recurring subfields - convert them to array
+        foreach ($subjectList as $k => $sub) {
+            if (strpos($sub, '; ')) {
+                $split = explode('; ', $sub);
+                $arrsub[$k] = $split;
+            }
+        }
+        return $arrsub;
+    }
 }
 
 

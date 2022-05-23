@@ -109,6 +109,34 @@ if (!empty($dficlassification) && $this->client()->is('show_dfi')): ?>
 <?php endif; ?>
 
 
+<?php $dfisubject = $this->driver->tryMethod('getDFISubject');
+if (!empty($dfisubject) && $this->client()->is('show_dfi')): ?>
+    <?php $contentDisplayed = true; ?>
+    <tr>
+        <th>
+            <span class="text-nowrap"><?= $this->abbrev('DFI') ?>-<?= $this->transEsc('Subject') ?>:</span>
+        </th>
+        <?php if (is_array($dfisubject)): ?>
+            <td>
+                <?php foreach ($dfisubject as $notation): ?>
+                    <div class="notationLine markjs">
+                        <?php foreach ($notation as $key=>$value): ?>
+                            <span>
+                                <a data-toggle="tooltip" data-placement="right" data-html="true"
+                                    href="<?= $this->record($this->driver)->getLink('subject', $value, $this->searchClassId) ?>"
+                                    class="searchicon"
+                                    title="<?= $this->transEsc($value) ?>"> <?= $value ?>
+                                </a>
+                            </span>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endforeach; ?>
+            </td>
+        <?php endif; ?>
+        <?php unset($dfisubject) ?>
+    </tr>
+<?php endif; ?>
+
 <?php $subjects = $this->driver->tryMethod('getRVKSubjectHeadings');
 if (!empty($subjects) && $this->client()->is('show_rvk')): ?>
     <tr>
