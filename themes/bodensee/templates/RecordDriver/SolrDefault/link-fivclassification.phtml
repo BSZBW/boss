@@ -1,2 +1,11 @@
-<?php $searchRoute = $this->searchOptions($this->driver->getSourceIdentifier())->getSearchAction(); ?>
-<?=$this->url($searchRoute)?>?lookfor=%22<?=urlencode($this->lookfor)?>%22&amp;type=FIVClassification
+<?php
+    $searchRoute = $this->searchOptions($this->driver->getSourceIdentifier())->getSearchAction();
+    if (substr($this->lookfor, 0, 1) == 'R') {
+        $prefix = "fivr ";
+    } elseif (substr($this->lookfor, 0,1) == 'S') {
+        $prefix = "fivs ";
+    } else {
+        $prefix = "fivt ";
+    }
+?>
+<?=$this->url($searchRoute)?>?lookfor=%22<?=$prefix?><?=urlencode($this->lookfor)?>%22&amp;type=FIVClassification
