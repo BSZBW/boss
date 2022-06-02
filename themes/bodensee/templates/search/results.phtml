@@ -73,7 +73,7 @@
         <?php if ($recordTotal > 0): ?>
         <div class="search-controls col-sm-6">
             <?=$this->render('search/controls/limit.phtml')?>
-            <?php if ($this->searchTabs()->isILL($this->searchClassId) && !$this->searchTabs()->isZDB($this->searchClassId)): ?>           
+            <?php if ($this->searchTabs()->isILL($this->searchClassId) && !$this->searchTabs()->isZDB($this->searchClassId)): ?>
                 <?= $this->render('search/controls/dedup.phtml'); ?>
             <?php endif; ?>
             <?=$this->render('search/controls/sort.phtml')?>
