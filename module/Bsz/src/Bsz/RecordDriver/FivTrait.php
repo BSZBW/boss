@@ -127,6 +127,8 @@ trait FivTrait {
             if (strpos($sub, '; ')) {
                 $split = explode('; ', $sub);
                 $arrsub[$k] = $split;
+            } else {
+                $arrsub[$k] = $sub;
             }
         }
         return $arrsub;
