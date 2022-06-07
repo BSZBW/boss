@@ -67,15 +67,21 @@ if (!empty($dfisubject) && $this->client()->is('show_dfi')): ?>
             <td>
                 <?php foreach ($dfisubject as $notation): ?>
                     <div class="notationLine markjs">
-                        <?php foreach ($notation as $key=>$value): ?>
+                        <?php if(is_array($notation)): ?>
+                            <?php foreach ($notation as $key=>$value): ?>
+                                <span>
+                                <a href="<?= $this->record($this->driver)->getLink('dfi2060subject', $value, $this->searchClassId) ?>"
+                                   class="searchicon"> <?= $value ?>
+                                </a>
+                                </span>
+                            <?php endforeach; ?>
+                        <?php else: ?>
                             <span>
-                                <a data-toggle="tooltip" data-placement="right" data-html="true"
-                                   href="<?= $this->record($this->driver)->getLink('dfi2060subject', $value, $this->searchClassId) ?>"
-                                   class="searchicon"
-                                   title="<?= $this->transEsc($value) ?>"> <?= $value ?>
+                                <a href="<?= $this->record($this->driver)->getLink('dfi2060subject', $notation, $this->searchClassId) ?>"
+                                   class="searchicon"> <?= $notation ?>
                                 </a>
                             </span>
-                        <?php endforeach; ?>
+                        <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
             </td>
