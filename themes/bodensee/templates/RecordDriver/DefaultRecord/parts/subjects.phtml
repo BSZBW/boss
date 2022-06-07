@@ -70,7 +70,7 @@ if (!empty($dfisubject) && $this->client()->is('show_dfi')): ?>
                         <?php foreach ($notation as $key=>$value): ?>
                             <span>
                                 <a data-toggle="tooltip" data-placement="right" data-html="true"
-                                   href="<?= $this->record($this->driver)->getLink('subject', $value, $this->searchClassId) ?>"
+                                   href="<?= $this->record($this->driver)->getLink('dfi2060subject', $value, $this->searchClassId) ?>"
                                    class="searchicon"
                                    title="<?= $this->transEsc($value) ?>"> <?= $value ?>
                                 </a>
