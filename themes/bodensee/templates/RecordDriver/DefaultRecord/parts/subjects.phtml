@@ -32,6 +32,58 @@ if (!empty($notations) && $this->client()->is('show_rvk')): ?>
     </tr>
 <?php endif; ?>
 
+<?php $dficlassification = $this->driver->tryMethod('getDFIClassification');
+if (!empty($dficlassification) && $this->client()->is('show_dfi')): ?>
+    <?php $contentDisplayed = true; ?>
+    <tr>
+        <th>
+            <span class="text-nowrap"><?= $this->abbrev('DFI') ?>-<?= $this->transEsc('Classification') ?>:</span>
+        </th>
+        <?php if (is_array($dficlassification)): ?>
+            <td>
+                <?php foreach ($dficlassification as $notation): ?>
+                    <span class="notationLine markjs">
+                <a data-toggle="tooltip" data-placement="right" data-html="true"
+                   href="<?= $this->record($this->driver)->getLink('dficlassification', $notation, $this->searchClassId) ?>"
+                   class="searchicon"
+                   title="<?= $this->transEsc($notation) ?>"><?=$notation?> <?=$this->transEsc('FIV::'.preg_replace('/\s/', '', strtolower($notation))) ?></a>
+            </span>
+                <?php endforeach; ?>
+            </td>
+        <?php endif; ?>
+        <?php unset($dficlassification) ?>
+    </tr>
+<?php endif; ?>
+
+
+<?php $dfisubject = $this->driver->tryMethod('getDFISubject');
+if (!empty($dfisubject) && $this->client()->is('show_dfi')): ?>
+    <?php $contentDisplayed = true; ?>
+    <tr>
+        <th>
+            <span class="text-nowrap"><?= $this->abbrev('DFI') ?>-<?= $this->transEsc('Subject') ?>:</span>
+        </th>
+        <?php if (is_array($dfisubject)): ?>
+            <td>
+                <?php foreach ($dfisubject as $notation): ?>
+                    <div class="notationLine markjs">
+                        <?php foreach ($notation as $key=>$value): ?>
+                            <span>
+                                <a data-toggle="tooltip" data-placement="right" data-html="true"
+                                   href="<?= $this->record($this->driver)->getLink('subject', $value, $this->searchClassId) ?>"
+                                   class="searchicon"
+                                   title="<?= $this->transEsc($value) ?>"> <?= $value ?>
+                                </a>
+                            </span>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endforeach; ?>
+            </td>
+        <?php endif; ?>
+        <?php unset($dfisubject) ?>
+    </tr>
+<?php endif; ?>
+
 <?php $fivclassification = $this->driver->tryMethod('getFIVClassification');
 if(!empty($fivclassification) && $this->client()->is('show_fiv')): ?>
     <?php $contentDisplayed = true; ?>
@@ -82,58 +134,6 @@ if (!empty($fivsubjects) && $this->client()->is('show_fiv')): ?>
 
         <?php endif; ?>
         <?php unset($fivsubjects) ?>
-    </tr>
-<?php endif; ?>
-
-<?php $dficlassification = $this->driver->tryMethod('getDFIClassification');
-if (!empty($dficlassification) && $this->client()->is('show_dfi')): ?>
-    <?php $contentDisplayed = true; ?>
-    <tr>
-        <th>
-            <span class="text-nowrap"><?= $this->abbrev('DFI') ?>-<?= $this->transEsc('Classification') ?>:</span>
-        </th>
-        <?php if (is_array($dficlassification)): ?>
-            <td>
-                <?php foreach ($dficlassification as $notation): ?>
-                    <span class="notationLine markjs">
-                <a data-toggle="tooltip" data-placement="right" data-html="true"
-                   href="<?= $this->record($this->driver)->getLink('dficlassification', $notation, $this->searchClassId) ?>"
-                   class="searchicon"
-                   title="<?= $this->transEsc($notation) ?>"><?=$notation?> <?=$this->transEsc('FIV::'.preg_replace('/\s/', '', strtolower($notation))) ?></a>
-            </span>
-                <?php endforeach; ?>
-            </td>
-        <?php endif; ?>
-        <?php unset($dficlassification) ?>
-    </tr>
-<?php endif; ?>
-
-
-<?php $dfisubject = $this->driver->tryMethod('getDFISubject');
-if (!empty($dfisubject) && $this->client()->is('show_dfi')): ?>
-    <?php $contentDisplayed = true; ?>
-    <tr>
-        <th>
-            <span class="text-nowrap"><?= $this->abbrev('DFI') ?>-<?= $this->transEsc('Subject') ?>:</span>
-        </th>
-        <?php if (is_array($dfisubject)): ?>
-            <td>
-                <?php foreach ($dfisubject as $notation): ?>
-                    <div class="notationLine markjs">
-                        <?php foreach ($notation as $key=>$value): ?>
-                            <span>
-                                <a data-toggle="tooltip" data-placement="right" data-html="true"
-                                    href="<?= $this->record($this->driver)->getLink('subject', $value, $this->searchClassId) ?>"
-                                    class="searchicon"
-                                    title="<?= $this->transEsc($value) ?>"> <?= $value ?>
-                                </a>
-                            </span>
-                        <?php endforeach; ?>
-                    </div>
-                <?php endforeach; ?>
-            </td>
-        <?php endif; ?>
-        <?php unset($dfisubject) ?>
     </tr>
 <?php endif; ?>
 
