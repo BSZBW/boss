@@ -70,16 +70,12 @@ if (!empty($dfisubject) && $this->client()->is('show_dfi')): ?>
                         <?php if(is_array($notation)): ?>
                             <?php foreach ($notation as $key=>$value): ?>
                                 <span>
-                                <a href="<?= $this->record($this->driver)->getLink('dfi2060subject', $value, $this->searchClassId) ?>"
-                                   class="searchicon"> <?= $value ?>
-                                </a>
+                                    <a href="<?= $this->record($this->driver)->getLink('dfi2060subject', $value, $this->searchClassId) ?>" class="searchicon"> <?= $value ?></a>
                                 </span>
                             <?php endforeach; ?>
                         <?php else: ?>
                             <span>
-                                <a href="<?= $this->record($this->driver)->getLink('dfi2060subject', $notation, $this->searchClassId) ?>"
-                                   class="searchicon"> <?= $notation ?>
-                                </a>
+                                <a href="<?= $this->record($this->driver)->getLink('dfi2060subject', $notation, $this->searchClassId) ?>" class="searchicon"> <?= $notation ?></a>
                             </span>
                         <?php endif; ?>
                     </div>
