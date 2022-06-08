@@ -37,11 +37,11 @@ class Articles extends \Bsz\RecordTab\Articles
             $this->content = [];
             if (is_array($relId) && count($relId) > 0) {
                 foreach ($relId as $k => $id) {
-                    $relId[$k] = 'id_related:"' . $id . '"';
+                    $relId[$k] = 'hierachy_top_id:"' . $id . '"';
                 }
 
                 $params = [
-                    'sort' => 'publish_date_sort desc, id desc',
+                    //'sort' => 'publish_date_sort desc, id desc',
                     'lookfor' => implode(' OR ', $relId),
                     'limit' => 500
                 ];
@@ -49,10 +49,10 @@ class Articles extends \Bsz\RecordTab\Articles
                 $filter = [];
                 if ($this->isFL() === false) {
                     foreach ($this->isils as $isil) {
-                        $filter[] = '~institution_id:' . $isil;
+                        $filter[] = '~collection_detail:ISIL_' . $isil;
                     }
                 }
-                $filter[] = 'material_content_type:Article';
+                //$filter[] = 'material_content_type:Article';
                 $params['filter'] = $filter;
                 $results = $this->runner->run($params);
 
