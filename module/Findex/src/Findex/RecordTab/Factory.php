@@ -21,7 +21,10 @@
 
 namespace Findex\RecordTab;
 
+use Bsz\RecordTab\Articles;
+use Bsz\RecordTab\Volumes;
 use Interop\Container\ContainerInterface;
+use Zend\Http\PhpEnvironment\Request;
 
 class Factory
 {
@@ -37,5 +40,57 @@ class Factory
         $client = $container->get('Bsz\Config\Client');
         $swbonly = $client->getTag() === 'swb' ?? false;
         return new Libraries($libraries, !$client->is('disable_library_tab'), $swbonly);
+    }
+    /**
+     * Factory for volumes tab
+     *
+     * @param ContainerInterface $container Service manager.
+     *
+     * @return Volumes
+     */
+    public static function getVolumes(ContainerInterface $container)
+    {
+        $last = '';
+        if (isset($_SESSION['Search']['last'])) {
+            $last = urldecode($_SESSION['Search']['last']);
+        }
+        $isils = [];
+        if (strpos($last, 'consortium=FL') === false
+            && strpos($last, 'consortium=ZDB') === false
+        ) {
+            $client = $container->get('Bsz\Config\Client');
+            $isils = $client->getIsils();
+        }
+
+        $volumes = new Volumes($container->get('VuFind\SearchRunner'), $isils);
+
+        return $volumes;
+    }
+
+    /**
+     * Factory for articles tab
+     *
+     * @param ContainerInterface $container
+     *
+     * @return Articles
+     */
+    public static function getArticles(ContainerInterface $container)
+    {
+        $last = '';
+        if (isset($_SESSION['Search']['last'])) {
+            $last = urldecode($_SESSION['Search']['last']);
+        }
+        $isils = [];
+        if (strpos($last, 'consortium=FL') === false
+            && strpos($last, 'consortium=ZDB') === false
+        ) {
+            $client = $container->get('Bsz\Config\Client');
+            $isils = $client->getIsils();
+        }
+
+        $articles = new Articles($container->get('VuFind\SearchRunner'), $isils);
+        $request = new Request();
+        $url = strtolower($request->getUriString());
+        return $articles;
     }
 }

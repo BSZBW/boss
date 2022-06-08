@@ -42,9 +42,15 @@ $config = [
             'recordtab' => [
                 'factories' => [
                     'Findex\RecordTab\Libraries' => 'Findex\RecordTab\Factory::getLibraries',
+                    'Findex\RecordTab\Volumes' => 'Findex\RecordTab\Factory::getVolumes',
+                    'Findex\RecordTab\Articles' => 'Findex\RecordTab\Factory::getArticles',
+
                 ],
                 'aliases' => [
                     'Libraries' => 'Findex\RecordTab\Libraries',
+                    'Volumes' => 'Findex\RecordTab\Volumes',
+                    'Articles' => 'Findex\RecordTab\Articles',
+
                 ]
             ],
         ],
