@@ -21,8 +21,6 @@
 
 namespace Findex\RecordTab;
 
-use Bsz\RecordTab\Articles;
-use Bsz\RecordTab\Volumes;
 use Interop\Container\ContainerInterface;
 use Zend\Http\PhpEnvironment\Request;
 

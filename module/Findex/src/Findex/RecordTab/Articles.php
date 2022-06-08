@@ -49,7 +49,7 @@ class Articles extends \Bsz\RecordTab\Articles
                 $filter = [];
                 if ($this->isFL() === false) {
                     foreach ($this->isils as $isil) {
-                        $filter[] = '~collection_detail:ISIL_' . $isil;
+                        $filter[] = '~collection_details:ISIL_' . $isil;
                     }
                 }
                 //$filter[] = 'material_content_type:Article';
