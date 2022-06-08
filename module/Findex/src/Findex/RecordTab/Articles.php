@@ -37,7 +37,7 @@ class Articles extends \Bsz\RecordTab\Articles
             $this->content = [];
             if (is_array($relId) && count($relId) > 0) {
                 foreach ($relId as $k => $id) {
-                    $relId[$k] = 'hierachy_top_id:"' . $id . '"';
+                    $relId[$k] = 'hierarchy_top_id:"' . $id . '"';
                 }
 
                 $params = [

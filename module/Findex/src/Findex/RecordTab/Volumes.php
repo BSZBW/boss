@@ -39,7 +39,7 @@ class Volumes extends \Bsz\RecordTab\Volumes
                 if (is_array($relId) && count($relId) > 0) {
                     foreach ($relId as $k => $id) {
 //                      $relId[$k] = 'id_related_host_item:"'.$id.'"';
-                        $relId[$k] = 'hierachy_top_id:"' . $id . '"';
+                        $relId[$k] = 'hierarchy_top_id:"' . $id . '"';
                     }
                     $params = [
                         //'sort' => 'publish_date_sort desc, id desc',
