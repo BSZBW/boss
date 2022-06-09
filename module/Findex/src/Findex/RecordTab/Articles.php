@@ -41,7 +41,7 @@ class Articles extends \Bsz\RecordTab\Articles
                 }
 
                 $params = [
-                    //'sort' => 'publish_date_sort desc, id desc',
+                    'sort' => 'publishDateDaySort_date desc, id desc',
                     'lookfor' => implode(' OR ', $relId),
                     'limit' => 500
                 ];

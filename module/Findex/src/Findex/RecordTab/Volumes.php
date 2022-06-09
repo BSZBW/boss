@@ -42,17 +42,12 @@ class Volumes extends \Bsz\RecordTab\Volumes
                         $relId[$k] = 'hierarchy_parent_id:"' . $id . '"';
                     }
                     $params = [
-                        //'sort' => 'publish_date_sort desc, id desc',
+                        'sort' => 'publishDateDaySort_date desc, id desc',
                         'lookfor' => implode(' OR ', $relId),
                         'limit'   => 500,
                     ];
 
                     $filter = [];
-                    if ($this->isFL() === false) {
-                        foreach ($this->isils as $isil) {
-                            $filter[] = '~collection_details:ISIL_' . $isil;
-                        }
-                    }
 
                     // Test: all Formats but articles
                     //$filter[] = '-material_content_type:Article';
