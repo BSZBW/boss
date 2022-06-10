@@ -300,6 +300,9 @@ function datepicker() {
         maxViewMode: 'years',
         keepEmptyValues: false,
         forceParse: true,
+        immediateUpdates: true,
+        assumeNearbyYear: true
+
     });
     // workaround: Addon does not open the datepicker by default
     $('.input-group.date .input-group-addon').click(function(){
