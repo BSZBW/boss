@@ -22,7 +22,7 @@
         <? foreach ($this->print as $link): ?>
           <li>
             <? if (!empty($link['href'])): ?>
-              <a target="_blank" href="<?=$this->escapeHtmlAttr($link['href'])?>" title="<?=isset($link['title'])?$this->transEsc($this->escapeHtml($link['title'])):''?>"<?=!empty($link['access'])?' class="access-' . $link['access'] . '"':''?>><strong><i class="fa fa-print"></i> <?=isset($link['coverage'])?$this->transEsc($this->escapeHtml($link['coverage'])):''?></strong></a>
+              <a target="_blank" href="<?=$this->escapeHtmlAttr($link['href'])?>" title="<?=isset($link['title'])?$this->escapeHtml($link['title']):''?>"<?=!empty($link['access'])?' class="access-' . $link['access'] . '"':''?>><strong><i class="fa fa-print"></i> <?=isset($link['coverage'])?$this->escapeHtml($link['coverage']):''?></strong></a>
             <? else: ?>
               <?=isset($link['title'])?$this->escapeHtml($link['title']):''?> <?=isset($link['coverage'])?$this->escapeHtml($link['coverage']):''?>
             <? endif; ?>
