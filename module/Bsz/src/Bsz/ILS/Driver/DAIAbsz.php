@@ -395,6 +395,7 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
                 'checkILLRequest' => true,
                 'checkStorageRetrievalRequest' => true,
                 'requests_placed' => 0,
+                'reserve' => false
             ];
         }
         return $return;
