@@ -107,7 +107,7 @@ class Ezb extends \VuFind\Resolver\Driver\Ezb
             'rft.format' => false,
         ];
         foreach ($params as $key => $value) {
-            if (isset($mapping[$key]) && $mapping[$key] !== false) {
+            if (!empty($value) && isset($mapping[$key]) && $mapping[$key] !== false) {
                 $newParams[$mapping[$key]] = $value;
             }
         }
