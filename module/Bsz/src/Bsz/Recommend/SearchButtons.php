@@ -179,7 +179,7 @@ class SearchButtons implements \VuFind\Recommend\RecommendInterface,
             ? $params[0] : 'http';
 
         $this->baseUrl = (isset($params[1]) && !empty($params[1]))
-            ? $params[1] : 'fernleihe.boss2.bsz-bw.de/Search/Results?lookfor=';
+            ? $params[1] : 'fernleihe.boss.bsz-bw.de/Search/Results?lookfor=';
 
         $this->sourceTitle = (isset($params[2]) && !empty($params[2]))
             ? $params[2] : 'Search in external source';
@@ -275,7 +275,12 @@ class SearchButtons implements \VuFind\Recommend\RecommendInterface,
             if (empty($this->lookfor) && is_object($params)) {
                 $this->lookfor = $params->getQuery()->getAllTerms();
             }
-            $this->targetUrl = $this->protocol . '://' . $this->baseUrl . $this->lookfor;
+            if (strpos($this->baseUrl, '<') !== false) {
+                $this->baseUrl = preg_replace('/<.*>/', $this->lookfor, $this->baseUrl);
+                $this->targetUrl = $this->protocol . '://' . $this->baseUrl;
+            } else {
+                $this->targetUrl = $this->protocol . '://' . $this->baseUrl . $this->lookfor;
+            }
         }
     }
 
