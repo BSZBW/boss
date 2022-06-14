@@ -230,7 +230,7 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
             } // end iteration on item
         }
         $message = $daiaArray['message'][0]['content'] ?? null;
-        if (empty($result) && $message === 'Monographic Component part, Text'
+        if (empty($result) && $message === 'Monographic component part, Text'
             && strpos($doc_id, 'koha:biblionumber:') !== false) {
             $result[] = $this->addArticleItem($doc_id);
         }
