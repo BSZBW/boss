@@ -270,4 +270,37 @@ class SolrFindexMarc extends SolrMarc implements Constants
         $volumes = preg_replace("/[\/,]$/", "", $this->getFieldsArray($fields));
         return array_shift($volumes);
     }
+
+    /**
+     * As out fiels 773 does not contain any further title information we need
+     * to query solr again
+     *
+     * @return array
+     * @throws Exception
+     */
+    public function getContainer()
+    {
+        if (count($this->container) == 0 &&
+            ($this->isArticle() || $this->isPart())
+        ) {
+            $relId = $this->getContainerIds();
+
+            $this->container = [];
+            if (is_array($relId) && count($relId) > 0) {
+                foreach ($relId as $k => $id) {
+                    $id = preg_replace('/\(DE-627\)/', '', $id);
+                    $relId[$k] = 'id:"' . $id . '"';
+                }
+                $params = [
+                    'lookfor' => implode(' OR ', $relId),
+                ];
+                if (null === $this->runner) {
+                    throw new Exception('Please attach a search runner first');
+                }
+                $results = $this->runner->run($params, 'Solr');
+                $this->container = $results->getResults();
+            }
+        }
+        return $this->container;
+    }
 }
