@@ -255,4 +255,19 @@ class SolrFindexMarc extends SolrMarc implements Constants
         }
         return $result;
     }
+
+
+    /**
+     * Returns Volume number
+     * @return String
+     */
+    public function getVolumeNumber()
+    {
+        $fields = [
+            830 => ['v'],
+            773 => ['g']
+        ];
+        $volumes = preg_replace("/[\/,]$/", "", $this->getFieldsArray($fields));
+        return array_shift($volumes);
+    }
 }
