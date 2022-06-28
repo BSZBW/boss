@@ -12,7 +12,7 @@
                 <?=($i++ == 0) ? '' : ' &gt; '?>
                 <?php $subject = trim($subject . ' ' . $subfield); ?>
                 <a class="markjs searchicon <?php if($count >= $max): ?><?=$this->type?>subjects-<?=$rand?>collapse-inline collapse multi-collapse<?php endif; ?>" title="<?=$this->escapeHtmlAttr($subject)?>"
-                   href="<?=$this->record($this->driver)->getLink('subject', $subject, $this->searchClassId)?>"><?=trim($this->escapeHtml($subfield))?></a>
+                   href="<?=$this->record($this->driver)->getLink($this->type, $subject, $this->searchClassId)?>"><?=trim($this->escapeHtml($subfield))?></a>
                 <?php $count++ ?>
             <?php endforeach; ?>
         <?php // case 2: subjects in array ?>
@@ -25,7 +25,7 @@
         <?php else: ?>
             <a class="markjs searchicon <?php if ($count >= $max): ?><?=$this->type?>subjects-<?=$rand?> collapse-inline collapse multi-collapse<?php endif; ?>"
                title="<?= $this->escapeHtmlAttr($field) ?>"
-               href="<?= $this->record($this->driver)->getLink('subject', $field, $this->searchClassId) ?>"><?= trim($this->escapeHtml($field)) ?></a>
+               href="<?= $this->record($this->driver)->getLink($this->type.'subject', $field, $this->searchClassId) ?>"><?= trim($this->escapeHtml($field)) ?></a>
             <?php $count++ ?>
         <? endif; ?>
       </span>

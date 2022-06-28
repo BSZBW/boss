@@ -83,7 +83,8 @@ if (!empty($fivsubjects) && $this->client()->is('show_fiv')): ?>
         <?php if (is_array($fivsubjects)): ?>
             <?php $count = 0; ?>
             <td>
-                <?= $this->context($this)->renderInContext('RecordDriver/DefaultRecord/parts/singlesubject.phtml', ['subjects' => $fivsubjects, 'type' => 'fivm']) ?>
+                <?= $this->context($this)->renderInContext('RecordDriver/DefaultRecord/parts/singlesubject.phtml',
+                    ['subjects' => $fivsubjects, 'type' => 'fivmsubject']) ?>
             </td>
         <?php endif; ?>
         <?php unset($fivsubjects) ?>
@@ -100,7 +101,8 @@ if (!empty($fivsubjects) && $this->client()->is('show_fiv')): ?>
             <?php $count = 0; ?>
             <td>
                 <?= $this->context($this)->renderInContext(
-                    'RecordDriver/DefaultRecord/parts/singlesubject.phtml', ['subjects' => $fivsubjects, 'type' => 'fivp']) ?>
+                    'RecordDriver/DefaultRecord/parts/singlesubject.phtml',
+                    ['subjects' => $fivsubjects, 'type' => 'fivpsubject']) ?>
             </td>
 
         <?php endif; ?>
@@ -194,7 +196,7 @@ if (!empty($subjects) && $this->client()->is('show_rvk')): ?>
         <td>
             <?= $this->context($this)->renderInContext(
                 'RecordDriver/DefaultRecord/parts/singlesubject.phtml',
-                ['subjects' => $subjects, 'type' => 'stw']
+                ['subjects' => $subjects, 'type' => 'stwsubject']
             ) ?>
         </td>
     </tr>
@@ -209,7 +211,7 @@ if (!empty($subjects) && $this->client()->is('show_rvk')): ?>
         <td>
             <?= $this->context($this)->renderInContext(
                 'RecordDriver/DefaultRecord/parts/singlesubject.phtml',
-                ['subjects' => $subjects, 'type' => 'gnd']
+                ['subjects' => $subjects, 'type' => 'gndsubject']
             ) ?>
         </td>
     </tr>
@@ -223,7 +225,7 @@ if (!empty($subjects) && $this->client()->is('show_rvk')): ?>
         <td>
             <?= $this->context($this)->renderInContext(
                 'RecordDriver/DefaultRecord/parts/singlesubject.phtml',
-                ['subjects' => $subjects, 'type' => 'all']
+                ['subjects' => $subjects, 'type' => 'subject']
             ) ?>
         </td>
     </tr>
