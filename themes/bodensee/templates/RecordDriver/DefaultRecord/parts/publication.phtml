@@ -3,8 +3,8 @@ $pubName = $this->publication->getName();
 $pubPlace = $this->publication->getPlace();
 $pubDate = $this->publication->getDate();
 ?>
-<?php if (!empty($pubName)): ?><span property="name"><?=$this->escapeHtml($pubName)?></span><? endif;?>
-<?php if(!empty($pubName) && !empty($pubPlace)):?> : <?php endif; ?>
 <?php if (!empty($pubPlace)):?><span property="location"><?=$this->escapeHtml($pubPlace)?></span><? endif;?>
-<?php if((!empty($pubPlace) || !empty($pubName)) && !empty($pubDate)):?>, <?php endif; ?>
+<?php if(!empty($pubName) && !empty($pubPlace)):?> : <?php endif; ?>
+<?php if (!empty($pubName)): ?><span property="name"><?=$this->escapeHtml($pubName)?></span><? endif;?>
+<?php if(!empty($pubName) && !empty($pubPlace)):?>, <?php endif; ?>
 <?php if (!empty($pubDate)): ?><span property="publicationDate"><?=$this->escapeHtml($pubDate)?></span><? endif;?>
