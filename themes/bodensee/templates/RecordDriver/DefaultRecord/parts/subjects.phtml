@@ -102,7 +102,7 @@ if (!empty($fivsubjects) && $this->client()->is('show_fiv')): ?>
             <td>
                 <?= $this->context($this)->renderInContext(
                     'RecordDriver/DefaultRecord/parts/singlesubject.phtml',
-                    ['subjects' => $fivsubjects, 'type' => 'fivp', 'linktype' => 'fivclassification']) ?>
+                    ['subjects' => $fivsubjects, 'type' => 'fivp', 'linktype' => 'fivfivaclassification']) ?>
             </td>
 
         <?php endif; ?>
