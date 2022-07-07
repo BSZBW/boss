@@ -26,9 +26,9 @@ $this->headTitle()->setPrefix($this->transEsc('ILL::Resigning'));
             'field'  => 'id',
             'value'  => $this->params['ppn'] ?? ''])?>
         <?=$this->context($this)->renderInContext('bsz/input.phtml', [
-            'title' => 'adv_search_journaltitle',
-            'field'  => 'JournalTitle',
-            'value'  => $this->params['journaltitle'] ?? ''])?>
+            'title' => 'adv_search_title',
+            'field'  => 'Title',
+            'value'  => $this->params['titel'] ?? ''])?>
         <?=$this->context($this)->renderInContext('bsz/input.phtml', [
             'title' => 'adv_search_author',
             'field'  => 'Author',
