@@ -100,7 +100,8 @@ class Module implements \Zend\ModuleManager\Feature\ConsoleUsageProviderInterfac
     {
         return [
             'compile less' => 'Flatten a theme hierarchy for improved performance',
-            'cache clean' => 'Clean all caches'
+            'bosscache clean' => 'Clean all caches',
+            'bosscache show' => 'show cache size'
         ];
     }
 }

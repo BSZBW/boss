@@ -21,7 +21,6 @@
 
 namespace BszConsole\Controller;
 
-use Zend\Console\Console;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -53,7 +52,8 @@ class CacheController extends AbstractActionController
             ? getenv('LOCAL_CACHE_DIR')
             : '/data/boss/cache';
         $this->localdirs = array_filter(
-            glob($this->basepath.'/*'), 'is_dir'
+            glob($this->basepath . '/*'),
+            'is_dir'
         );
     }
 
@@ -62,11 +62,12 @@ class CacheController extends AbstractActionController
      */
     public function showAction()
     {
-        $output = [];
+        $size = 0;
         foreach ($this->localdirs as $local) {
-            exec('du -sh '.$local, $output);
+            $size += static::foldersize($local);
         }
-        print implode("\n", $output);
+        $size /= 1024*1024;
+        print "Cache dir size ".number_format($size, 1)."M\n";
     }
 
     /**
@@ -74,18 +75,26 @@ class CacheController extends AbstractActionController
      */
     public function cleanAction()
     {
-
+        $count = 0;
         foreach ($this->localdirs as $local) {
-            $subdirs = array_filter(glob($local.'/*'), 'is_dir');
+            $subdirs = array_filter(glob($local . '/*'), 'is_dir');
             foreach ($subdirs as $sub) {
-                $subsub = array_filter(glob($sub.'/*'), 'is_dir');
+                $subsub = array_filter(glob($sub . '/*'), 'is_dir');
                 foreach ($subsub as $s) {
-                    static::delete_files($s);
+                    try {
+                        static::delete_files($s);
+                        $count++;
+                    } catch (\Excaption $e) {
+                        print "error: could not delete ".$s.". Check permissions.";
+                    }
                 }
             }
         }
-        print "Deleted BOSS caches\n";
-
+        if ($count > 0) {
+            print "Deleted BOSS caches\n";
+        } else {
+            print "Nothing to do\n";
+        }
     }
 
     /**
@@ -93,18 +102,33 @@ class CacheController extends AbstractActionController
      *
      * @param $target
      */
-    private static function delete_files($target) {
-        if(is_dir($target)){
+    private static function delete_files($target)
+    {
+        if (!is_writable($target)) {
+            throw new \Bsz\Exception("File ".$target." is not writable");
+        }
+        if (is_dir($target)) {
             //GLOB_MARK adds a slash to directories returned
-            $files = glob( $target . '*', GLOB_MARK );
+            $files = glob($target . '*', GLOB_MARK);
 
-            foreach( $files as $file ){
-                static::delete_files( $file );
+            foreach ($files as $file) {
+                static::delete_files($file);
             }
 
-            rmdir( $target );
-        } elseif(is_file($target)) {
-            unlink( $target );
+            rmdir($target);
+        } elseif (is_file($target)) {
+            unlink($target);
         }
+    }
+
+    private function foldersize ($dir)
+    {
+        $size = 0;
+
+        foreach (glob(rtrim($dir, '/').'/*', GLOB_NOSORT) as $each) {
+            $size += is_file($each) ? filesize($each) : static::foldersize($each);
+        }
+
+        return $size;
     }
 }
