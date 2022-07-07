@@ -81,10 +81,9 @@ if (!empty($fivsubjects) && $this->client()->is('show_fiv')): ?>
             <span class="text-nowrap"><?= $this->transEsc('Main Topics') ?>:</span>
         </th>
         <?php if (is_array($fivsubjects)): ?>
-            <?php $count = 0; ?>
             <td>
                 <?= $this->context($this)->renderInContext('RecordDriver/DefaultRecord/parts/singlesubject.phtml',
-                    ['subjects' => $fivsubjects, 'type' => 'fivm', 'linktype' => 'fivclassification']) ?>
+                    ['subjects' => $fivsubjects, 'type' => 'fivt', 'linktype' => 'fivtclassification']) ?>
             </td>
         <?php endif; ?>
         <?php unset($fivsubjects) ?>
@@ -98,11 +97,10 @@ if (!empty($fivsubjects) && $this->client()->is('show_fiv')): ?>
             <span class="text-nowrap"><?= $this->transEsc('Partial Aspects') ?>:</span>
         </th>
         <?php if (is_array($fivsubjects)): ?>
-            <?php $count = 0; ?>
             <td>
                 <?= $this->context($this)->renderInContext(
                     'RecordDriver/DefaultRecord/parts/singlesubject.phtml',
-                    ['subjects' => $fivsubjects, 'type' => 'fivp', 'linktype' => 'fivfivaclassification']) ?>
+                    ['subjects' => $fivsubjects, 'type' => 'fiva', 'linktype' => 'fivaclassification']) ?>
             </td>
 
         <?php endif; ?>
