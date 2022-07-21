@@ -343,9 +343,9 @@ class Params extends \VuFind\Search\Solr\Params
             return $this->facetConfig[$field];
         }
         if ($field == 'topic_browse' && strpos($value, 'fivt ') === 0) {
-            return $this->facetConfig['fivt'];
+            return 'fivt';
         } elseif ($field == 'topic_browse' && strpos($value, 'fiva ') === 0) {
-            return $this->facetConfig['fiva'];
+            return 'fiva';
         }
         return isset($this->extraFacetLabels[$field])
             ? $this->extraFacetLabels[$field]
