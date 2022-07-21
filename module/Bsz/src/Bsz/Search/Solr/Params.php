@@ -319,4 +319,37 @@ class Params extends \VuFind\Search\Solr\Params
         return $parent;
     }
 
+    /**
+     * Adapted to the prefixed facets for findex.
+     * Get a user-friendly string to describe the provided facet field.
+     *
+     * @param string $field   Facet field name.
+     * @param string $value   Facet value.
+     * @param string $default Default field name (null for default behavior).
+     *
+     * @return string         Human-readable description of field.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getFacetLabel($field, $value = null, $default = null)
+    {
+        if (!isset($this->facetConfig[$field])
+            && !isset($this->extraFacetLabels[$field])
+            && isset($this->facetAliases[$field])
+        ) {
+            $field = $this->facetAliases[$field];
+        }
+        if (isset($this->facetConfig[$field])) {
+            return $this->facetConfig[$field];
+        }
+        if ($field == 'topic_browse' && strpos($value, 'fivt ') === 0) {
+            return $this->facetConfig['fivt'];
+        } elseif ($field == 'topic_browse' && strpos($value, 'fiva ') === 0) {
+            return $this->facetConfig['fiva'];
+        }
+        return isset($this->extraFacetLabels[$field])
+            ? $this->extraFacetLabels[$field]
+            : ($default ?: 'unrecognized_facet_label');
+    }
+
 }
