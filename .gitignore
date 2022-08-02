@@ -18,13 +18,11 @@ public/phpinfo.php
 data/
 *.mrc
 /env.bat
-/local
 /.idea/
 /public/php---info.php
 /local/config/vufind/
 /themes/**/css/
 /themes/**/make/
-/config
 
 #/solr/
 /solr/vendor
