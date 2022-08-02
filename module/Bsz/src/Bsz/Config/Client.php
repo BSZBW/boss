@@ -22,10 +22,10 @@
 namespace Bsz\Config;
 
 use Exception;
-use Zend\Config\Config;
-use Zend\Config\Reader\Ini;
-use Zend\Http\PhpEnvironment\Request;
-use Zend\Session\Container as SessContainer;
+use Laminas\Config\Config;
+use Laminas\Config\Reader\Ini;
+use Laminas\Http\PhpEnvironment\Request;
+use Laminas\Session\Container as SessContainer;
 
 /**
  * Client class extends VuFinds configuration to fit our needs.

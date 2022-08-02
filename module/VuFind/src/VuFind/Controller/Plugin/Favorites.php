@@ -34,7 +34,7 @@ use VuFind\Record\Loader;
 use VuFind\Tags;
 
 /**
- * Zend action helper to perform favorites-related actions
+ * Action helper to perform favorites-related actions
  *
  * @category VuFind
  * @package  Controller_Plugins
@@ -42,7 +42,7 @@ use VuFind\Tags;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Page
  */
-class Favorites extends \Zend\Mvc\Controller\Plugin\AbstractPlugin
+class Favorites extends \Laminas\Mvc\Controller\Plugin\AbstractPlugin
 {
     /**
      * Record cache
@@ -119,7 +119,8 @@ class Favorites extends \Zend\Mvc\Controller\Plugin\AbstractPlugin
             $this->loader->setCacheContext(Cache::CONTEXT_FAVORITE);
             foreach ($records as $record) {
                 $this->cache->createOrUpdate(
-                    $record->getUniqueID(), $record->getSourceIdentifier(),
+                    $record->getUniqueID(),
+                    $record->getSourceIdentifier(),
                     $record->getRawData()
                 );
             }
@@ -153,7 +154,7 @@ class Favorites extends \Zend\Mvc\Controller\Plugin\AbstractPlugin
         $cacheRecordIds = [];   // list of record IDs to save to cache
         foreach ($params['ids'] as $current) {
             // Break apart components of ID:
-            list($source, $id) = explode('|', $current, 2);
+            [$source, $id] = explode('|', $current, 2);
 
             // Get or create a resource object as needed:
             $resourceTable = $this->getController()->getTable('Resource');
@@ -189,7 +190,7 @@ class Favorites extends \Zend\Mvc\Controller\Plugin\AbstractPlugin
         // Sort $ids into useful array:
         $sorted = [];
         foreach ($ids as $current) {
-            list($source, $id) = explode('|', $current, 2);
+            [$source, $id] = explode('|', $current, 2);
             if (!isset($sorted[$source])) {
                 $sorted[$source] = [];
             }

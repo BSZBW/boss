@@ -8,7 +8,7 @@
 namespace Bsz\AjaxHandler;
 
 use Bsz\Config\Libraries;
-use Zend\Mvc\Controller\Plugin\Params;
+use Laminas\Mvc\Controller\Plugin\Params;
 
 /**
  * AjaxHandler for the libraries typeahead

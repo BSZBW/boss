@@ -29,7 +29,7 @@
  */
 namespace VuFind\Role\PermissionProvider;
 
-use Zend\Http\PhpEnvironment\Request;
+use Laminas\Http\PhpEnvironment\Request;
 
 /**
  * ServerParam permission provider for VuFind.
@@ -43,7 +43,7 @@ use Zend\Http\PhpEnvironment\Request;
  * @link     https://vufind.org Main Page
  */
 class ServerParam implements PermissionProviderInterface,
-    \Zend\Log\LoggerAwareInterface
+    \Laminas\Log\LoggerAwareInterface
 {
     use \VuFind\Log\LoggerAwareTrait;
 
@@ -150,7 +150,9 @@ class ServerParam implements PermissionProviderInterface,
             return false;
         }
         $serverParams = $this->splitString(
-            $serverParamString, $this->serverParamDelimiter, $this->serverParamEscape
+            $serverParamString,
+            $this->serverParamDelimiter,
+            $this->serverParamEscape
         );
 
         $result = false;
@@ -198,7 +200,8 @@ class ServerParam implements PermissionProviderInterface,
         }
 
         return str_replace(
-            $escape . $delimiter, $delimiter,
+            $escape . $delimiter,
+            $delimiter,
             preg_split('/' . $pattern . '/', $string)
         );
     }

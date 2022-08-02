@@ -28,14 +28,14 @@
  */
 namespace VuFind\Controller;
 
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\Mvc\MvcEvent;
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\View\Model\ViewModel;
+use LmcRbacMvc\Service\AuthorizationServiceAwareInterface;
 use VuFind\Exception\Auth as AuthException;
 use VuFind\Exception\ILS as ILSException;
 use VuFind\Http\PhpEnvironment\Request as HttpRequest;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Mvc\MvcEvent;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\View\Model\ViewModel;
-use ZfcRbac\Service\AuthorizationServiceAwareInterface;
 
 /**
  * VuFind controller base class (defines some methods that can be shared by other
@@ -158,7 +158,9 @@ class AbstractBase extends AbstractActionController
         if ($this->accessPermission) {
             $events = $this->getEventManager();
             $events->attach(
-                MvcEvent::EVENT_DISPATCH, [$this, 'validateAccessPermission'], 1000
+                MvcEvent::EVENT_DISPATCH,
+                [$this, 'validateAccessPermission'],
+                1000
             );
         }
     }
@@ -265,12 +267,12 @@ class AbstractBase extends AbstractActionController
      * rather than through injection with the AuthorizationServiceAwareInterface
      * to minimize expensive initialization when authorization is not needed.
      *
-     * @return \ZfcRbac\Service\AuthorizationService
+     * @return \LmcRbacMvc\Service\AuthorizationService
      */
     protected function getAuthorizationService()
     {
         return $this->serviceLocator
-            ->get(\ZfcRbac\Service\AuthorizationService::class);
+            ->get(\LmcRbacMvc\Service\AuthorizationService::class);
     }
 
     /**
@@ -286,7 +288,7 @@ class AbstractBase extends AbstractActionController
     /**
      * Get the user object if logged in, false otherwise.
      *
-     * @return object|bool
+     * @return \VuFind\Db\Row\User|bool
      */
     protected function getUser()
     {
@@ -296,7 +298,7 @@ class AbstractBase extends AbstractActionController
     /**
      * Get the view renderer
      *
-     * @return \Zend\View\Renderer\RendererInterface
+     * @return \Laminas\View\Renderer\RendererInterface
      */
     protected function getViewRenderer()
     {
@@ -421,7 +423,7 @@ class AbstractBase extends AbstractActionController
      *
      * @param string $id Configuration identifier (default = main VuFind config)
      *
-     * @return \Zend\Config\Config
+     * @return \Laminas\Config\Config
      */
     public function getConfig($id = 'config')
     {
@@ -510,8 +512,8 @@ class AbstractBase extends AbstractActionController
      */
     public function translate($msg, $tokens = [], $default = null)
     {
-        return $this->getViewRenderer()->plugin('translate')
-            ->__invoke($msg, $tokens, $default);
+        $translate = $this->getViewRenderer()->plugin('translate');
+        return $translate($msg, $tokens, $default);
     }
 
     /**
@@ -538,17 +540,18 @@ class AbstractBase extends AbstractActionController
      * Also validate the Captcha, if it's activated
      *
      * @param string $submitElement Name of the post field of the submit button
-     * @param bool   $useRecaptcha  Are we using captcha in this situation?
+     * @param bool   $useCaptcha    Are we using captcha in this situation?
      *
      * @return bool
      */
-    protected function formWasSubmitted($submitElement = 'submit',
-        $useRecaptcha = false
+    protected function formWasSubmitted(
+        $submitElement = 'submit',
+        $useCaptcha = false
     ) {
         // Fail if the expected submission element was missing from the POST:
         // Form was submitted; if CAPTCHA is expected, validate it now.
         return $this->params()->fromPost($submitElement, false)
-            && (!$useRecaptcha || $this->recaptcha()->validate());
+            && (!$useCaptcha || $this->captcha()->verify());
     }
 
     /**
@@ -562,11 +565,16 @@ class AbstractBase extends AbstractActionController
      *
      * @return mixed
      */
-    public function confirm($title, $yesTarget, $noTarget, $messages = [],
+    public function confirm(
+        $title,
+        $yesTarget,
+        $noTarget,
+        $messages = [],
         $extras = []
     ) {
         return $this->forwardTo(
-            'Confirm', 'Confirm',
+            'Confirm',
+            'Confirm',
             [
                 'data' => [
                     'title' => $title,
@@ -746,7 +754,8 @@ class AbstractBase extends AbstractActionController
     {
         return
             $this->params()->fromPost(
-                'layout', $this->params()->fromQuery('layout', false)
+                'layout',
+                $this->params()->fromQuery('layout', false)
             ) === 'lightbox'
             || 'layout/lightbox' == $this->layout()->getTemplate();
     }
@@ -761,7 +770,8 @@ class AbstractBase extends AbstractActionController
     protected function getILSLoginMethod($target = '')
     {
         $config = $this->getILS()->checkFunction(
-            'patronLogin', ['patron' => ['cat_username' => "$target.login"]]
+            'patronLogin',
+            ['patron' => ['cat_username' => "$target.login"]]
         );
         return $config['loginMethod'] ?? 'password';
     }
@@ -789,5 +799,18 @@ class AbstractBase extends AbstractActionController
             $loginMethod = $this->getILSLoginMethod();
         }
         return compact('targets', 'defaultTarget', 'loginMethod', 'loginMethods');
+    }
+
+    /**
+     * Construct an HTTP 205 (refresh) response. Useful for reporting success
+     * in the lightbox without actually rendering content.
+     *
+     * @return \Laminas\Http\Response
+     */
+    protected function getRefreshResponse()
+    {
+        $response = $this->getResponse();
+        $response->setStatusCode(205);
+        return $response;
     }
 }

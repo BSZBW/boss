@@ -30,12 +30,12 @@ namespace VuFind\Search\Factory;
 
 use Interop\Container\ContainerInterface;
 
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use VuFindSearch\Backend\EIT\Backend;
 use VuFindSearch\Backend\EIT\Connector;
 use VuFindSearch\Backend\EIT\QueryBuilder;
-use VuFindSearch\Backend\EIT\Response\XML\RecordCollectionFactory;
 
-use Zend\ServiceManager\Factory\FactoryInterface;
+use VuFindSearch\Backend\EIT\Response\XML\RecordCollectionFactory;
 
 /**
  * Factory for EIT backends.
@@ -52,7 +52,7 @@ class EITBackendFactory implements FactoryInterface
     /**
      * Logger.
      *
-     * @var \Zend\Log\LoggerInterface
+     * @var \Laminas\Log\LoggerInterface
      */
     protected $logger;
 
@@ -66,7 +66,7 @@ class EITBackendFactory implements FactoryInterface
     /**
      * VuFind configuration
      *
-     * @var \Zend\Config\Config
+     * @var \Laminas\Config\Config
      */
     protected $config;
 
@@ -119,7 +119,8 @@ class EITBackendFactory implements FactoryInterface
     {
         $prof = $this->config->General->prof ?? null;
         $pwd = $this->config->General->pwd ?? null;
-        $base = "http://eit.ebscohost.com/Services/SearchService.asmx/Search";
+        $base = $this->config->General->base_url
+            ?? 'https://eit.ebscohost.com/Services/SearchService.asmx/Search';
         $dbs = $this->config->General->dbs ?? null;
         $client = $this->serviceLocator->get(\VuFindHttp\HttpService::class)
             ->createClient();

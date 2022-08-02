@@ -1,6 +1,6 @@
 <?php
 // A driver-specific template may pass in format overrides; check for these before going to the driver itself:
-$formats = isset($this->overrideFormats) ? $this->overrideFormats : $this->driver->tryMethod('getFormats');
+$formats = $this->slot('refworks-formats')->get($this->driver->tryMethod('getFormats'));
 if (is_array($formats) && !empty($formats)) {
     foreach ($formats as $format) {
         echo "RT $format\n";
@@ -90,7 +90,7 @@ if (!empty($edition)) {
     echo "ED $edition\n";
 }
 
-echo "UL " . $this->serverUrl($this->recordLink()->getUrl($this->driver)) . "\n";
+echo "UL " . $this->serverUrl($this->recordLinker()->getUrl($this->driver)) . "\n";
 
 $summary = $this->driver->tryMethod('getSummary');
 if (is_array($summary)) {

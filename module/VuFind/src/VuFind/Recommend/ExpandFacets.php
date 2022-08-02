@@ -80,7 +80,8 @@ class ExpandFacets implements RecommendInterface
      * @param \VuFind\Search\Solr\Results  $emptyResults Empty result set (used
      * by the template as the basis for URL generation)
      */
-    public function __construct(\VuFind\Config\PluginManager $configLoader,
+    public function __construct(
+        \VuFind\Config\PluginManager $configLoader,
         \VuFind\Search\Solr\Results $emptyResults
     ) {
         $this->configLoader = $configLoader;
@@ -113,13 +114,14 @@ class ExpandFacets implements RecommendInterface
     }
 
     /**
-     * Called at the end of the Search Params objects' initFromRequest() method.
+     * Called before the Search Results object performs its main search
+     * (specifically, in response to \VuFind\Search\SearchRunner::EVENT_CONFIGURED).
      * This method is responsible for setting search parameters needed by the
      * recommendation module and for reading any existing search parameters that may
      * be needed.
      *
      * @param \VuFind\Search\Base\Params $params  Search parameter object
-     * @param \Zend\StdLib\Parameters    $request Parameter object representing user
+     * @param \Laminas\Stdlib\Parameters $request Parameter object representing user
      * request.
      *
      * @return void

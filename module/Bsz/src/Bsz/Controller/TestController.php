@@ -20,7 +20,7 @@
 namespace Bsz\Controller;
 
 use Bsz\Debug;
-use Zend\Http\Client;
+use Laminas\Http\Client;
 
 /**
  * Hier kann man alles testen
@@ -102,7 +102,7 @@ class TestController extends \VuFind\Controller\AbstractBase
             echo '<h2>Testing: ' . $uri . '</h2>';
             if (Debug::isInternal()) {
                 $client = new Client();
-                $client->setAdapter('\Zend\Http\Client\Adapter\Curl')
+                $client->setAdapter('\Laminas\Http\Client\Adapter\Curl')
                     ->setUri($uri)
                     ->setMethod('POST')
                     ->setOptions(['timeout' => 5])

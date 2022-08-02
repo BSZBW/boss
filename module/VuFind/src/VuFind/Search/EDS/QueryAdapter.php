@@ -28,10 +28,10 @@
  */
 namespace VuFind\Search\EDS;
 
+use Laminas\Stdlib\Parameters;
 use VuFindSearch\Query\AbstractQuery;
 use VuFindSearch\Query\Query;
 use VuFindSearch\Query\QueryGroup;
-use Zend\StdLib\Parameters;
 
 /**
  * EDS API Query Adapter: search query parameters to AbstractQuery object
@@ -73,7 +73,9 @@ class QueryAdapter extends \VuFind\Search\QueryAdapter
      *
      * @return string
      */
-    protected static function displayAdvanced(AbstractQuery $query, $translate,
+    protected static function displayAdvanced(
+        AbstractQuery $query,
+        $translate,
         $showName
     ) {
         $output = '';

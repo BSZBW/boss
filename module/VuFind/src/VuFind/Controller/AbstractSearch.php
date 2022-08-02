@@ -27,10 +27,10 @@
  */
 namespace VuFind\Controller;
 
+use Laminas\Session\SessionManager;
+use Laminas\Stdlib\Parameters;
 use VuFind\Search\RecommendListener;
 use VuFind\Solr\Utils as SolrUtils;
-use Zend\Session\SessionManager;
-use Zend\Stdlib\Parameters;
 
 /**
  * VuFind Search Controller
@@ -69,7 +69,7 @@ class AbstractSearch extends AbstractBase
      *
      * @param array $params Parameters to pass to ViewModel constructor.
      *
-     * @return ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     protected function createViewModel($params = null)
     {
@@ -81,7 +81,7 @@ class AbstractSearch extends AbstractBase
     /**
      * Handle an advanced search
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function advancedAction()
     {
@@ -107,7 +107,7 @@ class AbstractSearch extends AbstractBase
                 ->get(\VuFind\Search\Results\PluginManager::class)
                 ->get($this->searchClassId);
             $view->saved->getParams()->initFromRequest(
-                new \Zend\StdLib\Parameters([])
+                new \Laminas\Stdlib\Parameters([])
             );
         }
 
@@ -199,7 +199,8 @@ class AbstractSearch extends AbstractBase
             return $all;
         }
         return array_diff(
-            $all, array_map('trim', explode(',', strtolower($noRecommend)))
+            $all,
+            array_map('trim', explode(',', strtolower($noRecommend)))
         );
     }
 
@@ -258,11 +259,48 @@ class AbstractSearch extends AbstractBase
     }
 
     /**
+     * If the search backend has thrown a "deep paging" exception, we should show a
+     * flash message and redirect the user to a legal page.
+     *
+     * @param array $request Incoming request parameters
+     * @param int   $page    Legal page number
+     *
+     * @return mixed
+     */
+    protected function redirectToLegalSearchPage(array $request, int $page)
+    {
+        if (($request['page'] ?? 0) <= $page) {
+            throw new \Exception('Unrecoverable deep paging error.');
+        }
+        $request['page'] = $page;
+        $this->flashMessenger()->addErrorMessage(
+            [
+                'msg' => 'deep_paging_failure',
+                'tokens' => ['%%page%%' => $page],
+            ]
+        );
+        return $this->redirect()->toUrl('?' . http_build_query($request));
+    }
+
+    /**
      * Send search results to results view
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function resultsAction()
+    {
+        return $this->getSearchResultsView();
+    }
+
+    /**
+     * Perform a search and send results to a results view
+     *
+     * @param callable $setupCallback Optional setup callback that overrides the
+     * default one
+     *
+     * @return \Laminas\View\Model\ViewModel
+     */
+    protected function getSearchResultsView($setupCallback = null)
     {
         $view = $this->createViewModel();
 
@@ -280,10 +318,16 @@ class AbstractSearch extends AbstractBase
 
         $lastView = $this->getSearchMemory()
             ->retrieveLastSetting($this->searchClassId, 'view');
-        $view->results = $results = $runner->run(
-            $request, $this->searchClassId, $this->getSearchSetupCallback(),
-            $lastView
-        );
+        try {
+            $view->results = $results = $runner->run(
+                $request,
+                $this->searchClassId,
+                $setupCallback ?: $this->getSearchSetupCallback(),
+                $lastView
+            );
+        } catch (\VuFindSearch\Backend\Exception\DeepPagingException $e) {
+            return $this->redirectToLegalSearchPage($request, $e->getLegalPage());
+        }
         $view->params = $results->getParams();
 
         // If we received an EmptySet back, that indicates that the real search
@@ -340,7 +384,7 @@ class AbstractSearch extends AbstractBase
      *
      * @param \VuFind\Search\Base\Results $results Search results object.
      *
-     * @return bool|\Zend\View\Model\ViewModel
+     * @return bool|\Laminas\View\Model\ViewModel
      */
     protected function processJumpTo($results)
     {
@@ -403,8 +447,10 @@ class AbstractSearch extends AbstractBase
         $sessId = $this->serviceLocator->get(SessionManager::class)->getId();
         $history = $this->getTable('Search');
         $history->saveSearch(
-            $this->getResultsManager(), $results, $sessId,
-            isset($user->id) ? $user->id : null
+            $this->getResultsManager(),
+            $results,
+            $sessId,
+            $user->id ?? null
         );
     }
 
@@ -505,7 +551,7 @@ class AbstractSearch extends AbstractBase
      *
      * @param string $config  Name of config file
      * @param string $section Configuration section to check
-     * @param array  $filter  Whitelist of fields to include (if empty, all
+     * @param array  $filter  List of fields to include (if empty, all
      * fields will be returned)
      *
      * @return array
@@ -529,12 +575,14 @@ class AbstractSearch extends AbstractBase
      *
      * @param object $savedSearch Saved search object (false if none)
      * @param string $config      Name of config file
-     * @param array  $filter      Whitelist of fields to include (if empty, all
+     * @param array  $filter      List of fields to include (if empty, all
      * fields will be returned)
      *
      * @return array
      */
-    protected function getDateRangeSettings($savedSearch = false, $config = 'facets',
+    protected function getDateRangeSettings(
+        $savedSearch = false,
+        $config = 'facets',
         $filter = []
     ) {
         $fields = $this->getRangeFieldList($config, 'dateRange', $filter);
@@ -546,13 +594,15 @@ class AbstractSearch extends AbstractBase
      *
      * @param object $savedSearch Saved search object (false if none)
      * @param string $config      Name of config file
-     * @param array  $filter      Whitelist of fields to include (if empty, all
+     * @param array  $filter      List of fields to include (if empty, all
      * fields will be returned)
      *
      * @return array
      */
-    protected function getFullDateRangeSettings($savedSearch = false,
-        $config = 'facets', $filter = []
+    protected function getFullDateRangeSettings(
+        $savedSearch = false,
+        $config = 'facets',
+        $filter = []
     ) {
         $fields = $this->getRangeFieldList($config, 'fullDateRange', $filter);
         return $this->getRangeSettings($fields, 'fulldate', $savedSearch);
@@ -563,13 +613,15 @@ class AbstractSearch extends AbstractBase
      *
      * @param object $savedSearch Saved search object (false if none)
      * @param string $config      Name of config file
-     * @param array  $filter      Whitelist of fields to include (if empty, all
+     * @param array  $filter      List of fields to include (if empty, all
      * fields will be returned)
      *
      * @return array
      */
-    protected function getGenericRangeSettings($savedSearch = false,
-        $config = 'facets', $filter = []
+    protected function getGenericRangeSettings(
+        $savedSearch = false,
+        $config = 'facets',
+        $filter = []
     ) {
         $fields = $this->getRangeFieldList($config, 'genericRange', $filter);
         return $this->getRangeSettings($fields, 'generic', $savedSearch);
@@ -580,13 +632,15 @@ class AbstractSearch extends AbstractBase
      *
      * @param object $savedSearch Saved search object (false if none)
      * @param string $config      Name of config file
-     * @param array  $filter      Whitelist of fields to include (if empty, all
+     * @param array  $filter      List of fields to include (if empty, all
      * fields will be returned)
      *
      * @return array
      */
-    protected function getNumericRangeSettings($savedSearch = false,
-        $config = 'facets', $filter = []
+    protected function getNumericRangeSettings(
+        $savedSearch = false,
+        $config = 'facets',
+        $filter = []
     ) {
         $fields = $this->getRangeFieldList($config, 'numericRange', $filter);
         return $this->getRangeSettings($fields, 'numeric', $savedSearch);
@@ -601,31 +655,41 @@ class AbstractSearch extends AbstractBase
      *
      * @return array
      */
-    protected function getAllRangeSettings($specialFacets, $savedSearch = false,
+    protected function getAllRangeSettings(
+        $specialFacets,
+        $savedSearch = false,
         $config = 'facets'
     ) {
         $result = [];
         if (isset($specialFacets['daterange'])) {
             $dates = $this->getDateRangeSettings(
-                $savedSearch, $config, $specialFacets['daterange']
+                $savedSearch,
+                $config,
+                $specialFacets['daterange']
             );
             $result = array_merge($result, $dates);
         }
         if (isset($specialFacets['fulldaterange'])) {
             $fulldates = $this->getFullDateRangeSettings(
-                $savedSearch, $config, $specialFacets['fulldaterange']
+                $savedSearch,
+                $config,
+                $specialFacets['fulldaterange']
             );
             $result = array_merge($result, $fulldates);
         }
         if (isset($specialFacets['genericrange'])) {
             $generic = $this->getGenericRangeSettings(
-                $savedSearch, $config, $specialFacets['genericrange']
+                $savedSearch,
+                $config,
+                $specialFacets['genericrange']
             );
             $result = array_merge($result, $generic);
         }
         if (isset($specialFacets['numericrange'])) {
             $numeric = $this->getNumericRangeSettings(
-                $savedSearch, $config, $specialFacets['numericrange']
+                $savedSearch,
+                $config,
+                $specialFacets['numericrange']
             );
             $result = array_merge($result, $numeric);
         }
@@ -670,13 +734,14 @@ class AbstractSearch extends AbstractBase
             ->get($config);
 
         // Process checkbox settings in config:
+        $flipCheckboxes = false;
         if (substr($section, 0, 1) == '~') {        // reverse flag
             $section = substr($section, 1);
             $flipCheckboxes = true;
         }
         $checkboxFacets = ($section && isset($config->$section))
             ? $config->$section->toArray() : [];
-        if (isset($flipCheckboxes) && $flipCheckboxes) {
+        if ($flipCheckboxes) {
             $checkboxFacets = array_flip($checkboxFacets);
         }
 
@@ -727,12 +792,14 @@ class AbstractSearch extends AbstractBase
         }
         $config = $this->serviceLocator->get(\VuFind\Config\PluginManager::class)
             ->get($options->getFacetsIni());
-        $limit = isset($config->Results_Settings->lightboxLimit)
-            ? $config->Results_Settings->lightboxLimit
-            : 50;
+        $limit = $config->Results_Settings->lightboxLimit ?? 50;
         $limit = $this->params()->fromQuery('facetlimit', $limit);
         $facets = $results->getPartialFieldFacets(
-            [$facet], false, $limit, $sort, $page,
+            [$facet],
+            false,
+            $limit,
+            $sort,
+            $page,
             $this->params()->fromQuery('facetop', 'AND') == 'OR'
         );
         $list = $facets[$facet]['data']['list'] ?? [];
@@ -741,7 +808,7 @@ class AbstractSearch extends AbstractBase
         $view = $this->createViewModel(
             [
                 'data' => $list,
-                'exclude' => $this->params()->fromQuery('facetexclude', 0),
+                'exclude' => intval($this->params()->fromQuery('facetexclude', 0)),
                 'facet' => $facet,
                 'facetLabel' => $facetLabel,
                 'operator' => $this->params()->fromQuery('facetop', 'AND'),

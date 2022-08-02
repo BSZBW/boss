@@ -36,7 +36,7 @@ namespace VuFindTheme\View\Helper;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Page
  */
-class ImageLink extends \Zend\View\Helper\AbstractHelper
+class ImageLink extends \Laminas\View\Helper\AbstractHelper
 {
     /**
      * Theme information service
@@ -67,7 +67,8 @@ class ImageLink extends \Zend\View\Helper\AbstractHelper
         // Normalize href to account for themes:
         $relPath = 'images/' . $image;
         $details = $this->themeInfo->findContainingTheme(
-            $relPath, \VuFindTheme\ThemeInfo::RETURN_ALL_DETAILS
+            $relPath,
+            \VuFindTheme\ThemeInfo::RETURN_ALL_DETAILS
         );
 
         if (null === $details) {

@@ -7,7 +7,7 @@
  */
 namespace BszTheme\View\Helper\Bodensee;
 
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 
 /**
  * View Helper for implementing Mapongo maps
@@ -18,7 +18,7 @@ class Mapongo extends AbstractHelper
 {
     /**
      *
-     * @var \Zend\Config\Config
+     * @var \Laminas\Config\Config
      */
     protected $config;
 

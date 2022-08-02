@@ -28,11 +28,11 @@
  */
 namespace VuFind\Search\Solr\V3;
 
+use Laminas\EventManager\EventInterface;
+
 use VuFind\Search\Solr\AbstractErrorListener;
 
 use VuFindSearch\Backend\Exception\HttpErrorException;
-
-use Zend\EventManager\EventInterface;
 
 /**
  * SOLR 3.x error listener.
@@ -54,15 +54,15 @@ class ErrorListener extends AbstractErrorListener
      */
     public function onSearchError(EventInterface $event)
     {
-        $backend = $event->getParam('backend_instance');
-        if ($this->listenForBackend($backend)) {
-            $error  = $event->getTarget();
+        $command = $event->getParam('command');
+        if ($this->listenForBackend($command->getTargetIdentifier())) {
+            $error = $event->getParam('error');
             if ($error instanceof HttpErrorException) {
                 $reason = $error->getResponse()->getReasonPhrase();
                 if (stristr($reason, 'org.apache.lucene.queryParser.ParseException')
                     || stristr($reason, 'undefined field')
                 ) {
-                    $error->addTag('VuFind\Search\ParserError');
+                    $error->addTag(self::TAG_PARSER_ERROR);
                 }
             }
         }

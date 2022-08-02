@@ -27,12 +27,12 @@
  */
 namespace VuFindTest\View\Helper\Root;
 
+use Laminas\Config\Config;
+use Laminas\View\Helper\HeadMeta;
 use VuFind\MetadataVocabulary\PluginManager;
 use VuFind\MetadataVocabulary\PRISM;
 use VuFind\View\Helper\Root\Metadata;
 use VuFindTest\RecordDriver\TestHarness;
-use Zend\Config\Config;
-use Zend\View\Helper\HeadMeta;
 
 /**
  * Metadata Test Class
@@ -43,7 +43,7 @@ use Zend\View\Helper\HeadMeta;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:testing:unit_tests Wiki
  */
-class MetadataTest extends \VuFindTest\Unit\TestCase
+class MetadataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Get a fake record driver
@@ -68,7 +68,7 @@ class MetadataTest extends \VuFindTest\Unit\TestCase
     {
         $mock = $this->getMockBuilder(HeadMeta::class)
             ->disableOriginalConstructor()
-            ->setMethods(['appendName'])
+            ->addMethods(['appendName'])    // mocking __call
             ->getMock();
         $mock->expects($this->once())->method('appendName')
             ->with($this->equalTo('prism.title'), $this->equalTo('Fake Title'));
@@ -84,7 +84,7 @@ class MetadataTest extends \VuFindTest\Unit\TestCase
     {
         $mock = $this->getMockBuilder(PluginManager::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMock();
         $mock->expects($this->once())->method('get')
             ->with($this->equalTo('PRISM'))

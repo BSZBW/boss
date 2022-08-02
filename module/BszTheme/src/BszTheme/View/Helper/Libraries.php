@@ -19,7 +19,7 @@
  */
 namespace BszTheme\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 
 /**
  * @deprecated this should be removed in near future

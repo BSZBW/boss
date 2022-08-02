@@ -21,10 +21,10 @@
  */
 namespace Bsz\Config;
 
-use Zend\Db\ResultSet\ResultSet;
-use Zend\Db\ResultSet\ResultSetInterface;
-use Zend\Db\Sql\Sql;
-use Zend\Db\TableGateway\TableGateway;
+use Laminas\Db\ResultSet\ResultSet;
+use Laminas\Db\ResultSet\ResultSetInterface;
+use Laminas\Db\Sql\Sql;
+use Laminas\Db\TableGateway\TableGateway;
 
 /**
  * Class for reading library config

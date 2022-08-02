@@ -41,7 +41,7 @@ class ConfigController extends AbstractAdmin
     /**
      * Configuration management
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function homeAction()
     {
@@ -75,7 +75,8 @@ class ConfigController extends AbstractAdmin
         } else {
             $this->flashMessenger()->addMessage(
                 'Could not enable auto-configuration; check permissions on '
-                . $configFile . '.', 'error'
+                . $configFile . '.',
+                'error'
             );
         }
         return $this->forwardTo('AdminConfig', 'Home');

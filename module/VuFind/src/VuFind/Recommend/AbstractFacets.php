@@ -27,7 +27,7 @@
  */
 namespace VuFind\Recommend;
 
-use Zend\Config\Config;
+use Laminas\Config\Config;
 
 /**
  * SideFacets Recommendations Module
@@ -137,7 +137,9 @@ abstract class AbstractFacets implements RecommendInterface
      *
      * @return void
      */
-    protected function loadBooleanConfigs(Config $config, $allFacets,
+    protected function loadBooleanConfigs(
+        Config $config,
+        $allFacets,
         $section = 'Results_Settings'
     ) {
         // Which facets are excludable?

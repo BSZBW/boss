@@ -28,9 +28,9 @@
  */
 namespace VuFindTest\RecordDriver;
 
+use Laminas\Config\Config;
 use VuFind\RecordDriver\DefaultRecord;
 use VuFind\RecordDriver\Response\PublicationDetails;
-use Zend\Config\Config;
 
 /**
  * DefaultRecord Record Driver Test Class
@@ -42,8 +42,11 @@ use Zend\Config\Config;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:testing:unit_tests Wiki
  */
-class DefaultRecordTest extends \VuFindTest\Unit\TestCase
+class DefaultRecordTest extends \PHPUnit\Framework\TestCase
 {
+    use \VuFindTest\Feature\FixtureTrait;
+    use \VuFindTest\Feature\ReflectionTrait;
+
     /**
      * Test getPublicationDates for a record.
      *
@@ -248,7 +251,7 @@ class DefaultRecordTest extends \VuFindTest\Unit\TestCase
      */
     public function testGetPhysicalDescriptions()
     {
-        $physical[0] = "296 p. : ill. ; 24 cm.";
+        $physical = ["296 p. : ill. ; 24 cm."];
         $this->assertEquals($physical, $this->getDriver()->getPhysicalDescriptions());
     }
 
@@ -412,7 +415,7 @@ class DefaultRecordTest extends \VuFindTest\Unit\TestCase
             ['bar ,     APA,MLA', ['APA', 'MLA']],
         ];
         foreach ($tests as $current) {
-            list($input, $output) = $current;
+            [$input, $output] = $current;
             $cfg = new Config(['Record' => ['citation_formats' => $input]]);
             $this->assertEquals(
                 $output,
@@ -431,15 +434,7 @@ class DefaultRecordTest extends \VuFindTest\Unit\TestCase
      */
     protected function getDriver($overrides = [], Config $mainConfig = null)
     {
-        $fixture = json_decode(
-            file_get_contents(
-                realpath(
-                    VUFIND_PHPUNIT_MODULE_PATH . '/fixtures/misc/testbug2.json'
-                )
-            ),
-            true
-        );
-
+        $fixture = $this->getJsonFixture('misc/testbug2.json');
         $record = new DefaultRecord($mainConfig);
         $record->setRawData($overrides + $fixture['response']['docs'][0]);
         return $record;

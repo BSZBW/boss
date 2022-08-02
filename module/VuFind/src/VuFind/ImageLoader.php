@@ -38,7 +38,7 @@ namespace VuFind;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/configuration:external_content Wiki
  */
-class ImageLoader implements \Zend\Log\LoggerAwareInterface
+class ImageLoader implements \Laminas\Log\LoggerAwareInterface
 {
     use \VuFind\Log\LoggerAwareTrait;
 
@@ -165,7 +165,8 @@ class ImageLoader implements \Zend\Log\LoggerAwareInterface
     {
         // No setting -- use default, and don't log anything:
         if (empty($this->configuredFailImage)) {
-            return $this->loadDefaultFailImage();
+            $this->loadDefaultFailImage();
+            return;
         }
 
         // Setting found -- get "no cover" image from config.ini:
@@ -176,7 +177,8 @@ class ImageLoader implements \Zend\Log\LoggerAwareInterface
             || !is_readable($noCoverImage)
         ) {
             $this->debug("Cannot access '{$this->configuredFailImage}'");
-            return $this->loadDefaultFailImage();
+            $this->loadDefaultFailImage();
+            return;
         }
 
         try {
@@ -185,7 +187,8 @@ class ImageLoader implements \Zend\Log\LoggerAwareInterface
         } catch (\Exception $e) {
             // Log error and bail out if file lacks a known image extension:
             $this->debug($e->getMessage());
-            return $this->loadDefaultFailImage();
+            $this->loadDefaultFailImage();
+            return;
         }
 
         // Load the image data:

@@ -28,9 +28,9 @@
  */
 namespace VuFindTest\Content\Covers;
 
+use Laminas\Config\Config;
 use VuFind\Content\Covers\ContentCafe;
 use VuFindCode\ISBN;
-use Zend\Config\Config;
 
 /**
  * Unit tests for ContentCafe cover loader.
@@ -55,7 +55,9 @@ class ContentCafeTest extends \PHPUnit\Framework\TestCase
             'http://contentcafe2.btol.com/ContentCafe/Jacket.aspx?UserID=mykey'
             . '&Password=fakepw&Return=1&Type=S&Value=9780739313121&erroroverride=1',
             $loader->getUrl(
-                'mykey', 'small', ['isbn' => new ISBN('0739313126')]
+                'mykey',
+                'small',
+                ['isbn' => new ISBN('0739313126')]
             )
         );
     }

@@ -27,7 +27,7 @@ namespace Bsz\ILS\Driver;
 
 use Exception;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Description of Factory

@@ -27,7 +27,7 @@
  */
 namespace VuFind\RecordDriver;
 
-use Zend\ServiceManager\Factory\InvokableFactory;
+use Laminas\ServiceManager\Factory\InvokableFactory;
 
 /**
  * Record driver plugin manager
@@ -54,6 +54,7 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
         'pazpar2' => Pazpar2::class,
         'primo' => Primo::class,
         'search2default' => Search2Default::class,
+        'solrarchivesspace' => SolrArchivesSpace::class,
         'solrauth' => SolrAuthMarc::class, // legacy name
         'solrauthdefault' => SolrAuthDefault::class,
         'solrauthmarc' => SolrAuthMarc::class,
@@ -70,7 +71,7 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
     /**
      * Default delegator factories.
      *
-     * @var string[][]|\Zend\ServiceManager\Factory\DelegatorFactoryInterface[][]
+     * @var string[][]|\Laminas\ServiceManager\Factory\DelegatorFactoryInterface[][]
      */
     protected $delegators = [
         SolrMarc::class => [IlsAwareDelegatorFactory::class],
@@ -91,6 +92,7 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
         Pazpar2::class => NameBasedConfigFactory::class,
         Primo::class => NameBasedConfigFactory::class,
         Search2Default::class => SolrDefaultFactory::class,
+        SolrArchivesSpace::class => SolrDefaultFactory::class,
         SolrAuthDefault::class => SolrDefaultWithoutSearchServiceFactory::class,
         SolrAuthMarc::class => SolrDefaultWithoutSearchServiceFactory::class,
         SolrDefault::class => SolrDefaultFactory::class,
@@ -112,7 +114,8 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
      * @param array $v3config                  If $configOrContainerInstance is a
      * container, this value will be passed to the parent constructor.
      */
-    public function __construct($configOrContainerInstance = null,
+    public function __construct(
+        $configOrContainerInstance = null,
         array $v3config = []
     ) {
         // These objects are not meant to be shared -- every time we retrieve one,
@@ -136,7 +139,7 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
                 }
             }
         };
-        $this->addInitializer($initializer, false);
+        $this->addInitializer($initializer);
     }
 
     /**
@@ -159,7 +162,9 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
      *
      * @return AbstractBase
      */
-    public function getSolrRecord($data, $keyPrefix = 'Solr',
+    public function getSolrRecord(
+        $data,
+        $keyPrefix = 'Solr',
         $defaultKeySuffix = 'Default'
     ) {
         $key = $keyPrefix . ucwords(

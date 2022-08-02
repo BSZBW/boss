@@ -28,7 +28,10 @@
 namespace VuFind\ILS\Driver;
 
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Interop\Container\Exception\ContainerException;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Generic factory suitable for most ILS drivers.
@@ -53,15 +56,18 @@ class DriverWithDateConverterFactory implements FactoryInterface
      * @throws ServiceNotFoundException if unable to resolve the service.
      * @throws ServiceNotCreatedException if an exception is raised when
      * creating a service.
-     * @throws ContainerException if any other error occurs
+     * @throws ContainerException&\Throwable if any other error occurs
      */
-    public function __invoke(ContainerInterface $container, $requestedName,
+    public function __invoke(
+        ContainerInterface $container,
+        $requestedName,
         array $options = null
     ) {
         // Set up the driver with the date converter (and any extra parameters
         // passed in as options):
         $driver = new $requestedName(
-            $container->get(\VuFind\Date\Converter::class), ...($options ?: [])
+            $container->get(\VuFind\Date\Converter::class),
+            ...($options ?: [])
         );
 
         // Populate cache storage if a setCacheStorage method is present:

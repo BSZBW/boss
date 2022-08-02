@@ -27,7 +27,7 @@
  */
 namespace VuFind\ContentBlock;
 
-use Zend\ServiceManager\Factory\InvokableFactory;
+use Laminas\ServiceManager\Factory\InvokableFactory;
 
 /**
  * Content block plugin manager
@@ -49,6 +49,7 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
         'channels' => Channels::class,
         'facetlist' => FacetList::class,
         'ilsstatusmonitor' => IlsStatusMonitor::class,
+        'templatebased' => TemplateBased::class,
     ];
 
     /**
@@ -60,6 +61,7 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
         Channels::class => ChannelsFactory::class,
         FacetList::class => FacetListFactory::class,
         IlsStatusMonitor::class => InvokableFactory::class,
+        TemplateBased::class => TemplateBasedFactory::class,
     ];
 
     /**
@@ -71,7 +73,8 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
      * @param array $v3config                  If $configOrContainerInstance is a
      * container, this value will be passed to the parent constructor.
      */
-    public function __construct($configOrContainerInstance = null,
+    public function __construct(
+        $configOrContainerInstance = null,
         array $v3config = []
     ) {
         // These objects are not meant to be shared -- every time we retrieve one,

@@ -67,7 +67,7 @@ class TitleHolds
     /**
      * VuFind configuration
      *
-     * @var \Zend\Config\Config
+     * @var \Laminas\Config\Config
      */
     protected $config;
 
@@ -84,10 +84,13 @@ class TitleHolds
      * @param \VuFind\Auth\ILSAuthenticator $ilsAuth ILS authenticator
      * @param ILSConnection                 $ils     A catalog connection
      * @param \VuFind\Crypt\HMAC            $hmac    HMAC generator
-     * @param \Zend\Config\Config           $config  VuFind configuration
+     * @param \Laminas\Config\Config        $config  VuFind configuration
      */
-    public function __construct(\VuFind\Auth\ILSAuthenticator $ilsAuth,
-        ILSConnection $ils, \VuFind\Crypt\HMAC $hmac, \Zend\Config\Config $config
+    public function __construct(
+        \VuFind\Auth\ILSAuthenticator $ilsAuth,
+        ILSConnection $ils,
+        \VuFind\Crypt\HMAC $hmac,
+        \Laminas\Config\Config $config
     ) {
         $this->ilsAuth = $ilsAuth;
         $this->hmac = $hmac;
@@ -204,7 +207,8 @@ class TitleHolds
     {
         // Get Hold Details
         $checkHolds = $this->catalog->checkFunction(
-            'Holds', compact('id', 'patron')
+            'Holds',
+            compact('id', 'patron')
         );
 
         if (isset($checkHolds['HMACKeys'])) {
@@ -241,7 +245,8 @@ class TitleHolds
 
         // Are holds allows?
         $checkHolds = $this->catalog->checkFunction(
-            'Holds', compact('id', 'patron')
+            'Holds',
+            compact('id', 'patron')
         );
 
         if ($checkHolds != false) {
@@ -288,6 +293,7 @@ class TitleHolds
         $HMACkey = $this->hmac->generate($HMACKeys, $data);
 
         // Add Params
+        $queryString = [];
         foreach ($data as $key => $param) {
             $needle = in_array($key, $HMACKeys);
             if ($needle) {

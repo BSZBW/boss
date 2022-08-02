@@ -29,12 +29,12 @@
  */
 namespace VuFind\Auth;
 
+use Laminas\Crypt\Password\Bcrypt;
+use Laminas\Http\PhpEnvironment\Request;
 use VuFind\Db\Row\User;
 use VuFind\Db\Table\User as UserTable;
 use VuFind\Exception\Auth as AuthException;
 use VuFind\Exception\AuthEmailNotVerified as AuthEmailNotVerifiedException;
-use Zend\Crypt\Password\Bcrypt;
-use Zend\Http\PhpEnvironment\Request;
 
 /**
  * Database authentication class
@@ -101,8 +101,20 @@ class Database extends AbstractBase
     protected function passwordHashingEnabled()
     {
         $config = $this->getConfig();
-        return isset($config->Authentication->hash_passwords)
-            ? $config->Authentication->hash_passwords : false;
+        return $config->Authentication->hash_passwords ?? false;
+    }
+
+    /**
+     * Does the provided exception indicate that a duplicate key value has been
+     * created?
+     *
+     * @param \Exception $e Exception to check
+     *
+     * @return bool
+     */
+    protected function exceptionIndicatesDuplicateKey(\Exception $e): bool
+    {
+        return strstr($e->getMessage(), 'Duplicate entry') !== false;
     }
 
     /**
@@ -129,7 +141,19 @@ class Database extends AbstractBase
 
         // If we got this far, we're ready to create the account:
         $user = $this->createUserFromParams($params, $userTable);
-        $user->save();
+        try {
+            $user->save();
+        } catch (\Laminas\Db\Adapter\Exception\RuntimeException $e) {
+            // In a scenario where the unique key of the user table is
+            // shorter than the username field length, it is possible that
+            // a user will pass validation but still get rejected due to
+            // the inability to generate a unique key. This is a very
+            // unlikely scenario, but if it occurs, we will treat it the
+            // same as a duplicate username. Other unexpected database
+            // errors will be passed through unmodified.
+            throw $this->exceptionIndicatesDuplicateKey($e)
+                ? new AuthException('That username is already taken') : $e;
+        }
 
         // Verify email address:
         $this->checkEmailVerified($user);
@@ -249,7 +273,7 @@ class Database extends AbstractBase
     }
 
     /**
-     * Check that an email address is legal based on whitelist (if configured).
+     * Check that an email address is legal based on inclusion list (if configured).
      *
      * @param string $email Email address to check (assumed to be valid/well-formed)
      *
@@ -257,28 +281,29 @@ class Database extends AbstractBase
      */
     protected function emailAllowed($email)
     {
-        // If no whitelist is configured, all emails are allowed:
-        $config = $this->getConfig();
-        if (!isset($config->Authentication->domain_whitelist)
-            || empty($config->Authentication->domain_whitelist)
-        ) {
+        // If no inclusion list is configured, all emails are allowed:
+        $fullConfig = $this->getConfig();
+        $config = isset($fullConfig->Authentication)
+            ? $fullConfig->Authentication->toArray() : [];
+        $rawIncludeList = $config['legal_domains']
+            ?? $config['domain_whitelist']  // deprecated configuration
+            ?? null;
+        if (empty($rawIncludeList)) {
             return true;
         }
 
-        // Normalize the whitelist:
-        $whitelist = array_map(
+        // Normalize the allowed list:
+        $includeList = array_map(
             'trim',
-            array_map(
-                'strtolower', $config->Authentication->domain_whitelist->toArray()
-            )
+            array_map('strtolower', $rawIncludeList)
         );
 
         // Extract the domain from the email address:
         $parts = explode('@', $email);
         $domain = strtolower(trim(array_pop($parts)));
 
-        // Match domain against whitelist:
-        return in_array($domain, $whitelist);
+        // Match domain against allowed list:
+        return in_array($domain, $includeList);
     }
 
     /**
@@ -361,12 +386,12 @@ class Database extends AbstractBase
     protected function validateParams($params, $table)
     {
         // Invalid Email Check
-        $validator = new \Zend\Validator\EmailAddress();
+        $validator = new \Laminas\Validator\EmailAddress();
         if (!$validator->isValid($params['email'])) {
             throw new AuthException('Email address is invalid');
         }
 
-        // Check if Email is on whitelist (if applicable)
+        // Check if Email is on allowed list (if applicable)
         if (!$this->emailAllowed($params['email'])) {
             throw new AuthException('authentication_error_creation_blocked');
         }

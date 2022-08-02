@@ -27,9 +27,9 @@
  */
 namespace VuFindTest\DoiLinker;
 
+use Laminas\Http\Client\Adapter\Test as TestAdapter;
+use Laminas\Http\Response as HttpResponse;
 use VuFind\DoiLinker\Unpaywall;
-use Zend\Http\Client\Adapter\Test as TestAdapter;
-use Zend\Http\Response as HttpResponse;
 
 /**
  * Unpaywall Test Class
@@ -40,19 +40,21 @@ use Zend\Http\Response as HttpResponse;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:testing:unit_tests Wiki
  */
-class UnpaywallTest extends \VuFindTest\Unit\TestCase
+class UnpaywallTest extends \PHPUnit\Framework\TestCase
 {
+    use \VuFindTest\Feature\FixtureTrait;
+
     /**
      * Test configuration validation.
      *
      * @return void
-     *
-     * @expectedException        Exception
-     * @expectedExceptionMessage Missing configuration for Unpaywall DOI linker: unpaywall_email
      */
     public function testConfigValidation()
     {
-        new Unpaywall(new \Zend\Config\Config([]));
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Missing configuration for Unpaywall DOI linker: unpaywall_email');
+
+        new Unpaywall(new \Laminas\Config\Config([]));
     }
 
     /**
@@ -63,28 +65,50 @@ class UnpaywallTest extends \VuFindTest\Unit\TestCase
     public function testApiSuccess()
     {
         $adapter = new TestAdapter();
-        $file = realpath(
-            __DIR__ . '/../../../../../tests/fixtures/unpaywall/goodresponse'
-        );
-        $response = file_get_contents($file);
-        $responseObj = HttpResponse::fromString($response);
-        $adapter->setResponse($responseObj);
-        $service = new \VuFindHttp\HttpService();
-        $service->setDefaultAdapter($adapter);
-        $config = [
-            'unpaywall_email' => 'foo@myuniversity.edu',
-        ];
-        $unpaywall = new Unpaywall(new \Zend\Config\Config($config));
-        $unpaywall->setHttpService($service);
-        $this->assertEquals(
-            ['10.7553/66-4-1434' => [
-                    [
-                        'link' => 'http://sajlis.journals.ac.za/pub/article/download/1434/1332',
-                        'label' => 'PDF Full Text',
+        $testData = [
+            [
+                'fixture' => $this->getFixture('unpaywall/goodresponsepdf'),
+                'response' => [
+                    '10.7553/66-4-1434' => [
+                        [
+                            'link' => 'http://sajlis.journals.ac.za/pub/article/download/1434/1332',
+                            'label' => 'PDF Full Text',
+                        ]
                     ]
                 ]
             ],
-            $unpaywall->getLinks(['10.7553/66-4-1434'])
-        );
+            [
+                'fixture' => $this->getFixture('unpaywall/goodresponseonline'),
+                'response' => [
+                    '10.7553/66-4-1434' => [
+                        [
+                            'link' => 'https://doi.org/10.7553/66-4-1434',
+                            'label' => 'online_resources',
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'fixture' => $this->getFixture('unpaywall/badresponse'),
+                'response' => []
+            ],
+        ];
+
+        $config = [
+            'unpaywall_email' => 'foo@myuniversity.edu',
+        ];
+        $unpaywall = new Unpaywall(new \Laminas\Config\Config($config));
+
+        foreach ($testData as $data) {
+            $responseObj = HttpResponse::fromString($data['fixture']);
+            $adapter->setResponse($responseObj);
+            $service = new \VuFindHttp\HttpService();
+            $service->setDefaultAdapter($adapter);
+            $unpaywall->setHttpService($service);
+            $this->assertEquals(
+                $data['response'],
+                $unpaywall->getLinks(['10.7553/66-4-1434'])
+            );
+        }
     }
 }

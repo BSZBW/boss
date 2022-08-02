@@ -28,10 +28,10 @@
  */
 namespace VuFind\Search;
 
+use Laminas\Stdlib\Parameters;
 use VuFindSearch\Query\AbstractQuery;
 use VuFindSearch\Query\Query;
 use VuFindSearch\Query\QueryGroup;
-use Zend\StdLib\Parameters;
 
 /**
  * Legacy adapter: search query parameters to AbstractQuery object
@@ -60,19 +60,23 @@ abstract class QueryAdapter
         if (array_key_exists('l', $search)) {
             $handler = $search['i'] ?? $search['f'];
             return new Query(
-                $search['l'], $handler, $search['o'] ?? null
+                $search['l'],
+                $handler,
+                $search['o'] ?? null
             );
         } elseif (isset($search['g'])) {
             $operator = $search['g'][0]['b'];
             return new QueryGroup(
-                $operator, array_map(['self', 'deminify'], $search['g'])
+                $operator,
+                array_map(['self', 'deminify'], $search['g'])
             );
         } else {
             // Special case: The outer-most group-of-groups.
             if (isset($search[0]['j'])) {
                 $operator = $search[0]['j'];
                 return new QueryGroup(
-                    $operator, array_map(['self', 'deminify'], $search)
+                    $operator,
+                    array_map(['self', 'deminify'], $search)
                 );
             } else {
                 // Simple query
@@ -110,7 +114,9 @@ abstract class QueryAdapter
      *
      * @return string
      */
-    protected static function displayAdvanced(AbstractQuery $query, $translate,
+    protected static function displayAdvanced(
+        AbstractQuery $query,
+        $translate,
         $showName
     ) {
         // Groups and exclusions.
@@ -133,7 +139,8 @@ abstract class QueryAdapter
                 // Is this an exclusion (NOT) group or a normal group?
                 $str = join(
                     ' ' . call_user_func($translate, $search->getOperator())
-                    . ' ', $thisGroup
+                    . ' ',
+                    $thisGroup
                 );
                 if ($search->isNegated()) {
                     $excludes[] = $str;

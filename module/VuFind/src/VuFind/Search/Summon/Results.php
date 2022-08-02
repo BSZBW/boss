@@ -67,6 +67,13 @@ class Results extends \VuFind\Search\Base\Results
     protected $topicRecommendations = false;
 
     /**
+     * Search backend identifier.
+     *
+     * @var string
+     */
+    protected $backendId = 'Summon';
+
+    /**
      * Support method for performAndProcessSearch -- perform a search based on the
      * parameters passed to the object.
      *
@@ -79,7 +86,11 @@ class Results extends \VuFind\Search\Base\Results
         $offset = $this->getStartRecord() - 1;
         $params = $this->getParams()->getBackendParameters();
         $collection = $this->getSearchService()->search(
-            'Summon', $query, $offset, $limit, $params
+            $this->backendId,
+            $query,
+            $offset,
+            $limit,
+            $params
         );
 
         $this->responseFacets = $collection->getFacets();
@@ -207,7 +218,8 @@ class Results extends \VuFind\Search\Base\Results
         // Should we translate values for the current facet?
         $field = $current['displayName'];
         $translate = in_array(
-            $field, $this->getOptions()->getTranslatedFacets()
+            $field,
+            $this->getOptions()->getTranslatedFacets()
         );
         if ($translate) {
             $transTextDomain = $this->getOptions()
@@ -341,8 +353,12 @@ class Results extends \VuFind\Search\Base\Results
      *
      * @return array an array with the facet values for each index field
      */
-    public function getPartialFieldFacets($facetfields, $removeFilter = true,
-        $limit = -1, $facetSort = null, $page = null
+    public function getPartialFieldFacets(
+        $facetfields,
+        $removeFilter = true,
+        $limit = -1,
+        $facetSort = null,
+        $page = null
     ) {
         $params = $this->getParams();
         $query  = $params->getQuery();
@@ -368,7 +384,11 @@ class Results extends \VuFind\Search\Base\Results
         }
         $params = $params->getBackendParameters();
         $collection = $this->getSearchService()->search(
-            'Summon', $query, 0, 0, $params
+            $this->backendId,
+            $query,
+            0,
+            0,
+            $params
         );
 
         $facets = $collection->getFacets();

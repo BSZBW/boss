@@ -60,7 +60,7 @@ class Email extends AbstractBase
     /**
      * Attempt to authenticate the current user.  Throws exception if login fails.
      *
-     * @param \Zend\Http\PhpEnvironment\Request $request Request object containing
+     * @param \Laminas\Http\PhpEnvironment\Request $request Request object containing
      * account credentials.
      *
      * @throws AuthException
@@ -81,7 +81,7 @@ class Email extends AbstractBase
 
         if (!$hash) {
             // Validate the credentials:
-            $user = $this->getUserTable()->getByEmail($email, false);
+            $user = $this->getUserTable()->getByEmail($email);
             if ($user) {
                 $loginData = [
                     'vufind_id' => $user['id']
@@ -110,7 +110,7 @@ class Email extends AbstractBase
     /**
      * Whether this authentication method needs CSRF checking for the request.
      *
-     * @param \Zend\Http\PhpEnvironment\Request $request Request object.
+     * @param \Laminas\Http\PhpEnvironment\Request $request Request object.
      *
      * @return bool
      */

@@ -63,7 +63,7 @@ class DatabaseTest extends TestCase
     {
         return $this->getMockBuilder(Shortlinks::class)
             ->disableOriginalConstructor()
-            ->setMethods($methods)
+            ->onlyMethods($methods)
             ->getMock();
     }
 

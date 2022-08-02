@@ -37,10 +37,8 @@ namespace VuFindTest\Mink;
  * @link     https://vufind.org Main Page
  * @retry    4
  */
-class SearchFacetsTest extends \VuFindTest\Unit\MinkTestCase
+class SearchFacetsTest extends \VuFindTest\Integration\MinkTestCase
 {
-    use \VuFindTest\Unit\AutoRetryTrait;
-
     /**
      * CSS selector for finding active filters
      *
@@ -53,11 +51,12 @@ class SearchFacetsTest extends \VuFindTest\Unit\MinkTestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         // Give up if we're not running in CI:
         if (!$this->continuousIntegrationRunning()) {
-            return $this->markTestSkipped('Continuous integration not running.');
+            $this->markTestSkipped('Continuous integration not running.');
+            return;
         }
     }
 
@@ -166,7 +165,8 @@ class SearchFacetsTest extends \VuFindTest\Unit\MinkTestCase
         // When exclusion is active, the result count is outside of the link tag:
         $expectedLinkText = $exclusionActive ? 'Weird IDs' : 'Weird IDs 9';
         $weirdIDs = $this->findAndAssertLink(
-            $page->findById('modal'), $expectedLinkText
+            $page->findById('modal'),
+            $expectedLinkText
         );
         $this->assertEquals($expectedLinkText, $weirdIDs->getText());
         // apply US facet
@@ -236,8 +236,8 @@ class SearchFacetsTest extends \VuFindTest\Unit\MinkTestCase
             ]
         );
         $page = $this->performSearch('building:weird_ids.mrc');
-        // Open the geographic facet
-        $genreMore = $this->findCss($page, '#more-narrowGroupHidden-genre_facet');
+        // Open the genre facet
+        $genreMore = $this->findCss($page, '#side-collapse-genre_facet .more-facets');
         $genreMore->click();
         $this->facetListProcedure($page, $limit);
         $genreMore->click();
@@ -266,13 +266,13 @@ class SearchFacetsTest extends \VuFindTest\Unit\MinkTestCase
             ]
         );
         $page = $this->performSearch('building:weird_ids.mrc');
-        // Open the geographic facet
-        $genreMore = $this->findCss($page, '#more-narrowGroupHidden-genre_facet');
+        // Open the genre facet
+        $genreMore = $this->findCss($page, '#side-collapse-genre_facet .more-btn');
         $genreMore->click();
-        $this->clickCss($page, '.narrowGroupHidden-genre_facet[data-lightbox]');
+        $this->clickCss($page, '#side-collapse-genre_facet .all-facets');
         $this->facetListProcedure($page, $limit);
         $genreMore->click();
-        $this->clickCss($page, '.narrowGroupHidden-genre_facet[data-lightbox]');
+        $this->clickCss($page, '#side-collapse-genre_facet .all-facets');
         $this->clickCss($page, '#modal .js-facet-item.active');
         // remove facet
         $this->snooze();
@@ -299,8 +299,8 @@ class SearchFacetsTest extends \VuFindTest\Unit\MinkTestCase
             ]
         );
         $page = $this->performSearch('building:weird_ids.mrc');
-        // Open the geographic facet
-        $genreMore = $this->findCss($page, '#more-narrowGroupHidden-genre_facet');
+        // Open the genre facet
+        $genreMore = $this->findCss($page, '#side-collapse-genre_facet .more-facets');
         $genreMore->click();
         $this->facetListProcedure($page, $limit, true);
         $this->assertEquals(1, count($page->findAll('css', $this->activeFilterSelector)));
@@ -315,16 +315,15 @@ class SearchFacetsTest extends \VuFindTest\Unit\MinkTestCase
      */
     protected function clickHierarchyFacet($page)
     {
-        $this->findCss($page, '#j1_1.jstree-closed .jstree-icon');
-        $session = $this->getMinkSession();
-        $session->executeScript("$('#j1_1.jstree-closed .jstree-icon').click();");
+        $this->clickCss($page, '#j1_1.jstree-closed .jstree-icon');
+        $this->snooze();
         $this->findCss($page, '#j1_1.jstree-open .jstree-icon');
         $this->clickCss($page, '#j1_2 a');
         $this->snooze();
         $filter = $this->findCss($page, $this->activeFilterSelector);
         $label = $this->findCss($page, '.filters .filters-title');
         $this->assertEquals('hierarchy:', $label->getText());
-        $this->assertEquals('1/level1a/level2a/', $filter->getText());
+        $this->assertEquals('level1a/level2a', $filter->getText());
         $this->findCss($page, '#j1_2 .fa-check');
     }
 
@@ -349,6 +348,54 @@ class SearchFacetsTest extends \VuFindTest\Unit\MinkTestCase
         );
         $page = $this->performSearch('building:"hierarchy.mrc"');
         $this->clickHierarchyFacet($page);
+    }
+
+    /**
+     * Test that hierarchy facet exclusion works properly.
+     *
+     * @return void
+     */
+    public function testHierarchicalFacetExclude()
+    {
+        $this->changeConfigs(
+            [
+                'facets' => [
+                    'Results' => [
+                        'hierarchical_facet_str_mv' => 'hierarchy'
+                    ],
+                    'SpecialFacets' => [
+                        'hierarchical[]' => 'hierarchical_facet_str_mv'
+                    ],
+                    'Results_Settings' => [
+                        'exclude' => 'hierarchical_facet_str_mv',
+                    ]
+                ]
+            ]
+        );
+        $extractCount = function ($str) {
+            $parts = explode(',', $str);
+            return $parts[0];
+        };
+        $page = $this->performSearch('building:"hierarchy.mrc"');
+        $stats = $this->findCss($page, '.search-stats');
+        $this->assertEquals(
+            'Showing 1 - 10 results of 10 for search \'building:"hierarchy.mrc"\'',
+            $extractCount($stats->getText())
+        );
+        $this->clickCss($page, '#j1_1.jstree-closed .jstree-icon');
+        $this->snooze();
+        $this->findCss($page, '#j1_1.jstree-open .jstree-icon');
+        $this->clickCss($page, '#j1_2 a.exclude');
+        $this->snooze();
+        $filter = $this->findCss($page, $this->activeFilterSelector);
+        $label = $this->findCss($page, '.filters .filters-title');
+        $this->assertEquals('hierarchy:', $label->getText());
+        $this->assertEquals('level1a/level2a', $filter->getText());
+        $stats = $this->findCss($page, '.search-stats');
+        $this->assertEquals(
+            'Showing 1 - 7 results of 7 for search \'building:"hierarchy.mrc"\'',
+            $extractCount($stats->getText())
+        );
     }
 
     /**

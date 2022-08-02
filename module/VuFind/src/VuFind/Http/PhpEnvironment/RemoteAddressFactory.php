@@ -1,6 +1,6 @@
 <?php
 /**
- * RemoteAddress utility factory. This uses the core Zend RemoteAddress but
+ * RemoteAddress utility factory. This uses the core Laminas RemoteAddress but
  * configures it according to VuFind settings.
  *
  * PHP version 7
@@ -29,7 +29,10 @@
 namespace VuFind\Http\PhpEnvironment;
 
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Interop\Container\Exception\ContainerException;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
  * RemoteAddress utility factory.
@@ -54,9 +57,11 @@ class RemoteAddressFactory implements FactoryInterface
      * @throws ServiceNotFoundException if unable to resolve the service.
      * @throws ServiceNotCreatedException if an exception is raised when
      * creating a service.
-     * @throws ContainerException if any other error occurs
+     * @throws ContainerException&\Throwable if any other error occurs
      */
-    public function __invoke(ContainerInterface $container, $requestedName,
+    public function __invoke(
+        ContainerInterface $container,
+        $requestedName,
         array $options = null
     ) {
         if (!empty($options)) {

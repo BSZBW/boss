@@ -19,7 +19,7 @@
  */
 namespace Bsz\Related;
 
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
  * Description of Factory

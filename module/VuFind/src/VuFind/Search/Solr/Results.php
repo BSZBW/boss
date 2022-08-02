@@ -27,7 +27,7 @@
  */
 namespace VuFind\Search\Solr;
 
-use VuFindSearch\Backend\Solr\Response\Json\Spellcheck;
+use VuFind\Search\Solr\AbstractErrorListener as ErrorListener;
 use VuFindSearch\Query\AbstractQuery;
 use VuFindSearch\Query\QueryGroup;
 
@@ -51,7 +51,7 @@ class Results extends \VuFind\Search\Base\Results
     protected $responseFacets = null;
 
     /**
-     * Search backend identifiers.
+     * Search backend identifier.
      *
      * @var string
      */
@@ -79,6 +79,25 @@ class Results extends \VuFind\Search\Base\Results
      * @var null|string
      */
     protected $cursorMark = null;
+
+    /**
+     * Hierarchical facet helper
+     *
+     * @var HierarchicalFacetHelper
+     */
+    protected $hierarchicalFacetHelper = null;
+
+    /**
+     * Set hierarchical facet helper
+     *
+     * @param HierarchicalFacetHelper $helper Hierarchical facet helper
+     *
+     * @return void
+     */
+    public function setHierarchicalFacetHelper(HierarchicalFacetHelper $helper)
+    {
+        $this->hierarchicalFacetHelper = $helper;
+    }
 
     /**
      * Get spelling processor.
@@ -153,7 +172,7 @@ class Results extends \VuFind\Search\Base\Results
                 ->search($this->backendId, $query, $offset, $limit, $params);
         } catch (\VuFindSearch\Backend\Exception\BackendException $e) {
             // If the query caused a parser error, see if we can clean it up:
-            if ($e->hasTag('VuFind\Search\ParserError')
+            if ($e->hasTag(ErrorListener::TAG_PARSER_ERROR)
                 && $newQuery = $this->fixBadQuery($query)
             ) {
                 // We need to get a fresh set of $params, since the previous one was
@@ -255,7 +274,9 @@ class Results extends \VuFind\Search\Base\Results
     public function getSpellingSuggestions()
     {
         return $this->getSpellingProcessor()->processSuggestions(
-            $this->getRawSuggestions(), $this->spellingQuery, $this->getParams()
+            $this->getRawSuggestions(),
+            $this->spellingQuery,
+            $this->getParams()
         );
     }
 
@@ -285,6 +306,7 @@ class Results extends \VuFind\Search\Base\Results
         // Loop through every field returned by the result set
         $fieldFacets = $this->responseFacets->getFieldFacets();
         $translatedFacets = $this->getOptions()->getTranslatedFacets();
+        $hierarchicalFacets = $this->getOptions()->getHierarchicalFacets();
         foreach (array_keys($filter) as $field) {
             $data = $fieldFacets[$field] ?? [];
             // Skip empty arrays:
@@ -302,6 +324,7 @@ class Results extends \VuFind\Search\Base\Results
                 $translateTextDomain = $this->getOptions()
                     ->getTextDomainForTranslatedFacet($field);
             }
+            $hierarchical = in_array($field, $hierarchicalFacets);
             // Loop through values:
             foreach ($data as $value => $count) {
                 // Initialize the array of data about the current facet:
@@ -311,9 +334,20 @@ class Results extends \VuFind\Search\Base\Results
                 $displayText = $this->getParams()
                     ->checkForDelimitedFacetDisplayText($field, $value);
 
+                if ($hierarchical) {
+                    if (!$this->hierarchicalFacetHelper) {
+                        throw new \Exception(
+                            get_class($this)
+                            . ': hierarchical facet helper unavailable'
+                        );
+                    }
+                    $displayText = $this->hierarchicalFacetHelper
+                        ->formatDisplayText($displayText);
+                }
                 $currentSettings['displayText'] = $translate
-                    ? $this->translate("$translateTextDomain::$displayText")
+                    ? $this->translate([$translateTextDomain, $displayText])
                     : $displayText;
+
                 $currentSettings['count'] = $count;
                 $currentSettings['operator']
                     = $this->getParams()->getFacetOperator($field);
@@ -343,8 +377,13 @@ class Results extends \VuFind\Search\Base\Results
      *
      * @return array list facet values for each index field with label and more bool
      */
-    public function getPartialFieldFacets($facetfields, $removeFilter = true,
-        $limit = -1, $facetSort = null, $page = null, $ored = false
+    public function getPartialFieldFacets(
+        $facetfields,
+        $removeFilter = true,
+        $limit = -1,
+        $facetSort = null,
+        $page = null,
+        $ored = false
     ) {
         $clone = clone $this;
         $params = $clone->getParams();

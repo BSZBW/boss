@@ -28,7 +28,10 @@
 namespace VuFind\View\Helper\Root;
 
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Interop\Container\Exception\ContainerException;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
  * UserList helper factory.
@@ -53,16 +56,18 @@ class UserListFactory implements FactoryInterface
      * @throws ServiceNotFoundException if unable to resolve the service.
      * @throws ServiceNotCreatedException if an exception is raised when
      * creating a service.
-     * @throws ContainerException if any other error occurs
+     * @throws ContainerException&\Throwable if any other error occurs
      */
-    public function __invoke(ContainerInterface $container, $requestedName,
+    public function __invoke(
+        ContainerInterface $container,
+        $requestedName,
         array $options = null
     ) {
         if (!empty($options)) {
             throw new \Exception('Unexpected options sent to factory.');
         }
-        $sessionManager = $container->get(\Zend\Session\SessionManager::class);
-        $session = new \Zend\Session\Container('List', $sessionManager);
+        $sessionManager = $container->get(\Laminas\Session\SessionManager::class);
+        $session = new \Laminas\Session\Container('List', $sessionManager);
         $capabilities = $container->get(\VuFind\Config\AccountCapabilities::class);
         return new $requestedName($session, $capabilities->getListSetting());
     }

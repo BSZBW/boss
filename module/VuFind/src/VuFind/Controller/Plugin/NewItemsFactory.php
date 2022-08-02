@@ -28,7 +28,10 @@
 namespace VuFind\Controller\Plugin;
 
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Interop\Container\Exception\ContainerException;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Factory for NewItems controller plugin.
@@ -53,9 +56,11 @@ class NewItemsFactory implements FactoryInterface
      * @throws ServiceNotFoundException if unable to resolve the service.
      * @throws ServiceNotCreatedException if an exception is raised when
      * creating a service.
-     * @throws ContainerException if any other error occurs
+     * @throws ContainerException&\Throwable if any other error occurs
      */
-    public function __invoke(ContainerInterface $container, $requestedName,
+    public function __invoke(
+        ContainerInterface $container,
+        $requestedName,
         array $options = null
     ) {
         if (!empty($options)) {
@@ -63,7 +68,7 @@ class NewItemsFactory implements FactoryInterface
         }
         $search
             = $container->get(\VuFind\Config\PluginManager::class)->get('searches');
-        $config = $search->NewItem ?? new \Zend\Config\Config([]);
+        $config = $search->NewItem ?? new \Laminas\Config\Config([]);
         return new $requestedName($config);
     }
 }

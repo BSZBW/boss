@@ -25,9 +25,9 @@ use Bsz\Config\Client;
 use Bsz\Config\Libraries;
 use Bsz\Exception;
 use VuFind\Controller\AbstractBase;
-use Zend\Http\Header\SetCookie;
-use Zend\Session\Container as SessionContainer;
-use Zend\Session\SessionManager;
+use Laminas\Http\Header\SetCookie;
+use Laminas\Session\Container as SessionContainer;
+use Laminas\Session\SessionManager;
 
 /**
  * Für statische Seiten etc.
@@ -119,7 +119,7 @@ class BszController extends AbstractBase
     }
 
     /**
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function dedupAction()
     {
@@ -144,7 +144,7 @@ class BszController extends AbstractBase
     }
 
     /**
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function libraryAction()
     {
@@ -161,7 +161,7 @@ class BszController extends AbstractBase
     }
 
     /**
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function resigningAction()
     {

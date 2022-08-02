@@ -1,7 +1,7 @@
 <?php
 namespace BszTheme\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 
 /**
  * String View Helper functions

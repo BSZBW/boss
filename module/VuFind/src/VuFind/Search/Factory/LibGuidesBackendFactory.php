@@ -30,12 +30,12 @@ namespace VuFind\Search\Factory;
 
 use Interop\Container\ContainerInterface;
 
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use VuFindSearch\Backend\LibGuides\Backend;
 use VuFindSearch\Backend\LibGuides\Connector;
 use VuFindSearch\Backend\LibGuides\QueryBuilder;
-use VuFindSearch\Backend\LibGuides\Response\RecordCollectionFactory;
 
-use Zend\ServiceManager\Factory\FactoryInterface;
+use VuFindSearch\Backend\LibGuides\Response\RecordCollectionFactory;
 
 /**
  * Factory for LibGuides backends.
@@ -51,7 +51,7 @@ class LibGuidesBackendFactory implements FactoryInterface
     /**
      * Logger.
      *
-     * @var \Zend\Log\LoggerInterface
+     * @var \Laminas\Log\LoggerInterface
      */
     protected $logger;
 
@@ -65,7 +65,7 @@ class LibGuidesBackendFactory implements FactoryInterface
     /**
      * LibGuides configuration
      *
-     * @var \Zend\Config\Config
+     * @var \Laminas\Config\Config
      */
     protected $libGuidesConfig;
 
@@ -105,7 +105,9 @@ class LibGuidesBackendFactory implements FactoryInterface
     {
         $defaultSearch = $this->libGuidesConfig->General->defaultSearch ?? null;
         $backend = new Backend(
-            $connector, $this->createRecordCollectionFactory(), $defaultSearch
+            $connector,
+            $this->createRecordCollectionFactory(),
+            $defaultSearch
         );
         $backend->setLogger($this->logger);
         $backend->setQueryBuilder($this->createQueryBuilder());

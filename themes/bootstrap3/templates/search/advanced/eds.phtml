@@ -43,7 +43,7 @@
             <div class="checkbox">
               <label for="limit_<?=$this->escapeHtmlAttr(str_replace(' ', '+', $field))?>">
                 <input id="limit_<?=$this->escapeHtmlAttr(str_replace(' ', '+', $field))?>" type="checkbox" <?=(isset($facet['LimiterValues'][0]['selected']) && $facet['LimiterValues'][0]['selected'])?'checked="checked"':''?> name="filter[]" value="<?=$this->escapeHtmlAttr('LIMIT|' . $field . ':' . $value)?>">
-                <?=$this->transEsc('eds_limiter_' . $field, [], $facet['Label'])?>
+                <?=$this->transEsc($facet['Label'])?>
               </label>
             </div>
             <?php break;
@@ -123,6 +123,6 @@ $(document).ready(function() {
 });
 JS;
     ?>
-    <?=$this->inlineScript(\Zend\View\Helper\HeadScript::SCRIPT, $script, 'SET'); ?>
+    <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET'); ?>
   </fieldset>
 <?php endif; ?>

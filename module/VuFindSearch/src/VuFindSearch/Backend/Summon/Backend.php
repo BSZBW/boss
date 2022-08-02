@@ -28,7 +28,7 @@
  */
 namespace VuFindSearch\Backend\Summon;
 
-use SerialsSolutions\Summon\Zend2 as Connector;
+use SerialsSolutions\Summon\Laminas as Connector;
 use SerialsSolutions_Summon_Exception as SummonException;
 use SerialsSolutions_Summon_Query as SummonQuery;
 
@@ -78,7 +78,8 @@ class Backend extends AbstractBackend implements RetrieveBatchInterface
      *
      * @return void
      */
-    public function __construct(Connector $connector,
+    public function __construct(
+        Connector $connector,
         RecordCollectionFactoryInterface $factory = null
     ) {
         if (null !== $factory) {
@@ -98,7 +99,10 @@ class Backend extends AbstractBackend implements RetrieveBatchInterface
      *
      * @return RecordCollectionInterface
      */
-    public function search(AbstractQuery $query, $offset, $limit,
+    public function search(
+        AbstractQuery $query,
+        $offset,
+        $limit,
         ParamBag $params = null
     ) {
         $baseParams = $this->getQueryBuilder()->build($query);

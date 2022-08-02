@@ -28,9 +28,9 @@
 namespace VuFind\Config;
 
 use Interop\Container\ContainerInterface;
-use Zend\Config\Config;
-use Zend\Config\Reader\Ini as IniReader;
-use Zend\ServiceManager\Factory\AbstractFactoryInterface;
+use Laminas\Config\Config;
+use Laminas\Config\Reader\Ini as IniReader;
+use Laminas\ServiceManager\Factory\AbstractFactoryInterface;
 
 /**
  * VuFind Config Plugin Factory
@@ -109,8 +109,11 @@ class PluginFactory implements AbstractFactoryInterface
         while (null !== ($child = array_pop($configs))) {
             $overrideSections = isset($child->Parent_Config->override_full_sections)
                 ? explode(
-                    ',', str_replace(
-                        ' ', '', $child->Parent_Config->override_full_sections
+                    ',',
+                    str_replace(
+                        ' ',
+                        '',
+                        $child->Parent_Config->override_full_sections
                     )
                 )
                 : [];
@@ -134,7 +137,7 @@ class PluginFactory implements AbstractFactoryInterface
                 } else {
                     foreach (array_keys($contents->toArray()) as $key) {
                         // If a key is defined as key[] in the config file the key
-                        // remains a Zend\Config\Config object. If the current
+                        // remains a Laminas\Config\Config object. If the current
                         // section is not configured as an override section we try to
                         // merge the key[] values instead of overwriting them.
                         if (is_object($config->$section->$key)
@@ -184,7 +187,9 @@ class PluginFactory implements AbstractFactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName,
+    public function __invoke(
+        ContainerInterface $container,
+        $requestedName,
         array $options = null
     ) {
         return $this->loadConfigFile($requestedName . '.ini');

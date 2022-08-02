@@ -45,7 +45,7 @@ class OaiController extends AbstractBase
     /**
      * Display OAI server form.
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function homeAction()
     {
@@ -56,21 +56,21 @@ class OaiController extends AbstractBase
     /**
      * Standard OAI server.
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function authserverAction()
     {
-        return $this->handleOAI('VuFind\OAI\Server\Auth');
+        return $this->handleOAI(\VuFind\OAI\Server\Auth::class);
     }
 
     /**
      * Standard OAI server.
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function serverAction()
     {
-        return $this->handleOAI('VuFind\OAI\Server');
+        return $this->handleOAI(\VuFind\OAI\Server::class);
     }
 
     /**
@@ -78,7 +78,7 @@ class OaiController extends AbstractBase
      *
      * @param string $serverClass Class to load for handling OAI requests.
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     protected function handleOAI($serverClass)
     {
@@ -103,8 +103,8 @@ class OaiController extends AbstractBase
             );
             $server = $this->serviceLocator->get($serverClass);
             $server->init($config, $baseURL, $params);
-            $server->setRecordLinkHelper(
-                $this->getViewRenderer()->plugin('recordLink')
+            $server->setRecordLinkerHelper(
+                $this->getViewRenderer()->plugin('recordLinker')
             );
             $server->setRecordFormatter(
                 $this->serviceLocator->get(RecordFormatter::class)

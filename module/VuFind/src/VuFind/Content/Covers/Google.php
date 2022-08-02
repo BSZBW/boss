@@ -54,7 +54,7 @@ class Google extends \VuFind\Content\AbstractCover
      *
      * @param string $url URL for client to use
      *
-     * @return \Zend\Http\Client
+     * @return \Laminas\Http\Client
      */
     protected function getHttpClient($url = null)
     {
@@ -94,7 +94,8 @@ class Google extends \VuFind\Content\AbstractCover
         ) {
             // convert \x26 or \u0026 to &
             $json = json_decode(
-                str_replace(['\\x26', '\\u0026'], '&', $matches[1]), true
+                str_replace(['\\x26', '\\u0026'], '&', $matches[1]),
+                true
             );
 
             // find the first thumbnail URL and process it:

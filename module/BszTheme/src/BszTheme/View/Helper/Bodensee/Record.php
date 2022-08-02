@@ -21,7 +21,7 @@
  */
 namespace BszTheme\View\Helper\Bodensee;
 
-use Zend\Config\Config;
+use Laminas\Config\Config;
 
 /**
  * Record driver view helper

@@ -27,14 +27,15 @@
  */
 namespace VuFind\Controller\Plugin;
 
+use Laminas\Mvc\Controller\Plugin\AbstractPlugin;
+use Laminas\Session\Container;
+use Laminas\Session\SessionManager;
 use VuFind\Crypt\HMAC;
+use VuFind\Date\Converter as DateConverter;
 use VuFind\ILS\Connection;
-use Zend\Mvc\Controller\Plugin\AbstractPlugin;
-use Zend\Session\Container;
-use Zend\Session\SessionManager;
 
 /**
- * Zend action helper base class to perform request-related actions
+ * Action helper base class to perform request-related actions
  *
  * @category VuFind
  * @package  Controller_Plugins
@@ -66,15 +67,27 @@ abstract class AbstractRequestBase extends AbstractPlugin
     protected $hmac;
 
     /**
+     * Date converter
+     *
+     * @var DateConverter
+     */
+    protected $dateConverter;
+
+    /**
      * Constructor
      *
      * @param HMAC           $hmac           HMAC generator
      * @param SessionManager $sessionManager Session manager
+     * @param DateConverter  $dateConverter  Date converter
      */
-    public function __construct(HMAC $hmac, SessionManager $sessionManager)
-    {
+    public function __construct(
+        HMAC $hmac,
+        SessionManager $sessionManager,
+        DateConverter $dateConverter
+    ) {
         $this->hmac = $hmac;
         $this->sessionManager = $sessionManager;
+        $this->dateConverter = $dateConverter;
     }
 
     /**
@@ -87,7 +100,8 @@ abstract class AbstractRequestBase extends AbstractPlugin
     {
         if (!isset($this->session)) {
             $this->session = new Container(
-                get_class($this) . '_Helper', $this->sessionManager
+                get_class($this) . '_Helper',
+                $this->sessionManager
             );
         }
         return $this->session;
@@ -114,10 +128,21 @@ abstract class AbstractRequestBase extends AbstractPlugin
     public function rememberValidId($id)
     {
         // The session container doesn't allow modification of entries (as of
-        // ZF2beta5 anyway), so we have to do this in a roundabout way.
+        // 2012, anyway), so we have to do this in a roundabout way.
+        // TODO: investigate whether this limitation has been lifted.
         $existingArray = $this->getSession()->validIds;
         $existingArray[] = $id;
         $this->getSession()->validIds = $existingArray;
+    }
+
+    /**
+     * Get remembered valid IDs
+     *
+     * @return array
+     */
+    public function getValidIds(): array
+    {
+        return $this->getSession()->validIds ?? [];
     }
 
     /**
@@ -215,7 +240,9 @@ abstract class AbstractRequestBase extends AbstractPlugin
      * @return bool
      */
     public function validateRequestGroupInput(
-        $gatheredDetails, $extraHoldFields, $requestGroups
+        $gatheredDetails,
+        $extraHoldFields,
+        $requestGroups
     ) {
         // Not having to care for requestGroup is equivalent to having a valid one.
         if (!in_array('requestGroup', $extraHoldFields)) {
@@ -227,9 +254,10 @@ abstract class AbstractRequestBase extends AbstractPlugin
             return true;
         }
 
-        // Check the valid pickup locations for a match against user input:
+        // Check the valid request groups for a match against user input:
         return $this->validateRequestGroup(
-            $gatheredDetails['requestGroupId'], $requestGroups
+            $gatheredDetails['requestGroupId'],
+            $requestGroups
         );
     }
 
@@ -264,8 +292,11 @@ abstract class AbstractRequestBase extends AbstractPlugin
      *
      * @return int A timestamp representing the default required date
      */
-    public function getDefaultRequiredDate($checkHolds, $catalog = null,
-        $patron = null, $holdInfo = null
+    public function getDefaultRequiredDate(
+        $checkHolds,
+        $catalog = null,
+        $patron = null,
+        $holdInfo = null
     ) {
         // Load config:
         $dateArray = isset($checkHolds['defaultRequiredDate'])
@@ -287,7 +318,8 @@ abstract class AbstractRequestBase extends AbstractPlugin
         // If the driver setting is active, try it out:
         if ($useDriver && $catalog) {
             $check = $catalog->checkCapability(
-                'getHoldDefaultRequiredDate', [$patron, $holdInfo]
+                'getHoldDefaultRequiredDate',
+                [$patron, $holdInfo]
             );
             if ($check) {
                 $result = $catalog->getHoldDefaultRequiredDate($patron, $holdInfo);
@@ -312,9 +344,14 @@ abstract class AbstractRequestBase extends AbstractPlugin
      */
     protected function getDateFromArray($dateArray)
     {
-        list($d, $m, $y) = $dateArray;
+        [$d, $m, $y] = $dateArray;
         return mktime(
-            0, 0, 0, date('m') + $m, date('d') + $d, date('Y') + $y
+            0,
+            0,
+            0,
+            date('m') + $m,
+            date('d') + $d,
+            date('Y') + $y
         );
     }
 }

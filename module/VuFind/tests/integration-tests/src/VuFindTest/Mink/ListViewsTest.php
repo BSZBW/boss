@@ -32,6 +32,8 @@ use Behat\Mink\Element\Element;
 /**
  * List views (i.e. tabs/accordion) test class.
  *
+ * Class must be final due to use of "new static()" by LiveDatabaseTrait.
+ *
  * @category VuFind
  * @package  Tests
  * @author   Demian Katz <demian.katz@villanova.edu>
@@ -39,19 +41,19 @@ use Behat\Mink\Element\Element;
  * @link     http://www.vufind.org  Main Page
  * @retry    4
  */
-class ListViewsTest extends \VuFindTest\Unit\MinkTestCase
+final class ListViewsTest extends \VuFindTest\Integration\MinkTestCase
 {
-    use \VuFindTest\Unit\AutoRetryTrait;
-    use \VuFindTest\Unit\UserCreationTrait;
+    use \VuFindTest\Feature\LiveDatabaseTrait;
+    use \VuFindTest\Feature\UserCreationTrait;
 
     /**
      * Standard setup method.
      *
-     * @return mixed
+     * @return void
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
-        return static::failIfUsersExist();
+        static::failIfUsersExist();
     }
 
     /**
@@ -59,11 +61,12 @@ class ListViewsTest extends \VuFindTest\Unit\MinkTestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         // Give up if we're not running in CI:
         if (!$this->continuousIntegrationRunning()) {
-            return $this->markTestSkipped('Continuous integration not running.');
+            $this->markTestSkipped('Continuous integration not running.');
+            return;
         }
     }
 
@@ -135,6 +138,8 @@ class ListViewsTest extends \VuFindTest\Unit\MinkTestCase
 
     /**
      * Test that we can save a favorite from accordion mode.
+     *
+     * @depends testFavoritesInTabMode
      *
      * @return void
      */
@@ -245,7 +250,7 @@ class ListViewsTest extends \VuFindTest\Unit\MinkTestCase
      *
      * @return void
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         static::removeUsers(['username1']);
     }

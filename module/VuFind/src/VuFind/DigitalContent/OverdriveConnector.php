@@ -29,15 +29,16 @@
 namespace VuFind\DigitalContent;
 
 use Exception;
+use Laminas\Cache\Storage\StorageInterface;
+use Laminas\Config\Config;
+use Laminas\Http\Client;
+use Laminas\Log\LoggerAwareInterface;
+use Laminas\Session\Container;
+use LmcRbacMvc\Service\AuthorizationServiceAwareInterface;
+use LmcRbacMvc\Service\AuthorizationServiceAwareTrait;
 use VuFind\Auth\ILSAuthenticator;
 use VuFind\Cache\KeyGeneratorTrait;
-use Zend\Cache\Storage\StorageInterface;
-use Zend\Config\Config;
-use Zend\Http\Client;
-use Zend\Log\LoggerAwareInterface;
-use Zend\Session\Container;
-use ZfcRbac\Service\AuthorizationServiceAwareInterface;
-use ZfcRbac\Service\AuthorizationServiceAwareTrait;
+use VuFind\Exception\ILS as ILSException;
 
 /**
  * OverdriveConnector
@@ -139,7 +140,7 @@ class OverdriveConnector implements LoggerAwareInterface,
     /**
      * Loads the session container
      *
-     * @return \Zend\Session\Container
+     * @return \Laminas\Session\Container
      */
     protected function getSessionContainer()
     {
@@ -188,29 +189,30 @@ class OverdriveConnector implements LoggerAwareInterface,
         if ($refresh || empty($odAccess)) {
             if ($this->connectToPatronAPI(
                 $user["cat_username"],
-                $user["cat_password"], true
+                $user["cat_password"],
+                true
             )
             ) {
-                $this->getSessionContainer()->odAccess
+                $result = $this->getSessionContainer()->odAccess
                     = $this->getResultObject(true);
             } else {
                 $result = $this->getResultObject();
-                //there is some problem with the account
+                // there is some problem with the account
                 $result->code = "od_account_problem";
                 $conf = $this->getConfig();
 
                 if ($conf->noAccessString) {
                     if (strpos(
                         $this->getSessionContainer()->odAccessMessage,
-                        $conf->noAccessString
+                        (string)$conf->noAccessString
                     ) !== false
                     ) {
-                        //this user should not have access to OD
+                        // this user should not have access to OD
                         $result->code = "od_account_noaccess";
                     }
                 }
-                //odAccessMessage is set in the session by the API call above
-                //maybe it should be saved to a class property instead
+                // odAccessMessage is set in the session by the API call above
+                // maybe it should be saved to a class property instead
                 $result->msg = $this->getSessionContainer()->odAccessMessage;
                 $this->getSessionContainer()->odAccess = $result;
             }
@@ -243,8 +245,8 @@ class OverdriveConnector implements LoggerAwareInterface,
 
         if ($conf = $this->getConfig()) {
             $collectionToken = $this->getCollectionToken();
-            //hmm. no token.  if user is logged in let's check access
-            if (!$collectionToken && $user = $this->getUser()) {
+            // hmm. no token.  if user is logged in let's check access
+            if (!$collectionToken && $this->getUser()) {
                 $accessResult = $this->getAccess();
                 if (!$accessResult->status) {
                     return $accessResult;
@@ -258,9 +260,9 @@ class OverdriveConnector implements LoggerAwareInterface,
 
             if ($res->errorCode == "NotFound") {
                 if ($conf->consortiumSupport && !$this->getUser()) {
-                    //consortium support is turned on but user is not logged in;
-                    //if the title is not found it probably means that it's only
-                    //available to some users.
+                    // consortium support is turned on but user is not logged in;
+                    // if the title is not found it probably means that it's only
+                    // available to some users.
                     $result->status = true;
                     $result->code = 'od_code_login_for_avail';
                 } else {
@@ -303,8 +305,8 @@ class OverdriveConnector implements LoggerAwareInterface,
                 $loginRequired = true;
             }
             $collectionToken = $this->getCollectionToken();
-            //hmm. no token.  if user is logged in let's check access
-            if (!$collectionToken && $user = $this->getUser()) {
+            // hmm. no token.  if user is logged in let's check access
+            if (!$collectionToken && $this->getUser()) {
                 $accessResult = $this->getAccess();
                 if (!$accessResult->status) {
                     return $accessResult;
@@ -321,10 +323,10 @@ class OverdriveConnector implements LoggerAwareInterface,
             } else {
                 if ($res->errorCode == "NotFound" || $res->totalItems == 0) {
                     if ($loginRequired) {
-                        //consortium support is turned on but user is
-                        //not logged in
-                        //if the title is not found it could mean that it's only
-                        //available to some users.
+                        // consortium support is turned on but user is
+                        // not logged in
+                        // if the title is not found it could mean that it's only
+                        // available to some users.
                         $result->status = true;
                         $result->code = 'od_code_login_for_avail';
                     } else {
@@ -337,7 +339,7 @@ class OverdriveConnector implements LoggerAwareInterface,
                         $this->debug("item:" . print_r($item, true));
                         $result->data[strtolower($item->reserveId)] = $item;
                     }
-                    //now look for items not returned
+                    // now look for items not returned
                     foreach ($overDriveIds as $id) {
                         if (!isset($result->data[$id])) {
                             if ($loginRequired) {
@@ -384,7 +386,8 @@ class OverdriveConnector implements LoggerAwareInterface,
                 $patronURL = "$baseUrl/v1/patrons/me";
                 $res = $this->callPatronUrl(
                     $user["cat_username"],
-                    $user["cat_password"], $patronURL
+                    $user["cat_password"],
+                    $patronURL
                 );
                 if ($res) {
                     $userCollectionToken = $res->collectionToken;
@@ -437,7 +440,10 @@ class OverdriveConnector implements LoggerAwareInterface,
 
             $response = $this->callPatronUrl(
                 $user["cat_username"],
-                $user["cat_password"], $url, $params, "POST"
+                $user["cat_password"],
+                $url,
+                $params,
+                "POST"
             );
 
             if (!empty($response)) {
@@ -451,7 +457,7 @@ class OverdriveConnector implements LoggerAwareInterface,
                     $result->status = true;
                     $result->data->expires = $expires;
                     $result->data->formats = $response->formats;
-                    //add the checkout to the session cache
+                    // add the checkout to the session cache
                     $this->getSessionContainer()->checkouts[] = $response;
                 } else {
                     $result->msg = $response->message;
@@ -526,7 +532,6 @@ class OverdriveConnector implements LoggerAwareInterface,
     {
         $holdResult = $this->getResultObject();
         $this->debug("OverdriveConnector: cancelHold");
-        //$this->debug(print_r($user,true));
         if (!$user = $this->getUser()) {
             $this->error("user is not logged in", false, true);
             return $holdResult;
@@ -534,11 +539,14 @@ class OverdriveConnector implements LoggerAwareInterface,
         if ($config = $this->getConfig()) {
             $url = $config->circURL . "/v1/patrons/me/holds/$overDriveId";
             $response = $this->callPatronUrl(
-                $user["cat_username"], $user["cat_password"], $url, null,
+                $user["cat_username"],
+                $user["cat_password"],
+                $url,
+                null,
                 "DELETE"
             );
 
-            //because this is a DELETE Call, we are just looking for a boolean
+            // because this is a DELETE Call, we are just looking for a boolean
             if ($response) {
                 $holdResult->status = true;
             } else {
@@ -559,7 +567,6 @@ class OverdriveConnector implements LoggerAwareInterface,
     public function returnResource($resourceID)
     {
         $result = $this->getResultObject();
-        //$this->debug(print_r($user,true));
         if (!$user = $this->getUser()) {
             $this->error("user is not logged in", false, true);
             return $result;
@@ -568,10 +575,13 @@ class OverdriveConnector implements LoggerAwareInterface,
             $url = $config->circURL . "/v1/patrons/me/checkouts/$resourceID";
             $response = $this->callPatronUrl(
                 $user["cat_username"],
-                $user["cat_password"], $url, null, "DELETE"
+                $user["cat_password"],
+                $url,
+                null,
+                "DELETE"
             );
 
-            //because this is a DELETE Call, we are just looking for a boolean
+            // because this is a DELETE Call, we are just looking for a boolean
             if ($response) {
                 $result->status = true;
             } else {
@@ -596,23 +606,22 @@ class OverdriveConnector implements LoggerAwareInterface,
         $this->debug("getDownloadLink: id: $overDriveId, $format");
         $result = $this->getResultObject();
         $downloadLink = false;
-        //$this->debug(print_r($user,true));
         if (!$user = $this->getUser()) {
             $this->error("user is not logged in", false, true);
             return $result;
         }
         $checkout = $this->getCheckout($overDriveId, false);
 
-        //either they are requesting a format that is always avail
-        //or it is locked in and they are requesting the format that
-        //is already locked in.
+        // either they are requesting a format that is always avail
+        // or it is locked in and they are requesting the format that
+        // is already locked in.
         if ($template = $this->getLinkTemplate($checkout, $format)) {
             $this->debug("template: " . print_r($template, true));
             $downloadLink = $template->downloadLinkV2->href;
             $this->debug("found the link: $downloadLink");
         } elseif (!$checkout->isFormatLockedIn) {
-            //if we get this far, and the checkout is not locked in, then we should
-            //lock it in and try again
+            // if we get this far, and the checkout is not locked in, then we should
+            // lock it in and try again
 
             $lockinResult = $this->lockinResource($overDriveId, $format);
             if ($lockinResult->status) {
@@ -623,9 +632,9 @@ class OverdriveConnector implements LoggerAwareInterface,
                 $result->msg = $lockinResult->msg;
             }
         } else {
-            //the checkout is locked in but we didn't find the template
-            //for this format, means that they are requesting the wrong
-            //format for the locked-in resource.
+            // the checkout is locked in but we didn't find the template
+            // for this format, means that they are requesting the wrong
+            // format for the locked-in resource.
             $result->msg
                 = "The title appears to be already locked in for a different format";
             $result->status = false;
@@ -641,7 +650,10 @@ class OverdriveConnector implements LoggerAwareInterface,
             $this->debug("getting download link using: $url");
             $response = $this->callPatronUrl(
                 $user["cat_username"],
-                $user["cat_password"], $url, null, "GET"
+                $user["cat_password"],
+                $url,
+                null,
+                "GET"
             );
 
             if (!empty($response)) {
@@ -699,7 +711,7 @@ class OverdriveConnector implements LoggerAwareInterface,
             $this->error("user is not logged in", false, true);
             return $result;
         }
-        //shouldn't need to refresh.  This should be in the cache if it exists
+        // shouldn't need to refresh.  This should be in the cache if it exists
         $checkout = $this->getCheckout($overDriveId, false);
         if (!$checkout) {
             $result->msg
@@ -708,9 +720,8 @@ class OverdriveConnector implements LoggerAwareInterface,
             $this->debug("title not checked out.");
             return $result;
         }
-        //doublecheck this format is an option.
+        // doublecheck this format is an option.
         $availableFormats = [];
-        //$params = array();
         foreach ($checkout->actions->format->fields as $field) {
             if ($field->name == 'formatType') {
                 $availableFormats = $field->options;
@@ -733,7 +744,10 @@ class OverdriveConnector implements LoggerAwareInterface,
                 . "/v1/patrons/me/checkouts/$overDriveId/formats";
             $response = $this->callPatronUrl(
                 $user["cat_username"],
-                $user["cat_password"], $url, $params, "POST"
+                $user["cat_password"],
+                $url,
+                $params,
+                "POST"
             );
 
             if (!empty($response)) {
@@ -849,7 +863,8 @@ class OverdriveConnector implements LoggerAwareInterface,
             $baseUrl = $conf->discURL;
             $metadataUrl = "$baseUrl/v1/collections/$productsKey/";
             $metadataUrl .= "bulkmetadata?reserveIds=" . implode(
-                ",", $overDriveIds
+                ",",
+                $overDriveIds
             );
             $res = $this->callUrl($metadataUrl);
             $md = $res->metadata;
@@ -933,9 +948,8 @@ class OverdriveConnector implements LoggerAwareInterface,
      */
     public function getCheckouts($refresh = true)
     {
-        //the checkouts are cached in the session, but we can force a refresh
+        // the checkouts are cached in the session, but we can force a refresh
         $this->debug("get Overdrive Checkouts");
-        // $this->debug(print_r($user,true));
         $result = $this->getResultObject();
 
         if (!$user = $this->getUser()) {
@@ -950,13 +964,15 @@ class OverdriveConnector implements LoggerAwareInterface,
 
                 $response = $this->callPatronUrl(
                     $user["cat_username"],
-                    $user["cat_password"], $url, false
+                    $user["cat_password"],
+                    $url,
+                    false
                 );
                 if (!empty($response)) {
                     $result->status = true;
                     $result->message = '';
                     $result->data = $response->checkouts;
-                    //Convert dates to desired format
+                    // Convert dates to desired format
                     foreach ($response->checkouts as $key => $checkout) {
                         $coExpires = new \DateTime($checkout->expires);
                         $result->data[$key]->expires = $coExpires->format(
@@ -971,7 +987,6 @@ class OverdriveConnector implements LoggerAwareInterface,
                 } else {
                     $accessResult = $this->getAccess();
                     return $accessResult;
-                    //$result->code = 'od_code_connection_failed';
                 }
             }
         } else {
@@ -1007,7 +1022,8 @@ class OverdriveConnector implements LoggerAwareInterface,
 
                 $response = $this->callPatronUrl(
                     $user["cat_username"],
-                    $user["cat_password"], $url
+                    $user["cat_password"],
+                    $url
                 );
 
                 $result->status = false;
@@ -1017,13 +1033,13 @@ class OverdriveConnector implements LoggerAwareInterface,
                     $result->status = true;
                     $result->message = 'hold_place_success_html';
                     $result->data = $response->holds;
-                    //Check for holds ready for chechout
+                    // Check for holds ready for chechout
                     foreach ($response->holds as $key => $hold) {
                         if (!$hold->autoCheckout
                             && $hold->holdListPosition == 1
                         ) {
                             $result->data[$key]->holdReadyForCheckout = true;
-                            //format the expires date.
+                            // format the expires date.
                             $holdExpires = new \DateTime($hold->holdExpires);
                             $result->data[$key]->holdExpires
                                 = $holdExpires->format(
@@ -1064,7 +1080,10 @@ class OverdriveConnector implements LoggerAwareInterface,
      *  HTTP level then the error is logged and false is returned.
      */
     protected function callUrl(
-        $url, $headers = null, $checkToken = true, $requestType = "GET"
+        $url,
+        $headers = null,
+        $checkToken = true,
+        $requestType = "GET"
     ) {
         $this->debug("chktoken: $checkToken");
         if (!$checkToken || $this->connectToAPI()) {
@@ -1088,7 +1107,7 @@ class OverdriveConnector implements LoggerAwareInterface,
             $client->setMethod($requestType);
             $client->setUri($url);
             try {
-                //throw new Exception('testException');
+                // throw new Exception('testException');
                 $response = $client->send();
             } catch (Exception $ex) {
                 $this->error(
@@ -1115,7 +1134,7 @@ class OverdriveConnector implements LoggerAwareInterface,
             );
             if ($returnVal != null) {
                 if (isset($returnVal->errorCode)) {
-                    //In some cases, this should be returned perhaps...
+                    // In some cases, this should be returned perhaps...
                     $this->error("Overdrive Error: " . $returnVal->errorCode);
                     return $returnVal;
                 } else {
@@ -1185,12 +1204,13 @@ class OverdriveConnector implements LoggerAwareInterface,
             $tokenData = json_decode($body);
             $this->debug(
                 "TokenData returned from OD API Call: " . print_r(
-                    $tokenData, true
+                    $tokenData,
+                    true
                 )
             );
             if ($tokenData != null) {
                 if (isset($tokenData->errorCode)) {
-                    //In some cases, this should be returned perhaps...
+                    // In some cases, this should be returned perhaps...
                     $this->error("Overdrive Error: " . $tokenData->errorCode);
                     return false;
                 } else {
@@ -1228,7 +1248,11 @@ class OverdriveConnector implements LoggerAwareInterface,
      *  HTTP level then the error is logged and false is returned.
      */
     protected function callPatronUrl(
-        $patronBarcode, $patronPin, $url, $params = null, $requestType = "GET"
+        $patronBarcode,
+        $patronPin,
+        $url,
+        $params = null,
+        $requestType = "GET"
     ) {
         $this->debug("calling patronURL: $url");
         if ($this->connectToPatronAPI($patronBarcode, $patronPin, false)) {
@@ -1261,8 +1285,8 @@ class OverdriveConnector implements LoggerAwareInterface,
                 }
                 $postData = json_encode($jsonData);
                 $client->setRawBody($postData);
+                $this->debug("patronURL data sent: $postData");
             }
-            $this->debug("patronURL data sent: $postData");
             $this->debug("patronURL method: " . $client->getMethod());
             $this->debug("client: " . $client->getRequest());
             try {
@@ -1276,8 +1300,8 @@ class OverdriveConnector implements LoggerAwareInterface,
             }
             $body = $response->getBody();
 
-            //if all goes well for DELETE, the code will be 204
-            //and response is empty.
+            // if all goes well for DELETE, the code will be 204
+            // and response is empty.
             if ($requestType == "DELETE") {
                 if ($response->getStatusCode() == 204) {
                     $this->debug("DELETE Patron call appears to have worked.");
@@ -1383,13 +1407,14 @@ class OverdriveConnector implements LoggerAwareInterface,
                 $this->debug(
                     "problem with OD patron API token Call: " .
                     print_r(
-                        $patronTokenData, true
+                        $patronTokenData,
+                        true
                     )
                 );
-                //if we have an unauthorized error, then we are going
-                //to cache that in the session so we don't keep making
-                //unnecessary calls, otherwise, just don't store the tokenData
-                //object so that it gets checked again next time
+                // if we have an unauthorized error, then we are going
+                // to cache that in the session so we don't keep making
+                // unnecessary calls, otherwise, just don't store the tokenData
+                // object so that it gets checked again next time
                 if ($patronTokenData->error == 'unauthorized_client') {
                     $this->getSessionContainer()->odAccessMessage
                         = $patronTokenData->error_description;
@@ -1413,7 +1438,7 @@ class OverdriveConnector implements LoggerAwareInterface,
      *
      * @param string $url URL for client to use
      *
-     * @return \Zend\Http\Client
+     * @return \Laminas\Http\Client
      * @throws Exception
      */
     protected function getHttpClient($url = null)
@@ -1423,7 +1448,7 @@ class OverdriveConnector implements LoggerAwareInterface,
         }
         if (!$this->client) {
             $this->client = $this->httpService->createClient($url);
-            //set keep alive to true since we are sending to the same server
+            // set keep alive to true since we are sending to the same server
             $this->client->setOptions(['keepalive', true]);
         }
         $this->client->resetParameters();

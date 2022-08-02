@@ -27,8 +27,8 @@ namespace Bsz\Config;
 
 use Bsz\LibrariesTable;
 use Interop\Container\ContainerInterface;
-use Zend\Db\ResultSet\ResultSet;
-use Zend\Session\Container;
+use Laminas\Db\ResultSet\ResultSet;
+use Laminas\Session\Container;
 
 /**
  * Description of Factory

@@ -80,13 +80,14 @@ class SimilarBuilder implements SimilarBuilderInterface
     /**
      * Constructor.
      *
-     * @param \Zend\Config\Config $searchConfig Search config
-     * @param string              $uniqueKey    Solr field used to store unique
+     * @param \Laminas\Config\Config $searchConfig Search config
+     * @param string                 $uniqueKey    Solr field used to store unique
      * identifier
      *
      * @return void
      */
-    public function __construct(\Zend\Config\Config $searchConfig = null,
+    public function __construct(
+        \Laminas\Config\Config $searchConfig = null,
         $uniqueKey = 'id'
     ) {
         $this->uniqueKey = $uniqueKey;
@@ -96,7 +97,7 @@ class SimilarBuilder implements SimilarBuilderInterface
                 && $mlt->useMoreLikeThisHandler
             ) {
                 $this->useHandler = true;
-                $this->handlerParams = isset($mlt->params) ? $mlt->params : '';
+                $this->handlerParams = $mlt->params ?? '';
             }
             if (isset($mlt->count)) {
                 $this->count = $mlt->count;
@@ -124,7 +125,8 @@ class SimilarBuilder implements SimilarBuilderInterface
             $params->set('q', sprintf('{!mlt %s}%s', $mltParams, $id));
         } else {
             $params->set(
-                'q', sprintf('%s:"%s"', $this->uniqueKey, addcslashes($id, '"'))
+                'q',
+                sprintf('%s:"%s"', $this->uniqueKey, addcslashes($id, '"'))
             );
             $params->set('qt', 'morelikethis');
         }

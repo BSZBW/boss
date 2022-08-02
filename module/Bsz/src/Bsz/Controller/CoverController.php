@@ -27,7 +27,7 @@ class CoverController extends \VuFind\Controller\CoverController
     /**
      * SDistinguish between show image (VuFind standard)
      * and show base64 encoded image
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function showAction()
     {
@@ -66,7 +66,7 @@ class CoverController extends \VuFind\Controller\CoverController
      * @param string $type  Content type of image (null to access loader)
      * @param string $image Image data (null to access loader)
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     protected function getBase64($type = null, $image = null)
     {

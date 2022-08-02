@@ -52,14 +52,16 @@ class CartTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->loader = $this->getMockBuilder(\VuFind\Record\Loader::class)
-            ->setMethods([])
-            ->setConstructorArgs([
+            ->onlyMethods(['loadBatch'])
+            ->setConstructorArgs(
+                [
                 $this->createMock(\VuFindSearch\Service::class),
                 $this->createMock(\VuFind\RecordDriver\PluginManager::class)
-            ])->getMock();
+                ]
+            )->getMock();
     }
 
     /**
@@ -72,11 +74,15 @@ class CartTest extends \PHPUnit\Framework\TestCase
      *
      * @return CookieManager
      */
-    protected function getMockCookieManager($cookies = [], $path = '/',
-        $domain = null, $secure = false, $httpOnly = false
+    protected function getMockCookieManager(
+        $cookies = [],
+        $path = '/',
+        $domain = null,
+        $secure = false,
+        $httpOnly = false
     ) {
         return $this->getMockBuilder(\VuFind\Cookie\CookieManager::class)
-            ->setMethods(['set'])
+            ->onlyMethods(['set'])
             ->setConstructorArgs([$cookies, $path, $domain, $secure, $httpOnly])
             ->getMock();
     }
@@ -148,7 +154,8 @@ class CartTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['success' => true], $cart->addItem('Solr|b'));
         $this->assertTrue($cart->isFull());
         $this->assertEquals(
-            ['success' => false, 'notAdded' => 1], $cart->addItem('Solr|c')
+            ['success' => false, 'notAdded' => 1],
+            $cart->addItem('Solr|c')
         );
     }
 
@@ -182,12 +189,9 @@ class CartTest extends \PHPUnit\Framework\TestCase
     public function testCookieWrite()
     {
         $manager = $this->getMockCookieManager();
-        $manager->expects($this->at(0))
+        $manager->expects($this->exactly(2))
             ->method('set')
-            ->with($this->equalTo('vufind_cart'), $this->equalTo('Aa'));
-        $manager->expects($this->at(1))
-            ->method('set')
-            ->with($this->equalTo('vufind_cart_src'), $this->equalTo('Solr'));
+            ->withConsecutive(['vufind_cart', 'Aa'], ['vufind_cart_src', 'Solr']);
         $cart = $this->getCart(100, true, $manager);
         $cart->addItem('Solr|a');
     }

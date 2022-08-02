@@ -27,7 +27,7 @@
  */
 namespace VuFind\Resolver\Driver;
 
-use Zend\ServiceManager\Factory\InvokableFactory;
+use Laminas\ServiceManager\Factory\InvokableFactory;
 
 /**
  * Resolver driver plugin manager
@@ -66,7 +66,7 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
         Alma::class => DriverWithHttpClientFactory::class,
         Threesixtylink::class => DriverWithHttpClientFactory::class,
         Demo::class => InvokableFactory::class,
-        Ezb::class => DriverWithHttpClientFactory::class,
+        Ezb::class => EzbFactory::class,
         Sfx::class => DriverWithHttpClientFactory::class,
         Redi::class => DriverWithHttpClientFactory::class,
         Generic::class => AbstractBaseFactory::class,
@@ -81,7 +81,8 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
      * @param array $v3config                  If $configOrContainerInstance is a
      * container, this value will be passed to the parent constructor.
      */
-    public function __construct($configOrContainerInstance = null,
+    public function __construct(
+        $configOrContainerInstance = null,
         array $v3config = []
     ) {
         $this->addAbstractFactory(PluginFactory::class);

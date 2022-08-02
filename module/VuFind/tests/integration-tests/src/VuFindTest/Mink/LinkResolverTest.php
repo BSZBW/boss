@@ -39,20 +39,19 @@ use Behat\Mink\Element\Element;
  * @link     https://vufind.org Main Page
  * @retry    4
  */
-class LinkResolverTest extends \VuFindTest\Unit\MinkTestCase
+class LinkResolverTest extends \VuFindTest\Integration\MinkTestCase
 {
-    use \VuFindTest\Unit\AutoRetryTrait;
-
     /**
      * Standard setup method.
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         // Give up if we're not running in CI:
         if (!$this->continuousIntegrationRunning()) {
-            return $this->markTestSkipped('Continuous integration not running.');
+            $this->markTestSkipped('Continuous integration not running.');
+            return;
         }
     }
 
@@ -137,7 +136,8 @@ class LinkResolverTest extends \VuFindTest\Unit\MinkTestCase
         $print = $this->findCss($page, 'a.access-unknown');
         $this->assertEquals('Print', $print->getText());
         $this->assertEquals(
-            'Print fake1 General notes', $print->getParent()->getText()
+            'Print fake1 General notes',
+            $print->getParent()->getText()
         );
         $this->assertEquals(
             'https://vufind.org/wiki?' . $openUrl . '#print',

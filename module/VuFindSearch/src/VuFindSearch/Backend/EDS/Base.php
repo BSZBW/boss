@@ -82,6 +82,13 @@ abstract class Base
     protected $contentType = 'application/json';
 
     /**
+     * Search HTTP method
+     *
+     * @var string
+     */
+    protected $searchHttpMethod = 'POST';
+
+    /**
      * Constructor
      *
      * Sets up the EDS API Client
@@ -91,7 +98,7 @@ abstract class Base
      *    <ul>
      *      <li>debug - boolean to control debug mode</li>
      *      <li>orgid - Organization making calls to the EDS API </li>
-     *      <li>profile - EBSCO profile to use for calls to the API. </li>
+     *      <li>search_http_method - HTTP method for search API calls</li>
      *    </ul>
      */
     public function __construct($settings = [])
@@ -99,12 +106,20 @@ abstract class Base
         if (is_array($settings)) {
             foreach ($settings as $key => $value) {
                 switch ($key) {
+                case 'api_url':
+                    $this->edsApiHost = $value;
+                    break;
+                case 'auth_url':
+                    $this->authHost = $value;
+                    break;
                 case 'debug':
                     $this->debug = $value;
                     break;
                 case 'orgid':
                     $this->orgId = $value;
                     break;
+                case 'search_http_method':
+                    $this->searchHttpMethod = $value;
                 }
             }
         }
@@ -149,7 +164,9 @@ abstract class Base
      *
      * @return array
      */
-    public function createSession($profile = null, $isGuest = null,
+    public function createSession(
+        $profile = null,
+        $isGuest = null,
         $authToken = null
     ) {
         $this->debugPrint(
@@ -173,16 +190,22 @@ abstract class Base
      * @param string $sessionToken        Session token
      * @param string $highlightTerms      Comma separated list of terms to highlight
      * in the retrieved record responses
+     * @param array  $extraQueryParams    Extra query string parameters
      *
      * @return array    The requested record
      */
-    public function retrieve($an, $dbId, $authenticationToken, $sessionToken,
-        $highlightTerms = null
+    public function retrieve(
+        $an,
+        $dbId,
+        $authenticationToken,
+        $sessionToken,
+        $highlightTerms = null,
+        $extraQueryParams = []
     ) {
         $this->debugPrint(
             "Get Record. an: $an, dbid: $dbId, $highlightTerms: $highlightTerms"
         );
-        $qs = ['an' => $an, 'dbid' => $dbId];
+        $qs = $extraQueryParams + ['an' => $an, 'dbid' => $dbId];
         if (null != $highlightTerms) {
             $qs['highlightterms'] = $highlightTerms;
         }
@@ -203,11 +226,15 @@ abstract class Base
     public function search($query, $authenticationToken, $sessionToken)
     {
         // Query String Parameters
-        $qs = $query->convertToQueryStringParameterArray();
-        $this->debugPrint('Query: ' . print_r($qs, true));
+        $method = $this->searchHttpMethod;
+        $json = $method === 'GET' ? null : $query->convertToSearchRequestJSON();
+        $qs = $method === 'GET' ? $query->convertToQueryStringParameterArray() : [];
+        $this->debugPrint(
+            'Query: ' . ($method === 'GET' ? print_r($qs, true) : $json)
+        );
         $url = $this->edsApiHost . '/search';
         $headers = $this->setTokens($authenticationToken, $sessionToken);
-        return $this->call($url, $headers, $qs);
+        return $this->call($url, $headers, $qs, $method, $json);
     }
 
     /**
@@ -242,11 +269,19 @@ abstract class Base
      */
     public function autocomplete($query, $type, $data, $raw = false)
     {
-        // build request
-        $url = $data['url'] . '?idx=' . urlencode($type) .
-            '&token=' . urlencode($data['token']) .
-            '&filters=[{"name"%3A"custid"%2C"values"%3A["' .
-            urlencode($data['custid']) . '"]}]&term=' . urlencode($query);
+        // $filters is an array of filter objects
+        // filter objects consist of name and an array of values (customer ids)
+        $filters = [['name' => 'custid', 'values' => [$data['custid']]]];
+
+        $params = [
+            'idx' => $type,
+            'token' => $data['token'],
+            'filters' => json_encode($filters),
+            'term' => $query,
+        ];
+
+        $url = $data['url'] . '?' . http_build_query($params);
+
         $this->debugPrint("Autocomplete URL: " . $url);
         $response = $this->call($url, null, null, 'GET', null);
         return $raw ? $response : $this->parseAutocomplete($response);
@@ -262,8 +297,11 @@ abstract class Base
      *
      * @return array
      */
-    public function authenticate($username = null, $password = null,
-        $orgid = null, $params = null
+    public function authenticate(
+        $username = null,
+        $password = null,
+        $orgid = null,
+        $params = null
     ) {
         $this->debugPrint(
             "Authenticating: username: $username, password: XXXXXXX, orgid: $orgid"
@@ -337,8 +375,13 @@ abstract class Base
      * @throws ApiException
      * @return object         EDS API response (or an Error object).
      */
-    protected function call($baseUrl, $headerParams, $params = [],
-        $method = 'GET', $message = null, $messageFormat = ""
+    protected function call(
+        $baseUrl,
+        $headerParams,
+        $params = [],
+        $method = 'GET',
+        $message = null,
+        $messageFormat = ""
     ) {
         // Build Query String Parameters
         $queryParameters = $this->createQSFromArray($params);
@@ -359,7 +402,12 @@ abstract class Base
             }
         }
         $response = $this->httpRequest(
-            $baseUrl, $method, $queryString, $headers, $message, $messageFormat
+            $baseUrl,
+            $method,
+            $queryString,
+            $headers,
+            $message,
+            $messageFormat
         );
         return $this->process($response);
     }
@@ -423,6 +471,11 @@ abstract class Base
      * @return string             HTTP response body
      */
     abstract protected function httpRequest(
-        $baseUrl, $method, $queryString, $headers, $messageBody, $messageFormat
+        $baseUrl,
+        $method,
+        $queryString,
+        $headers,
+        $messageBody,
+        $messageFormat
     );
 }

@@ -28,6 +28,10 @@
 namespace VuFind\RecordTab;
 
 use Interop\Container\ContainerInterface;
+use Interop\Container\Exception\ContainerException;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+
 use VuFind\Config\PluginManager as ConfigManager;
 use VuFind\Content\PluginManager as ContentManager;
 
@@ -41,7 +45,7 @@ use VuFind\Content\PluginManager as ContentManager;
  * @link     https://vufind.org/wiki/development Wiki
  */
 abstract class AbstractContentFactory
-    implements \Zend\ServiceManager\Factory\FactoryInterface
+    implements \Laminas\ServiceManager\Factory\FactoryInterface
 {
     /**
      * The name of the tab being constructed.
@@ -62,11 +66,13 @@ abstract class AbstractContentFactory
      * @throws ServiceNotFoundException if unable to resolve the service.
      * @throws ServiceNotCreatedException if an exception is raised when
      * creating a service.
-     * @throws ContainerException if any other error occurs
+     * @throws ContainerException&\Throwable if any other error occurs
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName,
+    public function __invoke(
+        ContainerInterface $container,
+        $requestedName,
         array $options = null
     ) {
         if (!empty($options)) {
@@ -84,11 +90,11 @@ abstract class AbstractContentFactory
      * Support method for construction of AbstractContent objects -- should we
      * hide this tab if it is empty?
      *
-     * @param \Zend\Config\Config $config VuFind configuration
+     * @param \Laminas\Config\Config $config VuFind configuration
      *
      * @return bool
      */
-    protected function getHideSetting(\Zend\Config\Config $config)
+    protected function getHideSetting(\Laminas\Config\Config $config)
     {
         $setting = $config->Content->hide_if_empty ?? false;
         if ($setting === true || $setting === false

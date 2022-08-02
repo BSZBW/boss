@@ -28,9 +28,9 @@
  */
 namespace VuFind\View\Helper\Root;
 
+use Laminas\View\Helper\AbstractHelper;
 use VuFind\Role\PermissionDeniedManager;
 use VuFind\Role\PermissionManager;
-use Zend\View\Helper\AbstractHelper;
 
 /**
  * Permission helper
@@ -120,7 +120,8 @@ class Permission extends AbstractHelper
             return $this->view->transEsc($displayLogic['value']);
         case 'showTemplate':
             return $this->view->context($this->view)->renderInContext(
-                $displayLogic['value'], $displayLogic['params']
+                $displayLogic['value'],
+                $displayLogic['params']
             );
         default:
             return null;

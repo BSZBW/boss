@@ -82,7 +82,7 @@ class RSSFeedResultsDeferred implements \VuFind\Recommend\RecommendInterface
      * be needed.
      *
      * @param \VuFind\Search\Base\Params $params  Search parameter object
-     * @param \Zend\StdLib\Parameters    $request Parameter object representing user
+     * @param \Laminas\StdLib\Parameters    $request Parameter object representing user
      * request.
      *
      * @return void

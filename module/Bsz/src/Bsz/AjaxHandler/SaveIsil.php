@@ -8,10 +8,10 @@
 namespace Bsz\AjaxHandler;
 
 use Bsz\Config\Libraries;
-use Zend\Http\Header\SetCookie;
-use Zend\Http\Response;
-use Zend\Mvc\Controller\Plugin\Params;
-use Zend\Session\Container as SessionContainer;
+use Laminas\Http\Header\SetCookie;
+use Laminas\Http\Response;
+use Laminas\Mvc\Controller\Plugin\Params;
+use Laminas\Session\Container as SessionContainer;
 
 /**
  * SaveIsil stores ISILs from AJAXRequests in the session
@@ -27,13 +27,13 @@ class SaveIsil extends \VuFind\AjaxHandler\AbstractBase
     protected $libraries;
     /**
      *
-     * @var \Zend\Session\Container
+     * @var \Laminas\Session\Container
      */
     protected $sessionContainer;
 
     /**
      *
-     * @var \Zend\Http\Response;
+     * @var \Laminas\Http\Response;
      */
     protected $response;
 

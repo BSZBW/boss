@@ -27,10 +27,10 @@
  */
 namespace VuFind\Controller;
 
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\Session\Container;
 use VuFind\Exception\Forbidden as ForbiddenException;
 use VuFind\Exception\Mail as MailException;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\Session\Container;
 
 /**
  * Book Bag / Bulk Action Controller
@@ -46,7 +46,7 @@ class CartController extends AbstractBase
     /**
      * Session container
      *
-     * @var \Zend\Session\Container
+     * @var \Laminas\Session\Container
      */
     protected $session;
 
@@ -247,19 +247,21 @@ class CartController extends AbstractBase
             && !$this->getUser()
         ) {
             return $this->forceLogin(
-                null, ['cartIds' => $ids, 'cartAction' => 'Email']
+                null,
+                ['cartIds' => $ids, 'cartAction' => 'Email']
             );
         }
 
         $view = $this->createEmailViewModel(
-            null, $this->translate('bulk_email_title')
+            null,
+            $this->translate('bulk_email_title')
         );
         $view->records = $this->getRecordLoader()->loadBatch($ids);
-        // Set up reCaptcha
-        $view->useRecaptcha = $this->recaptcha()->active('email');
+        // Set up Captcha
+        $view->useCaptcha = $this->captcha()->active('email');
 
         // Process form submission:
-        if ($this->formWasSubmitted('submit', $view->useRecaptcha)) {
+        if ($this->formWasSubmitted('submit', $view->useCaptcha)) {
             // Build the URL to share:
             $params = [];
             foreach ($ids as $current) {
@@ -275,8 +277,13 @@ class CartController extends AbstractBase
                 $cc = $this->params()->fromPost('ccself') && $view->from != $view->to
                     ? $view->from : null;
                 $mailer->sendLink(
-                    $view->to, $view->from, $view->message,
-                    $url, $this->getViewRenderer(), $view->subject, $cc
+                    $view->to,
+                    $view->from,
+                    $view->message,
+                    $url,
+                    $this->getViewRenderer(),
+                    $view->subject,
+                    $cc
                 );
                 return $this->redirectToSource('success', 'bulk_email_success');
             } catch (MailException $e) {
@@ -366,7 +373,8 @@ class CartController extends AbstractBase
             $msg = [
                 'translate' => false, 'html' => true,
                 'msg' => $this->getViewRenderer()->render(
-                    'cart/export-success.phtml', $params
+                    'cart/export-success.phtml',
+                    $params
                 )
             ];
             return $this->redirectToSource('success', $msg);
@@ -449,7 +457,8 @@ class CartController extends AbstractBase
         // Make sure user is logged in:
         if (!($user = $this->getUser())) {
             return $this->forceLogin(
-                null, ['cartIds' => $ids, 'cartAction' => 'Save']
+                null,
+                ['cartIds' => $ids, 'cartAction' => 'Save']
             );
         }
 

@@ -27,7 +27,7 @@
  */
 namespace VuFind\AjaxHandler;
 
-use Zend\Mvc\Controller\Plugin\Params;
+use Laminas\Mvc\Controller\Plugin\Params;
 
 /**
  * Relais: Check if logged-in patron can order an item.
@@ -58,14 +58,16 @@ class RelaisInfo extends AbstractRelaisAction
         $authorizationId = $authResponse->AuthorizationId ?? null;
         if ($authorizationId === null) {
             return $this->formatResponse(
-                $this->translate('Failed'), self::STATUS_HTTP_FORBIDDEN
+                $this->translate('Failed'),
+                self::STATUS_HTTP_FORBIDDEN
             );
         }
 
         $allowLoan = $authResponse->AllowLoanAddRequest ?? false;
         if ($allowLoan == false) {
             return $this->formatResponse(
-                'AllowLoan was false', self::STATUS_HTTP_ERROR
+                'AllowLoan was false',
+                self::STATUS_HTTP_ERROR
             );
         }
 

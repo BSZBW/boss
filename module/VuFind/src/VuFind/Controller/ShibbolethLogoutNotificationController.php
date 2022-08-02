@@ -27,8 +27,8 @@
  */
 namespace VuFind\Controller;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\Stdlib\ResponseInterface as Response;
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\Stdlib\ResponseInterface as Response;
 
 /**
  * Handles Shibboleth back-channel logout notifications.
@@ -63,7 +63,8 @@ class ShibbolethLogoutNotificationController extends AbstractBase
         $this->disableSessionWrites();
         $response = $this->getResponse();
         $response->getHeaders()->addHeaderLine(
-            'Content-Type', 'application/wsdl+xml'
+            'Content-Type',
+            'application/wsdl+xml'
         );
         $response->setContent($this->getWsdl());
         return $response;
@@ -77,7 +78,7 @@ class ShibbolethLogoutNotificationController extends AbstractBase
     public function postAction()
     {
         $this->disableSessionWrites();
-        $soapServer = new \Zend\Soap\Server(
+        $soapServer = new \Laminas\Soap\Server(
             'data://text/plain;base64,' . base64_encode($this->getWsdl())
         );
         $soapServer->setReturnResponse(true);
@@ -107,7 +108,7 @@ class ShibbolethLogoutNotificationController extends AbstractBase
             return;
         }
         $sessionManager = $this->serviceLocator
-            ->get(\Zend\Session\SessionManager::class);
+            ->get(\Laminas\Session\SessionManager::class);
         $handler = $sessionManager->getSaveHandler();
         $handler->destroy($row['session_id']);
     }
@@ -119,7 +120,7 @@ class ShibbolethLogoutNotificationController extends AbstractBase
      */
     protected function getWsdl()
     {
-        list($uri) = explode('?', $this->getRequest()->getUriString());
+        [$uri] = explode('?', $this->getRequest()->getUriString());
         return <<<EOT
 <?xml version ="1.0" encoding ="UTF-8" ?>
 <definitions name="LogoutNotification"

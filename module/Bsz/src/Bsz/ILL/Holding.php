@@ -24,7 +24,7 @@ namespace Bsz\ILL;
 use Bsz\RecordDriver\SolrGviMarc;
 use VuFind\Search\SearchRunner as Runner;
 use VuFind\Search\Solr\Results;
-use Zend\Http\Response;
+use Laminas\Http\Response;
 
 /**
  * class for the BSZ holdings service

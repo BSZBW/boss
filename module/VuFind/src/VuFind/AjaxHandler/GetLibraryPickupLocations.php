@@ -27,7 +27,7 @@
  */
 namespace VuFind\AjaxHandler;
 
-use Zend\Mvc\Controller\Plugin\Params;
+use Laminas\Mvc\Controller\Plugin\Params;
 
 /**
  * "Get Library Pickup Locations" AJAX handler
@@ -76,7 +76,8 @@ class GetLibraryPickupLocations extends AbstractIlsAndUserAction
                 foreach ($results as &$result) {
                     if (isset($result['name'])) {
                         $result['name'] = $this->translateWithPrefix(
-                            'location_', $result['name']
+                            'location_',
+                            $result['name']
                         );
                     }
                 }
@@ -87,7 +88,8 @@ class GetLibraryPickupLocations extends AbstractIlsAndUserAction
         }
 
         return $this->formatResponse(
-            $this->translate('An error has occurred'), self::STATUS_HTTP_ERROR
+            $this->translate('An error has occurred'),
+            self::STATUS_HTTP_ERROR
         );
     }
 }

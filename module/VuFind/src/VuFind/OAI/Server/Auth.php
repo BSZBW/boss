@@ -50,8 +50,10 @@ class Auth extends Base
      * @param \VuFind\Record\Loader                $loader  Record loader
      * @param \VuFind\Db\Table\PluginManager       $tables  Table manager
      */
-    public function __construct(\VuFind\Search\Results\PluginManager $results,
-        \VuFind\Record\Loader $loader, \VuFind\Db\Table\PluginManager $tables
+    public function __construct(
+        \VuFind\Search\Results\PluginManager $results,
+        \VuFind\Record\Loader $loader,
+        \VuFind\Db\Table\PluginManager $tables
     ) {
         parent::__construct($results, $loader, $tables);
         $this->core = 'authority';
@@ -63,11 +65,11 @@ class Auth extends Base
      * constructor and is only a separate method to allow easy override by child
      * classes).
      *
-     * @param \Zend\Config\Config $config VuFind configuration
+     * @param \Laminas\Config\Config $config VuFind configuration
      *
      * @return void
      */
-    protected function initializeSettings(\Zend\Config\Config $config)
+    protected function initializeSettings(\Laminas\Config\Config $config)
     {
         // Use some of the same settings as the regular OAI server, but override
         // others:

@@ -27,7 +27,7 @@
  */
 namespace VuFind\AjaxHandler;
 
-use Zend\Mvc\Controller\Plugin\Params;
+use Laminas\Mvc\Controller\Plugin\Params;
 
 /**
  * Relais: Check item availability using a generic patron ID
@@ -56,7 +56,8 @@ class RelaisAvailability extends AbstractRelaisAction
         $authorizationId = $this->relais->authenticatePatron();
         if ($authorizationId === null) {
             return $this->formatResponse(
-                $this->translate('Failed'), self::STATUS_HTTP_FORBIDDEN
+                $this->translate('Failed'),
+                self::STATUS_HTTP_FORBIDDEN
             );
         }
 
