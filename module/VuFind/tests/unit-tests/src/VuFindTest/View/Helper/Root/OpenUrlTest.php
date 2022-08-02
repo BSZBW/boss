@@ -145,7 +145,7 @@ class OpenUrlTest extends \PHPUnit\Framework\TestCase
     {
         $driver = $this->getMockDriver(
             'fake-data',
-            'VuFind\RecordDriver\SolrMarc',
+            \VuFind\RecordDriver\SolrMarc::class,
             ['Article'],
             false
         );
@@ -180,7 +180,7 @@ class OpenUrlTest extends \PHPUnit\Framework\TestCase
     {
         $driver = $this->getMockDriver(
             'fake-openurl',
-            'VuFind\RecordDriver\SolrDefault',
+            \VuFind\RecordDriver\SolrDefault::class,
             ['CrazyFormat']
         );
         $fixture = $this->getJsonFixture("openurlrules/rule5.json");
@@ -214,12 +214,12 @@ class OpenUrlTest extends \PHPUnit\Framework\TestCase
         $formats = ['Article'];
         $defaultDriver = $this->getMockDriver(
             'fake-data',
-            'VuFind\RecordDriver\SolrDefault',
+            \VuFind\RecordDriver\SolrDefault::class,
             $formats
         );
         $marcDriver = $this->getMockDriver(
             'fake-data',
-            'VuFind\RecordDriver\SolrMarc',
+            \VuFind\RecordDriver\SolrMarc::class,
             $formats
         );
         $openUrl = $this
@@ -251,7 +251,7 @@ class OpenUrlTest extends \PHPUnit\Framework\TestCase
      */
     protected function getMockDriver(
         $openUrl = 'fake-data',
-        $class = 'VuFind\RecordDriver\SolrDefault',
+        $class = \VuFind\RecordDriver\SolrDefault::class,
         $formats = ['ElectronicArticle', 'Article'],
         $issn = '1234-5678'
     ) {
