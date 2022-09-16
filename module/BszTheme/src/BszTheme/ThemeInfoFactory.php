@@ -20,17 +20,16 @@ class ThemeInfoFactory extends \VuFindTheme\ThemeInfoFactory
      */
     public static function getThemeInfo(ServiceManager $sm)
     {
-        $request = $sm->get('Request');
+        $config = $sm->get('Bsz\Config\Client');
         $tag = 'swb';
-        if ($request instanceof Request) {
-            $host = $request->getHeaders()->get('host')->getFieldValue();
-
-            if (preg_match('/ireon-portal/', $host)) {
-                $tag = 'ireon';
-            } else {
-                $parts = explode('.', $host);
-                $tag = $parts[0] ?? 'swb';
-            }
+        if (!$config->get('Site')->offsetExists('tag')) {
+            $url = $config->get('Site')->get('url');
+            $parts = parse_url($url);
+            $host = $parts['host'];
+            $domainParts = explode('.', $host);
+            $tag = $domainParts[0] ?? 'swb';
+        } elseif ($config->get('Site')->offsetExists('tag')) {
+            $tag = $config->get('Site')->get('tag');
         }
         return new ThemeInfo(realpath(APPLICATION_PATH . '/themes'), 'bodensee', $tag);
     }
