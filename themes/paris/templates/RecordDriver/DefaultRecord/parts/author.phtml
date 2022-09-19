@@ -1,0 +1,79 @@
+<? $containerId = $this->driver->tryMethod('getContainerId');
+   $summDate = $this->driver->getPublicationDates();
+   $summAuthors = $this->driver->getDeduplicatedAuthors(['role', 'gnd', 'live']);
+   $summDate = $this->driver->getPublicationDates();
+   $summInCollection = $this->driver->getContainingCollections();
+   $journalTitle = $this->driver->getContainerTitle();
+   $link = isset($containerId) ? $this->recordLink()->getUrl($containerId) : $this->record($this->driver)->getLink('journaltitle', str_replace(['{{{{START_HILITE}}}}', '{{{{END_HILITE}}}}'], '', $journalTitle));
+?>
+
+<? if($this->driver->isCollection()): ?>
+    <? if (!empty($summDate) && isset($summDate[0])): ?>
+        <dt><?=$this->transEsc('Published in')?></dt>
+        <dd>
+            <a href="<?=$link?>"><?=$this->highlight($journalTitle)?></a>
+            <? $summAuthors = $this->driver->getDeduplicatedAuthors()?>
+            <?=count($summDate) > 0? ' (' . $this->escapeHtml($summDate[0]) . ')' : ''?>
+        </dd>
+    <? endif; ?>
+<? endif; ?>
+
+<? if (!empty($summAuthors)) ?>
+    <? if (!empty($summAuthors['primary'])): ?>
+        <dt><?=$this->transEsc('Author')?></dt>
+        <dd>
+        <? foreach ($summAuthors['primary'] as $name => $info): ?>
+            <?=$this->context($this)->renderInContext('RecordDriver/DefaultRecord/parts/singleauthor.phtml', ['name' => $name, 'info' => $info, 'type' => 'person','hiddenFilterString' => $hiddenFilterString])?>
+        <? endforeach; ?>
+        </dd>
+    <? endif; ?>
+    <? if (!empty($summAuthors['secondary'])): ?>
+        <? if (!empty($summAuthors['primary'])):?>
+            <dt><?=$this->transEsc('Contributors')?></dt>
+        <? else: ?>
+            <dt><?=$this->transEsc('Author')?></dt>
+        <?endif?>
+        <? $count = 0?>
+        <dd>
+        <? foreach ($summAuthors['secondary'] as $name => $info): ?>
+            <? if ($count < 3): ?>
+            <?=$this->context($this)->renderInContext('RecordDriver/DefaultRecord/parts/singleauthor.phtml', ['name' => $name, 'info' => $info, 'type' => 'person','hiddenFilterString' => $hiddenFilterString])?>
+            <? endif; ?>
+            <? $count++ ?>
+        <? endforeach; ?>
+        <? if (count($summAuthors['secondary']) >= 3): ?>
+            <?=$this->transEsc('et al.')?>
+        <? endif; ?>
+        </dd>
+
+    <? endif; ?>
+
+
+
+<? $publications = $this->driver->getPublicationDetails(); if (!empty($publications)): ?>
+<? $count = 0 ?>
+<dt><?=$this->transEsc('Published')?></dt>
+<? if (!empty($publications[0])): ?>
+    <dd class="markjs">
+        <?php $count = 0 ?>
+        <? foreach ($publications as $field): ?>
+            <? if($count > 0):?>; <?endif;?>
+            <?=$this->context($this)->renderInContext('RecordDriver/DefaultRecord/parts/publication.phtml', ['publication' => $field])?>
+            <? $count++ ?>
+        <? endforeach; ?>
+    </dd>
+<? else: ?>
+    <? if (!empty($summDate) && isset($summDate[0])): ?>
+        <?= $this->escapeHtml($summDate[0])?>
+    <? endif; ?>
+<? endif; ?>
+<? endif; ?>
+<? if (!empty($summInCollection)): ?>
+    <? foreach ($summInCollection as $collId => $collText): ?>
+            <dt><?=$this->transEsc("in_collection_label")?></dt>
+            <dd><a class="ckText" href="<?=$this->url('collection', ['id' => $collId])?>?recordID=<?=urlencode($this->driver->getUniqueID())?>">
+            <?=$this->escapeHtml($collText)?>
+                </a></dd>
+
+    <? endforeach; ?>
+<? endif; ?>

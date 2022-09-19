@@ -19,37 +19,48 @@
  *
  */
 
-namespace Bsz\RecordTab;
+namespace Findex;
 
-use VuFind\RecordTab\AbstractBase;
+use Zend\Mvc\MvcEvent;
 
-class BibTip extends AbstractBase
+class Module
 {
-
-    protected $scriptsrc;
-
     /**
-     * @param $script SCript source url
+     * Get module configuration
+     *
+     * @return array
      */
-    public function __construct($script)
+    public function getConfig()
     {
-        $this->scriptsrc = $script;
+        return include __DIR__ . '/config/module.config.php';
     }
 
     /**
-     * @return bool
+     * Get autoloader configuration
+     *
+     * @return array
      */
-    public function isActive()
+    public function getAutoloaderConfig()
     {
-        return true;
+        return [            'Zend\Loader\StandardAutoloader' => [
+            'namespaces' => [
+                __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
+            ],
+        ],
+        ];
     }
 
     /**
-     * @return string
+     * Bootstrap the module
+     *
+     * @param MvcEvent $e Event
+     *
+     * @return void
      */
-    public function getDescription()
+    public function onBootstrap(MvcEvent $e)
     {
-        return 'BibTip';
+        $app = $e->getApplication();
+        $sm = $app->getServiceManager();
+        $config = $sm->get('Config');
     }
-
 }

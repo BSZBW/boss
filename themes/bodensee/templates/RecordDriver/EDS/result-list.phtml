@@ -8,7 +8,7 @@
       $thumbnail = false;
       $thumbnailAlignment = $this->record($this->driver)->getThumbnailAlignment('result');
   ob_start(); ?>
-  <div class="media-<?=$thumbnailAlignment ?> <?=$this->escapeHtml($coverDetails['size'])?>">
+  <div class="col-xs-3 col-sm-3 col-md-2 hidden-print">
     <?php if ($coverDetails['cover']): ?>
           <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="_record_link">
           <img src="<?=$this->escapeHtmlAttr(str_replace('http://', 'https://', $coverDetails['cover']))?>" class="img-responsive" alt="<?=$this->transEsc('Cover Image')?>..."/>
@@ -26,8 +26,7 @@
   <?php if ($thumbnail && $thumbnailAlignment == 'left'): ?>
     <?=$thumbnail ?>
   <?php endif; ?>
-  <div class="media-body">
-    <div class="result-body">
+  <div class="col-xs-9 col-sm-9 col-md-7 col-no-left-padding">
        <?=$this->driver->supportsCoinsOpenUrl()?'<span class="Z3988" title="'.$this->escapeHtmlAttr($this->driver->getCoinsOpenUrl()).'"></span>':''?>
       <?php $items = $this->driver->getItems();
         if (isset($items) && !empty($items)):
@@ -125,47 +124,44 @@
             <? endforeach; ?>
         </div>
       <? endif; ?>
-    </div>
 
-    <div class="result-links hidden-print">
+  </div>
+  <div class="col-xs-9 col-sm-9 col-md-3 hidden-print col-xs-offset-3 col-sm-offset-3 col-md-offset-0 col-no-left-padding hidden-print">
         <ul class="nav nav-pills nav-stacked">
-      <? if ($this->cart()->isActiveInSearch() && $this->params->getOptions()->supportsCart() && $this->cart()->isActive()): ?>
-        <?=$this->render('record/cart-buttons.phtml', ['id' => $this->driver->getUniqueId(), 'source' => $this->driver->getSourceIdentifier()]); ?>
-      <? endif; ?>
+            <? if ($this->cart()->isActiveInSearch() && $this->params->getOptions()->supportsCart() && $this->cart()->isActive()): ?>
+                <?=$this->render('record/cart-buttons.phtml', ['id' => $this->driver->getUniqueId(), 'source' => $this->driver->getSourceIdentifier()]); ?>
+            <? endif; ?>
 
-      <? if ($this->userlist()->getMode() !== 'disabled'): ?>
-        <? /* Add to favorites */ ?>
-        <li>
-            <a href="<?=$this->recordLink()->getActionUrl($this->driver, 'Save')?>" class="btn save-record" data-lightbox id="<?=$this->driver->getUniqueId() ?>" title="<?=$this->transEsc('Add to favorites')?>">
-                <i class="fa fa-fw fa-star" aria-hidden="true"></i>
-                <?=$this->transEsc('Add to favorites')?>
-            </a>
-        </li>
+            <? if ($this->userlist()->getMode() !== 'disabled'): ?>
+                <? /* Add to favorites */ ?>
+                <li>
+                    <a href="<?=$this->recordLink()->getActionUrl($this->driver, 'Save')?>" class="btn save-record" data-lightbox id="<?=$this->driver->getUniqueId() ?>" title="<?=$this->transEsc('Add to favorites')?>">
+                        <i class="fa fa-fw fa-star" aria-hidden="true"></i>
+                        <?=$this->transEsc('Add to favorites')?>
+                    </a>
+                </li>
 
-        <? /* Saved lists */ ?>
-        <li>
-            <div class="savedLists hidden">
-                <strong><?=$this->transEsc("Saved in")?>:</strong>
-            </div>
-        </li>
-      <? endif; ?>
+                <? /* Saved lists */ ?>
+                <li>
+                    <div class="savedLists hidden">
+                        <strong><?=$this->transEsc("Saved in")?>:</strong>
+                    </div>
+                </li>
+            <? endif; ?>
 
-      <? /* Hierarchy tree link */ ?>
-      <? $trees = $this->driver->tryMethod('getHierarchyTrees'); if (!empty($trees)): ?>
-        <? foreach ($trees as $hierarchyID => $hierarchyTitle): ?>
-          <div class="hierarchyTreeLink">
-            <input type="hidden" value="<?=$this->escapeHtmlAttr($hierarchyID)?>" class="hiddenHierarchyId" />
-            <i class="fa fa-fw fa-sitemap"></i>
-            <a class="hierarchyTreeLinkText modal-link" href="<?=$this->recordLink()->getTabUrl($this->driver, 'HierarchyTree')?>?hierarchy=<?=urlencode($hierarchyID)?>#tabnav" title="<?=$this->transEsc('hierarchy_tree')?>">
-              <?=$this->transEsc('hierarchy_view_context')?><? if (count($trees) > 1): ?>: <?=$this->escapeHtml($hierarchyTitle)?><? endif; ?>
-            </a>
-          </div>
-        <? endforeach; ?>
-      <? endif; ?>
+            <? /* Hierarchy tree link */ ?>
+            <? $trees = $this->driver->tryMethod('getHierarchyTrees'); if (!empty($trees)): ?>
+                <? foreach ($trees as $hierarchyID => $hierarchyTitle): ?>
+                    <div class="hierarchyTreeLink">
+                        <input type="hidden" value="<?=$this->escapeHtmlAttr($hierarchyID)?>" class="hiddenHierarchyId" />
+                        <i class="fa fa-fw fa-sitemap"></i>
+                        <a class="hierarchyTreeLinkText modal-link" href="<?=$this->recordLink()->getTabUrl($this->driver, 'HierarchyTree')?>?hierarchy=<?=urlencode($hierarchyID)?>#tabnav" title="<?=$this->transEsc('hierarchy_tree')?>">
+                            <?=$this->transEsc('hierarchy_view_context')?><? if (count($trees) > 1): ?>: <?=$this->escapeHtml($hierarchyTitle)?><? endif; ?>
+                        </a>
+                    </div>
+                <? endforeach; ?>
+            <? endif; ?>
         </ul>
     </div>
-  </div>
-  <?php if ($thumbnail && $thumbnailAlignment == 'right'): ?>
-    <?=$thumbnail ?>
-  <?php endif; ?>
+
 </div>

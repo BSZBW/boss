@@ -109,7 +109,7 @@
 //** Global color for active items (e.g., navs or dropdowns).
 @component-active-color: #fff;
 //** Global background color for active items (e.g., navs or dropdowns).
-@component-active-bg: @brand-primary;
+@component-active-bg: #b9c4de;
 
 //** Width of the `border` for generating carets that indicator dropdowns.
 @caret-width-base: 4px;
@@ -357,11 +357,11 @@
 //##
 
 // Basics of a navbar
-@navbar-height:                    85px;
+@navbar-height:                    127px;
 @navbar-margin-bottom:             @line-height-computed;
 @navbar-border-radius:             @border-radius-base;
-@navbar-padding-horizontal:        10px;;
-@navbar-padding-vertical:          ((@navbar-height - @line-height-computed) / 2);
+@navbar-padding-horizontal:        10px;
+@navbar-padding-vertical:          0px;
 @navbar-collapse-max-height:       340px;
 
 @navbar-default-color:             #ddd;
@@ -431,8 +431,8 @@
 @nav-tabs-link-hover-border-color:          @gray-lighter;
 
 @nav-tabs-active-link-hover-bg:             @body-bg;
-@nav-tabs-active-link-hover-color:          @gray;
-@nav-tabs-active-link-hover-border-color:   #ddd;
+@nav-tabs-active-link-hover-color:          @brand-primary;
+@nav-tabs-active-link-hover-border-color:   @brand-primary;
 
 @nav-tabs-justified-link-border-color:            #ddd;
 @nav-tabs-justified-active-link-border-color:     @body-bg;
@@ -867,3 +867,9 @@
 @dl-horizontal-breakpoint:    @grid-float-breakpoint;
 //** Horizontal line color.
 @hr-border:                   @gray-lighter;
+
+@bsz-navbar-searchbar-bg:              #b9c4de;
+@bsz-border-width: 2px;
+@bsz-border-color: @brand-primary;
+@bsz-searchbar-border-radius: 20px;
+@bsz-footer-line-color: #3d5da2;

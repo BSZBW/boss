@@ -1,7 +1,7 @@
 <?
     // Set page title.
     $this->headTitle($this->translate('Description') . ': ' . $this->driver->getBreadcrumb());
-
+    $rand = rand(0, 2000);
     // Grab clean ISBN for convenience:
     $isbn = $this->driver->getCleanISBN();
 ?>
@@ -139,32 +139,36 @@
   <? $isbns = $this->driver->getISBNs(); if (!empty($isbns)): ?>
     <? $contentDisplayed = true; ?>
     <tr>
-      <th><?=$this->transEsc('ISBN')?>: </th>
-      <td>
-        <? foreach ($isbns as $field): ?>
-          <?=$this->escapeHtml($field)?><br/>
-        <? endforeach; ?>
-      </td>
+        <th><?=$this->abbrev('ISBN', 'ISBN_long')?>: </th>
+        <td class="markjs">
+            <?php foreach ($isbns as $field): ?>
+                <?= $this->clipboard($field) ?><br/>
+            <?php endforeach; ?>
+        </td>
     </tr>
   <? endif; ?>
 
   <? $issns = $this->driver->getISSNs(); if (!empty($issns)): ?>
     <? $contentDisplayed = true; ?>
     <tr>
-      <th><?=$this->transEsc('ISSN')?>: </th>
-      <td>
-        <? foreach ($issns as $field): ?>
-          <?=$this->escapeHtml($field)?><br/>
-        <? endforeach; ?>
-      </td>
+        <th><?=$this->abbrev('ISSN', 'ISSN_long')?>: </th>
+        <td class="markjs">
+            <?php foreach ($issns as $field): ?>
+                <?= $this->clipboard($field) ?><br/>
+            <?php endforeach; ?>
+        </td>
     </tr>
   <? endif; ?>
 
   <? $doi = $this->driver->tryMethod('getCleanDOI'); if (!empty($doi)): ?>
     <? $contentDisplayed = true; ?>
     <tr>
-      <th><?=$this->transEsc('DOI')?>: </th>
-      <td><a href="https://doi.org/<?=$this->escapeHtml($doi)?>" target="_blank">https://doi.org/<?=$this->escapeHtml($doi)?></a></td>
+        <th><?= $this->transEsc('DOI') ?>:</th>
+        <td><a id="clipboard-doi-<?= $rand ?>"
+               href="https://doi.org/<?= $this->escapeHtml($doi) ?>"
+               target="_blank">https://doi.org/<?= $this->escapeHtml($doi) ?></a>
+            <?= $this->clipboard('', 'clipboard-doi-' . $rand) ?>
+        </td>
     </tr>
   <? endif; ?>
 

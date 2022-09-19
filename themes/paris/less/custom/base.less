@@ -1,0 +1,276 @@
+/**
+Very basic styles
+**/
+.nofloat {
+    float: none;
+    clear: both;
+    margin: 0;
+    padding: 0;
+}
+
+.modal-body > .col-sm-12 {
+    // this avoids double padding for content that already has a col-sm-12
+    padding-left: 0;
+    padding-right: 0;
+
+}
+/**
+Hintergrundfarbverlauf beim Body
+**/
+html {
+    min-height: 100%;
+    body:not(.frame) {
+        padding-top: 235px;
+        background-color: white;
+        min-height: 100%;
+    }
+}
+
+/*Minimaler abstand zw den Zeilen, damit Bilder nicht am Text kleben*/
+.results-container .row.result{
+    .bsz-border-bottom;
+
+}
+.row .record, .row .result {
+    table.table {
+        th {
+            border-top: 0;
+        }
+        td {
+            border-top: 0;
+        }
+        // table inside a table - ebsco
+        table {
+            td, th {
+                width: auto;
+            }
+        }
+    }
+
+}
+/*Platzhalter für die Coverbilder*/
+.cover-placeholder {
+    .title, .author {
+        font-size: @font-size-small;
+    }
+    border: 0.3em solid @brand-primary;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    text-shadow: 1px 0 @gray;
+    text-align: center;
+}
+
+
+.pagination {
+    &:extend(.pagination-lg);
+    .active > a,
+    .active > span{
+        font-weight: bold;
+    }
+}
+
+/*Styling OpenURL Icon*/
+.open-url-icon {
+    opacity: 0.8; //make icons less blazing
+}
+
+.searchHomeContent {
+    padding-top: 15px;
+    #searchForm {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    @media (min-width: @screen-sm-max) {
+        .title {
+            margin-top: 0;
+        }
+    }
+    .logo {
+        padding-bottom: 15px;
+        float: right;
+    }
+}
+//Backgrounds
+.bg-gray {
+    background-color: darken(@gray-lighter, 5%);
+    /*margin-right: 0;*/
+}
+.result-list {
+    background-color: white;
+}
+
+.fis-bildung-logo {
+    max-height: 3rem;
+    clear: both;
+}
+/**
+RecordTabs get another styling than searchTabs because their background is white
+**/
+.recordTabs {
+    li.active {
+        a {
+            border-top: 1px solid @brand-primary !important;
+            border-right: 1px solid @brand-primary !important;
+            border-left: 1px solid @brand-primary !important;
+        }
+    }
+}
+
+/**
+Ellipsis for too long texts
+**/
+.ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    max-width: 100%;
+    white-space: nowrap;
+}
+// ellipsis for links which have no whitespaces to break
+.ellipsis-link {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: anywhere;
+    width: 300px;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+/**
+H4 headings shoulc look like text.
+**/
+h4, .h4 {
+    color: @text-color;
+}
+.result .status .label i {
+    font-size: 2em;
+}
+
+.btn-bookbag-toggle {
+    list-style-type: none;
+}
+
+.duplicates.collapse {
+    margin-top: @grid-gutter-width/2;
+    .panel {
+        .panel-heading {
+            cursor: pointer;
+        }
+
+    }
+}
+.tooltip-inner {
+    max-width: 640px;
+}
+
+.panel-group.duplicates .panel{
+
+    &:nth-of-type(even) {
+        background-color: @table-bg-accent;
+    }
+}
+
+.indent {
+    text-indent: 1em;
+}
+.tab-content {
+    margin-top: 15px;
+}
+
+p.olSubjectMore {
+    margin-top: -20px;
+}
+
+
+mark {
+    padding: .2em 0;
+    background: rgba(255,255,0,0.5);
+}
+
+body.offcanvas.template-dir-record, body.offcanvas.template-name-home {
+    .offcanvas-toggle {
+        display: none;
+    }
+}
+.result-links li .btn {
+    text-align: left;
+    &:hover, &:focus {
+        background-color: darken(@gray-lighter, 5%);
+        color: @link-color;
+    }
+}
+
+.results-container {
+    .img-responsive.bsz {
+        margin: 5px 0;
+    }
+}
+
+.copy-clipboard-toggle {
+    cursor: pointer;
+    color: @link-color;
+}
+
+table.tablesorter thead tr th .tablesorter-header-inner::after {
+    float: none !important;
+    margin-left: 5px;
+}
+
+.specialhome {
+    margin-top: @grid-gutter-width/2;
+
+    .alert {
+        margin-bottom: 0;
+    }
+}
+
+.no-padding {
+    .panel-body, .panel-heading {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+.collapse-inline.collapse.in {
+    display: inline;
+}
+.rotate {
+    transform: rotate(180deg);
+    margin-right: 5px;
+}
+.main {
+    padding-bottom: 15px;
+}
+
+.record-tabs {
+    .bsz-border-top;
+}
+
+.table-striped tr {
+    background-color: white !important;
+}
+
+dl.dl-horizontal {
+    dt {
+        text-align: left;
+        &:after {
+            content: ':';
+        }
+    }
+}
+.facet-group .facet, .facet-load-indicator {
+    border-bottom: 0 !important;
+}
+
+.cover-container svg {
+    // adjust size of format icons
+    margin: 0 10px;
+}
+
+.pager .btn-default {
+    border: 0;
+    color: @text-color;
+    &:hover, &:active {
+        border: 0;
+    }
+}

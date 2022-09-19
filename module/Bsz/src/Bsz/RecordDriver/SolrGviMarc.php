@@ -40,6 +40,7 @@ class SolrGviMarc extends SolrMarc implements Constants
     use MarcAuthorTrait;
     use OriginalLanguageTrait;
     use MarcFormatTrait;
+    use FivTrait;
 
     /**
      * Get all subject headings associated with this record.  Each heading is
@@ -95,51 +96,6 @@ class SolrGviMarc extends SolrMarc implements Constants
 
         // Send back everything we collected:
         return array_unique($retval);
-    }
-
-    /**
-     * Get an array with DFI classification
-     * @returns array
-     */
-    public function getDFIClassification()
-    {
-        $classificationList = [];
-        foreach ($this->getMarcRecord()->getFields('084') as $field) {
-            $suba = $field->getSubField('a');
-            $sub2 = $field->getSubfield('2');
-            if ($suba && $sub2) {
-                $sub2data = $field->getSubfield('2')->getData();
-                if (strtolower($sub2data) == 'dfi') {
-                    $classificationList[] = $suba->getData();
-                }
-            }
-        }
-        return array_unique($classificationList);
-    }
-
-    /**
-     * Get an array with FIV classification
-     * @returns array
-     */
-    public function getFIVClassification()
-    {
-        $classificationList = [];
-
-        foreach ($this->getMarcRecord()->getFields('936') as $field) {
-            $suba = $field->getSubField('a');
-            $sub2 = $field->getSubfield('2');
-            if ($suba && $sub2 && $field->getIndicator(1) == 'f'
-                && $field->getIndicator(2) == 'i'
-            ) {
-                $sub2data = $field->getSubfield('2')->getData();
-                if (preg_match('/^fiv[rs]/', $sub2data)) {
-                    $data = $suba->getData();
-                    $data = preg_replace('/!.*!|:/i', '', $data);
-                    $classificationList[] = $data;
-                }
-            }
-        }
-        return array_unique($classificationList);
     }
 
     /**

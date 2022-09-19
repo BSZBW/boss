@@ -92,10 +92,14 @@ class Client extends Config
      */
     public function getTag()
     {
-        $urlParts = explode('.', $this->get('Site')->get('url'));
-        $tag = array_shift($urlParts);
-        $tag = strtolower($tag);
-        $tag = str_replace(['http://', 'https://'], '', $tag);
+        if ($this->get('Site')->offsetExists('tag')) {
+            $tag = $this->get('Site')->get('tag');
+        } else {
+            $urlParts = explode('.', $this->get('Site')->get('url'));
+            $tag = array_shift($urlParts);
+            $tag = strtolower($tag);
+            $tag = str_replace(['http://', 'https://'], '', $tag);
+        }
 
         return $tag;
     }

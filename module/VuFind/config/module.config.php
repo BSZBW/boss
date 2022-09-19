@@ -1,30 +1,31 @@
 <?php
+
 namespace VuFind\Module\Config;
 
 $config = [
     'router' => [
         'routes' => [
             'default' => [
-                'type'    => 'Zend\Router\Http\Segment',
+                'type' => 'Zend\Router\Http\Segment',
                 'options' => [
-                    'route'    => '/[:controller[/[:action]]]',
+                    'route' => '/[:controller[/[:action]]]',
                     'constraints' => [
                         'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                     ],
                     'defaults' => [
                         'controller' => 'index',
-                        'action'     => 'Home',
+                        'action' => 'Home',
                     ],
                 ],
             ],
             'alma-webhook' => [
-                'type'    => 'Zend\Router\Http\Segment',
+                'type' => 'Zend\Router\Http\Segment',
                 'options' => [
-                    'route'    => '/Alma/Webhook/[:almaWebhookAction]',
+                    'route' => '/Alma/Webhook/[:almaWebhookAction]',
                     'constraints' => [
                         'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                     ],
                     'defaults' => [
                         'controller' => 'Alma',
@@ -33,68 +34,68 @@ $config = [
                 ],
             ],
             'content-page' => [
-                'type'    => 'Zend\Router\Http\Segment',
+                'type' => 'Zend\Router\Http\Segment',
                 'options' => [
-                    'route'    => '/Content/[:page]',
+                    'route' => '/Content/[:page]',
                     'constraints' => [
-                        'page'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'page' => '[a-zA-Z][a-zA-Z0-9_-]*',
                     ],
                     'defaults' => [
                         'controller' => 'Content',
-                        'action'     => 'Content',
+                        'action' => 'Content',
                     ]
                 ],
             ],
             'shortlink' => [
-                'type'    => 'Zend\Router\Http\Segment',
+                'type' => 'Zend\Router\Http\Segment',
                 'options' => [
-                    'route'    => '/short/[:id]',
+                    'route' => '/short/[:id]',
                     'constraints' => [
-                        'id'     => '[a-zA-Z0-9]+',
+                        'id' => '[a-zA-Z0-9]+',
                     ],
                     'defaults' => [
                         'controller' => 'Shortlink',
-                        'action'     => 'redirect',
+                        'action' => 'redirect',
                     ]
                 ],
             ],
             'legacy-alphabrowse-results' => [
                 'type' => 'Zend\Router\Http\Literal',
                 'options' => [
-                    'route'    => '/AlphaBrowse/Results',
+                    'route' => '/AlphaBrowse/Results',
                     'defaults' => [
                         'controller' => 'Alphabrowse',
-                        'action'     => 'Home',
+                        'action' => 'Home',
                     ]
                 ]
             ],
             'legacy-bookcover' => [
                 'type' => 'Zend\Router\Http\Literal',
                 'options' => [
-                    'route'    => '/bookcover.php',
+                    'route' => '/bookcover.php',
                     'defaults' => [
                         'controller' => 'Cover',
-                        'action'     => 'Show',
+                        'action' => 'Show',
                     ]
                 ]
             ],
             'legacy-summonrecord' => [
                 'type' => 'Zend\Router\Http\Literal',
                 'options' => [
-                    'route'    => '/Summon/Record',
+                    'route' => '/Summon/Record',
                     'defaults' => [
                         'controller' => 'SummonRecord',
-                        'action'     => 'Home',
+                        'action' => 'Home',
                     ]
                 ]
             ],
             'legacy-worldcatrecord' => [
                 'type' => 'Zend\Router\Http\Literal',
                 'options' => [
-                    'route'    => '/WorldCat/Record',
+                    'route' => '/WorldCat/Record',
                     'defaults' => [
                         'controller' => 'WorldcatRecord',
-                        'action'     => 'Home',
+                        'action' => 'Home',
                     ]
                 ]
             ],
@@ -436,7 +437,7 @@ $config = [
             'Zend\Session\SessionManager' => 'VuFind\Session\ManagerFactory',
         ],
         'delegators' => [
-            'VuFind\Http\PhpEnvironment\Request' => [ \Zend\Mvc\Console\Service\ConsoleRequestDelegatorFactory::class ],
+            'VuFind\Http\PhpEnvironment\Request' => [\Zend\Mvc\Console\Service\ConsoleRequestDelegatorFactory::class],
         ],
         'initializers' => [
             'VuFind\ServiceManager\ServiceInitializer',
@@ -513,10 +514,10 @@ $config = [
     ],
     'view_manager' => [
         'display_not_found_reason' => APPLICATION_ENV == 'development',
-        'display_exceptions'       => APPLICATION_ENV == 'development',
-        'not_found_template'       => 'error/404',
-        'exception_template'       => 'error/index',
-        'template_path_stack'      => [],
+        'display_exceptions' => APPLICATION_ENV == 'development',
+        'not_found_template' => 'error/404',
+        'exception_template' => 'error/index',
+        'template_path_stack' => [],
         'whoops_no_catch' => [
             'VuFind\Exception\RecordMissing',
         ],
@@ -525,63 +526,63 @@ $config = [
     // unrelated to specific Zend Framework 2 components).
     'vufind' => [
         // The config reader is a special service manager for loading .ini files:
-        'config_reader' => [ /* see VuFind\Config\PluginManager for defaults */ ],
+        'config_reader' => [ /* see VuFind\Config\PluginManager for defaults */],
         // PostgreSQL sequence mapping
-        'pgsql_seq_mapping'  => [
-            'auth_hash'        => ['id', 'auth_hash_id_seq'],
-            'comments'         => ['id', 'comments_id_seq'],
+        'pgsql_seq_mapping' => [
+            'auth_hash' => ['id', 'auth_hash_id_seq'],
+            'comments' => ['id', 'comments_id_seq'],
             'external_session' => ['id', 'external_session_id_seq'],
-            'oai_resumption'   => ['id', 'oai_resumption_id_seq'],
-            'record'           => ['id', 'record_id_seq'],
-            'resource'         => ['id', 'resource_id_seq'],
-            'resource_tags'    => ['id', 'resource_tags_id_seq'],
-            'search'           => ['id', 'search_id_seq'],
-            'session'          => ['id', 'session_id_seq'],
-            'shortlinks'       => ['id', 'shortlinks_id_seq'],
-            'tags'             => ['id', 'tags_id_seq'],
-            'user'             => ['id', 'user_id_seq'],
-            'user_card'        => ['id', 'user_card_id_seq'],
-            'user_list'        => ['id', 'user_list_id_seq'],
-            'user_resource'    => ['id', 'user_resource_id_seq'],
+            'oai_resumption' => ['id', 'oai_resumption_id_seq'],
+            'record' => ['id', 'record_id_seq'],
+            'resource' => ['id', 'resource_id_seq'],
+            'resource_tags' => ['id', 'resource_tags_id_seq'],
+            'search' => ['id', 'search_id_seq'],
+            'session' => ['id', 'session_id_seq'],
+            'shortlinks' => ['id', 'shortlinks_id_seq'],
+            'tags' => ['id', 'tags_id_seq'],
+            'user' => ['id', 'user_id_seq'],
+            'user_card' => ['id', 'user_card_id_seq'],
+            'user_list' => ['id', 'user_list_id_seq'],
+            'user_resource' => ['id', 'user_resource_id_seq'],
         ],
         // This section contains service manager configurations for all VuFind
         // pluggable components:
         'plugin_managers' => [
-            'ajaxhandler' => [ /* see VuFind\AjaxHandler\PluginManager for defaults */ ],
-            'auth' => [ /* see VuFind\Auth\PluginManager for defaults */ ],
-            'autocomplete' => [ /* see VuFind\Autocomplete\PluginManager for defaults */ ],
-            'channelprovider' => [ /* see VuFind\ChannelProvider\PluginManager for defaults */ ],
-            'content' => [ /* see VuFind\Content\PluginManager for defaults */ ],
-            'content_authornotes' => [ /* see VuFind\Content\AuthorNotes\PluginManager for defaults */ ],
-            'content_covers' => [ /* see VuFind\Content\Covers\PluginManager for defaults */ ],
-            'content_excerpts' => [ /* see VuFind\Content\Excerpts\PluginManager for defaults */ ],
-            'content_reviews' => [ /* see VuFind\Content\Reviews\PluginManager for defaults */ ],
-            'content_summaries' => [ /* see VuFind\Content\Summaries\PluginManager for defaults */ ],
-            'content_toc' => [ /* see VuFind\Content\TOC\PluginManager for defaults */ ],
-            'contentblock' => [ /* see VuFind\ContentBlock\PluginManager for defaults */ ],
-            'cover_layer' => [ /* see VuFind\Cover\Layer\PluginManager for defaults */ ],
-            'db_row' => [ /* see VuFind\Db\Row\PluginManager for defaults */ ],
-            'db_table' => [ /* see VuFind\Db\Table\PluginManager for defaults */ ],
-            'doilinker' => [ /* see VuFind\DoiLinker\PluginManager for defaults */ ],
-            'hierarchy_driver' => [ /* see VuFind\Hierarchy\Driver\PluginManager for defaults */ ],
-            'hierarchy_treedataformatter' => [ /* see VuFind\Hierarchy\TreeDataFormatter\PluginManager for defaults */ ],
-            'hierarchy_treedatasource' => [ /* see VuFind\Hierarchy\TreeDataSource\PluginManager for defaults */ ],
-            'hierarchy_treerenderer' => [ /* see VuFind\Hierarchy\TreeRenderer\PluginManager for defaults */ ],
-            'ils_driver' => [ /* See VuFind\ILS\Driver\PluginManager for defaults */ ],
+            'ajaxhandler' => [ /* see VuFind\AjaxHandler\PluginManager for defaults */],
+            'auth' => [ /* see VuFind\Auth\PluginManager for defaults */],
+            'autocomplete' => [ /* see VuFind\Autocomplete\PluginManager for defaults */],
+            'channelprovider' => [ /* see VuFind\ChannelProvider\PluginManager for defaults */],
+            'content' => [ /* see VuFind\Content\PluginManager for defaults */],
+            'content_authornotes' => [ /* see VuFind\Content\AuthorNotes\PluginManager for defaults */],
+            'content_covers' => [ /* see VuFind\Content\Covers\PluginManager for defaults */],
+            'content_excerpts' => [ /* see VuFind\Content\Excerpts\PluginManager for defaults */],
+            'content_reviews' => [ /* see VuFind\Content\Reviews\PluginManager for defaults */],
+            'content_summaries' => [ /* see VuFind\Content\Summaries\PluginManager for defaults */],
+            'content_toc' => [ /* see VuFind\Content\TOC\PluginManager for defaults */],
+            'contentblock' => [ /* see VuFind\ContentBlock\PluginManager for defaults */],
+            'cover_layer' => [ /* see VuFind\Cover\Layer\PluginManager for defaults */],
+            'db_row' => [ /* see VuFind\Db\Row\PluginManager for defaults */],
+            'db_table' => [ /* see VuFind\Db\Table\PluginManager for defaults */],
+            'doilinker' => [ /* see VuFind\DoiLinker\PluginManager for defaults */],
+            'hierarchy_driver' => [ /* see VuFind\Hierarchy\Driver\PluginManager for defaults */],
+            'hierarchy_treedataformatter' => [ /* see VuFind\Hierarchy\TreeDataFormatter\PluginManager for defaults */],
+            'hierarchy_treedatasource' => [ /* see VuFind\Hierarchy\TreeDataSource\PluginManager for defaults */],
+            'hierarchy_treerenderer' => [ /* see VuFind\Hierarchy\TreeRenderer\PluginManager for defaults */],
+            'ils_driver' => [ /* See VuFind\ILS\Driver\PluginManager for defaults */],
             'metadatavocabulary' => [ /* See VuFind\MetadataVocabulary\PluginManager for defaults */],
-            'recommend' => [ /* See VuFind\Recommend\PluginManager for defaults */ ],
-            'record_fallbackloader' => [ /* See VuFind\Record\FallbackLoader\PluginManager for defaults */ ],
-            'recorddriver' => [ /* See VuFind\RecordDriver\PluginManager for defaults */ ],
-            'recordtab' => [ /* See VuFind\RecordTab\PluginManager for defaults */ ],
-            'related' => [ /* See VuFind\Related\PluginManager for defaults */ ],
-            'resolver_driver' => [ /* See VuFind\Resolver\Driver\PluginManager for defaults */ ],
-            'search_backend' => [ /* See VuFind\Search\BackendRegistry for defaults */ ],
-            'search_facetcache' => [ /* See VuFind\Search\FacetCache\PluginManager for defaults */ ],
-            'search_options' => [ /* See VuFind\Search\Options\PluginManager for defaults */ ],
-            'search_params' => [ /* See VuFind\Search\Params\PluginManager for defaults */ ],
-            'search_results' => [ /* See VuFind\Search\Results\PluginManager for defaults */ ],
-            'session' => [ /* see VuFind\Session\PluginManager for defaults */ ],
-            'urlshortener' => [ /* see VuFind\UrlShortener\PluginManager for defaults */ ],
+            'recommend' => [ /* See VuFind\Recommend\PluginManager for defaults */],
+            'record_fallbackloader' => [ /* See VuFind\Record\FallbackLoader\PluginManager for defaults */],
+            'recorddriver' => [ /* See VuFind\RecordDriver\PluginManager for defaults */],
+            'recordtab' => [ /* See VuFind\RecordTab\PluginManager for defaults */],
+            'related' => [ /* See VuFind\Related\PluginManager for defaults */],
+            'resolver_driver' => [ /* See VuFind\Resolver\Driver\PluginManager for defaults */],
+            'search_backend' => [ /* See VuFind\Search\BackendRegistry for defaults */],
+            'search_facetcache' => [ /* See VuFind\Search\FacetCache\PluginManager for defaults */],
+            'search_options' => [ /* See VuFind\Search\Options\PluginManager for defaults */],
+            'search_params' => [ /* See VuFind\Search\Params\PluginManager for defaults */],
+            'search_results' => [ /* See VuFind\Search\Results\PluginManager for defaults */],
+            'session' => [ /* see VuFind\Session\PluginManager for defaults */],
+            'urlshortener' => [ /* see VuFind\UrlShortener\PluginManager for defaults */],
         ],
     ],
     // Authorization configuration:
@@ -598,7 +599,7 @@ $config = [
                 'VuFind\Role\DynamicRoleProvider' => 'VuFind\Role\DynamicRoleProviderFactory',
             ],
         ],
-        'vufind_permission_provider_manager' => [ /* see VuFind\Role\PermissionProvider\PluginManager for defaults */ ],
+        'vufind_permission_provider_manager' => [ /* see VuFind\Role\PermissionProvider\PluginManager for defaults */],
     ],
 ];
 
@@ -660,7 +661,7 @@ $staticRoutes = [
     'MyResearch/StorageRetrievalRequests',
     'MyResearch/Unsubscribe', 'MyResearch/UserLogin',
     'MyResearch/Verify', 'MyResearch/VerifyEmail', 'OAI/Server',
-    'Overdrive/MyContent','Overdrive/Hold',
+    'Overdrive/MyContent', 'Overdrive/Hold',
     'Pazpar2/Home', 'Pazpar2/Search',
     'Primo/Advanced', 'Primo/Home', 'Primo/Search',
     'QRCode/Show', 'QRCode/Unavailable', 'Records/Home',
@@ -691,10 +692,10 @@ $routeGenerator->addStaticRoutes($config, $staticRoutes);
 $config['router']['routes']['home'] = [
     'type' => 'Zend\Router\Http\Literal',
     'options' => [
-        'route'    => '/',
+        'route' => '/',
         'defaults' => [
             'controller' => 'index',
-            'action'     => 'Home',
+            'action' => 'Home',
         ]
     ]
 ];

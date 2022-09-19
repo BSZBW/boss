@@ -22,13 +22,13 @@ $this->headTitle()->setPrefix($this->transEsc('ILL::Resigning'));
         </div>
 
         <?=$this->context($this)->renderInContext('bsz/input.phtml', [
-                'title' => 'adv_search_title',
-                'field'  => 'Title',
-                'value'  => $this->params['titel'] ?? ''])?>
+            'title' => 'PPN',
+            'field'  => 'id',
+            'value'  => $this->params['ppn'] ?? ''])?>
         <?=$this->context($this)->renderInContext('bsz/input.phtml', [
-            'title' => 'adv_search_journaltitle',
-            'field'  => 'JournalTitle',
-            'value'  => $this->params['journaltitle'] ?? ''])?>
+            'title' => 'adv_search_title',
+            'field'  => 'Title',
+            'value'  => $this->params['titel'] ?? ''])?>
         <?=$this->context($this)->renderInContext('bsz/input.phtml', [
             'title' => 'adv_search_author',
             'field'  => 'Author',
@@ -36,7 +36,7 @@ $this->headTitle()->setPrefix($this->transEsc('ILL::Resigning'));
         <?=$this->context($this)->renderInContext('bsz/input.phtml', [
             'title' => 'adv_search_publisher',
             'field'  => 'publisher',
-            'value'  => $this->params['verlkag'] ?? ''])?>
+            'value'  => $this->params['verlag'] ?? ''])?>
         <?=$this->context($this)->renderInContext('bsz/input.phtml', [
             'title' => 'adv_search_isn',
             'field'  => 'ISN',
@@ -52,11 +52,6 @@ $this->headTitle()->setPrefix($this->transEsc('ILL::Resigning'));
 
         <div class="form-group form-group-sm">
             <div class="col-sm-8 pull-right">
-                <button class="btn clear-btn text-danger" type="reset" name="submit" value="<?=$this->transEsc('Submit')?>">
-                    <i class="fa fa-times"></i>
-                    <span class="text"><?=$this->transEsc('Clear')?></span>
-                </button>
-
                 <input class="btn btn-success" type="submit" name="submit" value="<?=$this->transEsc('Submit')?>" />
             </div>
         </div>

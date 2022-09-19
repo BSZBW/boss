@@ -2,7 +2,9 @@
 namespace Bsz\Search\Solr;
 
 use Bsz\Config\Dedup;
+use DateTime;
 use VuFind\Config\PluginManager;
+use VuFind\Search\Solr\HierarchicalFacetHelper;
 use VuFindSearch\ParamBag;
 
 /**
@@ -16,20 +18,20 @@ class Params extends \VuFind\Search\Solr\Params
     protected $limit = 10;
 
     /**
-     * Params constructor.
+     * Constructor
      *
-     * @param $options
-     * @param PluginManager $configLoader
-     * @param HierarchicalFacetHelper|null $facetHelper
-     * @param Dedup|null $dedup
+     * @param \VuFind\Search\Base\Options  $options      Options to use
+     * @param \VuFind\Config\PluginManager $configLoader Config loader
+     * @param HierarchicalFacetHelper      $facetHelper  Hierarchical facet helper
+     * @param Dedup                        $dedup
      */
     public function __construct(
         $options,
         PluginManager $configLoader,
-        HierarchicalFacetHelper $facetHelper = null,
-        Dedup $dedup = null
+        Dedup $dedup = null,
+        HierarchicalFacetHelper $facetHelper = null
     ) {
-        parent::__construct($options, $configLoader);
+        parent::__construct($options, $configLoader, $facetHelper);
         $this->dedup = $dedup;
     }
 
@@ -224,4 +226,130 @@ class Params extends \VuFind\Search\Solr\Params
             }
         }
     }
+
+    /**
+     * Return current facet configurations
+     *
+     * @return array $facetSet
+     */
+    public function getFacetSettings()
+    {
+        // Build a list of facets we want from the index
+        $facetSet = [];
+        // List of used prefixes
+        $prefixList = [];
+
+        if (!empty($this->facetConfig)) {
+            $facetSet['limit'] = $this->facetLimit;
+            foreach (array_keys($this->facetConfig) as $facetField) {
+                $fieldLimit = $this->getFacetLimitForField($facetField);
+                if ($fieldLimit != $this->facetLimit) {
+                    $facetSet["f.{$facetField}.facet.limit"] = $fieldLimit;
+                }
+                $multifieldPrefix = $this->getFacetPrefixForMultiField($facetField);
+                if (!empty($multifieldPrefix)) {
+                    // &facet.field={!key=fivs facet.prefix=fivs}topic_browse
+                    $facetField = '{!key=' . $facetField . ' facet.prefix=' . $facetField . '}' . $multifieldPrefix;
+                }
+
+                $fieldPrefix = $this->getFacetPrefixForField($facetField);
+                if (!empty($fieldPrefix)) {
+                    $facetSet["f.{$facetField}.facet.prefix"] = $fieldPrefix;
+                }
+
+                $fieldMatches = $this->getFacetMatchesForField($facetField);
+                if (!empty($fieldMatches)) {
+                    $facetSet["f.{$facetField}.facet.matches"] = $fieldMatches;
+                }
+
+                if ($this->getFacetOperator($facetField) == 'OR') {
+                    $facetField = '{!ex=' . $facetField . '_filter}' . $facetField;
+                }
+                // remove fields of prefixList from solr request
+                if ( !in_array($facetField, $prefixList)) {
+                    $facetSet['field'][] = $facetField;
+                }
+            }
+            if ($this->facetContains != null) {
+                $facetSet['contains'] = $this->facetContains;
+            }
+            if ($this->facetContainsIgnoreCase != null) {
+                $facetSet['contains.ignoreCase']
+                    = $this->facetContainsIgnoreCase ? 'true' : 'false';
+            }
+            if ($this->facetOffset != null) {
+                $facetSet['offset'] = $this->facetOffset;
+            }
+            if ($this->facetPrefix != null) {
+                $facetSet['prefix'] = $this->facetPrefix;
+            }
+            $facetSet['sort'] = $this->facetSort ?: 'count';
+            if ($this->indexSortedFacets != null) {
+                foreach ($this->indexSortedFacets as $field) {
+                    $facetSet["f.{$field}.facet.sort"] = 'index';
+                }
+            }
+        }
+        return $facetSet;
+    }
+
+    /**
+     * Format a single filter for use in getFilterList().
+     *
+     * @param string $field     Field name
+     * @param string $value     Field value
+     * @param string $operator  Operator (AND/OR/NOT)
+     * @param bool   $translate Should we translate the label?
+     *
+     * @return array
+     */
+    protected function formatFilterListEntry($field, $value, $operator, $translate)
+    {
+        $parent = parent::formatFilterListEntry($field, $value, $operator, $translate);
+
+        if ($field == 'publishDateDaySort_date') {
+            $string = preg_replace('/T00:00:00Z/', '', $parent['displayText']);
+            $from = substr($string, 0, 10);
+            $to = substr($string, 11, 10);
+
+            $dateFrom = new DateTime($from);
+            $dateTo = new DateTime($to);
+            $parent['displayText'] = $dateFrom->format('d.m.Y').'-'.$dateTo->format('d.m.Y');
+        }
+        return $parent;
+    }
+
+    /**
+     * Adapted to the prefixed facets for findex.
+     * Get a user-friendly string to describe the provided facet field.
+     *
+     * @param string $field   Facet field name.
+     * @param string $value   Facet value.
+     * @param string $default Default field name (null for default behavior).
+     *
+     * @return string         Human-readable description of field.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getFacetLabel($field, $value = null, $default = null)
+    {
+        if (!isset($this->facetConfig[$field])
+            && !isset($this->extraFacetLabels[$field])
+            && isset($this->facetAliases[$field])
+        ) {
+            $field = $this->facetAliases[$field];
+        }
+        if (isset($this->facetConfig[$field])) {
+            return $this->facetConfig[$field];
+        }
+        if ($field == 'topic_browse' && strpos($value, 'fivt ') === 0) {
+            return 'fivt';
+        } elseif ($field == 'topic_browse' && strpos($value, 'fiva ') === 0) {
+            return 'fiva';
+        }
+        return isset($this->extraFacetLabels[$field])
+            ? $this->extraFacetLabels[$field]
+            : ($default ?: 'unrecognized_facet_label');
+    }
+
 }

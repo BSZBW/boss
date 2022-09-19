@@ -32,6 +32,29 @@ if (!empty($notations) && $this->client()->is('show_rvk')): ?>
     </tr>
 <?php endif; ?>
 
+<?php $dficlassification = $this->driver->tryMethod('getDFIClassification');
+if (!empty($dficlassification) && $this->client()->is('show_dfi')): ?>
+    <?php $contentDisplayed = true; ?>
+    <tr>
+        <th>
+            <span class="text-nowrap"><?= $this->abbrev('DFI') ?>-<?= $this->transEsc('Classification') ?>:</span>
+        </th>
+        <?php if (is_array($dficlassification)): ?>
+            <td>
+                <?php foreach ($dficlassification as $notation): ?>
+                    <span class="notationLine markjs">
+                <a data-toggle="tooltip" data-placement="right" data-html="true"
+                   href="<?= $this->record($this->driver)->getLink('dficlassification', $notation, $this->searchClassId) ?>"
+                   class="searchicon"
+                   title="<?= $this->transEsc($notation) ?>"><?=$notation?> <?=$this->transEsc('FIV::'.preg_replace('/\s/', '', strtolower($notation))) ?></a>
+            </span>
+                <?php endforeach; ?>
+            </td>
+        <?php endif; ?>
+        <?php unset($dficlassification) ?>
+    </tr>
+<?php endif; ?>
+
 <?php $fivclassification = $this->driver->tryMethod('getFIVClassification');
 if(!empty($fivclassification) && $this->client()->is('show_fiv')): ?>
     <?php $contentDisplayed = true; ?>
@@ -55,12 +78,12 @@ if (!empty($fivsubjects) && $this->client()->is('show_fiv')): ?>
     <?php $contentDisplayed = true; ?>
     <tr>
         <th>
-            <span class="text-nowrap"><?= $this->abbrev('FIV') ?>-<?= $this->transEsc('Main Topics') ?>:</span>
+            <span class="text-nowrap"><?= $this->transEsc('Main Topics') ?>:</span>
         </th>
         <?php if (is_array($fivsubjects)): ?>
-            <?php $count = 0; ?>
             <td>
-                <?= $this->context($this)->renderInContext('RecordDriver/DefaultRecord/parts/singlesubject.phtml', ['subjects' => $fivsubjects, 'type' => 'fivm']) ?>
+                <?= $this->context($this)->renderInContext('RecordDriver/DefaultRecord/parts/singlesubject.phtml',
+                    ['subjects' => $fivsubjects, 'type' => 'fivt', 'linktype' => 'fivtclassification']) ?>
             </td>
         <?php endif; ?>
         <?php unset($fivsubjects) ?>
@@ -71,13 +94,13 @@ if (!empty($fivsubjects) && $this->client()->is('show_fiv')): ?>
     <?php $contentDisplayed = true; ?>
     <tr>
         <th>
-            <span class="text-nowrap"><?= $this->abbrev('FIV') ?>-<?= $this->transEsc('Partial Aspects') ?>:</span>
+            <span class="text-nowrap"><?= $this->transEsc('Partial Aspects') ?>:</span>
         </th>
         <?php if (is_array($fivsubjects)): ?>
-            <?php $count = 0; ?>
             <td>
                 <?= $this->context($this)->renderInContext(
-                    'RecordDriver/DefaultRecord/parts/singlesubject.phtml', ['subjects' => $fivsubjects, 'type' => 'fivp']) ?>
+                    'RecordDriver/DefaultRecord/parts/singlesubject.phtml',
+                    ['subjects' => $fivsubjects, 'type' => 'fiva', 'linktype' => 'fivaclassification']) ?>
             </td>
 
         <?php endif; ?>
@@ -85,29 +108,42 @@ if (!empty($fivsubjects) && $this->client()->is('show_fiv')): ?>
     </tr>
 <?php endif; ?>
 
-<?php $dficlassification = $this->driver->tryMethod('getDFIClassification');
-if (!empty($dficlassification) && $this->client()->is('show_dfi')): ?>
+<?php $dfisubject = $this->driver->tryMethod('getDFISubject');
+if (!empty($dfisubject) && $this->client()->is('show_dfi')): ?>
     <?php $contentDisplayed = true; ?>
     <tr>
         <th>
-            <span class="text-nowrap"><?= $this->abbrev('DFI') ?>-<?= $this->transEsc('Classification') ?>:</span>
+            <span class="text-nowrap"><?= $this->abbrev('DFI') ?>-<?= $this->transEsc('Subject') ?>:</span>
         </th>
-        <?php if (is_array($dficlassification)): ?>
+        <?php if (is_array($dfisubject)): ?>
+            <?php $count = 0; ?>
             <td>
-                <?php foreach ($dficlassification as $notation): ?>
-                    <span class="notationLine markjs">
-                <a data-toggle="tooltip" data-placement="right" data-html="true"
-                   href="<?= $this->record($this->driver)->getLink('dficlassification', $notation, $this->searchClassId) ?>"
-                   class="searchicon"
-                   title="<?= $this->transEsc($notation) ?>"><?= $notation ?></a>
-            </span>
+                <?php foreach ($dfisubject as $notation): ?>
+                    <div class="notationLine markjs">
+                        <?php if(is_array($notation)): ?>
+                            <?php foreach ($notation as $key => $value): ?>
+                                <a href="<?=$this->record($this->driver)->getLink('dfi2060subject', $value, $this->searchClassId) ?>"
+                                   class="searchicon <?php if ($count >= 5): ?>dfisubjects-<?= $rand ?> collapse-inline collapse multi-collapse <?php endif; ?>"
+                                ><?=$this->escapeHtml($value)?>
+                                </a>
+                                <?php $count++; ?>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <a href="<?=$this->record($this->driver)->getLink('dfi2060subject', $notation, $this->searchClassId) ?>"
+                               class="searchicon <?php if ($count >= 5): ?>dfisubjects-<?= $rand ?> collapse-inline collapse multi-collapse <?php endif; ?>"
+                            ><?=$this->escapeHtml($notation)?></a>
+                            <?php $count++; ?>
+                        <?php endif; ?>
+                    </div>
                 <?php endforeach; ?>
+                <?php if ($count > 5): ?>
+                    <?= $this->showmore('.dfisubjects-' . $rand, false) ?>
+                <?php endif; ?>
             </td>
         <?php endif; ?>
-        <?php unset($dficlassification) ?>
+        <?php unset($dfisubject) ?>
     </tr>
 <?php endif; ?>
-
 
 <?php $subjects = $this->driver->tryMethod('getRVKSubjectHeadings');
 if (!empty($subjects) && $this->client()->is('show_rvk')): ?>

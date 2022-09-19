@@ -53,8 +53,6 @@ class Ezb extends \VuFind\Resolver\Driver\Ezb
             $openURL = $this->downgradeOpenUrl($parsed);
         }
 
-        $openURL .= '&sid=bsz:zdb&pid=' . urlencode($this->pid);
-
         // Make the call to the EZB and load results
         $url = $this->baseUrl . '?' . $openURL;
 
@@ -109,7 +107,7 @@ class Ezb extends \VuFind\Resolver\Driver\Ezb
             'rft.format' => false,
         ];
         foreach ($params as $key => $value) {
-            if (isset($mapping[$key]) && $mapping[$key] !== false) {
+            if (!empty($value) && isset($mapping[$key]) && $mapping[$key] !== false) {
                 $newParams[$mapping[$key]] = $value;
             }
         }

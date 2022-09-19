@@ -19,8 +19,11 @@
  */
 namespace Bsz\Search\Params;
 
-use Bsz\Search\Solr\Params;
 use Interop\Container\ContainerInterface;
+use VuFind\Config\YamlReader;
+use VuFind\ILS\Connection;
+use VuFind\ILS\Logic\Holds;
+use VuFind\ILS\Logic\TitleHolds;
 
 /**
  * BSz Search params Factory
@@ -29,20 +32,34 @@ use Interop\Container\ContainerInterface;
  */
 class Factory
 {
-    /**
-     * Factory for Solr params object.
-     *
-     * @param ContainerInterface $container
-     *
-     * @return \VuFind\Search\Solr\Params
-     */
-    public static function getSolr(ContainerInterface $container)
-    {
-        $config = $container->get('VuFind\Config');
-        $options = $container->get('VuFind\SearchOptionsPluginManager')->get('solr');
-        $dedup = $container->get('Bsz\Config\Dedup');
-        $params = new Params($options, $config, null, $dedup);
 
-        return $params;
+    /**
+     * Create an object
+     *
+     * @param ContainerInterface $container Service manager
+     * @param string $requestedName         Service being created
+     * @param null|array $options           Extra options (optional)
+     *
+     * @return object
+     * @throws ServiceNotFoundException if unable to resolve the service.
+     * @throws ServiceNotCreatedException if an exception is raised when
+     * creating a service.
+     * @throws ContainerException if any other error occurs
+     */
+    public function __invoke(ContainerInterface $container, $requestedName,
+                             array $options = null
+    )
+    {
+        // Replace trailing "Params" with "Options" to get the options service:
+        $parts = explode('\\', $requestedName);
+        $type = $parts[2] ?? 'Solr';
+        $optionsObj = $container->get('VuFind\SearchOptionsPluginManager')->get($type);
+        $configLoader = $container->get(\VuFind\Config\PluginManager::class);
+        // Clone the options instance in case caller modifies it:
+        $dedup = $container->get('Bsz\Config\Dedup');
+
+        return new $requestedName(
+            clone $optionsObj, $configLoader, $dedup, ...($options ?: [])
+        );
     }
 }

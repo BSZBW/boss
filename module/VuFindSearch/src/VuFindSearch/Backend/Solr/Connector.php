@@ -357,7 +357,7 @@ class Connector implements \Zend\Log\LoggerAwareInterface
             };
         } else {
             $method = Request::METHOD_GET;
-            $urlSuffix .= '?' . $paramString;
+            $urlSuffix .= '?' . 'year=2023&' . $paramString;
             $callback = null;
         }
 

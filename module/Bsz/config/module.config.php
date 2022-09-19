@@ -134,8 +134,7 @@ $config = [
                 'factories' => [
                     'Bsz\RecordDriver\SolrMarc'         => 'Bsz\RecordDriver\Factory',
                     'Bsz\RecordDriver\SolrGviMarc'      => 'Bsz\RecordDriver\Factory',
-                    'Bsz\RecordDriver\SolrFindexMarc' => 'Bsz\RecordDriver\Factory',
-                    'Bsz\RecordDriver\SolrGviMarcDE101' => 'Bsz\RecordDriver\Factory',
+                     'Bsz\RecordDriver\SolrGviMarcDE101' => 'Bsz\RecordDriver\Factory',
                     'Bsz\RecordDriver\SolrGviMarcDE576' => 'Bsz\RecordDriver\Factory',
                     'Bsz\RecordDriver\SolrGviMarcDE600' => 'Bsz\RecordDriver\Factory',
                     'Bsz\RecordDriver\SolrGviMarcDE601' => 'Bsz\RecordDriver\Factory',
@@ -152,7 +151,6 @@ $config = [
                 'aliases' => [
                     'SolrGviMarc'      =>  'Bsz\RecordDriver\SolrGviMarc',
                     'SolrGvimarc'      =>  'Bsz\RecordDriver\SolrGviMarc',
-                    'SolrFindexMarc'   => 'Bsz\RecordDriver\SolrFindexMarc',
                     'SolrGviMarcDE101' =>  'Bsz\RecordDriver\SolrGviMarcDE101',
                     'SolrGviMarcDE576' =>  'Bsz\RecordDriver\SolrGviMarcDE576',
                     'SolrGviMarcDE600' =>  'Bsz\RecordDriver\SolrGviMarcDE600',
@@ -170,7 +168,6 @@ $config = [
                 'delegators' => [
                     'Bsz\RecordDriver\SolrMarc'        => [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
                     'Bsz\RecordDriver\SolrGviMarc'      => [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
-                    'Bsz\RecordDriver\SolrFindexMarc' => [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
                     'Bsz\RecordDriver\SolrGviMarcDE627'=> [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
                     'Bsz\RecordDriver\SolrGviMarcDE101' => [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
                     'Bsz\RecordDriver\SolrGviMarcDE576' => [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
@@ -180,7 +177,6 @@ $config = [
                     'Bsz\RecordDriver\SolrGviMarcDE603' => [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
                     'Bsz\RecordDriver\SolrGviMarcDE604' => [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
                     'Bsz\RecordDriver\SolrGviMarcDE605' => [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
-                    'Bsz\RecordDriver\SolrGviMarcDE627' => [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
                     'Bsz\RecordDriver\SolrGviMarcATOBV' => [\VuFind\RecordDriver\IlsAwareDelegatorFactory::class],
                 ]
             ],
@@ -191,14 +187,12 @@ $config = [
                     'Bsz\RecordTab\Articles' => 'Bsz\RecordTab\Factory::getArticles',
                     'Bsz\RecordTab\Notes' => 'Bsz\RecordTab\Factory::getNotes',
                     'Bsz\RecordTab\Libraries' => 'Bsz\RecordTab\Factory::getLibraries',
-                    'Bsz\RecordTab\HoldingsILS' => 'Bsz\RecordTab\Factory::getHoldingsILS',
                     'Bsz\RecordTab\InterlibraryLoan' => 'Bsz\RecordTab\Factory::getInterLibraryLoan',
                 ],
                 'aliases' => [
                     'VuFind\RecordTab\HoldingsILS' => 'Bsz\RecordTab\HoldingsILS',
                     'Articles' => 'Bsz\RecordTab\Articles',
                     'Volumes' => 'Bsz\RecordTab\Volumes',
-                    'Articles' => 'Bsz\RecordTab\Articles',
                     'Notes' => 'Bsz\RecordTab\Notes',
                     'Libraries' => 'Bsz\RecordTab\Libraries',
                     'InterlibraryLoan' => 'Bsz\RecordTab\InterlibraryLoan',
@@ -212,10 +206,12 @@ $config = [
             ],
             'search_params'  => [
                 'factories' => [
-                    'Bsz\Search\Solr\Params' => 'Bsz\Search\Params\Factory::getSolr'
+                    'Bsz\Search\Solr\Params' =>     'Bsz\Search\Params\Factory',
+                    'Bsz\Search\Search2\Params' =>  'Bsz\Search\Params\Factory'
                 ],
                 'aliases' => [
-                    'VuFind\Search\Solr\Params' => 'Bsz\Search\Solr\Params'
+                    'VuFind\Search\Solr\Params' =>      'Bsz\Search\Solr\Params',
+                    'VuFind\Search\Search2\Params' =>   'Bsz\Search\Search2\Params',
                 ]
             ],
             'ils_driver' => [

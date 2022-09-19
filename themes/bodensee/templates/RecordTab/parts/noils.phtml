@@ -3,7 +3,7 @@
 
         <dl class="dl-horizontal">
         <?php $callNos = $this->tab->getUniqueCallNumbers($this->holding['items']); if (!empty($callNos)): ?>
-        <dt><?=$this->transEsc("Call Number")?>:</dt>
+        <dt><?=$this->transEsc("Call Number")?></dt>
 
         <dd><?php foreach ($callNos as $callNo): ?>
               <?php if ($this->callnumberHandler): ?>
@@ -16,11 +16,11 @@
         </dd>
         <?php endif; ?>
         <?php if (!empty($row['number'])): ?>
-            <dt><?=$this->transEsc('Local IDN')?>:</dt>
+            <dt><?=$this->transEsc('Local IDN')?></dt>
             <dd><?=$this->escapeHtml($row['number'])?></dd>
         <?php endif; ?>
         <?php if (!empty($row['storage'])): ?>
-            <dt><?=$this->transEsc('storage')?>:</dt>
+            <dt><?=$this->transEsc('storage')?></dt>
             <dd><?=$this->escapeHtml($row['storage'])?></dd>
         <?php endif; ?>
         <?php if (!empty($row['availability'])): ?>
@@ -28,11 +28,11 @@
             <dd><i class="fa <?=$this->record($this->driver)->indicator2icon($row['availability'])?>"></i> <?=$this->transEsc($this->record($this->driver)->indicator2status($row['availability']))?></dd>
         <?php endif; ?>
         <?php if (!empty($row['notes'])): ?>
-            <dt><?=$this->transEsc('Note')?>:</dt>
+            <dt><?=$this->transEsc('Note')?></dt>
             <dd><?=$this->transEsc($row['notes'])?></dd>
         <?php endif; ?>
         <?php if (!empty($row['link']) && strpos($row['link'], 'http') === 0): ?>
-            <dt><?=$this->transEsc('Link')?>:</dt>
+            <dt><?=$this->transEsc('Link')?></dt>
             <dd>
                 <?php $links = explode (' ', $row['link']) ?>
                 <?php if (is_array($links)): ?>
@@ -44,7 +44,7 @@
                 <?php endif; ?>
         <?php endif; ?>
         <?php if (!empty($row['status'])): ?>
-            <dt><?=$this->transEsc('Bestandsangaben')?>:</dt>
+            <dt><?=$this->transEsc('Bestandsangaben')?></dt>
             <dd><?=$this->escapeHtml($row['status'])?></dd>
         <? endif; ?>
         </dl>
