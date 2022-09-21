@@ -50,18 +50,8 @@ class Factory
     public static function getClientAsset(ContainerInterface $container)
     {
         $client = $container->get(\Bsz\Config\Client::class);
-
+        $tag = $client->getTag();
         $website = $client->getWebsite();
-
-        $host = $container->get('Request')->getHeaders()->get('host')->getFieldValue();
-
-        $tag = 'swb';
-        if (preg_match('/ireon-portal/', $host)) {
-            $tag = 'ireon';
-        } else {
-            $parts = explode('.', $host);
-            $tag = $parts[0] ?? 'swb';
-        }
 
         $library = null;
         $libraries = $container->get('Bsz\Config\Libraries');
