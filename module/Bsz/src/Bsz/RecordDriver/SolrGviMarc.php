@@ -836,9 +836,12 @@ class SolrGviMarc extends SolrMarc implements Constants
 
         $holdings = $this->getLocalHoldings();
         $isils = $this->mainConfig->getIsils();
+        $isils4local = $this->mainConfig->get('Site')->get('isil_local_url');
 
-        if ($this->mainConfig->is('first_isil_for_local_urls')) {
+        if (empty($isils4local)) {
             $isils = [array_shift($isils)];
+        } else {
+            $isils = explode(',', $isils4local);
         }
 
         /**
