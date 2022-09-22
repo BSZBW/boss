@@ -836,8 +836,10 @@ class SolrGviMarc extends SolrMarc implements Constants
 
         $holdings = $this->getLocalHoldings();
         $isils = $this->mainConfig->getIsils();
-        // we assume the first isil in config.ini is the most important one
-        $firstIsil = array_shift($isils);
+
+        if ($this->mainConfig->is('first_isil_for_local_urls')) {
+            $isils = [array_shift($isils)];
+        }
 
         /**
          * Anonymous function, called bellow. It handles ONE url.
@@ -845,7 +847,7 @@ class SolrGviMarc extends SolrMarc implements Constants
          * @param $link
          * @param $label
          */
-        $handler = function ($isil, $link, $label) use (&$addedUrls, $firstIsil) {
+        $handler = function ($isil, $link, $label) use (&$addedUrls, &$isils) {
 
             // Is there a label?  If not, just use the URL itself.
             if (empty($label)) {
@@ -861,7 +863,7 @@ class SolrGviMarc extends SolrMarc implements Constants
 
             // Prevent adding the same url multiple times
             if (!in_array($link, $addedUrls) && !empty($link)
-                && $firstIsil == $isil
+                && in_array($isil, $isils)
             ) {
                 $tmp = [
                     'isil' => $isil,
