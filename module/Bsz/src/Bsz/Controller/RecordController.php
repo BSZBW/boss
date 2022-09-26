@@ -461,4 +461,29 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
 
         return $response;
     }
+
+    /**
+     * Da a ping test on specified host
+     *
+     * @param $domain
+     *
+     * @return bool
+     */
+    private function pingDomain($domain)
+    {
+        $starttime = microtime(true);
+        $file      = fsockopen ($domain, 443, $errno, $errstr, 10);
+        $stoptime  = microtime(true);
+        $status    = 0;
+
+        if (!$file) {
+            $status = -1;  // Site is down
+        }
+        else {
+            fclose($file);
+            $status = ($stoptime - $starttime) * 1000;
+            $status = floor($status);
+        }
+        return ($status >= 0);
+    }
 }
