@@ -59,7 +59,7 @@
                 <dd><?=$this->escapeHtml($row['part'])?></dd>
             <?php endif; ?>
             <?php if (isset($row['about']) && count($row['about']) > 0): ?>
-                <dd> <?=$this->escapeHtml(implode(', ', $row['about']))?></dd>
+                <dd> <?=$this->transEsc(implode(', ', $row['about']))?></dd>
             <?php endif; ?>
             <?php if (isset($row['availability']) && $row['availability'] === 'article'): ?>
                 <dt></dt>

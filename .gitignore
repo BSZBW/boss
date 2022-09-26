@@ -25,7 +25,6 @@ data/
 /themes/**/css/
 /themes/**/make/
 /config
-
 #/solr/
 /solr/vendor
 import/solrmarc.log

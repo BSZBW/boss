@@ -8,13 +8,13 @@
     <xsl:param name="institution">elib</xsl:param>
     <xsl:param name="collection">All Sets</xsl:param>
     <xsl:param name="urlPrefix">http</xsl:param>
-    <xsl:variable name="inst" />
+    <xsl:variable name="inst" />    
     <!-- Change Tracking (See: https://vufind.org/wiki/indexing:eprints?s[]=eprints)  -->
     <!--
     <xsl:param name="track_changes">1</xsl:param>
     <xsl:param name="solr_core">biblio</xsl:param>
     -->
-
+    
     <xsl:template match="oai_dc:dc">
         <add>
             <doc>
@@ -23,13 +23,13 @@
                 <field name="id">
                     <xsl:value-of select="//identifier"/>
                 </field>
-
+                
                 <!-- Institution -->
                 <field name="institution_id">elib</field>
-
+                
                 <!-- Consortium -->
                 <field name="consortium">DLR</field>
-
+                                
                 <!-- RECORDTYPE -->
                 <field name="recordtype">ntrsoai</field>
 
@@ -38,7 +38,7 @@
               <field name="fullrecord">
                   <xsl:copy-of select="php:function('VuFind::xmlAsText', //oai_dc:dc)"/>
               </field>
-
+                
 
                 <!-- ALLFIELDS -->
                 <field name="allfields">
@@ -50,7 +50,7 @@
                     <xsl:value-of select="$institution" />
                 </field>
                 -->
-
+                
                 <!-- COLLECTION -->
                 <field name="collection">
                     <xsl:value-of select="$collection" />
@@ -87,10 +87,10 @@
                                 <field name="format">
                                     <xsl:value-of select="php:function('VuFind::mapString', normalize-space(string(.)), 'format_map.properties')"/>
                                 </field>
-                            </xsl:if>
+                            </xsl:if>                                
                         </xsl:if>
                     </xsl:for-each>
-                </xsl:if>
+                </xsl:if>                
 
 
                 <!-- Institution -->
@@ -105,7 +105,7 @@
                     </xsl:for-each>
                 </xsl:if>
                 -->
-
+                
                 <xsl:if test="//SetName">
                     <xsl:for-each select="//SetName">
                         <xsl:if test="string-length() > 0">
@@ -117,10 +117,10 @@
                             <xsl:variable name="inst">
                                 <xsl:choose>
                                     <xsl:when test="contains(., ':')">
-                                        <xsl:value-of select="substring-before(substring-after(.,'Institute und Einrichtungen = '),': ')"/>
+                                        <xsl:value-of select="substring-before(substring-after(.,'Institute und Einrichtungen = '),': ')"/>                                    
                                     </xsl:when>
                                     <xsl:otherwise>
-                                        <xsl:value-of select="substring-after(.,'Institute und Einrichtungen = ')"/>
+                                        <xsl:value-of select="substring-after(.,'Institute und Einrichtungen = ')"/>                                    
                                     </xsl:otherwise>
                                 </xsl:choose>
                             </xsl:variable>
@@ -146,7 +146,7 @@
                         <xsl:value-of select="//dc:contributor[normalize-space()]" />
                     </field>
                 </xsl:if>
-
+                
                 <!-- TYPE (Conference / Journal title) -->
                 <!--
                 <xsl:if test="//dc:type">
@@ -167,11 +167,9 @@
                                 <field name="author">
                                     <xsl:value-of select="normalize-space()"/>
                                 </field>
-                                <!--
                                 <field name="author-letter">
                                     <xsl:value-of select="normalize-space()"/>
                                 </field>
-                                -->
                             </xsl:if>
                             <xsl:if test="position()>1">
                                 <field name="author2">
@@ -207,14 +205,14 @@
 
                 <!-- PUBLISHDATE -->
                 <xsl:if test="//dc:date">
-                    <field name="publishDate">
+                    <field name="publish_date">
                         <xsl:value-of select="substring(//dc:date, 1, 4)"/>
                     </field>
-                    <field name="publishDateSort">
+                    <field name="publish_date_sort">
                         <xsl:value-of select="substring(//dc:date, 1, 4)"/>
                     </field>
                 </xsl:if>
-
+                
                 <!-- Change Tracking (See: https://vufind.org/wiki/indexing:eprints?s[]=eprints)  -->
                 <!--
                 <xsl:if test="$track_changes != 0">

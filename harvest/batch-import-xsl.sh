@@ -78,7 +78,7 @@ do
   if [ -f $file ]
   then
     echo "Processing $file ..."
-    php import-xsl.php import import-xsl $file $2
+    php import-xsl.php $file $2
     # Only move the file into the "processed" folder if processing was successful:
     if [ "$?" -eq "0" ]
     then

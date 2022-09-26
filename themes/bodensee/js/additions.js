@@ -315,7 +315,7 @@ function manageActiveTab() {
 
     var id = $('.searchForm .nav-tabs li.active').attr('id');
 
-    if (id === 'solr' || id === 'solr:filtered2' || 'Search2' ) {
+    if (id === 'solr' || id === 'solr:filtered2' || id === 'search2' ) {
         console.info('ILL tab is active');
         if ($('.record-tabs a.interlibraryloan').length > 0) {
             // jquery can't trigger a click on a bare text node.
