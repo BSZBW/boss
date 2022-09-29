@@ -26,17 +26,24 @@ class Tools
     /**
      * Da a ping test on specified host
      *
-     * @param $domain
+     * @param $url
      *
      * @return bool
      */
-    public static function pingDomain($domain)
+    public static function pingDomain($url)
     {
-        preg_replace('/https?:\/\//', '', $domain);
+        $urlparts = parse_url($url);
+        $domain = $urlparts['host'];
         $return = [];
-        exec("ping -c 1 ".$domain. " 2> $1", $return, $val);
-        xdebug_var_dump($return);
+        $cmd = ['ping', '-c1', escapeshellarg($domain)];
 
+        try {
+            exec(implode(' ', $cmd), $return);
+            return isset($return[4]) ? preg_match('/1 received, 0% packet loss/', $return[4]) : false;
+        } catch (Exception $e) {
+            throw new \Bsz\Exception('Unable to check zfl server status');
+            return false;
+        }
     }
 
 }
