@@ -103,9 +103,9 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
             $submitDisabled = true;
         }
 
-//        if (!NetTools::pingDomain($this->baseUrl)) {
-//            $this->flashMessenger()->addErrorMessage('ILL::server_unavailable');
-//        }
+        if (!NetTools::pingDomain($this->baseUrl)) {
+            $this->flashMessenger()->addErrorMessage('ILL::server_unavailable');
+        }
 
         // validate form data
         if (isset($params['Bestellform'])) {
