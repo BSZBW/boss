@@ -181,10 +181,6 @@ function searchInputTweaks() {
      });
      $('#searchForm').submit(function(e) {
 
-         // PPN Search
-         if (lookfor.match(/^[0-9]{9}[0-9X]$/i)) {
-             $input.val('id:*'+lookfor);
-         }
          if ($input.val().replace( /[\*\s]/gi,"" ).length <= limit) {
              $input.attr('data-placement', 'bottom');
 

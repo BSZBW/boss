@@ -67,7 +67,8 @@ class SaveIsil extends \VuFind\AjaxHandler\AbstractBase
                     implode(',', $isils),
                     time() + 14 * 24 * 60 * 60,
                     '/',
-                    $this->host);
+                    $this->host,
+                    true);
             $header = $this->response->getHeaders();
             $header->addHeader($cookie);
         }

@@ -61,7 +61,9 @@ class Dedup
                     'group_field',
                     $post['group_field'],
                     time() + 14 * 24 * 60 * 60,
-                    '/');
+                    '/',
+                    null,
+                    true);
             $header = $this->response->getHeaders();
             $header->addHeader($cookie);
             $this->container->offsetSet('group_field', $post['group_field']);
@@ -72,7 +74,9 @@ class Dedup
                     'group_limit',
                     $post['group_limit'],
                     time() + 14 * 24 * 60 * 60,
-                    '/');
+                    '/',
+                    null,
+                    true);
             $header = $this->response->getHeaders();
             $header->addHeader($cookie);
             $this->container->offsetSet('group_limit', $post['group_limit']);
