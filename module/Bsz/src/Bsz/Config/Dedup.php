@@ -45,6 +45,7 @@ class Dedup
     public function store($post)
     {
         $params = $this->getCurrentSettings();
+        $secure = getenv('VUFIND_ENV') === 'production' ? true : false;
         if (array_key_exists('group', $post)) {
             $cookie = new \Zend\Http\Header\SetCookie(
                     'group',
@@ -63,7 +64,7 @@ class Dedup
                     time() + 14 * 24 * 60 * 60,
                     '/',
                     null,
-                    true);
+                    $secure);
             $header = $this->response->getHeaders();
             $header->addHeader($cookie);
             $this->container->offsetSet('group_field', $post['group_field']);
@@ -76,7 +77,7 @@ class Dedup
                     time() + 14 * 24 * 60 * 60,
                     '/',
                     null,
-                    true);
+                    $secure);
             $header = $this->response->getHeaders();
             $header->addHeader($cookie);
             $this->container->offsetSet('group_limit', $post['group_limit']);

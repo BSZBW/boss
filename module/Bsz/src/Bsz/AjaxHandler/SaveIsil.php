@@ -62,13 +62,14 @@ class SaveIsil extends \VuFind\AjaxHandler\AbstractBase
         }
         if (count($isils) > 0) {
             $this->sessionContainer->offsetSet('isil', $isils);
+            $secure = getenv('VUFIND_ENV') === 'production' ? true : false;
             $cookie = new SetCookie(
                     'isil',
                     implode(',', $isils),
                     time() + 14 * 24 * 60 * 60,
                     '/',
                     $this->host,
-                    true);
+                    $secure);
             $header = $this->response->getHeaders();
             $header->addHeader($cookie);
         }
