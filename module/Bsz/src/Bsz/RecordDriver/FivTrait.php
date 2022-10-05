@@ -38,7 +38,6 @@ trait FivTrait {
         } elseif ($type === 'partial_aspects') {
             $ind2 = 1;
         }
-
         foreach ($this->getMarcRecord()->getFields('938') as $field) {
             $suba = $field->getSubField('a');
             $sub2 = $field->getSubfield(2);
