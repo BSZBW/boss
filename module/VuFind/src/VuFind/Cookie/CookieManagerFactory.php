@@ -72,7 +72,7 @@ class CookieManagerFactory implements FactoryInterface
                 $path = '/';
             }
         }
-        $secure = $config->Cookies->only_secure ?? false;
+        $secure = getenv('VUFIND_ENV') === 'production' ? true : false;
         $httpOnly = $config->Cookies->http_only ?? true;
         $domain = $config->Cookies->domain ?? null;
         $session_name = $config->Cookies->session_name ?? null;
