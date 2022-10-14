@@ -94,7 +94,6 @@ function displayItemStatus(result, $item) {
       var data = response.data;
       for (var j = 0; j < data.statuses.length; j++) {
         var status = data.statuses[j];
-        console.log(status);
         displayItemStatus(status, this.itemStatusEls[status.id]);
         this.itemStatusIds.splice(this.itemStatusIds.indexOf(status.id), 1);
       }

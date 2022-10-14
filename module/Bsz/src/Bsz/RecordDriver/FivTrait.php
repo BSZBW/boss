@@ -38,17 +38,19 @@ trait FivTrait {
         } elseif ($type === 'partial_aspects') {
             $ind2 = 1;
         }
-
         foreach ($this->getMarcRecord()->getFields('938') as $field) {
             $suba = $field->getSubField('a');
-            $sub2 = $field->getSubfield(2);
-            if ($suba && $field->getIndicator(1) == 1
-                && (empty($sub2) || $sub2->getData() != 'gnd')
-                && ((isset($ind2) && $field->getIndicator(2) == $ind2) || !isset($ind2))
-            ) {
-                $data = $suba->getData();
-                $data = preg_replace('/!.*!|:/i', '', $data);
-                $notationList[] = $data;
+            $subs2 = $field->getSubfields(2);
+            foreach ($subs2 as $sub2) {
+
+                if ($suba && $field->getIndicator(1) == 1
+                    && (empty($sub2) || $sub2->getData() != 'gnd')
+                    && ((isset($ind2) && $field->getIndicator(2) == $ind2) || !isset($ind2))
+                ) {
+                    $data = $suba->getData();
+                    $data = preg_replace('/!.*!|:/i', '', $data);
+                    $notationList[] = $data;
+                }
             }
         }
         return $notationList;
