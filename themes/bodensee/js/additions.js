@@ -281,33 +281,36 @@ function openUrlTooltip() {
   *
   */
 function datepicker() {
-    var date = new Date().toLocaleDateString();
-    $('.datepicker').datepicker({
-        language: $('html').attr('lang'),
-        weekStart: 1,
-        format: 'dd.mm.yyyy',
-        allowInputToggle: true,
-        orientation: 'bottom'
-    });
-    $('.input-daterange').datepicker({
-        language: $('html').attr('lang'),
-        weekStart: 1,
-        format: 'dd.mm.yyyy',
-        startDate: '01.01.1800',
-        endDate: date,
-        allowInputToggle: true,
-        orientation: 'bottom',
-        maxViewMode: 'years',
-        keepEmptyValues: false,
-        forceParse: true,
-        immediateUpdates: true,
-        assumeNearbyYear: true
+    if ($.fn.datepicker) {
 
-    });
-    // workaround: Addon does not open the datepicker by default
-    $('.input-group.date .input-group-addon').click(function(){
-       $(this).parent().find('input.datepicker').datepicker('show');
-    });
+        var date = new Date().toLocaleDateString();
+        $('.datepicker').datepicker({
+            language: $('html').attr('lang'),
+            weekStart: 1,
+            format: 'dd.mm.yyyy',
+            allowInputToggle: true,
+            orientation: 'bottom'
+        });
+        $('.input-daterange').datepicker({
+            language: $('html').attr('lang'),
+            weekStart: 1,
+            format: 'dd.mm.yyyy',
+            startDate: '01.01.1800',
+            endDate: date,
+            allowInputToggle: true,
+            orientation: 'bottom',
+            maxViewMode: 'years',
+            keepEmptyValues: false,
+            forceParse: true,
+            immediateUpdates: true,
+            assumeNearbyYear: true
+
+        });
+        // workaround: Addon does not open the datepicker by default
+        $('.input-group.date .input-group-addon').click(function(){
+            $(this).parent().find('input.datepicker').datepicker('show');
+        });
+    }
 
 }
 

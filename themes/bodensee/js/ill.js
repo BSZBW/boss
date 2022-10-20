@@ -185,12 +185,20 @@ function copyLend() {
     }
 }
 
+function resigningForm() {
+    $('input#reset-network-selection').on('click', function(){
+        $(this).paren().parent().find('input[type=checkbox]').prop('checked', false);
+    });
+}
+
+
 $(document).ready(function() {
 
     appendValidator();
     datepicker();
     copyLend();
     illFormLogic();
+    resigningForm();
     changeRequiredCopy($("input[name='Bestellform']:checked"));
 
 });
