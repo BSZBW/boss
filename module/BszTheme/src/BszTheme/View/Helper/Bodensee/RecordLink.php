@@ -83,8 +83,7 @@ class RecordLink extends \VuFind\View\Helper\Root\RecordLink
     private function determineProperties(SolrMarc $driver, $url = '')
     {
         $id = $driver->getUniqueId();
-        $pos = strpos($id, ')');
-        $ppn = substr($id, $pos + 1);
+        $ppn = preg_replace('/\(.*\)/', '', $id);
         $recordHelper = $this->getView()->plugin('record');
         $label = '';
         $url = empty($url) ? $this->baseUrl : $url;
