@@ -186,8 +186,19 @@ function copyLend() {
 }
 
 function resigningForm() {
-    $('input#reset-network-selection').on('click', function(){
-        $(this).paren().parent().find('input[type=checkbox]').prop('checked', false);
+    $('#reset-network-selection').click(function(e){
+        var $elems = $(this).parent().parent().find('.active');
+        $elems.each(function(index){
+            setTimeout(function() {
+                $(this).removeClass('active').find('input').prop('checked', false);
+            }.bind(this), 10);
+        });
+        e.preventDefault();
+    });
+    $('input[type=reset]').click(function(e) {
+        $('form input[type=text]').val('');
+        $('#reset-network-selection').trigger('click');
+        e.preventDefault();
     });
 }
 
