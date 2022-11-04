@@ -5,6 +5,15 @@ $this->headTitle()->setPrefix($this->transEsc('ILL::Resigning'));
 ?>
 <div class="col-sm-12">
     <h3><?=$this->transEsc('ILL::resigning_header')?></h3>
+    <dl class="dl-horizontal align-table">
+    <?php foreach ($this->params as $param => $value): ?>
+        <?php if (strpos($param, '_r') !== false): ?>
+        <?php $param = str_replace('_r', '', $param)?>
+        <dt><?=$this->transEsc($param)?></dt>
+        <dd><?=$this->escapeHtml($value)?></dd>
+        <?php endif; ?>
+    <?php endforeach; ?>
+    </dl>
 </div>
 <div class="col-sm-12 col-md-8">
 
