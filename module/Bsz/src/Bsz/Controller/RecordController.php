@@ -21,6 +21,7 @@
 namespace Bsz\Controller;
 
 use Bsz\Config\Library;
+use Bsz\Net\Tools as NetTools;
 use Exception;
 use VuFind\Controller\HoldsTrait;
 use VuFind\Controller\ILLRequestsTrait;
@@ -100,6 +101,10 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
                 && $first->getAuth() == 'shibboleth') {
             $this->flashMessenger()->addErrorMessage('You must be logged in first');
             $submitDisabled = true;
+        }
+
+        if (!NetTools::pingDomain($this->baseUrl)) {
+            $this->flashMessenger()->addErrorMessage('ILL::server_unavailable');
         }
 
         // validate form data
@@ -204,7 +209,7 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
      * Determin if we should use the test or live url.
      * @return boolean
      */
-    public function isTestMode()
+    private function isTestMode()
     {
         $client = $this->serviceLocator->get('Bsz\Config\Client');
         $libraries = $this->serviceLocator->get('Bsz\Config\Libraries')
@@ -461,4 +466,5 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
 
         return $response;
     }
+
 }
