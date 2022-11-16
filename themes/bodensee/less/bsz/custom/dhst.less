@@ -1,0 +1,18 @@
+// Switch on/off highlighting visibility using
+// background color in alpha channel 
+// rgba(255,255,0,0) = off, 
+// rgba(255,255,0,1) = maximum saturation
+
+// decent gray gradient
+body:not(.frame) {
+    background-image: linear-gradient(to bottom, #eaeaea 15%, #ddd 90%);    
+}
+
+.row.result:nth-child(2n+1) {
+    background-color: #f9f9f9;
+}
+
+.label-default {
+    background-color: inherit;
+}
+
