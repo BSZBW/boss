@@ -32,14 +32,13 @@ class Tools
      */
     public static function pingDomain($url)
     {
-        $urlparts = parse_url($url);
-        $domain = $urlparts['host'];
+        $domain = parse_url($url, PHP_URL_HOST);
         $return = [];
         $cmd = ['ping', '-c1', escapeshellarg($domain)];
 
         try {
             exec(implode(' ', $cmd), $return);
-            return isset($return[4]) ? preg_match('/1 received, 0% packet loss/', $return[4]) : false;
+            return isset($return[4]) ? (bool)preg_match('/1 received, 0% packet loss/', $return[4]) : false;
         } catch (Exception $e) {
             throw new \Bsz\Exception('Unable to check zfl server status');
             return false;

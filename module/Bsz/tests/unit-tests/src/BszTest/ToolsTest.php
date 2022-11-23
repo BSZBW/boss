@@ -28,7 +28,9 @@ class ToolsTest extends TestCase
 {
     public function testZfl()
     {
-        $result = Tools::pingDomain('fltest.bsz-bw.de');
+        $result = Tools::pingDomain('https://fltest.bsz-bw.de');
+        $this->assertTrue($result);
+        $result = Tools::pingDomain('https://zfl.bsz-bw.de');
         $this->assertTrue($result);
     }
 }
