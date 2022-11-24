@@ -34,7 +34,7 @@ class Tools
     {
         $domain = parse_url($url, PHP_URL_HOST);
         $return = [];
-        $cmd = ['ping', '-c1', escapeshellarg($domain)];
+        $cmd = ['ping', '-W1 -c1', escapeshellarg($domain)];
 
         try {
             exec(implode(' ', $cmd), $return);
