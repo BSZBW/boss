@@ -185,12 +185,31 @@ function copyLend() {
     }
 }
 
+function resigningForm() {
+    $('#reset-network-selection').click(function(e){
+        var $elems = $(this).parent().parent().find('.active');
+        $elems.each(function(index){
+            setTimeout(function() {
+                $(this).removeClass('active').find('input').prop('checked', false);
+            }.bind(this), 10);
+        });
+        e.preventDefault();
+    });
+    $('input[type=reset]').click(function(e) {
+        $('form input[type=text]').val('');
+        $('#reset-network-selection').trigger('click');
+        e.preventDefault();
+    });
+}
+
+
 $(document).ready(function() {
 
     appendValidator();
     datepicker();
     copyLend();
     illFormLogic();
+    resigningForm();
     changeRequiredCopy($("input[name='Bestellform']:checked"));
 
 });

@@ -1,9 +1,13 @@
+<?php
+ $imglink = $this->imageLink($imglink)
+?>
+
 <?php if (isset($website)): ?>
-<a href="<?=$website?>" class="external hasicon">
+    <a href="<?=$website?>" class="external hasicon">
 <?php endif; ?>
 <?php if (!empty($imglink)): ?>
-    <img src="<?=$this->imageLink($imglink); ?>" alt="<?=$this->escapeHtml($alt)?>" class="logo img-responsive"/>
+    <img src="<?=$imglink?>" alt="<?=$this->escapeHtml($alt)?>" class="logo img-responsive"/>
 <?php endif; ?>
 <?php if (isset($website)): ?>
-</a>
+    </a>
 <?php endif; ?>

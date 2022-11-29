@@ -1,10 +1,19 @@
 <?php
 $this->layout()->breadcrumbs .= '<li class="active">' . $this->transEsc('ILL::Resigning') . '</li>';
-
+$this->headScript()->appendFile("ill.js");
 $this->headTitle()->setPrefix($this->transEsc('ILL::Resigning'));
 ?>
 <div class="col-sm-12">
     <h3><?=$this->transEsc('ILL::resigning_header')?></h3>
+    <dl class="dl-horizontal align-table">
+    <?php foreach ($this->params as $param => $value): ?>
+        <?php if (strpos($param, '_r') !== false): ?>
+        <?php $param = str_replace('_r', '', $param)?>
+        <dt><?=$this->transEsc($param)?></dt>
+        <dd><?=$this->escapeHtml($value)?></dd>
+        <?php endif; ?>
+    <?php endforeach; ?>
+    </dl>
 </div>
 <div class="col-sm-12 col-md-8">
 
@@ -16,8 +25,9 @@ $this->headTitle()->setPrefix($this->transEsc('ILL::Resigning'));
             <label class="control-label col-sm-4" for="network"><?=$this->transEsc('Network')?></label>
             <div class="btn-group col-sm-8" data-toggle="buttons" id="network">
                 <?php foreach ($this->allNetworks as $name => $isil): ?>
-                    <label class="btn btn-default <?php if(in_array($name, $this->selectedNetworks)):?>active<?php endif; ?>"><input type="checkbox" <?php if(in_array($name, $this->selectedNetworks)):?>checked="checked" <?php endif; ?>name="filter[]" value="~consortium:<?=$this->escapeHtml($isil)?>" autocomplete="off"><?=$this->escapeHtml($name)?></label>
+                    <label class="btn btn-default <?php if(in_array($name, $this->selectedNetworks)):?>active<?php endif; ?>"><input type="checkbox" <?php if(in_array($name, $this->selectedNetworks)):?>checked="checked" <?php endif; ?> name="filter[]" value="~consortium:<?=$this->escapeHtml($isil)?>" autocomplete="off"><?=$this->escapeHtml($name)?></label>
                 <?php endforeach; ?>
+                <label class="btn btn-default" id="reset-network-selection"><span ><i class="fa fa-times text-danger"></i></label>
             </div>
         </div>
 
@@ -53,6 +63,7 @@ $this->headTitle()->setPrefix($this->transEsc('ILL::Resigning'));
         <div class="form-group form-group-sm">
             <div class="col-sm-8 pull-right">
                 <input class="btn btn-success" type="submit" name="submit" value="<?=$this->transEsc('Submit')?>" />
+                <input class="btn btn-danger" type="reset" name="submit" value="<?=$this->transEsc('Set back parts')?>" />
             </div>
         </div>
     </form>
