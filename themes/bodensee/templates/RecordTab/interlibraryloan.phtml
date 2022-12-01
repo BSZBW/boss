@@ -8,11 +8,14 @@ $ppns = $content['ppns'];
 $linklabels = $content['linklabels'];
 $status = $content['status'];
 $library = $content['library'];
+$networks = $this->driver->tryMethod('getConsortium');
+$networks = explode(', ', $networks);
+$network = $this->driver->getNetwork();
+$class = '';
 ?>
 
 <?php
-$network = $this->driver->getNetwork();
-$class = '';
+
 
 $url = $this->recordLink()->getUrl($this->driver) . '/ILLForm';
 if ($content['customUrl'] && $this->client()->getTag() !== 'fl-dienst' ) {
@@ -53,14 +56,38 @@ if ($content['customUrl'] && $this->client()->getTag() !== 'fl-dienst' ) {
     <?php endif; ?>
 
 </ul>
-<?php if ($status && $authMethod === 'shibboleth' && !$account->isLoggedIn()): ?>
-    <div class="alert alert-danger">
-        <?=$this->transEsc('You must be logged in first')?>
+<?php if($this->client()->getTag() !== 'fl-dienst'):?>
+    <?php if ($status && $authMethod === 'shibboleth' && !$account->isLoggedIn()): ?>
+        <div class="alert alert-danger">
+            <?=$this->transEsc('You must be logged in first')?>
+        </div>
+    <?php elseif ($status): ?>
+        <a title="<?= $this->transEsc('Interlibrary Loan') ?>" accesskey=""
+           href="<?= $url ?>"
+           id="illform"
+           class="<?= $this->escapeHtmlAttr($class) ?> btn btn-success btn-sm <?php if ($this->customUrl): ?>external hasicon<?php endif; ?>"><?= $this->transEsc('Recall as Interlibrary Loan') ?></a>
+    <?php endif; ?>
+<?php elseif ($this->client()->getTag() === 'fl-dienst'): ?>
+
+
+    <!-- Split button -->
+    <div class="btn-group">
+        <a title="<?= $this->transEsc('Interlibrary Loan') ?>" accesskey=""
+           href="<?=$url?>"
+           id="illform"
+           class="<?= $this->escapeHtmlAttr($class) ?> btn btn-success <?php if ($this->customUrl): ?>external hasicon<?php endif; ?>"><?= $this->transEsc('Recall as Interlibrary Loan') ?></a>
+        <?php if (is_array($networks)):?>
+            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="caret"></span>
+            <span class="sr-only">Toggle Dropdown</span>
+          </button>
+          <ul class="dropdown-menu">
+                <?php foreach($networks as $net): ?>
+                    <?php $urllist = str_replace('=SWB', '='.$net, $url)?>
+                    <li><a href="<?=$urllist?>"><?=$net?></a></li>
+                <?php endforeach; ?>
+          </ul>
+      <?php endif; ?>
     </div>
-<?php elseif ($status): ?>
-    <a title="<?= $this->transEsc('Interlibrary Loan') ?>" accesskey=""
-       href="<?= $url ?>"
-       id="illform"
-       class="<?= $this->escapeHtmlAttr($class) ?> btn btn-success btn-sm <?php if ($this->customUrl): ?>external hasicon<?php endif; ?>"><?= $this->transEsc('Recall as Interlibrary Loan') ?></a>
 <?php endif; ?>
 
