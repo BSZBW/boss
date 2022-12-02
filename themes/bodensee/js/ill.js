@@ -197,7 +197,6 @@ function resigningForm() {
     });
     $('input[type=reset]').click(function(e) {
         $('form input[type=text]').val('');
-        $('#reset-network-selection').trigger('click');
         e.preventDefault();
     });
 }
