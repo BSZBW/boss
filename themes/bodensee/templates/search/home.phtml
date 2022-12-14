@@ -54,13 +54,13 @@ JS;
               <img class="img-responsive" src="<?=$this->imageLink('logo/bsz.svg')?>" alt="BSZ Logo" />
           </div>
       <?php else: ?>
-          <div class="<?php if ($this->client()->getTag() == "athen"):?>col-md-12<?php else: ?>col-md-8<?php endif; ?>  hidden-sm hidden-xs">
+          <div class="<?php if ($this->client()->getTag() == "goethe"):?>col-md-12<?php else: ?>col-md-8<?php endif; ?>  hidden-sm hidden-xs">
               <?php if ($this->imageLink($this->clientAsset()->getHeader())): ?>
               <img src="<?=$this->imageLink($this->clientAsset()->getHeader()) ?>" class="img-responsive" alt="Aufmacherbild" />
               <?php endif; ?>
           </div>
       <?php endif; ?>
-      <?php if ($this->client()->getTag() != 'athen' && $this->client()->getTag() != 'fl-recherche'):?>
+      <?php if ($this->client()->getTag() != 'goethe' && $this->client()->getTag() != 'fl-recherche'):?>
       <div class="col-xs-6 col-sm-4 pull-right">
           <?=$this->clientAsset()->getLogoHtml()?>
       </div>

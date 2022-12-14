@@ -18,31 +18,19 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
-namespace Bsz\Net;
 
-class Tools
+namespace BszTest;
+
+use Bsz\Net\Tools;
+use PHPUnit\Framework\TestCase;
+
+class ToolsTest extends TestCase
 {
-
-    /**
-     * Da a ping test on specified host
-     *
-     * @param $url
-     *
-     * @return bool
-     */
-    public static function pingDomain($url)
+    public function testZfl()
     {
-        $domain = parse_url($url, PHP_URL_HOST);
-        $return = [];
-        $cmd = ['ping', '-W1 -c1', escapeshellarg($domain)];
-
-        try {
-            exec(implode(' ', $cmd), $return);
-            return isset($return[4]) ? (bool)preg_match('/1 received, 0% packet loss/', $return[4]) : false;
-        } catch (Exception $e) {
-            throw new \Bsz\Exception('Unable to check zfl server status');
-            return false;
-        }
+        $result = Tools::pingDomain('https://fltest.bsz-bw.de');
+        $this->assertTrue($result);
+        $result = Tools::pingDomain('https://zfl.bsz-bw.de');
+        $this->assertTrue($result);
     }
-
 }
