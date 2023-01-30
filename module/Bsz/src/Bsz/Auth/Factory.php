@@ -13,7 +13,7 @@ class Factory
     /**
      * Construct the authentication manager.
      *
-     * @param ServiceManager $sm Service manager.
+     * @param ContainerInterface $container
      *
      * @return Manager
      */
@@ -56,17 +56,10 @@ class Factory
         return $manager;
     }
 
-    /**
-     * Construct the Shibboleth plugin.
-     *
-     * @param ServiceManager $sm Service manager.
-     *
-     * @return Shibboleth
-     */
-    public static function getShibboleth(ContainerInterface $container)
-    {
+
+    public function __invoke(ContainerInterface $container, $requestedName) {
         $client = $container->get('Bsz\Config\Client');
-        return new Shibboleth(
+        return new $requestedName(
             $container->get('VuFind\SessionManager'),
             $container->get('Bsz\Config\Libraries'),
             $client->getIsils()
