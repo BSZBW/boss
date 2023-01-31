@@ -22,6 +22,9 @@
 namespace Bsz\Auth;
 
 use Bsz\Config\Libraries;
+use VuFind\Exception\Auth as AuthException;
+use Zend\Http\Client;
+use \Zend\Http\Client as HttpClient;
 
 class Koha extends \VuFind\Auth\AbstractBase
 {
@@ -47,6 +50,48 @@ class Koha extends \VuFind\Auth\AbstractBase
      */
     public function authenticate($request)
     {
-        // TODO: Implement authenticate() method.
+        $username = trim($request->getPost()->get('username'));
+        $password = trim($request->getPost()->get('password'));
+        if ($username == '' || $password == '') {
+            throw new AuthException('authentication_error_blank');
+        }
+        return $this->checkKoha($username, $password);
+    }
+
+    protected function checkKoha($username, $password)
+    {
+        $config = $this->getConfig();
+
+        $serviceid = $config->get('Koha')->get('serviceid');
+        $path = $config->get('Koha')->get('path');
+        $path = str_replace('%isil%', $this->isil, $path);
+        $url = [
+            'host' => $config->get('Koha')->get('host'),
+            'port' => $config->get('Koha')->get('post'),
+            'schma' => $config->get('Koha')->get('schema'),
+            'path' => $path
+        ];
+        $query_url = http_build_query($url);
+
+        $data = [
+            'user' => $username,
+            'password' => $password,
+            'service' => $serviceid,
+        ];
+        $json = json_encode($data);
+
+        $client = new HttpClient();
+        $client->setEncType(Client::ENC_URLENCODED);
+        $client->setAdapter('\Zend\Http\Client\Adapter\Curl')
+            ->setUri($query_url)
+            ->setMethod('POST')
+            ->setOptions(['timeout' => 30])
+            ->setParameterPost($json)
+            ->setAuth($config->get('basic_auth_user'), str_rot13($config->get('basic_auth_pw')));
+        $response = $client->send();
+        xdebug_var_dump($response);
+        return true;
+
+
     }
 }
