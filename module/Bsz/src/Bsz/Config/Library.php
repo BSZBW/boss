@@ -299,4 +299,12 @@ class Library
     {
         return $this->lend_copy[1] == 0b1;
     }
+
+    public function loginEnabled()
+    {
+        if ($this->getAuth() == 'shibboleth' || $this->getAuth() == 'kohaauth') {
+            return true;
+        }
+        return false;
+    }
 }

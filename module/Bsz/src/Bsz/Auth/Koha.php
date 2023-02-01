@@ -28,7 +28,6 @@ use \Zend\Http\Client as HttpClient;
 
 class Koha extends \VuFind\Auth\AbstractBase
 {
-
     protected $libraries;
     protected $isil;
     /**
@@ -39,10 +38,11 @@ class Koha extends \VuFind\Auth\AbstractBase
     public function __construct(
         \Zend\Session\ManagerInterface $sessionManager,
         Libraries $libraries,
-                                       $isil)
-    {
+        $isils
+    ) {
         $this->sessionManager = $sessionManager;
         $this->libraries = $libraries;
+        $isil = array_shift($isils);
         $this->isil = $isil;
     }
     /**
@@ -63,15 +63,15 @@ class Koha extends \VuFind\Auth\AbstractBase
         $config = $this->getConfig();
 
         $serviceid = $config->get('Koha')->get('serviceid');
+        $apikey = $config->get('Koha')->get('apikey');
+
+        $schema = $config->get('Koha')->get('schema');
+        $host = $config->get('Koha')->get('host');
+        $port = $config->get('Koha')->get('port');
         $path = $config->get('Koha')->get('path');
         $path = str_replace('%isil%', $this->isil, $path);
-        $url = [
-            'host' => $config->get('Koha')->get('host'),
-            'port' => $config->get('Koha')->get('post'),
-            'schma' => $config->get('Koha')->get('schema'),
-            'path' => $path
-        ];
-        $query_url = http_build_query($url);
+
+        $query_url = $schema.'://'.$host.':'.$port.$path;
 
         $data = [
             'user' => $username,
@@ -86,12 +86,12 @@ class Koha extends \VuFind\Auth\AbstractBase
             ->setUri($query_url)
             ->setMethod('POST')
             ->setOptions(['timeout' => 30])
-            ->setParameterPost($json)
-            ->setAuth($config->get('basic_auth_user'), str_rot13($config->get('basic_auth_pw')));
+            ->setHeaders([
+                'X-API-Key' => $apikey
+            ])
+            ->setRawBody($json);
         $response = $client->send();
-        xdebug_var_dump($response);
+
         return true;
-
-
     }
 }
