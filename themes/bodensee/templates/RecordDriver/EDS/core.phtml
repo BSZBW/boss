@@ -113,11 +113,15 @@
         <? endif; ?>
     <? $customFTLinks = $this->driver->getFTCustomLinks(); ?>
     <? if (!empty($customFTLinks) && !$this->driver->hasHTMLFullTextAvailable() && !$this->driver->hasPdfAvailable() ): ?>
-      <? foreach ($customFTLinks as $customLink): ?>        <? $url = isset($customLink['Url']) ? $customLink['Url'] : '';
-          $mot = isset($customLink['MouseOverText'])? $customLink['MouseOverText'] : '';
-          $icon = isset ($customLink['Icon']) ? $customLink['Icon'] : '';
-          $name = isset($customLink['Text']) ? $customLink['Text'] : '';
-        ?>
+      <? foreach ($customFTLinks as $customLink):
+            $url = isset($customLink['Url']) ? $customLink['Url'] : '';
+            $mot = isset($customLink['MouseOverText'])? $customLink['MouseOverText'] : '';
+            $icon = isset ($customLink['Icon']) ? $customLink['Icon'] : '';
+            $name = isset($customLink['Text']) ? $customLink['Text'] : '';
+
+            if ($this->client()->is('eds_han_link')):
+                $url = 'https://widgets.ebscohost.com/prod/customlink/hanapi/hanapi.php?profile=4dfs1q6ik97P45Pr6Mmmy9nUotvMptHd2uHU0qfH3ZXc1NLa0%2BGS2dfXpcnqtJihxZy1strSy9bd2eTe4K6s3dmiqenjh8ja7dyW5afew6SS&DestinationURL='.urlencode($url);
+            endif; ?>
         <tr>
           <td>
             <a href="<?=$this->escapeHtmlAttr(str_replace('http://dx.doi.org', 'https://doi.org', $url))?>" target="_blank" title="<?=$mot?>" class="custom-link">
