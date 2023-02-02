@@ -112,7 +112,7 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
 
             // use regex to trim username
             if (isset($first) && strlen($first->getRegex()) > 0
-                && $first->getAuth() == 'shibboleth'
+                && $first->loginEnabled()
                 && isset($params['BenutzerNummer'])
             ) {
                 $params['BenutzerNummer'] = preg_replace($first->getRegex(), "$1", $params['BenutzerNummer']);
