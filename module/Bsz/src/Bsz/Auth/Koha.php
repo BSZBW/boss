@@ -28,7 +28,7 @@ use \Zend\Http\Client as HttpClient;
 
 class Koha extends \VuFind\Auth\AbstractBase
 {
-    protected $libraries;
+    protected $library;
     protected $isil;
     /**
      * Constructor
@@ -41,7 +41,7 @@ class Koha extends \VuFind\Auth\AbstractBase
         $isils
     ) {
         $this->sessionManager = $sessionManager;
-        $this->libraries = $libraries;
+        $this->library = $libraries->getFirstActive($isils);
         $isil = array_shift($isils);
         $this->isil = $isil;
     }
