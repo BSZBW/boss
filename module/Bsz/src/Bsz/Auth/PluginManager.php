@@ -24,8 +24,8 @@ namespace Bsz\Auth;
 use Interop\Container\ContainerInterface;
 use VuFind\Auth\AlmaDatabase;
 use VuFind\Auth\CAS;
-use VuFind\Auth\ChoiceAuth;
-use VuFind\Auth\ChoiceAuthFactory;
+use Bsz\Auth\ChoiceAuth;
+use Bsz\Auth\ChoiceAuthFactory;
 use VuFind\Auth\Database;
 use VuFind\Auth\Email;
 use VuFind\Auth\EmailFactory;
@@ -37,8 +37,8 @@ use VuFind\Auth\LDAP;
 use VuFind\Auth\MultiAuth;
 use VuFind\Auth\MultiAuthFactory;
 use VuFind\Auth\MultiILS;
-use VuFind\Auth\Shibboleth;
-use VuFind\Auth\ShibbolethFactory;
+use Bsz\Auth\Shibboleth;
+use Bsz\Auth\Factory;
 use VuFind\Auth\SIP2;
 use Zend\ServiceManager\Factory\InvokableFactory;
 
@@ -84,7 +84,7 @@ class PluginManager extends \VuFind\Auth\PluginManager
         LDAP::class => InvokableFactory::class,
         MultiAuth::class => MultiAuthFactory::class,
         MultiILS::class => ILSFactory::class,
-        Shibboleth::class => ShibbolethFactory::class,
+        Shibboleth::class => Factory::class,
         SIP2::class => InvokableFactory::class,
         Koha::class => Factory::class
     ];
