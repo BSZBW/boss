@@ -21,6 +21,9 @@
 
 namespace Bsz\Auth;
 
+use Bsz\Config\Library;
+use VuFind\Exception\Auth as AuthException;
+
 /**
  * Class ChoiceAuth
  * @package  Bsz\Auth
@@ -29,18 +32,43 @@ namespace Bsz\Auth;
  */
 class ChoiceAuth extends \VuFind\Auth\ChoiceAuth
 {
+    protected $library;
     /**
      * Constructor
      *
      * @param \Zend\Session\Container $container Session container for retaining
      * user choices.
      */
-    public function __construct(\Zend\Session\Container $container)
+    public function __construct(\Zend\Session\Container $container, Library $library = null)
     {
         // Set up session container and load cached strategy (if found):
         $this->session = $container;
+        $this->library = $library;
+
         $this->strategy = isset($this->session->auth_method)
             ? $this->session->auth_method : false;
+    }
+
+    /**
+     * Set configuration; throw an exception if it is invalid.
+     *
+     * @param \Zend\Config\Config $config Configuration to set
+     *
+     * @throws AuthException
+     * @return void
+     */
+    public function setConfig($config)
+    {
+        parent::setConfig($config);
+
+        if ($this->library instanceof Library && $this->library->loginEnabled()) {
+            $authMethods = $this->library->getAuth();
+            $this->strategies = array_map('trim', $authMethods);
+        } else {
+            $this->strategies = array_map(
+                'trim', explode(',', $this->getConfig()->ChoiceAuth->choice_order)
+            );
+        }
     }
 
 }

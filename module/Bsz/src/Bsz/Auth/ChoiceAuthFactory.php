@@ -67,7 +67,10 @@ class ChoiceAuthFactory implements \Zend\ServiceManager\Factory\FactoryInterface
         $session = new \Zend\Session\Container(
             'ChoiceAuth', $container->get(\Zend\Session\SessionManager::class)
         );
-        $auth = new $requestedName($session);
+        $client = $container->get('Bsz\Config\Client');
+        $libraries = $container->get('Bsz\Config\Libraries');
+        $library = $libraries->getFirsActive($client->gtIsils());
+        $auth = new $requestedName($session, $library);
         $auth->setPluginManager($container->get(PluginManager::class));
         return $auth;
     }

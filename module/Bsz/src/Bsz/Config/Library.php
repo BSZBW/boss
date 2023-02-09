@@ -309,4 +309,10 @@ class Library
         }
         return false;
     }
+
+    public function getFirstAuth()
+    {
+        $auths = $this->getAuth();
+        return array_shift($auth);
+    }
 }
