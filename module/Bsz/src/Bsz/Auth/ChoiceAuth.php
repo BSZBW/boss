@@ -45,6 +45,8 @@ class ChoiceAuth extends \VuFind\Auth\ChoiceAuth
         $this->session = $container;
         $this->library = $library;
 
+        //$this->setConfig([]);
+
         $this->strategy = isset($this->session->auth_method)
             ? $this->session->auth_method : false;
     }
@@ -59,8 +61,6 @@ class ChoiceAuth extends \VuFind\Auth\ChoiceAuth
      */
     public function setConfig($config)
     {
-        parent::setConfig($config);
-
         if ($this->library instanceof Library && $this->library->loginEnabled()) {
             $authMethods = $this->library->getAuth();
             $this->strategies = array_map('trim', $authMethods);
