@@ -128,7 +128,8 @@ class Library
      */
     public function getAuth()
     {
-        return [$this->auth, $this->auth2];
+        $auths = [$this->auth, $this->auth2];
+        return array_filter($auths, static function($var){return $var !== null;} );;
     }
 
     /**

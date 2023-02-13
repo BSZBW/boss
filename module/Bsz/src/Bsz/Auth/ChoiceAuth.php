@@ -41,11 +41,10 @@ class ChoiceAuth extends \VuFind\Auth\ChoiceAuth
      */
     public function __construct(\Zend\Session\Container $container, Library $library = null)
     {
+        parent::__construct($container);
         // Set up session container and load cached strategy (if found):
         $this->session = $container;
         $this->library = $library;
-
-        //$this->setConfig([]);
 
         $this->strategy = isset($this->session->auth_method)
             ? $this->session->auth_method : false;
@@ -63,12 +62,30 @@ class ChoiceAuth extends \VuFind\Auth\ChoiceAuth
     {
         if ($this->library instanceof Library && $this->library->loginEnabled()) {
             $authMethods = $this->library->getAuth();
-            $this->strategies = array_map('trim', $authMethods);
+            $this->strategies = array_map([$this, 'map2Classnames'], $authMethods);
         } else {
             $this->strategies = array_map(
-                'trim', explode(',', $this->getConfig()->ChoiceAuth->choice_order)
+                'trim',
+                explode(',', $config->ChoiceAuth->choice_order)
             );
         }
     }
 
+    /**
+     * @param $input
+     *
+     * @return string
+     */
+    private function map2ClassNames($input)
+    {
+        $output = trim($input);
+
+        switch ($input) {
+            case 'kohaauth': $output = 'koha';
+            break;
+            case 'adisauth': $output = 'adis';
+            break;
+        }
+        return $output;
+    }
 }
