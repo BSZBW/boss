@@ -22,6 +22,7 @@
 namespace Bsz\Auth;
 
 use Bsz\Config\Libraries;
+use MongoDB\Driver\Exception\AuthenticationException;
 use VuFind\Exception\Auth as AuthException;
 use Zend\Http\Client;
 use \Zend\Http\Client as HttpClient;
@@ -50,7 +51,11 @@ class Koha extends \VuFind\Auth\AbstractBase
      */
     public function authenticate($request)
     {
-        return $this->validateCredentials($request);
+        if ($this->validateCredentials($request)) {
+            return trim($request->getPost()->get('username'));
+        } else {
+            throw new AuthException('unknown user');
+        }
     }
 
     /**
@@ -79,7 +84,7 @@ class Koha extends \VuFind\Auth\AbstractBase
         $serviceid = $config->get('Koha')->get('serviceid');
         $apikey = $config->get('Koha')->get('apikey');
 
-        $query_url = $config->get('url');
+        $query_url = $config->get('Koha')->get('url');
         $query_url = str_replace('%isil%', $this->isil, $query_url);
 
         $data = [
@@ -96,12 +101,21 @@ class Koha extends \VuFind\Auth\AbstractBase
             ->setMethod('POST')
             ->setOptions(['timeout' => 30])
             ->setHeaders([
+                'accept' => 'application/json',
+                'Content-Type' => 'application/json',
                 'X-API-Key' => $apikey
             ])
             ->setRawBody($json);
         $response = $client->send();
 
-        return true;
+        if ($response->getStatusCode() === 200 ) {
+            $json_response = $response->getContent();
+            $data_response = json_decode($json_response);
+            if ($data_response->auth == true) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
