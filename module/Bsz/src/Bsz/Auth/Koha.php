@@ -94,4 +94,29 @@ class Koha extends \VuFind\Auth\AbstractBase
 
         return true;
     }
+
+    /**
+     * Check if configuration is valid
+     *
+     * @return void
+     * @throws AuthException
+     */
+    public function validateConfig()
+    {
+        $requiredKeys = ['url', 'serviceid', 'apikey'];
+        if (!isset($this->config->Koha)) {
+            throw new AuthException(
+                "Koha section is missing in your config.ini!"
+            );
+        }
+        foreach ($requiredKeys as $req) {
+            if (!isset($this->config->Koha->$req)
+                || strlen($this->config->Koha->$req) === 0
+            ) {
+                throw new AuthException(
+                    "Koha section is missing required keys (url, serviceid, apikey)!"
+                );
+            }
+        }
+    }
 }
