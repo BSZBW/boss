@@ -60,6 +60,7 @@ class ChoiceAuth extends \VuFind\Auth\ChoiceAuth
      */
     public function setConfig($config)
     {
+        parent::setConfig($config);
         if ($this->library instanceof Library && $this->library->loginEnabled()) {
             $authMethods = $this->library->getAuth();
             $this->strategies = array_map([$this, 'map2Classnames'], $authMethods);
@@ -87,5 +88,18 @@ class ChoiceAuth extends \VuFind\Auth\ChoiceAuth
             break;
         }
         return $output;
+    }
+
+    /**
+     * Validate configuration parameters.  This is a support method for getConfig(),
+     * so the configuration MUST be accessed using $this->config; do not call
+     * $this->getConfig() from within this method!
+     *
+     * @throws AuthException
+     * @return void
+     */
+    protected function validateConfig()
+    {
+
     }
 }

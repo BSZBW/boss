@@ -26,7 +26,7 @@ if ($content['customUrl'] && $this->client()->getTag() !== 'fl-dienst' ) {
 ?>
 
 <?php
-    $authMethod = $library ? $library->getAuth() : '';
+    $authMethod = $library ? $library->getFirstAuth() : '';
     $account = $this->auth()->getManager();
 ?>
 

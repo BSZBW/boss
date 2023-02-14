@@ -50,28 +50,37 @@ class Koha extends \VuFind\Auth\AbstractBase
      */
     public function authenticate($request)
     {
+        return $this->validateCredentials($request);
+    }
+
+    /**
+     * Validate the credentials in the provided request, but do not change the state
+     * of the current logged-in user. Return true for valid credentials, false
+     * otherwise.
+     *
+     * @param \Zend\Http\PhpEnvironment\Request $request Request object containing
+     * account credentials.
+     *
+     * @throws AuthException
+     * @return bool
+     */
+    public function validateCredentials($request)
+    {
+
         $username = trim($request->getPost()->get('username'));
         $password = trim($request->getPost()->get('password'));
+
         if ($username == '' || $password == '') {
             throw new AuthException('authentication_error_blank');
         }
-        return $this->checkKoha($username, $password);
-    }
 
-    protected function checkKoha($username, $password)
-    {
         $config = $this->getConfig();
 
         $serviceid = $config->get('Koha')->get('serviceid');
         $apikey = $config->get('Koha')->get('apikey');
 
-        $schema = $config->get('Koha')->get('schema');
-        $host = $config->get('Koha')->get('host');
-        $port = $config->get('Koha')->get('port');
-        $path = $config->get('Koha')->get('path');
-        $path = str_replace('%isil%', $this->isil, $path);
-
-        $query_url = $schema.'://'.$host.':'.$port.$path;
+        $query_url = $config->get('url');
+        $query_url = str_replace('%isil%', $this->isil, $query_url);
 
         $data = [
             'user' => $username,
