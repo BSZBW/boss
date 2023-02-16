@@ -52,7 +52,12 @@ class Koha extends \VuFind\Auth\AbstractBase
     public function authenticate($request)
     {
         if ($this->validateCredentials($request)) {
-            return trim($request->getPost()->get('username'));
+            $username =  trim($request->getPost()->get('username'));
+            // If we made it this far, we should log in the user!
+            $user = $this->getUserTable()->getByUsername($username);
+
+            $user->save();
+            return $user;
         } else {
             throw new AuthException('unknown user');
         }
@@ -71,7 +76,6 @@ class Koha extends \VuFind\Auth\AbstractBase
      */
     public function validateCredentials($request)
     {
-
         $username = trim($request->getPost()->get('username'));
         $password = trim($request->getPost()->get('password'));
 
@@ -108,7 +112,7 @@ class Koha extends \VuFind\Auth\AbstractBase
             ->setRawBody($json);
         $response = $client->send();
 
-        if ($response->getStatusCode() === 200 ) {
+        if ($response->getStatusCode() === 200) {
             $json_response = $response->getContent();
             $data_response = json_decode($json_response);
             if ($data_response->auth == true) {
