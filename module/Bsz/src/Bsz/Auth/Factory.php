@@ -22,10 +22,9 @@ class Factory
         // Set up configuration:
         $config = $container->get('VuFind\Config')->get('config');
         $client = $container->get('Bsz\Config\Client');
-        $libraries = $container->get('Bsz\Config\Libraries');
         $library = null;
         if ($client->isIsilSession()) {
-            $library = $libraries->getFirstActive($client->getIsils());
+            $library = $client->getLibrary();
         }
         try {
             // Check if the catalog wants to hide the login link, and override

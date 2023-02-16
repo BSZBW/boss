@@ -440,6 +440,18 @@ class Client extends Config
         return $this->get('Help')->get('groups');
     }
 
+    /**
+     * @return null|Library
+     */
+    public function getLibrary()
+    {
+        $library = null;
+        if ($this->libraries instanceof Libraries) {
+            $library = $this->libraries->getFirstActive($this->getIsils());
+        }
+        return $library;
+    }
+
     public function getMaintenanceMessage()
     {
         if (defined('MAINTENANCE_MODE')) {

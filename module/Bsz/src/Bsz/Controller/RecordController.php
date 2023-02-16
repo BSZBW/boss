@@ -92,8 +92,7 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
             $this->flashMessenger()->addErrorMessage('missing_isil');
             throw new \Bsz\Exception('You must select a library to continue');
         }
-        $libraries = $this->serviceLocator->get('Bsz\Config\Libraries');
-        $first = $libraries->getFirstActive($client->getIsils());
+        $first = $client->getLibrary();
         $submitDisabled = false;
 
         if (isset($first) && $authManager->loginEnabled()
