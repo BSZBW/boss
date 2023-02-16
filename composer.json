@@ -75,7 +75,8 @@
         "zendframework/zendservice-amazon": "2.3.1",
         "zendframework/zendservice-recaptcha": "3.2.0",
         "zf-commons/zfc-rbac": "2.6.3",
-        "ezyang/htmlpurifier": "4.13"
+        "ezyang/htmlpurifier": "4.13",
+      "ext-simplexml": "*"
     },
     "require-dev": {
         "behat/mink": "1.7.1",

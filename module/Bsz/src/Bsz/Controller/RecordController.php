@@ -281,7 +281,7 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
             }
 
             $pw = '';
-            if ($library->getAuth() == 'tan' && isset($params['TAN'])) {
+            if ($library->getFirstAuth() == 'tan' && isset($params['TAN'])) {
                 $pw = $params['TAN'];
             } elseif (isset($params['Passwort'])) {
                 $pw = $params['Passwort'];

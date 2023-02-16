@@ -4,12 +4,9 @@
 $inputSize = 9;
 $account = $this->auth()->getManager();
 $library = $this->libraries()->getFirstActive($this->client()->getIsils());
-$authMethod = '';
-if (isset($library)) {
-    $authMethod = $library->getAuth();
-}
+
 ?>
-<?php if (!$account->loginEnabled() || $authMethod != 'shibboleth'): ?>
+<?php if (!$account->loginEnabled() || !$library->loginEnabled()): ?>
     <div class=" form-group form-group-sm <?= isset($success) && !$success ? 'has-error' : '' ?>">
         <label class="control-label col-sm-<?= $labelSize ?>"
                for="ill-user"><?= $this->transEsc('Benutzernummer') ?>*</label>

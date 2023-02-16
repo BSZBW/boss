@@ -302,6 +302,9 @@ class Library
         return $this->lend_copy[1] == 0b1;
     }
 
+    /**
+     * @return bool
+     */
     public function loginEnabled()
     {
         $auth = $this->getAuth();
@@ -311,9 +314,12 @@ class Library
         return false;
     }
 
+    /**
+     * @return array
+     */
     public function getFirstAuth()
     {
         $auths = $this->getAuth();
-        return array_shift($auth);
+        return array_shift($auths);
     }
 }
