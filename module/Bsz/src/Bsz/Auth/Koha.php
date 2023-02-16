@@ -59,7 +59,7 @@ class Koha extends \VuFind\Auth\AbstractBase
             $user->save();
             return $user;
         } else {
-            throw new AuthException('unknown user');
+            // it's clear that the user name is not valid
         }
     }
 
@@ -112,13 +112,19 @@ class Koha extends \VuFind\Auth\AbstractBase
             ->setRawBody($json);
         $response = $client->send();
 
+        $json_response = $response->getContent();
+        $data_response = json_decode($json_response);
+
         if ($response->getStatusCode() === 200) {
-            $json_response = $response->getContent();
-            $data_response = json_decode($json_response);
             if ($data_response->auth == true) {
                 return true;
             }
+        } else if ($response->getStatusCode() === 403) {
+            throw new AuthException('Invalid API token: '.$data_response->detail);
+        } else {
+            throw new AuthException($data_response->detail);
         }
+
         return false;
     }
 
