@@ -213,10 +213,10 @@ class Client extends Config
 
     /**
      *
-     * @param Request $request
+     * @param $request
      * @return Client
      */
-    public function attachRequest(Request $request)
+    public function attachRequest($request)
     {
         $this->request = $request;
         return $this;
