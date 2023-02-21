@@ -1261,4 +1261,15 @@ class SolrGviMarc extends SolrMarc implements Constants
 
         return $zdb;
     }
+
+    public function isEPflicht() : bool
+    {
+        $fields = $this->getFieldArray('912', ['a']);
+        foreach ($fields as $field) {
+            if ($field === 'EPF-BW-GESAMT') {
+                return true;
+            }
+        }
+        return false;
+    }
 }
