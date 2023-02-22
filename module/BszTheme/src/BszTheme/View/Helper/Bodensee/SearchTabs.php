@@ -154,15 +154,14 @@ class SearchTabs extends \VuFind\View\Helper\Root\SearchTabs
     public static function getIcon($id)
     {
         switch (strtolower($id)) {
+            case 'summon':
+            case 'solr:filtered2':
             case 'eds': $icon = 'fa-newspaper-o';
-                break;
-            case 'summon': $icon = 'fa-newspaper-o';
                 break;
             case 'solr:filtered1': $icon = 'fa-book';
                 break;
-            case 'solr:filtered2': $icon = 'fa-newspaper-o';
-                break;
-            case 'solr': $icon = 'fa-globe';
+            case 'solr':
+                $icon = 'fa-globe';
                 break;
             case 'fis': $icon = 'fa-university';
                 break;
