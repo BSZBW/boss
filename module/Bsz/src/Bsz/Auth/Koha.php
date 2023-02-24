@@ -118,14 +118,15 @@ class Koha extends \VuFind\Auth\AbstractBase
         if ($response->getStatusCode() === 200) {
             if ($data_response->auth == true) {
                 return true;
+            } else {
+                // user not valid
+                return false;
             }
         } else if ($response->getStatusCode() === 403) {
             throw new AuthException('Invalid API token: '.$data_response->detail);
         } else {
             throw new AuthException($data_response->detail);
         }
-
-        return false;
     }
 
     /**
