@@ -74,12 +74,16 @@ class Holding
      */
     protected $debug;
 
+    protected $searchClassId;
+
     /**
      * @param Runner $runner
+     * @param string $searchClassId
      */
-    public function __construct(Runner $runner)
+    public function __construct(Runner $runner, $searchClassId = 'Solr')
     {
         $this->runner = $runner;
+        $this->searchClassId = $searchClassId;
     }
 
     /**
@@ -218,7 +222,7 @@ class Holding
         }
         $params['lookfor'] = implode(' AND ', $and);
 
-        $results = $this->runner->run($params, 'Solr');
+        $results = $this->runner->run($params, $this->searchClassId);
 
         return $this->parse($results);
     }
