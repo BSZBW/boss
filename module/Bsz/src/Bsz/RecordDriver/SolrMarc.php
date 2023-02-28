@@ -132,7 +132,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
         $leader07 = $leader{7};
         $leader19 = $leader{19};
 
-        if ($leader07 == 'm' && $leader19 == 'c') {
+        if ($leader07 == 'm' && preg_match('/b|c/', $leader19)) {
             return true;
         }
         return false;
