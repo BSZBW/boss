@@ -13,7 +13,7 @@ class Factory
     /**
      * Construct the authentication manager.
      *
-     * @param ServiceManager $sm Service manager.
+     * @param ContainerInterface $container
      *
      * @return Manager
      */
@@ -22,10 +22,9 @@ class Factory
         // Set up configuration:
         $config = $container->get('VuFind\Config')->get('config');
         $client = $container->get('Bsz\Config\Client');
-        $libraries = $container->get('Bsz\Config\Libraries');
         $library = null;
         if ($client->isIsilSession()) {
-            $library = $libraries->getFirstActive($client->getIsils());
+            $library = $client->getLibrary();
         }
         try {
             // Check if the catalog wants to hide the login link, and override
@@ -56,17 +55,10 @@ class Factory
         return $manager;
     }
 
-    /**
-     * Construct the Shibboleth plugin.
-     *
-     * @param ServiceManager $sm Service manager.
-     *
-     * @return Shibboleth
-     */
-    public static function getShibboleth(ContainerInterface $container)
-    {
+
+    public function __invoke(ContainerInterface $container, $requestedName) {
         $client = $container->get('Bsz\Config\Client');
-        return new Shibboleth(
+        return new $requestedName(
             $container->get('VuFind\SessionManager'),
             $container->get('Bsz\Config\Libraries'),
             $client->getIsils()

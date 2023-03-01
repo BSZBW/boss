@@ -58,8 +58,7 @@ class DAIAFactory implements FactoryInterface
         $isils = $client->getIsils();
 
         if ($client->isIsilSession() && $client->hasIsilSession()) {
-            $libraries = $container->get('Bsz\Config\Libraries');
-            $active = $libraries->getFirstActive($isils);
+            $active = $client->getLibrary();
             $baseUrl = isset($active) ? $active->getUrlDaia() : '';
         }
         $converter = $container->get('VuFind\DateConverter');

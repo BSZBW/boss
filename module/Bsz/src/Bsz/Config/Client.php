@@ -213,10 +213,10 @@ class Client extends Config
 
     /**
      *
-     * @param Request $request
+     * @param $request
      * @return Client
      */
-    public function attachRequest(Request $request)
+    public function attachRequest($request)
     {
         $this->request = $request;
         return $this;
@@ -438,6 +438,18 @@ class Client extends Config
     public function getHelpGroups()
     {
         return $this->get('Help')->get('groups');
+    }
+
+    /**
+     * @return null|Library
+     */
+    public function getLibrary()
+    {
+        $library = null;
+        if ($this->libraries instanceof Libraries) {
+            $library = $this->libraries->getFirstActive($this->getIsils());
+        }
+        return $library;
     }
 
     public function getMaintenanceMessage()

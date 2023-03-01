@@ -92,8 +92,7 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
             $this->flashMessenger()->addErrorMessage('missing_isil');
             throw new \Bsz\Exception('You must select a library to continue');
         }
-        $libraries = $this->serviceLocator->get('Bsz\Config\Libraries');
-        $first = $libraries->getFirstActive($client->getIsils());
+        $first = $client->getLibrary();
         $submitDisabled = false;
 
         if (isset($first) && $authManager->loginEnabled()
@@ -112,7 +111,7 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
 
             // use regex to trim username
             if (isset($first) && strlen($first->getRegex()) > 0
-                && $first->getAuth() == 'shibboleth'
+                && $first->loginEnabled()
                 && isset($params['BenutzerNummer'])
             ) {
                 $params['BenutzerNummer'] = preg_replace($first->getRegex(), "$1", $params['BenutzerNummer']);
@@ -281,7 +280,7 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
             }
 
             $pw = '';
-            if ($library->getAuth() == 'tan' && isset($params['TAN'])) {
+            if ($library->getFirstAuth() == 'tan' && isset($params['TAN'])) {
                 $pw = $params['TAN'];
             } elseif (isset($params['Passwort'])) {
                 $pw = $params['Passwort'];

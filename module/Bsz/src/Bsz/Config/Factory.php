@@ -25,10 +25,9 @@
  */
 namespace Bsz\Config;
 
-use Bsz\LibrariesTable;
 use Interop\Container\ContainerInterface;
 use Zend\Db\ResultSet\ResultSet;
-use Zend\Session\Container;
+use Zend\Session\Container as SessionContainer;
 
 /**
  * Description of Factory
@@ -55,26 +54,29 @@ class Factory
         }
 
         $bszconf = $container->get('VuFind\Config')->get('bsz')->toArray();
-        $sessContainer = new Container(
+
+        $client = new Client(array_merge($vufindconf, $bszconf), true);
+
+        // Session is needed to fetch ISILs out of session
+        $sessionContainer = new SessionContainer(
             'fernleihe',
             $container->get('VuFind\SessionManager')
         );
+        $client->attachSessionContainer($sessionContainer);
+        // Libraries object is needed to obtain current libraries
+        $libraries = $container->get('Bsz\Config\Libraries');
+        $client->attachLibraries($libraries);
+        // Request is needed to work with cookies
+        $request = $container->get('Request');
+        $client->attachRequest($request);
 
-        $client = new Client(array_merge($vufindconf, $bszconf), true);
-        $client->attachSessionContainer($sessContainer);
-        if ($client->isIsilSession()) {
-            $libraries = $container->get('Bsz\Config\Libraries');
-            $request = $container->get('Request');
-            $client->attachLibraries($libraries);
-            $client->attachRequest($request);
-        }
         return $client;
     }
 
     /**
-     *
      * @param ContainerInterface $container
-     * @return LibrariesTable
+     *
+     * @return Libraries
      */
     public static function getLibrariesTable(ContainerInterface $container)
     {
@@ -89,10 +91,15 @@ class Factory
         return $librariesTable;
     }
 
+    /**
+     * @param ContainerInterface $container
+     *
+     * @return Dedup
+     */
     public static function getDedup(ContainerInterface $container)
     {
         $config = $container->get('VuFind\Config')->get('config')->get('Index');
-        $sesscontainer = new Container(
+        $sesscontainer = new SessionContainer(
             'dedup',
             $container->get('VuFind\SessionManager')
         );

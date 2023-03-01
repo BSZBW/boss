@@ -22,6 +22,7 @@
 namespace Bsz\Module\Config;
 
 use Bsz\Controller\Factory;
+use Bsz\Auth\Factory as AuthFactory;
 use Bsz\Route\RouteGenerator;
 
 $config = [
@@ -83,6 +84,7 @@ $config = [
             'Bsz\Parser\OpenUrl' => 'Bsz\Parser\Factory::getOpenUrlParser',
             'Bsz\SearchTabsHelper' => 'Bsz\Service\Factory::getSearchTabsHelper',
             'Bsz\Auth\Manager' => 'Bsz\Auth\Factory::getManager',
+            'Bsz\Auth\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'Bsz\RecordDriver\PluginManager' => 'Bsz\RecordDriver\PluginManagerFactory',
             'Bsz\ILL\Logic' => 'Bsz\ILL\Factory::getIllLogic',
 
@@ -94,7 +96,8 @@ $config = [
         'aliases' => [
             'VuFind\SearchTabsHelper'   => 'Bsz\SearchTabsHelper',
             'VuFind\Auth\Manager'           => 'Bsz\Auth\Manager',
-            'VuFind\RecordDriver\PluginManager' => 'Bsz\RecordDriver\PluginManager'
+            'VuFind\RecordDriver\PluginManager' => 'Bsz\RecordDriver\PluginManager',
+            'VuFind\Auth\PluginManager' => 'Bsz\Auth\PluginManager'
 
         ]
     ],
@@ -106,7 +109,8 @@ $config = [
         'plugin_managers' => [
             'auth' => [
                 'factories' => [
-                   'Bsz\Auth\Shibboleth' => 'Bsz\Auth\Factory::getShibboleth'
+                   'Bsz\Auth\Shibboleth' => AuthFactory::class,
+                   'Bsz\Auth\Koha' => AuthFactory::class,
                 ],
                 'aliases' => [
                     'VuFind\Auth\Shibboleth' => 'Bsz\Auth\Shibboleth'

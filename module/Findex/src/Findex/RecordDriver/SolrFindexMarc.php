@@ -303,4 +303,27 @@ class SolrFindexMarc extends SolrMarc implements Constants
         }
         return $this->container;
     }
+    public function getIdsRelated()
+    {
+        return $this->getContainerIds();
+    }
+    public function getContainerIds()
+    {
+        $fields = [
+            800 => ['w'],
+        ];
+        $ids = [];
+        $array = $this->getFieldsArray($fields);
+        foreach ($array as $subfields) {
+            $tmp = explode(' ', $subfields);
+            foreach ($tmp as $id) {
+                // match all PPNs except old SWB PPNs and ZDB-IDs
+                if ( !preg_match('/^\(DE-627\)/', $id)) {
+                    $ids[] = $id;
+                }
+            }
+        }
+        return array_unique($ids);
+    }
+
 }
