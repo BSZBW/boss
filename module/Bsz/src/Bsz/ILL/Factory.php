@@ -54,8 +54,6 @@ class Factory
      */
     public static function getHolding(ContainerInterface $container)
     {
-        $uri = $container->get('Request')->getUri() ;
-        $searchClassId = preg_match('/search2/i', $uri) ? 'Search2' : 'Solr';
-        return new Holding($container->get('VuFind\SearchRunner'), $searchClassId);
+        return new Holding($container->get('VuFind\SearchRunner'));
     }
 }
