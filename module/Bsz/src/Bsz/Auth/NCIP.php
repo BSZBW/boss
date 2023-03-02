@@ -27,6 +27,7 @@
  * @link     https://vufind.org/wiki/development:plugins:authentication_handlers Wiki
  */
 namespace Bsz\Auth;
+
 use VuFind\Exception\Auth as AuthException;
 use DOMImplementation;
 use SimpleXMLElement;
@@ -37,6 +38,7 @@ use VuFind\Auth\AbstractBase;
  *
  * @category VuFind
  * @package  Authentication
+ * @author   Cornelius Amzar <cornelius.amzar@bsz-bw.de>
  * @author   Franck Borel <franck.borel@gbv.de>
  * @author   Demian Katz <demian.katz@villanova.edu>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
@@ -44,7 +46,6 @@ use VuFind\Auth\AbstractBase;
  */
 class NCIP extends AbstractBase
 {
-
     const SUCCESS = 'Success';
     const AUTHENTICATION_FAILED = 'User Authentication Failed';
     const ACCESS_DENIED = 'User Access Denied';
@@ -164,7 +165,6 @@ class NCIP extends AbstractBase
         // Update the user in the database, then return it to the caller:
         $user->save();
         return $user;
-
     }
 
     /**
@@ -178,7 +178,8 @@ class NCIP extends AbstractBase
     {
         $domImpl = new DOMImplementation();
         $docType = $domImpl->createDocumentType(
-            'NCIPMessage', '-//NISO//NCIP DTD Version 1.0//EN',
+            'NCIPMessage',
+            '-//NISO//NCIP DTD Version 1.0//EN',
             'http://www.niso.org/ncip/v1_0/imp1/dtd/ncip_v1_0.dtd'
         );
         $this->_ncip = $domImpl->createDocument('', '', $docType);

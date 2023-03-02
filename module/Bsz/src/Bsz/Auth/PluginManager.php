@@ -66,6 +66,7 @@ class PluginManager extends \VuFind\Auth\PluginManager
         'db' => Database::class,
         'sip' => SIP2::class,
         'koha' => Koha::class,
+        'ncip' => NCIP::class,
     ];
 
     /**
@@ -86,7 +87,8 @@ class PluginManager extends \VuFind\Auth\PluginManager
         MultiILS::class => ILSFactory::class,
         Shibboleth::class => Factory::class,
         SIP2::class => InvokableFactory::class,
-        Koha::class => Factory::class
+        Koha::class => Factory::class,
+        NCIP::class => Factory::class
     ];
 
 }
