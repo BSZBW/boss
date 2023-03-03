@@ -329,10 +329,10 @@ class NCIP extends AbstractBase
 
         $this->_curlHandle = curl_init();
         if ($this->_curlHandle === false) {
-            curl_error('init');
+            curl_error($this->_curlHandle);
         }
         if (curl_setopt($this->_curlHandle, CURLOPT_POST, 1) === false) {
-            curl_error('setopt');
+            curl_error($this->_curlHandle);
         }
         $url = "https://{$this->config->NCIP->host}:{$this->config->NCIP->port}{$this->config->NCIP->path}";
 
@@ -341,17 +341,17 @@ class NCIP extends AbstractBase
             || curl_setopt($this->_curlHandle, CURLOPT_CONNECTTIMEOUT, $this->connectTimeout) === false
             || curl_setopt($this->_curlHandle, CURLOPT_TIMEOUT, $this->timeout) === false
         ) {
-            curl_error('setopt');
+            curl_error($this->_curlHandle);
         }
         if (curl_setopt($this->_curlHandle, CURLOPT_POST, 1) === false
             || curl_setopt($this->_curlHandle, CURLOPT_POSTFIELDS, $message) === false
         ) {
-            curl_error('setopt');
+            curl_error($this->_curlHandle);
         }
 
         $contents = curl_exec($this->_curlHandle);
         if ($contents === false) {
-            curl_error('exec');
+            curl_error($this->_curlHandle);
         }
         curl_close($this->_curlHandle);
 
