@@ -22,8 +22,9 @@ data/
 /.idea/
 /public/php---info.php
 /local/config/vufind/
-/themes/**/css/
-/themes/**/make/
+/themes/**/css/*.css
+/themes/**/css/*.map
+/themes/**/make/*.d
 /config
 #/solr/
 /solr/vendor
