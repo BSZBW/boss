@@ -47,7 +47,7 @@ class Manager extends \VuFind\Auth\Manager
      */
     public function loginEnabled()
     {
-        if (isset($this->library) && $this->library->getAuth() != 'shibboleth') {
+        if (isset($this->library) && !$this->library->loginEnabled()) {
             return false;
         } else {
             // Assume login is enabled unless explicitly turned off:

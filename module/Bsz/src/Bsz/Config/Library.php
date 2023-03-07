@@ -67,6 +67,7 @@ class Library
         $this->isil_availability = $data['isil_availability'];
         $this->email = $data['email'];
         $this->auth = $data['auth_name'] ?? 'adis';
+        $this->auth2 = $data['auth2_name'] ?? null;
         $this->daia = $data['daiaurl'] ?? null;
         $this->openurl = $data['openurl'] ?? null;
         $this->opacurl = $data['opacurl'] ?? null;
@@ -123,11 +124,12 @@ class Library
 
     /**
      * Get authentication method, adis is default
-     * @return string
+     * @return array
      */
     public function getAuth()
     {
-        return $this->auth;
+        $auths = [$this->auth, $this->auth2];
+        return array_filter($auths, static function($var){return $var !== null;} );;
     }
 
     /**
@@ -298,5 +300,26 @@ class Library
     public function allowsCopy()
     {
         return $this->lend_copy[1] == 0b1;
+    }
+
+    /**
+     * @return bool
+     */
+    public function loginEnabled()
+    {
+        $auth = $this->getAuth();
+        if (in_array('shibboleth', $auth) || in_array('kohaauth', $auth)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFirstAuth()
+    {
+        $auths = $this->getAuth();
+        return array_shift($auths);
     }
 }

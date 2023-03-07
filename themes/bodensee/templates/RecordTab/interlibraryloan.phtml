@@ -26,7 +26,6 @@ if ($content['customUrl'] && $this->client()->getTag() !== 'fl-dienst' ) {
 ?>
 
 <?php
-    $authMethod = $library ? $library->getAuth() : '';
     $account = $this->auth()->getManager();
 ?>
 
@@ -57,7 +56,7 @@ if ($content['customUrl'] && $this->client()->getTag() !== 'fl-dienst' ) {
 
 </ul>
 <?php if($this->client()->getTag() !== 'fl-dienst'):?>
-    <?php if ($status && $authMethod === 'shibboleth' && !$account->isLoggedIn()): ?>
+    <?php if ($status && $library->loginEnabled() && !$account->isLoggedIn()): ?>
         <div class="alert alert-danger">
             <?=$this->transEsc('You must be logged in first')?>
         </div>

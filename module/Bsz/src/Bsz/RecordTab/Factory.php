@@ -155,9 +155,8 @@ class Factory
         ) {
             $illmode = true;
         }
-        $libraries = $container->get(\Bsz\Config\Libraries::class);
         $client = $container->get(Client::class);
-        $library = $libraries->getFirstActive($client->getIsils());
+        $library = $client->getLibrary();
         $dienst = $client->getTag() === 'fl-dienst';
 
         $orderid = '';

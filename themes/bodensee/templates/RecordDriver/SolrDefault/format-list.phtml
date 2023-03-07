@@ -6,3 +6,6 @@
     <?php endif ?>
     <span class="label <?=$labelclass?> <?= $this->record($this->driver)->getFormatClass($format) ?>"><?= $this->transEsc('Formats::'.$format) ?></span>
 <?php endforeach; ?>
+<?php if ($this->driver->tryMethod('isEPflicht')):?>
+        <span class="label label-warning" data-toggle="tooltip" title="<?=$this->transEsc('ePflicht-BW Text')?>"><?=$this->transEsc('ePflicht-BW Label')?></span>
+<?php endif ?>

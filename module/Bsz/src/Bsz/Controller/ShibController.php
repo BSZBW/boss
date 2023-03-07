@@ -47,7 +47,7 @@ class ShibController extends AbstractBase
         $isils = $client->getIsils();
         $library = $libraries->getByIsil($isils);
 
-        if (isset($library) && $library->getAuth() === 'shibboleth') {
+        if (isset($library) && in_array('shibboleth', $library->getAuth())) {
             return $this->redirect()->toRoute(
                 'shib-redirect',
                 [

@@ -66,6 +66,7 @@ CREATE TABLE `libraries`
     `is_boss`           binary(1) DEFAULT 0 COMMENT 'BOSS Sicht?',
     `fk_country`        int(11) unsigned NOT NULL DEFAULT 1,
     `fk_auth`           int(11) unsigned NOT NULL DEFAULT 1,
+    `fk_auth_2`         int(11) unsigned DEFAULT NULL,
     `isil_availability` varchar(2048) COLLATE latin1_german1_ci DEFAULT NULL,
     `homepage`          varchar(128) CHARACTER SET latin1       DEFAULT NULL,
     `email`             varchar(128) CHARACTER SET latin1       DEFAULT NULL,
@@ -80,7 +81,8 @@ CREATE TABLE `libraries`
     KEY                 `fk_libraries_1_idx` (`fk_country`),
     KEY                 `fk_libraries_2_idx` (`fk_auth`),
     CONSTRAINT `fk_libraries_1` FOREIGN KEY (`fk_country`) REFERENCES `countries` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-    CONSTRAINT `fk_libraries_2` FOREIGN KEY (`fk_auth`) REFERENCES `authentications` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+    CONSTRAINT `fk_libraries_2` FOREIGN KEY (`fk_auth`) REFERENCES `authentications` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+    CONSTRAINT `fk_libraries_3` FOREIGN KEY (`fk_auth_2`) REFERENCES `authentications` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_german1_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

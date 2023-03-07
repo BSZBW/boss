@@ -39,7 +39,7 @@ class Volumes extends \Bsz\RecordTab\Volumes
                 if (is_array($relId) && count($relId) > 0) {
                     foreach ($relId as $k => $id) {
 //                      $relId[$k] = 'id_related_host_item:"'.$id.'"';
-                        $relId[$k] = 'hierarchy_parent_id:"' . $id . '"';
+                        $relId[$k] = 'id:"' . $id . '"';
                     }
                     $params = [
                         'sort' => 'publishDateDaySort_date desc, id desc',
@@ -55,8 +55,6 @@ class Volumes extends \Bsz\RecordTab\Volumes
                     $params['filter'] = $filter;
 
                     $results = $this->runner->run($params);
-
-                    $results instanceof Results;
                     $this->content = $results->getResults();
                 }
             }
