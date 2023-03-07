@@ -36,6 +36,11 @@
         <div class="alert alert-info">
             <p><?=$this->transEsc('ILL::request_submit_ok_text_3')?></p>
         </div>
+        <?php if (in_array('DE-93', $this->client()->getIsils())):?>
+            <div class="alert alert-info">
+                <p><?=$this->transEsc('ILL::close_popup')?></p>
+            </div>
+        <?php endif ?>
 
     <? endif ?>
 

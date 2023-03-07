@@ -1,6 +1,4 @@
 
-make
-map
-css
-.map
-tmp
+make/*.d
+css/*.css
+css/*.map
