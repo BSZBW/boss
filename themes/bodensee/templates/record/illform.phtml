@@ -37,6 +37,7 @@
     <?php if (in_array($isil, $this->client()->getIsils())): ?>
         <div class="alert alert-info">
             <p><?=$this->transEsc('ILL::request_submit_ok_text_3')?></p>
+            <?php break; ?>
         </div>
     <?php endif ?>
     <?php endforeach ?>
