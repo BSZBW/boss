@@ -43,25 +43,15 @@ class Backend extends \VuFindSearch\Backend\EDS\Backend
         $this->cache = $cache;
         $this->session = $session;
         $this->isGuest = $isGuest;
+
         // Extract key values from configuration:
-        if (isset($config->EBSCO_Account->user_name)) {
-            $this->userName = $config->EBSCO_Account->user_name;
-        }
-        if (isset($config->EBSCO_Account->password)) {
-            $this->password = $config->EBSCO_Account->password;
-        }
-        if (isset($config->EBSCO_Account->ip_auth)) {
-            $this->ipAuth = $config->EBSCO_Account->ip_auth;
-        }
-        if (isset($config->EBSCO_Account->profile)) {
-            $this->profile = $config->EBSCO_Account->profile;
-        }
-        if (isset($config->EBSCO_Account->organization_id)) {
-            $this->orgId = $config->EBSCO_Account->organization_id;
-        }
-        if (isset($config->EBSCO_Account->local_ip_addresses)) {
-            $this->localips = $config->EBSCO_Account->local_ip_addresses;
-        }
+        $this->userName = $config->EBSCO_Account->user_name ?? null;
+        $this->password = $config->EBSCO_Account->password ?? null;
+        $this->ipAuth = $config->EBSCO_Account->ip_auth ?? false;
+        $this->profile = $config->EBSCO_Account->profile ?? null;
+        $this->orgId = $config->EBSCO_Account->organization_id ?? null;
+        $this->localips = $config->EBSCO_Account->local_ip_addresses ?? mull;
+
         // Save default profile value, since profile property may be overriden:
         $this->defaultProfile = $this->profile;
     }
