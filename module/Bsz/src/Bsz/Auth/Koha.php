@@ -63,6 +63,8 @@ class Koha extends \VuFind\Auth\AbstractBase
             $user->save();
             return $user;
         }
+        // if we got so far, there is obviously no user.
+        throw new AuthException('authentication_error_invalid');
     }
 
     /**
@@ -121,9 +123,9 @@ class Koha extends \VuFind\Auth\AbstractBase
             if ($data_response->auth == true) {
                 return true;
             } else {
-                throw new AuthException($data_response->message);
+                return false;
             }
-        } else if ($response->getStatusCode() === 403) {
+        } elseif ($response->getStatusCode() === 403) {
             throw new AuthException('Invalid API token: '.$data_response->detail);
         } else {
             throw new AuthException($data_response->detail);
