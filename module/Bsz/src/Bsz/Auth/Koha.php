@@ -121,7 +121,7 @@ class Koha extends \VuFind\Auth\AbstractBase
             if ($data_response->auth == true) {
                 return true;
             } else {
-                throw new AuthException('Username or password not valid');
+                throw new AuthException($data_response->message);
             }
         } else if ($response->getStatusCode() === 403) {
             throw new AuthException('Invalid API token: '.$data_response->detail);
