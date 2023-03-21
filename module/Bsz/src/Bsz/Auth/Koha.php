@@ -62,8 +62,6 @@ class Koha extends \VuFind\Auth\AbstractBase
 
             $user->save();
             return $user;
-        } else {
-            throw new AuthException('Username or password not valid');
         }
     }
 
@@ -123,8 +121,7 @@ class Koha extends \VuFind\Auth\AbstractBase
             if ($data_response->auth == true) {
                 return true;
             } else {
-                // user not valid
-                return false;
+                throw new AuthException('Username or password not valid');
             }
         } else if ($response->getStatusCode() === 403) {
             throw new AuthException('Invalid API token: '.$data_response->detail);
