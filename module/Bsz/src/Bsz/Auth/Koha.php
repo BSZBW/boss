@@ -46,8 +46,12 @@ class Koha extends \VuFind\Auth\AbstractBase
         $isil = array_shift($isils);
         $this->isil = $isil;
     }
+
     /**
-     * @inheritDoc
+     * @param $request
+     *
+     * @return \VuFind\Db\Row\User|\VuFind\Db\Table\UserRow
+     * @throws AuthException
      */
     public function authenticate($request)
     {
@@ -59,7 +63,7 @@ class Koha extends \VuFind\Auth\AbstractBase
             $user->save();
             return $user;
         } else {
-            // it's clear that the user name is not valid
+            throw new AuthException('Username or password not valid');
         }
     }
 
