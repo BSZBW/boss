@@ -16,12 +16,6 @@ use Zend\Session\Container as SessionContainer;
 
 class Backend extends \VuFindSearch\Backend\EDS\Backend
 {
-    /**
-     * List of allowed IPs
-     *
-     * @var string
-     */
-    protected $localips = '';
 
     /**
      * Constructor.
@@ -43,88 +37,16 @@ class Backend extends \VuFindSearch\Backend\EDS\Backend
         $this->cache = $cache;
         $this->session = $session;
         $this->isGuest = $isGuest;
+
         // Extract key values from configuration:
-        if (isset($config->EBSCO_Account->user_name)) {
-            $this->userName = $config->EBSCO_Account->user_name;
-        }
-        if (isset($config->EBSCO_Account->password)) {
-            $this->password = $config->EBSCO_Account->password;
-        }
-        if (isset($config->EBSCO_Account->ip_auth)) {
-            $this->ipAuth = $config->EBSCO_Account->ip_auth;
-        }
-        if (isset($config->EBSCO_Account->profile)) {
-            $this->profile = $config->EBSCO_Account->profile;
-        }
-        if (isset($config->EBSCO_Account->organization_id)) {
-            $this->orgId = $config->EBSCO_Account->organization_id;
-        }
-        if (isset($config->EBSCO_Account->local_ip_addresses)) {
-            $this->localips = $config->EBSCO_Account->local_ip_addresses;
-        }
+        $this->userName = $config->EBSCO_Account->user_name ?? null;
+        $this->password = $config->EBSCO_Account->password ?? null;
+        $this->ipAuth = $config->EBSCO_Account->ip_auth ?? false;
+        $this->profile = $config->EBSCO_Account->profile ?? null;
+        $this->orgId = $config->EBSCO_Account->organization_id ?? null;
+
         // Save default profile value, since profile property may be overriden:
         $this->defaultProfile = $this->profile;
     }
 
-    protected function isAuthenticationIP()
-    {
-        $this->debugPrint("isAuthenticationIP-0 : " . $this->localips);
-        $res = $this->validAuthIP($this->localips);
-        $this->debugPrint("isAuthenticationIP-1 : " . $res);
-        return $res;
-    }
-
-    protected function isGuest()
-    {
-        // If the user is not logged in, then treat them as a guest. Unless they are
-        // using IP Authentication.
-        // If IP Authentication is used, then don't treat them as a guest.
-
-        if ($this->isAuthenticationIP()) {
-            return 'n';
-        }
-        if (isset($this->authManager)) {
-            return $this->authManager->isLoggedIn() ? 'n' : 'y';
-        }
-        return 'y';
-    }
-
-    /**
-     * Determines whether or not the current user session is identifed as a guest
-     * session
-     *
-     * @return string 'y'|'n'
-     */
-    protected function validAuthIP($listIPs)
-    {
-        try {
-            if ($listIPs == '') {
-                return false;
-            }
-            $m = explode(',', $listIPs);
-            if (count($m) == 0) {
-                return false;
-            }
-            // get the ip address of the request
-            $remote = new \Zend\Http\PhpEnvironment\RemoteAddress;
-            $ip_address = $remote->getIpAddress();
-
-            foreach ($m as $ip) {
-                $ip = trim($ip);
-                if (strpos($ip, '/') !== false) {
-                    list($network, $cidr) = explode('/', $ip);
-                    $actual = ip2long($ip_address) & ~((1 << (32 - $cidr)) - 1);
-                    $longNet = ip2long($network);
-                    if ($actual == $longNet) {
-                        return true;
-                    }
-                } elseif ($ip_address == $ip) {
-                    return true;
-                }
-            }
-        } catch (Exception $e) {
-            $this->debugPrint("validAuthIP ex: " . $e);
-        }
-        return false;
-    }
 }
