@@ -32,17 +32,15 @@
     <? if ($success && !empty($this->orderId) && $this->orderId > 0):?>
     <p><?=$this->transEsc('ILL::request_submit_ok_text')?><strong><?=$this->escapeHtml($this->orderId)?></strong></p>
     <p><?=$this->transEsc('ILL::request_submit_ok_text_2')?></p>
-    <? if (in_array('DE-31', $this->client()->getIsils())): ?>
+    <?php $isilsClosePopup = ['DE-31', 'DE-93'] ?>
+    <?php foreach ($isilsClosePopup as $isil):?>
+    <?php if (in_array($isil, $this->client()->getIsils())): ?>
         <div class="alert alert-info">
             <p><?=$this->transEsc('ILL::request_submit_ok_text_3')?></p>
+            <?php break; ?>
         </div>
-        <?php if (in_array('DE-93', $this->client()->getIsils())):?>
-            <div class="alert alert-info">
-                <p><?=$this->transEsc('ILL::close_popup')?></p>
-            </div>
-        <?php endif ?>
-
-    <? endif ?>
+    <?php endif ?>
+    <?php endforeach ?>
 
     <? endif; ?>
     <? if (!isset($success) || !$success): ?>

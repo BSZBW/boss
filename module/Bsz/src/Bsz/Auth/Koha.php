@@ -46,8 +46,12 @@ class Koha extends \VuFind\Auth\AbstractBase
         $isil = array_shift($isils);
         $this->isil = $isil;
     }
+
     /**
-     * @inheritDoc
+     * @param $request
+     *
+     * @return \VuFind\Db\Row\User|\VuFind\Db\Table\UserRow
+     * @throws AuthException
      */
     public function authenticate($request)
     {
@@ -58,9 +62,9 @@ class Koha extends \VuFind\Auth\AbstractBase
 
             $user->save();
             return $user;
-        } else {
-            // it's clear that the user name is not valid
         }
+        // if we got so far, there is obviously no user.
+        throw new AuthException('authentication_error_invalid');
     }
 
     /**
@@ -119,10 +123,9 @@ class Koha extends \VuFind\Auth\AbstractBase
             if ($data_response->auth == true) {
                 return true;
             } else {
-                // user not valid
                 return false;
             }
-        } else if ($response->getStatusCode() === 403) {
+        } elseif ($response->getStatusCode() === 403) {
             throw new AuthException('Invalid API token: '.$data_response->detail);
         } else {
             throw new AuthException($data_response->detail);

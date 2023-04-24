@@ -129,7 +129,10 @@ class Library
     public function getAuth()
     {
         $auths = [$this->auth, $this->auth2];
-        return array_filter($auths, static function($var){return $var !== null;} );;
+        return array_filter($auths, static function ($var) {
+            return $var !== null;
+        });
+        ;
     }
 
     /**
@@ -308,7 +311,10 @@ class Library
     public function loginEnabled()
     {
         $auth = $this->getAuth();
-        if (in_array('shibboleth', $auth) || in_array('kohaauth', $auth)) {
+        if (in_array('shibboleth', $auth)
+            || in_array('kohaauth', $auth)
+            || in_array('ncip', $auth)
+        ) {
             return true;
         }
         return false;
