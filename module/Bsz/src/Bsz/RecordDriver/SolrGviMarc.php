@@ -86,7 +86,7 @@ class SolrGviMarc extends SolrMarc implements Constants
                         // Numeric subfields are for control purposes and should not
                         // be displayed:
                         if (!is_numeric($subfield->getCode())
-                            && ($subfield->getCode() == "a" || $subfield->getCode() == "x")) {
+                            && preg_match('/[a-z]/', $subfield->getCode())) {
                             array_push($retval, $subfield->getData());
                         }
                     }
