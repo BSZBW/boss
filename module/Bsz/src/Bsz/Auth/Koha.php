@@ -31,10 +31,11 @@ class Koha extends \VuFind\Auth\AbstractBase
 {
     protected $library;
     protected $isil;
+
     /**
-     * Constructor
-     *
-     * @param \Zend\Session\ManagerInterface $sessionManager Session manager
+     * @param \Zend\Session\ManagerInterface $sessionManager
+     * @param Libraries $libraries
+     * @param $isils
      */
     public function __construct(
         \Zend\Session\ManagerInterface $sessionManager,
