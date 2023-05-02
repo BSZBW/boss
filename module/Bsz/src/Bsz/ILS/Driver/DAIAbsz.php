@@ -430,4 +430,26 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
         $id = preg_replace('/\(.*\)/', '', $id);
         return parent::generateURI($id);
     }
+
+    /**GFF
+     * Returns the value for "callnumber" in VuFind getStatus/getHolding array
+     *
+     * @param array $item Array with DAIA item data
+     *
+     * @return string
+     */
+    protected function getItemCallnumber($item)
+    {
+        $retval = [];
+        if (isset($item['label']) && !empty($item['label'])) {
+            $retval[] = $item['label'];
+        }
+        if (isset($item['chronology']['about']) && !empty($item['chronology']['about'])) {
+            $retval[] = $item['chronology']['about'];
+        }
+        if (count($retval) > 0) {
+            return implode(' | ', $retval);
+        }
+        return 'Unknown';
+    }
 }
