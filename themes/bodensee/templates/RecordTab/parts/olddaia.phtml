@@ -1,8 +1,7 @@
-<?php if ($row['callnumber'] != 'Unknown'): ?>
-    <?php $check = (isset($row['check']) && $row['check']); ?>
-    <?php $checkStorageRetrievalRequest = (isset($row['checkStorageRetrievalRequest']) && $row['checkStorageRetrievalRequest']); ?>
-    <?php $checkILLRequest = (isset($row['checkILLRequest']) && $row['checkILLRequest']); ?>
-    <?php if (!$this->driver->isElectronicBook()): ?>
+<?php $check = (isset($row['check']) && $row['check']); ?>
+<?php $checkStorageRetrievalRequest = (isset($row['checkStorageRetrievalRequest']) && $row['checkStorageRetrievalRequest']); ?>
+<?php $checkILLRequest = (isset($row['checkILLRequest']) && $row['checkILLRequest']); ?>
+<?php if (!$this->driver->isElectronicBook()): ?>
  <div class="row">
     <div class="col-sm-12">
     <dl class="dl-horizontal">
@@ -18,7 +17,7 @@
         <?php endif ?>
         <?php if (!empty($row['callnumber'])): ?>
         <dt><?=$this->transEsc('Call Number')?>:</dt>
-        <dd><?=$row['callnumber']?></dd>
+        <dd><?=$this->transEsc($row['callnumber'])?></dd>
         <?php endif; ?>
 
         <dt><?=$this->transEsc('live_status')?>:</dt>
@@ -59,7 +58,7 @@
                   <?php if (isset($row['link']) && $row['link']): ?>
                     <!-- Vormerken / Möglichkeit einer Vormerkung prüfen -->
                     <dd>
-                        <a class="<?=$check ? 'checkRequest' : ''?> external hasicon inlineblock " data-name="aDIS BOSS2" data-size="md" href="<?=$this->recordLink()->getRequestUrl($row['link'])?>"><i class="fa fa-flag"></i>&nbsp;<?=$this->transEsc($check ? "Check Recall" : "Recall This")?></a>
+                        <a class="<?=$check ? 'checkRequest' : ''?> external hasicon inlineblock " data-size="md" href="<?=$this->recordLink()->getRequestUrl($row['link'])?>"><i class="fa fa-flag"></i>&nbsp;<?=$this->transEsc($check ? "Check Recall" : "Recall This")?></a>
                     </dd>
                   <?php endif; ?>
                 <?php endif; ?>
@@ -78,5 +77,4 @@
           </dl>
     </div>
 </div>
-<?php endif; ?>
 <?php endif; ?>
