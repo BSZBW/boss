@@ -6,6 +6,16 @@
  <div class="row">
     <div class="col-sm-12">
     <dl class="dl-horizontal">
+        <?// get call number from marc record ?>
+        <?php if($this->client()->getTag() == 'elk-wue' && $this->driver->isArticle()): ?>
+            <?php $holdings = $this->driver->getLocalHoldings()?>
+            <?php if (count($holdings) > 0 && isset($holdings[0]['call_number'])):?>
+                <dt><?=$this->transEsc('Base Signature')?>:</dt>
+                <?php foreach ($holdings as $holding):?>
+                    <dd><?=$this->escapeHtml($holding['call_number'])?></dd>
+                <?php endforeach ?>
+            <?php endif ?>
+        <?php endif ?>
         <?php if (!empty($row['callnumber'])): ?>
         <dt><?=$this->transEsc('Call Number')?>:</dt>
         <dd><?=$row['callnumber']?></dd>

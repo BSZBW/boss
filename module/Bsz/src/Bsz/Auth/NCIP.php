@@ -28,6 +28,7 @@
  */
 namespace Bsz\Auth;
 
+use Bsz\Config\Libraries;
 use VuFind\Exception\Auth as AuthException;
 use DOMImplementation;
 use SimpleXMLElement;
@@ -67,6 +68,27 @@ class NCIP extends AbstractBase
 
 
     /**
+     * @var Bsz\Config\Library;
+     */
+    protected $library;
+    protected $isil;
+
+    /**
+     * @param \Zend\Session\ManagerInterface $sessionManager
+     * @param Libraries $libraries
+     * @param $isils
+     */
+    public function __construct(
+        \Zend\Session\ManagerInterface $sessionManager,
+        Libraries $libraries,
+        $isils
+    ) {
+        $this->sessionManager = $sessionManager;
+        $this->library = $libraries->getFirstActive($isils);
+        $isil = array_shift($isils);
+        $this->isil = $isil;
+    }
+    /**
      * Validate configuration parameters.  This is a support method for getConfig(),
      * so the configuration MUST be accessed using $this->config; do not call
      * $this->getConfig() from within this method!
@@ -77,7 +99,9 @@ class NCIP extends AbstractBase
     protected function validateConfig()
     {
         // Check for missing parameters:
-        $requiredParams = ['host', 'port', 'path', 'fromAgencyId', 'toAgencyId'];
+        $requiredParams = ['host_production', 'host_test', 'port',
+            'path', 'fromAgencyId', 'toAgencyId'
+        ];
         foreach ($requiredParams as $param) {
             if (!isset($this->config->NCIP->$param)
                 || empty($this->config->NCIP->$param)
@@ -334,7 +358,11 @@ class NCIP extends AbstractBase
         if (curl_setopt($this->_curlHandle, CURLOPT_POST, 1) === false) {
             curl_error($this->_curlHandle);
         }
-        $url = "https://{$this->config->NCIP->host}:{$this->config->NCIP->port}{$this->config->NCIP->path}";
+        if ($this->library->isLive()) {
+            $url = "https://{$this->config->NCIP->host_production}:{$this->config->NCIP->port}{$this->config->NCIP->path}";
+        } else {
+            $url = "https://{$this->config->NCIP->host_test}:{$this->config->NCIP->port}{$this->config->NCIP->path}";
+        }
 
         if (curl_setopt($this->_curlHandle, CURLOPT_URL, $url) === false
             || curl_setopt($this->_curlHandle, CURLOPT_RETURNTRANSFER, 1) === false
