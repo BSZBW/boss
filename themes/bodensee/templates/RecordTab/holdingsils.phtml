@@ -60,6 +60,7 @@
 </div>
 
     <?php $knownLocations = []; ?>
+    <div class="row">
     <?php foreach ($holding['items'] as $row): ?>
         <?php if (!in_array($row['location'], $knownLocations)): ?>
               <?php $knownLocations[] = $row['location'] ?>
@@ -78,6 +79,7 @@
             <?=$this->render('RecordTab/parts/noils.phtml', ['row' => $row, 'driver' => $this->driver, 'tab' => $this->tab, 'holding' => $holding])?>
         <?php endif; // End of old DAIA code?>
     <?php endforeach; ?>
+    </div>
 <?php endforeach; ?>
 <?php endif; ?>
 

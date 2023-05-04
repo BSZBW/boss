@@ -1,55 +1,54 @@
-<div class="row">
-    <div class="col-sm-12">
+<div class="col-lg-4 col-md-6 col-sm-12">
 
-        <dl class="dl-horizontal">
-        <?php $callNos = $this->tab->getUniqueCallNumbers($this->holding['items']); if (!empty($callNos)): ?>
-        <dt><?=$this->transEsc("Call Number")?></dt>
+    <dl class="dl-horizontal">
+    <?php $callNos = $this->tab->getUniqueCallNumbers($this->holding['items']); if (!empty($callNos)): ?>
+    <dt><?=$this->transEsc("Call Number")?></dt>
 
-        <dd><?php foreach ($callNos as $callNo): ?>
-              <?php if ($this->callnumberHandler): ?>
-                <a href="<?=$this->url('alphabrowse-home') ?>?source=<?=$this->escapeHtmlAttr($this->callnumberHandler) ?>&amp;from=<?=$this->escapeHtmlAttr($callNo) ?>"><?=$this->escapeHtml($callNo)?></a>
-              <?php else: ?>
-                <?=$this->escapeHtml($callNo)?>
-              <?php endif; ?>
-              <br />
-            <?php endforeach; ?>
-        </dd>
-        <?php endif; ?>
-        <?php if (!empty($row['number'])): ?>
-            <dt><?=$this->transEsc('Local IDN')?></dt>
-            <dd><?=$this->escapeHtml($row['number'])?></dd>
-        <?php endif; ?>
-        <?php if (!empty($row['storage'])): ?>
-            <dt><?=$this->transEsc('storage')?></dt>
-            <dd><?=$this->escapeHtml($row['storage'])?></dd>
-        <?php endif; ?>
-        <?php if (!empty($row['availability'])): ?>
-            <dt><?=$this->transEsc('ILL::indicator')?></dt>
-            <dd><i class="fa <?=$this->record($this->driver)->indicator2icon($row['availability'])?>"></i> <?=$this->transEsc($this->record($this->driver)->indicator2status($row['availability']))?></dd>
-        <?php endif; ?>
-        <?php if (!empty($row['notes'])): ?>
-            <dt><?=$this->transEsc('Note')?></dt>
-            <dd><?=$this->transEsc($row['notes'])?></dd>
-        <?php endif; ?>
-        <?php if (!empty($row['link']) && strpos($row['link'], 'http') === 0): ?>
-            <dt><?=$this->transEsc('Link')?></dt>
-            <dd>
-                <?php $links = explode (' ', $row['link']) ?>
-                <?php if (is_array($links)): ?>
-                    <?php foreach ($links as $linkitem): ?>
-                        <a href="<?=$linkitem?>" class="external"><?=$this->transEsc('Local Online Access')?></a><br/>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <a href="<?=$row['link']?>" class="external"><?=$this->transEsc('Local Online Access')?></a></dd>
-                <?php endif; ?>
-        <?php endif; ?>
-        <?php if (!empty($row['status'])): ?>
-            <dt><?=$this->transEsc('Bestandsangaben')?></dt>
-            <dd><?=$this->escapeHtml($row['status'])?></dd>
-        <? endif; ?>
-        </dl>
-        <? $ppn = $this->driver->tryMethod('getPPN'); if(!empty($ppn) && ($this->driver->isJournal() || $this->driver->isSerial())): ?>
-            <?=$this->recordLink()->linkPPNButton($this->driver) ?>
-        <? endif; ?>
-    </div>
+    <dd><?php foreach ($callNos as $callNo): ?>
+          <?php if ($this->callnumberHandler): ?>
+            <a href="<?=$this->url('alphabrowse-home') ?>?source=<?=$this->escapeHtmlAttr($this->callnumberHandler) ?>&amp;from=<?=$this->escapeHtmlAttr($callNo) ?>"><?=$this->escapeHtml($callNo)?></a>
+          <?php else: ?>
+            <?=$this->escapeHtml($callNo)?>
+          <?php endif; ?>
+          <br />
+        <?php endforeach; ?>
+    </dd>
+    <?php endif; ?>
+    <?php if (!empty($row['number'])): ?>
+        <dt><?=$this->transEsc('Local IDN')?></dt>
+        <dd><?=$this->escapeHtml($row['number'])?></dd>
+    <?php endif; ?>
+    <?php if (!empty($row['storage'])): ?>
+        <dt><?=$this->transEsc('storage')?></dt>
+        <dd><?=$this->escapeHtml($row['storage'])?></dd>
+    <?php endif; ?>
+    <?php if (!empty($row['availability'])): ?>
+        <dt><?=$this->transEsc('ILL::indicator')?></dt>
+        <dd><i class="fa <?=$this->record($this->driver)->indicator2icon($row['availability'])?>"></i> <?=$this->transEsc($this->record($this->driver)->indicator2status($row['availability']))?></dd>
+    <?php endif; ?>
+    <?php if (!empty($row['notes'])): ?>
+        <dt><?=$this->transEsc('Note')?></dt>
+        <dd><?=$this->transEsc($row['notes'])?></dd>
+    <?php endif; ?>
+    <?php if (!empty($row['link']) && strpos($row['link'], 'http') === 0): ?>
+        <dt><?=$this->transEsc('Link')?></dt>
+        <dd>
+            <?php $links = explode (' ', $row['link']) ?>
+            <?php if (is_array($links)): ?>
+                <?php foreach ($links as $linkitem): ?>
+                    <a href="<?=$linkitem?>" class="external"><?=$this->transEsc('Local Online Access')?></a><br/>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <a href="<?=$row['link']?>" class="external"><?=$this->transEsc('Local Online Access')?></a></dd>
+            <?php endif; ?>
+    <?php endif; ?>
+    <?php if (!empty($row['status'])): ?>
+        <dt><?=$this->transEsc('Bestandsangaben')?></dt>
+        <dd><?=$this->escapeHtml($row['status'])?></dd>
+    <? endif; ?>
+    </dl>
+    <? $ppn = $this->driver->tryMethod('getPPN'); if(!empty($ppn) && ($this->driver->isJournal() || $this->driver->isSerial())): ?>
+        <?=$this->recordLink()->linkPPNButton($this->driver) ?>
+    <? endif; ?>
 </div>
+
