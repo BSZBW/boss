@@ -9,18 +9,18 @@
         <?php if($this->client()->getTag() == 'elk-wue' && $this->driver->isArticle()): ?>
             <?php $holdings = $this->driver->getLocalHoldings()?>
             <?php if (count($holdings) > 0 && isset($holdings[0]['call_number'])):?>
-                <dt><?=$this->transEsc('Base Signature')?>:</dt>
+                <dt><?=$this->transEsc('Base Signature')?></dt>
                 <?php foreach ($holdings as $holding):?>
                     <dd><?=$this->escapeHtml($holding['call_number'])?></dd>
                 <?php endforeach ?>
             <?php endif ?>
         <?php endif ?>
         <?php if (!empty($row['callnumber'])): ?>
-        <dt><?=$this->transEsc('Call Number')?>:</dt>
+        <dt><?=$this->transEsc('Call Number')?></dt>
         <dd><?=$this->transEsc($row['callnumber'])?></dd>
         <?php endif; ?>
 
-        <dt><?=$this->transEsc('live_status')?>:</dt>
+        <dt><?=$this->transEsc('live_status')?></dt>
 
         <?php if (isset($row['use_unknown_message']) && $row['use_unknown_message']): ?>
             <dd class="text-muted"><?=$this->transEsc("status_unknown_message")?></dd>

@@ -23,7 +23,7 @@
 $seriesol = $this->driver->tryMethod('getSeriesOl');
 if (!empty($series)): ?>
     <tr>
-        <th><?= $this->transEsc('Series') ?>:</th>
+        <th><?= $this->transEsc('Series') ?></th>
         <td>
             <?php $seriesids = $this->driver->tryMethod('getSeriesIds'); ?>
             <?php $count = 0; ?>

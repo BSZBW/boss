@@ -20,14 +20,14 @@
     <div class="col-xs-9 col-sm-6">
         <dl class="dl-horizontal">
             <?php if (!empty($row['callnumber']) && $row['callnumber'] != 'Unknown'): ?>
-            <dt><?=$this->transEsc("Call Number")?>:</dt>
+            <dt><?=$this->transEsc("Call Number")?></dt>
                 <dd>
                     <?= preg_replace('/^.*\s\|\s/', '', $this->string()->cleanEsc($row['callnumber'])); ?>
                 </dd>
             <?php endif; ?>
 
             <?php if (is_array($row['message'])): ?>
-                <dt><?=$this->transEsc('live_status')?>:</dt>
+                <dt><?=$this->transEsc('live_status')?></dt>
                 <dd class="<?=$this->escapeHtmlAttr($class)?>">
                     <i class="fa <?=$this->escapeHtmlAttr($icon)?>"></i>
                     <?=$this->escapeHtml($message)?>
