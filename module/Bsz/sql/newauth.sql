@@ -19,6 +19,6 @@
  */
 
 INSERT INTO libraries.authentications (id, name) VALUES(10, 'kohaauth');
-ALTER TABLE libraries.libraries ADD fk_auth_2 INT(11) DEFAULT NULL NULL AFTER fk_auth;
+ALTER TABLE libraries.libraries ADD fk_auth_2 INT(11) UNSIGNED DEFAULT NULL NULL AFTER fk_auth;
 ALTER TABLE libraries.libraries ADD CONSTRAINT fk_libraries_3 FOREIGN KEY (fk_auth_2) REFERENCES libraries.authentications(id);
 
