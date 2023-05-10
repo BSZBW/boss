@@ -61,7 +61,7 @@
       <? foreach ($items as $key => $item): ?>
               <? if (!empty($item['Data'])  && !in_array($item['Group'], $hiddenItems)): ?>
         <tr>
-          <th><?=$this->transEsc($item['Label'])?>:</th>
+          <th><?=$this->transEsc($item['Label'])?></th>
             <? if($item['Label'] !== 'DOI' && $item['Label'] !== 'Access URL'): ?>
               <td>
                   <? if (strpos($item['Data'],'http') !== false): ?>
@@ -79,7 +79,7 @@
       <? endforeach; ?>
       <? if ($pubType): ?>
         <tr>
-          <th><?=$this->transEsc('Format')?>:</th>
+          <th><?=$this->transEsc('Format')?></th>
           <td><?=$this->transEsc($pubType)?></td>
 
         </tr>
@@ -87,7 +87,7 @@
 
       <? if ($dbLabel): ?>
         <tr>
-          <th><?=$this->transEsc('Database')?>:</th>
+          <th><?=$this->transEsc('Database')?></th>
           <td><?=$this->escapeHtml($dbLabel)?></td>
         </tr>
       <? endif; ?>
@@ -137,7 +137,7 @@
 
     <? if (!empty($this->driver->getDoi()) && !$this->client()->is('doi_in_customlink') && !$this->driver->hasHTMLFullTextAvailable() && !$this->driver->hasPdfAvailable()): ?>
         <tr>
-            <th>DOI:</th>
+            <th>DOI</th>
             <td><a class="external" href="https://doi.org/<?= $this->driver->getDoi(); ?>" target="_blank">https://doi.org/<?= $this->driver->getDoi(); ?></a></td>
         </tr>
       <? endif; ?>

@@ -21,7 +21,7 @@
 
 if (!empty($subjects)): ?>
     <tr>
-        <th><?= $this->transEsc('Subjects') ?>:</th>
+        <th><?= $this->transEsc('Subjects') ?></th>
         <td>
             <?php $count = 0 ?>
             <?php foreach ($subjects as $field): ?>
@@ -60,7 +60,7 @@ if (!empty($subjects)): ?>
     <? $subjects = $this->driver->getAllRVKSubjectHeadings();
     if (!empty($subjects)): ?>
         <tr>
-            <th>RVK-<?= $this->transEsc('Subjects') ?>:</th>
+            <th>RVK-<?= $this->transEsc('Subjects') ?></th>
             <td>
                 <div class="subjectLine" property="keywords">
                     <?php $count = 0; ?>

@@ -4,7 +4,7 @@ if (!empty($notations) && $this->client()->is('show_rvk')): ?>
     <?php $contentDisplayed = true; ?>
     <tr>
         <th>
-            <span class="text-nowrap"><?= $this->abbrev('RVK') ?>-<?= $this->transEsc('Notation') ?>:</span>
+            <span class="text-nowrap"><?= $this->abbrev('RVK') ?>-<?= $this->transEsc('Notation') ?></span>
         </th>
         <?php if (is_array($notations)): ?>
             <td>
@@ -37,7 +37,7 @@ if (!empty($dficlassification) && $this->client()->is('show_dfi')): ?>
     <?php $contentDisplayed = true; ?>
     <tr>
         <th>
-            <span class="text-nowrap"><?= $this->abbrev('DFI') ?>-<?= $this->transEsc('Classification') ?>:</span>
+            <span class="text-nowrap"><?= $this->abbrev('DFI') ?>-<?= $this->transEsc('Classification') ?></span>
         </th>
         <?php if (is_array($dficlassification)): ?>
             <td>
@@ -149,7 +149,7 @@ if (!empty($dfisubject) && $this->client()->is('show_dfi')): ?>
 if (!empty($subjects) && $this->client()->is('show_rvk')): ?>
     <tr>
         <th>
-            <span class="text-nowrap"><?= $this->abbrev('RVK') ?>-<?= $this->transEsc('Subjects') ?>:</span>
+            <span class="text-nowrap"><?= $this->abbrev('RVK') ?>-<?= $this->transEsc('Subjects') ?></span>
         </th>
         <td>
             <div class="subjectLine" property="keywords">
@@ -219,7 +219,7 @@ if (!empty($subjects) && $this->client()->is('show_rvk')): ?>
 <?php $subjects = $this->driver->getAllSubjectHeadings(); ?>
 <?php if (!empty($subjects) && $this->client()->is('show_general_keywords')): ?>
     <tr>
-        <th><?= $this->transEsc('Subjects') ?>:</th>
+        <th><?= $this->transEsc('Subjects') ?></th>
         <td>
             <?= $this->context($this)->renderInContext(
                 'RecordDriver/DefaultRecord/parts/singlesubject.phtml',

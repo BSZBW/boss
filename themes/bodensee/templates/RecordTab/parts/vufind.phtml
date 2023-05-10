@@ -1,6 +1,6 @@
 <?php $callNos = $this->tab->getUniqueCallNumbers($holding['items']); if (!empty($callNos)): ?>
 <tr>
-  <th><?=$this->transEsc("Call Number")?>: </th>
+  <th><?=$this->transEsc("Call Number")?></th>
   <td width="50%">
     <?php foreach ($callNos as $callNo): ?>
       <?php if ($this->callnumberHandler): ?>
@@ -16,7 +16,7 @@
 <?php if (isset($holding['textfields'])): foreach ($holding['textfields'] as $textFieldName => $textFields): ?>
   <tr>
     <?php // Translation for summary is a special case for backwards-compatibility?>
-    <th><?=$textFieldName == 'summary' ? $this->transEsc("Volume Holdings") : $this->transEsc(ucfirst($textFieldName))?>:</th>
+    <th><?=$textFieldName == 'summary' ? $this->transEsc("Volume Holdings") : $this->transEsc(ucfirst($textFieldName))?></th>
     <td>
       <?php foreach ($textFields as $current): ?>
         <?=$this->escapeHtml($current)?><br/>

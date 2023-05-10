@@ -90,10 +90,10 @@ class Koha extends \VuFind\Auth\AbstractBase
 
         $config = $this->getConfig();
 
-        $serviceid = $config->get('Koha')->get('serviceid');
-        $apikey = $config->get('Koha')->get('apikey');
+        $serviceid = $config->get('Koha')->get('serviceid:'.$this->isil);
+        $apikey = $config->get('Koha')->get('apikey:'.$this->isil);
 
-        $query_url = $config->get('Koha')->get('url');
+        $query_url = $config->get('Koha')->get('url:'.$this->isil);
         $query_url = str_replace('%isil%', $this->isil, $query_url);
 
         $data = [
@@ -148,6 +148,7 @@ class Koha extends \VuFind\Auth\AbstractBase
             );
         }
         foreach ($requiredKeys as $req) {
+            $req .= ':'.$this->isil;
             if (!isset($this->config->Koha->$req)
                 || strlen($this->config->Koha->$req) === 0
             ) {

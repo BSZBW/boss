@@ -1,17 +1,25 @@
-<?php if ($row['callnumber'] != 'Unknown'): ?>
-    <?php $check = (isset($row['check']) && $row['check']); ?>
-    <?php $checkStorageRetrievalRequest = (isset($row['checkStorageRetrievalRequest']) && $row['checkStorageRetrievalRequest']); ?>
-    <?php $checkILLRequest = (isset($row['checkILLRequest']) && $row['checkILLRequest']); ?>
-    <?php if (!$this->driver->isElectronicBook()): ?>
- <div class="row">
-    <div class="col-sm-12">
+<?php $check = (isset($row['check']) && $row['check']); ?>
+<?php $checkStorageRetrievalRequest = (isset($row['checkStorageRetrievalRequest']) && $row['checkStorageRetrievalRequest']); ?>
+<?php $checkILLRequest = (isset($row['checkILLRequest']) && $row['checkILLRequest']); ?>
+<?php if (!$this->driver->isElectronicBook()): ?>
+    <div class="col-lg-4 col-md-6 col-sm-12">
     <dl class="dl-horizontal">
+        <?// get call number from marc record ?>
+        <?php if($this->client()->getTag() == 'elk-wue' && $this->driver->isArticle()): ?>
+            <?php $holdings = $this->driver->getLocalHoldings()?>
+            <?php if (count($holdings) > 0 && isset($holdings[0]['call_number'])):?>
+                <dt><?=$this->transEsc('Base Signature')?></dt>
+                <?php foreach ($holdings as $holding):?>
+                    <dd><?=$this->escapeHtml($holding['call_number'])?></dd>
+                <?php endforeach ?>
+            <?php endif ?>
+        <?php endif ?>
         <?php if (!empty($row['callnumber'])): ?>
-        <dt><?=$this->transEsc('Call Number')?>:</dt>
-        <dd><?=$row['callnumber']?></dd>
+        <dt><?=$this->transEsc('Call Number')?></dt>
+        <dd><?=$this->transEsc($row['callnumber'])?></dd>
         <?php endif; ?>
 
-        <dt><?=$this->transEsc('live_status')?>:</dt>
+        <dt><?=$this->transEsc('live_status')?></dt>
 
         <?php if (isset($row['use_unknown_message']) && $row['use_unknown_message']): ?>
             <dd class="text-muted"><?=$this->transEsc("status_unknown_message")?></dd>
@@ -49,7 +57,7 @@
                   <?php if (isset($row['link']) && $row['link']): ?>
                     <!-- Vormerken / Möglichkeit einer Vormerkung prüfen -->
                     <dd>
-                        <a class="<?=$check ? 'checkRequest' : ''?> external hasicon inlineblock " data-name="aDIS BOSS2" data-size="md" href="<?=$this->recordLink()->getRequestUrl($row['link'])?>"><i class="fa fa-flag"></i>&nbsp;<?=$this->transEsc($check ? "Check Recall" : "Recall This")?></a>
+                        <a class="<?=$check ? 'checkRequest' : ''?> external hasicon inlineblock " data-size="md" href="<?=$this->recordLink()->getRequestUrl($row['link'])?>"><i class="fa fa-flag"></i>&nbsp;<?=$this->transEsc($check ? "Check Recall" : "Recall This")?></a>
                     </dd>
                   <?php endif; ?>
                 <?php endif; ?>
@@ -76,6 +84,4 @@
             <?php endif ?>
           </dl>
     </div>
-</div>
-<?php endif; ?>
 <?php endif; ?>

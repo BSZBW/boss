@@ -168,7 +168,7 @@ class NCIP extends AbstractBase
      *
      * @param array $result parsed result
      *
-     * @return \VuFind\Db\Row\User Object representing logged-in user.
+     * @return \VuFind\Db\Table\UserRow Object representing logged-in user.
      */
     protected function generateUser($result)
     {

@@ -10,7 +10,7 @@
   <?php $ppn = $this->driver->tryMethod('getPPN'); if (!empty($ppn)): ?>
   <?php $contentDisplayed = true; ?>
     <tr>
-      <th><?=$this->abbrev('PPN')?>:</th>
+      <th><?=$this->abbrev('PPN')?></th>
       <td class="markjs">
         <?=$this->recordLink()->linkPPN($this->driver) ?>
       </td>
@@ -19,7 +19,7 @@
   <?php $zdb = $this->driver->tryMethod('getZdbId'); if (!empty($zdb)): ?>
   <?php $contentDisplayed = true; ?>
     <tr>
-      <th><?=$this->transEsc('ZDB-ID')?>:</th>
+      <th><?=$this->transEsc('ZDB-ID')?></th>
       <td class="markjs">
           <?php if (isset($zdb)): ?>
               <a id="clipboard-zdb-<?= $rand ?>" class="external"
@@ -42,7 +42,7 @@
   <?php $summ = $this->driver->getSummary(); if (!empty($summ)): ?>
     <?php $contentDisplayed = true; ?>
     <tr>
-      <th><?=$this->transEsc('Summary')?>: </th>
+      <th><?=$this->transEsc('Summary')?></th>
       <td class="markjs">
         <?php foreach ($summ as $field): ?>
           <?=$this->escapeHtml($field)?><br/>
@@ -55,7 +55,7 @@
          $contentDisplayed = true;
          ?>
          <tr>
-             <th><?= $this->abbrev('GTIN') ?>:</th>
+             <th><?= $this->abbrev('GTIN') ?></th>
              <td class="markjs"><?= $this->clipboard($ean) ?></td>
          </tr>
      <?php endif; ?>
@@ -63,7 +63,7 @@
   <?php $dateSpan = $this->driver->getDateSpan(); if (!empty($dateSpan)): ?>
     <?php $contentDisplayed = true; ?>
     <tr>
-      <th><?=$this->transEsc('Published')?>: </th>
+      <th><?=$this->transEsc('Published')?></th>
       <td class="markjs">
         <?php foreach ($dateSpan as $field): ?>
           <?=$this->escapeHtml($field)?><br/>
@@ -75,7 +75,7 @@
   <?php $notes = $this->driver->getGeneralNotes(); if (!empty($notes)): ?>
     <?php $contentDisplayed = true; ?>
     <tr>
-      <th><?=$this->transEsc('Item Description')?>: </th>
+      <th><?=$this->transEsc('Item Description')?></th>
       <td class="markjs">
         <?php foreach ($notes as $field): ?>
           <?=$this->escapeHtml($field)?><br/>
@@ -88,7 +88,7 @@
   <?php $freq = $this->driver->getPublicationFrequency(); if (!empty($freq)): ?>
     <?php $contentDisplayed = true; ?>
     <tr>
-      <th><?=$this->transEsc('Publication Frequency')?>: </th>
+      <th><?=$this->transEsc('Publication Frequency')?></th>
       <td>
         <?php foreach ($freq as $field): ?>
           <?=$this->escapeHtml($field)?><br/>
@@ -100,7 +100,7 @@
   <?php $playTime = $this->driver->getPlayingTimes(); if (!empty($playTime)): ?>
     <?php $contentDisplayed = true; ?>
     <tr>
-      <th><?=$this->transEsc('Playing Time')?>: </th>
+      <th><?=$this->transEsc('Playing Time')?></th>
       <td>
         <?php foreach ($playTime as $field): ?>
           <?=$this->escapeHtml($field)?><br/>
@@ -112,7 +112,7 @@
   <?php $system = $this->driver->getSystemDetails(); if (!empty($system)): ?>
     <?php $contentDisplayed = true; ?>
     <tr>
-      <th><?=$this->transEsc('Format')?>: </th>
+      <th><?=$this->transEsc('Format')?></th>
       <td>
         <?php foreach ($system as $field): ?>
           <?=$this->escapeHtml($field)?><br/>
@@ -124,7 +124,7 @@
   <?php $audience = $this->driver->getTargetAudienceNotes(); if (!empty($audience)): ?>
     <?php $contentDisplayed = true; ?>
     <tr>
-      <th><?=$this->transEsc('Audience')?>: </th>
+      <th><?=$this->transEsc('Audience')?></th>
       <td class="markjs">
         <?php foreach ($audience as $field): ?>
           <?=$this->escapeHtml($field)?><br/>
@@ -136,7 +136,7 @@
   <?php $awards = $this->driver->getAwards(); if (!empty($awards)): ?>
     <?php $contentDisplayed = true; ?>
     <tr>
-      <th><?=$this->transEsc('Awards')?>: </th>
+      <th><?=$this->transEsc('Awards')?></th>
       <td>
         <?php foreach ($awards as $field): ?>
           <?=$this->escapeHtml($field)?><br/>
@@ -148,7 +148,7 @@
   <?php $credits = $this->driver->getProductionCredits(); if (!empty($credits)): ?>
     <?php $contentDisplayed = true; ?>
     <tr>
-      <th><?=$this->transEsc('Production Credits')?>: </th>
+      <th><?=$this->transEsc('Production Credits')?></th>
       <td>
         <?php foreach ($credits as $field): ?>
           <?=$this->escapeHtml($field)?><br/>
@@ -160,7 +160,7 @@
   <?php $bib = $this->driver->getBibliographyNotes(); if (!empty($bib)): ?>
     <?php $contentDisplayed = true; ?>
     <tr>
-      <th><?=$this->transEsc('Bibliography')?>: </th>
+      <th><?=$this->transEsc('Bibliography')?></th>
       <td class="markjs">
         <?php foreach ($bib as $field): ?>
           <?=$this->escapeHtml($field)?><br/>
@@ -172,7 +172,7 @@
   <?php $isbns = $this->driver->getISBNs(); if (!empty($isbns)): ?>
     <?php $contentDisplayed = true; ?>
     <tr>
-      <th><?=$this->abbrev('ISBN', 'ISBN_long')?>: </th>
+      <th><?=$this->abbrev('ISBN', 'ISBN_long')?></th>
       <td class="markjs">
         <?php foreach ($isbns as $field): ?>
             <?= $this->clipboard($field) ?><br/>
@@ -184,7 +184,7 @@
   <?php $issns = $this->driver->getISSNs(); if (!empty($issns)): ?>
     <?php $contentDisplayed = true; ?>
     <tr>
-      <th><?=$this->abbrev('ISSN', 'ISSN_long')?>: </th>
+      <th><?=$this->abbrev('ISSN', 'ISSN_long')?></th>
       <td class="markjs">
         <?php foreach ($issns as $field): ?>
             <?= $this->clipboard($field) ?><br/>
@@ -196,7 +196,7 @@
   <?php $doi = $this->driver->tryMethod('getCleanDOI'); if (!empty($doi)): ?>
       <?php $contentDisplayed = true; ?>
       <tr>
-          <th><?= $this->transEsc('DOI') ?>:</th>
+          <th><?= $this->transEsc('DOI') ?></th>
           <td><a id="clipboard-doi-<?= $rand ?>"
                  href="https://doi.org/<?= $this->escapeHtml($doi) ?>"
                  target="_blank">https://doi.org/<?= $this->escapeHtml($doi) ?></a>
@@ -208,7 +208,7 @@
   <?php $related = $this->driver->getRelationshipNotes(); if (!empty($related)): ?>
     <?php $contentDisplayed = true; ?>
     <tr>
-      <th><?=$this->transEsc('Related Items')?>: </th>
+      <th><?=$this->transEsc('Related Items')?></th>
       <td>
         <?php foreach ($related as $field): ?>
           <?=$this->escapeHtml($field)?><br/>
@@ -220,7 +220,7 @@
   <?php $access = $this->driver->getAccessRestrictions(); if (!empty($access)): ?>
     <?php $contentDisplayed = true; ?>
     <tr>
-      <th><?=$this->transEsc('Access')?>: </th>
+      <th><?=$this->transEsc('Access')?></th>
       <td>
         <?php foreach ($access as $field): ?>
           <?=$this->escapeHtml($field)?><br/>
@@ -232,7 +232,7 @@
   <?php $findingAids = $this->driver->getFindingAids(); if (!empty($findingAids)): ?>
     <?php $contentDisplayed = true; ?>
     <tr>
-      <th><?=$this->transEsc('Finding Aid')?>: </th>
+      <th><?=$this->transEsc('Finding Aid')?></th>
       <td>
         <?php foreach ($findingAids as $field): ?>
           <?=$this->escapeHtml($field)?><br/>
@@ -244,7 +244,7 @@
   <?php $publicationPlaces = $this->driver->getHierarchicalPlaceNames(); if (!empty($publicationPlaces)): ?>
     <?php $contentDisplayed = true; ?>
     <tr>
-      <th><?=$this->transEsc('Publication_Place')?>: </th>
+      <th><?=$this->transEsc('Publication_Place')?></th>
       <td>
         <?php foreach ($publicationPlaces as $field): ?>
           <?=$this->escapeHtml($field)?><br/>
@@ -256,7 +256,7 @@
     <?php $remarks = $this->driver->tryMethod('getRemarks'); if (!empty($remarks)): ?>
         <?php $contentDisplayed = true; ?>
         <tr>
-            <th><?=$this->transEsc('remarks')?>: </th>
+            <th><?=$this->transEsc('remarks')?></th>
             <td class="markjs">
                 <?php foreach ($remarks as $field): ?>
                     <?=$this->escapeHtml($field)?><br/>
@@ -269,7 +269,7 @@
         <?php $contentDisplayed = true; ?>
         <?php $bibliorelationsids = $this->driver->tryMethod('getBiblioRelationsIds'); ?>
         <tr>
-            <th><?=$this->transEsc('Bibliographic Relations')?>: </th>
+            <th><?=$this->transEsc('Bibliographic Relations')?></th>
             <td class="markjs">
                 <?php foreach ($bibliorelations as $field): ?>
                     <?=$this->escapeHtml($field)?><br/>

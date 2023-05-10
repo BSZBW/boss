@@ -323,7 +323,10 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
                     }
                     if ($message == 'missing') {
                         $status = 'Missing';
+                    } elseif ($message == 'ordered') {
+                        $status = 'Ordered';
                     }
+
                 }
                 // attribute expected is mandatory for unavailable element
                 if (isset($unavailable['expected'])) {
