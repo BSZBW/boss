@@ -56,7 +56,7 @@ if ($content['customUrl'] && $this->client()->getTag() !== 'fl-dienst' ) {
 
 </ul>
 <?php if($this->client()->getTag() !== 'fl-dienst'):?>
-    <?php if ($status && $library->loginEnabled() && !$account->isLoggedIn()): ?>
+    <?php if ($library && $status && $library->loginEnabled() && !$account->isLoggedIn()): ?>
         <div class="alert alert-danger">
             <?=$this->transEsc('You must be logged in first')?>
         </div>
