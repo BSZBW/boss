@@ -78,7 +78,6 @@ class Articles extends AbstractBase
     public function getContent()
     {
         if ($this->content === null) {
-            $relId = $this->driver->tryMethod('getIdsRelatedArticle');
             $relId[] = $this->driver->getUniqueId();
             $this->content = [];
             if (is_array($relId) && count($relId) > 0) {
