@@ -6,7 +6,7 @@
 <?php if(!isset($this->linktype)):
     $this->linktype = 'subject';
 endif; ?>
-<?php foreach ($this->subjects as $field): ?>
+<?php foreach ($this->subjects as $key => $field): ?>
     <span class="subjectLine" property="keywords">
          <?php $subject = ''; ?>
         <?php // case 1 : subjects in one field separated by --?>
