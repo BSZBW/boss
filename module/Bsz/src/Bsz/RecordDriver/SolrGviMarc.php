@@ -137,9 +137,9 @@ class SolrGviMarc extends SolrMarc implements Constants
                             $tmp[] = $delimiters[$subfield->getCode()];
                         }
                     } elseif ($subfield->getCode() == 0
-                        && preg_match('/\(DE-627\)/', $subfield->getData())
+                        && preg_match('/\(DE-588\)/', $subfield->getData())
                     ) {
-                        $id = $subfield->getData();
+                        $id = preg_replace('/\(.*\)/','',  $subfield->getData());
                     }
 
                 }
