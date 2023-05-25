@@ -55,8 +55,7 @@ class Factory
             $client = $container->get('Bsz\Config\Client');
             $isils = $client->getIsils();
         }
-
-        $volumes = new Volumes($container->get('VuFind\SearchRunner'), $isils);
+        $volumes = new Volumes($container->get(\VuFindSearch\Service::class), $isils);
 
         return $volumes;
     }

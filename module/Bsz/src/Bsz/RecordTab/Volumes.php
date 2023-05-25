@@ -21,7 +21,8 @@ namespace Bsz\RecordTab;
 
 use Bsz\Search\Solr\Results;
 use VuFind\RecordTab\AbstractBase;
-use VuFind\Search\SearchRunner;
+use VuFindSearch\ParamBag;
+use VuFindSearch\Service as SearchService;
 
 /**
  * Class Volumes
@@ -31,16 +32,19 @@ use VuFind\Search\SearchRunner;
  */
 class Volumes extends AbstractBase
 {
+    const LIMIT = 50;
     /**
-     * @var SearchRunner
+     * Search service
+     *
+     * @var \VuFindSearch\Service
      */
-    protected $runner;
+    protected $searchService;
 
     /**
      *
      * @var array
      */
-    protected $content;
+    protected $results;
 
     /**
      * @var string
@@ -54,11 +58,13 @@ class Volumes extends AbstractBase
 
     /**
      * Constructor
-     * @param SearchRunner $runner
+     *
+     * @param SearchService $search
+     * @param array $isils
      */
-    public function __construct(SearchRunner $runner, $isils = [])
+    public function __construct(SearchService $search, $isils = [])
     {
-        $this->runner = $runner;
+        $this->searchService = $search;
         $this->isils = $isils;
         $this->accessPermission = 'access.VolumesViewTab';
     }
@@ -76,47 +82,44 @@ class Volumes extends AbstractBase
      *
      * @return array|null
      */
-    public function getContent()
+    public function getResults()
     {
-        if ($this->content === null) {
-            $relId = $this->driver->tryMethod('getIdsRelated');
-            // add the ID of the current hit, thats usefull if its a
-            // Gesamtaufnahme
+        if ($this->results === null) {
+            $relIds = $this->driver->tryMethod('getIdsRelated');
             $this->content = [];
-            if (is_array($relId)) {
-                array_push($relId, $this->driver->getUniqueID());
-                if (is_array($relId) && count($relId) > 0) {
-                    foreach ($relId as $k => $id) {
-//                      $relId[$k] = 'id_related_host_item:"'.$id.'"';
-                        $relId[$k] = 'id_related:"' . $id . '"';
-                    }
-                    $params = [
-                        'sort' => 'publish_date_sort desc, id desc',
-                     'lookfor' => implode(' OR ', $relId),
-                     'limit'   => 500,
-                    ];
+            if (is_array($relIds) && count($relIds) > 0) {
+                // add the ID of the current record, thats usefull if its a
+                // Gesamtaufnahme to find the
+                array_push($relIds, $this->driver->getUniqueID());
+                $queryArr = [];
 
-                    $filter = [];
-                    if ($this->isFL() === false) {
-                        foreach ($this->isils as $isil) {
-                            $filter[] = '~institution_id:' . $isil;
-                        }
-                    }
-
-                    // Test: all Formats but articles
-                    $filter[] = '-material_content_type:Article';
-
-//                    $filter[] = '~material_content_type:Book';
-//                    $filter[] = '~material_content_type:"Musical Score"';
-//                    $filter[] = '~material_content_type:"Sound Recording"';
-
-                    $params['filter'] = $filter;
-
-                    $results = $this->runner->run($params);
-
-                    $results instanceof Results;
-                    $this->content = $results->getResults();
+                foreach ($relIds as $id) {
+                    $queryArr[] = 'id_related:"' . $id . '"';
                 }
+                $query = new \VuFindSearch\Query\Query(
+                    implode(' OR ', $queryArr)
+                );
+
+                // in local tab, we need to filter by isil
+                $filter = [];
+                if ($this->isFL() === false) {
+                    foreach ($this->isils as $isil) {
+                        $filter[] = '~institution_id:' . $isil;
+                    }
+                }
+
+                $params = new ParamBag(['filter' => $filter]);
+                $params->add('-material_content_type', 'Article');
+                $params->add('sort', 'publish_date_sort desc');
+
+                $record = $this->getRecordDriver();
+                $this->content = $this->searchService->search(
+                    $record->getSourceIdentifier(),
+                    $query,
+                    0,
+                    static::LIMIT,
+                    $params
+                );
             }
         }
         return $this->content;
@@ -128,6 +131,7 @@ class Volumes extends AbstractBase
     public function isFL()
     {
         $last = '';
+        $status = false;
         if (isset($_SESSION['Search']['last'])) {
             $last = urldecode($_SESSION['Search']['last']);
         }
@@ -136,10 +140,9 @@ class Volumes extends AbstractBase
             || strpos($last, 'consortium:ZDB') !== false
             || strpos($last, 'consortium:"ZDB"') !== false
         ) {
-            return true;
-        } else {
-            return false;
+            $status = true;
         }
+        return $status;
     }
 
     /**
@@ -148,15 +151,17 @@ class Volumes extends AbstractBase
      */
     public function isActive()
     {
-        //getContents to determine active state
-        $this->getContent();
         $parent = parent::isActive();
-        if ($parent && $this->getContent() !== []) {
-            if (($this->driver->isCollection() || $this->driver->isPart()
-                || $this->driver->isMonographicSerial()
-                || $this->driver->isJournal()) && !empty($this->content)) {
-                return true;
-            }
+        $record = $this->getRecordDriver();
+
+        if ($parent && (
+            count($record->getIdsRelated()) > 0
+            || $record->tryMethod('isCollection')
+            || $record->tryMethod('isMonographicSerial')
+            || $record->tryMethod('isJournal')
+        )
+        ) {
+            return true;
         }
         return false;
     }
