@@ -44,19 +44,13 @@ class Factory
      */
     public static function getVolumes(ContainerInterface $container)
     {
-        $last = '';
-        if (isset($_SESSION['Search']['last'])) {
-            $last = urldecode($_SESSION['Search']['last']);
-        }
-        $isils = [];
-        if (strpos($last, 'consortium=FL') === false
-            && strpos($last, 'consortium=ZDB') === false
-        ) {
-            $client = $container->get('Bsz\Config\Client');
-            $isils = $client->getIsils();
-        }
-        $volumes = new Volumes($container->get(\VuFindSearch\Service::class), $isils);
+        $client = $container->get('Bsz\Config\Client');
+        $isils = $client->getIsils();
 
+        $volumes = new Volumes(
+            $container->get(\VuFindSearch\Service::class),
+            $isils
+        );
         return $volumes;
     }
 
@@ -69,21 +63,13 @@ class Factory
      */
     public static function getArticles(ContainerInterface $container)
     {
-        $last = '';
-        if (isset($_SESSION['Search']['last'])) {
-            $last = urldecode($_SESSION['Search']['last']);
-        }
-        $isils = [];
-        if (strpos($last, 'consortium=FL') === false
-            && strpos($last, 'consortium=ZDB') === false
-        ) {
-            $client = $container->get('Bsz\Config\Client');
-            $isils = $client->getIsils();
-        }
+        $client = $container->get('Bsz\Config\Client');
+        $isils = $client->getIsils();
 
-        $articles = new Articles($container->get('VuFind\SearchRunner'), $isils);
-        $request = new Request();
-        $url = strtolower($request->getUriString());
+        $articles = new Articles(
+            $container->get(\VuFindSearch\Service::class),
+            $isils
+        );
         return $articles;
     }
 
