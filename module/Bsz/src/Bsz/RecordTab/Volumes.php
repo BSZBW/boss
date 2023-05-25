@@ -19,7 +19,6 @@
  */
 namespace Bsz\RecordTab;
 
-use Bsz\Search\Solr\Results;
 use VuFind\RecordTab\AbstractBase;
 use VuFindSearch\ParamBag;
 use VuFindSearch\Service as SearchService;
@@ -113,7 +112,7 @@ class Volumes extends AbstractBase
                 $params->add('sort', 'publish_date_sort desc');
 
                 $record = $this->getRecordDriver();
-                $this->content = $this->searchService->search(
+                $this->results = $this->searchService->search(
                     $record->getSourceIdentifier(),
                     $query,
                     0,
@@ -122,7 +121,7 @@ class Volumes extends AbstractBase
                 );
             }
         }
-        return $this->content;
+        return $this->results;
     }
 
     /**
