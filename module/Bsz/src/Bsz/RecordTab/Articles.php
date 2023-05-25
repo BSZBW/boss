@@ -19,10 +19,9 @@
  */
 namespace Bsz\RecordTab;
 
-use Vu;
 use VuFind\RecordTab\AbstractBase;
-use VuFind\Search\SearchRunner;
-use VuFind\Search\Solr\Results;
+use VuFindSearch\ParamBag;
+use VuFindSearch\Service as SearchService;
 
 /**
  * Class Articles
@@ -32,32 +31,37 @@ use VuFind\Search\Solr\Results;
  */
 class Articles extends AbstractBase
 {
+    const LIMIT = 50;
     /**
+     * Search service
      *
-     * @var Vu
+     * @var \VuFindSearch\Service
      */
-    protected $runner;
+    protected $searchService;
 
     /**
      *
      * @var array
      */
-    protected $content;
+    protected $results;
 
     /**
      * @var string
      */
     protected $searchClassId;
 
+    /**
+     * @var array
+     */
     protected $isils;
 
     /**
      * Constructor
      * @param SearchRunner $runner
      */
-    public function __construct(SearchRunner $runner, $isils = [])
+    public function __construct(SearchService $search, $isils = [])
     {
-        $this->runner = $runner;
+        $this->searchService = $search;
         $this->isils = $isils;
         $this->accessPermission = 'access.ArticlesViewTab';
     }
@@ -75,34 +79,47 @@ class Articles extends AbstractBase
      *
      * @return array|null
      */
-    public function getContent()
+    public function getResults()
     {
-        if ($this->content === null) {
-            $relId[] = $this->driver->getUniqueId();
+        if ($this->results === null) {
+            $relIds = $this->driver->tryMethod('getIdsRelated');
             $this->content = [];
-            if (is_array($relId) && count($relId) > 0) {
-                foreach ($relId as $k => $id) {
-                    $relId[$k] = 'id_related:"' . $id . '"';
+            if (is_array($relIds) && count($relIds) > 0) {
+                // add the ID of the current record, thats usefull if its a
+                // Gesamtaufnahme to find the
+                array_push($relIds, $this->driver->getUniqueID());
+                $queryArr = [];
+
+                foreach ($relIds as $id) {
+                    $queryArr[] = 'id_related:"' . $id . '"';
                 }
+                $query = new \VuFindSearch\Query\Query(
+                    implode(' OR ', $queryArr)
+                );
 
-                $params = [
-                    'sort' => 'publish_date_sort desc, id desc',
-                    'lookfor' => implode(' OR ', $relId),
-                    'limit' => 500
-                ];
-
-                $filter = [];
+                // in local tab, we need to filter by isil
+                $filterOr = [];
                 if ($this->isFL() === false) {
                     foreach ($this->isils as $isil) {
-                        $filter[] = '~institution_id:' . $isil;
+                        $filterOr[] = 'institution_id:' . $isil;
                     }
                 }
-                $filter[] = 'material_content_type:Article';
-                $params['filter'] = $filter;
-                $results = $this->runner->run($params);
+                $params = new ParamBag();
+                $params->add('fq', implode(' OR ', $filterOr));
+                $params->add('fq', 'material_content_type:Article');
 
-                $results instanceof Results;
-                $this->content = $results->getResults();
+                $params->add('sort', 'publish_date_sort desc');
+                $params->add('hl', 'false');
+                $params->add('echoParams', 'ALL');
+
+                $record = $this->getRecordDriver();
+                $this->content = $this->searchService->search(
+                    $record->getSourceIdentifier(),
+                    $query,
+                    0,
+                    static::LIMIT,
+                    $params
+                );
             }
         }
         return $this->content;
@@ -129,16 +146,24 @@ class Articles extends AbstractBase
     }
 
     /**
-     * This Tab is Active for collections or parts of collections only.
-     * @return boolean
+     * @return true
+     * @throws \Exception
      */
     public function isActive()
     {
-        $this->getContent();
-        if (parent::isActive() && !empty($this->content)) {
-            return true;
+        $parent = parent::isActive();
+        $record = $this->getRecordDriver();
+        $status = false;
+
+        if ($parent && (
+            count($record->getIdsRelated()) > 0
+                || $record->tryMethod('isJournal')
+                || $record->isArticle()
+        )
+        ) {
+            $status = true;
         }
-        return false;
+        return $status;
     }
 
     /**

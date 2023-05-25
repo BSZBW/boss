@@ -31,10 +31,10 @@ class Articles extends \Bsz\RecordTab\Articles
      */
     public function getContent()
     {
-        if ($this->content === null) {
+        if ($this->results === null) {
             $relId = $this->driver->tryMethod('getIdsRelatedArticle');
             $relId[] = $this->driver->getUniqueId();
-            $this->content = [];
+            $this->results = [];
             if (is_array($relId) && count($relId) > 0) {
                 foreach ($relId as $k => $id) {
                     $relId[$k] = 'id:"' . $id . '"';
@@ -57,10 +57,10 @@ class Articles extends \Bsz\RecordTab\Articles
                 $results = $this->runner->run($params);
 
                 $results instanceof Results;
-                $this->content = $results->getResults();
+                $this->results = $results->getResults();
             }
         }
-        return $this->content;
+        return $this->results;
     }
 
 }

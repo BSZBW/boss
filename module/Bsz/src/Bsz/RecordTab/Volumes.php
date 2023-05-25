@@ -100,16 +100,19 @@ class Volumes extends AbstractBase
                 );
 
                 // in local tab, we need to filter by isil
-                $filter = [];
+                $filterOr = [];
                 if ($this->isFL() === false) {
                     foreach ($this->isils as $isil) {
-                        $filter[] = '~institution_id:' . $isil;
+                        $filterOr[] = 'institution_id:' . $isil;
                     }
                 }
+                $params = new ParamBag();
+                $params->add('fq', implode(' OR ', $filterOr));
+                $params->add('fq', '-material_content_type:Article');
 
-                $params = new ParamBag(['filter' => $filter]);
-                $params->add('-material_content_type', 'Article');
                 $params->add('sort', 'publish_date_sort desc');
+                $params->add('hl', 'false');
+                $params->add('echoParams', 'ALL');
 
                 $record = $this->getRecordDriver();
                 $this->results = $this->searchService->search(
@@ -152,6 +155,7 @@ class Volumes extends AbstractBase
     {
         $parent = parent::isActive();
         $record = $this->getRecordDriver();
+        $status = false;
 
         if ($parent && (
             count($record->getIdsRelated()) > 0
@@ -160,8 +164,8 @@ class Volumes extends AbstractBase
             || $record->tryMethod('isJournal')
         )
         ) {
-            return true;
+            $status = true;
         }
-        return false;
+        return $status;
     }
 }
