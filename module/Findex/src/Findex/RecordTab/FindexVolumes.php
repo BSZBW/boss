@@ -93,7 +93,7 @@ class FindexVolumes extends AbstractBase
                 $queryArr = [];
 
                 foreach ($relIds as $id) {
-                    $queryArr[] = 'id_related:"' . $id . '"';
+//                    $queryArr[] = 'id_related:"' . $id . '"';
                 }
                 $query = new \VuFindSearch\Query\Query(
                     implode(' OR ', $queryArr)
@@ -103,14 +103,15 @@ class FindexVolumes extends AbstractBase
                 $filterOr = [];
                 if ($this->isFL() === false) {
                     foreach ($this->isils as $isil) {
-                        $filterOr[] = 'institution_id:' . $isil;
+                        $filterOr[] = 'collection_details:ISIL_' . $isil;
                     }
                 }
                 $params = new ParamBag();
                 $params->add('fq', implode(' OR ', $filterOr));
-                $params->add('fq', '-material_content_type:Article');
+                $params->add('fq', '-format:Article');
+                $params->add('fq', '-format:"electronic Article"');
 
-                $params->add('sort', 'publish_date_sort desc');
+                $params->add('sort', 'publishDateSort desc');
                 $params->add('hl', 'false');
                 $params->add('echoParams', 'ALL');
 
