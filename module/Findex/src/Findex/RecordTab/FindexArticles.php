@@ -23,7 +23,7 @@ namespace Findex\RecordTab;
 
 use VuFind\Search\Solr\Results;
 
-class Articles extends \Bsz\RecordTab\Articles
+class FindexArticles extends \Bsz\RecordTab\Articles
 {
     /**
      *

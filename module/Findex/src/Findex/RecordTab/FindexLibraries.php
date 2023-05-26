@@ -24,7 +24,7 @@ namespace Findex\RecordTab;
 use Bsz\Config\Library;
 use Bsz\RecordTab\Libraries as BszLibrariesTab;
 
-class Libraries extends BszLibrariesTab
+class FindexLibraries extends BszLibrariesTab
 {
 
     /**
