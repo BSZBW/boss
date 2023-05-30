@@ -85,8 +85,7 @@ class SolrGviMarc extends SolrMarc implements Constants
                     foreach ($subfields as $subfield) {
                         // Numeric subfields are for control purposes and should not
                         // be displayed:
-                        if (!is_numeric($subfield->getCode())
-                            && preg_match('/[a-z]/', $subfield->getCode())) {
+                        if (preg_match('/[a-z]/', $subfield->getCode())) {
                             array_push($retval, $subfield->getData());
                         }
                     }
@@ -124,10 +123,27 @@ class SolrGviMarc extends SolrMarc implements Constants
     public function getGNDSubjectHeadings()
     {
         $gnd = [];
+        $delimiters = ['a' => '. ', 'p' => ', '];
         foreach ($this->getMarcRecord()->getFields('689') as $field) {
             $sub2 = $field->getSubfield(2);
             if (is_object($sub2) && $sub2->getData() == 'gnd') {
-                $gnd[] = $field->getSubfield('a')->getData();
+                $subfields = $field->getSubfields();
+                $tmp = [];
+                $id = 0;
+                foreach ($subfields as $subfield) {
+                    if (preg_match('/[a-z]/', $subfield->getCode())) {
+                        $tmp[] = $subfield->getData();
+                        if (array_key_exists($subfield->getCode(), $delimiters)) {
+                            $tmp[] = $delimiters[$subfield->getCode()];
+                        }
+                    } elseif ($subfield->getCode() == 0
+                        && preg_match('/\(DE-588\)/', $subfield->getData())
+                    ) {
+                        $id = preg_replace('/\(.*\)/','',  $subfield->getData());
+                    }
+
+                }
+                $gnd[$id] = implode('', $tmp);
             }
         }
         return array_unique($gnd);

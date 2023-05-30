@@ -6,7 +6,7 @@
 <?php if(!isset($this->linktype)):
     $this->linktype = 'subject';
 endif; ?>
-<?php foreach ($this->subjects as $field): ?>
+<?php foreach ($this->subjects as $key => $field): ?>
     <span class="subjectLine" property="keywords">
          <?php $subject = ''; ?>
         <?php // case 1 : subjects in one field separated by --?>
@@ -26,9 +26,14 @@ endif; ?>
             <?php endforeach; ?>
         <?php // case 3: subjects in string ?>
         <?php else: ?>
+            <?php if (strlen($key) > 2 ):
+                $href = $this->record($this->driver)->getLink($this->linktype, $key, $this->searchClassId);
+            else:
+                $href = $this->record($this->driver)->getLink($this->linktype, $field, $this->searchClassId);
+            endif; ?>
             <a class="markjs searchicon <?php if ($count >= $max): ?><?=$this->type?>subjects-<?=$rand?> collapse-inline collapse multi-collapse<?php endif; ?>"
                title="<?= $this->escapeHtmlAttr($field) ?>"
-               href="<?= $this->record($this->driver)->getLink($this->linktype, $field, $this->searchClassId) ?>"><?= trim($this->escapeHtml($field)) ?></a>
+               href="<?=$href?>"><?= trim($this->escapeHtml($field)) ?></a>
             <?php $count++ ?>
         <? endif; ?>
       </span>

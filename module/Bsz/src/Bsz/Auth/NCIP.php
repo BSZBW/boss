@@ -99,10 +99,10 @@ class NCIP extends AbstractBase
     protected function validateConfig()
     {
         // Check for missing parameters:
-        $requiredParams = ['host_production', 'host_test', 'port',
-            'path', 'fromAgencyId', 'toAgencyId'
+        $requiredParams = ['host_production', 'host_test', 'fromAgencyId', 'toAgencyId'
         ];
         foreach ($requiredParams as $param) {
+            $param .= ':'.$this->isil;
             if (!isset($this->config->NCIP->$param)
                 || empty($this->config->NCIP->$param)
             ) {
@@ -227,9 +227,9 @@ class NCIP extends AbstractBase
     protected function initiationHeaderNode()
     {
         $fromAgencyIdNode = $this->_ncip->createElement('FromAgencyId');
-        $fromAgencyIdNode->appendChild($this->schemeValueNode('UniqueAgencyId', $this->config->NCIP->fromAgencyId));
+        $fromAgencyIdNode->appendChild($this->schemeValueNode('UniqueAgencyId', $this->config->NCIP->{'fromAgencyId:'.$this->isil}));
         $toAgencyIdNode = $this->_ncip->createElement('ToAgencyId');
-        $toAgencyIdNode->appendChild($this->schemeValueNode('UniqueAgencyId', $this->config->NCIP->toAgencyId));
+        $toAgencyIdNode->appendChild($this->schemeValueNode('UniqueAgencyId', $this->config->NCIP->{'toAgencyId:'.$this->isil}));
 
         $initiationHeaderNode = $this->_ncip->createElement('InitiationHeader');
         $initiationHeaderNode->appendChild($fromAgencyIdNode);
@@ -359,9 +359,9 @@ class NCIP extends AbstractBase
             curl_error($this->_curlHandle);
         }
         if ($this->library->isLive()) {
-            $url = "https://{$this->config->NCIP->host_production}:{$this->config->NCIP->port}{$this->config->NCIP->path}";
+            $url = $this->config->NCIP->{'url_production:'.$this->isil};
         } else {
-            $url = "https://{$this->config->NCIP->host_test}:{$this->config->NCIP->port}{$this->config->NCIP->path}";
+            $url = $this->config->NCIP->{'url_test:'.$this->isil};
         }
 
         if (curl_setopt($this->_curlHandle, CURLOPT_URL, $url) === false
