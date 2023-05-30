@@ -156,9 +156,9 @@ class Articles extends AbstractBase
         $status = false;
 
         if ($parent && (
-            count($record->getIdsRelated()) > 0
-                || $record->tryMethod('isJournal')
-                || $record->isArticle()
+            count($record->getIdsRelated()) > 0 && (
+                 $record->tryMethod('isJournal')
+                || $record->isArticle())
         )
         ) {
             $status = true;
