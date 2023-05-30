@@ -32,6 +32,7 @@ use VuFindSearch\Service as SearchService;
 class FindexVolumes extends AbstractBase
 {
     const LIMIT = 50;
+    const PREFIX = '(DE-627)';
     /**
      * Search service
      *
@@ -88,12 +89,17 @@ class FindexVolumes extends AbstractBase
             $this->content = [];
             if (is_array($relIds) && count($relIds) > 0) {
                 // add the ID of the current record, thats usefull if its a
-                // Gesamtaufnahme to find the
+                // Gesamtaufnahme to find the subrecords
                 array_push($relIds, $this->driver->getUniqueID());
                 $queryArr = [];
 
                 foreach ($relIds as $id) {
-//                    $queryArr[] = 'id_related:"' . $id . '"';
+                    /*
+                     * ppnlink contains all ppn links without prefix
+                     * familylinks_str_mv contains ppn links from 773w and 830w with ISDIL prefix
+                     */
+                    $queryArr[] = 'familylinks_str_mv:"' . static::PREFIX.$id . '"';
+//                    $queryArr[] = 'ppnlink:"' . $id . '"';
                 }
                 $query = new \VuFindSearch\Query\Query(
                     implode(' OR ', $queryArr)
@@ -159,11 +165,11 @@ class FindexVolumes extends AbstractBase
         $status = false;
 
         if ($parent && (
-                count($record->getIdsRelated()) > 0
+            count($record->getIdsRelated()) > 0
                 || $record->tryMethod('isCollection')
                 || $record->tryMethod('isMonographicSerial')
                 || $record->tryMethod('isJournal')
-            )
+        )
         ) {
             $status = true;
         }

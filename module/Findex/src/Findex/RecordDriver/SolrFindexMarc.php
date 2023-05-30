@@ -310,16 +310,16 @@ class SolrFindexMarc extends SolrMarc implements Constants
     public function getContainerIds()
     {
         $fields = [
-            800 => ['w'],
+            773 => ['w'],
+            830 => ['w']
         ];
         $ids = [];
         $array = $this->getFieldsArray($fields);
         foreach ($array as $subfields) {
             $tmp = explode(' ', $subfields);
             foreach ($tmp as $id) {
-                // match all PPNs except old SWB PPNs and ZDB-IDs
-                if ( !preg_match('/^\(DE-627\)/', $id)) {
-                    $ids[] = $id;
+                if ( preg_match('/^\(DE-627\)/', $id)) {
+                    $ids[] = preg_replace('/\(.*\)/', '', $id);
                 }
             }
         }
