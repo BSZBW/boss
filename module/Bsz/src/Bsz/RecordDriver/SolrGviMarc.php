@@ -123,7 +123,6 @@ class SolrGviMarc extends SolrMarc implements Constants
     public function getGNDSubjectHeadings()
     {
         $gnd = [];
-        $delimiters = ['a' => '. ', 'p' => ', '];
         foreach ($this->getMarcRecord()->getFields('689') as $field) {
             $sub2 = $field->getSubfield(2);
             if (is_object($sub2) && $sub2->getData() == 'gnd') {
@@ -132,10 +131,7 @@ class SolrGviMarc extends SolrMarc implements Constants
                 $id = 0;
                 foreach ($subfields as $subfield) {
                     if (preg_match('/[a-z]/', $subfield->getCode())) {
-                        $tmp[] = $subfield->getData();
-                        if (array_key_exists($subfield->getCode(), $delimiters)) {
-                            $tmp[] = $delimiters[$subfield->getCode()];
-                        }
+                        $tmp[$subfield->getCode()] = $subfield->getData();
                     } elseif ($subfield->getCode() == 0
                         && preg_match('/\(DE-588\)/', $subfield->getData())
                     ) {
@@ -143,7 +139,7 @@ class SolrGviMarc extends SolrMarc implements Constants
                     }
 
                 }
-                $gnd[$id] = implode('', $tmp);
+                $gnd[$id] = $this->addDelimiterChars($tmp);
             }
         }
         return array_unique($gnd);

@@ -40,4 +40,22 @@ trait HelperTrait
     {
         return $this->cleanString($this->getTitle());
     }
+
+    public function addDelimiterChars($input)
+    {
+        $output = '';
+        foreach ($input as $key => $value) {
+            $output .= $value;
+            if ($key == 'a' && isset($input['n'])) {
+                $output .= '. ';
+            } elseif ($key == 'n' && (isset($input['p']) || isset($input['c']))) {
+                $output .= ', ';
+            } elseif ($key == 'a' && (isset($input['p']) || isset($input['c']))) {
+                $output .= ', ';
+            } else {
+                $output .= ' ';
+            }
+        }
+        return $output;
+    }
 }
