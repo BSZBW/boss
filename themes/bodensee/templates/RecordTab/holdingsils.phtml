@@ -84,7 +84,8 @@
 <?php endif; ?>
 
 <?php /* One Recall/Holds-Button for all items */ ?>
-<?php if ($this->client()->is('only_one_holds_button') && $this->ils()->getDriverClass() == 'Bsz\ILS\Driver\DAIA'): ?>
+<?php $class = $this->ils()->getDriverClass(); ?>
+<?php if ($this->client()->is('only_one_holds_button') && ($class == 'Bsz\ILS\Driver\DAIA' || $class == 'Bsz\ILS\Driver\NoILS')): ?>
     <?php if (isset($row['ilslink']) && ($recallButtonCounter > 0)): ?>
         <a href="<?=$row['ilslink']?>" class="btn btn-primary btn-sm recallholdButtonLink external "><?=$this->transEsc('recall/hold')?></a>
     <?php endif; ?>

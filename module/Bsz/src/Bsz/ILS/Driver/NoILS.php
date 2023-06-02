@@ -99,13 +99,15 @@ class NoILS extends \VuFind\ILS\Driver\NoILS
                 if (isset($library)) {
                     $parent[$k]['location'] = $library->getName();
                     $parent[$k]['locationhref'] = $library->getHomepage();
+                    $parent[$k]['ilslink'] = $parent[$k]['link'];
+                    unset($parent[$k]['link']);
                 }
             } else {
                 unset($parent[$k]);
             }
         }
 
-        return $parent;
+        return array_values($parent);
     }
 
     /**
