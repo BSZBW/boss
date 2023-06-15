@@ -72,7 +72,6 @@ class NoILS extends \VuFind\ILS\Driver\NoILS
             ];
         } elseif ($useHoldings == "marc") {
             // Retrieve record from index:
-            xdebug_break();
             $recordDriver = $this->getSolrRecord($id);
             return $this->getFormattedMarcDetails($recordDriver, 'MarcHoldings');
         }
