@@ -15,6 +15,9 @@
         if ($filter['displayText'] == '[* TO *]') {
             $filter['displayText'] = $this->translate('filter_wildcard');
         }
+        if (($pos = strpos($filter['displayText'], 'rvk ')) !== false) {
+            $filter['displayText'] = substr($filter['displayText'], $pos + 4 );
+        }
       ?>
       <a class="facet" href="<?=$removeLink ?>" title="<?=$this->transEsc('clear_tag_filter') ?>">
         <span class="sr-only"><?=$this->transEsc('clear_tag_filter') ?></span>

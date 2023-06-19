@@ -326,4 +326,43 @@ class SolrFindexMarc extends SolrMarc implements Constants
         return array_unique($ids);
     }
 
+    /**
+     * Get an array with RVK shortcut as key and description as value (array)
+     * @returns array
+     */
+    public function getRVKNotations()
+    {
+        $notationList = [];
+        $replace = [
+            '"' => "'",
+        ];
+        foreach ($this->getMarcRecord()->getFields('084') as $field) {
+            $suba = $field->getSubField('a');
+            $sub2 = $field->getSubfield('2');
+            if ($suba && $sub2) {
+                $sub2data = $field->getSubfield('2')->getData();
+                if (strtolower($sub2data) == 'rvk') {
+                    $title = [];
+                    foreach ($field->getSubFields('k') as $item) {
+                        $title[] = htmlentities($item->getData());
+                    }
+                    $notationList[$suba->getData()] = $title;
+                }
+            }
+        }
+        foreach ($this->getMarcRecord()->getFields('936') as $field) {
+            $suba = $field->getSubField('a');
+            if ($suba && $field->getIndicator(1) == 'r'
+                && $field->getIndicator(2) == 'v'
+            ) {
+                $title = [];
+                foreach ($field->getSubFields('k') as $item) {
+                    $title[] = htmlentities($item->getData());
+                }
+                $notationList[$suba->getData()] = $title;
+            }
+        }
+        return $notationList;
+    }
+
 }
