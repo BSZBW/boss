@@ -365,4 +365,19 @@ class SolrFindexMarc extends SolrMarc implements Constants
         return $notationList;
     }
 
+    public function getBibliographies()
+    {
+        $return = [];
+        $m935 = $this->getMarcRecord()->getFields('935');
+        foreach ($m935 as $field) {
+            foreach ($field->getSubfields('a') as $suba) {
+                $content = strtoupper($suba->getData());
+                if ($this->mainConfig->is($content)) {
+                    $return[] = $content;
+                }
+            }
+        }
+        return $return;
+    }
+
 }

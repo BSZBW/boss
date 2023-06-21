@@ -375,7 +375,19 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
             </td>
         </tr>
         <? endif; ?>
-            <?php if ($this->driver->tryMethod('isEPflicht')):?>
+            <?php $bibliographies = $this->driver->tryMethod('getBibliographies');
+            if ($bibliographies != false && count($bibliographies) > 0):?>
+            <tr>
+                <th><?=$this->transEsc('Bibliographie')?></th>
+                <td>
+                    <?php foreach ($bibliographies as $bibliography):?>
+                        <span class="label label-success"><?=$bibliography?></span>
+                        <?=$this->transEsc($bibliography)?><br/>
+                    <?php endforeach;?>
+                </td>
+            </tr>
+        <?php endif ?>
+        <?php if ($this->driver->tryMethod('isEPflicht')):?>
             <tr>
                 <th><?=$this->transEsc('Source')?></th>
                 <td><span class="label label-warning"><?=$this->transEsc('ePflicht-BW Label')?></span> <?=$this->transEsc('ePflicht-BW Text')?></td>
