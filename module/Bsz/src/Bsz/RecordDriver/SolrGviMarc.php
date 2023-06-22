@@ -1274,6 +1274,9 @@ class SolrGviMarc extends SolrMarc implements Constants
         return $zdb;
     }
 
+    /**
+     * @return bool
+     */
     public function isEPflicht() : bool
     {
         $fields = $this->getFieldArray('912', ['a']);
@@ -1284,4 +1287,22 @@ class SolrGviMarc extends SolrMarc implements Constants
         }
         return false;
     }
+
+
+    /**
+     * @return bool
+     */
+    public function isLFER() : bool
+    {
+        $fields = $this->getField924();
+        foreach ($fields as $field) {
+            if ($field['isil'] === 'LFER') {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
 }
