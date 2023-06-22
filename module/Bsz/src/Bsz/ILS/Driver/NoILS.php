@@ -64,10 +64,8 @@ class NoILS extends \VuFind\ILS\Driver\NoILS
                         $this->config['Holdings']['callnumber']
                     ),
                     'barcode' => $this->config['Holdings']['barcode'],
-                    'notes' => isset($this->config['Holdings']['notes'])
-                        ? $this->config['Holdings']['notes'] : [],
-                    'summary' => isset($this->config['Holdings']['summary'])
-                        ? $this->config['Holdings']['summary'] : []
+                    'notes' => $this->config['Holdings']['notes'] ?? [],
+                    'summary' => $this->config['Holdings']['summary'] ?? []
                 ]
             ];
         } elseif ($useHoldings == "marc") {
