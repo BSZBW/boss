@@ -12,3 +12,7 @@
 <?php if ($this->driver->tryMethod('isLFER')):?>
         <span class="label label-lfer" data-toggle="tooltip" title="<?=$this->transEsc('LFER_long')?>"><?=$this->transEsc('lizenzfrei')?></span>
 <?php endif ?>
+<?php if ($this->driver->tryMethod('isEPflicht') && $this->driver->tryMethod('hasLocalHoldings')):?>
+    <span class="label label-wlblizenz" data-toggle="tooltip" title="<?=$this->transEsc('WLB lizenz description')?>"><?=$this->transEsc('WLB Lizenz')?></span>
+<?php endif ?>
+
