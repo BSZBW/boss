@@ -69,8 +69,8 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
      */
     public function ILLFormAction()
     {
-        $isils = $this->params()->fromQuery('isil');
-        if ($isils) {
+        $isilsParam = $this->params()->fromQuery('isil');
+        if ($isilsParam) {
             return $this->processIsil();
         }
         $params = $this->params()->fromPost();
