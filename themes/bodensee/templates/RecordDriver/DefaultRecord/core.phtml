@@ -397,9 +397,6 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
                     <?php if ($this->driver->tryMethod('isLFER')):?>
                     <p><span class="label label-lfer"><?=$this->transEsc('lizenzfrei')?></span> <?=$this->transEsc('LFER_long')?></p>
                     <?php endif; ?>
-                    <?php if ($this->client()->getTag() == 'wlb' && $this->driver->tryMethod('isEPflicht') && $this->driver->tryMethod('hasLocalHoldings')):?>
-                    <p><span class="label label-wlblizenz" ><?=$this->transEsc('WLB Lizenz')?></span> <?=$this->transEsc('WLB lizenz description')?>
-                    <?php endif ?>
                     </td>
                 </tr>
             <?php endif ?>
