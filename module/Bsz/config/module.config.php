@@ -192,6 +192,8 @@ $config = [
                     'Bsz\RecordTab\Notes' => 'Bsz\RecordTab\Factory::getNotes',
                     'Bsz\RecordTab\Libraries' => 'Bsz\RecordTab\Factory::getLibraries',
                     'Bsz\RecordTab\InterlibraryLoan' => 'Bsz\RecordTab\Factory::getInterLibraryLoan',
+                    'Bsz\RecordTab\StaffViewAll' => 'InvokableFactory::class',
+
                 ],
                 'aliases' => [
                     'VuFind\RecordTab\HoldingsILS' => 'Bsz\RecordTab\HoldingsILS',
@@ -200,6 +202,7 @@ $config = [
                     'Notes' => 'Bsz\RecordTab\Notes',
                     'Libraries' => 'Bsz\RecordTab\Libraries',
                     'InterlibraryLoan' => 'Bsz\RecordTab\InterlibraryLoan',
+                    'staffviewall' => 'Bsz\RecordTab\StaffViewAll',
                 ]
             ],
             'search_backend' => [
