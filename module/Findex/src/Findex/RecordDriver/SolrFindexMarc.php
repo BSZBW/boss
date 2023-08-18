@@ -326,4 +326,18 @@ class SolrFindexMarc extends SolrMarc implements Constants
         return array_unique($ids);
     }
 
+    public function getLocalSubjects()
+    {
+        $fields = $this->getMarcRecord()->getFields('982');
+        $isils = $this->mainConfig->getIsils();
+        $output = [];
+        foreach ($fields as $index => $field) {
+            $isil = $field->getSubfield('x')->getData();
+            if (in_array($isil, $isils)) {
+                $output[] = $field->getSubfield('a')->getData();
+            }
+        }
+        return $output;
+    }
+
 }
