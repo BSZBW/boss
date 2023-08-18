@@ -219,7 +219,7 @@ if (!empty($subjects) && $this->client()->is('show_rvk')): ?>
 <?php if (!empty($subjects) && $this->client()->is('show_local')): ?>
     <tr>
         <th>
-            <span class="text-nowrap"><?= $this->abbrev('GND') ?>-<?= $this->transEsc('Local Subjects') ?>:</span>
+            <?= $this->transEsc('Local Subjects') ?>:</span>
         </th>
         <td>
             <?= $this->context($this)->renderInContext(
