@@ -56,10 +56,12 @@ if (empty($zdb) && isset($this->driver) && !$verbund == 'HBZ') {
 } elseif (isset($this->driver) && $verbund == 'HBZ') {
     $ppn = $this->driver->getUniqueId();
     $ppn = preg_replace('/\(.*\)/', '', $ppn);
+    xdebug_var_dump($ppn);
 } elseif (isset($this->driver) && !empty($zdb)) {
     $ppn = $zdb;
     $verbund = 'ZDB';
 }
+xdebug_var_dump($verbund);
 ?>
 <input type="hidden" name="Verbund" value="<?= $this->escapeHtmlAttr($verbund) ?>"/>
 <input type="hidden" name="TitelId" value="<?= $this->escapeHtmlAttr($ppn) ?>"/>
