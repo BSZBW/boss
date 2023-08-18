@@ -44,12 +44,11 @@ class InterlibraryLoan extends AbstractBase
      * @param bool $active
      * @param bool $internal Link to Dienstoberfläche
      */
-    public function __construct(
-        Logic $logic,
-        Library $library = null,
-        bool $active = true,
-        bool $internal = false,
-        string $orderid = ''
+    public function __construct(Logic $logic,
+                                Library $library = null,
+                                bool $active = true,
+                                bool $internal = false,
+                                string $orderid = ''
     ) {
         $this->logic = $logic;
         $this->library = $library;
@@ -88,28 +87,21 @@ class InterlibraryLoan extends AbstractBase
         $this->logic->attachDriver($this->driver);
 
         $customUrl = false;
-        $verbund = $this->driver->getNetwork();
-        $titelid = $this->driver->getPPN();
-
-        // workaround for HBZ titles
-        if ($verbund == 'HBZ') {
-            $titelid = $this->driver->getUniqueId();
-            $titelid = preg_replace('/\(.*\)/', '', $titelid);
-        }
 
         if ($this->internalill) {
             $query = http_build_query([
-                'titelid' => $titelid,
-                'verbund' => $verbund,
+                'titelid' => $this->driver->getPPN(),
+                'verbund' => $this->driver->getNetwork(),
                 'bestellid' => $this->orderid ?? ''
             ]);
             $url = 'https://%s.bsz-bw.de/flcgi/fernleihe_boss.pl?'.$query;
             if (getenv('VUFIND_ENV') === 'production') {
+
                 $customUrl = sprintf($url, 'zfl');
             } else {
                 $customUrl = sprintf($url, 'fltest');
             }
-        } elseif ($this->library && $this->library->hasCustomUrl()) {
+        } elseif($this->library && $this->library->hasCustomUrl()) {
             $customUrl = $this->library->getCustomUrl();
         }
         return [
