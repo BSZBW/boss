@@ -215,6 +215,21 @@ if (!empty($subjects) && $this->client()->is('show_rvk')): ?>
     </tr>
     <?php unset($subjects) ?>
 <?php endif; ?>
+<?php $subjects = $this->driver->tryMethod('getLocalSubjects'); ?>
+<?php if (!empty($subjects) && $this->client()->is('show_local')): ?>
+    <tr>
+        <th>
+            <span class="text-nowrap"><?= $this->abbrev('GND') ?>-<?= $this->transEsc('Local Subjects') ?>:</span>
+        </th>
+        <td>
+            <?= $this->context($this)->renderInContext(
+                'RecordDriver/DefaultRecord/parts/singlesubject.phtml',
+                ['subjects' => $subjects, 'type' => 'gnd', 'linktype' => 'gnd']
+            ) ?>
+        </td>
+    </tr>
+    <?php unset($subjects) ?>
+<?php endif; ?>
 
 <?php $subjects = $this->driver->getAllSubjectHeadings(); ?>
 <?php if (!empty($subjects) && $this->client()->is('show_general_keywords')): ?>
