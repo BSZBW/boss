@@ -59,5 +59,25 @@ class NoILS extends \VuFind\ILS\Driver\NoILS
         return array_values($parent);
     }
 
-
+    /**
+     * Has Holdings
+     *
+     * This is responsible for determining if holdings exist for a particular
+     * bibliographic id
+     *
+     * @param string $id The record id to retrieve the holdings for
+     *
+     * @return bool True if holdings exist, False if they do not
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function hasHoldings($id)
+    {
+        $parent = parent::hasHoldings($id);
+        $marc = $this->getHolding($id);
+        if (count($marc) > 0 && $parent) {
+            return true;
+        }
+        return false;
+    }
 }
