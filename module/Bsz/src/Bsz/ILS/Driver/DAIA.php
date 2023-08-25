@@ -327,7 +327,7 @@ class DAIA extends \VuFind\ILS\Driver\DAIA
     {
         if (isset($this->config['DAIA']['baseUrl']) && !isset($this->baseUrl)) {
             $this->baseUrl = $this->config['DAIA']['baseUrl'];
-        } elseif (isset($this->config['Global']['baseUrl'])) {
+        } else if (isset($this->config['Global']['baseUrl'])) {
             throw new ILSException(
                 'Deprecated [Global] section in DAIA.ini present, but no [DAIA] ' .
                 'section found: please update DAIA.ini (cf. config/vufind/DAIA.ini).'
@@ -362,26 +362,5 @@ class DAIA extends \VuFind\ILS\Driver\DAIA
         } else {
             $this->debug('No ContentTypes for response defined. Accepting any.');
         }
-    }
-
-    /**
-     * Needed to hide holdings tab if empty
-     * @param string $id
-     * @return boolean
-     */
-    public function hasHoldings($id)
-    {
-        // we can't query DAIA without an ISIL.
-        if (empty($this->isil)) {
-            return false;
-        }
-        $holdings = $this->getHolding($id);
-
-        if (count($holdings) > 0) {
-            return true;
-        } else {
-            throw new ILSException('no holdings');
-        }
-        return false;
     }
 }

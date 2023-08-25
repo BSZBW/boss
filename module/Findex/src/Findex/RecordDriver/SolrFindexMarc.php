@@ -380,7 +380,11 @@ class SolrFindexMarc extends SolrMarc implements Constants
         return $return;
     }
 
-    public function getLocalSubjects()
+    /**
+     * @return array
+     * @throws \File_MARC_Exception
+     */
+    public function getLocalSubjects(): array
     {
         $fields = $this->getMarcRecord()->getFields('982');
         $isils = $this->mainConfig->getIsils();
