@@ -90,53 +90,6 @@ class FindexArticles extends AbstractBase
     public function getResults()
     {
         if ($this->results === null) {
-//            $relIds = $this->driver->tryMethod('getIdsRelated');
-//            $this->content = [];
-//            if (is_array($relIds) && count($relIds) > 0) {
-//                // add the ID of the current record, thats usefull if its a
-//                // Gesamtaufnahme to find the
-//                array_push($relIds, $this->driver->getUniqueID());
-//                $queryArr = [];
-//
-//                foreach ($relIds as $id) {
-//                    /*
-//                     * ppnlink contains all ppn links without prefix
-//                     * familylinks_str_mv contains ppn links from 773w and 830w with ISDIL prefix
-//                     */
-//
-////                    $queryArr[] = 'familylinks_str_mv:"' . static::PREFIX.$id . '"';
-//                    $queryArr[] = 'ppnlink:"' .
-//                        $id . '"';
-//                }
-//                $query = new \VuFindSearch\Query\Query(
-//                    implode(' OR ', $queryArr)
-//                );
-//
-//                // in local tab, we need to filter by isil
-//                $filterOr = [];
-//                if ($this->isFL() === false) {
-//                    foreach ($this->isils as $isil) {
-//                        $filterOr[] = 'collection_details:ISIL_' . $isil;
-//                    }
-//                }
-//                $params = new ParamBag();
-//                $params->add('fq', implode(' OR ', $filterOr));
-//                $params->add('fq', 'format:Article');
-//                $params->add('fq', 'format:"electronic Article"');
-//
-//                $params->add('sort', 'publishDateSort desc');
-//                $params->add('hl', 'false');
-//                $params->add('echoParams', 'ALL');
-//
-//                $record = $this->getRecordDriver();
-//                $this->results = $this->searchService->search(
-//                    $record->getSourceIdentifier(),
-//                    $query,
-//                    0,
-//                    static::LIMIT,
-//                    $params
-//                );
-//            }
             $queryStr = 'hierarchy_parent_id:' . $this->driver->getUniqueID();
             $query = new \VuFindSearch\Query\Query($queryStr);
 
@@ -199,14 +152,5 @@ class FindexArticles extends AbstractBase
         $record = $this->getRecordDriver();
         return $parent && $record->tryMethod('isJournal')
             && ($this->getResults()->getTotal() > 0);
-//        $status = false;
-//        if ($parent && (
-//                count($record->getIdsRelated()) > 0
-//                && $record->tryMethod('isJournal')
-//            )
-//        ) {
-//            $status = true;
-//        }
-//        return $status;
     }
 }
