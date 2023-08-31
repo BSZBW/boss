@@ -178,11 +178,16 @@ trait MarcFormatTrait
     {
         // A = Aufsätze aus Monographien
         // B = Aufsätze aus Zeitschriften (wird aber wohl nicht genutzt))
-        $leader = $this->getLeader(7);
-        if ($leader == 'a' || $leader == 'b') {
-            return true;
-        }
-        return false;
+        // (-> laut Gerlind nur a)
+        $l7 = $this->getLeader(7);
+        return ($l7 == 'a');
+    }
+
+    public function isVolume(): bool
+    {
+        $l7 = $this->getLeader(7);
+        $l19 = $this->getLeader(19);
+        return ($l7 == 'm') && (($l19 == 'b') || ($l19 == 'c'));
     }
 
     /**

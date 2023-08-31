@@ -20,10 +20,6 @@
 
 namespace Findex\RecordTab;
 
-use Bsz\Backend\Solr\Response\Json\RecordCollection;
-use VuFind\RecordTab\AbstractBase;
-use VuFindSearch\ParamBag;
-use VuFindSearch\Response\RecordCollectionInterface;
 use VuFindSearch\Service as SearchService;
 
 /**
@@ -32,34 +28,8 @@ use VuFindSearch\Service as SearchService;
  * @category boss
  * @author Cornelius Amzar <cornelius.amzar@bsz-bw.de>
  */
-class FindexArticles extends AbstractBase
+class FindexArticles extends AbstractCollection
 {
-    const LIMIT = 50;
-    const PREFIX = '(DE-627)';
-    /**
-     * Search service
-     *
-     * @var \VuFindSearch\Service
-     */
-    protected $searchService;
-
-    /**
-     *
-     * @var array
-     */
-    protected $results;
-
-    protected $res;
-
-    /**
-     * @var string
-     */
-    protected $searchClassId;
-
-    /**
-     * @var array
-     */
-    protected $isils;
 
     /**
      * Constructor
@@ -69,9 +39,8 @@ class FindexArticles extends AbstractBase
      */
     public function __construct(SearchService $search, $isils = [])
     {
-        $this->searchService = $search;
-        $this->isils = $isils;
-        $this->accessPermission = 'access.VolumesViewTab';
+        parent::__construct($search, $isils);
+        $this->accessPermission = 'access.ArticlesViewTab';
     }
 
     /**
@@ -83,74 +52,10 @@ class FindexArticles extends AbstractBase
         return 'Articles';
     }
 
-    /**
-     *
-     * @return RecordCollectionInterface
-     */
-    public function getResults()
+
+    protected function display($record): bool
     {
-        if ($this->results === null) {
-            $queryStr = 'hierarchy_parent_id:' . $this->driver->getUniqueID();
-            $query = new \VuFindSearch\Query\Query($queryStr);
-
-            // in local tab, we need to filter by isil
-            $filterOr = [];
-            if ($this->isFL() === false) {
-                foreach ($this->isils as $isil) {
-                    $filterOr[] = 'collection_details:ISIL_' . $isil;
-                }
-            }
-            $params = new ParamBag();
-            $params->add('fq', implode(' OR ', $filterOr));
-            $params->add('fq', 'format:Article OR format:"electronic Article"');
-//            $params->add('fq', 'format:"electronic Article"');
-
-            $params->add('sort', 'publishDateSort desc');
-            $params->add('hl', 'false');
-            $params->add('echoParams', 'ALL');
-
-            $record = $this->getRecordDriver();
-            $this->results = $this->searchService->search(
-                $record->getSourceIdentifier(),
-                $query,
-                0,
-                static::LIMIT,
-                $params
-            );
-        }
-        return $this->results;
+        return $record->isArticle();
     }
 
-
-    /**
-     * Check if we are in an interlending or ZDB-TAB
-     **/
-    public function isFL()
-    {
-        $last = '';
-        $status = false;
-        if (isset($_SESSION['Search']['last'])) {
-            $last = urldecode($_SESSION['Search']['last']);
-        }
-        if (strpos($last, 'consortium:FL') !== false
-            || strpos($last, 'consortium:"FL"') !== false
-            || strpos($last, 'consortium:ZDB') !== false
-            || strpos($last, 'consortium:"ZDB"') !== false
-        ) {
-            $status = true;
-        }
-        return $status;
-    }
-
-    /**
-     * This Tab is Active for collections or parts of collections only.
-     * @return boolean
-     */
-    public function isActive()
-    {
-        $parent = parent::isActive();
-        $record = $this->getRecordDriver();
-        return $parent && $record->tryMethod('isJournal')
-            && ($this->getResults()->getTotal() > 0);
-    }
 }
