@@ -326,6 +326,7 @@ class SolrFindexMarc extends SolrMarc implements Constants
         return array_unique($ids);
     }
 
+
     /**
      * Get an array with RVK shortcut as key and description as value (array)
      * @returns array
