@@ -24,7 +24,7 @@ use VuFindSearch\Service as SearchService;
 
 /**
  * Class Volumes
- * @package Bsz\RecordTab
+ * @package Findex\RecordTab
  * @category boss
  * @author Cornelius Amzar <cornelius.amzar@bsz-bw.de>
  */
@@ -53,6 +53,10 @@ class FindexArticles extends AbstractCollection
     }
 
 
+    /**
+     * @param ??? $record Indicates whether a given record should be displayed in this tab
+     * @return bool
+     */
     protected function display($record): bool
     {
         return $record->isArticle();

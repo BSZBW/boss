@@ -24,7 +24,7 @@ use VuFindSearch\Service as SearchService;
 
 /**
  * Class Volumes
- * @package Bsz\RecordTab
+ * @package Findex\RecordTab
  * @category boss
  * @author Cornelius Amzar <cornelius.amzar@bsz-bw.de>
  */
@@ -54,7 +54,7 @@ class FindexVolumes extends AbstractCollection
 
     protected function display($record): bool
     {
-        return $record->isVolume();
+        return !$record->isArticle();
     }
 
 }
