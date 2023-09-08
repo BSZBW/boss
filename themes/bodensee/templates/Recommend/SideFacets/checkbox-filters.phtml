@@ -15,9 +15,9 @@
         </a>
         <?php if ($this->client()->is($current['desc']) && !$hidden): ?>
             <?php $imgLink = $this->imageLink('/logo/bibliographies/' . $current['desc'] .".png" ); ?>
-            <span class="vertcenter"><img class="lineicon" src="<?=$imgLink?>" alt="<?=$current['desc']?>"></span>
+            <img class="lineicon" src="<?=$imgLink?>" alt="<?=$current['desc']?>">
         <?php endif ?>
-        <?php if ($this->client()->is('wlb_facet_tooltip')): ?>
+        <?php if ($this->client()->is('wlb_facet_tooltip') && (strpos($current['desc'], 'ePflicht') !== false)): ?>
             <a class="external hasicon" href="https://www.wlb-stuttgart.de/die-wlb/wir-ueber-uns/abteilungen/pflichtexemplare/"><span class="" data-toggle="tooltip" title="<?=$this->transEsc('ePflicht-BW Tooltip')?>"><i class="fa fa-info-circle text-success"></i></span></a>
         <?php endif ?>
     </div>

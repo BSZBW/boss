@@ -1,0 +1,16 @@
+<?php if (isset($this->checkboxFacets) && count($this->checkboxFacets) > 0): ?>
+  <div class="checkbox-filters">
+    <?php foreach ($this->checkboxFacets as $current): ?>
+      <div class="checkbox verticalcenter">
+        <label>
+          <input type="checkbox" name="filter[]" value="<?=$this->escapeHtmlAttr($current['filter'])?>" id="<?=$this->escapeHtmlAttr(str_replace(' ', '', $current['desc']))?>"<?php if ($current['selected']): ?> checked="checked"<?php endif; ?>/>
+          <?=$this->transEsc($current['desc'])?>
+        </label>
+          <?php if ($this->client()->is($current['desc'])): ?>
+              <?php $imgLink = $this->imageLink('/logo/bibliographies/' . $current['desc'] .".png" ); ?>
+              <img class="lineicon" src="<?=$imgLink?>" alt="<?=$current['desc']?>">
+          <?php endif ?>
+      </div>
+    <?php endforeach; ?>
+  </div>
+<?php endif; ?>
