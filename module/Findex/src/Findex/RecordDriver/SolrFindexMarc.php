@@ -395,4 +395,31 @@ class SolrFindexMarc extends SolrMarc implements Constants
         return $output;
     }
 
+    public function getParallelEditions()
+    {
+        $retval = [];
+        foreach ($this->getMarcRecord()->getfields(776) as $field) {
+            $tmp = [];
+            if ($field->getIndicator(1) == 0) {
+                $tmp['ppn'] = $field->getSubfield('w') ? $field->getSubfield('w')->getData() : null;
+                if ($tmp['ppn'] !== null) {
+                    $tmp['ppn'] = preg_replace('/\(.*\)(.*)/', '$1', $tmp['ppn']);
+                }
+                if ($field->getSubfield('i')) {
+                    $tmp['prefix'] = $field->getSubfield('i')->getData();
+                }
+                if ($field->getSubfield('t')) {
+                    $tmp['label'] = $field->getSubfield('t')->getData();
+                }
+                if ($field->getSubfield('n')) {
+                    $tmp['postfix'] = $field->getSubfield('n')->getData();
+                }
+            }
+            if (isset($tmp['ppn'], $tmp['label'])) {
+                $retval[] = $tmp;
+            }
+        }
+        return array_filter($retval);
+    }
+
 }
