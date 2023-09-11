@@ -19,7 +19,6 @@
  */
 namespace Bsz\RecordTab;
 
-use VuFind\RecordTab\AbstractBase;
 use VuFindSearch\ParamBag;
 use VuFindSearch\Service as SearchService;
 
@@ -29,21 +28,8 @@ use VuFindSearch\Service as SearchService;
  * @category boss
  * @author Cornelius Amzar <cornelius.amzar@bsz-bw.de>
  */
-class Articles extends AbstractBase
+class Articles extends AbstractCollection
 {
-    const LIMIT = 50;
-    /**
-     * Search service
-     *
-     * @var \VuFindSearch\Service
-     */
-    protected $searchService;
-
-    /**
-     *
-     * @var array
-     */
-    protected $results;
 
     /**
      * @var string
@@ -51,18 +37,13 @@ class Articles extends AbstractBase
     protected $searchClassId;
 
     /**
-     * @var array
-     */
-    protected $isils;
-
-    /**
      * Constructor
-     * @param SearchRunner $runner
+     * @param SearchService $search
+     * @param array $isils
      */
-    public function __construct(SearchService $search, $isils = [])
+    public function __construct(SearchService $search, array $isils = [])
     {
-        $this->searchService = $search;
-        $this->isils = $isils;
+        parent::__construct($search, $isils);
         $this->accessPermission = 'access.ArticlesViewTab';
     }
 
@@ -75,104 +56,11 @@ class Articles extends AbstractBase
         return 'Articles';
     }
 
-    /**
-     *
-     * @return array|null
-     */
-    public function getResults()
+    protected function display($record): bool
     {
-        if ($this->results === null) {
-            $relIds = $this->driver->tryMethod('getIdsRelated');
-            $this->content = [];
-            if (is_array($relIds) && count($relIds) > 0) {
-                // add the ID of the current record, thats usefull if its a
-                // Gesamtaufnahme to find the
-                array_push($relIds, $this->driver->getUniqueID());
-                $queryArr = [];
-
-                foreach ($relIds as $id) {
-                    $queryArr[] = 'id_related:"' . $id . '"';
-                }
-                $query = new \VuFindSearch\Query\Query(
-                    implode(' OR ', $queryArr)
-                );
-
-                // in local tab, we need to filter by isil
-                $filterOr = [];
-                if ($this->isFL() === false) {
-                    foreach ($this->isils as $isil) {
-                        $filterOr[] = 'institution_id:' . $isil;
-                    }
-                }
-                $params = new ParamBag();
-                $params->add('fq', implode(' OR ', $filterOr));
-                $params->add('fq', 'material_content_type:Article');
-
-                $params->add('sort', 'publish_date_sort desc');
-                $params->add('hl', 'false');
-                $params->add('echoParams', 'ALL');
-
-                $record = $this->getRecordDriver();
-                $this->content = $this->searchService->search(
-                    $record->getSourceIdentifier(),
-                    $query,
-                    0,
-                    static::LIMIT,
-                    $params
-                );
-            }
-        }
-        return $this->content;
+        $id = $this->driver->getUniqueID();
+        $fields = $record->getAllFieldsArray([773 => ['w'], 800 => ['w']]);
+        return in_array($id, $fields) && $record->isArticle();
     }
 
-    /**
-     * Check if we are in an interlending or ZDB-TAB
-     *      **/
-    public function isFL()
-    {
-        $last = '';
-        if (isset($_SESSION['Search']['last'])) {
-            $last = urldecode($_SESSION['Search']['last']);
-        }
-        if (strpos($last, 'consortium:FL') !== false
-            || strpos($last, 'consortium:"FL"') !== false
-            || strpos($last, 'consortium:ZDB') !== false
-            || strpos($last, 'consortium:"ZDB"') !== false
-        ) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * @return true
-     * @throws \Exception
-     */
-    public function isActive()
-    {
-        $parent = parent::isActive();
-        $record = $this->getRecordDriver();
-        $status = false;
-
-        if ($parent && (
-            count($record->getIdsRelated()) > 0 && (
-                 $record->tryMethod('isJournal')
-                || $record->isArticle())
-        )
-        ) {
-            $status = true;
-        }
-        return $status;
-    }
-
-    /**
-     * @param $searchClassId
-     */
-    public function setSearchClassId($searchClassId)
-    {
-        if (isset($searchClassId) && !empty($searchClassId)) {
-            $this->searchClassId = $searchClassId;
-        }
-    }
 }

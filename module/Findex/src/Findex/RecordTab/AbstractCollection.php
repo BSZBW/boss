@@ -60,10 +60,8 @@ abstract class AbstractCollection extends \BszCommon\RecordTab\AbstractCollectio
         $id = $this->driver->getUniqueID();
         // in local tab, we need to filter by isil
         $filterOr = [];
-        if ($this->isFL() === false) {
-            foreach ($this->isils as $isil) {
-                $filterOr[] = 'collection_details:ISIL_' . $isil;
-            }
+        foreach ($this->isils as $isil) {
+            $filterOr[] = 'collection_details:ISIL_' . $isil;
         }
         $params = new ParamBag();
         $params->add('fq', implode(' OR ', $filterOr));
@@ -74,11 +72,6 @@ abstract class AbstractCollection extends \BszCommon\RecordTab\AbstractCollectio
         $params->add('echoParams', 'ALL');
 
         return $params;
-    }
-
-    private function isFL(): bool
-    {
-        return false;
     }
 
 }
