@@ -1,7 +1,7 @@
 <?php foreach ($checkboxFilters as $current): ?>
-    <div class="facet verticalcenter" >
-        <?php $hidden = (!($results->getResultTotal() > 0 || $current['selected'] || $current['alwaysVisible'])) ?>
-        <a class="checkbox-filter<?php if($hidden): ?> hidden<?php endif; ?>" href="<?=$current['selected'] ? $results->getUrlQuery()->removeFilter($current['filter']) : $results->getUrlQuery()->addFilter($current['filter']);?>" data-facet="<?=$this->escapeHtmlAttr($current['filter'])?>" data-facet="<?=$this->escapeHtmlAttr($current['filter'])?>">
+    <?php if($results->getResultTotal() > 0 || $current['selected'] || $current['alwaysVisible']): ?>
+    <div class="facet verticalcenter">
+        <a class="checkbox-filter" href="<?=$current['selected'] ? $results->getUrlQuery()->removeFilter($current['filter']) : $results->getUrlQuery()->addFilter($current['filter']);?>" data-facet="<?=$this->escapeHtmlAttr($current['filter'])?>" data-facet="<?=$this->escapeHtmlAttr($current['filter'])?>">
             <?php if ($current['selected']): ?>
                 <span class="sr-only"><?=$this->transEsc('clear_tag_filter') ?></span>
             <?php endif; ?>
@@ -13,7 +13,7 @@
                 <span class="badge avail-count"></span>
             <?php endif; ?>
         </a>
-        <?php if ($this->client()->is($current['desc']) && !$hidden): ?>
+        <?php if ($this->client()->is($current['desc'])): ?>
             <?php $imgLink = $this->imageLink('/logo/bibliographies/' . $current['desc'] .".png" ); ?>
             <img class="lineicon" src="<?=$imgLink?>" alt="<?=$current['desc']?>">
         <?php endif ?>
@@ -21,4 +21,5 @@
             <a class="external hasicon" href="https://www.wlb-stuttgart.de/die-wlb/wir-ueber-uns/abteilungen/pflichtexemplare/"><span class="" data-toggle="tooltip" title="<?=$this->transEsc('ePflicht-BW Tooltip')?>"><i class="fa fa-info-circle text-success"></i></span></a>
         <?php endif ?>
     </div>
+    <?php endif; ?>
 <?php endforeach; ?>
