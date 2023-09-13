@@ -31,6 +31,7 @@ use Bsz\RecordDriver\Constants;
 use Bsz\RecordDriver\ContainerTrait;
 use Bsz\RecordDriver\FivTrait;
 use Bsz\RecordDriver\HelperTrait;
+use Bsz\RecordDriver\MarcAuthorTrait;
 use Bsz\RecordDriver\MarcFormatTrait;
 use Bsz\RecordDriver\SolrMarc;
 use Bsz\RecordDriver\SubrecordTrait;
@@ -53,6 +54,7 @@ class SolrFindexMarc extends SolrMarc implements Constants
     use HelperTrait;
     use ContainerTrait;
     use MarcFormatTrait;
+    use MarcAuthorTrait;
     use FivTrait;
 
     /**
@@ -421,5 +423,33 @@ class SolrFindexMarc extends SolrMarc implements Constants
         }
         return array_filter($retval);
     }
+
+    /**
+     * Get an array of physical descriptions of the item.
+     * @return array
+     */
+    public function getPhysicalDescriptions()
+    {
+        return $this->getFieldArray('300', ['a', 'b', 'c', 'e', 'f', 'g'], false);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEPflicht() : bool
+    {
+        $fields = $this->getFieldArray('912', ['a']);
+        return in_array('EPF-BW-GESAMT', $fields);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLFER() : bool
+    {
+        $fields = $this->getFieldArray('912', ['a']);
+        return in_array('ISIL_DE-LFER', $fields);
+    }
+
 
 }
