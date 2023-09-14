@@ -61,7 +61,6 @@ if (empty($zdb) && isset($this->driver) && !$verbund == 'HBZ') {
     $ppn = $zdb;
     $verbund = 'ZDB';
 }
-xdebug_var_dump($verbund);
 ?>
 <input type="hidden" name="Verbund" value="<?= $this->escapeHtmlAttr($verbund) ?>"/>
 <input type="hidden" name="TitelId" value="<?= $this->escapeHtmlAttr($ppn) ?>"/>
