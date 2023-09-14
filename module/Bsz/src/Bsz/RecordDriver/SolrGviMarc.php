@@ -598,7 +598,7 @@ class SolrGviMarc extends SolrMarc implements Constants
         $consortium1 = $this->getFirstFieldValue(924, ['c']);
         $consortium1 = explode(' ', $consortium1);
         $consortium2 = $this->fields['consortium'];
-        $consortium = array_merge($consortium1, $consortium2);
+        $consortium = $this->fields['consortium'];
 
         foreach ($consortium as $k => $con) {
             if (!empty($con)) {
