@@ -375,11 +375,22 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
             </td>
         </tr>
         <? endif; ?>
-            <?php if ($this->driver->tryMethod('isEPflicht')):?>
-            <tr>
-                <th><?=$this->transEsc('Source')?></th>
-                <td><span class="label label-warning"><?=$this->transEsc('ePflicht-BW Label')?></span> <?=$this->transEsc('ePflicht-BW Text')?></td>
-            </tr>
+            <?php if($this->client()->is('wlb_facet_tooltip')):?>
+            <?php $isEPflicht = $this->driver->tryMethod('isEPflicht'); ?>
+            <?php $isLFER = $this->driver->tryMethod('isLFER'); ?>
+            <?php if ($isEPflicht || $isLFER):?>
+                <tr>
+                    <th><?=$this->transEsc('Source')?></th>
+                    <td>
+                    <?php if ($isEPflicht || $isLFER):?>
+                    <p><span class="label label-warning"><?=$this->transEsc('ePflicht-BW Label')?></span> <?=$this->transEsc('ePflicht-BW Text')?></p>
+                    <?php endif; ?>
+                    <?php if ($isLFER):?>
+                    <p><span class="label label-lfer"><?=$this->transEsc('lizenzfrei')?></span> <?=$this->transEsc('LFER_long')?></p>
+                    <?php endif; ?>
+                    </td>
+                </tr>
+            <?php endif ?>
             <?php endif ?>
     </table>
     <?/* End Main Details */?>
