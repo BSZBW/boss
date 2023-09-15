@@ -251,6 +251,16 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
         return [];
     }
 
+    public function getAllFieldsArray($fields)
+    {
+        $result = [];
+        foreach ($fields as $no => $subfield) {
+            $raw = $this->getFieldArray($no, (array)$subfield, false);
+            $result = array_merge($result, $raw);
+        }
+        return array_unique($result);
+    }
+
     /**
      * Get access to the raw File_MARC object.
      *

@@ -18,60 +18,71 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace Findex\RecordTab;
+namespace Bsz\RecordTab;
 
 use VuFindSearch\ParamBag;
-use VuFindSearch\Query\Query as SearchQuery;
+use VuFindSearch\Query\Query;
 use VuFindSearch\Service as SearchService;
 
-/**
- * @package Findex\RecordTab
- * @author Sebastian Sahli
- */
 abstract class AbstractCollection extends \BszCommon\RecordTab\AbstractCollection
 {
+
     /**
      * @var array
      */
     protected $isils;
 
-    /**
-     * Constructor
-     *
-     * @param SearchService $search
-     * @param array $isils
-     */
-    public function __construct(SearchService $search, $isils)
+    public function __construct(SearchService $search, array $isils)
     {
         parent::__construct($search);
         $this->isils = $isils;
     }
 
-    protected function getQuery(): SearchQuery
+    protected function getQuery(): Query
     {
         $id = $this->driver->getUniqueID();
-        //hierarchy_parent_id stores the data from MARC fields 773w, 800w, 810w, 830w
-        $queryStr = 'hierarchy_parent_id:' . $id;
-        return new SearchQuery($queryStr);
+        return new Query('id_related:"' . $id . '"');
     }
 
     protected function getParams(): ParamBag
     {
-        $id = $this->driver->getUniqueID();
-        // in local tab, we need to filter by isil
         $filterOr = [];
-        foreach ($this->isils as $isil) {
-            $filterOr[] = 'collection_details:ISIL_' . $isil;
+        if ($this->isInterlending() === false) {
+            foreach ($this->isils as $isil) {
+                $filterOr[] = 'institution_id:' . $isil;
+            }
         }
         $params = new ParamBag();
         $params->add('fq', implode(' OR ', $filterOr));
-        $params->add('fq', '-id:' . $id);
 
-        $params->add('sort', 'hierarchy_sort_str desc');
+        //$params->add('sort', 'publish_date_sort desc');
         $params->add('hl', 'false');
         $params->add('echoParams', 'ALL');
 
         return $params;
+    }
+
+
+    /**
+     * Check if we are in an interlending or ZDB-TAB
+     *
+     * @return bool
+     * **/
+    private function isInterlending(): bool
+    {
+        $last = '';
+        if (isset($_SESSION['Search']['last'])) {
+            $last = urldecode($_SESSION['Search']['last']);
+        }
+        if (strpos($last, 'consortium:FL') !== false
+            || strpos($last, 'consortium:"FL"') !== false
+            || strpos($last, 'consortium:ZDB') !== false
+            || strpos($last, 'consortium:"ZDB"') !== false
+        ) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
