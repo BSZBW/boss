@@ -68,6 +68,9 @@ abstract class AbstractCollection extends AbstractBase
     /**
      * Returns a list of all records that should be displayed in this tab.
      *
+     * Since in MARC dependent records contain a reference to their parent but not the other way round,
+     * we need to perform an additional Solr search to find the dependent titles of the current one.
+     *
      * @return array
      * @throws \Exception
      */
