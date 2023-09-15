@@ -328,7 +328,7 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
                     <tr>
                       <th><?=$this->transEsc('External Resources')?></th>
                       <td><? foreach ($urls as $current): ?>
-                              <a class="external" href="<?=$this->wayfless($current['url'], $this->client()->getIsils(), )?>"><?=$this->transEsc($current['desc'])?></a><br/>
+                              <a class="external" href="<?=$this->wayfless($current['url'], $this->client()->getIsils())?>"><?=$this->transEsc($current['desc'])?></a><br/>
                           <? endforeach; ?></td>
                     </tr>
                 <? endif; ?>
@@ -392,18 +392,22 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
                 </td>
             </tr>
         <?php endif ?>
-            <?php if ($this->driver->tryMethod('isEPflicht') || $this->driver->tryMethod('isLFER')):?>
+            <?php if($this->client()->is('wlb_facet_tooltip')):?>
+            <?php $isEPflicht = $this->driver->tryMethod('isEPflicht'); ?>
+            <?php $isLFER = $this->driver->tryMethod('isLFER'); ?>
+            <?php if ($isEPflicht || $isLFER):?>
                 <tr>
                     <th><?=$this->transEsc('Source')?></th>
                     <td>
-                    <?php if ($this->driver->tryMethod('isEPflicht') || $this->driver->tryMethod('isLFER')):?>
+                    <?php if ($isEPflicht || $isLFER):?>
                     <p><span class="label label-warning"><?=$this->transEsc('ePflicht-BW Label')?></span> <?=$this->transEsc('ePflicht-BW Text')?></p>
                     <?php endif; ?>
-                    <?php if ($this->driver->tryMethod('isLFER')):?>
+                    <?php if ($isLFER):?>
                     <p><span class="label label-lfer"><?=$this->transEsc('lizenzfrei')?></span> <?=$this->transEsc('LFER_long')?></p>
                     <?php endif; ?>
                     </td>
                 </tr>
+            <?php endif ?>
             <?php endif ?>
     </table>
     <?/* End Main Details */?>
