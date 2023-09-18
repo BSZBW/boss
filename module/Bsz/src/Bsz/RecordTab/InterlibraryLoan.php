@@ -104,7 +104,8 @@ class InterlibraryLoan extends AbstractBase
                 'bestellid' => $this->orderid ?? ''
             ]);
             $url = 'https://%s.bsz-bw.de/flcgi/fernleihe_boss.pl?'.$query;
-            if (getenv('VUFIND_ENV') === 'production') {
+            $domainparts = explode('.', $_SERVER['HTTP_HOST']);
+            if (in_array('boss', $domainparts)) {
                 $customUrl = sprintf($url, 'zfl');
             } else {
                 $customUrl = sprintf($url, 'fltest');
