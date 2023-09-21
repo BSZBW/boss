@@ -50,7 +50,7 @@ $library = $this->libraries()->getFirstActive($this->client()->getIsils());
 <?php endif; ?>
 <?php $zdb = isset($this->driver) ? $this->driver->getZdbId() : '' ?>
 <?php $ppn = 999999999;
-$verbund = $this->driver->tryMethod('getNetwork') ?? '';
+$verbund = isset($this->driver) ? ($this->driver->tryMethod('getNetwork') ?? '') : '';
 if (empty($zdb) && isset($this->driver) && !$verbund == 'HBZ') {
     $ppn = $this->driver->getPPN();
 } elseif (isset($this->driver) && $verbund == 'HBZ') {
