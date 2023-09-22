@@ -48,17 +48,21 @@ $library = $this->libraries()->getFirstActive($this->client()->getIsils());
     <input type="hidden" name="BenutzerNummer"
            value="<?= htmlspecialchars($identity->username) ?>"/>
 <?php endif; ?>
-<?php $zdb = isset($this->driver) ? $this->driver->getZdbId() : '' ?>
-<?php $ppn = 999999999;
-$verbund = isset($this->driver) ? ($this->driver->tryMethod('getNetwork') ?? '') : '';
-if (empty($zdb) && isset($this->driver) && !$verbund == 'HBZ') {
-    $ppn = $this->driver->getPPN();
-} elseif (isset($this->driver) && $verbund == 'HBZ') {
-    $ppn = $this->driver->getUniqueId();
-    $ppn = preg_replace('/\(.*\)/', '', $ppn);
-} elseif (isset($this->driver) && !empty($zdb)) {
-    $ppn = $zdb;
-    $verbund = 'ZDB';
+<?php
+$ppn = 999999999;
+$verbund = '';
+if (isset($this->driver)) {
+    $zdb = $this->driver->getZdbId();
+    $verbund = ($this->driver->tryMethod('getNetwork') ?? '');
+    if (empty($zdb) && ($verbund != 'HBZ')) {
+        $ppn = $this->driver->getPPN();
+    } elseif ($verbund == 'HBZ') {
+        $ppn = $this->driver->getUniqueId();
+        $ppn = preg_replace('/\(.*\)/', '', $ppn);
+    } elseif (!empty($zdb)) {
+        $ppn = $zdb;
+        $verbund = 'ZDB';
+    }
 }
 ?>
 <input type="hidden" name="Verbund" value="<?= $this->escapeHtmlAttr($verbund) ?>"/>
