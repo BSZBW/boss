@@ -7,3 +7,8 @@
 <a class="<?=$type?> markjs" href="<?=$this->record($this->driver)->getLink('author', $this->name, $this->searchClassId)?>"><?=$this->transEsc($this->name)?><?if (isset($live)):?>, <?=$this->escapeHtml($live)?><? endif; ?></a><? if (!empty($gnd)): ?>
     <a data-placement="right" data-toggle="tooltip" title="<?=$this->transEsc('Search GND-ID')?>: <?=$this->escapeHtml($gnd)?>" class="hidden-print searchLink" href="<?=$this->url('search-results')?>?lookfor=gnd_from:<?=$this->escapeHtml($gnd)?>&amp;type=AllFields<?= $hiddenFilterString ?>"></a><span class="visible-print">GND-ID: <?=$this->escapeHtml($gnd)?></span><? endif; ?>
 <? if (!empty($role)): ?>, <?=$this->transEsc('CreatorRoles::'.$role)?><? endif; ?>
+<?php if(isset($gnd)):?>
+<a class="external hasicon" data-toggle="tooltip" title="<?=$this->transEsc('DNB_link')?>" href="https://d-nb.info/gnd/<?=urlencode($gnd)?>">
+    <i class="fa fa-vcard"></i>
+</a>
+<?php endif ?>
