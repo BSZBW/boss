@@ -399,7 +399,7 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
                 <tr>
                     <th><?=$this->transEsc('Source')?></th>
                     <td>
-                    <?php if ($isEPflicht || $isLFER):?>
+                    <?php if ($isEPflicht):?>
                     <p><span class="label label-warning"><?=$this->transEsc('ePflicht-BW Label')?></span> <?=$this->transEsc('ePflicht-BW Text')?></p>
                     <?php endif; ?>
                     <?php if ($isLFER):?>
