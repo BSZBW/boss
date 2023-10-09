@@ -598,7 +598,7 @@ class SolrGviMarc extends SolrMarc implements Constants
         $consortium1 = $this->getFirstFieldValue(924, ['c']);
         $consortium1 = explode(' ', $consortium1);
         $consortium2 = $this->fields['consortium'];
-        $consortium = array_merge($consortium1, $consortium2);
+        $consortium = $this->fields['consortium'];
 
         foreach ($consortium as $k => $con) {
             if (!empty($con)) {
@@ -1274,14 +1274,43 @@ class SolrGviMarc extends SolrMarc implements Constants
         return $zdb;
     }
 
+    /**
+     * @return bool
+     */
     public function isEPflicht() : bool
     {
         $fields = $this->getFieldArray('912', ['a']);
         foreach ($fields as $field) {
             if ($field === 'EPF-BW-GESAMT') {
-                return true;
+                return !$this->isBLB();
             }
         }
         return false;
     }
+
+    private function isBLB(): bool
+    {
+        $f583 = $this->getMarcRecord()->getField('583');
+        $sff = $f583->getSubfield('f')->getData();
+        $sf5 = $f583->getSubfield('5')->getData();
+        return ($sff === 'PEBW') && ($sf5 === 'DE-31');
+    }
+
+
+    /**
+     * @return bool
+     */
+    public function isLFER() : bool
+    {
+        $fields = $this->getField924();
+        foreach ($fields as $field) {
+            if ($field['isil'] === 'LFER') {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
 }

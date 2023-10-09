@@ -31,6 +31,7 @@ use Bsz\RecordDriver\Constants;
 use Bsz\RecordDriver\ContainerTrait;
 use Bsz\RecordDriver\FivTrait;
 use Bsz\RecordDriver\HelperTrait;
+use Bsz\RecordDriver\MarcAuthorTrait;
 use Bsz\RecordDriver\MarcFormatTrait;
 use Bsz\RecordDriver\SolrMarc;
 use Bsz\RecordDriver\SubrecordTrait;
@@ -53,6 +54,7 @@ class SolrFindexMarc extends SolrMarc implements Constants
     use HelperTrait;
     use ContainerTrait;
     use MarcFormatTrait;
+    use MarcAuthorTrait;
     use FivTrait;
 
     /**
@@ -310,20 +312,75 @@ class SolrFindexMarc extends SolrMarc implements Constants
     public function getContainerIds()
     {
         $fields = [
-            800 => ['w'],
+            773 => ['w'],
+            830 => ['w']
         ];
         $ids = [];
         $array = $this->getFieldsArray($fields);
         foreach ($array as $subfields) {
             $tmp = explode(' ', $subfields);
             foreach ($tmp as $id) {
-                // match all PPNs except old SWB PPNs and ZDB-IDs
-                if ( !preg_match('/^\(DE-627\)/', $id)) {
-                    $ids[] = $id;
+                if ( preg_match('/^\(DE-627\)/', $id)) {
+                    $ids[] = preg_replace('/\(.*\)/', '', $id);
                 }
             }
         }
         return array_unique($ids);
+    }
+
+
+    /**
+     * Get an array with RVK shortcut as key and description as value (array)
+     * @returns array
+     */
+    public function getRVKNotations()
+    {
+        $notationList = [];
+        $replace = [
+            '"' => "'",
+        ];
+        foreach ($this->getMarcRecord()->getFields('084') as $field) {
+            $suba = $field->getSubField('a');
+            $sub2 = $field->getSubfield('2');
+            if ($suba && $sub2) {
+                $sub2data = $field->getSubfield('2')->getData();
+                if (strtolower($sub2data) == 'rvk') {
+                    $title = [];
+                    foreach ($field->getSubFields('k') as $item) {
+                        $title[] = htmlentities($item->getData());
+                    }
+                    $notationList[$suba->getData()] = $title;
+                }
+            }
+        }
+        foreach ($this->getMarcRecord()->getFields('936') as $field) {
+            $suba = $field->getSubField('a');
+            if ($suba && $field->getIndicator(1) == 'r'
+                && $field->getIndicator(2) == 'v'
+            ) {
+                $title = [];
+                foreach ($field->getSubFields('k') as $item) {
+                    $title[] = htmlentities($item->getData());
+                }
+                $notationList[$suba->getData()] = $title;
+            }
+        }
+        return $notationList;
+    }
+
+    public function getBibliographies()
+    {
+        $return = [];
+        $m935 = $this->getMarcRecord()->getFields('935');
+        foreach ($m935 as $field) {
+            foreach ($field->getSubfields('a') as $suba) {
+                $content = strtoupper($suba->getData());
+                if ($this->mainConfig->is($content)) {
+                    $return[] = $content;
+                }
+            }
+        }
+        return $return;
     }
 
     public function getLocalSubjects()
@@ -339,5 +396,69 @@ class SolrFindexMarc extends SolrMarc implements Constants
         }
         return $output;
     }
+
+    public function getParallelEditions()
+    {
+        $retval = [];
+        foreach ($this->getMarcRecord()->getfields(776) as $field) {
+            $tmp = [];
+            if ($field->getIndicator(1) == 0) {
+                $tmp['ppn'] = $field->getSubfield('w') ? $field->getSubfield('w')->getData() : null;
+                if ($tmp['ppn'] !== null) {
+                    $tmp['ppn'] = preg_replace('/\(.*\)(.*)/', '$1', $tmp['ppn']);
+                }
+                if ($field->getSubfield('i')) {
+                    $tmp['prefix'] = $field->getSubfield('i')->getData();
+                }
+                if ($field->getSubfield('t')) {
+                    $tmp['label'] = $field->getSubfield('t')->getData();
+                }
+                if ($field->getSubfield('n')) {
+                    $tmp['postfix'] = $field->getSubfield('n')->getData();
+                }
+            }
+            if (isset($tmp['ppn'], $tmp['label'])) {
+                $retval[] = $tmp;
+            }
+        }
+        return array_filter($retval);
+    }
+
+    /**
+     * Get an array of physical descriptions of the item.
+     * @return array
+     */
+    public function getPhysicalDescriptions()
+    {
+        return $this->getFieldArray('300', ['a', 'b', 'c', 'e', 'f', 'g'], false);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEPflicht() : bool
+    {
+        $fields = $this->getFieldArray('912', ['a']);
+        return in_array('EPF-BW-GESAMT', $fields) && !$this->isBLB();
+    }
+
+
+    private function isBLB(): bool
+    {
+        $f583 = $this->getMarcRecord()->getField('583');
+        $sff = $f583->getSubfield('f')->getData();
+        $sf5 = $f583->getSubfield('5')->getData();
+        return ($sff === 'PEBW') && ($sf5 === 'DE-31');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLFER() : bool
+    {
+        $fields = $this->getFieldArray('912', ['a']);
+        return in_array('ISIL_DE-LFER', $fields);
+    }
+
 
 }
