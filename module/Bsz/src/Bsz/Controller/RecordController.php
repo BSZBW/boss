@@ -343,8 +343,8 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
             }
 
             if (empty($msgText)) {
-                $this->debug('HTML response from ZFL server: ' . $html);
-                $this->logError('ILL error: could not parse error message out of HTML: ' . $html);
+                $this->debug('HTML response from ZFL server: ' . $html->saveHtml());
+                $this->logError('ILL error: could not parse error message out of HTML: ' . $html->saveHtml());
             }
 
             if (!empty($msgText)) {
