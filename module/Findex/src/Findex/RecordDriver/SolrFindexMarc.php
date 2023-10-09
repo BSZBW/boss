@@ -439,7 +439,16 @@ class SolrFindexMarc extends SolrMarc implements Constants
     public function isEPflicht() : bool
     {
         $fields = $this->getFieldArray('912', ['a']);
-        return in_array('EPF-BW-GESAMT', $fields);
+        return in_array('EPF-BW-GESAMT', $fields) && !$this->isBLB();
+    }
+
+
+    private function isBLB(): bool
+    {
+        $f583 = $this->getMarcRecord()->getField('583');
+        $sff = $f583->getSubfield('f')->getData();
+        $sf5 = $f583->getSubfield('5')->getData();
+        return ($sff === 'PEBW') && ($sf5 === 'DE-31');
     }
 
     /**
