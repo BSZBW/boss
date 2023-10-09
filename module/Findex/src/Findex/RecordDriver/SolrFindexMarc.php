@@ -445,10 +445,15 @@ class SolrFindexMarc extends SolrMarc implements Constants
 
     private function isBLB(): bool
     {
-        $f583 = $this->getMarcRecord()->getField('583');
-        $sff = $f583->getSubfield('f')->getData();
-        $sf5 = $f583->getSubfield('5')->getData();
-        return ($sff === 'PEBW') && ($sf5 === 'DE-31');
+        $f583 = $this->getMarcRecord()->getFields('583', false);
+        foreach ($f583 as $field) {
+            $sff = $field->getSubfield('f');
+            $sf5 = $field->getSubfield('5');
+            if (($sff && ($sff->getData() === 'PEBW')) && ($sf5 && ($sf5->getData() === 'DE-31'))){
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
