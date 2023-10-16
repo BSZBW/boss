@@ -13,7 +13,7 @@ $config = [
                     'Finc\RecordDriver\SolrIS'       => 'Finc\RecordDriver\Factory::getSolrIS',
                 ],
                 'aliases' => [
-                    'solrmarc'              =>  'Finc\RecordDriver\SolrMarc',
+//                    'solrmarc'              =>  'Finc\RecordDriver\SolrMarc',
                     'solrmarcfinc'              =>  'Finc\RecordDriver\SolrMarcFinc',
                     'solrdefault'              =>  'Finc\RecordDriver\SolrDefault',
                     'solrai'                   =>  'Finc\RecordDriver\SolrAI',
