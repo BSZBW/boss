@@ -18,22 +18,28 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace BszCommon\Search\Factory;
+namespace BszCommon;
 
-use BszCommon\AbstractSearchNFactory;
-use Interop\Container\ContainerInterface;
-
-class AbstractSearchNBackendFactory extends AbstractSearchNFactory
+trait SearchRouteRewriteTrait
 {
+    public function rewrite(string $route): array
+    {
+        $retVal = [];
 
-    public function __invoke(
-        ContainerInterface $container,
-        $requestedName,
-        array $options = null
-    ) {
-        $name = str_replace('Collection', '', $requestedName);
-        $factory = new SearchNBackendFactory($name);
-        return $factory->__invoke($container, $name, $options);
+        $regex
+            = '/search([3-9][0-9]*|[1-9][0-9]+)([a-z][a-z0-9]*|)(-[a-z0-9]+|)/';
+        $matches = [];
+        if (preg_match($regex, strtolower($route), $matches)) {
+            $retVal['route'] = 'searchn' . strtolower($matches[2])
+                . $matches[3];
+            $retVal['params'] = [
+                'controller' => 'Search' . ucfirst($matches[1])
+                    . ucfirst($matches[2])
+            ];
+        } else {
+            $retVal['route'] = $route;
+            $retVal['params'] = [];
+        }
+        return $retVal;
     }
-
 }

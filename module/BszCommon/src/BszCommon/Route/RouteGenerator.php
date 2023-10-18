@@ -17,6 +17,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
 namespace BszCommon\Route;
 
 /**
@@ -30,31 +31,47 @@ class RouteGenerator extends \VuFind\Route\RouteGenerator
      * Constructor
      *
      * @param array $nonTabRecordActions List of non-tab record actions (null
-     * for default).
+     *                                   for default).
      */
     public function __construct(array $nonTabRecordActions = null)
     {
         if (null === $nonTabRecordActions) {
             $this->nonTabRecordActions = [
-                'AddComment', 'DeleteComment', 'AddTag', 'DeleteTag', 'Save',
-                'Email', 'SMS', 'Cite', 'Export', 'RDF', 'Hold', 'BlockedHold',
-                'Home', 'StorageRetrievalRequest', 'AjaxTab',
-                'BlockedStorageRetrievalRequest', 'ILLRequest', 'BlockedILLRequest',
-                'PDF', 'ILLForm'
+                'AddComment',
+                'DeleteComment',
+                'AddTag',
+                'DeleteTag',
+                'Save',
+                'Email',
+                'SMS',
+                'Cite',
+                'Export',
+                'RDF',
+                'Hold',
+                'BlockedHold',
+                'Home',
+                'StorageRetrievalRequest',
+                'AjaxTab',
+                'BlockedStorageRetrievalRequest',
+                'ILLRequest',
+                'BlockedILLRequest',
+                'PDF',
+                'ILLForm'
             ];
         } else {
             $this->nonTabRecordActions = $nonTabRecordActions;
         }
     }
 
-    public function addSearchRecordRoutes(& $config, $routes)
+    public function addSearchRecordRoutes(&$config, $routes)
     {
         foreach ($routes as $baseName => $baseController) {
             $this->addSearchRecordRoute($config, $baseName, $baseController);
         }
     }
 
-    public function addSearchRecordRoute(& $config, $baseName, $baseController) {
+    public function addSearchRecordRoute(&$config, $baseName, $baseController)
+    {
         $routeName = 'searchn' . strtolower($baseName);
         $controllerSpec = 'Search([3-9][0-9]*|[1-9][0-9]+)' . $baseController;
 
@@ -64,7 +81,7 @@ class RouteGenerator extends \VuFind\Route\RouteGenerator
                 'route' => '/:controller[/:id[/[:tab]]]',
                 'constraints' => [
                     'controller' => $controllerSpec,
-                    'action'     => '[a-zA-Z][a-zA-Z0-9_-]*'
+                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
                 ],
                 'defaults' => [
                     'action' => 'Home',
@@ -73,24 +90,25 @@ class RouteGenerator extends \VuFind\Route\RouteGenerator
         ];
 
         foreach ($this->nonTabRecordActions as $action) {
-            $config['router']['routes'][$routeName . '-' . strtolower($action)] = [
-                'type'    => 'Zend\Router\Http\Segment',
+            $config['router']['routes'][$routeName . '-' . strtolower($action)]
+                = [
+                'type' => 'Zend\Router\Http\Segment',
                 'options' => [
-                    'route'    => '/:controller' . '/[:id]/' . $action,
+                    'route' => '/:controller' . '/[:id]/' . $action,
                     'constraints' => [
                         'controller' => $controllerSpec,
-                        'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                     ],
                     'defaults' => [
-                        'action'     => $action,
+                        'action' => $action,
                     ]
                 ]
             ];
         }
-
     }
 
-    public function addSearchRoute(& $config, $routeName) {
+    public function addSearchRoute(&$config, $routeName)
+    {
         $routeId = 'searchn-' . strtolower($routeName);
         $config['router']['routes'][$routeId] = [
             'type' => 'Zend\Router\Http\Segment',
@@ -106,7 +124,8 @@ class RouteGenerator extends \VuFind\Route\RouteGenerator
         ];
     }
 
-    public function addSearchRoutes(& $config, $routes) {
+    public function addSearchRoutes(&$config, $routes)
+    {
         foreach ($routes as $routeName) {
             $this->addSearchRoute($config, $routeName);
         }

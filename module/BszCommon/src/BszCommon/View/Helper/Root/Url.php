@@ -1,27 +1,44 @@
 <?php
 
+/*
+ * Copyright (C) 2023 Bibliotheks-Service Zentrum, Konstanz, Germany
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
 namespace BszCommon\View\Helper\Root;
+
+use BszCommon\SearchRouteRewriteTrait;
 
 class Url extends \VuFind\View\Helper\Root\Url
 {
-    public function __invoke($name = null, $params = [], $options = [], $reuseMatchedParams = false)
-    {
-        $regex = '/([Ss]earch)([3-9][0-9]*|[1-9][0-9]+)([a-zA-Z][a-zA-z0-9]*|)(-[a-zA-z0-9]+|)/';
-        $matches = [];
-        if (preg_match($regex, $name, $matches)) {
-            $routeName = 'searchn' . strtolower($matches[3]) . $matches[4];
-            $params = array_merge($params, ['controller' => ucfirst($matches[1]) . ucfirst($matches[2]) . ucfirst($matches[3])]);
-            return parent::__invoke($routeName, $params, $options, $reuseMatchedParams);
-        }
-//        foreach (['/', '-', ''] as $delim) {
-//            $matches = [];
-//            $regex = '/([Ss]earch[3-9][0-9]*)(' . preg_quote($delim, '/') . '(.+)?)/';
-//            if(preg_match($regex, $name, $matches)) {
-//                $routeName = 'searchn' . (empty($matches[2]) ? '' : $matches[2]);
-//                $params = array_merge($params, ['controller' => $name]);
-//                return parent::__invoke($routeName, $params, $options, $reuseMatchedParams);
-//            }
-//        }
-        return parent::__invoke($name, $params, $options, $reuseMatchedParams);
+    use SearchRouteRewriteTrait;
+
+    public function __invoke(
+        $name = null,
+        $params = [],
+        $options = [],
+        $reuseMatchedParams = false
+    ) {
+        $rewrite = $this->rewrite($name);
+        return parent::__invoke(
+            $rewrite['route'],
+            array_merge($params, $rewrite['params']),
+            $options,
+            $reuseMatchedParams
+        );
     }
+
 }

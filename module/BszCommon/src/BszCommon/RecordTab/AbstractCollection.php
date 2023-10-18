@@ -90,7 +90,7 @@ abstract class AbstractCollection extends AbstractBase
 
             $this->results = [];
             foreach ($records as $r) {
-                if($this->display($r)) {
+                if ($this->display($r)) {
                     $this->results[] = $r;
                 }
             }
@@ -100,20 +100,23 @@ abstract class AbstractCollection extends AbstractBase
 
     /**
      * Returns the Solr-query to retrieve all the dependent titles of the current record
+     *
      * @return Query
      */
-    protected abstract function getQuery(): Query;
+    abstract protected function getQuery(): Query;
 
     /**
      * Returns additional parameters for the search query
      *
      * @return ParamBag
      */
-    protected abstract function getParams(): ParamBag;
+    abstract protected function getParams(): ParamBag;
 
     /**
      * Indicates whether a given record (dependent title) should be displayed in this tab
+     *
      * @param $record
+     *
      * @return bool
      */
     abstract protected function display($record): bool;
@@ -126,6 +129,4 @@ abstract class AbstractCollection extends AbstractBase
     {
         return parent::isActive() && (count($this->getResults()) > 0);
     }
-
-
 }

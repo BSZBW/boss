@@ -13,14 +13,16 @@ $config = [
             'BszCommon\Search\Results\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'BszCommon\Search\Options\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'BszCommon\Search\Params\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'BszCommon\Search\FacetCache\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory'
+            'BszCommon\Search\FacetCache\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
+            'BszCommon\Autocomplete\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory'
         ],
         'aliases' => [
             'VuFind\Search\Results\PluginManager' => 'BszCommon\Search\Results\PluginManager',
             'VuFind\Search\Options\PluginManager' => 'BszCommon\Search\Options\PluginManager',
             'VuFind\Search\Params\PluginManager' => 'BszCommon\Search\Params\PluginManager',
             'VuFind\Search\FacetCache\PluginManager' => 'BszCommon\Search\FacetCache\PluginManager',
-            'VuFind\Search\BackendManagerFactory' => 'BszCommon\Search\BackendManagerFactory'
+            'VuFind\Search\BackendManagerFactory' => 'BszCommon\Search\BackendManagerFactory',
+            'VuFind\Autocomplete\PluginManager' => 'BszCommon\Autocomplete\PluginManager'
         ]
     ],
     'vufind' => [

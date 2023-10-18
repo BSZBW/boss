@@ -18,22 +18,17 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace BszCommon\Search\Factory;
+namespace BszCommon\Autocomplete;
 
-use BszCommon\AbstractSearchNFactory;
-use Interop\Container\ContainerInterface;
-
-class AbstractSearchNBackendFactory extends AbstractSearchNFactory
+class PluginManager extends \VuFind\Autocomplete\PluginManager
 {
 
-    public function __invoke(
-        ContainerInterface $container,
-        $requestedName,
-        array $options = null
+    public function __construct(
+        $configOrContainerInstance = null,
+        array $v3config = []
     ) {
-        $name = str_replace('Collection', '', $requestedName);
-        $factory = new SearchNBackendFactory($name);
-        return $factory->__invoke($container, $name, $options);
+        parent::__construct($configOrContainerInstance, $v3config);
+        $this->addAbstractFactory(AbstractSearchNCNFactory::class);
     }
 
 }
