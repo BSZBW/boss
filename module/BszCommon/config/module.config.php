@@ -8,25 +8,33 @@ $config = [
             AbstractBaseFactory::class
         ]
     ],
-    'service_manager' => [
-        'factories' => [
-            'BszCommon\Search\Results\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'BszCommon\Search\Options\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'BszCommon\Search\Params\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'BszCommon\Search\FacetCache\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
-            'BszCommon\Autocomplete\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory'
-        ],
-        'aliases' => [
-            'VuFind\Search\Results\PluginManager' => 'BszCommon\Search\Results\PluginManager',
-            'VuFind\Search\Options\PluginManager' => 'BszCommon\Search\Options\PluginManager',
-            'VuFind\Search\Params\PluginManager' => 'BszCommon\Search\Params\PluginManager',
-            'VuFind\Search\FacetCache\PluginManager' => 'BszCommon\Search\FacetCache\PluginManager',
-            'VuFind\Search\BackendManagerFactory' => 'BszCommon\Search\BackendManagerFactory',
-            'VuFind\Autocomplete\PluginManager' => 'BszCommon\Autocomplete\PluginManager'
-        ]
-    ],
     'vufind' => [
         'plugin_managers' => [
+            'autocomplete' => [
+                'abstract_factories' => [
+                    \BszCommon\Autocomplete\AbstractSearchNCNFactory::class
+                ]
+            ],
+            'search_options' => [
+                'abstract_factories' => [
+                    \BszCommon\Search\SearchN\OptionsFactory::class
+                ]
+            ],
+            'search_params' => [
+                'abstract_factories' => [
+                    \BszCommon\Search\SearchN\ParamsFactory::class
+                ]
+            ],
+            'search_results' => [
+                'abstract_factories' => [
+                    \BszCommon\Search\SearchN\ResultsFactory::class
+                ]
+            ],
+            'search_facetcache' => [
+              'abstract_factories' => [
+                  \BszCommon\Search\SearchN\FacetCacheFactory::class
+              ]
+            ],
             'search_backend' => [
                 'abstract_factories' => [
                     \BszCommon\Search\Factory\AbstractSearchNBackendFactory::class

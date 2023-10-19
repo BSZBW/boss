@@ -23,7 +23,7 @@ namespace BszCommon\Search\SearchN;
 use Bsz\Exception;
 use Interop\Container\ContainerInterface;
 
-class AbstractFacetCacheFactory extends \BszCommon\AbstractSearchNFactory
+class FacetCacheFactory extends \BszCommon\AbstractSearchNFactory
 {
     public function __invoke(
         ContainerInterface $container,

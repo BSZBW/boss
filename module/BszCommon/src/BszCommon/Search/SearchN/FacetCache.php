@@ -34,7 +34,7 @@ class FacetCache extends \VuFind\Search\Base\FacetCache
         $language = 'en'
     ) {
         parent::__construct($r, $cm, $language);
-        $this->cacheNamespace = strtolower($this->cacheNamespace) . '-facets';
+        $this->cacheNamespace = strtolower($searchClassId) . '-facets';
     }
 
     protected function getCacheNamespace()
