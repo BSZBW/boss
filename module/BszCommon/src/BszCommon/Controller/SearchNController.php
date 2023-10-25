@@ -40,9 +40,9 @@ class SearchNController extends \VuFind\Controller\AbstractSolrSearch
             && $config->Record->next_prev_navigation;
     }
 
-    public function url(): \Zend\Mvc\Controller\Plugin\Url
-    {
-        return new UrlDecorator(parent::url());
-    }
+//    public function url(): \Zend\Mvc\Controller\Plugin\Url
+//    {
+//        return new UrlDecorator(parent::url());
+//    }
 
 }

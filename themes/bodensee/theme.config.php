@@ -38,7 +38,7 @@ $config = [
             'Bsz\View\Helper\Root\SearchMemory' => 'BszTheme\View\Helper\Bodensee\Factory::getSearchMemory',
             'illform' => 'BszTheme\View\Helper\Bodensee\Factory::getIllForm',
             'BszTheme\View\Helper\Bodensee\Wayfless' => 'BszTheme\View\Helper\Bodensee\Factory::getWayfless',
-            'BszCommon\View\Helper\Root\Url' => 'VuFind\View\Helper\Root\UrlFactory'
+//            'BszCommon\View\Helper\Root\Url' => 'VuFind\View\Helper\Root\UrlFactory'
         ],
         'aliases' => [
             'VuFind\View\Helper\Bootstrap3\LayoutClass' => 'Bsz\View\Helper\Bootstrap3\LayoutClass',
@@ -49,7 +49,7 @@ $config = [
             'VuFind\View\Helper\Root\SearchTabs' => 'Bsz\View\Helper\Root\SearchTabs',
             'VuFind\View\Helper\Root\SearchMemory' => 'Bsz\View\Helper\Root\SearchMemory',
             'wayfless' => 'BszTheme\View\Helper\Bodensee\Wayfless',
-            'VuFind\View\Helper\Root\Url' => 'BszCommon\View\Helper\Root\Url'
+//            'VuFind\View\Helper\Root\Url' => 'BszCommon\View\Helper\Root\Url'
         ]
     ]
 ];
