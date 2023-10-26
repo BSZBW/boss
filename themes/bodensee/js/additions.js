@@ -174,6 +174,7 @@ function searchInputTweaks() {
             href = href.replace('/Summon/Search', '/Summon/Home');
         } else {
             href = href.replace('Home', 'Results');
+            href = href+'&lookfor='+lookfor;
         }
         // this is like clicking the manipulated link
         window.location.href = href;
