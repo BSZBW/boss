@@ -36,7 +36,6 @@ $config = [
             'Bsz\Controller\HoldingController' => Factory::class,
             'Bsz\Controller\ShibController' => Factory::class,
             'Bsz\Controller\BszController' => Factory::class,
-            'Bsz\Controller\TestController' => Factory::class,
             'Bsz\Controller\CoverController' => 'Bsz\Controller\Factory::getCoverController',
         ],
         'aliases' => [
@@ -44,7 +43,6 @@ $config = [
             'Holding' => 'Bsz\Controller\HoldingController',
             'Shib' => 'Bsz\Controller\ShibController',
             'Bsz' => 'Bsz\Controller\BszController',
-            'Test' => 'Bsz\Controller\TestController',
             // overwriting
             'VuFind\Controller\SearchController'    => 'Bsz\Controller\SearchController',
             'VuFind\Controller\RecordController'    => 'Bsz\Controller\RecordController',
