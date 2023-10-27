@@ -252,9 +252,12 @@ class Client extends Config
 
     public function getProvenances()
     {
-        $raw = trim($this->get('Provenances')->get('isil'));
-        if (!empty($raw)) {
-            return explode(',', $raw);
+        $section = $this->get('Provenances');
+        if ($section != null) {
+            $raw = trim($section->get('isil'));
+            if (!empty($raw)) {
+                return explode(',', $raw);
+            }
         }
         return [];
     }
