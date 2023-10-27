@@ -280,6 +280,19 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
                 <td><a href="<?=$this->recordLink()->getChildRecordSearchUrl($this->driver)?>"><?=$this->transEsc('child_record_count', array('%%count%%' => $childRecordCount))?></a></td>
             </tr>
             <? endif; ?>
+
+            <? $provenances = $this->driver->tryMethod('getProvenances', [$this->client()->getProvenances()]); if ($provenances): ?>
+            <tr>
+                <th><?=$this->transEsc('provenances')?></th>
+                <td>
+                    <? foreach ($provenances as $item): ?>
+                    <?=$this->context($this)->renderInContext('RecordDriver/DefaultRecord/parts/provenance.phtml', ['provenance' => $item])?>
+                    <br>
+                    <? endforeach; ?>
+                </td>
+            </tr>
+            <? endif ?>
+
             <?=$this->render('RecordDriver/DefaultRecord/parts/subjects.phtml')?>
 
             <?

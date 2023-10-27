@@ -1,0 +1,24 @@
+<?php if (isset($provenance['signature'])): ?>
+    <?= $this->escapeHtml($provenance['signature']) ?>
+<?php endif; ?>
+
+<?php if (isset($provenance['header'])): ?>
+    <?= $this->escapeHtml($provenance['header']) . ": " ?>
+<?php endif;?>
+
+<?php if (isset($provenance['name'])): ?>
+    <?php if (isset($provenance['gnd'])): ?>
+        <a class="external hasicon" data-toggle="tooltip" title="<?=$this->transEsc('DNB_link')?>" href="<?=$this->gndLink($provenance['gnd'])?>">
+            <?= $this->escapeHtml($provenance['name']) ?>
+            <i class="fa fa-database"></i>
+        </a>
+    <?php else: ?>
+        <?= $this->escapeHtml($provenance['name']) ?>
+    <?php endif; ?>
+<?php endif; ?>
+
+<?php if (isset($provenance['details'])): ?>
+    <?php foreach ($provenance['details'] as $detail): ?>
+        <?= ' | ' . $this->escapeHtml($detail) ?>
+    <?php endforeach; ?>
+<?php endif; ?>

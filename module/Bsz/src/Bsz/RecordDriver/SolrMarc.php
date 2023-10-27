@@ -21,6 +21,7 @@
  */
 namespace Bsz\RecordDriver;
 
+use Bsz\Tools\GndHelperTrait;
 use Exception;
 use File_MARC;
 use File_MARC_Exception;
@@ -45,6 +46,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
     use MarcReaderTrait;
     use MarcAdvancedTrait;
     use HelperTrait;
+    use GndHelperTrait;
 
     protected $formats;
     protected $runner;
@@ -621,5 +623,54 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
             }
         }
         return $f007_0 . $f007_1;
+    }
+
+    public function getProvenances(array $isils = []): array
+    {
+        $retVal = [];
+        $f561 = $this->getMarcRecord()->getFields('561', false);
+        foreach ($f561 as $field) {
+            $entry = [];
+
+            $sf5 = $field->getSubfield('5');
+            if (!empty($isils) && !in_array($sf5->getData(), $isils)) {
+                continue;
+            }
+            $sf3 = $field->getSubfield('3');
+            if (isset($sf3)) {
+                $pos = strpos($sf3->getData(), 'Signatur');
+                if ($pos !== false) {
+                    $entry['signature'] = substr($sf3->getData(), $pos);
+                }
+            }
+
+            $sfa = $field->getSubfield('a');
+            if (isset($sfa)) {
+                $data = explode(' / ', $sfa->getData());
+
+                $subData = explode(';', $data[0]);
+                $splittedName = explode(':', $subData[0], 2);
+                if (count($splittedName) > 1) {
+                    $entry['header'] = $splittedName[0];
+                    $entry['name'] = trim($splittedName[1]);
+                } else {
+                    $entry['name'] = $splittedName[0];
+                }
+
+                if (count($subData) > 1) {
+                    $gnd = $this->gndIdFromLink($subData[1]);
+                    if ($gnd) {
+                        $entry['gnd'] = $gnd;
+                    }
+                }
+                $entry['details'] = array_slice($data, 1);
+            }
+
+            if (!empty($entry)) {
+                $retVal[] = $entry;
+            }
+        }
+
+        return $retVal;
     }
 }

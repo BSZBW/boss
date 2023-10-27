@@ -250,6 +250,15 @@ class Client extends Config
         return $isils;
     }
 
+    public function getProvenances()
+    {
+        $raw = trim($this->get('Provenances')->get('isil'));
+        if (!empty($raw)) {
+            return explode(',', $raw);
+        }
+        return [];
+    }
+
     /**
      * Returns Sigel for use in OpenUrl
      * @deprecated not really clear, OpenUrl not used.
