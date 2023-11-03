@@ -281,6 +281,17 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
             </tr>
             <? endif; ?>
 
+            <? $oldPrintGenre = $this->driver->tryMethod('getOldPrintGenre'); if ($oldPrintGenre): ?>
+                <tr>
+                    <th><?= $this->transEsc('old_print_genre') ?></th>
+                    <td>
+                        <? foreach ($oldPrintGenre as $item): ?>
+                        <?= $this->escapeHtml($item) ?><br>
+                        <? endforeach; ?>
+                    </td>
+                </tr>
+            <? endif; ?>
+
             <? $provenances = $this->driver->tryMethod('getProvenances', [$this->client()->getProvenances()]); if ($provenances): ?>
             <tr>
                 <th><?=$this->transEsc('provenances')?></th>
