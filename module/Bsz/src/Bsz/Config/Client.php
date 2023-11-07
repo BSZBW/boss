@@ -396,13 +396,10 @@ class Client extends Config
         foreach ($dirs as $dir) {
             try {
                 $config = $Reader->fromFile($dir . '/config/vufind/config.ini');
-                if (strpos($config['Site']['url'], 'dlr-') === false) {
-                    $tmp = [
-                        'title' => $config['Site']['title'],
-                        'url' => $config['Site']['url']
-                    ];
-                    $configs[] = $tmp;
-                }
+                $configs[] = [
+                    'title' => $config['Site']['title'],
+                    'url' => $config['Site']['url']
+                ];
             } catch (Exception $ex) {
                 continue;
             }

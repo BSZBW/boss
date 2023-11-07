@@ -35,7 +35,7 @@ class PluginManager extends \VuFind\RecordDriver\PluginManager
 
         // Findex also sends recordtype=SolrMarc, so, we need to distinguish
         //  between Findex and other sources.
-        if (!preg_match('/Gvi|Dlr|Ntrs|Finc/i', $recordType)) {
+        if (!preg_match('/Gvi|Ntrs|Finc/i', $recordType)) {
             $recordType = 'SolrFindexMarc';
         }
 
