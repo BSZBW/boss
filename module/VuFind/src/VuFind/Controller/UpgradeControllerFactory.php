@@ -28,6 +28,9 @@
 namespace VuFind\Controller;
 
 use Interop\Container\ContainerInterface;
+use Interop\Container\Exception\ContainerException;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 
 /**
  * Upgrade controller factory.
@@ -61,8 +64,8 @@ class UpgradeControllerFactory extends AbstractBaseFactory
             throw new \Exception('Unexpected options sent to factory.');
         }
         $cookieManager = $container->get(\VuFind\Cookie\CookieManager::class);
-        $session = new \Zend\Session\Container(
-            'upgrade', $container->get(\Zend\Session\SessionManager::class)
+        $session = new \Laminas\Session\Container(
+            'upgrade', $container->get(\Laminas\Session\SessionManager::class)
         );
         return $this->applyPermissions(
             $container,

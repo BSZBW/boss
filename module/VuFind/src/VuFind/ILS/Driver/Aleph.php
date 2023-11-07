@@ -155,7 +155,7 @@ class AlephTranslator
             echo "tab15 is null!<br>";
         }
         $findme = $tab15["tab15"] . "|" . $isc . "|" . $ipsc;
-        $result = $this->table15[$findme];
+        $result = $this->table15[$findme] ?? null;
         if ($result == null) {
             $findme = $tab15["tab15"] . "||" . $ipsc;
             $result = $this->table15[$findme];
@@ -300,7 +300,7 @@ class AlephRestfulException extends ILSException
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:plugins:ils_drivers Wiki
  */
-class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
+class Aleph extends AbstractBase implements \Laminas\Log\LoggerAwareInterface,
     \VuFindHttp\HttpServiceAwareInterface
 {
     use \VuFind\Log\LoggerAwareTrait;
@@ -389,8 +389,7 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
             $this->wwwuser = $this->config['Catalog']['wwwuser'];
             $this->wwwpasswd = $this->config['Catalog']['wwwpasswd'];
             $this->xserver_enabled = true;
-            $this->xport = isset($this->config['Catalog']['xport'])
-                ? $this->config['Catalog']['xport'] : 80;
+            $this->xport = $this->config['Catalog']['xport'] ?? 80;
         } else {
             $this->xserver_enabled = false;
         }
@@ -405,10 +404,8 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
         $this->available_statuses
             = explode(',', $this->config['Catalog']['available_statuses']);
         $this->quick_availability
-            = isset($this->config['Catalog']['quick_availability'])
-            ? $this->config['Catalog']['quick_availability'] : false;
-        $this->debug_enabled = isset($this->config['Catalog']['debug'])
-            ? $this->config['Catalog']['debug'] : false;
+            = $this->config['Catalog']['quick_availability'] ?? false;
+        $this->debug_enabled = $this->config['Catalog']['debug'] ?? false;
         if (isset($this->config['util']['tab40'])
             && isset($this->config['util']['tab15'])
             && isset($this->config['util']['tab_sub_library'])
@@ -1076,7 +1073,7 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
                     ],
                     null, 'POST', null
                 );
-                $due = (string)$xml->xpath('//new-due-date');
+                $due = (string)current($xml->xpath('//new-due-date'));
                 $result[$id] = [
                     'success' => true, 'new_date' => $this->parseDate($due)
                 ];

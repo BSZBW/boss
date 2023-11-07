@@ -41,6 +41,8 @@ use VuFind\View\Helper\Root\RecordDataFormatterFactory;
  */
 class RecordDataFormatterTest extends \VuFindTest\Unit\ViewHelperTestCase
 {
+    use \VuFindTest\Unit\FixtureTrait;
+
     /**
      * Get a mock record router.
      *
@@ -119,14 +121,7 @@ class RecordDataFormatterTest extends \VuFindTest\Unit\ViewHelperTestCase
             ->will($this->returnValue($authors));
 
         // Load record data from fixture file:
-        $fixture = json_decode(
-            file_get_contents(
-                realpath(
-                    VUFIND_PHPUNIT_MODULE_PATH . '/fixtures/misc/testbug2.json'
-                )
-            ),
-            true
-        );
+        $fixture = $this->getJsonFixture('misc/testbug2.json');
         $record->setRawData($overrides + $fixture['response']['docs'][0]);
         return $record;
     }
@@ -149,10 +144,10 @@ class RecordDataFormatterTest extends \VuFindTest\Unit\ViewHelperTestCase
         $view = $this->getPhpRenderer($helpers);
 
         // Mock out the router to avoid errors:
-        $match = new \Zend\Router\RouteMatch([]);
+        $match = new \Laminas\Router\RouteMatch([]);
         $match->setMatchedRouteName('foo');
         $view->plugin('url')
-            ->setRouter($this->createMock(\Zend\Router\RouteStackInterface::class))
+            ->setRouter($this->createMock(\Laminas\Router\RouteStackInterface::class))
             ->setRouteMatch($match);
 
         // Inject the view object into all of the helpers:
@@ -317,7 +312,8 @@ class RecordDataFormatterTest extends \VuFindTest\Unit\ViewHelperTestCase
             'Multi Data' => 'Book',
             'Subjects' => 'Naples (Kingdom) History Spanish rule, 1442-1707 Sources',
             'Online Access' => 'http://fictional.com/sample/url',
-            'Tags' => 'Add Tag No Tags, Be the first to tag this record!',
+            // Double slash at the end comes from inline javascript
+            'Tags' => 'Add Tag No Tags, Be the first to tag this record! //',
             'ZeroAllowed' => 0,
             'c' => 'c',
             'a' => 'a',
@@ -344,7 +340,7 @@ class RecordDataFormatterTest extends \VuFindTest\Unit\ViewHelperTestCase
 
         // Check for exact markup in representative example:
         $this->assertEquals(
-            'Italian<br />Latin', $this->findResult('Language', $results)['value']
+            '<span property="availableLanguage" typeof="Language"><span property="name">Italian</span></span><br /><span property="availableLanguage" typeof="Language"><span property="name">Latin</span></span>', $this->findResult('Language', $results)['value']
         );
 
         // Check for context in Building:

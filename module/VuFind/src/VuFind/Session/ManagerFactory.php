@@ -28,8 +28,11 @@
 namespace VuFind\Session;
 
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
-use Zend\Session\SessionManager;
+use Interop\Container\Exception\ContainerException;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Laminas\ServiceManager\Factory\FactoryInterface;
+use Laminas\Session\SessionManager;
 
 /**
  * Factory for instantiating Session Manager
@@ -91,11 +94,8 @@ class ManagerFactory implements FactoryInterface
             throw new \Exception('Cannot initialize session; configuration missing');
         }
 
-        $sessionPluginManager = $container
-            ->get(\VuFind\Session\PluginManager::class);
-        $sessionHandler = $sessionPluginManager->get($config->Session->type);
-        $sessionHandler->setConfig($config->Session);
-        return $sessionHandler;
+        return $container->get(\VuFind\Session\PluginManager::class)
+            ->get($config->Session->type);
     }
 
     /**
@@ -143,7 +143,7 @@ class ManagerFactory implements FactoryInterface
         }
 
         // Build configuration:
-        $sessionConfig = new \Zend\Session\Config\SessionConfig();
+        $sessionConfig = new \Laminas\Session\Config\SessionConfig();
         $sessionConfig->setOptions($this->getOptions($container));
 
         // Build session manager and attach handler:
@@ -155,7 +155,7 @@ class ManagerFactory implements FactoryInterface
 
         // Verify that any existing session has the correct path to avoid using
         // a cookie from a service higher up in the path hierarchy.
-        $storage = new \Zend\Session\Container('SessionState', $sessionManager);
+        $storage = new \Laminas\Session\Container('SessionState', $sessionManager);
         if (null !== $storage->cookiePath) {
             if ($storage->cookiePath != $sessionConfig->getCookiePath()) {
                 // Disable writes temporarily to keep the existing session intact

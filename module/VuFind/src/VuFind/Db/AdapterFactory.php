@@ -1,7 +1,7 @@
 <?php
 /**
  * Database utility class. May be used as a service or as a standard
- * Zend Framework factory.
+ * Laminas factory.
  *
  * PHP version 7
  *
@@ -29,12 +29,16 @@
 namespace VuFind\Db;
 
 use Interop\Container\ContainerInterface;
-use Zend\Config\Config;
-use Zend\Db\Adapter\Adapter;
+use Interop\Container\Exception\ContainerException;
+use Laminas\Config\Config;
+use Laminas\Db\Adapter\Adapter;
+
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 
 /**
  * Database utility class. May be used as a service or as a standard
- * Zend Framework factory.
+ * Laminas factory.
  *
  * @category VuFind
  * @package  Db
@@ -42,7 +46,7 @@ use Zend\Db\Adapter\Adapter;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Site
  */
-class AdapterFactory implements \Zend\ServiceManager\Factory\FactoryInterface
+class AdapterFactory implements \Laminas\ServiceManager\Factory\FactoryInterface
 {
     /**
      * VuFind configuration
@@ -88,7 +92,7 @@ class AdapterFactory implements \Zend\ServiceManager\Factory\FactoryInterface
     }
 
     /**
-     * Obtain a Zend\DB connection using standard VuFind configuration.
+     * Obtain a Laminas\DB connection using standard VuFind configuration.
      *
      * @param string $overrideUser Username override (leave null to use username
      * from config.ini)
@@ -129,7 +133,7 @@ class AdapterFactory implements \Zend\ServiceManager\Factory\FactoryInterface
     }
 
     /**
-     * Obtain a Zend\DB connection using an option array.
+     * Obtain a Laminas\DB connection using an option array.
      *
      * @param array $options Options for building adapter
      *
@@ -141,8 +145,7 @@ class AdapterFactory implements \Zend\ServiceManager\Factory\FactoryInterface
         $driver = strtolower($options['driver']);
         switch ($driver) {
         case 'mysqli':
-            $options['charset'] = isset($this->config->Database->charset)
-                ? $this->config->Database->charset : 'utf8';
+            $options['charset'] = $this->config->Database->charset ?? 'utf8';
             $options['options'] = ['buffer_results' => true];
             break;
         }
@@ -163,7 +166,7 @@ class AdapterFactory implements \Zend\ServiceManager\Factory\FactoryInterface
     }
 
     /**
-     * Obtain a Zend\DB connection using a connection string.
+     * Obtain a Laminas\DB connection using a connection string.
      *
      * @param string $connectionString Connection string of the form
      * [db_type]://[username]:[password]@[host]/[db_name]

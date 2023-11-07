@@ -28,6 +28,9 @@
 namespace VuFind\Role\PermissionProvider;
 
 use Interop\Container\ContainerInterface;
+use Interop\Container\Exception\ContainerException;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 
 /**
  * Factory for instantiating IpRange permission provider.
@@ -38,7 +41,7 @@ use Interop\Container\ContainerInterface;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
-class IpRangeFactory implements \Zend\ServiceManager\Factory\FactoryInterface
+class IpRangeFactory implements \Laminas\ServiceManager\Factory\FactoryInterface
 {
     /**
      * Create an object
@@ -64,7 +67,8 @@ class IpRangeFactory implements \Zend\ServiceManager\Factory\FactoryInterface
         }
         return new $requestedName(
             $container->get('Request'),
-            $container->get(\VuFind\Net\IpAddressUtils::class)
+            $container->get(\VuFind\Net\IpAddressUtils::class),
+            $container->get(\VuFind\Net\UserIpReader::class)
         );
     }
 }

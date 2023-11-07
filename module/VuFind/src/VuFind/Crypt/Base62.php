@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright 2020 (C) Bibliotheksservice-Zentrum Baden-
- * Württemberg, Konstanz, Germany
+ * Base62 generator
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Class to encode and decode numbers using base62
+ *
+ * PHP version 7
+ *
+ * Copyright (C) Villanova University 2020.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,16 +19,28 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
+ * @category VuFind
+ * @package  VuFind\Crypt
+ * @author   Cornelius Amzar <cornelius.amzar@bsz-bw.de>
+ * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://vufind.org/wiki/development Wiki
  */
 namespace VuFind\Crypt;
 
-use Exception;/**
- * Klasse to encode and decod enumbers using base62
- * @package  VuFind\Crypt
- * @category boss
+use Exception;
+
+/**
+ * Base62 generator
+ *
+ * Class to encode and decode numbers using base62
+ *
+ * @category VuFind
+ * @package  Crypt
  * @author   Cornelius Amzar <cornelius.amzar@bsz-bw.de>
+ * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://vufind.org/wiki/development Wiki
  */
 class Base62
 {

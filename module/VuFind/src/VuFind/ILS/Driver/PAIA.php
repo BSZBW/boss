@@ -55,14 +55,14 @@ class PAIA extends DAIA
     /**
      * URL of PAIA service
      *
-     * @var
+     * @var string
      */
     protected $paiaURL;
 
     /**
      * Timeout in seconds to be used for PAIA http requests
      *
-     * @var
+     * @var int
      */
     protected $paiaTimeout = null;
 
@@ -76,14 +76,14 @@ class PAIA extends DAIA
     /**
      * Session containing PAIA login information
      *
-     * @var \Zend\Session\Container
+     * @var \Laminas\Session\Container
      */
     protected $session;
 
     /**
      * SessionManager
      *
-     * @var \Zend\Session\SessionManager
+     * @var \Laminas\Session\SessionManager
      */
     protected $sessionManager;
 
@@ -127,11 +127,11 @@ class PAIA extends DAIA
     /**
      * Constructor
      *
-     * @param \VuFind\Date\Converter       $converter      Date converter
-     * @param \Zend\Session\SessionManager $sessionManager Session Manager
+     * @param \VuFind\Date\Converter          $converter      Date converter
+     * @param \Laminas\Session\SessionManager $sessionManager Session Manager
      */
     public function __construct(\VuFind\Date\Converter $converter,
-        \Zend\Session\SessionManager $sessionManager
+        \Laminas\Session\SessionManager $sessionManager
     ) {
         parent::__construct($converter);
         $this->sessionManager = $sessionManager;
@@ -162,7 +162,7 @@ class PAIA extends DAIA
     {
         // SessionContainer not defined yet? Build it now:
         if (null === $this->session) {
-            $this->session = new \Zend\Session\Container(
+            $this->session = new \Laminas\Session\Container(
                 'PAIA', $this->sessionManager
             );
         }
@@ -954,7 +954,7 @@ class PAIA extends DAIA
             case 'access_denied':
                 throw new AuthException(
                     $array['error_description'] ?? $array['error'],
-                    $array['code'] ?? ''
+                    (int)($array['code'] ?? 0)
                 );
 
                 // invalid_grant     401     The access token was missing, invalid
@@ -966,7 +966,7 @@ class PAIA extends DAIA
             case 'insufficient_scope':
                 throw new ForbiddenException(
                     $array['error_description'] ?? $array['error'],
-                    $array['code'] ?? ''
+                    (int)($array['code'] ?? 0)
                 );
 
                 // not_found     404     Unknown request URL or unknown patron.
@@ -1013,7 +1013,7 @@ class PAIA extends DAIA
             default:
                 throw new ILSException(
                     $array['error_description'] ?? $array['error'],
-                    $array['code'] ?? ''
+                    (int)($array['code'] ?? 0)
                 );
             }
         }
@@ -1268,8 +1268,7 @@ class PAIA extends DAIA
      */
     protected function paiaStatusString($status)
     {
-        return isset(self::$statusStrings[$status])
-            ? self::$statusStrings[$status] : '';
+        return self::$statusStrings[$status] ?? '';
     }
 
     /**
@@ -2018,6 +2017,18 @@ class PAIA extends DAIA
     }
 
     /**
+     * Get notification identifier from message identifier
+     *
+     * @param string $messageId Message identifier
+     *
+     * @return string
+     */
+    protected function getPaiaNotificationsId($messageId)
+    {
+        return $messageId;
+    }
+
+    /**
      * DELETE data on foreign host
      *
      * @param string $file         DELETE target URL
@@ -2040,7 +2051,7 @@ class PAIA extends DAIA
         try {
             $client = $this->httpService->createClient(
                 $this->paiaURL . $file,
-                \Zend\Http\Request::METHOD_DELETE,
+                \Laminas\Http\Request::METHOD_DELETE,
                 $this->paiaTimeout
             );
             $client->setHeaders($http_headers);

@@ -27,11 +27,7 @@
  */
 namespace VuFind\View\Helper\Root;
 
-use Exception;
-use VuFind\RecordDriver;
-use VuFind\Resolver\Connection;
 use VuFind\Resolver\Driver\PluginManager;
-use Zend\View\Helper\AbstractHelper;
 
 /**
  * OpenUrl view helper
@@ -42,19 +38,19 @@ use Zend\View\Helper\AbstractHelper;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
-class OpenUrl extends AbstractHelper
+class OpenUrl extends \Laminas\View\Helper\AbstractHelper
 {
     /**
      * Context helper
      *
-     * @var Context
+     * @var \VuFind\View\Helper\Root\Context
      */
     protected $context;
 
     /**
      * VuFind OpenURL configuration
      *
-     * @var \Zend\Config\Config
+     * @var \Laminas\Config\Config
      */
     protected $config;
 
@@ -75,7 +71,7 @@ class OpenUrl extends AbstractHelper
     /**
      * Current RecordDriver
      *
-     * @var RecordDriver
+     * @var \VuFind\RecordDriver
      */
     protected $recordDriver;
 
@@ -89,16 +85,13 @@ class OpenUrl extends AbstractHelper
     /**
      * Constructor
      *
-     * @param Context             $context       Context helper
-     * @param array               $openUrlRules  VuFind OpenURL rules
-     * @param PluginManager       $pluginManager Resolver plugin manager
-     * @param \Zend\Config\Config $config        VuFind OpenURL config
+     * @param Context                $context       Context helper
+     * @param array                  $openUrlRules  VuFind OpenURL rules
+     * @param PluginManager          $pluginManager Resolver plugin manager
+     * @param \Laminas\Config\Config $config        VuFind OpenURL config
      */
-    public function __construct(
-        Context $context,
-        $openUrlRules,
-        PluginManager $pluginManager,
-        $config = null
+    public function __construct(Context $context, $openUrlRules,
+        PluginManager $pluginManager, $config = null
     ) {
         $this->context = $context;
         $this->openUrlRules = $openUrlRules;
@@ -109,7 +102,7 @@ class OpenUrl extends AbstractHelper
     /**
      * Set up context for helper
      *
-     * @param RecordDriver $driver The current record driver
+     * @param \VuFind\RecordDriver $driver The current record driver
      * @param string               $area   OpenURL context ('results', 'record'
      *  or 'holdings'
      *
@@ -144,7 +137,7 @@ class OpenUrl extends AbstractHelper
             if (!isset($this->config->dynamic_graphic)) {
                 // if imagebased linking is forced by the template, but it is not
                 // configured properly, throw an exception
-                throw new Exception(
+                throw new \Exception(
                     'Template tries to display OpenURL as image based link, but
                      Image based linking is not configured! Please set parameter
                      dynamic_graphic in config file.'
@@ -189,8 +182,7 @@ class OpenUrl extends AbstractHelper
 
         $embed = (isset($this->config->embed) && !empty($this->config->embed));
 
-        $embedAutoLoad = isset($this->config->embed_auto_load)
-            ? $this->config->embed_auto_load : false;
+        $embedAutoLoad = $this->config->embed_auto_load ?? false;
         // ini values 'true'/'false' are provided via ini reader as 1/0
         // only check embedAutoLoad for area if the current area passed checkContext
         if (!($embedAutoLoad === "1" || $embedAutoLoad === "0")
@@ -211,11 +203,10 @@ class OpenUrl extends AbstractHelper
         }
 
         // instantiate the resolver plugin to get a proper resolver link
-        $resolver = isset($this->config->resolver)
-            ? $this->config->resolver : 'other';
+        $resolver = $this->config->resolver ?? 'other';
         $openurl = $this->recordDriver->getOpenUrl();
         if ($this->resolverPluginManager->has($resolver)) {
-            $resolverObj = new Connection(
+            $resolverObj = new \VuFind\Resolver\Connection(
                 $this->resolverPluginManager->get($resolver)
             );
             $resolverUrl = $resolverObj->getResolverUrl($openurl);
@@ -243,8 +234,7 @@ class OpenUrl extends AbstractHelper
 
         // Render the subtemplate:
         return $this->context->__invoke($this->getView())->renderInContext(
-            'Helpers/openurl.phtml',
-            $params
+            'Helpers/openurl.phtml', $params
         );
     }
 

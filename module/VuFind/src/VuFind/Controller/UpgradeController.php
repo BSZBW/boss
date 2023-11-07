@@ -31,22 +31,22 @@ namespace VuFind\Controller;
 
 use ArrayObject;
 use Exception;
-use Tuupola\Base62;
-use VuFind\Cache\Manager;
+use Laminas\Db\Adapter\Adapter;
+use Laminas\Mvc\MvcEvent;
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\Session\Container;
+use VuFind\Cache\Manager as CacheManager;
 use VuFind\Config\Locator as ConfigLocator;
 use VuFind\Config\Upgrade;
 use VuFind\Config\Version;
 use VuFind\Config\Writer;
 use VuFind\Cookie\Container as CookieContainer;
 use VuFind\Cookie\CookieManager;
+use VuFind\Crypt\Base62;
 use VuFind\Date\Converter;
 use VuFind\Db\AdapterFactory;
 use VuFind\Exception\RecordMissing as RecordMissingException;
-use VuFind\Search\Results\PluginManager;
-use Zend\Db\Adapter\Adapter;
-use Zend\Mvc\MvcEvent;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\Session\Container;
+use VuFind\Search\Results\PluginManager as ResultsManager;
 
 /**
  * Class controls VuFind upgrading.
@@ -177,6 +177,7 @@ class UpgradeController extends AbstractBase
      * Figure out which version(s) are being used.
      *
      * @return mixed
+     * @throws Exception
      */
     public function establishversionsAction()
     {
@@ -320,8 +321,7 @@ class UpgradeController extends AbstractBase
      */
     protected function fixSearchChecksumsInDatabase()
     {
-        $manager = $this->serviceLocator
-            ->get(PluginManager::class);
+        $manager = $this->serviceLocator->get(ResultsManager::class);
         $search = $this->getTable('search');
         $searchWhere = ['checksum' => null, 'saved' => 1];
         $searchRows = $search->select($searchWhere);
@@ -342,12 +342,13 @@ class UpgradeController extends AbstractBase
     /**
      * Attempt to perform a MySQL upgrade; return either a string containing SQL
      * (if we are in "log SQL" mode), an empty string (if we are successful but
-     * not logging SQL) or a Zend Framework object representing forward/redirect
-     * (if we need to obtain user input).
+     * not logging SQL) or a Laminas object representing forward/redirect (if we
+     * need to obtain user input).
      *
      * @param Adapter $adapter Database adapter
      *
      * @return mixed
+     * @throws Exception
      */
     protected function upgradeMySQL($adapter)
     {
@@ -726,6 +727,7 @@ class UpgradeController extends AbstractBase
      * Fix missing metadata in the resource table.
      *
      * @return mixed
+     * @throws Exception
      */
     public function fixmetadataAction()
     {
@@ -815,6 +817,7 @@ class UpgradeController extends AbstractBase
      * Prompt the user for a source version (to upgrade from 2.x+).
      *
      * @return mixed
+     * @throws Exception
      */
     public function getsourceversionAction()
     {
@@ -853,7 +856,7 @@ class UpgradeController extends AbstractBase
     {
         // If the cache is messed up, nothing is going to work right -- check that
         // first:
-        $cache = $this->serviceLocator->get(Manager::class);
+        $cache = $this->serviceLocator->get(CacheManager::class);
         if ($cache->hasDirectoryCreationError()) {
             return $this->redirect()->toRoute('install-fixcache');
         }
@@ -892,7 +895,7 @@ class UpgradeController extends AbstractBase
         // We're finally done -- display any warnings that we collected during
         // the process.
         $allWarnings = array_merge(
-            isset($this->cookie->warnings) ? $this->cookie->warnings : [],
+            $this->cookie->warnings ?? [],
             (array)$this->session->warnings
         );
         foreach ($allWarnings as $warning) {
@@ -927,23 +930,37 @@ class UpgradeController extends AbstractBase
     }
 
     /**
+     * Generate base62 encoding to migrate old shortlinks
+     *
      * @throws Exception
+     *
+     * @return void
      */
     protected function fixshortlinks()
     {
         $shortlinksTable = $this->getTable('shortlinks');
-        $base62 = new \VuFind\Crypt\Base62();
+        $base62 = new Base62();
 
-        $results = $shortlinksTable->select(['hash' => '']);
+        try {
+            $results = $shortlinksTable->select(['hash' => null]);
 
-        foreach ($results as $result) {
-            $id = $result['id'];
-            $shortlinksTable->update(
-                ['hash' => $base62->encode($id)],
-                ['id' => $id]
+            foreach ($results as $result) {
+                $id = $result['id'];
+                $shortlinksTable->update(
+                    ['hash' => $base62->encode($id)],
+                    ['id' => $id]
+                );
+            }
+
+            $this->session->warnings->append(
+                'Added hash value(s) to ' . count($results) . ' short links.'
+            );
+        } catch (Exception $e) {
+            $this->session->warnings->append(
+                'Could not fix hashes in table shortlinks - maybe column ' .
+                'hash is missing? Exception thrown with ' .
+                'message: ' . $e->getMessage()
             );
         }
-
-        //$shortlinksTable->update(['hash' => $base62->encode()])
     }
 }

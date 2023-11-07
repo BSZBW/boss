@@ -28,6 +28,9 @@
 namespace VuFind\Db\Table;
 
 use Interop\Container\ContainerInterface;
+use Interop\Container\Exception\ContainerException;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 
 /**
  * User table gateway factory.
@@ -63,8 +66,9 @@ class UserFactory extends GatewayFactory
         if (isset($config->Authentication->privacy)
             && $config->Authentication->privacy
         ) {
-            $sessionManager = $container->get(\Zend\Session\SessionManager::class);
-            $session = new \Zend\Session\Container('Account', $sessionManager);
+            $sessionManager = $container
+                ->get(\Laminas\Session\SessionManager::class);
+            $session = new \Laminas\Session\Container('Account', $sessionManager);
         }
         return parent::__invoke($container, $requestedName, [$config, $session]);
     }

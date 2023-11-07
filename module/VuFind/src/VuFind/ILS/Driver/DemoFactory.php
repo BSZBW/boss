@@ -28,6 +28,9 @@
 namespace VuFind\ILS\Driver;
 
 use Interop\Container\ContainerInterface;
+use Interop\Container\Exception\ContainerException;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 
 /**
  * Factory for Demo ILS driver.
@@ -61,12 +64,16 @@ class DemoFactory extends DriverWithDateConverterFactory
             throw new \Exception('Unexpected options passed to factory.');
         }
         $sessionFactory = function ($ns) use ($container) {
-            $manager = $container->get(\Zend\Session\SessionManager::class);
-            return new \Zend\Session\Container('DemoDriver' . $ns, $manager);
+            $manager = $container->get(\Laminas\Session\SessionManager::class);
+            return new \Laminas\Session\Container('DemoDriver' . $ns, $manager);
         };
         return parent::__invoke(
             $container, $requestedName,
-            [$container->get(\VuFindSearch\Service::class), $sessionFactory]
+            [
+                $container->get(\VuFindSearch\Service::class),
+                $sessionFactory,
+                $container->get('Request')
+            ]
         );
     }
 }

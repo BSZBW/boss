@@ -28,6 +28,9 @@
 namespace VuFind\Content\Covers;
 
 use Interop\Container\ContainerInterface;
+use Interop\Container\Exception\ContainerException;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 
 /**
  * Buchhandel cover loader factory
@@ -38,7 +41,7 @@ use Interop\Container\ContainerInterface;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:plugins:record_drivers Wiki
  */
-class BuchhandelFactory implements \Zend\ServiceManager\Factory\FactoryInterface
+class BuchhandelFactory implements \Laminas\ServiceManager\Factory\FactoryInterface
 {
     /**
      * Create an object

@@ -27,7 +27,7 @@
  */
 namespace VuFind\AjaxHandler;
 
-use Zend\Mvc\Controller\Plugin\Params;
+use Laminas\Mvc\Controller\Plugin\Params;
 
 /**
  * "Get User Transactions" AJAX handler
@@ -40,6 +40,13 @@ use Zend\Mvc\Controller\Plugin\Params;
  */
 class GetUserTransactions extends AbstractIlsAndUserAction
 {
+    /**
+     * Paginator
+     *
+     * @var \VuFind\ILS\PaginationHelper
+     */
+    protected $paginator = null;
+
     /**
      * Handle a request.
      *
@@ -57,24 +64,64 @@ class GetUserTransactions extends AbstractIlsAndUserAction
         if (!$this->ils->checkCapability('getMyTransactions')) {
             return $this->formatResponse('', self::STATUS_HTTP_ERROR, 405);
         }
-        $items = $this->ils->getMyTransactions($patron);
+
         $counts = [
             'ok' => 0,
             'warn' => 0,
             'overdue' => 0
         ];
-        foreach ($items['records'] as $item) {
-            if (!isset($item['dueStatus'])) {
-                continue;
+        $functionConfig = $this->ils->checkFunction('getMyTransactions', $patron);
+        $page = 1;
+        do {
+            // Try to use large page size, but take ILS limits into account
+            $pageOptions = $this->getPaginationHelper()
+                ->getOptions($page, null, 1000, $functionConfig);
+            $result = $this->ils
+                ->getMyTransactions($patron, $pageOptions['ilsParams']);
+            foreach ($result['records'] as $item) {
+                switch ($item['dueStatus'] ?? '') {
+                case 'due':
+                    $counts['warn']++;
+                    break;
+                case 'overdue':
+                    $counts['overdue']++;
+                    break;
+                default:
+                    $counts['ok']++;
+                    break;
+                }
             }
-            if ($item['dueStatus'] == 'overdue') {
-                $counts['overdue'] += 1;
-            } elseif ($item['dueStatus'] == 'due') {
-                $counts['warn'] += 1;
-            } else {
-                $counts['ok'] += 1;
-            }
-        }
+            $pageEnd = $pageOptions['ilsPaging']
+                ? ceil($result['count'] / $pageOptions['limit'])
+                : 1;
+            $page++;
+        } while ($page <= $pageEnd);
+
         return $this->formatResponse($counts);
+    }
+
+    /**
+     * Set the ILS pagination helper
+     *
+     * @param \VuFind\ILS\PaginationHelper $helper Pagination helper
+     *
+     * @return void
+     */
+    protected function setPaginationHelper($helper)
+    {
+        $this->paginationHelper = $helper;
+    }
+
+    /**
+     * Get the ILS pagination helper
+     *
+     * @return \VuFind\ILS\PaginationHelper
+     */
+    protected function getPaginationHelper()
+    {
+        if (null === $this->paginationHelper) {
+            $this->paginationHelper = new \VuFind\ILS\PaginationHelper();
+        }
+        return $this->paginationHelper;
     }
 }

@@ -28,7 +28,10 @@
 namespace VuFind\Controller\Plugin;
 
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Interop\Container\Exception\ContainerException;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Factory for ResultScroller controller plugin.
@@ -62,9 +65,9 @@ class ResultScrollerFactory implements FactoryInterface
             throw new \Exception('Unexpected options sent to factory.');
         }
         return new $requestedName(
-            new \Zend\Session\Container(
+            new \Laminas\Session\Container(
                 'ResultScroller',
-                $container->get(\Zend\Session\SessionManager::class)
+                $container->get(\Laminas\Session\SessionManager::class)
             ),
             $container->get(\VuFind\Search\Results\PluginManager::class)
         );

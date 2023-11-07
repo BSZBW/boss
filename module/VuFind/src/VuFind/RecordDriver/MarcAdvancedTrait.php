@@ -480,21 +480,20 @@ trait MarcAdvancedTrait
     public function getTOC()
     {
         // Return empty array if we have no table of contents:
-        $fields = $this->getMarcRecord()->getFields('505');
-        if (!$fields) {
-            return [];
-        }
-
-        // If we got this far, we have a table -- collect it as a string:
         $toc = [];
-        foreach ($fields as $field) {
-            $subfields = $field->getSubfields();
-            foreach ($subfields as $subfield) {
-                // Break the string into appropriate chunks, filtering empty strings,
-                // and merge them into return array:
+        if ($fields = $this->getMarcRecord()->getFields('505')) {
+            foreach ($fields as $field) {
+                // Implode all the subfields into a single string, then explode
+                // on the -- separators (filtering out empty chunks). Due to
+                // inconsistent application of subfield codes, this is the most
+                // reliable way to split up a table of contents.
+                $str = '';
+                foreach ($field->getSubfields() as $subfield) {
+                    $str .= trim($subfield->getData()) . ' ';
+                }
                 $toc = array_merge(
                     $toc,
-                    array_filter(explode('--', $subfield->getData()), 'trim')
+                    array_filter(array_map('trim', preg_split('/[.\s]--/', $str)))
                 );
             }
         }
@@ -603,8 +602,7 @@ trait MarcAdvancedTrait
         $fieldsNames = isset($this->mainConfig->Record->marc_links)
             ? explode(',', $this->mainConfig->Record->marc_links) : [];
         $useVisibilityIndicator
-            = isset($this->mainConfig->Record->marc_links_use_visibility_indicator)
-            ? $this->mainConfig->Record->marc_links_use_visibility_indicator : true;
+            = $this->mainConfig->Record->marc_links_use_visibility_indicator ?? true;
 
         $retVal = [];
         foreach ($fieldsNames as $value) {
@@ -644,7 +642,8 @@ trait MarcAdvancedTrait
     {
         // If set, use relationship information from subfield i
         if ($subfieldI = $field->getSubfield('i')) {
-            $data = trim($subfieldI->getData());
+            // VuFind will add a colon to the label, so prevent double colons:
+            $data = rtrim(trim($subfieldI->getData(), ':'));
             if (!empty($data)) {
                 return $data;
             }
@@ -691,9 +690,8 @@ trait MarcAdvancedTrait
             return false;
         }
 
-        $linkTypeSetting = isset($this->mainConfig->Record->marc_links_link_types)
-            ? $this->mainConfig->Record->marc_links_link_types
-            : 'id,oclc,dlc,isbn,issn,title';
+        $linkTypeSetting = $this->mainConfig->Record->marc_links_link_types
+            ?? 'id,oclc,dlc,isbn,issn,title';
         $linkTypes = explode(',', $linkTypeSetting);
         $linkFields = $field->getSubfields('w');
 
@@ -785,56 +783,83 @@ trait MarcAdvancedTrait
     }
 
     /**
+     * Support method for getFormattedMarcDetails() -- extract a single result
+     *
+     * @param object $currentField Result from File_MARC::getFields
+     * @param array  $details      Parsed instructions from getFormattedMarcDetails()
+     *
+     * @return string|bool
+     */
+    protected function extractSingleMarcDetail($currentField, $details)
+    {
+        // Simplest case -- "msg" mode (just return a configured message):
+        if ($details['mode'] === 'msg') {
+            // Map 'true' and 'false' to boolean equivalents:
+            $msgMap = ['true' => true, 'false' => false];
+            return $msgMap[$details['params']] ?? $details['params'];
+        }
+
+        // Standard case -- "marc" mode (extract subfield data):
+        $result = $this->getSubfieldArray(
+            $currentField,
+            // Default to subfield a if nothing is specified:
+            str_split($details['params'] ?? 'a'),
+            true
+        );
+        return count($result) > 0 ? (string)$result[0] : '';
+    }
+
+    /**
      * Get Status/Holdings Information from the internally stored MARC Record
      * (support method used by the NoILS driver).
      *
-     * @param array $field The MARC Field to retrieve
-     * @param array $data  A keyed array of data to retrieve from subfields
+     * @param string $defaultField The MARC Field to retrieve if $data commands do
+     * not request something more specific
+     * @param array  $data         The type of data to retrieve from the MARC field;
+     * an array of pipe-delimited commands where the first part determines the data
+     * retrieval mode, the second part provides further instructions, and the
+     * optional third part provides a field to override $defaultField; supported
+     * modes: "msg" (for a hard-coded message) and "marc" (for fetching subfield
+     * data)
      *
      * @return array
      */
-    public function getFormattedMarcDetails($field, $data)
+    public function getFormattedMarcDetails($defaultField, $data)
     {
-        // Initialize return array
-        $matches = [];
-        $i = 0;
-
-        // Try to look up the specified field, return empty array if it doesn't
-        // exist.
-        $fields = $this->getMarcRecord()->getFields($field);
-        if (!is_array($fields)) {
-            return $matches;
+        // First, parse the instructions into a more useful format, so we know
+        // which fields we're going to have to look up.
+        $instructions = [];
+        foreach ($data as $key => $rawInstruction) {
+            $instructionParts = explode('|', $rawInstruction);
+            $instructions[$key] = [
+                'mode' => $instructionParts[0],
+                'params' => $instructionParts[1] ?? null,
+                'field' => $instructionParts[2] ?? $defaultField
+            ];
         }
 
-        // Extract all the requested subfields, if applicable.
-        foreach ($fields as $currentField) {
-            foreach ($data as $key => $info) {
-                $split = explode("|", $info);
-                if ($split[0] == "msg") {
-                    if ($split[1] == "true") {
-                        $result = true;
-                    } elseif ($split[1] == "false") {
-                        $result = false;
-                    } else {
-                        $result = $split[1];
-                    }
-                    $matches[$i][$key] = $result;
-                } else {
-                    // Default to subfield a if nothing is specified.
-                    if (count($split) < 2) {
-                        $subfields = ['a'];
-                    } else {
-                        $subfields = str_split($split[1]);
-                    }
-                    $result = $this->getSubfieldArray(
-                        $currentField, $subfields, true
-                    );
-                    $matches[$i][$key] = count($result) > 0
-                        ? (string)$result[0] : '';
+        // Now fetch all of the MARC data that we need.
+        $getTagCallback = function ($instruction) {
+            return $instruction['field'];
+        };
+        $fields = [];
+        foreach (array_unique(array_map($getTagCallback, $instructions)) as $field) {
+            $fields[$field] = $this->getMarcRecord()->getFields($field);
+        }
+
+        // Initialize return array
+        $matches = [];
+
+        // Process the instructions on the requested data.
+        foreach ($instructions as $key => $details) {
+            foreach ($fields[$details['field']] as $i => $currentField) {
+                if (!isset($matches[$i])) {
+                    $matches[$i] = ['id' => $this->getUniqueId()];
                 }
+                $matches[$i][$key] = $this->extractSingleMarcDetail(
+                    $currentField, $details
+                );
             }
-            $matches[$i]['id'] = $this->getUniqueID();
-            $i++;
         }
         return $matches;
     }
@@ -904,7 +929,7 @@ trait MarcAdvancedTrait
      */
     public function getConsortialIDs()
     {
-        return $this->getFieldArray('035', 'a', true);
+        return $this->getFieldArray('035');
     }
 
     /**

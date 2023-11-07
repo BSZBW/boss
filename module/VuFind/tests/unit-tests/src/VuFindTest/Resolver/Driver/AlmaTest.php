@@ -32,10 +32,10 @@ namespace VuFindTest\Resolver\Driver;
 
 use InvalidArgumentException;
 
-use VuFind\Resolver\Driver\Alma;
-use Zend\Http\Client\Adapter\Test as TestAdapter;
+use Laminas\Http\Client\Adapter\Test as TestAdapter;
+use Laminas\Http\Response as HttpResponse;
 
-use Zend\Http\Response as HttpResponse;
+use VuFind\Resolver\Driver\Alma;
 
 /**
  * Alma resolver driver test
@@ -50,6 +50,8 @@ use Zend\Http\Response as HttpResponse;
  */
 class AlmaTest extends \VuFindTest\Unit\TestCase
 {
+    use \VuFindTest\Unit\FixtureTrait;
+
     /**
      * Test-Config
      *
@@ -172,22 +174,14 @@ class AlmaTest extends \VuFindTest\Unit\TestCase
     {
         $adapter = new TestAdapter();
         if ($fixture) {
-            $file = realpath(
-                __DIR__ .
-                '/../../../../../../tests/fixtures/resolver/response/' . $fixture
+            $responseObj = HttpResponse::fromString(
+                $this->getFixture("resolver/response/$fixture")
             );
-            if (!is_string($file) || !file_exists($file) || !is_readable($file)) {
-                throw new InvalidArgumentException(
-                    sprintf('Unable to load fixture file: %s ', $file)
-                );
-            }
-            $response = file_get_contents($file);
-            $responseObj = HttpResponse::fromString($response);
             $adapter->setResponse($responseObj);
         }
         $_SERVER['REMOTE_ADDR'] = "127.0.0.1";
 
-        $client = new \Zend\Http\Client();
+        $client = new \Laminas\Http\Client();
         $client->setAdapter($adapter);
 
         $conn = new Alma($this->openUrlConfig['OpenURL']['url'], $client);

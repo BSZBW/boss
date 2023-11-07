@@ -28,6 +28,10 @@
 namespace VuFind\Recommend;
 
 use Interop\Container\ContainerInterface;
+use Interop\Container\Exception\ContainerException;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+
 use VuFind\Config\PluginManager as ConfigManager;
 
 /**
@@ -39,7 +43,7 @@ use VuFind\Config\PluginManager as ConfigManager;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
-class AuthorInfoFactory implements \Zend\ServiceManager\Factory\FactoryInterface
+class AuthorInfoFactory implements \Laminas\ServiceManager\Factory\FactoryInterface
 {
     /**
      * Create an object

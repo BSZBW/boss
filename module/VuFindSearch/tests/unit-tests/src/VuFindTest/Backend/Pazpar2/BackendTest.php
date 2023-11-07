@@ -44,6 +44,8 @@ use VuFindTest\Unit\TestCase;
  */
 class BackendTest extends TestCase
 {
+    use \VuFindTest\Unit\FixtureTrait;
+
     /**
      * Test that getConnector works.
      *
@@ -52,7 +54,7 @@ class BackendTest extends TestCase
     public function testGetConnector()
     {
         $connector = $this->getMockBuilder(\VuFindSearch\Backend\Pazpar2\Connector::class)
-            ->setConstructorArgs(['http://fake', $this->createMock(\Zend\Http\Client::class)])
+            ->setConstructorArgs(['http://fake', $this->createMock(\Laminas\Http\Client::class)])
             ->getMock();
         $back = new Backend(
             $connector,
@@ -133,11 +135,8 @@ class BackendTest extends TestCase
      */
     protected function loadResponse($fixture)
     {
-        $file = realpath(sprintf('%s/pazpar2/response/%s', PHPUNIT_SEARCH_FIXTURES, $fixture));
-        if (!is_string($file) || !file_exists($file) || !is_readable($file)) {
-            throw new InvalidArgumentException(sprintf('Unable to load fixture file: %s', $fixture));
-        }
-        return simplexml_load_file($file);
+        $xml = $this->getFixture("pazpar2/response/$fixture", 'VuFindSearch');
+        return simplexml_load_string($xml);
     }
 
     /**
@@ -149,7 +148,7 @@ class BackendTest extends TestCase
      */
     protected function getConnectorMock(array $mock = [])
     {
-        $client = $this->createMock(\Zend\Http\Client::class);
+        $client = $this->createMock(\Laminas\Http\Client::class);
         return $this->getMockBuilder(\VuFindSearch\Backend\Pazpar2\Connector::class)
             ->setMethods($mock)
             ->setConstructorArgs(['fake', $client])

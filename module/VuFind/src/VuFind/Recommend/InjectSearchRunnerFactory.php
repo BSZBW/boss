@@ -28,6 +28,10 @@
 namespace VuFind\Recommend;
 
 use Interop\Container\ContainerInterface;
+use Interop\Container\Exception\ContainerException;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+
 use VuFind\Search\SearchRunner;
 
 /**
@@ -40,7 +44,7 @@ use VuFind\Search\SearchRunner;
  * @link     https://vufind.org/wiki/development Wiki
  */
 class InjectSearchRunnerFactory
-    implements \Zend\ServiceManager\Factory\FactoryInterface
+    implements \Laminas\ServiceManager\Factory\FactoryInterface
 {
     /**
      * Create an object

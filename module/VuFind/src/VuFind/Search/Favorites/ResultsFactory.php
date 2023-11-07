@@ -28,6 +28,9 @@
 namespace VuFind\Search\Favorites;
 
 use Interop\Container\ContainerInterface;
+use Interop\Container\Exception\ContainerException;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 
 /**
  * Factory for Favorites search results objects.
@@ -65,7 +68,7 @@ class ResultsFactory extends \VuFind\Search\Results\ResultsFactory
             $container, $requestedName,
             [$tm->get('Resource'), $tm->get('UserList')]
         );
-        $init = new \ZfcRbac\Initializer\AuthorizationServiceInitializer();
+        $init = new \LmcRbacMvc\Initializer\AuthorizationServiceInitializer();
         $init($container, $obj);
         return $obj;
     }

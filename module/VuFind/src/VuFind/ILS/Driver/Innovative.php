@@ -271,7 +271,7 @@ class Innovative extends AbstractBase implements
      * @param array  $patron  Patron data
      * @param array  $options Extra options (not currently used)
      *
-     * @throws VuFind\Date\DateException;
+     * @throws VuFind\Date\DateException
      * @throws ILSException
      * @return array         On success, an associative array with the following
      * keys: id, availability (boolean), status, location, reserve, callnumber,
@@ -360,7 +360,8 @@ class Innovative extends AbstractBase implements
     public function patronLogin($username, $password)
     {
         // TODO: if username is a barcode, test to make sure it fits proper format
-        if ($this->config['PATRONAPI']['enabled'] == 'true') {
+        $enabled = $this->config['PATRONAPI']['enabled'] ?? false;
+        if ($enabled && strtolower($enabled) !== 'false') {
             // use patronAPI to authenticate customer
             $url = $this->config['PATRONAPI']['url'];
 

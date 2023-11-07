@@ -13,8 +13,8 @@
 
   $help = $form->getHelp();
   $helpPre = $helpPost = null;
-  $helpPre = isset($help['pre']) ? $this->translate($help['pre']) : null;
-  $helpPost = isset($help['post']) ? $this->translate($help['post']) : null;
+  $helpPre = isset($help['pre']) ? $form->getDisplayString($help['pre'], false) : null;
+  $helpPost = isset($help['post']) ? $form->getDisplayString($help['post'], false) : null;
 ?>
 <?php if (!$this->inLightbox): ?><div class="feedback-content"><?php endif; ?>
   <?php if ($title): ?>
@@ -53,6 +53,17 @@
         $handleGroup = 'openAndClose';
         $currentGroup = $group;
     }
+    $elementHelpPre = $elementHelpPost = null;
+    if ($elementHelp = $el['help'] ?? null) {
+      if (is_string($elementHelp)) {
+        $elementHelpPre = $elementHelp;
+      } else {
+        $elementHelpPre = $elementHelp['pre'] ?? null;
+        $elementHelpPost = $elementHelp['post'] ?? null;
+      }
+      $elementHelpPre = $form->getDisplayString($elementHelpPre);
+      $elementHelpPost = $form->getDisplayString($elementHelpPost);
+    }
     ?>
 
     <?php if (in_array($handleGroup, ['close', 'openAndClose'])): ?>
@@ -66,16 +77,20 @@
       <?php endif ?>
     <?php endif ?>
 
-    <div class="form-group <?= $el['type'] ?>">
-    <?php if (!empty($el['help'])): ?>
-      <p class="info"><?= substr($el['help'], -5) === '_html' ? $this->translate($el['help']) : $this->transEsc($el['help']) ?></p>
+    <div class="form-group <?= $el['type'] ?> group-<?=$this->escapeHtmlAttr($el['name'])?>">
+    <?php if (!empty($elementHelpPre)): ?>
+      <p class="info pre"><?=$elementHelpPre?></p>
     <?php endif ?>
     <?php if ($el['type'] !== 'submit'): ?>
       <?php if ($el['label']): ?>
+        <?php
+          $required = $el['required'] ?? false;
+          $requireOne = $el['requireOne'] ?? false;
+        ?>
         <?php if (in_array($el['type'], ['checkbox', 'radio'])): ?>
-          <p id="<?=$this->escapeHtmlAttr($el['name'])?>" class="control-label radio-label<?=!empty($el['required']) ? ' required' : ''?>"><?=$this->transEsc($el['label'])?>:</p>
+          <p id="<?=$this->escapeHtmlAttr($el['name'])?>" class="control-label radio-label<?=$required && !$requireOne? ' required' : ''?><?=$requireOne ? ' require-one' : ''?>"><?=$this->transEsc($el['label'])?>:</p>
         <?php else: ?>
-          <label for="<?=$this->escapeHtmlAttr($el['name'])?>" class="control-label<?=!empty($el['required']) ? ' required' : ''?>"><?=$this->transEsc($el['label'])?>:</label>
+          <label for="<?=$this->escapeHtmlAttr($el['name'])?>" class="control-label<?=$required ? ' required' : ''?>"><?=$this->transEsc($el['label'])?>:</label>
         <?php endif ?>
       <?php endif ?>
     <?php else: ?>
@@ -84,9 +99,12 @@
           <?=$helpPost?>
         </div>
       <?php endif ?>
-      <?=$this->recaptcha()->html($this->useRecaptcha) ?>
+      <?=$this->captcha()->html($this->useCaptcha) ?>
     <?php endif ?>
     <?= $this->formRow($formElement) ?>
+    <?php if (!empty($elementHelpPost)): ?>
+      <p class="info post"><?=$elementHelpPost?></p>
+    <?php endif ?>
     </div>
   <?php endforeach ?>
   <?= $this->form()->closeTag() ?>

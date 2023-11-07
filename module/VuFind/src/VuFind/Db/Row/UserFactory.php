@@ -28,6 +28,9 @@
 namespace VuFind\Db\Row;
 
 use Interop\Container\ContainerInterface;
+use Interop\Container\Exception\ContainerException;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 
 /**
  * User row gateway factory.
@@ -75,8 +78,9 @@ class UserFactory extends RowGatewayFactory
         $prototype = parent::__invoke($container, $rowClass, $options);
         $prototype->setConfig($config);
         if ($privacy) {
-            $sessionManager = $container->get(\Zend\Session\SessionManager::class);
-            $session = new \Zend\Session\Container('Account', $sessionManager);
+            $sessionManager = $container
+                ->get(\Laminas\Session\SessionManager::class);
+            $session = new \Laminas\Session\Container('Account', $sessionManager);
             $prototype->setSession($session);
         }
         return $prototype;

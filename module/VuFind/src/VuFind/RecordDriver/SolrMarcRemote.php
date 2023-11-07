@@ -30,8 +30,8 @@
  */
 namespace VuFind\RecordDriver;
 
+use Laminas\Log\LoggerAwareInterface as LoggerAwareInterface;
 use VuFindHttp\HttpServiceAwareInterface as HttpServiceAwareInterface;
-use Zend\Log\LoggerAwareInterface as LoggerAwareInterface;
 
 /**
  * Model for MARC records without a fullrecord in Solr. The fullrecord is being
@@ -62,11 +62,12 @@ class SolrMarcRemote extends SolrMarc implements
     /**
      * Constructor
      *
-     * @param \Zend\Config\Config $mainConfig     VuFind main configuration (omit for
-     * built-in defaults)
-     * @param \Zend\Config\Config $recordConfig   Record-specific configuration file
-     * (omit to use $mainConfig as $recordConfig)
-     * @param \Zend\Config\Config $searchSettings Search-specific configuration file
+     * @param \Laminas\Config\Config $mainConfig     VuFind main configuration (omit
+     * for built-in defaults)
+     * @param \Laminas\Config\Config $recordConfig   Record-specific configuration
+     * file (omit to use $mainConfig as $recordConfig)
+     * @param \Laminas\Config\Config $searchSettings Search-specific configuration
+     * file
      *
      * @throws \Exception
      */
@@ -76,10 +77,9 @@ class SolrMarcRemote extends SolrMarc implements
         parent::__construct($mainConfig, $recordConfig, $searchSettings);
 
         // get config values for remote fullrecord service
-        if (! $mainConfig->Record->get('remote_marc_url')) {
+        $this->uriPattern = $mainConfig->Record->remote_marc_url ?? null;
+        if (!$this->uriPattern) {
             throw new \Exception('SolrMarcRemote baseUrl-setting missing.');
-        } else {
-            $this->uriPattern = $mainConfig->Record->get('remote_marc_url');
         }
     }
 
@@ -95,7 +95,7 @@ class SolrMarcRemote extends SolrMarc implements
         // handle availability of fullrecord
         if (!isset($this->fields['fullrecord'])) {
             // retrieve fullrecord from external source
-            if (! isset($this->fields['id'])) {
+            if (!isset($this->fields['id'])) {
                 throw new \Exception(
                     'No unique id given for fullrecord retrieval'
                 );

@@ -29,14 +29,14 @@
  */
 namespace VuFind\AjaxHandler;
 
+use Laminas\Config\Config;
+use Laminas\Mvc\Controller\Plugin\Params;
+use Laminas\View\Renderer\RendererInterface;
 use VuFind\Exception\ILS as ILSException;
 use VuFind\I18n\Translator\TranslatorAwareInterface;
 use VuFind\ILS\Connection;
 use VuFind\ILS\Logic\Holds;
 use VuFind\Session\Settings as SessionSettings;
-use Zend\Config\Config;
-use Zend\Mvc\Controller\Plugin\Params;
-use Zend\View\Renderer\RendererInterface;
 
 /**
  * "Get Item Status" AJAX handler
@@ -198,9 +198,7 @@ class GetItemStatuses extends AbstractBase implements TranslatorAwareInterface
         if ($displaySetting == 'msg' && count($list) > 1) {
             return false;
         }
-        return isset($this->config->Item_Status->callnumber_handler)
-            ? $this->config->Item_Status->callnumber_handler
-            : false;
+        return $this->config->Item_Status->callnumber_handler ?? false;
     }
 
     /**
@@ -465,12 +463,9 @@ class GetItemStatuses extends AbstractBase implements TranslatorAwareInterface
         ];
 
         // Load callnumber and location settings:
-        $callnumberSetting = isset($this->config->Item_Status->multiple_call_nos)
-            ? $this->config->Item_Status->multiple_call_nos : 'msg';
-        $locationSetting = isset($this->config->Item_Status->multiple_locations)
-            ? $this->config->Item_Status->multiple_locations : 'msg';
-        $showFullStatus = isset($this->config->Item_Status->show_full_status)
-            ? $this->config->Item_Status->show_full_status : false;
+        $callnumberSetting = $this->config->Item_Status->multiple_call_nos ?? 'msg';
+        $locationSetting = $this->config->Item_Status->multiple_locations ?? 'msg';
+        $showFullStatus = $this->config->Item_Status->show_full_status ?? false;
 
         // Loop through all the status information that came back
         $statuses = [];

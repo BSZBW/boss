@@ -201,7 +201,7 @@ class LibraryCardsController extends AbstractBase
     /**
      * Activates a library card
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function selectCardAction()
     {
@@ -273,7 +273,12 @@ class LibraryCardsController extends AbstractBase
             // Connect to the ILS and check that the credentials are correct:
             $loginMethod = $this->getILSLoginMethod($target);
             $catalog = $this->getILS();
-            $patron = $catalog->patronLogin($username, $password);
+            try {
+                $patron = $catalog->patronLogin($username, $password);
+            } catch (ILSException $e) {
+                $this->flashMessenger()->addErrorMessage('ils_connection_failed');
+                return false;
+            }
             if ('password' === $loginMethod && !$patron) {
                 $this->flashMessenger()
                     ->addMessage('authentication_error_invalid', 'error');
@@ -317,7 +322,7 @@ class LibraryCardsController extends AbstractBase
      * @param User   $user User object
      * @param string $hash Hash
      *
-     * @return \Zend\Http\Response Response object
+     * @return \Laminas\Http\Response Response object
      */
     protected function processEmailLink($user, $hash)
     {
