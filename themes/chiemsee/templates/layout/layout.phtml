@@ -192,7 +192,7 @@ JS;
     <?=$this->googleanalytics()?>
     <?=$this->render('bsz/browserupdate.phtml')?>
     <?php if ($this->recaptcha()->active()): ?>
-        <?=$this->inlineScript(\Zend\View\Helper\HeadScript::FILE, "https://www.google.com/recaptcha/api.js?onload=recaptchaOnLoad&render=explicit&hl=" . $this->layout()->userLang, 'SET')?>
+        <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::FILE, "https://www.google.com/recaptcha/api.js?onload=recaptchaOnLoad&render=explicit&hl=" . $this->layout()->userLang, 'SET')?>
     <?php endif; ?>
   </body>
 </html>

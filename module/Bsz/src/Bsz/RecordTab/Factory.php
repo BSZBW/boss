@@ -24,9 +24,9 @@ namespace Bsz\RecordTab;
 use Bsz\Config\Client;
 use Bsz\ILL\Logic;
 use Interop\Container\ContainerInterface;
-use Zend\Http\PhpEnvironment\Request;
-use Zend\Session\AbstractContainer as SessionContainer;
-use Zend\Session\SessionManager as SessionManager;
+use Laminas\Http\PhpEnvironment\Request;
+use Laminas\Session\AbstractContainer as SessionContainer;
+use Laminas\Session\SessionManager as SessionManager;
 
 /**
  * Description of Factory

@@ -21,7 +21,7 @@
  */
 namespace Bsz\Config;
 
-use Zend\Db\ResultSet\ResultSet;
+use Laminas\Db\ResultSet\ResultSet;
 
 /**
  * Simple Library Object - uses for Interlending view

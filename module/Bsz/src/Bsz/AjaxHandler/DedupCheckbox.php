@@ -30,7 +30,7 @@ namespace Bsz\AjaxHandler;
 
 use Bsz\Config\Dedup;
 use VuFind\I18n\Translator\TranslatorAwareInterface;
-use Zend\Mvc\Controller\Plugin\Params;
+use Laminas\Mvc\Controller\Plugin\Params;
 
 /**
  * "Get Resolver Links" AJAX handler

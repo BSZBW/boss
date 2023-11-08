@@ -21,7 +21,7 @@
 
 namespace BszTheme\View\Helper\Bodensee;
 
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 
 class Wayfless extends AbstractHelper
 {

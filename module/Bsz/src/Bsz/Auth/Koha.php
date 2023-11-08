@@ -24,8 +24,8 @@ namespace Bsz\Auth;
 use Bsz\Config\Libraries;
 use MongoDB\Driver\Exception\AuthenticationException;
 use VuFind\Exception\Auth as AuthException;
-use Zend\Http\Client;
-use \Zend\Http\Client as HttpClient;
+use Laminas\Http\Client;
+use \Laminas\Http\Client as HttpClient;
 
 class Koha extends \VuFind\Auth\AbstractBase
 {
@@ -33,12 +33,12 @@ class Koha extends \VuFind\Auth\AbstractBase
     protected $isil;
 
     /**
-     * @param \Zend\Session\ManagerInterface $sessionManager
+     * @param \Laminas\Session\ManagerInterface $sessionManager
      * @param Libraries $libraries
      * @param $isils
      */
     public function __construct(
-        \Zend\Session\ManagerInterface $sessionManager,
+        \Laminas\Session\ManagerInterface $sessionManager,
         Libraries $libraries,
         $isils
     ) {
@@ -73,7 +73,7 @@ class Koha extends \VuFind\Auth\AbstractBase
      * of the current logged-in user. Return true for valid credentials, false
      * otherwise.
      *
-     * @param \Zend\Http\PhpEnvironment\Request $request Request object containing
+     * @param \Laminas\Http\PhpEnvironment\Request $request Request object containing
      * account credentials.
      *
      * @throws AuthException
@@ -105,7 +105,7 @@ class Koha extends \VuFind\Auth\AbstractBase
 
         $client = new HttpClient();
         $client->setEncType(Client::ENC_URLENCODED);
-        $client->setAdapter('\Zend\Http\Client\Adapter\Curl')
+        $client->setAdapter('\Laminas\Http\Client\Adapter\Curl')
             ->setUri($query_url)
             ->setMethod('POST')
             ->setOptions(['timeout' => 30])

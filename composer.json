@@ -27,7 +27,7 @@
         "laminas/laminas-config": "3.3.0",
         "laminas/laminas-crypt": "3.3.1",
         "laminas/laminas-db": "2.11.3",
-        "laminas/laminas-dependency-plugin": "2.0.0",
+        "laminas/laminas-dependency-plugin": "^2.1",
         "laminas/laminas-dom": "2.7.2",
         "laminas/laminas-escaper": "2.6.1",
         "laminas/laminas-eventmanager": "3.2.1",
@@ -104,7 +104,10 @@
         }
     },
     "scripts": {
-        "phing-install-dependencies": ["phing patch-dependencies", "phing installsolr installswaggerui"],
+        "phing-install-dependencies": [
+            "phing patch-dependencies",
+            "phing installsolr installswaggerui"
+        ],
         "post-install-cmd": "@phing-install-dependencies",
         "post-update-cmd": "@phing-install-dependencies"
     }

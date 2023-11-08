@@ -2,8 +2,8 @@
 
 namespace BszTheme;
 
-use Zend\Http\Request;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Http\Request;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
  * VuFind creates its ThemeInfo in a dynamic way. We use a factory here

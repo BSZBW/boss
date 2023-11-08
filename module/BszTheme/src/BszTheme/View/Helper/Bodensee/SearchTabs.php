@@ -1,7 +1,7 @@
 <?php
 namespace BszTheme\View\Helper\Bodensee;
 
-use Zend\View\Helper\Url;
+use Laminas\View\Helper\Url;
 
 /**
  * BSZ extension of searchTabs View Helper

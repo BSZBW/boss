@@ -33,8 +33,8 @@ namespace Finc\RecordDriver;
 
 use VuFind\Log\LoggerAwareTrait;
 use VuFind\Search\SearchRunner;
-use Zend\Config\Config;
-use Zend\Log\LoggerAwareInterface as LoggerAwareInterface;
+use Laminas\Config\Config;
+use Laminas\Log\LoggerAwareInterface as LoggerAwareInterface;
 
 /**
  * finc specific model for Solr records based on the stock

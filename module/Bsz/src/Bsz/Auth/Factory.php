@@ -31,7 +31,7 @@ class Factory
             // the configuration if necessary.
             $catalog = $container->get('VuFind\ILSConnection');
             if ($catalog->loginIsHidden()) {
-                $config = new \Zend\Config\Config($config->toArray(), true);
+                $config = new \Laminas\Config\Config($config->toArray(), true);
                 $config->Authentication->hideLogin = true;
                 $config->setReadOnly();
             }

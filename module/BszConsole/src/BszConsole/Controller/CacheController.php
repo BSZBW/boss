@@ -21,8 +21,8 @@
 
 namespace BszConsole\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class CacheController

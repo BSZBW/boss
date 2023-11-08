@@ -22,8 +22,8 @@
 namespace Bsz\Controller;
 
 use VuFind\Controller\AbstractBase;
-use Zend\Http\PhpEnvironment\Response;
-use Zend\Json\Json;
+use Laminas\Http\PhpEnvironment\Response;
+use Laminas\Json\Json;
 
 /**
  * Holding Actions

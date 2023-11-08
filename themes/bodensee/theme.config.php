@@ -38,7 +38,7 @@ $config = [
             'Bsz\View\Helper\Root\SearchMemory' => 'BszTheme\View\Helper\Bodensee\Factory::getSearchMemory',
             'illform' => 'BszTheme\View\Helper\Bodensee\Factory::getIllForm',
             'BszTheme\View\Helper\Bodensee\Wayfless' => 'BszTheme\View\Helper\Bodensee\Factory::getWayfless',
-            'BszTheme\View\Helper\Bodensee\GndLink' => \Zend\ServiceManager\Factory\InvokableFactory::class
+            'BszTheme\View\Helper\Bodensee\GndLink' => \Laminas\ServiceManager\Factory\InvokableFactory::class
         ],
         'aliases' => [
             'VuFind\View\Helper\Bootstrap3\LayoutClass' => 'Bsz\View\Helper\Bootstrap3\LayoutClass',

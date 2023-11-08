@@ -28,7 +28,7 @@
  */
 namespace Bsz\Recommend;
 
-use Zend\Feed\Reader\Reader as FeedReader;
+use Laminas\Feed\Reader\Reader as FeedReader;
 
 /**
  * RSS Feed  Recommendations Module
@@ -42,7 +42,7 @@ use Zend\Feed\Reader\Reader as FeedReader;
  * @link     https://vufind.org/wiki/development:plugins:recommendation_modules Wiki
  */
 class RSSFeedResults implements \VuFind\Recommend\RecommendInterface,
-    \VuFindHttp\HttpServiceAwareInterface, \Zend\Log\LoggerAwareInterface
+    \VuFindHttp\HttpServiceAwareInterface, \Laminas\Log\LoggerAwareInterface
 {
     use \VuFind\Log\LoggerAwareTrait;
     use \VuFindHttp\HttpServiceAwareTrait;

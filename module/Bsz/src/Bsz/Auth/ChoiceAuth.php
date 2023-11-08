@@ -36,10 +36,10 @@ class ChoiceAuth extends \VuFind\Auth\ChoiceAuth
     /**
      * Constructor
      *
-     * @param \Zend\Session\Container $container Session container for retaining
+     * @param \Laminas\Session\Container $container Session container for retaining
      * user choices.
      */
-    public function __construct(\Zend\Session\Container $container, Library $library = null)
+    public function __construct(\Laminas\Session\Container $container, Library $library = null)
     {
         parent::__construct($container);
         // Set up session container and load cached strategy (if found):
@@ -53,7 +53,7 @@ class ChoiceAuth extends \VuFind\Auth\ChoiceAuth
     /**
      * Set configuration; throw an exception if it is invalid.
      *
-     * @param \Zend\Config\Config $config Configuration to set
+     * @param \Laminas\Config\Config $config Configuration to set
      *
      * @throws AuthException
      * @return void

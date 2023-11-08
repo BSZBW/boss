@@ -21,7 +21,7 @@
 
 namespace Bsz\Controller;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class Search2recordController extends \VuFind\Controller\Search2recordController
 {

@@ -29,7 +29,7 @@
 namespace Finc\RecordDriver;
 
 use Bsz\RecordDriver\MarcFormatTrait;
-use Zend\Config\Config;
+use Laminas\Config\Config;
 
 /**
  * finc specific model for MARC records with a fullrecord in Solr.

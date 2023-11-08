@@ -1,7 +1,7 @@
 <?php
 namespace Bsz\Config;
 
-use Zend\Session\Container as SessionContainer;
+use Laminas\Session\Container as SessionContainer;
 
 /**
  * Class for setting dedup options
@@ -47,7 +47,7 @@ class Dedup
         $params = $this->getCurrentSettings();
         $secure = getenv('VUFIND_ENV') === 'production' ? true : false;
         if (array_key_exists('group', $post)) {
-            $cookie = new \Zend\Http\Header\SetCookie(
+            $cookie = new \Laminas\Http\Header\SetCookie(
                     'group',
                     (int)$post['group'],
                     time() + 14 * 24 * 60 * 60,
@@ -58,7 +58,7 @@ class Dedup
             $params['group'] = $post['group'];
         }
         if (isset($post['group_field'])) {
-            $cookie = new \Zend\Http\Header\SetCookie(
+            $cookie = new \Laminas\Http\Header\SetCookie(
                     'group_field',
                     $post['group_field'],
                     time() + 14 * 24 * 60 * 60,
@@ -71,7 +71,7 @@ class Dedup
             $params['field'] = $post['group_field'];
         }
         if (isset($post['group_limit'])) {
-            $cookie = new \Zend\Http\Header\SetCookie(
+            $cookie = new \Laminas\Http\Header\SetCookie(
                     'group_limit',
                     $post['group_limit'],
                     time() + 14 * 24 * 60 * 60,

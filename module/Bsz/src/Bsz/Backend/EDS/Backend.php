@@ -10,9 +10,9 @@ namespace Bsz\Backend\EDS;
 use Exception;
 use VuFindSearch\Backend\EDS\Zend2 as ApiClient;
 use VuFindSearch\Response\RecordCollectionFactoryInterface;
-use Zend\Cache\Storage\Adapter\AbstractAdapter as CacheAdapter;
-use Zend\Config\Config;
-use Zend\Session\Container as SessionContainer;
+use Laminas\Cache\Storage\Adapter\AbstractAdapter as CacheAdapter;
+use Laminas\Config\Config;
+use Laminas\Session\Container as SessionContainer;
 
 class Backend extends \VuFindSearch\Backend\EDS\Backend
 {
