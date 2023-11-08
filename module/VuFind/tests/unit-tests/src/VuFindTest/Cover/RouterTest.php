@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Cover Router Test Class
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2016.
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:testing:unit_tests Wiki
  */
+
 namespace VuFindTest\Cover;
 
 use Laminas\Config\Config;
@@ -42,7 +44,7 @@ use VuFindTheme\ThemeInfo;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:testing:unit_tests Wiki
  */
-class RouterTest extends \VuFindTest\Unit\TestCase
+class RouterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Theme to use for testing purposes.
@@ -96,7 +98,8 @@ class RouterTest extends \VuFindTest\Unit\TestCase
     {
         $url = 'http://foo/bar';
         $this->assertEquals(
-            $url, $this->getRouter()->getUrl($this->getDriver(['Thumbnail' => $url]))
+            $url,
+            $this->getRouter()->getUrl($this->getDriver(['Thumbnail' => $url]))
         );
     }
 
@@ -123,7 +126,7 @@ class RouterTest extends \VuFindTest\Unit\TestCase
      * @param \VuFindHttp\HttpService              $httpService HTTP client factory
      * @param array|bool                           $mock        Array of functions to mock, or false for real object
      *
-     * @return Loader
+     * @return Loader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getCoverLoader($config = [], $manager = null, $theme = null, $httpService = null, $mock = false)
     {
@@ -139,7 +142,7 @@ class RouterTest extends \VuFindTest\Unit\TestCase
         }
         if ($mock) {
             return $this->getMockBuilder(__NAMESPACE__ . '\MockLoader')
-                ->setMethods($mock)
+                ->onlyMethods($mock)
                 ->setConstructorArgs([$config, $manager, $theme, $httpService])
                 ->getMock();
         }

@@ -1,104 +1,141 @@
 /*global VuFind */
-/*exported collapseTopFacets, initFacetTree */
-function buildFacetNodes(data, currentPath, allowExclude, excludeTitle, counts)
+/*exported initFacetTree */
+function buildFacetNodes(facetName, data, currentPath, allowExclude, excludeTitle, showCounts, counter, locale)
 {
-  var json = [];
+  // Helper function to create elements
+  function el(tagName, className = null) {
+    const node = document.createElement(tagName);
 
-  $(data).each(function facetNodesEach() {
-    var $html = $('<div/>').addClass('facet');
-    var url = currentPath + this.href;
-    var $item = $('<span/>')
-      .addClass('main text' + (this.isApplied ? ' applied' : ''))
-      .attr('role', 'menuitem')
-      .attr('title', this.displayText);
-
-    var $i = $('<i/>').addClass('fa');
-    if (this.operator === 'OR') {
-      if (this.isApplied) {
-        $i.addClass('fa-check-square-o').attr('title', VuFind.translate('Selected'));
-      } else {
-        $i.addClass('fa-square-o').attr('aria-hidden', 'true');
-      }
-      $i.appendTo($item);
-      $item.append(' ');
-    } else if (this.isApplied) {
-      $i.addClass('fa-check pull-right').attr('title', VuFind.translate('Selected'));
-      $i.appendTo($item);
-      $item.append(' ');
-    }
-    var $description = $('<span/>')
-      .addClass('facet-value')
-      .append(this.displayText);
-    $item.append($description);
-
-    $item.appendTo($html);
-
-    if (!this.isApplied && counts) {
-      $('<span/>')
-        .addClass('badge')
-        .html(
-          this.count.toString().replace(/\B(?=(\d{3})+\b)/g, VuFind.translate('number_thousands_separator'))
-        )
-        .appendTo($html);
-
-      if (allowExclude) {
-        var excludeUrl = currentPath + this.exclude;
-        var $a = $('<a/>')
-          .addClass('exclude')
-          .attr('href', excludeUrl)
-          .attr('title', excludeTitle);
-        $('<i/>').addClass('fa fa-times').appendTo($a);
-        $a.appendTo($html);
-      }
+    if (className !== null) {
+      node.className = className;
     }
 
-    $html = $('<div/>').append($html);
+    return node;
+  }
 
-    var children = null;
-    if (typeof this.children !== 'undefined' && this.children.length > 0) {
-      children = buildFacetNodes(this.children, currentPath, allowExclude, excludeTitle, counts);
+  // Build a UL
+  let facetList = el('ul');
+
+  // Elements
+  for (let i = 0; i < data.length; i++) {
+    let facet = data[i];
+
+    const hasChildren = typeof facet.children !== 'undefined' && facet.children.length > 0;
+
+    // Create badge
+    let badgeEl = null;
+    if (showCounts && !facet.isApplied && facet.count) {
+      badgeEl = el('span', 'badge');
+      badgeEl.innerText = facet.count.toLocaleString(locale);
     }
-    json.push({
-      'text': $html.html(),
-      'children': children,
-      'applied': this.isApplied,
-      'state': {
-        'opened': this.hasAppliedChildren
-      },
-      'li_attr': this.isApplied ? { 'class': 'active' } : {},
-      'data': {
-        'url': url.replace(/&amp;/g, '&')
-      }
-    });
-  });
 
-  return json;
+    // Create exclude link
+    let excludeEl = null;
+    if (allowExclude && !facet.isApplied) {
+      excludeEl = el('a', 'exclude');
+      excludeEl.innerHTML = VuFind.icon('facet-exclude');
+      excludeEl.setAttribute('href', currentPath + facet.exclude);
+      excludeEl.setAttribute('title', excludeTitle);
+    }
+
+    // Create facet text element
+    const orFacet = facet.operator === 'OR';
+    let valueEl = el('span', 'facet-value');
+    valueEl.innerText = facet.displayText;
+    let textEl = el('span', 'text');
+    if (orFacet) {
+      valueEl.className += ' icon-link__label';
+      textEl.innerHTML = facet.isApplied
+        ? VuFind.icon('facet-checked', { title: VuFind.translate('Selected'), class: 'icon-link__icon' })
+        : VuFind.icon('facet-unchecked', 'icon-link__icon');
+    }
+    textEl.append(valueEl);
+
+    // Create link element
+    const linkEl = el('a', (orFacet ? ' icon-link' : ''));
+    linkEl.setAttribute('href', currentPath + facet.href);
+    linkEl.setAttribute('title', facet.displayText);
+    linkEl.append(textEl);
+
+    // Create facet element
+    const classes = 'facet js-facet-item'
+      + (facet.isApplied ? ' active' : '')
+      + (orFacet ? ' facetOR' : ' facetAND');
+    let facetEl;
+    if (excludeEl) {
+      linkEl.className += ' text';
+      facetEl = el('div', classes);
+      facetEl.append(linkEl);
+      if (badgeEl) {
+        facetEl.append(badgeEl);
+      }
+      facetEl.append(excludeEl);
+    } else {
+      if (badgeEl) {
+        linkEl.append(badgeEl);
+      }
+      linkEl.className = classes + ' ' + linkEl.className;
+      facetEl = linkEl;
+    }
+
+    // Create toggle button
+    const toggleButton = el('button', 'facet-tree__toggle-expanded');
+    toggleButton.setAttribute('aria-expanded', facet.hasAppliedChildren ? 'true' : 'false');
+    toggleButton.setAttribute('data-toggle-aria-expanded', '');
+    toggleButton.setAttribute('aria-label', facet.displayText);
+
+    let itemContainerEl = el('span', 'facet-tree__item-container' + (allowExclude ? ' facet-tree__item-container--exclude' : ''));
+    itemContainerEl.append(facetEl);
+
+    // Create an li node with or without children
+    const liEl = el('li');
+    if (hasChildren) {
+      liEl.className = 'facet-tree__parent';
+      const childUlId = 'facet_' + facetName + '_' + (++counter.count);
+
+      toggleButton.setAttribute('aria-controls', childUlId);
+      toggleButton.innerHTML = VuFind.icon('facet-expand', 'facet-tree__expand') + VuFind.icon('facet-collapse', 'facet-tree__collapse');
+
+      const childrenEl = buildFacetNodes(facetName, facet.children, currentPath, allowExclude, excludeTitle, showCounts, counter, locale);
+      childrenEl.id = childUlId;
+
+      liEl.append(toggleButton, itemContainerEl, childrenEl);
+    } else {
+      toggleButton.innerHTML = VuFind.icon('facet-noncollapsible', 'facet-tree__noncollapsible');
+      toggleButton.setAttribute('disabled', '');
+
+      liEl.append(toggleButton, itemContainerEl);
+    }
+
+    // Append to the UL
+    facetList.append(liEl);
+  }
+
+  return facetList;
 }
 
 function buildFacetTree(treeNode, facetData, inSidebar) {
-  // Enable keyboard navigation also when a screen reader is active
-  treeNode.bind('select_node.jstree', VuFind.sideFacets.showLoadingOverlay);
-
   var currentPath = treeNode.data('path');
   var allowExclude = treeNode.data('exclude');
   var excludeTitle = treeNode.data('exclude-title');
-
-  var results = buildFacetNodes(facetData, currentPath, allowExclude, excludeTitle, inSidebar);
-  treeNode.find('.fa-spinner').parent().remove();
-  if (inSidebar) {
-    treeNode.on('loaded.jstree open_node.jstree', function treeNodeOpen(/*e, data*/) {
-      treeNode.find('ul.jstree-container-ul > li.jstree-node').addClass('list-group-item');
-      treeNode.find('a.exclude').click(VuFind.sideFacets.showLoadingOverlay);
-    });
+  var facetName = treeNode.data('facet');
+  var locale = $('html').attr('lang');
+  if (locale) {
+    locale = locale.replace('_', '-');
   }
-  treeNode.jstree({
-    'core': {
-      'data': results
+
+  var facetList = buildFacetNodes(facetName, facetData, currentPath, allowExclude, excludeTitle, inSidebar, { count: 0 }, locale);
+  treeNode[0].replaceChildren(facetList);
+
+  if (inSidebar) {
+    treeNode.find('a').click(VuFind.sideFacets.showLoadingOverlay);
+    if (treeNode.parent().hasClass('truncate-hierarchy')) {
+      VuFind.truncate.initTruncate(treeNode.parent(), 'div > ul > li');
     }
-  });
+  }
 }
 
-function initFacetTree(treeNode, inSidebar)
+function loadFacetTree(treeNode, inSidebar)
 {
   var loaded = treeNode.data('loaded');
   if (loaded) {
@@ -107,9 +144,9 @@ function initFacetTree(treeNode, inSidebar)
   treeNode.data('loaded', true);
 
   if (inSidebar) {
-    treeNode.prepend('<li class="list-group-item"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></li>');
+    treeNode.prepend('<li class="jstree-node list-group-item facet-load-indicator">' + VuFind.loading() + '</li>');
   } else {
-    treeNode.prepend('<div><i class="fa fa-spinner fa-spin" aria-hidden="true"></i><div>');
+    treeNode.prepend('<div>' + VuFind.loading() + '<div>');
   }
   var request = {
     method: "getFacetData",
@@ -129,18 +166,18 @@ function initFacetTree(treeNode, inSidebar)
   );
 }
 
-function collapseTopFacets() {
-  $('.top-facets').each(function setupToCollapses() {
-    $(this).find('.collapse').removeClass('in');
-    $(this).on('show.bs.collapse', function toggleTopFacet() {
-      $(this).find('.top-title .fa').removeClass('fa-caret-right');
-      $(this).find('.top-title .fa').addClass('fa-caret-down');
+function initFacetTree(treeNode, inSidebar)
+{
+  // Defer init if the facet is collapsed:
+  let $collapse = treeNode.parents('.facet-group').find('.collapse');
+  if (!$collapse.hasClass('in')) {
+    $collapse.on('show.bs.collapse', function onExpand() {
+      loadFacetTree(treeNode, inSidebar);
     });
-    $(this).on('hide.bs.collapse', function toggleTopFacet() {
-      $(this).find('.top-title .fa').removeClass('fa-caret-down');
-      $(this).find('.top-title .fa').addClass('fa-caret-right');
-    });
-  });
+    return;
+  } else {
+    loadFacetTree(treeNode, inSidebar);
+  }
 }
 
 /* --- Side Facets --- */
@@ -148,9 +185,14 @@ VuFind.register('sideFacets', function SideFacets() {
   function showLoadingOverlay(e, data) {
     e.preventDefault();
     var overlay = '<div class="facet-loading-overlay">'
-      + '<span class="facet-loading-overlay-label">' + VuFind.translate('loading')
-      + "...</span></div>";
+      + '<span class="facet-loading-overlay-label">'
+      + VuFind.loading()
+      + "</span></div>";
     $(this).closest(".collapse").append(overlay);
+    if (typeof data !== "undefined") {
+      // Remove jstree-clicked class from JSTree links to avoid the color change:
+      data.instance.get_node(data.node, true).children().removeClass('jstree-clicked');
+    }
     // This callback operates both as a click handler and a JSTree callback;
     // if the data element is undefined, we assume we are handling a click.
     var href = typeof data === "undefined" || typeof data.node.data.url === "undefined"
@@ -201,7 +243,7 @@ VuFind.register('sideFacets', function SideFacets() {
               );
             }
           } else if (typeof facetData.html !== 'undefined') {
-            $facetContainer.html(facetData.html);
+            $facetContainer.html(VuFind.updateCspNonce(facetData.html));
             activateFacetBlocking($facetContainer);
           } else {
             var treeNode = $facetContainer.find('.jstree-facet');
@@ -290,11 +332,11 @@ VuFind.register('lightbox_facets', function LightboxFacets() {
       var sort = $(button).data('sort');
       var list = $('#facet-list-' + sort);
       if (list.find('.js-facet-item').length === 0) {
-        list.find('.js-facet-next-page').html(VuFind.translate('loading') + '...');
+        list.find('.js-facet-next-page').html(VuFind.translate('loading_ellipsis'));
         $.ajax(button.href + '&layout=lightbox')
           .done(function facetSortTitleDone(data) {
             list.prepend($('<span>' + data + '</span>').find('.js-facet-item'));
-            list.find('.js-facet-next-page').html(VuFind.translate('more') + ' ...');
+            list.find('.js-facet-next-page').html(VuFind.translate('more_ellipsis'));
           });
       }
       $('.full-facet-list').addClass('hidden');
@@ -310,14 +352,14 @@ VuFind.register('lightbox_facets', function LightboxFacets() {
 
   function setup() {
     lightboxFacetSorting();
-    $('.js-facet-next-page').click(function facetLightboxMore() {
+    $('.js-facet-next-page').on("click", function facetLightboxMore() {
       var button = $(this);
       var page = parseInt(button.attr('data-page'), 10);
       if (button.attr('disabled')) {
         return false;
       }
       button.attr('disabled', 1);
-      button.html(VuFind.translate('loading') + '...');
+      button.html(VuFind.translate('loading_ellipsis'));
       $.ajax(this.href + '&layout=lightbox')
         .done(function facetLightboxMoreDone(data) {
           var htmlDiv = $('<div>' + data + '</div>');
@@ -326,7 +368,7 @@ VuFind.register('lightbox_facets', function LightboxFacets() {
           if (list.length && htmlDiv.find('.js-facet-next-page').length) {
             button.attr('data-page', page + 1);
             button.attr('href', button.attr('href').replace(/facetpage=\d+/, 'facetpage=' + (page + 1)));
-            button.html(VuFind.translate('more') + ' ...');
+            button.html(VuFind.translate('more_ellipsis'));
             button.removeAttr('disabled');
           } else {
             button.remove();
@@ -338,7 +380,7 @@ VuFind.register('lightbox_facets', function LightboxFacets() {
     $('#modal').on('show.bs.modal', function facetListHeight() {
       $('#modal .lightbox-scroll').css('max-height', window.innerHeight - margin);
     });
-    $(window).resize(function facetListResize() {
+    $(window).on("resize", function facetListResize() {
       $('#modal .lightbox-scroll').css('max-height', window.innerHeight - margin);
     });
   }
@@ -346,21 +388,8 @@ VuFind.register('lightbox_facets', function LightboxFacets() {
   return { setup: setup };
 });
 
-function registerMoreLessFacetsEventHandlers() {
-  $('.more-facets, .less-facets').off('click');
-  $('.more-facets').click(function moreFacets() {
-    var id = 'narrowGroupHidden-' + $(this).data('title');
-    $('.' + id).removeClass('hidden');
-    $('#more-' + id).addClass('hidden');
-    return false;
-  });
-
-  $('.less-facets').click(function lessFacets() {
-    var id = 'narrowGroupHidden-' + $(this).data('title');
-    $('.' + id).addClass('hidden');
-    $('#more-' + id).removeClass('hidden');
-    return false;
-  });
+function registerSideFacetTruncation() {
+  VuFind.truncate.initTruncate('.truncate-facets', '.facet__list__item');
 }
 
-VuFind.listen('VuFind.sidefacets.loaded', registerMoreLessFacetsEventHandlers);
+VuFind.listen('VuFind.sidefacets.loaded', registerSideFacetTruncation);

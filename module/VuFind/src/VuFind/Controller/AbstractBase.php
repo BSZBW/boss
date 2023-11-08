@@ -1,9 +1,10 @@
 <?php
+
 /**
  * VuFind controller base class (defines some methods that can be shared by other
  * controllers).
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2010.
  *
@@ -26,16 +27,22 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:plugins:controllers Wiki
  */
+
 namespace VuFind\Controller;
 
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\Mvc\MvcEvent;
+use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\Model\ViewModel;
-use LmcRbacMvc\Service\AuthorizationServiceAwareInterface;
 use VuFind\Exception\Auth as AuthException;
 use VuFind\Exception\ILS as ILSException;
 use VuFind\Http\PhpEnvironment\Request as HttpRequest;
+use VuFind\I18n\Translator\TranslatorAwareInterface;
+use VuFind\I18n\Translator\TranslatorAwareTrait;
+
+use function intval;
+use function is_object;
 
 /**
  * VuFind controller base class (defines some methods that can be shared by other
@@ -47,10 +54,28 @@ use VuFind\Http\PhpEnvironment\Request as HttpRequest;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:plugins:controllers Wiki
  *
+ * @method Plugin\Captcha captcha() Captcha plugin
+ * @method Plugin\DbUpgrade dbUpgrade() DbUpgrade plugin
+ * @method Plugin\Favorites favorites() Favorites plugin
+ * @method FlashMessenger flashMessenger() FlashMessenger plugin
+ * @method Plugin\Followup followup() Followup plugin
+ * @method Plugin\Holds holds() Holds plugin
+ * @method Plugin\ILLRequests ILLRequests() ILLRequests plugin
+ * @method Plugin\IlsRecords ilsRecords() IlsRecords plugin
+ * @method Plugin\NewItems newItems() NewItems plugin
+ * @method Plugin\Permission permission() Permission plugin
+ * @method Plugin\Renewals renewals() Renewals plugin
+ * @method Plugin\Reserves reserves() Reserves plugin
+ * @method Plugin\ResultScroller resultScroller() ResultScroller plugin
+ * @method Plugin\StorageRetrievalRequests storageRetrievalRequests()
+ * StorageRetrievalRequests plugin
+ *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-class AbstractBase extends AbstractActionController
+class AbstractBase extends AbstractActionController implements TranslatorAwareInterface
 {
+    use TranslatorAwareTrait;
+
     /**
      * Permission that must be granted to access this module (false for no
      * restriction, null to use configured default (which is usually the same
@@ -158,7 +183,9 @@ class AbstractBase extends AbstractActionController
         if ($this->accessPermission) {
             $events = $this->getEventManager();
             $events->attach(
-                MvcEvent::EVENT_DISPATCH, [$this, 'validateAccessPermission'], 1000
+                MvcEvent::EVENT_DISPATCH,
+                [$this, 'validateAccessPermission'],
+                1000
             );
         }
     }
@@ -215,19 +242,22 @@ class AbstractBase extends AbstractActionController
         }
 
         // Set default values if applicable:
-        if ((!isset($view->to) || empty($view->to)) && $user
+        if (
+            (!isset($view->to) || empty($view->to)) && $user
             && isset($config->Mail->user_email_in_to)
             && $config->Mail->user_email_in_to
         ) {
             $view->to = $user->email;
         }
         if (!isset($view->from) || empty($view->from)) {
-            if ($user && isset($config->Mail->user_email_in_from)
+            if (
+                $user && isset($config->Mail->user_email_in_from)
                 && $config->Mail->user_email_in_from
             ) {
                 $view->userEmailInFrom = true;
                 $view->from = $user->email;
-            } elseif (isset($config->Mail->default_from)
+            } elseif (
+                isset($config->Mail->default_from)
                 && $config->Mail->default_from
             ) {
                 $view->from = $config->Mail->default_from;
@@ -286,7 +316,7 @@ class AbstractBase extends AbstractActionController
     /**
      * Get the user object if logged in, false otherwise.
      *
-     * @return object|bool
+     * @return \VuFind\Db\Row\User|bool
      */
     protected function getUser()
     {
@@ -361,9 +391,15 @@ class AbstractBase extends AbstractActionController
         // Now check if the user has provided credentials with which to log in:
         $ilsAuth = $this->getILSAuthenticator();
         $patron = null;
-        if (($username = $this->params()->fromPost('cat_username', false))
+        if (
+            ($username = $this->params()->fromPost('cat_username', false))
             && ($password = $this->params()->fromPost('cat_password', false))
         ) {
+            // If somebody is POSTing credentials but that logic is disabled, we
+            // should throw an exception!
+            if (!$account->allowsUserIlsLogin()) {
+                throw new \Exception('Unexpected ILS credential submission.');
+            }
             // Check for multiple ILS target selection
             $target = $this->params()->fromPost('target', false);
             if ($target) {
@@ -374,7 +410,8 @@ class AbstractBase extends AbstractActionController
                     $routeMatch = $this->getEvent()->getRouteMatch();
                     $routeName = $routeMatch ? $routeMatch->getMatchedRouteName()
                         : 'myresearch-profile';
-                    $ilsAuth->sendEmailLoginLink($username, $routeName);
+                    $routeParams = $routeMatch ? $routeMatch->getParams() : [];
+                    $ilsAuth->sendEmailLoginLink($username, $routeName, $routeParams, ['catalogLogin' => 'true']);
                     $this->flashMessenger()
                         ->addSuccessMessage('email_login_link_sent');
                 } else {
@@ -389,7 +426,8 @@ class AbstractBase extends AbstractActionController
             } catch (ILSException $e) {
                 $this->flashMessenger()->addErrorMessage('ils_connection_failed');
             }
-        } elseif ('ILS' === $this->params()->fromQuery('auth_method', false)
+        } elseif (
+            'ILS' === $this->params()->fromQuery('auth_method', false)
             && ($hash = $this->params()->fromQuery('hash', false))
         ) {
             try {
@@ -499,22 +537,6 @@ class AbstractBase extends AbstractActionController
     }
 
     /**
-     * Translate a string if a translator is available.
-     *
-     * @param string $msg     Message to translate
-     * @param array  $tokens  Tokens to inject into the translated string
-     * @param string $default Default value to use if no translation is found (null
-     * for no default).
-     *
-     * @return string
-     */
-    public function translate($msg, $tokens = [], $default = null)
-    {
-        return $this->getViewRenderer()->plugin('translate')
-            ->__invoke($msg, $tokens, $default);
-    }
-
-    /**
      * Convenience method to make invocation of forward() helper less verbose.
      *
      * @param string $controller Controller to invoke
@@ -542,7 +564,8 @@ class AbstractBase extends AbstractActionController
      *
      * @return bool
      */
-    protected function formWasSubmitted($submitElement = 'submit',
+    protected function formWasSubmitted(
+        $submitElement = 'submit',
         $useCaptcha = false
     ) {
         // Fail if the expected submission element was missing from the POST:
@@ -562,19 +585,24 @@ class AbstractBase extends AbstractActionController
      *
      * @return mixed
      */
-    public function confirm($title, $yesTarget, $noTarget, $messages = [],
+    public function confirm(
+        $title,
+        $yesTarget,
+        $noTarget,
+        $messages = [],
         $extras = []
     ) {
         return $this->forwardTo(
-            'Confirm', 'Confirm',
+            'Confirm',
+            'Confirm',
             [
                 'data' => [
                     'title' => $title,
                     'confirm' => $yesTarget,
                     'cancel' => $noTarget,
                     'messages' => (array)$messages,
-                    'extras' => $extras
-                ]
+                    'extras' => $extras,
+                ],
             ]
         );
     }
@@ -645,9 +673,11 @@ class AbstractBase extends AbstractActionController
      * separate logic is used for storing followup information when VuFind
      * forces the user to log in from another context.
      *
+     * @param bool $allowCurrentUrl Whether the current URL is valid for followup
+     *
      * @return void
      */
-    protected function setFollowupUrlToReferer()
+    protected function setFollowupUrlToReferer(bool $allowCurrentUrl = true)
     {
         // lbreferer is the stored current url of the lightbox
         // which overrides the url from the server request when present
@@ -665,7 +695,7 @@ class AbstractBase extends AbstractActionController
         // want internal post-login redirects.
         $baseUrl = $this->getServerUrl('home');
         $baseUrlNorm = $this->normalizeUrlForComparison($baseUrl);
-        if (0 !== strpos($refererNorm, $baseUrlNorm)) {
+        if (!str_starts_with($refererNorm, $baseUrlNorm)) {
             return;
         }
 
@@ -683,7 +713,12 @@ class AbstractBase extends AbstractActionController
         // ignore this and instead rely on any previously stored referer.
         $myUserLogin = $this->getServerUrl('myresearch-userlogin');
         $mulNorm = $this->normalizeUrlForComparison($myUserLogin);
-        if (0 === strpos($refererNorm, $mulNorm)) {
+        if (str_starts_with($refererNorm, $mulNorm)) {
+            return;
+        }
+
+        // Check that the referer is not current URL if not allowed:
+        if (!$allowCurrentUrl && $this->getRequest()->getUriString() === $referer) {
             return;
         }
 
@@ -746,7 +781,8 @@ class AbstractBase extends AbstractActionController
     {
         return
             $this->params()->fromPost(
-                'layout', $this->params()->fromQuery('layout', false)
+                'layout',
+                $this->params()->fromQuery('layout', false)
             ) === 'lightbox'
             || 'layout/lightbox' == $this->layout()->getTemplate();
     }
@@ -761,7 +797,8 @@ class AbstractBase extends AbstractActionController
     protected function getILSLoginMethod($target = '')
     {
         $config = $this->getILS()->checkFunction(
-            'patronLogin', ['patron' => ['cat_username' => "$target.login"]]
+            'patronLogin',
+            ['patron' => ['cat_username' => "$target.login"]]
         );
         return $config['loginMethod'] ?? 'password';
     }
@@ -789,5 +826,18 @@ class AbstractBase extends AbstractActionController
             $loginMethod = $this->getILSLoginMethod();
         }
         return compact('targets', 'defaultTarget', 'loginMethod', 'loginMethods');
+    }
+
+    /**
+     * Construct an HTTP 205 (refresh) response. Useful for reporting success
+     * in the lightbox without actually rendering content.
+     *
+     * @return \Laminas\Http\Response
+     */
+    protected function getRefreshResponse()
+    {
+        $response = $this->getResponse();
+        $response->setStatusCode(205);
+        return $response;
     }
 }

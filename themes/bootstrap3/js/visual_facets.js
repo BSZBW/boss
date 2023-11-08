@@ -25,8 +25,7 @@ function settext() {
 
     // Case 3: "More Topics" special-case collapsed block:
     if (d.name === VuFind.translate('More Topics')) {
-      var topics = VuFind.translate('more_topics');
-      return topics.replace("%%count%%", d.count);
+      return VuFind.translate('more_topics_unescaped', { '%%count%%': d.count});
     }
 
     // Csae 4 (default): Standard second-level field
@@ -58,8 +57,8 @@ function settitle() {
 
     // Case 3: Standard second-level field
     if (typeof d.field !== "undefined") {
-      var on_topic = VuFind.translate('on_topic');
-      return d.name + " (" + on_topic.replace("%%count%%", d.count) + ")";
+      var on_topic = VuFind.translate('on_topic_unescaped', {'%%count%%': d.count});
+      return d.name + " (" + on_topic + ")";
     }
   });
 }
@@ -205,13 +204,18 @@ function showVisualFacets(pivotdata) {
       .data(treemap.nodes)
       .enter().append("a")
       .attr("href", function createHref(d) {
+        let url = new URL(window.location.href);
+        let params = url.searchParams;
         if (d.parentlevel && d.name !== VuFind.translate('More Topics')) {
-          return window.location + "&filter[]=" + d.field + ":\"" + encodeURIComponent(d.name) + "\"&filter[]=" + d.parentfield + ":\"" + encodeURIComponent(d.parentlevel) + "\"&view=list";
+          params.append('filter[]', d.field + ':"' + d.name + '"');
+          params.append('filter[]', d.parentfield + ':"' + d.parentlevel + '"');
+          params.set('view', 'list');
         } else if (d.name === VuFind.translate('More Topics')) {
-          return window.location + "&filter[]=" + d.parentfield + ":\"" + encodeURIComponent(d.parentlevel) + "\"";
+          params.append('filter[]', d.parentfield + ':"' + d.parentlevel + '"');
         } else if (d.name !== "theData") {
-          return window.location + "&filter[]=" + d.field + ":\"" + encodeURIComponent(d.name) + "\"";
+          params.append('filter[]', d.field + ':"' + d.name + '"');
         }
+        return url.toString();
       })
       .append("div")
       .attr("class", function createClass(d) { return (typeof d.parentfield === "undefined") ? "node toplevel" : "node secondlevel"; })
@@ -220,7 +224,6 @@ function showVisualFacets(pivotdata) {
       .style("background", function styleBackground(d) { return d.children ? color(d.name.substr(0, 1)) : null; })
       .call(settitle)
       .style("z-index", function setZindex(d) { return (typeof d.parentfield !== "undefined") ? "1" : "0"; })
-      .attr("tabindex", 0)
       .append("div")
       .call(settext)
       .attr("class", function createClass(d) { return d.children ? "label" : "notalabel"; } )

@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Base class for AjaxHandler tests.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2018.
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Page
  */
+
 namespace VuFindTest\Unit;
 
 use Laminas\Http\Request;
@@ -40,8 +42,25 @@ use Laminas\Stdlib\Parameters;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Page
  */
-abstract class AjaxHandlerTest extends MockContainerTest
+abstract class AjaxHandlerTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * Mock container
+     *
+     * @var \VuFindTest\Container\MockContainer
+     */
+    protected $container;
+
+    /**
+     * Standard setup method.
+     *
+     * @return void
+     */
+    public function setUp(): void
+    {
+        $this->container = new \VuFindTest\Container\MockContainer($this);
+    }
+
     /**
      * Create mock user object.
      *
@@ -62,7 +81,8 @@ abstract class AjaxHandlerTest extends MockContainerTest
     protected function getMockAuthManager($user)
     {
         $authManager = $this->container->createMock(
-            'VuFind\Auth\Manager', ['isLoggedIn']
+            \VuFind\Auth\Manager::class,
+            ['isLoggedIn']
         );
         $authManager->expects($this->any())->method('isLoggedIn')
             ->will($this->returnValue($user));
@@ -84,7 +104,8 @@ abstract class AjaxHandlerTest extends MockContainerTest
         $request->setQuery(new Parameters($get));
         $request->setPost(new Parameters($post));
         $controller = $this->container->createMock(
-            'Laminas\Mvc\Controller\AbstractActionController', ['getRequest']
+            'Laminas\Mvc\Controller\AbstractActionController',
+            ['getRequest']
         );
         $controller->expects($this->any())->method('getRequest')
             ->will($this->returnValue($request));

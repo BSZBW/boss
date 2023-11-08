@@ -1,8 +1,9 @@
 <?php
+
 /**
  * LDAP authentication test class.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2011.
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Page
  */
+
 namespace VuFindTest\Auth;
 
 use Laminas\Config\Config;
@@ -39,8 +41,10 @@ use VuFind\Auth\LDAP;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Page
  */
-class LDAPTest extends \VuFindTest\Unit\DbTestCase
+class LDAPTest extends \PHPUnit\Framework\TestCase
 {
+    use \VuFindTest\Feature\ReflectionTrait;
+
     /**
      * Get an authentication object.
      *
@@ -53,7 +57,10 @@ class LDAPTest extends \VuFindTest\Unit\DbTestCase
         if (null === $config) {
             $config = $this->getAuthConfig();
         }
-        $obj = clone $this->getAuthManager()->get('LDAP');
+        $authManager = new \VuFind\Auth\PluginManager(
+            new \VuFindTest\Container\MockContainer($this)
+        );
+        $obj = $authManager->get('LDAP');
         $obj->setConfig($config);
         return $obj;
     }
@@ -70,8 +77,9 @@ class LDAPTest extends \VuFindTest\Unit\DbTestCase
                 'host' => 'localhost',
                 'port' => 1234,
                 'basedn' => 'basedn',
-                'username' => 'username'
-            ], true
+                'username' => 'username',
+            ],
+            true
         );
         return new Config(['LDAP' => $ldapConfig], true);
     }
@@ -176,7 +184,7 @@ class LDAPTest extends \VuFindTest\Unit\DbTestCase
     protected function getLoginRequest($overrides = [])
     {
         $post = $overrides + [
-            'username' => 'testuser', 'password' => 'testpass'
+            'username' => 'testuser', 'password' => 'testpass',
         ];
         $request = new \Laminas\Http\Request();
         $request->setPost(new \Laminas\Stdlib\Parameters($post));

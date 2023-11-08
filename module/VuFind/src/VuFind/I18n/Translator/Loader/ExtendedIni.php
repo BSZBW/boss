@@ -1,8 +1,9 @@
 <?php
+
 /**
  * VuFind Translate Adapter ExtendedIni
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2010.
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Site
  */
+
 namespace VuFind\I18n\Translator\Loader;
 
 use Laminas\I18n\Exception\InvalidArgumentException;
@@ -81,15 +83,14 @@ class ExtendedIni implements FileLoaderInterface
      * @param ExtendedIniReader $reader          Helper for reading .ini files from
      * disk.
      */
-    public function __construct($pathStack = [], $fallbackLocales = null,
+    public function __construct(
+        $pathStack = [],
+        $fallbackLocales = null,
         ExtendedIniReader $reader = null
     ) {
         $this->pathStack = $pathStack;
-        $this->fallbackLocales = $fallbackLocales;
-        if (!empty($this->fallbackLocales) && !is_array($this->fallbackLocales)) {
-            $this->fallbackLocales = [$this->fallbackLocales];
-        }
-        $this->reader = ($reader === null) ? new ExtendedIniReader() : $reader;
+        $this->fallbackLocales = $fallbackLocales ? (array)$fallbackLocales : [];
+        $this->reader = $reader ?? new ExtendedIniReader();
     }
 
     /**
@@ -116,6 +117,10 @@ class ExtendedIni implements FileLoaderInterface
      */
     public function load($locale, $filename)
     {
+        if ($locale == 'debug') {
+            return null;
+        }
+
         // Reset the loaded files list:
         $this->resetLoadedFiles();
 
@@ -123,12 +128,10 @@ class ExtendedIni implements FileLoaderInterface
         $data = $this->loadLanguageLocale($locale, $filename);
 
         // Load fallback data, if any:
-        if (!empty($this->fallbackLocales)) {
-            foreach ($this->fallbackLocales as $fallbackLocale) {
-                $newData = $this->loadLanguageLocale($fallbackLocale, $filename);
-                $newData->merge($data);
-                $data = $newData;
-            }
+        foreach ($this->fallbackLocales as $fallbackLocale) {
+            $newData = $this->loadLanguageLocale($fallbackLocale, $filename);
+            $newData->merge($data);
+            $data = $newData;
         }
 
         return $data;

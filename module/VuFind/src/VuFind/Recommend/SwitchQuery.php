@@ -1,8 +1,9 @@
 <?php
+
 /**
  * SwitchQuery Recommendations Module
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2010.
  *
@@ -26,9 +27,14 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:plugins:recommendation_modules Wiki
  */
+
 namespace VuFind\Recommend;
 
-use VuFind\Search\BackendManager;
+use VuFindSearch\Command\GetLuceneHelperCommand;
+use VuFindSearch\Service;
+
+use function in_array;
+use function strlen;
 
 /**
  * SwitchQuery Recommendations Module
@@ -52,11 +58,11 @@ class SwitchQuery implements RecommendInterface
     protected $backend;
 
     /**
-     * Search backend plugin manager.
+     * Search service.
      *
-     * @var BackendManager
+     * @var Service
      */
-    protected $backendManager;
+    protected $searchService;
 
     /**
      * Improved query suggestions.
@@ -91,11 +97,11 @@ class SwitchQuery implements RecommendInterface
     /**
      * Constructor
      *
-     * @param BackendManager $backendManager Search backend plugin manager
+     * @param Service $searchService Search backend plugin manager
      */
-    public function __construct(BackendManager $backendManager)
+    public function __construct(Service $searchService)
     {
-        $this->backendManager = $backendManager;
+        $this->searchService = $searchService;
     }
 
     /**
@@ -118,12 +124,14 @@ class SwitchQuery implements RecommendInterface
         $optIns = !empty($params[2])
             ? explode(',', $params[2]) : [];
         $this->skipChecks = array_merge(
-            $this->skipChecks, array_diff($this->optInMethods, $optIns)
+            $this->skipChecks,
+            array_diff($this->optInMethods, $optIns)
         );
     }
 
     /**
-     * Called at the end of the Search Params objects' initFromRequest() method.
+     * Called before the Search Results object performs its main search
+     * (specifically, in response to \VuFind\Search\SearchRunner::EVENT_CONFIGURED).
      * This method is responsible for setting search parameters needed by the
      * recommendation module and for reading any existing search parameters that may
      * be needed.
@@ -139,7 +147,7 @@ class SwitchQuery implements RecommendInterface
     }
 
     /**
-     * Called after the Search Results object has performed its main search.  This
+     * Called after the Search Results object has performed its main search. This
      * may be used to extract necessary information from the Search Results object
      * or to perform completely unrelated processing.
      *
@@ -206,7 +214,7 @@ class SwitchQuery implements RecommendInterface
     protected function checkFuzzy($query)
     {
         // Don't stack tildes:
-        if (strpos($query, '~') !== false) {
+        if (str_contains($query, '~')) {
             return false;
         }
         $query = trim($query, ' ?*');
@@ -267,7 +275,7 @@ class SwitchQuery implements RecommendInterface
     {
         // Remove escaped quotes as they are of no consequence:
         $query = str_replace('\"', ' ', $query);
-        return (strpos($query, '"') === false)
+        return (!str_contains($query, '"'))
             ? false : trim(str_replace('"', ' ', $query));
     }
 
@@ -312,11 +320,8 @@ class SwitchQuery implements RecommendInterface
      */
     protected function getLuceneHelper()
     {
-        $backend = $this->backendManager->get($this->backend);
-        $qb = is_callable([$backend, 'getQueryBuilder'])
-            ? $backend->getQueryBuilder() : false;
-        return $qb && is_callable([$qb, 'getLuceneHelper'])
-            ? $qb->getLuceneHelper() : false;
+        $command = new GetLuceneHelperCommand($this->backend);
+        return $this->searchService->invoke($command)->getResult();
     }
 
     /**

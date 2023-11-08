@@ -3,7 +3,7 @@
 /**
  * Unit tests for Summon Backend class.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2013.
  *
@@ -26,16 +26,14 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org
  */
+
 namespace VuFindSearch\Backend\Summon;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-
 use SerialsSolutions_Summon_Exception as SummonException;
 use SerialsSolutions_Summon_Query as SummonQuery;
-
 use VuFindSearch\ParamBag;
-
 use VuFindSearch\Query\Query;
 
 /**
@@ -49,7 +47,7 @@ use VuFindSearch\Query\Query;
  */
 class BackendTest extends TestCase
 {
-    use \VuFindTest\Unit\FixtureTrait;
+    use \VuFindTest\Feature\FixtureTrait;
 
     /**
      * Setup method.
@@ -94,15 +92,11 @@ class BackendTest extends TestCase
     {
         $conn = $this->getConnectorMock(['query']);
         $expected1 = new SummonQuery(null, ['idsToFetch' => range(1, 50), 'pageNumber' => 1, 'pageSize' => 50]);
-        $conn->expects($this->at(0))
-            ->method('query')
-            ->with($this->equalTo($expected1))
-            ->will($this->returnValue($this->loadResponse('retrieve1')));
         $expected2 = new SummonQuery(null, ['idsToFetch' => range(51, 60), 'pageNumber' => 1, 'pageSize' => 50]);
-        $conn->expects($this->at(1))
+        $conn->expects($this->exactly(2))
             ->method('query')
-            ->with($this->equalTo($expected2))
-            ->will($this->returnValue($this->loadResponse('retrieve2')));
+            ->withConsecutive([$expected1], [$expected2])
+            ->willReturnOnConsecutiveCalls($this->loadResponse('retrieve1'), $this->loadResponse('retrieve2'));
 
         $back = new Backend($conn);
         $back->setIdentifier('test');
@@ -261,7 +255,7 @@ class BackendTest extends TestCase
     protected function getConnectorMock(array $mock = [])
     {
         return $this->getMockBuilder(\SerialsSolutions\Summon\Laminas::class)
-            ->setMethods($mock)
+            ->onlyMethods($mock)
             ->setConstructorArgs(['id', 'key'])
             ->getMock();
     }

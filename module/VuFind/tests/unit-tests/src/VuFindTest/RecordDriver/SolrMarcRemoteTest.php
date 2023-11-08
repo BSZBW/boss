@@ -1,8 +1,9 @@
 <?php
+
 /**
  * SolrMarcRemote Record Driver Test Class
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2020.
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:testing:unit_tests Wiki
  */
+
 namespace VuFindTest\RecordDriver;
 
 use Exception;
@@ -42,9 +44,9 @@ use VuFindHttp\HttpServiceInterface;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:testing:unit_tests Wiki
  */
-class SolrMarcRemoteTest extends \VuFindTest\Unit\TestCase
+class SolrMarcRemoteTest extends \PHPUnit\Framework\TestCase
 {
-    use \VuFindTest\Unit\FixtureTrait;
+    use \VuFindTest\Feature\FixtureTrait;
 
     /**
      * Test config validation.
@@ -80,7 +82,7 @@ class SolrMarcRemoteTest extends \VuFindTest\Unit\TestCase
         $driver = $this->getDriver();
         $driver->setHttpService($this->getMockHttpService());
         $driver->setRawData(['id' => 1]);
-        $this->assertEquals(4, count($driver->getTOC()));
+        $this->assertCount(4, $driver->getTOC());
     }
 
     /**

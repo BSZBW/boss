@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Course Reserves CSV Loader Test Class
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2010.
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:testing:unit_tests Wiki
  */
+
 namespace VuFindTest\Reserves;
 
 use VuFind\Reserves\CsvReader;
@@ -38,9 +40,9 @@ use VuFind\Reserves\CsvReader;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:testing:unit_tests Wiki
  */
-class CsvReaderTest extends \VuFindTest\Unit\TestCase
+class CsvReaderTest extends \PHPUnit\Framework\TestCase
 {
-    use \VuFindTest\Unit\FixtureTrait;
+    use \VuFindTest\Feature\FixtureTrait;
 
     /**
      * Test getInstructors()
@@ -129,7 +131,7 @@ class CsvReaderTest extends \VuFindTest\Unit\TestCase
     {
         $reader = $this->getReader();
         $reader->getReserves();
-        $fixture = $this->getFixtureDir() . "reserves/reserves.csv";
+        $fixture = $this->getFixtureDir() . 'reserves/reserves.csv';
         $errors = "Skipping empty/missing Bib ID: $fixture, line 3\nSkipping incomplete row: $fixture, line 5\n";
         $this->assertEquals($errors, $reader->getErrors());
     }

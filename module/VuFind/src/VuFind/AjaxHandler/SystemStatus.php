@@ -1,8 +1,9 @@
 <?php
+
 /**
  * "Keep Alive" AJAX handler
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2018.
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
+
 namespace VuFind\AjaxHandler;
 
 use Laminas\Config\Config;
@@ -83,8 +85,11 @@ class SystemStatus extends AbstractBase
      * @param Config         $config Top-level VuFind configuration (config.ini)
      * @param Session        $table  Session database table
      */
-    public function __construct(SessionManager $sm, ResultsManager $rm,
-        Config $config, Session $table
+    public function __construct(
+        SessionManager $sm,
+        ResultsManager $rm,
+        Config $config,
+        Session $table
     ) {
         $this->sessionManager = $sm;
         $this->resultsManager = $rm;
@@ -104,11 +109,13 @@ class SystemStatus extends AbstractBase
     public function handleRequest(Params $params)
     {
         // Check system status
-        if (!empty($this->config->System->healthCheckFile)
+        if (
+            !empty($this->config->System->healthCheckFile)
             && file_exists($this->config->System->healthCheckFile)
         ) {
             return $this->formatResponse(
-                'Health check file exists', self::STATUS_HTTP_UNAVAILABLE
+                'Health check file exists',
+                self::STATUS_HTTP_UNAVAILABLE
             );
         }
 
@@ -120,7 +127,8 @@ class SystemStatus extends AbstractBase
             $results->performAndProcessSearch();
         } catch (\Exception $e) {
             return $this->formatResponse(
-                'Search index error: ' . $e->getMessage(), self::STATUS_HTTP_ERROR
+                'Search index error: ' . $e->getMessage(),
+                self::STATUS_HTTP_ERROR
             );
         }
 
@@ -129,7 +137,8 @@ class SystemStatus extends AbstractBase
             $this->sessionTable->getBySessionId('healthcheck', false);
         } catch (\Exception $e) {
             return $this->formatResponse(
-                'Database error: ' . $e->getMessage(), self::STATUS_HTTP_ERROR
+                'Database error: ' . $e->getMessage(),
+                self::STATUS_HTTP_ERROR
             );
         }
 

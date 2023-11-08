@@ -1,9 +1,10 @@
 <?php
+
 /**
  * VuFind Action Feature Trait - Record Versions Search
  * Depends on method getSearchResultsView and record driver's method getWorkKeys.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) The National Library of Finland 2020.
  *
@@ -26,7 +27,12 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Page
  */
+
 namespace VuFind\Controller\Feature;
+
+use VuFindSearch\Query\WorkKeysQuery;
+
+use function is_callable;
 
 /**
  * VuFind Action Feature Trait - Record Versions Search
@@ -47,7 +53,7 @@ trait RecordVersionsSearchTrait
     public function versionsAction()
     {
         $id = $this->params()->fromQuery('id');
-        $keys = $this->params()->fromQuery('keys');
+        $keys = $queryKeys = $this->params()->fromQuery('keys', []);
         $record = null;
         if ($id) {
             $loader = $this->serviceLocator->get(\VuFind\Record\Loader::class);
@@ -63,18 +69,13 @@ trait RecordVersionsSearchTrait
             return $this->forwardTo('Search', 'Home');
         }
 
-        $mapFunc = function ($val) {
-            return '"' . addcslashes($val, '"') . '"';
-        };
-
-        $query = $this->getRequest()->getQuery();
-        $query->lookfor = implode(' OR ', array_map($mapFunc, (array)$keys));
-        $query->type = 'WorkKeys';
+        $query = new WorkKeysQuery(null, (array)$keys);
 
         // Don't save to history -- history page doesn't handle correctly:
         $this->saveToHistory = false;
 
-        $callback = function ($runner, $params, $searchId) {
+        $callback = function ($runner, $params, $searchId) use ($query) {
+            $params->setQuery($query);
             $defaultCallback = is_callable([$this, 'getSearchSetupCallback'])
                 ? $this->getSearchSetupCallback() : null;
             if (is_callable($defaultCallback)) {
@@ -93,7 +94,7 @@ trait RecordVersionsSearchTrait
         if (isset($view->results)) {
             $view->results->getUrlQuery()
                 ->setDefaultParameter('id', $id)
-                ->setDefaultParameter('keys', $keys)
+                ->setDefaultParameter('keys', $queryKeys) // original keys from the query, if it had any
                 ->setSuppressQuery(true);
             $view->driver = $record;
         }

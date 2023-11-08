@@ -1,8 +1,9 @@
 <?php
+
 /**
  * "Get Facet Data" AJAX handler
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2018.
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
+
 namespace VuFind\AjaxHandler;
 
 use Laminas\Mvc\Controller\Plugin\Params;
@@ -74,7 +76,9 @@ class GetFacetData extends AbstractBase
      * @param HierarchicalFacetHelper $fh Facet helper
      * @param ResultsManager          $rm Search results manager
      */
-    public function __construct(SessionSettings $ss, HierarchicalFacetHelper $fh,
+    public function __construct(
+        SessionSettings $ss,
+        HierarchicalFacetHelper $fh,
         ResultsManager $rm
     ) {
         $this->sessionSettings = $ss;

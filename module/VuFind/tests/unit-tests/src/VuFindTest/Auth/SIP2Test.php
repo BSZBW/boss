@@ -1,8 +1,9 @@
 <?php
+
 /**
  * SIP2 authentication test class.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2011.
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Page
  */
+
 namespace VuFindTest\Auth;
 
 use Laminas\Config\Config;
@@ -39,7 +41,7 @@ use VuFind\Auth\SIP2;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Page
  */
-class SIP2Test extends \VuFindTest\Unit\DbTestCase
+class SIP2Test extends \PHPUnit\Framework\TestCase
 {
     /**
      * Get an authentication object.
@@ -53,7 +55,10 @@ class SIP2Test extends \VuFindTest\Unit\DbTestCase
         if (null === $config) {
             $config = $this->getAuthConfig();
         }
-        $obj = clone $this->getAuthManager()->get('SIP2');
+        $authManager = new \VuFind\Auth\PluginManager(
+            new \VuFindTest\Container\MockContainer($this)
+        );
+        $obj = $authManager->get('SIP2');
         $obj->setConfig($config);
         return $obj;
     }
@@ -68,8 +73,9 @@ class SIP2Test extends \VuFindTest\Unit\DbTestCase
         $config = new Config(
             [
                 'host' => 'my.fake.host',
-                'port' => '6002'
-            ], true
+                'port' => '6002',
+            ],
+            true
         );
         return new Config(['MultiAuth' => $config], true);
     }
@@ -85,7 +91,7 @@ class SIP2Test extends \VuFindTest\Unit\DbTestCase
     protected function getLoginRequest($overrides = [])
     {
         $post = $overrides + [
-            'username' => 'testuser', 'password' => 'testpass'
+            'username' => 'testuser', 'password' => 'testpass',
         ];
         $request = new \Laminas\Http\Request();
         $request->setPost(new \Laminas\Stdlib\Parameters($post));

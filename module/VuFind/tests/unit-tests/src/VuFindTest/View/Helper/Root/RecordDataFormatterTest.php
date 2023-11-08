@@ -1,8 +1,9 @@
 <?php
+
 /**
  * RecordDataFormatter Test Class
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2016.
  *
@@ -25,10 +26,15 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:testing:unit_tests Wiki
  */
+
 namespace VuFindTest\View\Helper\Root;
 
+use Psr\Container\ContainerInterface;
+use VuFind\RecordDriver\Response\PublicationDetails;
 use VuFind\View\Helper\Root\RecordDataFormatter;
 use VuFind\View\Helper\Root\RecordDataFormatterFactory;
+
+use function count;
 
 /**
  * RecordDataFormatter Test Class
@@ -39,9 +45,11 @@ use VuFind\View\Helper\Root\RecordDataFormatterFactory;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:testing:unit_tests Wiki
  */
-class RecordDataFormatterTest extends \VuFindTest\Unit\ViewHelperTestCase
+class RecordDataFormatterTest extends \PHPUnit\Framework\TestCase
 {
-    use \VuFindTest\Unit\FixtureTrait;
+    use \VuFindTest\Feature\FixtureTrait;
+    use \VuFindTest\Feature\ViewTrait;
+    use \VuFindTest\Feature\PathResolverTrait;
 
     /**
      * Get a mock record router.
@@ -52,7 +60,7 @@ class RecordDataFormatterTest extends \VuFindTest\Unit\ViewHelperTestCase
     {
         $mock = $this->getMockBuilder(\VuFind\Record\Router::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getActionRouteDetails'])
+            ->onlyMethods(['getActionRouteDetails'])
             ->getMock();
         $mock->expects($this->any())->method('getActionRouteDetails')
             ->will($this->returnValue(['route' => 'home', 'params' => []]));
@@ -62,9 +70,11 @@ class RecordDataFormatterTest extends \VuFindTest\Unit\ViewHelperTestCase
     /**
      * Get view helpers needed by test.
      *
+     * @param ContainerInterface $container Mock service container
+     *
      * @return array
      */
-    protected function getViewHelpers()
+    protected function getViewHelpers($container)
     {
         $context = new \VuFind\View\Helper\Root\Context();
         return [
@@ -73,13 +83,29 @@ class RecordDataFormatterTest extends \VuFindTest\Unit\ViewHelperTestCase
                 $this->getMockBuilder(\VuFind\Auth\ILSAuthenticator::class)->disableOriginalConstructor()->getMock()
             ),
             'context' => $context,
+            'config' => new \VuFind\View\Helper\Root\Config($container->get(\VuFind\Config\PluginManager::class)),
             'doi' => new \VuFind\View\Helper\Root\Doi($context),
-            'openUrl' => new \VuFind\View\Helper\Root\OpenUrl($context, [], $this->getMockBuilder(\VuFind\Resolver\Driver\PluginManager::class)->disableOriginalConstructor()->getMock()),
+            'htmlSafeJsonEncode' => new \VuFind\View\Helper\Root\HtmlSafeJsonEncode(),
+            'icon' => new \VuFind\View\Helper\Root\Icon(
+                [],
+                new \Laminas\Cache\Storage\Adapter\BlackHole(),
+                new \Laminas\View\Helper\EscapeHtmlAttr(),
+            ),
+            'openUrl' => new \VuFind\View\Helper\Root\OpenUrl(
+                $context,
+                [],
+                $this->getMockBuilder(\VuFind\Resolver\Driver\PluginManager::class)
+                    ->disableOriginalConstructor()->getMock()
+            ),
             'proxyUrl' => new \VuFind\View\Helper\Root\ProxyUrl(),
             'record' => new \VuFind\View\Helper\Root\Record(),
-            'recordLink' => new \VuFind\View\Helper\Root\RecordLink($this->getMockRecordRouter()),
-            'searchOptions' => new \VuFind\View\Helper\Root\SearchOptions(new \VuFind\Search\Options\PluginManager($this->getServiceManager())),
-            'searchTabs' => $this->getMockBuilder(\VuFind\View\Helper\Root\SearchTabs::class)->disableOriginalConstructor()->getMock(),
+            'recordLinker' => new \VuFind\View\Helper\Root\RecordLinker($this->getMockRecordRouter()),
+            'searchMemory' => $this->getSearchMemoryViewHelper(),
+            'searchOptions' => new \VuFind\View\Helper\Root\SearchOptions(
+                new \VuFind\Search\Options\PluginManager($container)
+            ),
+            'searchTabs' => $this->getMockBuilder(\VuFind\View\Helper\Root\SearchTabs::class)
+                ->disableOriginalConstructor()->getMock(),
             'transEsc' => new \VuFind\View\Helper\Root\TransEsc(),
             'translate' => new \VuFind\View\Helper\Root\Translate(),
             'usertags' => new \VuFind\View\Helper\Root\UserTags(),
@@ -96,18 +122,24 @@ class RecordDataFormatterTest extends \VuFindTest\Unit\ViewHelperTestCase
     protected function getDriver($overrides = [])
     {
         // "Mock out" tag functionality to avoid database access:
-        $methods = [
-            'getBuilding', 'getDeduplicatedAuthors', 'getContainerTitle', 'getTags'
+        $onlyMethods = [
+            'getBuildings', 'getDeduplicatedAuthors', 'getContainerTitle', 'getTags', 'getSummary', 'getNewerTitles',
+        ];
+        $addMethods = [
+            'getFullTitle', 'getFullTitleAltScript', 'getAltFullTitle', 'getBuildingsAltScript',
+            'getNotExistingAltScript', 'getSummaryAltScript', 'getNewerTitlesAltScript',
+            'getPublicationDetailsAltScript',
         ];
         $record = $this->getMockBuilder(\VuFind\RecordDriver\SolrDefault::class)
-            ->setMethods($methods)
+            ->onlyMethods($onlyMethods)
+            ->addMethods($addMethods)
             ->getMock();
         $record->expects($this->any())->method('getTags')
             ->will($this->returnValue([]));
         // Force a return value of zero so we can test this edge case value (even
         // though in the context of "building"/"container title" it makes no sense):
-        $record->expects($this->any())->method('getBuilding')
-            ->will($this->returnValue(0));
+        $record->expects($this->any())->method('getBuildings')
+            ->will($this->returnValue(['0']));
         $record->expects($this->any())->method('getContainerTitle')
             ->will($this->returnValue('0'));
         // Expect only one call to getDeduplicatedAuthors to confirm that caching
@@ -119,6 +151,30 @@ class RecordDataFormatterTest extends \VuFindTest\Unit\ViewHelperTestCase
         ];
         $record->expects($this->once())->method('getDeduplicatedAuthors')
             ->will($this->returnValue($authors));
+
+        // Functions for testing combine alt
+        $record->expects($this->any())->method('getFullTitle')
+            ->will($this->returnValue(['Standard Title']));
+        $record->expects($this->any())->method('getFullTitleAltScript')
+            ->will($this->returnValue('Alternative Title'));
+        $record->expects($this->any())->method('getAltFullTitle')
+            ->will($this->returnValue('Other Alternative Title'));
+        $record->expects($this->any())->method('getBuildingsAltScript')
+            ->will($this->returnValue(null));
+        $record->expects($this->any())->method('getNotExistingAltScript')
+            ->will($this->returnValue('Alternative Value'));
+        $record->expects($this->any())->method('getSummary')
+        ->will($this->returnValue(null));
+        $record->expects($this->any())->method('getSummaryAltScript')
+            ->will($this->returnValue('Alternative Summary'));
+        $record->expects($this->any())->method('getPublicationDetailsAltScript')
+            ->will($this->returnValue([
+                new PublicationDetails('Alt Place', 'Alt Name', 'Alt Date'),
+            ]));
+        $record->expects($this->any())->method('getNewerTitles')
+            ->will($this->returnValue(['New Title', 'Second New Title']));
+        $record->expects($this->any())->method('getNewerTitlesAltScript')
+            ->will($this->returnValue(['Alt New Title', 'Second Alt New Title']));
 
         // Load record data from fixture file:
         $fixture = $this->getJsonFixture('misc/testbug2.json');
@@ -135,12 +191,16 @@ class RecordDataFormatterTest extends \VuFindTest\Unit\ViewHelperTestCase
     {
         // Build the formatter:
         $factory = new RecordDataFormatterFactory();
-        $formatter = $factory->__invoke(
-            $this->getServiceManager(), RecordDataFormatter::class
+        $container = new \VuFindTest\Container\MockContainer($this);
+        $container->set(
+            \VuFind\Config\PluginManager::class,
+            new \VuFind\Config\PluginManager($container)
         );
+        $this->addPathResolverToContainer($container);
+        $formatter = $factory($container, RecordDataFormatter::class);
 
         // Create a view object with a set of helpers:
-        $helpers = $this->getViewHelpers();
+        $helpers = $this->getViewHelpers($container);
         $view = $this->getPhpRenderer($helpers);
 
         // Mock out the router to avoid errors:
@@ -193,16 +253,38 @@ class RecordDataFormatterTest extends \VuFindTest\Unit\ViewHelperTestCase
     }
 
     /**
-     * Test citation generation
+     * Data Provider for testFormatting().
+     *
+     * @return array
+     */
+    public function getFormattingData(): array
+    {
+        return [
+            [
+                'getInvokedSpecs',
+            ],
+            [
+                'getOldSpecs',
+            ],
+        ];
+    }
+
+    /**
+     * Test formatting.
+     *
+     * @param string $function Function to test the formatting with.
      *
      * @return void
+     *
+     * @dataProvider getFormattingData
      */
-    public function testFormatting()
+    public function testFormatting(string $function): void
     {
+        $driver = $this->getDriver();
         $formatter = $this->getFormatter();
         $spec = $formatter->getDefaults('core');
         $spec['Building'] = [
-            'dataMethod' => 'getBuilding', 'pos' => 0, 'context' => ['foo' => 1],
+            'dataMethod' => 'getBuildings', 'pos' => 0, 'context' => ['foo' => 1],
             'translationTextDomain' => 'prefix_',
         ];
         $spec['MultiTest'] = [
@@ -220,7 +302,7 @@ class RecordDataFormatterTest extends \VuFindTest\Unit\ViewHelperTestCase
                         'values' => count($data),
                     ],
                 ];
-            }
+            },
         ];
         $spec['MultiEmptyArrayTest'] = [
             'dataMethod' => true,
@@ -228,7 +310,7 @@ class RecordDataFormatterTest extends \VuFindTest\Unit\ViewHelperTestCase
             'pos' => 2000,
             'multiFunction' => function () {
                 return [];
-            }
+            },
         ];
         $spec['MultiNullTest'] = [
             'dataMethod' => true,
@@ -236,7 +318,7 @@ class RecordDataFormatterTest extends \VuFindTest\Unit\ViewHelperTestCase
             'pos' => 2000,
             'multiFunction' => function () {
                 return null;
-            }
+            },
         ];
         $spec['MultiNullInArrayWithZeroTest'] = [
             'dataMethod' => true,
@@ -252,9 +334,9 @@ class RecordDataFormatterTest extends \VuFindTest\Unit\ViewHelperTestCase
                     [
                         'label' => 'ZeroBlocked',
                         'values' => 0,
-                    ]
+                    ],
                 ];
-            }
+            },
         ];
         $spec['MultiNullInArrayWithZeroAllowedTest'] = [
             'dataMethod' => true,
@@ -270,9 +352,9 @@ class RecordDataFormatterTest extends \VuFindTest\Unit\ViewHelperTestCase
                     [
                         'label' => 'ZeroAllowed',
                         'values' => 0,
-                    ]
+                    ],
                 ];
-            }
+            },
         ];
         $spec['MultiWithSortPos'] = [
             'dataMethod' => true,
@@ -283,24 +365,74 @@ class RecordDataFormatterTest extends \VuFindTest\Unit\ViewHelperTestCase
                     [
                         'label' => 'b',
                         'values' => 'b',
-                        'options' => ['pos' => 3000]
+                        'options' => ['pos' => 3000],
                     ],
                     [
                         'label' => 'a',
                         'values' => 'a',
-                        'options' => ['pos' => 3000]
+                        'options' => ['pos' => 3000],
                     ],
                     [
                         'label' => 'c',
                         'values' => 'c',
-                        'options' => ['pos' => 2999]
+                        'options' => ['pos' => 2999],
                     ],
                 ];
-            }
+            },
+        ];
+        $spec['CombineAlt'] = [
+            'dataMethod' => 'getFullTitle',
+            'renderType' => 'CombineAlt',
+            'pos' => 4000,
+        ];
+        $spec['CombineAltPrioritizeAlt'] = [
+            'dataMethod' => 'getFullTitle',
+            'renderType' => 'CombineAlt',
+            'pos' => 4001,
+            'prioritizeAlt' => true,
+        ];
+        $spec['CombineAltDataMethod'] = [
+            'dataMethod' => 'getFullTitle',
+            'renderType' => 'CombineAlt',
+            'pos' => 4002,
+            'altDataMethod' => 'getAltFullTitle',
+        ];
+        $spec['CombineAltNoAltFunction'] = [
+            'dataMethod' => 'getFormats',
+            'renderType' => 'CombineAlt',
+            'pos' => 4003,
+        ];
+        $spec['CombineAltNoAltValue'] = [
+            'dataMethod' => 'getBuildings',
+            'renderType' => 'CombineAlt',
+            'pos' => 4004,
+        ];
+        $spec['CombineAltNoStdFunction'] = [
+            'dataMethod' => 'getNotExisting',
+            'renderType' => 'CombineAlt',
+            'pos' => 4005,
+        ];
+        $spec['CombineAltNoStdValue'] = [
+            'dataMethod' => 'getSummary',
+            'renderType' => 'CombineAlt',
+            'pos' => 4006,
+        ];
+        $spec['CombineAltArray'] = [
+            'dataMethod' => 'getNewerTitles',
+            'renderType' => 'CombineAlt',
+            'pos' => 4007,
+        ];
+        $spec['CombineAltRenderTemplate'] = [
+            'dataMethod' => 'getPublicationDetails',
+            'renderType' => 'CombineAlt',
+            'combineAltRenderType' => 'RecordDriverTemplate',
+            'template' => 'data-publicationDetails.phtml',
+            'pos' => 4008,
         ];
         $expected = [
             'Building' => 'prefix_0',
             'Published in' => '0',
+            'New Title' => 'New TitleSecond New Title',
             'Main Author' => 'Vico, Giambattista, 1668-1744.',
             'Other Authors' => 'Pandolfi, Claudia.',
             'Format' => 'Book',
@@ -318,10 +450,18 @@ class RecordDataFormatterTest extends \VuFindTest\Unit\ViewHelperTestCase
             'c' => 'c',
             'a' => 'a',
             'b' => 'b',
+            'CombineAlt' => 'Standard Title Alternative Title',
+            'CombineAltPrioritizeAlt' => 'Alternative Title Standard Title',
+            'CombineAltDataMethod' => 'Standard Title Other Alternative Title',
+            'CombineAltNoAltFunction' => 'Book',
+            'CombineAltNoAltValue' => '0',
+            'CombineAltNoStdFunction' => 'Alternative Value',
+            'CombineAltNoStdValue' => 'Alternative Summary',
+            'CombineAltArray' => 'New TitleSecond New Title Alt New TitleSecond Alt New Title',
+            'CombineAltRenderTemplate' => 'Centro di Studi Vichiani, 1992 Alt Place Alt Name Alt Date',
         ];
-        $driver = $this->getDriver();
-        $results = $formatter->getData($driver, $spec);
-
+        // Call the method specified by the data provider
+        $results = $this->$function($driver, $spec);
         // Check for expected array keys
         $this->assertEquals(array_keys($expected), $this->getLabels($results));
 
@@ -331,21 +471,52 @@ class RecordDataFormatterTest extends \VuFindTest\Unit\ViewHelperTestCase
                 $value,
                 trim(
                     preg_replace(
-                        '/\s+/', ' ',
+                        '/\s+/',
+                        ' ',
                         strip_tags($this->findResult($key, $results)['value'])
                     )
                 )
             );
         }
-
         // Check for exact markup in representative example:
         $this->assertEquals(
-            '<span property="availableLanguage" typeof="Language"><span property="name">Italian</span></span><br /><span property="availableLanguage" typeof="Language"><span property="name">Latin</span></span>', $this->findResult('Language', $results)['value']
+            '<span property="availableLanguage" typeof="Language"><span property="name">Italian</span></span><br>'
+            . '<span property="availableLanguage" typeof="Language"><span property="name">Latin</span></span>',
+            $this->findResult('Language', $results)['value']
         );
 
         // Check for context in Building:
         $this->assertEquals(
-            ['foo' => 1], $this->findResult('Building', $results)['context']
+            ['foo' => 1],
+            $this->findResult('Building', $results)['context']
         );
+    }
+
+    /**
+     * Invokes a RecordDataFormatter with a driver and returns getData results.
+     *
+     * @param SolrDefault $driver Driver to invoke with.
+     * @param array       $spec   Specifications to test with.
+     *
+     * @return array Results from RecordDataFormatter::getData
+     */
+    protected function getInvokedSpecs($driver, array $spec): array
+    {
+        $formatter = ($this->getFormatter())($driver);
+        return $formatter->getData($spec);
+    }
+
+    /**
+     * Calls RecordDataFormatter::getData with a driver as parameter and returns the results.
+     *
+     * @param SolrDefault $driver Driver to call with.
+     * @param array       $spec   Specifications to test with.
+     *
+     * @return array Results from RecordDataFormatter::getData
+     */
+    protected function getOldSpecs($driver, array $spec): array
+    {
+        $formatter = $this->getFormatter();
+        return $formatter->getData($driver, $spec);
     }
 }
