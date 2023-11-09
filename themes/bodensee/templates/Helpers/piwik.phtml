@@ -1,6 +1,9 @@
 <script type="text/javascript">
 
     window.matomoAsyncInit = function () {
+        <?php
+        $searchIsils = $this->searchMemory()->getLastSearchIsils();
+        ?>
         try {
             <?php if ($this->siteId > 0): ?>
             var matomoTracker = Matomo.getTracker("<?=$this->piwikUrl?>matomo.php", <?=$this->siteId?>);
@@ -10,6 +13,9 @@
             var matomoTracker2 = Matomo.getTracker("<?=$this->piwikUrl?>matomo.php", 28);
             <?php if ($this->client()->isIsilSession() && $this->client()->hasIsilSession()): ?>
             matomoTracker2.setCustomVariable(1, "sigel", '<?=$this->escapeHtml($this->client()->getSigel())?>', "visit");
+            <?php endif; ?>
+            <?php if(true):?>
+            matomoTracker2.setCustomVariable(1, "library", '<?=implode(', ', $searchIsils)?>'', "visit");
             <?php endif; ?>
             matomoTracker2.trackPageView();
             <?php endif; ?>
