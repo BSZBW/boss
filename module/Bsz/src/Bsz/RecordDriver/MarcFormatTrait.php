@@ -202,7 +202,7 @@ trait MarcFormatTrait
         $leader = $this->getMarcRecord()->getLeader();
         $retval = $leader ?? '';
         if (strlen($leader) > $pos - 1) {
-            $retval = $leader{$pos};
+            $retval = $leader[$pos];
         }
         return $retval;
     }
@@ -240,7 +240,7 @@ trait MarcFormatTrait
             $retval = $data ?? '';
 
             if (isset($pos) && strlen($data) >= $pos + 1) {
-                $retval = $data{$pos};
+                $retval = $data[$pos];
             }
         }
         return strtolower($retval);
@@ -254,7 +254,7 @@ trait MarcFormatTrait
     public function isSerial(): bool
     {
         $leader = $this->getMarcRecord()->getLeader();
-        $leader_7 = $leader{7};
+        $leader_7 = $leader[7];
         if ($leader_7 === 's') {
             return true;
         }
@@ -269,7 +269,7 @@ trait MarcFormatTrait
     public function isPrintBook()
     {
         $leader = $this->getMarcRecord()->getLeader();
-        $leader_7 = $leader{7};
+        $leader_7 = $leader[7];
         $f007 = $this->get007();
 
         if ($this->isPhysical() && $leader_7 == 'm' && preg_match('/^t/i', $f007)) {

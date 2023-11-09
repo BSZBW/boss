@@ -36,9 +36,9 @@ use Bsz\RecordDriver\MarcFormatTrait;
 use Bsz\RecordDriver\SolrMarc;
 use Bsz\RecordDriver\SubrecordTrait;
 use VuFind\RecordDriver\DefaultRecord;
-use VuFind\RecordDriver\IlsAwareTrait;
-use VuFind\RecordDriver\MarcAdvancedTrait;
-use VuFind\RecordDriver\MarcReaderTrait;
+use VuFind\RecordDriver\Feature\IlsAwareTrait;
+use VuFind\RecordDriver\Feature\MarcAdvancedTrait;
+use VuFind\RecordDriver\Feature\MarcReaderTrait;
 
 /**
  * SolrMarc class for Findex records

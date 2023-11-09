@@ -27,7 +27,7 @@ use Bsz\RecordDriver\SolrMarc;
  *
  * @author Cornelius Amzar <cornelius.amzar@bsz-bw.de>
  */
-class RecordLink extends \VuFind\View\Helper\Root\RecordLink
+class RecordLink extends \VuFind\View\Helper\Root\RecordLinker
 {
     /**
      *

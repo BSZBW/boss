@@ -28,9 +28,9 @@ use File_MARC_Exception;
 use File_MARCBASE;
 use File_MARCXML;
 use phpDocumentor\Reflection\Types\Boolean;
-use VuFind\RecordDriver\IlsAwareTrait;
-use VuFind\RecordDriver\MarcAdvancedTrait;
-use VuFind\RecordDriver\MarcReaderTrait;
+use VuFind\RecordDriver\Feature\IlsAwareTrait;
+use VuFind\RecordDriver\Feature\MarcAdvancedTrait;
+use VuFind\RecordDriver\Feature\MarcReaderTrait;
 use VuFind\Search\SearchRunner;
 use VuFindCode\ISBN;
 
@@ -42,9 +42,10 @@ use VuFindCode\ISBN;
 class SolrMarc extends \VuFind\RecordDriver\SolrMarc
 {
     use MarcFormatTrait;
-    use IlsAwareTrait;
     use MarcReaderTrait;
-    use MarcAdvancedTrait;
+    use IlsAwareTrait, MarcAdvancedTrait {
+        MarcAdvancedTrait::getURLs insteadof IlsAwareTrait;
+    }
     use HelperTrait;
     use GndHelperTrait;
 
@@ -113,8 +114,8 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
     public function isCollection() : bool
     {
         $leader = $this->getMarcRecord()->getLeader();
-        $leader07 = $leader{7};
-        $leader19 = $leader{19};
+        $leader07 = $leader[7];
+        $leader19 = $leader[19];
 
         if ($leader07 == 'm' && $leader19 == 'a') {
             return true;
@@ -131,8 +132,8 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
     public function isPart() : bool
     {
         $leader = $this->getMarcRecord()->getLeader();
-        $leader07 = $leader{7};
-        $leader19 = $leader{19};
+        $leader07 = $leader[7];
+        $leader19 = $leader[19];
 
         if ($leader07 == 'm' && preg_match('/b|c/', $leader19)) {
             return true;
@@ -616,10 +617,10 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
         foreach ($f007 as $field) {
             $data = strtoupper($field->getData());
             if (strlen($data) > 0) {
-                $f007_0 = $data{0};
+                $f007_0 = $data[0];
             }
             if (strlen($data) > 1) {
-                $f007_1 = $data{1};
+                $f007_1 = $data[1];
             }
         }
         return $f007_0 . $f007_1;

@@ -44,12 +44,13 @@ $config = [
             'VuFind\View\Helper\Bootstrap3\LayoutClass' => 'Bsz\View\Helper\Bootstrap3\LayoutClass',
             'VuFind\View\Helper\Root\OpenUrl' => 'Bsz\View\Helper\Root\OpenUrl',
             'VuFind\View\Helper\Root\Record' => 'Bsz\View\Helper\Root\Record',
-            'VuFind\View\Helper\Root\RecordLink' => 'Bsz\View\Helper\Root\RecordLink',
+            'VuFind\View\Helper\Root\RecordLinker' => 'Bsz\View\Helper\Root\RecordLink',
             'VuFind\View\Helper\Root\Piwik' => 'Bsz\View\Helper\Root\Piwik',
             'VuFind\View\Helper\Root\SearchTabs' => 'Bsz\View\Helper\Root\SearchTabs',
             'VuFind\View\Helper\Root\SearchMemory' => 'Bsz\View\Helper\Root\SearchMemory',
             'wayfless' => 'BszTheme\View\Helper\Bodensee\Wayfless',
-            'gndLink' => 'BszTheme\View\Helper\Bodensee\GndLink'
+            'gndLink' => 'BszTheme\View\Helper\Bodensee\GndLink',
+            'recordLink' => 'VuFind\View\Helper\Root\RecordLinker'
         ]
     ]
 ];

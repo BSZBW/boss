@@ -15,7 +15,6 @@ use Laminas\Session\SessionManager;
 use Laminas\Validator\Csrf;
 
 class Manager extends \VuFind\Auth\Manager
-    implements \ZfcRbac\Identity\IdentityProviderInterface
 {
     /**
      *

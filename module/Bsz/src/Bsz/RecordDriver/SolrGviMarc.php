@@ -23,8 +23,8 @@ namespace Bsz\RecordDriver;
 
 use Bsz\Exception;
 use File_MARC_Exception;
-use VuFind\RecordDriver\IlsAwareTrait;
-use VuFind\RecordDriver\MarcReaderTrait;
+use VuFind\RecordDriver\Feature\IlsAwareTrait;
+use VuFind\RecordDriver\Feature\MarcReaderTrait;
 
 /**
  * @author Cornelius Amzar <cornelius.amzar@bsz-bw.de>

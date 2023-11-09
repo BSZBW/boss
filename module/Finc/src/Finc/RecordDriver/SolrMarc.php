@@ -20,9 +20,9 @@
  */
 namespace Finc\RecordDriver;
 
-use VuFind\RecordDriver\IlsAwareTrait;
-use VuFind\RecordDriver\MarcAdvancedTrait;
-use VuFind\RecordDriver\MarcBasicTrait;
+use VuFind\RecordDriver\Feature\IlsAwareTrait;
+use VuFind\RecordDriver\Feature\MarcAdvancedTrait;
+use VuFind\RecordDriver\Feature\MarcBasicTrait;
 use VuFind\View\Helper\Root\RecordLink;
 use VuFind\XSLT\Processor as XSLTProcessor;
 
