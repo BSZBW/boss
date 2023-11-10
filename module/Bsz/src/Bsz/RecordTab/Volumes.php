@@ -19,9 +19,11 @@
  */
 namespace Bsz\RecordTab;
 
-use Bsz\Search\Solr\Results;
 use VuFind\RecordTab\AbstractBase;
-use VuFind\Search\SearchRunner;
+use VuFind\XSLT\Import\VuFind;
+use VuFindSearch\ParamBag;
+use VuFindSearch\Query\Query;
+use VuFindSearch\Service as SearchService;
 
 /**
  * Class Volumes
@@ -29,37 +31,18 @@ use VuFind\Search\SearchRunner;
  * @category boss
  * @author Cornelius Amzar <cornelius.amzar@bsz-bw.de>
  */
-class Volumes extends AbstractBase
+class Volumes extends AbstractCollection
 {
-    /**
-     * @var SearchRunner
-     */
-    protected $runner;
-
-    /**
-     *
-     * @var array
-     */
-    protected $content;
-
-    /**
-     * @var string
-     */
-    protected $searchClassId;
-
-    /**
-     * @var array
-     */
-    protected $isils;
 
     /**
      * Constructor
-     * @param SearchRunner $runner
+     *
+     * @param SearchService $search
+     * @param array $isils
      */
-    public function __construct(SearchRunner $runner, $isils = [])
+    public function __construct(SearchService $search, array $isils = [])
     {
-        $this->runner = $runner;
-        $this->isils = $isils;
+        parent::__construct($search, $isils);
         $this->accessPermission = 'access.VolumesViewTab';
     }
 
@@ -72,92 +55,11 @@ class Volumes extends AbstractBase
         return 'Volumes';
     }
 
-    /**
-     *
-     * @return array|null
-     */
-    public function getContent()
+    protected function display($record): bool
     {
-        if ($this->content === null) {
-            $relId = $this->driver->tryMethod('getIdsRelated');
-            // add the ID of the current hit, thats usefull if its a
-            // Gesamtaufnahme
-            $this->content = [];
-            if (is_array($relId)) {
-                array_push($relId, $this->driver->getUniqueID());
-                if (is_array($relId) && count($relId) > 0) {
-                    foreach ($relId as $k => $id) {
-//                      $relId[$k] = 'id_related_host_item:"'.$id.'"';
-                        $relId[$k] = 'id_related:"' . $id . '"';
-                    }
-                    $params = [
-                        'sort' => 'publish_date_sort desc, id desc',
-                     'lookfor' => implode(' OR ', $relId),
-                     'limit'   => 500,
-                    ];
-
-                    $filter = [];
-                    if ($this->isFL() === false) {
-                        foreach ($this->isils as $isil) {
-                            $filter[] = '~institution_id:' . $isil;
-                        }
-                    }
-
-                    // Test: all Formats but articles
-                    $filter[] = '-material_content_type:Article';
-
-//                    $filter[] = '~material_content_type:Book';
-//                    $filter[] = '~material_content_type:"Musical Score"';
-//                    $filter[] = '~material_content_type:"Sound Recording"';
-
-                    $params['filter'] = $filter;
-
-                    $results = $this->runner->run($params);
-
-                    $results instanceof Results;
-                    $this->content = $results->getResults();
-                }
-            }
-        }
-        return $this->content;
+        $id = $this->driver->getUniqueID();
+        $fields = $record->getAllFieldsArray([773 => ['w'], 800 => ['w']]);
+        return in_array($id, $fields) && !$record->isArticle();
     }
 
-    /**
-     * Check if we are in an interlending or ZDB-TAB
-     **/
-    public function isFL()
-    {
-        $last = '';
-        if (isset($_SESSION['Search']['last'])) {
-            $last = urldecode($_SESSION['Search']['last']);
-        }
-        if (strpos($last, 'consortium:FL') !== false
-            || strpos($last, 'consortium:"FL"') !== false
-            || strpos($last, 'consortium:ZDB') !== false
-            || strpos($last, 'consortium:"ZDB"') !== false
-        ) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * This Tab is Active for collections or parts of collections only.
-     * @return boolean
-     */
-    public function isActive()
-    {
-        //getContents to determine active state
-        $this->getContent();
-        $parent = parent::isActive();
-        if ($parent && $this->getContent() !== []) {
-            if (($this->driver->isCollection() || $this->driver->isPart()
-                || $this->driver->isMonographicSerial()
-                || $this->driver->isJournal()) && !empty($this->content)) {
-                return true;
-            }
-        }
-        return false;
-    }
 }

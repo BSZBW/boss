@@ -27,59 +27,6 @@ class NoILS extends \VuFind\ILS\Driver\NoILS
     }
 
     /**
-     * Get Holding
-     *
-     * This is responsible for retrieving the holding information of a certain
-     * record.
-     *
-     * @param string $id     The record id to retrieve the holdings for
-     * @param array  $patron Patron data
-     *
-     * @throws ILSException
-     * @return array         On success, an associative array with the following
-     * keys: id, availability (boolean), status, location, reserve, callnumber,
-     * duedate, number, barcode.
-     */
-    public function getHolding($id, array $patron = null, array $options = [])
-    {
-        $useHoldings = isset($this->config['settings']['useHoldings'])
-            ? $this->config['settings']['useHoldings'] : 'none';
-
-        if ($useHoldings == "custom") {
-            return [
-                [
-                    'id' => $id,
-                    'number' => $this->translate(
-                        $this->config['Holdings']['number']
-                    ),
-                    'availability' => $this->config['Holdings']['availability'],
-                    'status' => $this->translate(
-                        $this->config['Holdings']['status']
-                    ),
-                    'use_unknown_message' =>
-                        $this->config['Holdings']['use_unknown_message'],
-                    'location' => '',
-                    'reserve' => $this->config['Holdings']['reserve'],
-                    'callnumber' => $this->translate(
-                        $this->config['Holdings']['callnumber']
-                    ),
-                    'barcode' => $this->config['Holdings']['barcode'],
-                    'notes' => isset($this->config['Holdings']['notes'])
-                        ? $this->config['Holdings']['notes'] : [],
-                    'summary' => isset($this->config['Holdings']['summary'])
-                        ? $this->config['Holdings']['summary'] : []
-                ]
-            ];
-        } elseif ($useHoldings == "marc") {
-            // Retrieve record from index:
-            $recordDriver = $this->getSolrRecord($id);
-            return $this->getFormattedMarcDetails($recordDriver, 'MarcHoldings');
-        }
-
-        return [];
-    }
-
-    /**
      * This is responsible for retrieving the status or holdings information of a
      * certain record from a Marc Record.
      *

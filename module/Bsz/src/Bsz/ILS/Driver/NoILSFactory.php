@@ -62,8 +62,6 @@ class NoILSFactory implements FactoryInterface
             throw new \Exception('Unexpected options passed to factory.');
         }
         $client = $container->get('Bsz\Config\Client');
-        $client = $container->get('Bsz\Config\Client');
-        $isils = $client->getIsilAvailability();
         $isils = $client->getIsilAvailability();
         $libraries = $container->get('Bsz\Config\Libraries');
         return new $requestedName(

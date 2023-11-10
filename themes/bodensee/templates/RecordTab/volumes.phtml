@@ -2,7 +2,7 @@
     // Set page title.
     $this->headTitle($this->translate('Volumes') . ': ' . $this->driver->getBreadcrumb());
 
-    $content = $this->tab->getContent();
+    $content = $this->tab->getResults();
 ?>
 <?php if (isset($content) && count($content) > 0): ?>
 <?php $rand = rand(0, 9999)?>

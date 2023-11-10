@@ -21,6 +21,8 @@
 
 namespace Findex\RecordTab;
 
+use Bsz\RecordTab\Articles;
+use Bsz\RecordTab\Volumes;
 use Interop\Container\ContainerInterface;
 use Zend\Http\PhpEnvironment\Request;
 
@@ -30,38 +32,32 @@ class Factory
      * Factory for libraries tab
      *
      * @param ContainerInterface $container
-     * @return Libraries
+     *
+     * @return FindexLibraries
      */
     public static function getLibraries(ContainerInterface $container)
     {
         $libraries = $container->get('Bsz\Config\Libraries');
         $client = $container->get('Bsz\Config\Client');
         $swbonly = $client->getTag() === 'swb' ?? false;
-        return new Libraries($libraries, !$client->is('disable_library_tab'), $swbonly);
+        return new FindexLibraries($libraries, !$client->is('disable_library_tab'), $swbonly);
     }
     /**
      * Factory for volumes tab
      *
      * @param ContainerInterface $container Service manager.
      *
-     * @return Volumes
+     * @return FindexVolumes
      */
     public static function getVolumes(ContainerInterface $container)
     {
-        $last = '';
-        if (isset($_SESSION['Search']['last'])) {
-            $last = urldecode($_SESSION['Search']['last']);
-        }
-        $isils = [];
-        if (strpos($last, 'consortium=FL') === false
-            && strpos($last, 'consortium=ZDB') === false
-        ) {
-            $client = $container->get('Bsz\Config\Client');
-            $isils = $client->getIsils();
-        }
+        $client = $container->get('Bsz\Config\Client');
+        $isils = $client->getIsils();
 
-        $volumes = new Volumes($container->get('VuFind\SearchRunner'), $isils);
-
+        $volumes = new FindexVolumes(
+            $container->get(\VuFindSearch\Service::class),
+            $isils
+        );
         return $volumes;
     }
 
@@ -70,25 +66,17 @@ class Factory
      *
      * @param ContainerInterface $container
      *
-     * @return Articles
+     * @return FindexArticles
      */
     public static function getArticles(ContainerInterface $container)
     {
-        $last = '';
-        if (isset($_SESSION['Search']['last'])) {
-            $last = urldecode($_SESSION['Search']['last']);
-        }
-        $isils = [];
-        if (strpos($last, 'consortium=FL') === false
-            && strpos($last, 'consortium=ZDB') === false
-        ) {
-            $client = $container->get('Bsz\Config\Client');
-            $isils = $client->getIsils();
-        }
+        $client = $container->get('Bsz\Config\Client');
+        $isils = $client->getIsils();
 
-        $articles = new Articles($container->get('VuFind\SearchRunner'), $isils);
-        $request = new Request();
-        $url = strtolower($request->getUriString());
+        $articles = new FindexArticles(
+            $container->get(\VuFindSearch\Service::class),
+            $isils
+        );
         return $articles;
     }
 }

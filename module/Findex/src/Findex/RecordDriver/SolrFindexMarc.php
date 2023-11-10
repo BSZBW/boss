@@ -465,5 +465,34 @@ class SolrFindexMarc extends SolrMarc implements Constants
         return in_array('ISIL_DE-LFER', $fields);
     }
 
+    public function getMusicalCast()
+    {
+        $castCodes = ['937'];
+        $cast = [];
+        foreach ($castCodes as $cc) {
+            $tmp = $this->getFieldArray($cc, ['d', 'e', 'f'], true, ' / ');
+            $cast = array_merge($cast, $tmp);
+        }
+        return $cast;
+    }
+
+    public function getOldPrintGenre()
+    {
+        $retVal = [];
+        foreach ($this->getMarcRecord()->getFields('655') as $field) {
+            $sfa = $field->getSubfield('a');
+            $sf2 = $field->getSubfield('2');
+            if (is_object($sf2) && $sf2->getData() === 'local' && is_object($sfa)) {
+                $retVal[] = $sfa->getData();
+            }
+        }
+        return $retVal;
+    }
+
+    public function getKindContent()
+    {
+
+    }
+
 
 }

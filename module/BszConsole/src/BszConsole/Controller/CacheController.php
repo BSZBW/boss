@@ -120,15 +120,4 @@ class CacheController extends AbstractActionController
             unlink($target);
         }
     }
-
-    private function foldersize ($dir)
-    {
-        $size = 0;
-
-        foreach (glob(rtrim($dir, '/').'/*', GLOB_NOSORT) as $each) {
-            $size += is_file($each) ? filesize($each) : static::foldersize($each);
-        }
-
-        return $size;
-    }
 }

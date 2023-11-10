@@ -36,7 +36,6 @@ $config = [
             'Bsz\Controller\HoldingController' => Factory::class,
             'Bsz\Controller\ShibController' => Factory::class,
             'Bsz\Controller\BszController' => Factory::class,
-            'Bsz\Controller\TestController' => Factory::class,
             'Bsz\Controller\CoverController' => 'Bsz\Controller\Factory::getCoverController',
         ],
         'aliases' => [
@@ -44,7 +43,6 @@ $config = [
             'Holding' => 'Bsz\Controller\HoldingController',
             'Shib' => 'Bsz\Controller\ShibController',
             'Bsz' => 'Bsz\Controller\BszController',
-            'Test' => 'Bsz\Controller\TestController',
             // overwriting
             'VuFind\Controller\SearchController'    => 'Bsz\Controller\SearchController',
             'VuFind\Controller\RecordController'    => 'Bsz\Controller\RecordController',
@@ -192,6 +190,8 @@ $config = [
                     'Bsz\RecordTab\Notes' => 'Bsz\RecordTab\Factory::getNotes',
                     'Bsz\RecordTab\Libraries' => 'Bsz\RecordTab\Factory::getLibraries',
                     'Bsz\RecordTab\InterlibraryLoan' => 'Bsz\RecordTab\Factory::getInterLibraryLoan',
+                    'Bsz\RecordTab\StaffViewAll' => 'InvokableFactory::class',
+
                 ],
                 'aliases' => [
                     'VuFind\RecordTab\HoldingsILS' => 'Bsz\RecordTab\HoldingsILS',
@@ -200,6 +200,7 @@ $config = [
                     'Notes' => 'Bsz\RecordTab\Notes',
                     'Libraries' => 'Bsz\RecordTab\Libraries',
                     'InterlibraryLoan' => 'Bsz\RecordTab\InterlibraryLoan',
+                    'staffviewall' => 'Bsz\RecordTab\StaffViewAll',
                 ]
             ],
             'search_backend' => [

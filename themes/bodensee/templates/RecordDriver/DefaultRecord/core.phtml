@@ -280,6 +280,30 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
                 <td><a href="<?=$this->recordLink()->getChildRecordSearchUrl($this->driver)?>"><?=$this->transEsc('child_record_count', array('%%count%%' => $childRecordCount))?></a></td>
             </tr>
             <? endif; ?>
+
+            <? $oldPrintGenre = $this->driver->tryMethod('getOldPrintGenre'); if ($oldPrintGenre): ?>
+                <tr>
+                    <th><?= $this->transEsc('old_print_genre') ?></th>
+                    <td>
+                        <? foreach ($oldPrintGenre as $item): ?>
+                        <?= $this->escapeHtml($item) ?><br>
+                        <? endforeach; ?>
+                    </td>
+                </tr>
+            <? endif; ?>
+
+            <? $provenances = $this->driver->tryMethod('getProvenances', [$this->client()->getProvenances()]); if ($provenances): ?>
+            <tr>
+                <th><?=$this->transEsc('provenances')?></th>
+                <td>
+                    <? foreach ($provenances as $item): ?>
+                    <?=$this->context($this)->renderInContext('RecordDriver/DefaultRecord/parts/provenance.phtml', ['provenance' => $item])?>
+                    <br>
+                    <? endforeach; ?>
+                </td>
+            </tr>
+            <? endif ?>
+
             <?=$this->render('RecordDriver/DefaultRecord/parts/subjects.phtml')?>
 
             <?
@@ -328,7 +352,7 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
                     <tr>
                       <th><?=$this->transEsc('External Resources')?></th>
                       <td><? foreach ($urls as $current): ?>
-                              <a class="external" href="<?=$this->wayfless($current['url'], $this->client()->getIsils(), )?>"><?=$this->transEsc($current['desc'])?></a><br/>
+                              <a class="external" href="<?=$this->wayfless($current['url'], $this->client()->getIsils())?>"><?=$this->transEsc($current['desc'])?></a><br/>
                           <? endforeach; ?></td>
                     </tr>
                 <? endif; ?>
@@ -375,6 +399,23 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
             </td>
         </tr>
         <? endif; ?>
+            <?php $bibliographies = $this->driver->tryMethod('getBibliographies');
+            if ($bibliographies != false && count($bibliographies) > 0):?>
+            <tr>
+                <th><?=$this->transEsc('Bibliographie')?></th>
+                <td>
+                    <?php foreach ($bibliographies as $bibliography):?>
+                        <?php if ($this->client()->is($bibliography)): ?>
+                        <div class="verticalcenter">
+                            <?php $imgLink= $this->imageLink('/logo/bibliographies/' . $bibliography .".png" ); ?>
+                            <img class="lineicon" src="<?=$imgLink?>" alt="<?=$bibliography?>" />
+                            <span style="vertical-align: middle"><?=$this->transEsc($bibliography)?></span>
+                        </div>
+                        <?php endif;?>
+                    <?php endforeach;?>
+                </td>
+            </tr>
+        <?php endif ?>
             <?php if($this->client()->is('wlb_facet_tooltip')):?>
             <?php $isEPflicht = $this->driver->tryMethod('isEPflicht'); ?>
             <?php $isLFER = $this->driver->tryMethod('isLFER'); ?>

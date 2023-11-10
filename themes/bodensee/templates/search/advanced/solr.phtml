@@ -32,6 +32,9 @@
                             ?>
                             <?php foreach ($sorted as $i => $display): ?>
                                 <?php $value = $list['list'][$i]; ?>
+                                <?php if ($field == 'rvk'):
+                                    $display = str_replace('rvk ', '', $display);
+                                endif; ?>
                                 <option value="<?=$this->escapeHtmlAttr(($value['operator'] == 'OR' ? '~' : '') . $field . ':"' . $value['value'] . '"')?>"<?=(isset($value['selected']) && $value['selected'])?' selected="selected"':''?>><?=$this->escapeHtml($display)?></option>
                             <?php endforeach; ?>
                         <?php endif; ?>

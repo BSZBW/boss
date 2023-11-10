@@ -44,20 +44,13 @@ class Factory
      */
     public static function getVolumes(ContainerInterface $container)
     {
-        $last = '';
-        if (isset($_SESSION['Search']['last'])) {
-            $last = urldecode($_SESSION['Search']['last']);
-        }
-        $isils = [];
-        if (strpos($last, 'consortium=FL') === false
-            && strpos($last, 'consortium=ZDB') === false
-        ) {
-            $client = $container->get('Bsz\Config\Client');
-            $isils = $client->getIsils();
-        }
+        $client = $container->get('Bsz\Config\Client');
+        $isils = $client->getIsils();
 
-        $volumes = new Volumes($container->get('VuFind\SearchRunner'), $isils);
-
+        $volumes = new Volumes(
+            $container->get(\VuFindSearch\Service::class),
+            $isils
+        );
         return $volumes;
     }
 
@@ -70,21 +63,13 @@ class Factory
      */
     public static function getArticles(ContainerInterface $container)
     {
-        $last = '';
-        if (isset($_SESSION['Search']['last'])) {
-            $last = urldecode($_SESSION['Search']['last']);
-        }
-        $isils = [];
-        if (strpos($last, 'consortium=FL') === false
-            && strpos($last, 'consortium=ZDB') === false
-        ) {
-            $client = $container->get('Bsz\Config\Client');
-            $isils = $client->getIsils();
-        }
+        $client = $container->get('Bsz\Config\Client');
+        $isils = $client->getIsils();
 
-        $articles = new Articles($container->get('VuFind\SearchRunner'), $isils);
-        $request = new Request();
-        $url = strtolower($request->getUriString());
+        $articles = new Articles(
+            $container->get(\VuFindSearch\Service::class),
+            $isils
+        );
         return $articles;
     }
 
@@ -123,17 +108,20 @@ class Factory
      */
     public static function getHoldingsILS(ContainerInterface $container)
     {
+        if (!empty($options)) {
+            throw new \Exception('Unexpected options passed to factory.');
+        }
         // If VuFind is configured to suppress the holdings tab when the
         // ILS driver specifies no holdings, we need to pass in a connection
         // object:
-        $config = $container->get('VuFind\Config')->get('config');
-        if (isset($config->Site->hideHoldingsTabWhenEmpty) && $config->Site->hideHoldingsTabWhenEmpty
-        ) {
-            $catalog = $container->get('VuFind\ILSConnection');
-        } else {
-            $catalog = false;
-        }
-        return new HoldingsILS($catalog);
+        $config = $container->get(\VuFind\Config\PluginManager::class)
+            ->get('config');
+        $catalog = $container->get(\VuFind\ILS\Connection::class);
+        return new HoldingsILS(
+            $catalog,
+            (string)($config->Site->holdingsTemplate ?? 'standard'),
+            (string)($config->Site->hideHoldingsTabWhenEmpty ?? false)
+        );
     }
 
     /**

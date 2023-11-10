@@ -4,7 +4,7 @@
 // Set page title.
 $this->headTitle($this->translate('Articles') . ': ' . $this->driver->getBreadcrumb());
 
-$content = $this->tab->getContent();
+$content = $this->tab->getResults();
 
 ?>
 <?php if (isset($content) && count($content) > 0): ?>

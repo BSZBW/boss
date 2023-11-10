@@ -18,7 +18,7 @@ $library = $this->libraries()->getFirstActive($this->client()->getIsils());
     </div>
     <?php $libraries = $this->libraries()->getActive($this->client()->getIsils()) ?>
     <?php $firstLibrary = array_shift($libraries);
-    if (isset($firstLibrary) && $firstLibrary->getFirstAuth() == 'tan'): ?>
+    if (isset($firstLibrary) && in_array('tan', $firstLibrary->getAuth())): ?>
         <div class=" form-group form-group-sm <?= isset($success) && !$success ? 'has-error' : '' ?>">
             <label class="control-label col-sm-<?= $labelSize ?>"
                    for="ill-tan"><?= $this->transEsc('TAN') ?>*</label>

@@ -37,7 +37,8 @@ $config = [
             'Bsz\View\Helper\Root\SearchTabs' => 'BszTheme\View\Helper\Bodensee\Factory::getSearchTabs',
             'Bsz\View\Helper\Root\SearchMemory' => 'BszTheme\View\Helper\Bodensee\Factory::getSearchMemory',
             'illform' => 'BszTheme\View\Helper\Bodensee\Factory::getIllForm',
-            'BszTheme\View\Helper\Bodensee\Wayfless' => 'BszTheme\View\Helper\Bodensee\Factory::getWayfless'
+            'BszTheme\View\Helper\Bodensee\Wayfless' => 'BszTheme\View\Helper\Bodensee\Factory::getWayfless',
+            'BszTheme\View\Helper\Bodensee\GndLink' => \Zend\ServiceManager\Factory\InvokableFactory::class
         ],
         'aliases' => [
             'VuFind\View\Helper\Bootstrap3\LayoutClass' => 'Bsz\View\Helper\Bootstrap3\LayoutClass',
@@ -47,7 +48,8 @@ $config = [
             'VuFind\View\Helper\Root\Piwik' => 'Bsz\View\Helper\Root\Piwik',
             'VuFind\View\Helper\Root\SearchTabs' => 'Bsz\View\Helper\Root\SearchTabs',
             'VuFind\View\Helper\Root\SearchMemory' => 'Bsz\View\Helper\Root\SearchMemory',
-            'wayfless' => 'BszTheme\View\Helper\Bodensee\Wayfless'
+            'wayfless' => 'BszTheme\View\Helper\Bodensee\Wayfless',
+            'gndLink' => 'BszTheme\View\Helper\Bodensee\GndLink'
         ]
     ]
 ];
