@@ -21,6 +21,7 @@
 namespace BszCommon\RecordTab;
 
 use VuFind\RecordTab\AbstractBase;
+use VuFindSearch\Command\SearchCommand;
 use VuFindSearch\ParamBag;
 use VuFindSearch\Query\Query;
 use VuFindSearch\Service as SearchService;
@@ -80,16 +81,18 @@ abstract class AbstractCollection extends AbstractBase
             $query = $this->getQuery();
             $params = $this->getParams();
 
-            $records = $this->searchService->search(
-                $this->getRecordDriver()->getSourceIdentifier(),
+            $command = new SearchCommand(
+            $this->getRecordDriver()->getSourceIdentifier(),
                 $query,
                 0,
                 static::LIMIT,
                 $params
-            )->getRecords();
+            );
+
+            $records = $this->searchService->invoke($command)->getResult();
 
             $this->results = [];
-            foreach ($records as $r) {
+            foreach ($records->getRecords() as $r) {
                 if($this->display($r)) {
                     $this->results[] = $r;
                 }

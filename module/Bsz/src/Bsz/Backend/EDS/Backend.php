@@ -8,7 +8,7 @@
 namespace Bsz\Backend\EDS;
 
 use Exception;
-use VuFindSearch\Backend\EDS\Zend2 as ApiClient;
+use VuFindSearch\Backend\EDS\Connector as ApiClient;
 use VuFindSearch\Response\RecordCollectionFactoryInterface;
 use Laminas\Cache\Storage\Adapter\AbstractAdapter as CacheAdapter;
 use Laminas\Config\Config;

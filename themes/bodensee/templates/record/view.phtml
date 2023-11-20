@@ -122,7 +122,7 @@ use Laminas\View\Helper\HeadScript;
                             }
                             $tab_classes[] = 'initiallyActive';
                             $this->layout()->breadcrumbs = '<li>' . $this->searchMemory()->getLastSearchLink($this->transEsc('Search'), '', '</li> ') .
-                                '<li class="active">' . $this->recordLink()->getBreadcrumb($this->driver) . '</li> ';
+                                '<li class="active">' . $this->recordLink()->getBreadcrumbHtml($this->driver) . '</li> ';
                             $activeTabObj = $obj;
                         }
 

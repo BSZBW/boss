@@ -377,7 +377,7 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
             $this->layout()->setTemplate('layout/lightbox');
         }
         $view = new ViewModel($params);
-        $this->layout()->searchClassId = $view->searchClassId = $this->searchClassId;
+        $this->layout()->searchClassId = $view->searchClassId = $this->sourceId;
         // we don't use a driver in this action
         // $view->driver = $this->loadRecord();
         return $view;
@@ -432,7 +432,7 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
             $this->layout()->setTemplate('layout/lightbox');
         }
         $view = new ViewModel($params);
-        $this->layout()->searchClassId = $view->searchClassId = $this->searchClassId;
+        $this->layout()->searchClassId = $view->searchClassId = $this->sourceId;
         $route = $this->params()->fromRoute();
         $view->driver = isset($route['id']) ? $this->loadRecord() : null;
         return $view;
