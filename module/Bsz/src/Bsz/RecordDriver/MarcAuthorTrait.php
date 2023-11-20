@@ -14,6 +14,8 @@ namespace Bsz\RecordDriver;
  */
 trait MarcAuthorTrait
 {
+    use AdvancedMarcReaderTrait;
+
     /**
      *
      * @return array
@@ -138,18 +140,18 @@ trait MarcAuthorTrait
      */
     public function getMarcFieldsAuthor($tag, $subfields = [])
     {
-        $fields = $this->getMarcRecord()->getFields($tag);
+        $fields = $this->getFields($tag);
         $result = [];
 
         foreach ($fields as $field) {
-            $field instanceof \File_MARC_Data_Field;
+            if (!is_array($field)) {
+                continue;
+            }
 
             $content = [];
-
-            foreach ($field->getSubfields() as $subfield) {
-                $subfield instanceof \File_MARC_Subfield;
-                if (in_array($subfield->getCode(), $subfields)) {
-                    $content[] = $subfield->getData();
+            foreach ($field['subfields'] as $subfield) {
+                if (in_array($subfield['code'], $subfields)) {
+                    $content[] = $subfield['data'];
                 }
             }
             // throw repeated subfields away! They are too difficult to process

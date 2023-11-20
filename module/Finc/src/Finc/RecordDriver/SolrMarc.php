@@ -20,6 +20,7 @@
  */
 namespace Finc\RecordDriver;
 
+use Bsz\RecordDriver\AdvancedMarcReaderTrait;
 use VuFind\RecordDriver\Feature\IlsAwareTrait;
 use VuFind\RecordDriver\Feature\MarcAdvancedTrait;
 use VuFind\RecordDriver\Feature\MarcBasicTrait;
@@ -38,6 +39,7 @@ use VuFind\XSLT\Processor as XSLTProcessor;
  */
 class SolrMarc extends SolrDefault
 {
+    use AdvancedMarcReaderTrait;
     use IlsAwareTrait;
     use MarcBasicTrait;
     use MarcAdvancedTrait;

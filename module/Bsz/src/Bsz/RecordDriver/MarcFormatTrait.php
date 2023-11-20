@@ -25,6 +25,8 @@ use Bsz\Exception;
 
 trait MarcFormatTrait
 {
+    use AdvancedMarcReaderTrait;
+
     protected $formatConfig;
     protected $formatConfigRda;
 
@@ -191,23 +193,6 @@ trait MarcFormatTrait
     }
 
     /**
-     * Get Leader at $pos
-     *
-     * @param int $pos
-     *
-     * @return string
-     */
-    protected function getLeader(int $pos): string
-    {
-        $leader = $this->getMarcRecord()->getLeader();
-        $retval = $leader ?? '';
-        if (strlen($leader) > $pos - 1) {
-            $retval = $leader[$pos];
-        }
-        return $retval;
-    }
-
-    /**
      * Is this a book serie?
      * @return boolean
      */
@@ -230,20 +215,15 @@ trait MarcFormatTrait
      * @return string
      */
 
-    protected function get008(int $pos = null): string
+    protected function get008(int $pos): string
     {
-        $f008 = $this->getMarcRecord()->getField("008", false);
-        $retval = '';
-
-        if (is_object($f008)) {
-            $data = $f008->getData();
-            $retval = $data ?? '';
-
-            if (isset($pos) && strlen($data) >= $pos + 1) {
-                $retval = $data[$pos];
+        $f008 = $this->getField("008");
+        if (is_string($f008)) {
+            if (($pos >= 0) && ($pos < strlen($f008))) {
+                return strtolower($f008[$pos]);
             }
         }
-        return strtolower($retval);
+        return '';
     }
 
     /**
@@ -253,12 +233,7 @@ trait MarcFormatTrait
      */
     public function isSerial(): bool
     {
-        $leader = $this->getMarcRecord()->getLeader();
-        $leader_7 = $leader[7];
-        if ($leader_7 === 's') {
-            return true;
-        }
-        return false;
+        return 's' === $this->getLeader(7);
     }
 
     /**
@@ -268,8 +243,7 @@ trait MarcFormatTrait
      */
     public function isPrintBook()
     {
-        $leader = $this->getMarcRecord()->getLeader();
-        $leader_7 = $leader[7];
+        $leader_7 = $this->getLeader(7);
         $f007 = $this->get007();
 
         if ($this->isPhysical() && $leader_7 == 'm' && preg_match('/^t/i', $f007)) {
@@ -288,11 +262,13 @@ trait MarcFormatTrait
 
     protected function get007($pattern = '/.*/'): array
     {
-        $f007 = $this->getMarcRecord()->getFields("007");
+        $f007 = $this->getFields("007");
         $retval = [];
         foreach ($f007 as $field) {
-            $tmp = $field->getData();
-            $tmp = substr($tmp, 0, 2);
+            if(!is_string($field)) {
+                continue;
+            }
+            $tmp = substr($field, 0, 2);
             if (preg_match($pattern, $tmp)) {
                 $tmp = str_pad($tmp, 2, STR_PAD_RIGHT);
                 $retval[] = strtolower($tmp);
@@ -337,13 +313,13 @@ trait MarcFormatTrait
     protected function getRdaCarrier(): array
     {
         $sub = '';
-        $fields = $this->getMarcRecord()->getFields(338);
+        $fields = $this->getFields(338);
         $retval = [];
 
         foreach ($fields as $field) {
-            if (is_object($field)) {
-                $sub = $field->getSubfield('b');
-                $retval[] = is_object($sub) ? strtolower($sub->getData()) : '';
+            if (is_array($field)) {
+                $sub = $this->getSubfield($field, 'b');
+                $retval[] = strtolower($sub);
             }
         }
         return $retval;
@@ -356,14 +332,11 @@ trait MarcFormatTrait
      */
     protected function get300($subfield = 'a'): string
     {
-        $sub = '';
-        $field = $this->getMarcRecord()->getField(300);
-        $retval = '';
-        if (is_object($field)) {
-            $sub = $field->getSubfield($subfield);
-            $retval = is_object($sub) ? $sub->getData() : '';
+        $field = $this->getField(300);
+        if (is_array($field)) {
+             return $this->getSubfield($field, $subfield);
         }
-        return strtolower($retval);
+        return '';
     }
 
     /**
@@ -433,13 +406,11 @@ trait MarcFormatTrait
      */
     public function isFree(): bool
     {
-        $f856 = $this->getMarcRecord()->getFields(856);
+        $f856 = $this->getFields(856);
         foreach ($f856 as $field) {
-            $z = $field->getSubfield('z');
-            if (is_string($z) && $field->getIndicator(2) == 0
-                && preg_match('/^kostenlos|kostenfrei$/i', $z)
-            ) {
-                return true;
+            if (is_array($field) && $field['i2'] == 0) {
+                $sfz = strtolower($this->getSubfield($field, 'z'));
+                return preg_match('/^kostenlos|kostenfrei$/i', $sfz);
             }
         }
         return false;
@@ -452,14 +423,12 @@ trait MarcFormatTrait
 
     protected function getRdaContent(): array
     {
-        $sub = '';
-        $fields = $this->getMarcRecord()->getFields(336);
+        $fields = $this->getFields(336);
         $retval = [];
 
         foreach ($fields as $field) {
-            if (is_object($field)) {
-                $sub = $field->getSubfield('b');
-                $retval[] = is_object($sub) ? strtolower($sub->getData()) : '';
+            if (is_array($field)) {
+                $retval[] = strtolower($this->getSubfield($field, 'b'));
             }
         }
         return $retval;
@@ -473,13 +442,12 @@ trait MarcFormatTrait
     protected function getRdaMedia(): array
     {
         $sub = '';
-        $fields = $this->getMarcRecord()->getFields(337);
+        $fields = $this->getFields(337);
         $retval = [];
 
         foreach ($fields as $field) {
-            if (is_object($field)) {
-                $sub = $field->getSubfield('b');
-                $retval[] = is_object($sub) ? strtolower($sub->getData()) : '';
+            if (is_array($field)) {
+                $retval[] = strtolower($this->getSubfield($fields, 'b'));
             }
         }
         return $retval;
@@ -490,16 +458,14 @@ trait MarcFormatTrait
      *
      * @return array
      */
-    protected function get500($subfield = 'a'): array
+    protected function get500(string $subfield = 'a'): array
     {
-        $sub = '';
-        $fields = $this->getMarcRecord()->getFields(500);
+        $fields = $this->getFields(500);
         $retval = [];
 
         foreach ($fields as $field) {
-            if (is_object($field)) {
-                $sub = $field->getSubfield($subfield);
-                $retval[] = is_object($sub) ? strtolower($sub->getData()) : '';
+            if (is_array($field)) {
+                $retval[] = strtolower($this->getSubfield($field, $subfield));
             }
         }
         return $retval;

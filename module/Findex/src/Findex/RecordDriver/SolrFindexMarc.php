@@ -27,6 +27,7 @@
 namespace Findex\RecordDriver;
 
 use Bsz\Exception;
+use Bsz\RecordDriver\AdvancedMarcReaderTrait;
 use Bsz\RecordDriver\Constants;
 use Bsz\RecordDriver\ContainerTrait;
 use Bsz\RecordDriver\FivTrait;
@@ -48,7 +49,7 @@ use VuFind\RecordDriver\Feature\MarcReaderTrait;
 class SolrFindexMarc extends SolrMarc implements Constants
 {
     use IlsAwareTrait;
-    use MarcReaderTrait;
+    use AdvancedMarcReaderTrait;
     use MarcAdvancedTrait;
     use SubrecordTrait;
     use HelperTrait;
@@ -155,26 +156,34 @@ class SolrFindexMarc extends SolrMarc implements Constants
 
         $urls = [];
         $urlFields = array_merge(
-            $this->getMarcRecord()->getFields('856'),
-            $this->getMarcRecord()->getFields('555')
+            $this->getFields('856'),
+            $this->getFields('555')
         );
-        foreach ($urlFields as $f) {
-            $f instanceof File_MARC_Data_Field;
-            $url = [];
-            $sf = $f->getSubField('u');
-            $ind1 = $f->getIndicator(1);
-            $ind2 = $f->getIndicator(2);
-            if (!$sf) {
+        foreach ($urlFields as $field) {
+            if(!is_array($field)) {
                 continue;
             }
-            $url['url'] = $sf->getData();
 
-            if (($sf = $f->getSubField('3')) && strlen($sf->getData()) > 2) {
-                $url['desc'] = $sf->getData();
-            } elseif (($sf = $f->getSubField('y'))) {
-                $url['desc'] = $sf->getData();
-            } elseif (($sf = $f->getSubField('n'))) {
-                $url['desc'] = $sf->getData();
+            $url = [];
+
+            $ind1 = $field['i1'];
+            $ind2 = $field['i2'];
+
+            //URL must not be empty
+            $sfu = $this->getSubfield($field, 'u');
+            if (empty($sfu)) {
+                continue;
+            }
+
+            $url['url'] = $sfu;
+
+            //TODO: = correct?
+            if (($sfu = $this->getSubfield($field, '3')) && strlen($sfu) > 2) {
+                $url['desc'] = $sfu;
+            } elseif (($sfu = $this->getSubfield($field, 'y'))) {
+                $url['desc'] = $sfu;
+            } elseif (($sfu = $this->getSubfield($field, 'n'))) {
+                $url['desc'] = $sfu;
             } elseif ($ind1 == 4 && ($ind2 == 1 || $ind2 == 0)) {
                 $url['desc'] = 'Online Access';
             } elseif ($ind1 == 4 && ($ind2 == 1 || $ind2 == 0)) {
@@ -209,7 +218,7 @@ class SolrFindexMarc extends SolrMarc implements Constants
      */
     public function getField980()
     {
-        $f980 = $this->getMarcRecord()->getFields('980');
+        $f980 = $this->getFields('980');
 
         // map subfield codes to human-readable descriptions
         $mappings = [
@@ -225,12 +234,11 @@ class SolrFindexMarc extends SolrMarc implements Constants
         $result = [];
 
         foreach ($f980 as $field) {
-            $subfields = $field->getSubfields();
             $arrsub = [];
 
-            foreach ($subfields as $subfield) {
-                $code = $subfield->getCode();
-                $data = $subfield->getData();
+            foreach ($field['subfields'] ?? [] as $subfield) {
+                $code = $subfield['code'];
+                $data = $subfield['data'];
 
                 if (array_key_exists($code, $mappings)) {
                     $mapping = $mappings[$code];
@@ -248,7 +256,7 @@ class SolrFindexMarc extends SolrMarc implements Constants
             }
             // handle recurring subfields - convert them to array
             foreach ($arrsub as $k => $sub) {
-                if (strpos($sub, ' | ')) {
+                if (str_contains($sub, ' | ')) {
                     $split = explode(' | ', $sub);
                     $arrsub[$k] = $split;
                 }
@@ -339,30 +347,36 @@ class SolrFindexMarc extends SolrMarc implements Constants
         $replace = [
             '"' => "'",
         ];
-        foreach ($this->getMarcRecord()->getFields('084') as $field) {
-            $suba = $field->getSubField('a');
-            $sub2 = $field->getSubfield('2');
-            if ($suba && $sub2) {
-                $sub2data = $field->getSubfield('2')->getData();
-                if (strtolower($sub2data) == 'rvk') {
-                    $title = [];
-                    foreach ($field->getSubFields('k') as $item) {
-                        $title[] = htmlentities($item->getData());
-                    }
-                    $notationList[$suba->getData()] = $title;
+        foreach ($this->getFields('084') as $field) {
+
+            $sfa = $this->getSubfield($field, 'a');
+            $sf2 = $this->getSubfield($field, '2');
+
+            if(empty($sfa) || empty($sf2)) {
+                continue;
+            }
+
+            if (strtolower($sf2) == 'rvk') {
+                $title = [];
+                foreach ($this->getSubfields($field, 'k') as $item) {
+                    $title[] = htmlentities($item);
                 }
+                $notationList[$sfa] = $title;
             }
         }
-        foreach ($this->getMarcRecord()->getFields('936') as $field) {
-            $suba = $field->getSubField('a');
-            if ($suba && $field->getIndicator(1) == 'r'
-                && $field->getIndicator(2) == 'v'
-            ) {
+        foreach ($this->getFields('936') as $field) {
+
+            $sfa = $this->getSubfield($field, 'a');
+            if(empty($sfa)) {
+                continue;
+            }
+
+            if ($field['i1'] == 'r' && $field['i2'] == 'v') {
                 $title = [];
-                foreach ($field->getSubFields('k') as $item) {
-                    $title[] = htmlentities($item->getData());
+                foreach ($this->getSubfields($field, 'k') as $item) {
+                    $title[] = htmlentities($item);
                 }
-                $notationList[$suba->getData()] = $title;
+                $notationList[$sfa] = $title;
             }
         }
         return $notationList;
@@ -371,10 +385,15 @@ class SolrFindexMarc extends SolrMarc implements Constants
     public function getBibliographies()
     {
         $return = [];
-        $m935 = $this->getMarcRecord()->getFields('935');
-        foreach ($m935 as $field) {
-            foreach ($field->getSubfields('a') as $suba) {
-                $content = strtoupper($suba->getData());
+        $f935 = $this->getFields('935');
+
+        foreach ($f935 as $field) {
+            if(!is_array($field)) {
+                continue;
+            }
+
+            foreach ($this->getSubfields($field, 'a') as $sfa) {
+                $content = strtoupper($sfa);
                 if ($this->mainConfig->is($content)) {
                     $return[] = $content;
                 }
@@ -385,13 +404,17 @@ class SolrFindexMarc extends SolrMarc implements Constants
 
     public function getLocalSubjects()
     {
-        $fields = $this->getMarcRecord()->getFields('982');
+        $fields = $this->getFields('982');
         $isils = $this->mainConfig->getIsils();
         $output = [];
-        foreach ($fields as $index => $field) {
-            $isil = $field->getSubfield('x')->getData();
+        foreach ($fields as $field) {
+            if(!is_array($field)) {
+                continue;
+            }
+
+            $isil = $this->getSubfield($field, 'x');
             if (in_array($isil, $isils)) {
-                $output[] = $field->getSubfield('a')->getData();
+                $output[] = $this->getSubfield($field, 'a');
             }
         }
         return $output;
@@ -400,21 +423,28 @@ class SolrFindexMarc extends SolrMarc implements Constants
     public function getParallelEditions()
     {
         $retval = [];
-        foreach ($this->getMarcRecord()->getfields(776) as $field) {
+        foreach ($this->getFields(776) as $field) {
             $tmp = [];
-            if ($field->getIndicator(1) == 0) {
-                $tmp['ppn'] = $field->getSubfield('w') ? $field->getSubfield('w')->getData() : null;
-                if ($tmp['ppn'] !== null) {
-                    $tmp['ppn'] = preg_replace('/\(.*\)(.*)/', '$1', $tmp['ppn']);
+            if ($field['i1'] == 0) {
+
+                $sfw = $this->getSubfield($field, 'w');
+                if(!empty($sfw)) {
+                    $tmp['ppn'] =  preg_replace('/\(.*\)(.*)/', '$1', $sfw);
                 }
-                if ($field->getSubfield('i')) {
-                    $tmp['prefix'] = $field->getSubfield('i')->getData();
+
+                $sfi = $this->getSubfield($field, 'i');
+                if(!empty($sfi)) {
+                    $tmp['prefix'] = $sfi;
                 }
-                if ($field->getSubfield('t')) {
-                    $tmp['label'] = $field->getSubfield('t')->getData();
+
+                $sft = $this->getSubfield($field, 't');
+                if(!empty($sft)) {
+                    $tmp['label'] = $sft;
                 }
-                if ($field->getSubfield('n')) {
-                    $tmp['postfix'] = $field->getSubfield('n')->getData();
+
+                $sfn = $this->getSubfield($field, 'n');
+                if(!empty($sfn)) {
+                    $tmp['postfix'] = $sfn;
                 }
             }
             if (isset($tmp['ppn'], $tmp['label'])) {
@@ -445,11 +475,11 @@ class SolrFindexMarc extends SolrMarc implements Constants
 
     private function isBLB(): bool
     {
-        $f583 = $this->getMarcRecord()->getFields('583', false);
+        $f583 = $this->getFields('583');
         foreach ($f583 as $field) {
-            $sff = $field->getSubfield('f');
-            $sf5 = $field->getSubfield('5');
-            if (($sff && ($sff->getData() === 'PEBW')) && ($sf5 && ($sf5->getData() === 'DE-31'))){
+            $sff = $this->getSubfield($field, 'f');
+            $sf5 = $this->getSubfield($field, '5');
+            if(($sff === 'PEBW') && ($sf5 === 'DE-31')) {
                 return true;
             }
         }
@@ -479,11 +509,15 @@ class SolrFindexMarc extends SolrMarc implements Constants
     public function getOldPrintGenre()
     {
         $retVal = [];
-        foreach ($this->getMarcRecord()->getFields('655') as $field) {
-            $sfa = $field->getSubfield('a');
-            $sf2 = $field->getSubfield('2');
-            if (is_object($sf2) && $sf2->getData() === 'local' && is_object($sfa)) {
-                $retVal[] = $sfa->getData();
+        foreach ($this->getFields('655') as $field) {
+            if(!is_array($field)) {
+                continue;
+
+            }
+            $sfa = $this->getSubfield($field, 'a');
+            $sf2 = $this->getSubfield($field, '2');
+            if ($sf2 === 'local' && !empty($sfa)) {
+                $retVal[] = $sfa;
             }
         }
         return $retVal;

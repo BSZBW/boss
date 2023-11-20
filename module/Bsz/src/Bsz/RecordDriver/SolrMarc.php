@@ -21,16 +21,10 @@
  */
 namespace Bsz\RecordDriver;
 
+use Bsz\Exception;
 use Bsz\Tools\GndHelperTrait;
-use Exception;
-use File_MARC;
-use File_MARC_Exception;
-use File_MARCBASE;
-use File_MARCXML;
-use phpDocumentor\Reflection\Types\Boolean;
 use VuFind\RecordDriver\Feature\IlsAwareTrait;
 use VuFind\RecordDriver\Feature\MarcAdvancedTrait;
-use VuFind\RecordDriver\Feature\MarcReaderTrait;
 use VuFind\Search\SearchRunner;
 use VuFindCode\ISBN;
 
@@ -42,7 +36,7 @@ use VuFindCode\ISBN;
 class SolrMarc extends \VuFind\RecordDriver\SolrMarc
 {
     use MarcFormatTrait;
-    use MarcReaderTrait;
+    use AdvancedMarcReaderTrait;
     use IlsAwareTrait, MarcAdvancedTrait {
         MarcAdvancedTrait::getURLs insteadof IlsAwareTrait;
     }
@@ -54,68 +48,14 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
     protected $container = [];
 
     /**
-     * Return an array of non-empty subfield values found in the provided MARC
-     * field.  If $concat is true, the array will contain either zero or one
-     * entries (empty array if no subfields found, subfield values concatenated
-     * together in specified order if found).  If concat is false, the array
-     * will contain a separate entry for each subfield value found.
-     *
-     * @param object $currentField Result from File_MARC::getFields.
-     * @param array  $subfields    The MARC subfield codes to read
-     * @param bool   $concat       Should we concatenate subfields?
-     *
-     * @return array
-     */
-    protected function getSubfieldArray($currentField, $subfields, $concat = true, $separator = ' ')
-    {
-        // Start building a line of text for the current field
-        $matches = [];
-        $currentLine = '';
-
-        // Loop through all subfields, collecting results that match the whitelist;
-        // note that it is important to retain the original MARC order here!
-        $allSubfields = $currentField->getSubfields();
-        if (count($allSubfields) > 0) {
-            foreach ($allSubfields as $currentSubfield) {
-                if (in_array($currentSubfield->getCode(), $subfields)) {
-                    // Grab the current subfield value and act on it if it is
-                    // non-empty:
-                    $data = trim($currentSubfield->getData());
-                    if (!empty($data)) {
-                        // Are we concatenating fields or storing them separately?
-                        if ($concat) {
-                            $currentLine .= $data . ' ';
-                        } else {
-                            $matches[] = $data;
-                        }
-                    }
-                }
-            }
-        }
-
-        // If we're in concat mode and found data, it will be in $currentLine and
-        // must be moved into the matches array.  If we're not in concat mode,
-        // $currentLine will always be empty and this code will be ignored.
-        if (!empty($currentLine)) {
-            $matches[] = trim($currentLine);
-        }
-
-        // Send back our result array:
-        return $matches;
-    }
-
-
-    /**
      * is this item a collection
      * @return bool
      * @deprecated the differences between "parts" and "collections" is not clear
-     * @throws File_MARC_Exception
      */
     public function isCollection() : bool
     {
-        $leader = $this->getMarcRecord()->getLeader();
-        $leader07 = $leader[7];
-        $leader19 = $leader[19];
+        $leader07 = $this->getLeader(7);
+        $leader19 = $this->getLeader(19);
 
         if ($leader07 == 'm' && $leader19 == 'a') {
             return true;
@@ -127,15 +67,14 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
      * is this item part of a collection?
      *
      * @deprecated the differences between "parts" and "collections" is not clear
-     * @return boolean
+     * @return bool
      */
     public function isPart() : bool
     {
-        $leader = $this->getMarcRecord()->getLeader();
-        $leader07 = $leader[7];
-        $leader19 = $leader[19];
+        $leader07 = $this->getLeader(7);
+        $leader19 = $this->getLeader(19);
 
-        if ($leader07 == 'm' && preg_match('/b|c/', $leader19)) {
+        if ($leader07 == 'm' && preg_match('/[bc]/', $leader19)) {
             return true;
         }
         return false;
@@ -145,7 +84,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
      * Attach a Search Results Plugin Manager connection and related logic to
      * the driver
      *
-     * @param \VuFind\SearchRunner $runner
+     * @param \VuFind\Search\SearchRunner $runner
      * @return void
      */
     public function attachSearchRunner(SearchRunner $runner)
@@ -158,8 +97,8 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
      *  already simplified and unified.
      *
      * @return array
+     * @throws Exception
      */
-
     public function getFormats() : array
     {
         if ($this->formats === null && isset($this->formatConfig)) {
@@ -181,7 +120,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
      */
     public function getField924()
     {
-        $f924 = $this->getMarcRecord()->getFields('924');
+        $f924 = $this->getFields('924');
 
         // map subfield codes to human-readable descriptions
         $mappings = [
@@ -193,12 +132,11 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
         $result = [];
 
         foreach ($f924 as $field) {
-            $subfields = $field->getSubfields();
             $arrsub = [];
 
-            foreach ($subfields as $subfield) {
-                $code = $subfield->getCode();
-                $data = $subfield->getData();
+            foreach ($field['subfields'] ?? [] as $subfield) {
+                $code = $subfield['code'];
+                $data = $subfield['data'];
 
                 if (array_key_exists($code, $mappings)) {
                     $mapping = $mappings[$code];
@@ -264,52 +202,53 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
         return array_unique($result);
     }
 
-    /**
-     * Get access to the raw File_MARC object.
-     *
-     * @return File_MARCBASE
-     */
-    public function getMarcRecord()
-    {
-        if (null === $this->lazyMarcRecord) {
-            $marc = trim($this->fields['fullrecord']);
-            $backup = $marc;
-
-            // check if we are dealing with MARCXML
-            if (substr($marc, 0, 1) == '<') {
-                $errorReporting = error_reporting();
-                error_reporting(E_ERROR);
-                try {
-//                    error_reporting(0);
-                    $marc = new File_MARCXML($marc, File_MARCXML::SOURCE_STRING);
-                } catch (Exception $ex) {
-                    /**
-                     * Replace asci control chars and & chars not followed bei amp;
-                     */
-                    $marc = preg_replace(['/#[0-9]*;/', '/&(?!amp;)/'], ['', '&amp;'], $backup);
-                    $marc = new File_MARCXML($marc, File_MARCXML::SOURCE_STRING);
-                    // Try again
-                }
-                error_reporting($errorReporting);
-            } else {
-                // When indexing over HTTP, SolrMarc may use entities instead of
-                // certain control characters; we should normalize these:
-                $marc = str_replace(
-                    ['#29;', '#30;', '#31;'],
-                    ["\x1D", "\x1E", "\x1F"],
-                    $marc
-                );
-                $marc = new File_MARC($marc, File_MARC::SOURCE_STRING);
-            }
-
-            $this->lazyMarcRecord = $marc->next();
-            if (!$this->lazyMarcRecord) {
-                throw new File_MARC_Exception('Cannot Process MARC Record');
-            }
-        }
-
-        return $this->lazyMarcRecord;
-    }
+    //TODO: Deprecated?
+//    /**
+//     * Get access to the raw File_MARC object.
+//     *
+//     * @return File_MARCBASE
+//     */
+//    public function getMarcRecord()
+//    {
+//        if (null === $this->lazyMarcRecord) {
+//            $marc = trim($this->fields['fullrecord']);
+//            $backup = $marc;
+//
+//            // check if we are dealing with MARCXML
+//            if (substr($marc, 0, 1) == '<') {
+//                $errorReporting = error_reporting();
+//                error_reporting(E_ERROR);
+//                try {
+////                    error_reporting(0);
+//                    $marc = new File_MARCXML($marc, File_MARCXML::SOURCE_STRING);
+//                } catch (Exception $ex) {
+//                    /**
+//                     * Replace asci control chars and & chars not followed bei amp;
+//                     */
+//                    $marc = preg_replace(['/#[0-9]*;/', '/&(?!amp;)/'], ['', '&amp;'], $backup);
+//                    $marc = new File_MARCXML($marc, File_MARCXML::SOURCE_STRING);
+//                    // Try again
+//                }
+//                error_reporting($errorReporting);
+//            } else {
+//                // When indexing over HTTP, SolrMarc may use entities instead of
+//                // certain control characters; we should normalize these:
+//                $marc = str_replace(
+//                    ['#29;', '#30;', '#31;'],
+//                    ["\x1D", "\x1E", "\x1F"],
+//                    $marc
+//                );
+//                $marc = new File_MARC($marc, File_MARC::SOURCE_STRING);
+//            }
+//
+//            $this->lazyMarcRecord = $marc->next();
+//            if (!$this->lazyMarcRecord) {
+//                throw new File_MARC_Exception('Cannot Process MARC Record');
+//            }
+//        }
+//
+//        return $this->lazyMarcRecord;
+//    }
 
     /**
      * parses Format to OpenURL genre
@@ -419,8 +358,8 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
      */
     public function getPPN(): string
     {
-        $m001 = $this->getMarcRecord()->getField('001');
-        return is_object($m001) ? $m001->getData() : '';
+        $f001 = $this->getField('001');
+        return is_string($f001) ? $f001 : '';
     }
 
     /**
@@ -484,14 +423,17 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
      */
     public function getLanguages() : array
     {
-        $languages = [];
-        $fields = $this->getMarcRecord()->getFields('041');
-        foreach ($fields as $field) {
-            foreach ($field->getSubFields('a') as $sf) {
-                $languages[] = $sf->getData();
-            }
-        }
-        return $languages;
+        //TODO: Remove
+//        $languages = [];
+//        $marc = $this->getMarcReader();
+//        $fields = $marc->getFields('041');
+//        foreach ($fields as $field) {
+//            foreach ($field->getSubFields('a') as $sf) {
+//                $languages[] = $sf->getData();
+//            }
+//        }
+//        return $languages;
+        return $this->getFieldArray('041', 'a', false);
     }
 
     /**
@@ -531,10 +473,10 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
      */
     public function getShortTitle() : string
     {
-        $shortTitle = $this->getFirstFieldValue('245', ['a'], false);
+        $shortTitle = $this->getFirstFieldValue('245', ['a']);
 
         // Sortierzeichen weg
-        if (strpos($shortTitle, '@') !== false) {
+        if (str_contains($shortTitle, '@')) {
             $occurrence = strpos($shortTitle, '@');
             $shortTitle = substr_replace($shortTitle, '', $occurrence, 1);
         }
@@ -551,10 +493,10 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
      */
     public function getSubtitle(): string
     {
-        $subTitle = $this->getFirstFieldValue('245', ['b'], false);
+        $subTitle = $this->getFirstFieldValue('245', ['b']);
 
         // Sortierzeichen weg
-        if (strpos($subTitle, '@') !== false) {
+        if (str_contains($subTitle, '@')) {
             $occurrence = strpos($subTitle, '@');
             $subTitle = substr_replace($subTitle, '', $occurrence, 1);
         }
@@ -611,11 +553,10 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
      */
     private function get007()
     {
-        $f007 = null;
         $f007_0 = $f007_1 = '';
-        $f007 = $this->getMarcRecord()->getFields("007", false);
+        $f007 = $this->getFields("007");
         foreach ($f007 as $field) {
-            $data = strtoupper($field->getData());
+            $data = is_string($field) ? strtoupper($field) : '';
             if (strlen($data) > 0) {
                 $f007_0 = $data[0];
             }
@@ -629,25 +570,25 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
     public function getProvenances(array $isils = []): array
     {
         $retVal = [];
-        $f561 = $this->getMarcRecord()->getFields('561', false);
+        $f561 = $this->getFields('561');
         foreach ($f561 as $field) {
             $entry = [];
 
-            $sf5 = $field->getSubfield('5');
-            if (!empty($isils) && !in_array($sf5->getData(), $isils)) {
+            $sf5 = $this->getSubfield($field, '5');
+            if (!empty($isils) && !in_array($sf5, $isils)) {
                 continue;
             }
-            $sf3 = $field->getSubfield('3');
+            $sf3 = $this->getSubfield($field, '3');
             if (isset($sf3)) {
-                $pos = strpos($sf3->getData(), 'Signatur');
+                $pos = strpos($sf3, 'Signatur');
                 if ($pos !== false) {
-                    $entry['signature'] = substr($sf3->getData(), $pos);
+                    $entry['signature'] = substr($sf3, $pos);
                 }
             }
 
-            $sfa = $field->getSubfield('a');
+            $sfa = $this->getSubfield($field, 'a');
             if (isset($sfa)) {
-                $data = explode(' / ', $sfa->getData());
+                $data = explode(' / ', $sfa);
 
                 $subData = explode(';', $data[0]);
                 $splittedName = explode(':', $subData[0], 2);
