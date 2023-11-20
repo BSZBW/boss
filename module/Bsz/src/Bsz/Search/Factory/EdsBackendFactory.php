@@ -10,7 +10,7 @@
 namespace Bsz\Search\Factory;
 
 use Bsz\Backend\EDS\Backend;
-use VuFindSearch\Backend\EDS\Zend2 as Connector;
+use VuFindSearch\Backend\EDS\Connector;
 
 class EdsBackendFactory extends \VuFind\Search\Factory\EdsBackendFactory
 {
@@ -23,7 +23,7 @@ class EdsBackendFactory extends \VuFind\Search\Factory\EdsBackendFactory
      */
     protected function createBackend(Connector $connector)
     {
-        $auth = $this->serviceLocator->get('ZfcRbac\Service\AuthorizationService');
+        $auth = $this->serviceLocator->get('LmcRbacMvc\Service\AuthorizationService');
         $isGuest = !$auth->isGranted('access.EDSExtendedResults');
         $session = new \Laminas\Session\Container(
             'EBSCO', $this->serviceLocator->get('VuFind\SessionManager')
