@@ -2,6 +2,8 @@
 namespace Bsz\Auth;
 
 use Interop\Container\ContainerInterface;
+use VuFind\Auth\Shibboleth\MultiIdPConfigurationLoader;
+use VuFind\Auth\Shibboleth\SingleIdPConfigurationLoader;
 
 /**
  * Description of Factory
@@ -64,4 +66,32 @@ class Factory
             $client->getIsils()
         );
     }
+
+    public static function getShibboleth(ContainerInterface $container, $requestedName) {
+
+        return new $requestedName(
+            $container->get('VuFind\SessionManager'),
+            self::getConfigurationLoader($container),
+            $container->get('Request'),
+            $container->get('Bsz\Config\Libraries'),
+            $container->get('Bsz\Config\Client')->getIsils()
+        );
+    }
+
+    public static function getConfigurationLoader(
+        \Psr\Container\ContainerInterface $container)
+    {
+        $configManager = $container->get(\VuFind\Config\PluginManager::class);
+        $config = $configManager->get('config');
+        $override = $config->Shibboleth->allow_configuration_override ?? false;
+        $loader = null;
+        if ($override) {
+            $shibConfig = $configManager->get(self::SHIBBOLETH_CONFIG_FILE_NAME);
+            $loader = new MultiIdPConfigurationLoader($config, $shibConfig);
+        } else {
+            $loader = new SingleIdPConfigurationLoader($config);
+        }
+        return $loader;
+    }
+
 }

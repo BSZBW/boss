@@ -230,7 +230,7 @@ class SolrGviMarc extends SolrMarc implements Constants
 
         foreach ($this->getFields('938') as $field) {
             $sf2 = $this->getSubfield($field, '2');
-            if ($field['ind'] == 1
+            if ($field['i1'] == 1
                 && (empty($sf2) || $sf2 != 'gnd')
                 && ((isset($ind2) && $field['i2']== $ind2) || !isset($ind2))
             ) {

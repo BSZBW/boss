@@ -221,8 +221,8 @@ JS;
     <div class="offcanvas-toggle" data-toggle="offcanvas"><i class="fa fa-chevron-left" title="<?=$this->transEsc('sidebar_expand') ?>"></i></div>
     <div class="offcanvas-overlay" data-toggle="offcanvas"></div>
     <?=$this->googleanalytics()?>
-    <?php if ($this->recaptcha()->active()): ?>
-      <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::FILE, "https://www.google.com/recaptcha/api.js?onload=recaptchaOnLoad&render=explicit&hl=" . $this->layout()->userLang, 'SET')?>
-    <?php endif; ?>
+<!--    --><?php //if ($this->recaptcha()->active()): ?>
+<!--      --><?php //=$this->inlineScript(\Laminas\View\Helper\HeadScript::FILE, "https://www.google.com/recaptcha/api.js?onload=recaptchaOnLoad&render=explicit&hl=" . $this->layout()->userLang, 'SET')?>
+<!--    --><?php //endif; ?>
   </body>
 </html>
