@@ -225,15 +225,15 @@ trait MarcReaderTrait
      * together in specified order if found). If concat is false, the array
      * will contain a separate entry for each subfield value found.
      *
-     * @param array  $currentField Result from MarcReader::getFields
-     * @param array  $subfields    The MARC subfield codes to read
-     * @param bool   $concat       Should we concatenate subfields?
-     * @param string $separator    Separator string (used only when $concat === true)
+     * @param array  $field     Result from MarcReader::getFields
+     * @param array  $subfields The MARC subfield codes to read
+     * @param bool   $concat    Should we concatenate subfields?
+     * @param string $separator Separator string (used only when $concat === true)
      *
      * @return array
      */
     protected function getSubfieldArray(
-        $currentField,
+        $field,
         $subfields,
         $concat = true,
         $separator = ' '
@@ -243,7 +243,7 @@ trait MarcReaderTrait
 
         // Loop through all subfields, collecting results that match the filter;
         // note that it is important to retain the original MARC order here!
-        foreach ($currentField['subfields'] as $currentSubfield) {
+        foreach ($field['subfields'] as $currentSubfield) {
             if (in_array($currentSubfield['code'], $subfields)) {
                 // Grab the current subfield value and act on it if it is non-empty:
                 $data = trim($currentSubfield['data']);
