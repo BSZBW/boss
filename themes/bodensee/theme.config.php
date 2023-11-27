@@ -52,6 +52,38 @@ $config = [
             'gndLink' => 'BszTheme\View\Helper\Bodensee\GndLink',
             'recordLink' => 'VuFind\View\Helper\Root\RecordLinker'
         ]
+    ],
+    'icons' => [
+        'defaultSet' => 'FontAwesome',
+        'sets' => [
+            /**
+             * Define icon sets here.
+             *
+             * All sets need:
+             * - 'template': which template the icon renders with
+             * - 'src': the location of the relevant resource (font, css, images)
+             * - 'prefix': prefix to place before each icon name for convenience
+             *             (ie. fa fa- for FontAwesome, default "")
+             */
+            'FontAwesome' => [
+                // Specifically Font Awesome 4.7
+                'template' => 'font',
+                'prefix' => 'fa fa-',
+                // Right now, FontAwesome is bundled into compiled.css; when we no
+                // longer globally rely on FA (by managing all icons through the
+                // helper), we should change this to 'vendor/font-awesome.min.css'
+                // so it only loads conditionally when icons are used.
+                'src' => '',
+            ],
+            'Collapse' => [
+                'template' => 'collapse',
+            ],
+            // Unicode symbol characters. Icons are defined as hex code points.
+            'Unicode' => [
+                'template' => 'unicode',
+            ],
+            /* For an example of an images set, see Bootprint's theme.config.php. */
+        ]
     ]
 ];
 return $config;
