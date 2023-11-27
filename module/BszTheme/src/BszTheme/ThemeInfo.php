@@ -27,7 +27,7 @@ namespace BszTheme;
 class ThemeInfo extends \VuFindTheme\ThemeInfo
 {
 
-    protected $tag;
+    protected string $tag;
 
     /**
      * Adapted constructor
@@ -69,8 +69,8 @@ class ThemeInfo extends \VuFindTheme\ThemeInfo
 
             $this->allThemeInfo[$first]['favicon'] = $this->addClientFavicon();
 
-            $css = isset($this->allThemeInfo[$first]['css']) ? $this->allThemeInfo[$first]['css'] : [];
-            array_push($css, $this->addClientStylesheet());
+            $css = $this->allThemeInfo[$first]['css'] ?? [];
+            $css[] = $this->addClientStylesheet();
             $this->allThemeInfo[$first]['css'] = $css;
 
             // we then remove the compiled.css because it's included in our dynamic version
