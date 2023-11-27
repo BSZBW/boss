@@ -27,7 +27,7 @@ namespace BszTheme;
 class ThemeInfo extends \VuFindTheme\ThemeInfo
 {
 
-    protected $tag;
+    protected string $tag;
 
     /**
      * Adapted constructor
