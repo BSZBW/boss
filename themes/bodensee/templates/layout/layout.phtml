@@ -93,7 +93,7 @@
             'no_result' => 'no result'
         ]);
           if ($cart->isActive()) {
-              $this->headScript()->appendFile("vendor/cookies.js");
+              $this->headScript()->appendFile("vendor/js.cookie.js");
               $this->headScript()->appendFile("cart.js");
               $domain = $cart->getCookieDomain();
               if (!empty($domain)) {
