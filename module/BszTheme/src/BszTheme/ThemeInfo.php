@@ -74,20 +74,16 @@ class ThemeInfo extends \VuFindTheme\ThemeInfo
             $this->allThemeInfo[$first]['css'] = $css;
 
             // we then remove the compiled.css because it's included in our dynamic version
-            if (isset($this->allThemeInfo[$second]['css'])) {
-                foreach ($this->allThemeInfo[$second]['css'] as $key => $value) {
-                    if ($value == 'compiled.css') {
-                        unset($this->allThemeInfo[$second]['css'][$key]);
+            foreach ([$first, $second, $third] as $theme) {
+                if (isset($this->allThemeInfo[$theme]['css'])) {
+                    foreach ($this->allThemeInfo[$theme]['css'] as $key => $value) {
+                        if ($value == 'compiled.css') {
+                            unset($this->allThemeInfo[$theme]['css'][$key]);
+                        }
                     }
                 }
             }
-            if (isset($this->allThemeInfo[$third]['css'])) {
-                foreach ($this->allThemeInfo[$third]['css'] as $key => $value) {
-                    if ($value == 'compiled.css') {
-                        unset($this->allThemeInfo[$third]['css'][$key]);
-                    }
-                }
-            }
+
         }
         return $this->allThemeInfo;
     }
