@@ -27,7 +27,6 @@ trait FivTrait {
      * @param string $type all, main_topic, partial_aspect
      *
      * @return array
-     * @throws File_MARC_Exception
      *
      */
     public function getFivSubjects(string $type = 'all'): array
@@ -49,7 +48,7 @@ trait FivTrait {
             foreach ($this->getSubfields($field, '2') as $sub2) {
 
                 if (!empty($suba) && $field['i1'] == 1
-                    && (empty($sub2) || $sub2->getData() != 'gnd')
+                    && (empty($sub2) || $sub2 != 'gnd')
                     && ((isset($ind2) && $field['i2'] == $ind2) || !isset($ind2))
                 ) {
                     $data = preg_replace('/!.*!|:/i', '', $suba);
