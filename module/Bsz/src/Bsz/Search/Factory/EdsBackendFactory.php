@@ -36,6 +36,7 @@ class EdsBackendFactory extends \VuFind\Search\Factory\EdsBackendFactory
         $backend->setAuthManager($this->serviceLocator->get('VuFind\AuthManager'));
         $backend->setLogger($this->logger);
         $backend->setQueryBuilder($this->createQueryBuilder());
+        $backend->setBackendType($this->getServiceName());
         return $backend;
     }
 }

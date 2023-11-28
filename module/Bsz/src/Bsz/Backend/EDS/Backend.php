@@ -31,22 +31,19 @@ class Backend extends \VuFindSearch\Backend\EDS\Backend
         RecordCollectionFactoryInterface $factory, CacheAdapter $cache,
         SessionContainer $session, Config $config = null, $isGuest = true
     ) {
-        // Save dependencies/incoming parameters:
-        $this->client = $client;
-        $this->setRecordCollectionFactory($factory);
-        $this->cache = $cache;
-        $this->session = $session;
-        $this->isGuest = $isGuest;
 
-        // Extract key values from configuration:
-        $this->userName = $config->EBSCO_Account->user_name ?? null;
-        $this->password = $config->EBSCO_Account->password ?? null;
-        $this->ipAuth = $config->EBSCO_Account->ip_auth ?? false;
-        $this->profile = $config->EBSCO_Account->profile ?? null;
-        $this->orgId = $config->EBSCO_Account->organization_id ?? null;
-
-        // Save default profile value, since profile property may be overriden:
-        $this->defaultProfile = $this->profile;
+        parent::__construct($client, $factory, $cache, $session);
+//        $this->isGuest = $isGuest;
+//
+//        // Extract key values from configuration:
+//        $this->userName = $config->EBSCO_Account->user_name ?? null;
+//        $this->password = $config->EBSCO_Account->password ?? null;
+//        $this->ipAuth = $config->EBSCO_Account->ip_auth ?? false;
+//        $this->profile = $config->EBSCO_Account->profile ?? null;
+//        $this->orgId = $config->EBSCO_Account->organization_id ?? null;
+//
+//        // Save default profile value, since profile property may be overriden:
+//        $this->defaultProfile = $this->profile;
     }
 
 }
