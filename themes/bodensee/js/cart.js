@@ -1,7 +1,7 @@
 /*global Cookies, VuFind */
 /*exported cartFormHandler */
 
-VuFind.register('cart', function Cart() {
+VuFind.register('cart', function Cart(key, value) {
   var _COOKIE = 'vufind_cart';
   var _COOKIE_SOURCES = 'vufind_cart_src';
   var _COOKIE_DELIM = "\t";
@@ -27,14 +27,14 @@ VuFind.register('cart', function Cart() {
   }
 
   function _getItems() {
-    var items = Cookies.getItem(_COOKIE);
+    var items = Cookies.get(_COOKIE);
     if (items) {
       return items.split(_COOKIE_DELIM);
     }
     return [];
   }
   function _getSources() {
-    var items = Cookies.getItem(_COOKIE_SOURCES);
+    var items = Cookies.get(_COOKIE_SOURCES);
     if (items) {
       return items.split(_COOKIE_DELIM);
     }
@@ -96,11 +96,11 @@ VuFind.register('cart', function Cart() {
       // Add source to source cookie
       cartItems[cartItems.length] = String.fromCharCode(65 + cartSources.length) + id;
       cartSources[cartSources.length] = source;
-      Cookies.setItem(_COOKIE_SOURCES, cartSources.join(_COOKIE_DELIM), false, _COOKIE_PATH, _COOKIE_DOMAIN);
+      Cookies.set(_COOKIE_SOURCES, cartSources.join(_COOKIE_DELIM), false, _COOKIE_PATH, _COOKIE_DOMAIN);
     } else {
       cartItems[cartItems.length] = String.fromCharCode(65 + sIndex) + id;
     }
-    Cookies.setItem(_COOKIE, _uniqueArray(cartItems).join(_COOKIE_DELIM), false, _COOKIE_PATH, _COOKIE_DOMAIN);
+    Cookies.set(_COOKIE, _uniqueArray(cartItems).join(_COOKIE_DELIM), false, _COOKIE_PATH, _COOKIE_DOMAIN);
     updateCount();
     return true;
   }
@@ -135,11 +135,11 @@ VuFind.register('cart', function Cart() {
         }
       }
       if (cartItems.length > 0) {
-        Cookies.setItem(_COOKIE, _uniqueArray(cartItems).join(_COOKIE_DELIM), false, _COOKIE_PATH, _COOKIE_DOMAIN);
-        Cookies.setItem(_COOKIE_SOURCES, _uniqueArray(cartSources).join(_COOKIE_DELIM), false, _COOKIE_PATH, _COOKIE_DOMAIN);
+        Cookies.set(_COOKIE, _uniqueArray(cartItems).join(_COOKIE_DELIM), false, _COOKIE_PATH, _COOKIE_DOMAIN);
+        Cookies.set(_COOKIE_SOURCES, _uniqueArray(cartSources).join(_COOKIE_DELIM), false, _COOKIE_PATH, _COOKIE_DOMAIN);
       } else {
-        Cookies.removeItem(_COOKIE, _COOKIE_PATH, _COOKIE_DOMAIN);
-        Cookies.removeItem(_COOKIE_SOURCES, _COOKIE_PATH, _COOKIE_DOMAIN);
+        Cookies.remove(_COOKIE, _COOKIE_PATH, _COOKIE_DOMAIN);
+        Cookies.remove(_COOKIE_SOURCES, _COOKIE_PATH, _COOKIE_DOMAIN);
       }
       updateCount();
       return true;
