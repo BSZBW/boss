@@ -32,7 +32,7 @@ class Backend extends \VuFindSearch\Backend\EDS\Backend
         SessionContainer $session, Config $config = null, $isGuest = true
     ) {
 
-        parent::__construct($client, $factory, $cache, $session);
+        parent::__construct($client, $factory, $cache, $session, $config, $isGuest);
 //        $this->isGuest = $isGuest;
 //
 //        // Extract key values from configuration:
