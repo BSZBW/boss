@@ -93,7 +93,7 @@
             'no_result' => 'no result'
         ]);
           if ($cart->isActive()) {
-              $this->headScript()->appendFile("vendor/cookies.js");
+              $this->headScript()->appendFile("vendor/js.cookie.js");
               $this->headScript()->appendFile("cart.js");
               $domain = $cart->getCookieDomain();
               if (!empty($domain)) {
@@ -221,9 +221,8 @@ JS;
     <div class="offcanvas-toggle" data-toggle="offcanvas"><i class="fa fa-chevron-left" title="<?=$this->transEsc('sidebar_expand') ?>"></i></div>
     <div class="offcanvas-overlay" data-toggle="offcanvas"></div>
     <?=$this->googleanalytics()?>
-    <!-- TODO: Cornelius fragen -->
-<!--    --><?php //if ($this->captcha()->active()): ?>
-<!--      --><?php //=$this->inlineScript(\Laminas\View\Helper\HeadScript::FILE, "https://www.google.com/recaptcha/api.js?onload=recaptchaOnLoad&render=explicit&hl=" . $this->layout()->userLang, 'SET')?>
-<!--    --><?php //endif; ?>
+    <?php foreach ($this->captcha()->js() as $jsInclude):?>
+        <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::FILE, $jsInclude, 'SET')?>
+    <?php endforeach; ?>
   </body>
 </html>
