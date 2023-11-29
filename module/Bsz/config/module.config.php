@@ -21,6 +21,7 @@
 
 namespace Bsz\Module\Config;
 
+use Bsz\Auth\ShibbolethFactory;
 use Bsz\Controller\Factory;
 use Bsz\Auth\Factory as AuthFactory;
 use Bsz\Route\RouteGenerator;
@@ -107,7 +108,7 @@ $config = [
         'plugin_managers' => [
             'auth' => [
                 'factories' => [
-                   'Bsz\Auth\Shibboleth' => 'Bsz\Auth\AuthFactory::getShibboleth',
+                   'Bsz\Auth\Shibboleth' => ShibbolethFactory::class,
                    'Bsz\Auth\Koha' => AuthFactory::class,
                 ],
                 'aliases' => [
