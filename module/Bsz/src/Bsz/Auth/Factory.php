@@ -12,6 +12,7 @@ use VuFind\Auth\Shibboleth\SingleIdPConfigurationLoader;
  */
 class Factory
 {
+    const SHIBBOLETH_CONFIG_FILE_NAME = 'Shibboleth';
     /**
      * Construct the authentication manager.
      *

@@ -3,6 +3,8 @@ namespace Bsz\Auth;
 
 use Bsz\Config\Libraries;
 use Bsz\Config\Library;
+use Laminas\Http\PhpEnvironment\Request;
+use VuFind\Auth\Shibboleth\ConfigurationLoaderInterface;
 use VuFind\Exception\Auth as AuthException;
 
 /**
@@ -22,10 +24,12 @@ class Shibboleth extends \VuFind\Auth\Shibboleth
      */
     public function __construct(
         \Laminas\Session\ManagerInterface $sessionManager,
+        ConfigurationLoaderInterface $configurationLoader,
+        Request $request,
         Libraries $libraries,
         $isil)
     {
-        $this->sessionManager = $sessionManager;
+        parent::__construct($sessionManager, $configurationLoader, $request);
         $this->libraries = $libraries;
         $this->isil = $isil;
     }

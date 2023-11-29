@@ -107,7 +107,7 @@ $config = [
         'plugin_managers' => [
             'auth' => [
                 'factories' => [
-                   'Bsz\Auth\Shibboleth' => AuthFactory::class,
+                   'Bsz\Auth\Shibboleth' => 'Bsz\Auth\AuthFactory::getShibboleth',
                    'Bsz\Auth\Koha' => AuthFactory::class,
                 ],
                 'aliases' => [
