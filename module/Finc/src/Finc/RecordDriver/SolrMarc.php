@@ -25,6 +25,7 @@ use BszTheme\View\Helper\Bodensee\RecordLink;
 use VuFind\RecordDriver\Feature\IlsAwareTrait;
 use VuFind\RecordDriver\Feature\MarcAdvancedTrait;
 use VuFind\RecordDriver\Feature\MarcBasicTrait;
+use VuFind\View\Helper\Root\RecordLinker;
 use VuFind\XSLT\Processor as XSLTProcessor;
 
 /**
@@ -895,20 +896,20 @@ class SolrMarc extends SolrDefault
      * Return an XML representation of the record using the specified format.
      * Return false if the format is unsupported.
      *
-     * @param string     $format     Name of format to use (corresponds with OAI-PMH
+     * @param string     $format  Name of format to use (corresponds with OAI-PMH
      * metadataPrefix parameter).
-     * @param string     $baseUrl    Base URL of host containing VuFind (optional;
+     * @param string     $baseUrlFi Base URL of host containing VuFind (optional;
      * may be used to inject record URLs into XML when appropriate).
-     * @param RecordLink $recordLink Record link helper (optional; may be used to
+     * @param RecordLinker $linker  Record link helper (optional; may be used to
      * inject record URLs into XML when appropriate).
      *
      * @return mixed         XML, or false if format unsupported.
      */
-    public function getXML($format, $baseUrl = null, $recordLink = null)
+    public function getXML($format, $baseUrl = null, $linker = null)
     {
         // Special case for MARC:
         if ($format == 'marc21') {
-            $xml = $this->getMarcReader()->toXML();
+            $xml = $this->getMarcReader()->toFormat('MARCXML');
             $xml = str_replace(
                 [chr(27), chr(28), chr(29), chr(30), chr(31)], ' ', $xml
             );
@@ -930,7 +931,7 @@ class SolrMarc extends SolrDefault
         }
 
         // Try the parent method:
-        return parent::getXML($format, $baseUrl, $recordLink);
+        return parent::getXML($format, $baseUrl, $linker);
     }
 
     /**
