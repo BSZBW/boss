@@ -21,7 +21,10 @@
 
 $config = [
     'extends' => 'bootstrap3',
-    'favicon' => '/themes/bodensee/images/favicon/default.ico',
+    'favicon' => '{{client_favicon}}',
+    'css' => [
+        '{{client_stylesheet}}'
+    ],
     'js' => [
         'additions.js',
         'vendor/jquery.mark.min.js',
@@ -73,7 +76,7 @@ $config = [
                 // longer globally rely on FA (by managing all icons through the
                 // helper), we should change this to 'vendor/font-awesome.min.css'
                 // so it only loads conditionally when icons are used.
-                'src' => '',
+                'src' => '{{client_stylesheet}}',
             ],
             'Collapse' => [
                 'template' => 'collapse',

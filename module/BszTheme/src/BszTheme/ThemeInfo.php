@@ -62,24 +62,25 @@ class ThemeInfo extends \VuFindTheme\ThemeInfo
                 $currentTheme = $this->allThemeInfo[$currentTheme]['extends'];
             } while ($currentTheme);
 
-            $this->allThemeInfo[$currentTheme]['favicon'] = $this->addClientFavicon();
-            $css = $this->allThemeInfo[$currentTheme]['css'] ?? [];
-            $css[] = $this->addClientStylesheet();
-            $this->allThemeInfo[$currentTheme]['css'] = $css;
-
-            foreach(array_keys($this->allThemeInfo) as $key) {
-                if ($key == $this->getTheme()) {
-                    continue;
-                }
-
-                $oldCss = $this->allThemeInfo[$key]['css'] ?? [];
-                foreach ($oldCss as $k => $v) {
-                    if ($v == 'compiled.css') {
-                        unset($this->allThemeInfo[$key]['css'][$k]);
-                        break;
-                    }
-                }
-            }
+            $this->modifyArray($this->allThemeInfo);
+//            $this->allThemeInfo[$currentTheme]['favicon'] = $this->addClientFavicon();
+//            $css = $this->allThemeInfo[$currentTheme]['css'] ?? [];
+//            $css[] = $this->addClientStylesheet();
+//            $this->allThemeInfo[$currentTheme]['css'] = $css;
+//
+//            foreach(array_keys($this->allThemeInfo) as $key) {
+//                if ($key == $this->getTheme()) {
+//                    continue;
+//                }
+//
+//                $oldCss = $this->allThemeInfo[$key]['css'] ?? [];
+//                foreach ($oldCss as $k => $v) {
+//                    if ($v == 'compiled.css') {
+//                        unset($this->allThemeInfo[$key]['css'][$k]);
+//                        break;
+//                    }
+//                }
+//            }
 
             // Here, we make the css files dynamic
 //            $first = array_keys($this->allThemeInfo)[0];
@@ -111,6 +112,21 @@ class ThemeInfo extends \VuFindTheme\ThemeInfo
 //            }
         }
         return $this->allThemeInfo;
+    }
+
+    protected function modifyArray(array &$config): void
+    {
+        foreach ($config as $k => &$v) {
+            if(is_array($v)) {
+                $this->modifyArray($config[$k]);
+            } else if ('compiled.css' == $v) {
+                unset($config[$k]);
+            } else if ('{{client_stylesheet}}' == $v) {
+                $config[$k] = $this->addClientStylesheet();
+            } else if ('{{client_favicon}}' == $v) {
+                $config[$k] = $this->addClientFavicon();
+            }
+        }
     }
 
     /**
