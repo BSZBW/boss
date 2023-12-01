@@ -71,7 +71,7 @@
         <?php if (!in_array($row['location'], $knownLocations)): ?>
               <?php $knownLocations[] = $row['location'] ?>
         <?php endif; ?>
-        <?php if ($row['status'] != 'For reference' &&
+        <?php if (isset($row['status']) && $row['status'] != 'For reference' &&
            $row['status'] != 'Lost' &&
            $row['status'] != 'Missing' &&
            $row['status'] != 'Permanent on loan'):

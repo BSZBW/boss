@@ -528,5 +528,105 @@ class SolrFindexMarc extends SolrMarc implements Constants
 
     }
 
+    public function getFormattedMarcDetails($defaultField, $data)
+    {
+        $holdings = [];
+
+        $f980 = $this->getFields('980');
+        foreach ($f980 as $field) {
+            if(!is_array($field)) {
+                continue;
+            }
+
+            $sf1= $this->getSubfield($field, '1');
+
+            $entry = [];
+
+            $sfx = $this->getSubfield($field, 'x');
+            if(empty($sfx)) {
+                continue;
+            }
+
+            $entry['location'] = trim($sfx);
+
+            $sfd = $this->getSubfield($field, 'd');
+            if(!empty($sfd) && "--%%--" !== $sfd) {
+                $entry['callnumber'] = $sfd;
+            }
+
+            $sff = $this->getSubfield($field, 'f');
+            if(!empty($sff) && "--%%--" !== $sff) {
+                $entry['storage'] = $sff;
+            }
+
+            $sfk = $this->getSubfield($field, 'k');
+            if("--%%--" != $sfk) {
+                $start = strpos($sfk, '***');
+                if ($start !== false){
+                    $sfk = substr($sfk, $start + 3);
+                }
+                if(!empty($sfk)) {
+                    $entry['notes'] = $sfk;
+                }
+            }
+
+            $sfg = $this->getSubfield($field, 'g');
+            if(!empty($sfg) && "--%%--" !== $sfg) {
+                if (isset($entry['notes'])) {
+                    $entry['notes'] = $entry['notes'] ? $entry['notes'] . "<br>" . $sfg : $sfg;
+                }else {
+                    $entry['notes'] = $sfg;
+                }
+            }
+
+            $sfj = $this->getSubfield($field, 'j');
+            switch ($sfj) {
+                case 'l':
+                case "--%%--":
+                    $entry['availability'] = 'c';
+                    break;
+                case 'a':
+                    $entry['availability'] = 'a';
+                    break;
+                case 'k':
+                    $entry['availability'] = 'b';
+                    break;
+                case 'n':
+                    $entry['availability'] = 'N';
+                    break;
+                case 'e':
+                    $entry['availability'] = 'e';
+                    break;
+            }
+
+            if (!empty($entry)) {
+                $holdings[$sfx][$sf1] = $entry;
+            }
+        }
+
+        $f981 = $this->getFields('981');
+        foreach ($f981 as $field) {
+            if(!is_array($field)) {
+                continue;
+            }
+
+            $sf1 = $this->getSubfield($field, '1');
+            $sfx = $this->getSubfield($field, 'x');
+
+            $sfr = $this->getSubfield($field, 'r');
+            if(!empty($sfr) && "--%%--" !== $sfr
+                && array_key_exists($sfx, $holdings)
+                && array_key_exists($sf1, $holdings[$sfx])){
+                $holdings[$sfx][$sf1]['link'] = $sfr;
+            }
+        }
+
+        $retVal = [];
+        foreach ($holdings as $k => $v) {
+            $retVal = array_merge($retVal, array_values($v));
+        }
+        return $retVal;
+    }
+
 
 }
