@@ -41,18 +41,4 @@ class SearchMemory extends \VuFind\View\Helper\Root\SearchMemory
         parse_str($query_str, $queryArray);
         return $queryArray['lookfor'] ?? null;
     }
-
-    public function getLastSearchIsils()
-    {
-        $retval = [];
-        $last = $this->memory->retrieveSearch();
-        $last = urldecode($last);
-        preg_match_all('/filter\[\]=[\~_a-z:"]*(DE-[a-zA-Z0-9-]*)/', $last, $matches);
-        if (isset($matches[1]) && count($matches[1]) > 0) {
-            $retval = $matches[1];
-        }
-        return $retval;
-
-
-    }
 }
