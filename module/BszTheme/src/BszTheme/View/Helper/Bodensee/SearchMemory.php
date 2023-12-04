@@ -34,8 +34,11 @@ class SearchMemory extends \VuFind\View\Helper\Root\SearchMemory
      *
      * @return string
      */
-    public function getLastSearchterms()
+    public function getLastSearchterms(bool $isHome = false)
     {
+        if($isHome) {
+            return null;
+        }
         $url = $this->memory->retrieveSearch();
         $query_str = parse_url($url, PHP_URL_QUERY);
         parse_str($query_str, $queryArray);

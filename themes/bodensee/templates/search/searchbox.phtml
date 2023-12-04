@@ -3,6 +3,9 @@
     if (!isset($this->searchClassId)) {
         $this->searchClassId = 'Solr';
     }
+    if(!isset($this->isHome)) {
+        $this->isHome = false;
+    }
 
     // Load search actions and settings (if any):
     $options = $this->searchOptions($this->searchClassId);
@@ -58,7 +61,7 @@
             <input <?= $disabled ?> id="searchForm_lookfor"
                                     class="searchForm_lookfor form-control search-query<?php if ($this->searchbox()->autocompleteEnabled($this->searchClassId)): ?> autocomplete searcher:<?= $this->escapeHtmlAttr($this->searchClassId) ?><?= $this->searchbox()->autocompleteAutoSubmit($this->searchClassId) ? ' ac-auto-submit' : '' ?><?php endif ?>"
                                     type="text" name="lookfor"
-                                    value="<?= $this->escapeHtmlAttr($this->searchMemory()->getLastSearchterms()); ?>"<?php if ($placeholder): ?> placeholder="<?= $this->transEsc($placeholder) ?>"<?php endif ?>
+                                    value="<?= $this->escapeHtmlAttr($this->searchMemory()->getLastSearchterms($this->isHome)); ?>"<?php if ($placeholder): ?> placeholder="<?= $this->transEsc($placeholder) ?>"<?php endif ?>
                                     data-title="<?= $this->transEsc('empty_search') ?>"
                                     data-content="<?= $this->transEsc('empty_search_text') ?>"
                                     autocomplete="on"/>
