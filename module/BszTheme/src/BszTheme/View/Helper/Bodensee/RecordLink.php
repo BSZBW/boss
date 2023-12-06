@@ -144,12 +144,16 @@ class RecordLink extends \VuFind\View\Helper\Root\RecordLinker
     {
         $urlHelper = $this->getView()->plugin('url');
         $route = $this->getSearchActionForSource($driver->getSourceIdentifier());
+        $id = urlencode(addcslashes($driver->getUniqueID(), '"'));
+
+        $filter = urlencode(addcslashes($filterString, '"'));
+        $filter = empty($filterString) ? '' :  '&hiddenFilters[]=' .$filter;
         return $urlHelper($route)
-            . '?lookfor='
-            . urlencode(addcslashes($driver->getUniqueID(), '"'))
+            . '?lookfor=' . $id
             . '&type=ParentID'
-            . '&hiddenFilter[]=-id:' . urlencode(addcslashes($driver->getUniqueID(), '"'))
-            . (empty($filterString) ? '' :  '&hiddenFilters[]=' . $filterString);
+            . '&sort=publishDateSort desc, id asc'
+            . '&hiddenFilter[]=-id:' . $id
+            . $filter;
     }
 
 }

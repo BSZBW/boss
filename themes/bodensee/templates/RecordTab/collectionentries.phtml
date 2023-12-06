@@ -39,11 +39,4 @@ $content = $this->tab->getResults();
     <?php if ($showMore): ?>
         <a class="btn btn-info btn-xs" href="<?= $href ?>"><?=$this->transEsc('see all')?></a>
     <?php endif; ?>
-    <script type="text/javascript">
-      $(document).ready(function() {
-        $('.tablesorter').tablesorter({
-          sortList : [[1,1]]
-        });
-      });
-    </script>
 <?php endif; ?>

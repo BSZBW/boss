@@ -68,7 +68,7 @@ abstract class AbstractCollection extends \BszCommon\RecordTab\AbstractCollectio
         $params->add('fq', '-id:' . $id);
         $params->add('fq', $this->getFilterString());
 
-        $params->add('sort', 'hierarchy_sort_str desc');
+        $params->add('sort', 'publishDateSort desc, id asc');
         $params->add('hl', 'false');
         $params->add('echoParams', 'ALL');
 
