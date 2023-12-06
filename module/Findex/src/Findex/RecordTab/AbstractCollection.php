@@ -66,6 +66,7 @@ abstract class AbstractCollection extends \BszCommon\RecordTab\AbstractCollectio
         $params = new ParamBag();
         $params->add('fq', implode(' OR ', $filterOr));
         $params->add('fq', '-id:' . $id);
+        $params->add('fq', $this->getFilterString());
 
         $params->add('sort', 'hierarchy_sort_str desc');
         $params->add('hl', 'false');
@@ -73,5 +74,7 @@ abstract class AbstractCollection extends \BszCommon\RecordTab\AbstractCollectio
 
         return $params;
     }
+
+    abstract function getFilterString(): string;
 
 }

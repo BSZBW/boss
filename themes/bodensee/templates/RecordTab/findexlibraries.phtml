@@ -1,1 +1,117 @@
-libraries.phtml
+<?php
+
+
+// Set page title.
+$this->headTitle($this->translate('Libraries') . ': ' . $this->driver->getBreadcrumb());
+$content = $this->tab->getContent();
+?>
+
+<?php if (isset($content) && count($content) > 0): ?>
+    <table class="table table-striped table-condensed tablesorter">
+        <thead>
+        <tr>
+            <th class="col-sm-1 col-xs-1 hidden-xs"><?= $this->transEsc('Contact') ?></th>
+            <th><?= $this->transEsc('Library') ?></th>
+            <th><?= $this->transEsc('Call Number') ?></th>
+            <?php if ($this->client()->is('show_ill_column')): ?>
+                <th class="col-sm-2 col-xs-2 hidden-xs"><?= $this->transEsc('Interlibrary Loan') ?></th>
+            <?php endif; ?>
+            <?php if ($this->driver->isJournal()): ?>
+                <th><?= $this->transEsc('Collection') ?></th><?php endif; ?>
+
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($content as $result): ?>
+            <tr>
+                <?php if (is_string($result['isil']) && preg_match('/^[A-Z]{2}-/', $result['isil'])): ?>
+                    <td class="hidden-xs">
+                        <?php if ($result['isil'] !== 'LFER'): ?>
+                            <span class="text-nowrap">
+                            <?php if (isset($result['homepage'])): ?>
+                                <a data-toggle="tooltip"
+                                   title="<?= $this->transEsc('ILL::library_homepage') ?>"
+                                   href="<?= $result['homepage'] ?>"
+                                   class="external hasicon"><i
+                                        class="fa fa-globe"></i><?= $this->escapeHtml($result['isil']) ?></a>
+                            <?php else: ?>
+                                <?= $this->escapeHtml($result['isil']) ?>
+                            <?php endif; ?>
+                        </span>
+                        <?php else: ?>
+                            <?= $this->abbrev($result['isil'], 'LFER_long') ?>
+                        <?php endif; ?>
+                    </td>
+
+                    <td>
+                        <?php if (isset($result['opacurl']) && isset($result['name']) && trim($result['opacurl']) != '' && $this->driver->getNetwork() !== 'ZDB'): ?>
+                            <?php $opac = preg_replace('/%PPN%/', $this->driver->getPPN(), $result['opacurl']) ?>
+                            <a data-toggle="tooltip"
+                               title="<?= $this->transEsc('ILL::library_opac') ?>"
+                               href="<?= $opac ?>"
+                               class="external hasicon">
+                                <i class="fa fa-globe"></i><?= $this->escapeHtml($result['name']) ?>
+                            </a>
+                        <?php else: ?>
+                            <?= isset($result['name']) ? $this->escapeHtml($result['name']) : '' ?>
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <?php if (isset($result['url']) && is_array($result['url'])):
+                            $url = array_shift($result['url']);
+                            $result['url'] = $url;
+                        endif; ?>
+                        <?php if (isset($result['call_number']) && is_array($result['call_number'])):
+                            $callnumber = implode(', ', $result['call_number']);
+                            $result['call_number'] = $callnumber;
+                        endif; ?>
+                        <?php if (isset($result['call_number']) && !isset($result['url'])): ?>
+                            <?= $this->escapeHtml($result['call_number']) ?>
+                        <?php elseif (isset($result['url']) && isset($result['call_number'])): ?>
+                            <a href="<?= $result['url'] ?>" target="_blank"
+                               data-toggle="tooltip"
+                               title="<?= $this->transEsc('Fulltext') ?>"><i
+                                    class="fa fa-globe"></i><?= $this->escapeHtml($result['call_number']) ?>
+                            </a>
+                        <?php elseif (isset($result['url'])): ?>
+                            <a href="<?= $result['url'] ?>" target="_blank"
+                               data-toggle="tooltip"
+                               title="<?= $this->transEsc('Fulltext') ?>"><i
+                                    class="fa fa-globe"></i><?= $this->transEsc('E-Book') ?>
+                            </a>
+                        <?php else: ?>
+                            <?= $this->transEsc('NoCallnumber') ?>
+                        <?php endif; ?>
+                    </td>
+
+                    <?php if ($this->client()->is('show_ill_column')): ?>
+                        <td>
+                            <?php if (isset($result['ill_indicator'])): ?><i
+                                class="fa <?= $this->record($this->driver)->indicator2icon($result['ill_indicator']) ?>"></i> <?php endif; ?>
+                            <span
+                                class="text hidden-xs"><?= isset($result['ill_indicator']) ? $this->transEsc($this->record($this->driver)->indicator2status($result['ill_indicator'])) : '-' ?></span>
+                        </td>
+                    <?php endif; ?>
+
+                    <?php if ($this->driver->isJournal()): ?>
+                        <?php if (isset($result['issue']) && is_array($result['issue'])): ?>
+                            <td><?= isset($result['issue']) ? $this->escapeHtml(implode(' | ', $result['issue'])) : '' ?></td>
+                        <?php else: ?>
+                            <td><?= isset($result['issue']) ? $this->escapeHtml($result['issue']) : '' ?></td>
+                        <?php endif ?>
+                    <?php endif; ?>
+                <?php endif; ?>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $('.tablesorter').tablesorter({
+          sortList: [[0, 0]]
+        });
+      });
+    </script>
+<?php else: ?>
+    <p><?= $this->transEsc('nohit_heading') ?></p>
+<?php endif; ?>

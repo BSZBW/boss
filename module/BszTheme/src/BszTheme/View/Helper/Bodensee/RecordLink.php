@@ -139,4 +139,17 @@ class RecordLink extends \VuFind\View\Helper\Root\RecordLinker
         }
         return $this->getView()->render('Helpers/singleauthor.phtml', $params);
     }
+
+    public function getChildSearchUrl($driver, $filterString)
+    {
+        $urlHelper = $this->getView()->plugin('url');
+        $route = $this->getSearchActionForSource($driver->getSourceIdentifier());
+        return $urlHelper($route)
+            . '?lookfor='
+            . urlencode(addcslashes($driver->getUniqueID(), '"'))
+            . '&type=ParentID'
+            . '&hiddenFilter[]=-id:' . urlencode(addcslashes($driver->getUniqueID(), '"'))
+            . (empty($filterString) ? '' :  '&hiddenFilters[]=' . $filterString);
+    }
+
 }

@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
-
+$recordLinker = $this->recordLinker($this->results);
 $hasSubRecords = $this->driver->tryMethod('hasSubRecords');
     $subRecords = $this->driver->tryMethod('getSubRecords');
     $subRecordsCount = 0;
@@ -35,13 +35,13 @@ $hasSubRecords = $this->driver->tryMethod('hasSubRecords');
             $hiddenFilterString .= '&hiddenFilters[]=' . $this->escapeHtmlAttr($key) . ':' . $this->escapeHtmlAttr($value);
         }
     }
-$coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'small', $this->recordLink()->getUrl($this->driver));
+$coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'small', $recordLinker->getUrl($this->driver));
     $cover = $coverDetails['html'];
 ?>
 
 
     <div class="col-xs-3 col-sm-2 col-md-2 hidden-print">
-        <a href="<?=$this->recordLink()->getUrl($this->driver)?>">
+        <a href="<?=$recordLinker->getUrl($this->driver)?>">
             <?=$cover ?>
         </a>
     </div> <!-- end cover col -->
@@ -49,7 +49,7 @@ $coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'sm
         <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID())?>" class="hiddenId" />
         <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getSourceIdentifier())?>" class="hiddenSource" />
         <span class="" style="float:left;"><?=$this->recordNumber?></span>.
-        <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title getFull markjs" data-view="<?=$this->params->getOptions()->getListViewOption() ?>">
+        <a href="<?=$recordLinker->getUrl($this->driver)?>" class="title getFull markjs" data-view="<?=$this->params->getOptions()->getListViewOption() ?>">
             <?=$this->record($this->driver)->getTitleHtml()?>
         </a>
         <?php if ($titlesection = $this->driver->getTitleSection()):?>
@@ -77,13 +77,13 @@ $coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'sm
             <?php $i = 0 ?>
             <?php foreach ($dedupData as $source => $current): ?>
                 <?php if (++$i == 1):?>
-                <span class="currentSource"><a href="<?=$this->recordLink()->getUrl($this->driver)?>"><?=$this->transEsc("source_$source", [], $source)?></a></span>
+                <span class="currentSource"><a href="<?=$recordLinker->getUrl($this->driver)?>"><?=$this->transEsc("source_$source", [], $source)?></a></span>
                 <?php else: ?>
                     <?php if ($i == 2): ?>
                         <span class="otherSources">(<?=$this->transEsc('Other Sources')?>:
                     <?php else: ?>,
                     <?php endif; ?>
-                    <a href="<?=$this->recordLink()->getUrl($current['id'])?>"><?=$this->transEsc("source_$source", [], $source)?></a>
+                    <a href="<?=$recordLinker->getUrl($current['id'])?>"><?=$this->transEsc("source_$source", [], $source)?></a>
                 <?php endif; ?>
             <?php endforeach; ?>
             <?php if ($i > 1): ?>
@@ -146,7 +146,7 @@ $coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'sm
                 <?php if ($this->permission()->allowDisplay('feature.Favorites')): ?>
                     <?php /* Add to favorites */ ?>
                     <li>
-                        <a href="<?=$this->recordLink()->getActionUrl($this->driver, 'Save')?>" data-lightbox class="btn save-record result-link-label" data-id="<?=$this->escapeHtmlAttr($this->driver->getUniqueId()) ?>">
+                        <a href="<?=$recordLinker->getActionUrl($this->driver, 'Save')?>" data-lightbox class="btn save-record result-link-label" data-id="<?=$this->escapeHtmlAttr($this->driver->getUniqueId()) ?>">
                             <i class="result-link-icon fa fa-fw fa-star" aria-hidden="true"></i>
                             <?=$this->transEsc('Add to favorites')?>
                         </a>
@@ -205,7 +205,7 @@ $coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'sm
                             <div class="row">
                                 <div class="col-xs-4 col-sm-2">
                                     <?php
-                                      $subCoverDetails = $this->record($sub)->getCoverDetails('result-list', 'small', $this->recordLink()->getUrl($this->driver));
+                                      $subCoverDetails = $this->record($sub)->getCoverDetails('result-list', 'small', $recordLinker->getUrl($this->driver));
                                       $subCover = $subCoverDetails['html'];
 
                                     ?>
@@ -213,7 +213,7 @@ $coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'sm
 
                                 </div>
                                 <div class="col-xs-8 col-sm-10">
-                                    <a class="title markjs" href="<?=$this->recordLink()->getUrl($sub)?>">
+                                    <a class="title markjs" href="<?=$recordLinker->getUrl($sub)?>">
                                         <?=$this->record($sub)->getTitleHtml()?>
                                     </a>
                                     <?php if ($titlesection = $sub->getTitleSection()):?>
