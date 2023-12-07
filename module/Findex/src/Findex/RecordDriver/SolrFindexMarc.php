@@ -628,5 +628,48 @@ class SolrFindexMarc extends SolrMarc implements Constants
         return $retVal;
     }
 
+    public function getGNDSubjectHeadings()
+    {
+        $fields = array_merge(
+            $this->getFields('600'),
+            $this->getFields('610'),
+            $this->getFields('611'),
+            $this->getFields('630'),
+            $this->getFields('648'),
+            $this->getFields('650'),
+            $this->getFields('651'),
+            $this->getFields('655'),
+            $this->getFields('689'),
+        );
+
+        $gnd = [];
+        foreach ($fields as $field) {
+            $sf2 = $this->getSubfield($field, '2');
+            if ($sf2 == 'gnd') {
+                $tmp = [];
+
+                $sf0 = $this->getSubfield($field, '0');
+                if (!preg_match('/^\(DE-588\).+$/', $sf0)) {
+                    continue;
+                }
+
+                $id = str_replace('(DE-588)', '', $sf0);
+                if(array_key_exists($id, $gnd)) {
+                    continue;
+                }
+
+                foreach ($field['subfields'] ?? [] as $subfield) {
+                    $sfCode = $subfield['code'] ?? '';
+                    $sfData = $subfield['data'] ?? '';
+                    if (preg_match('/[a-z]/', $sfCode)) {
+                        $tmp[$sfCode] = $sfData;
+                    }
+
+                }
+                $gnd[$id] = $this->addDelimiterChars($tmp);
+            }
+        }
+        return $gnd;
+    }
 
 }
