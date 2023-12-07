@@ -124,7 +124,7 @@ class SolrGviMarc extends SolrMarc implements Constants
     {
         $gnd = [];
         foreach ($this->getFields('689') as $field) {
-            $sf2 = $this->getSubfields($field, '2');
+            $sf2 = $this->getSubfield($field, '2');
             if ($sf2 == 'gnd') {
                 $tmp = [];
                 $id = 0;
