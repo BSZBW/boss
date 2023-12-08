@@ -340,7 +340,9 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
                                   myDefaultWhiteList.tr = []
                                   myDefaultWhiteList.td = ['style']
                                 </script>
-                                <a tabindex="0" data-toggle="tooltip" data-html="true" title="<?= $this->escapeHtml($description) ?>"><?=$item ?></a>
+                                <a data-toggle="tooltip" data-html="true" class="searchicon"
+                                   href="<?= $this->record($this->driver)->getLink('bwlb', $item, $this->searchClassId) ?>"
+                                   title="<?= $this->escapeHtml($description) ?>"><?=$item ?></a>
                             <?php endif; ?>
                         <?php endforeach; ?>
                     </td>
