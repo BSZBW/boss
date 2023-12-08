@@ -316,7 +316,7 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
                                 $abbrev = $this->bwlbConcordance($item);
                                 foreach ($abbrev as $key => $value) {
                                     $description .= '<tr>';
-                                    $description .= '<td style="text-align:right; padding-right:10px">' . $key . '</td>';
+                                    $description .= '<td style="text-align:left; padding-right:10px">' . $key . '</td>';
                                     $description .= '<td style="text-align:left">' . $value . '</td>';
                                     $description .= '</tr>';
                                 }
@@ -339,7 +339,6 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
                                   myDefaultWhiteList.tbody = []
                                   myDefaultWhiteList.tr = []
                                   myDefaultWhiteList.td = ['style']
-                                  myDefaultWhiteList.th = []
                                 </script>
                                 <a tabindex="0" data-toggle="tooltip" data-html="true" title="<?= $this->escapeHtml($description) ?>"><?=$item ?></a>
                             <?php endif; ?>
