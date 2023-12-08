@@ -41,7 +41,7 @@ $config = [
             'Bsz\View\Helper\Root\SearchMemory' => 'BszTheme\View\Helper\Bodensee\Factory::getSearchMemory',
             'illform' => 'BszTheme\View\Helper\Bodensee\Factory::getIllForm',
             'BszTheme\View\Helper\Bodensee\Wayfless' => 'BszTheme\View\Helper\Bodensee\Factory::getWayfless',
-            'BszTheme\View\Helper\Bodensee\BwlbConcordance' => 'BszTheme\View\Helper\Bodensee\Factory::getBwlbConcordance',
+            'BszTheme\View\Helper\Bodensee\BwlbConcordance' =>  \Laminas\ServiceManager\Factory\InvokableFactory::class,
             'BszTheme\View\Helper\Bodensee\GndLink' => \Laminas\ServiceManager\Factory\InvokableFactory::class
         ],
         'aliases' => [
