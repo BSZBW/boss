@@ -41,6 +41,7 @@ $config = [
             'Bsz\View\Helper\Root\SearchMemory' => 'BszTheme\View\Helper\Bodensee\Factory::getSearchMemory',
             'illform' => 'BszTheme\View\Helper\Bodensee\Factory::getIllForm',
             'BszTheme\View\Helper\Bodensee\Wayfless' => 'BszTheme\View\Helper\Bodensee\Factory::getWayfless',
+            'BszTheme\View\Helper\Bodensee\BwlbConcordance' => 'BszTheme\View\Helper\Bodensee\Factory::getBwlbConcordance',
             'BszTheme\View\Helper\Bodensee\GndLink' => \Laminas\ServiceManager\Factory\InvokableFactory::class
         ],
         'aliases' => [
@@ -53,7 +54,8 @@ $config = [
             'VuFind\View\Helper\Root\SearchMemory' => 'Bsz\View\Helper\Root\SearchMemory',
             'wayfless' => 'BszTheme\View\Helper\Bodensee\Wayfless',
             'gndLink' => 'BszTheme\View\Helper\Bodensee\GndLink',
-            'recordLink' => 'VuFind\View\Helper\Root\RecordLinker'
+            'recordLink' => 'VuFind\View\Helper\Root\RecordLinker',
+            'bwlbConcordance' => 'BszTheme\View\Helper\Bodensee\BwlbConcordance'
         ]
     ],
     'icons' => [

@@ -242,4 +242,10 @@ class Factory
             $config->getTag()
         );
     }
+
+    public static function getBwlbConcordance(ContainerInterface $container)
+    {
+        $config = $container->get('VuFind\Config')->get('bwlb')->toArray();
+        return new BwlbConcordance($config);
+    }
 }

@@ -672,4 +672,20 @@ class SolrFindexMarc extends SolrMarc implements Constants
         return $gnd;
     }
 
+    public function getSystematics()
+    {
+        $fields = $this->getFields('084');
+
+        $retVal = [];
+        foreach ($fields as $field) {
+            if(!is_array($field) || 'bwlb' !== $this->getSubfield($field, '2')) {
+                continue;
+            }
+
+            $retVal = array_merge($retVal, $this->getSubfields($field, 'a'));
+        }
+
+        return $retVal;
+    }
+
 }
