@@ -35,4 +35,24 @@ trait AdvancedMarcReaderTrait
         return $this->getMarcReader()->getSubfields($field);
     }
 
+    public function getMultiFields(array $fieldTags)
+    {
+        $retVal = [];
+        foreach ($fieldTags as $tag) {
+            $retVal = array_merge($retVal, $this->getFields($tag));
+        }
+        return $retVal;
+    }
+
+    public function getSubfieldsByRegex(array $field, string $subfieldRegex): array
+    {
+        $retVal = [];
+        foreach ($field['subfields'] as $sf) {
+            if(preg_match($subfieldRegex, $sf['code'])) {
+                $retVal[] = $sf['data'];
+            }
+        }
+        return $retVal;
+    }
+
 }

@@ -525,7 +525,35 @@ class SolrFindexMarc extends SolrMarc implements Constants
 
     public function getKindContent()
     {
+        $fields = array_merge(
+            $this->getFields('655'),
+            $this->getFields('348')
+        );
 
+        $map = [
+            '655' => 'gnd-content',
+            '348' => 'gnd-music'
+        ];
+
+        $retVal = [];
+        foreach ($fields as $field) {
+            if (!is_array($field)) {
+                continue;
+            }
+
+            $sf2Req = $map[$field['tag']];
+            if(empty($sf2Req) || $sf2Req !== $this->getSubfield($field, '2')) {
+                continue;
+            }
+
+            foreach ($field['subfields'] as $sf) {
+                if(preg_match('/^[a-zA-Z]$/', $sf['code'])) {
+                    $retVal[] = $sf['data'];
+                }
+            }
+        }
+
+        return $retVal;
     }
 
     public function getFormattedMarcDetails($defaultField, $data)
@@ -630,20 +658,14 @@ class SolrFindexMarc extends SolrMarc implements Constants
 
     public function getGNDSubjectHeadings()
     {
-        $fields = array_merge(
-            $this->getFields('600'),
-            $this->getFields('610'),
-            $this->getFields('611'),
-            $this->getFields('630'),
-            $this->getFields('648'),
-            $this->getFields('650'),
-            $this->getFields('651'),
-            $this->getFields('655'),
-            $this->getFields('689'),
-        );
+        $fields = $this->getMultiFields(['600', '610', '611', '630', '648', '650', '651', '655', '689']);
 
         $gnd = [];
         foreach ($fields as $field) {
+            if(!is_array($field)) {
+                continue;
+            }
+
             $sf2 = $this->getSubfield($field, '2');
             if ($sf2 == 'gnd') {
                 $tmp = [];
@@ -685,6 +707,27 @@ class SolrFindexMarc extends SolrMarc implements Constants
             $retVal = array_merge($retVal, $this->getSubfields($field, 'a'));
         }
 
+        return $retVal;
+    }
+
+    public function getFreeKeywords()
+    {
+        $fields = $this->getMultiFields(['600', '610', '611', '630', '648', '650', '651', '655', '689']);
+        $sf7Whitelist = ["(dpeaa)DE-631", "(dpeaa)DE-24", "(dpeaa)DE-24/stga"];
+
+        $retVal = [];
+        foreach ($fields as $field) {
+            if(!is_array($field)) {
+                continue;
+            }
+
+            $sf2 = $this->getSubfield($field, '2');
+            $sf7 = $this->getSubfield($field, '7');
+
+            if(!empty($sf2) && $sf2 !== 'gnd' && in_array($sf7, $sf7Whitelist)) {
+                $retVal = array_merge($retVal, $this->getSubfieldsByRegex($fields, '/^[a-z]$/'));
+            }
+        }
         return $retVal;
     }
 

@@ -44,4 +44,13 @@ class SearchMemory extends \VuFind\View\Helper\Root\SearchMemory
         parse_str($query_str, $queryArray);
         return $queryArray['lookfor'] ?? null;
     }
+
+    public function getLastSearchLink($link, $prefix = '', $suffix = '')
+    {
+        $lastLink = parent::getLastSearchLink($link, $prefix, $suffix);
+        if($lastLink == '') {
+            $urlHelper = $this->getView()->plugin('url');
+        }
+        return $lastLink;
+    }
 }

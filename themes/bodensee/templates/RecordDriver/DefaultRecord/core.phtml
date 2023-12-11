@@ -349,6 +349,17 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
                 </tr>
             <?php endif; ?>
 
+            <?php $contents = $this->driver->tryMethod('getKindContent'); if ($contents): ?>
+                <tr>
+                    <th><?=$this->transEsc('Kind/Content')?></th>
+                    <td>
+                        <?php foreach ($contents as $item): ?>
+                            <?= $this->escapeHtml($item) . " " ?>
+                        <?php endforeach; ?>
+                    </td>
+                </tr>
+            <?php endif; ?>
+
             <?
                   $openUrl = $this->openUrl($this->driver, 'record');
                   $openUrlActive = $openUrl->isActive();
