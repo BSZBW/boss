@@ -204,7 +204,13 @@ if (!empty($subjects) && $this->client()->is('show_rvk')): ?>
 <?php if (!empty($subjects) && $this->client()->is('show_gnd')): ?>
     <tr>
         <th>
-            <span class="text-nowrap"><?= $this->abbrev('GND') ?>-<?= $this->transEsc('Subjects') ?>:</span>
+            <?php
+            $text = $this->transEsc('Subjects');
+            if(!$this->client()->is('wlb2')) {
+                $text = $this->abbrev('GND') . '-' . $text;
+            }
+            ?>
+            <span class="text-nowrap"><?= $text ?>:</span>
         </th>
         <td>
             <?= $this->context($this)->renderInContext(
@@ -224,7 +230,7 @@ if (!empty($subjects) && $this->client()->is('show_rvk')): ?>
 <?php if (!empty($subjects) && $this->client()->is('show_local')): ?>
     <tr>
         <th>
-            <span class="text-nowrap"><?= $this->abbrev('GND') ?>-<?= $this->transEsc('Local Subjects') ?>:</span>
+            <span class="text-nowrap"><?php if (!$this->client()->is('wlb2)')): ?><?= $this->abbrev('GND') ?>-<?php endif; ?><?= $this->transEsc('Local Subjects') ?>:</span>
         </th>
         <td>
             <?= $this->context($this)->renderInContext(
