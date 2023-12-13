@@ -1465,8 +1465,8 @@ trait SolrMarcFincTrait
                         // https://intern.finc.info/issues/6896#note-7
                         $text = [];
                         foreach ($subfields as $subfield) {
-                            if ($line->getSubfield($subfield)) {
-                                $text[] = $line->getSubfield($subfield);
+                            if ($this->getSubfield($line, $subfield)) {
+                                $text[] =$this->getSubfield($line, $subfield);
                             }
                         }
 
@@ -1538,7 +1538,7 @@ trait SolrMarcFincTrait
                     // https://intern.finc.info/issues/6896#note-7
                     $text = [];
                     foreach ($subfields as $subfield => list($l_delim, $r_delim)) {
-                        $val = $line->getSubfield($subfield);
+                        $val = $this->getSubfield($line, $subfield);
                         if ($field == '773' && $subfield == 'a') {
                             if ($line->getIndicator(1) == 1) {
                                 $field245 = $this->getField('245');
@@ -1880,13 +1880,13 @@ trait SolrMarcFincTrait
                 if ($skipThisField($result)) {
 
                     // Get all the chunks and collect them together:
-                    $subfields = $result->getSubfields();
+                    $subfields = $result['subfields'];
                     if ($subfields) {
                         foreach ($subfields as $subfield) {
                             // Numeric subfields are for control purposes and should not
                             // be displayed:
-                            if (!is_numeric($subfield->getCode())) {
-                                $current[] = $subfield->getData();
+                            if (!is_numeric($subfield['code'])) {
+                                $current[] = $subfield['data'];
                             }
                         }
                         // If we found at least one chunk, add a heading to our result:

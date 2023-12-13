@@ -909,24 +909,36 @@ class SolrMarc extends SolrDefault
     {
         // Special case for MARC:
         if ($format == 'marc21') {
-            $xml = $this->getMarcReader()->toFormat('MARCXML');
-            $xml = str_replace(
-                [chr(27), chr(28), chr(29), chr(30), chr(31)], ' ', $xml
+            $sanitizeXmlRegEx
+                = '[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+';
+            $xml = simplexml_load_string(
+                trim(
+                    preg_replace(
+                        "/$sanitizeXmlRegEx/u",
+                        ' ',
+                        $this->getMarcReader()->toFormat('MARCXML')
+                    )
+                )
             );
-            $xml = simplexml_load_string($xml);
             if (!$xml || !isset($xml->record)) {
                 return false;
             }
 
             // Set up proper namespacing and extract just the <record> tag:
-            $xml->record->addAttribute('xmlns', "http://www.loc.gov/MARC21/slim");
+            $xml->record->addAttribute('xmlns', 'http://www.loc.gov/MARC21/slim');
+            // There's a quirk in SimpleXML that strips the first namespace
+            // declaration, hence the double xmlns: prefix:
+            $xml->record->addAttribute(
+                'xmlns:xmlns:xsi',
+                'http://www.w3.org/2001/XMLSchema-instance'
+            );
             $xml->record->addAttribute(
                 'xsi:schemaLocation',
                 'http://www.loc.gov/MARC21/slim ' .
                 'http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd',
                 'http://www.w3.org/2001/XMLSchema-instance'
             );
-            $xml->record->addAttribute('type', 'Bibliographic');
+            $xml->record->addAttribute('type', $this->xmlType);
             return $xml->record->asXML();
         }
 

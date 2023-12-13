@@ -92,13 +92,13 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault implements
      *
      * @return mixed
      */
-    public function getField($field)
-    {
-        if (isset($this->fields[$field])) {
-            return $this->fields[$field];
-        }
-        return null;
-    }
+//    public function getField($field)
+//    {
+//        if (isset($this->fields[$field])) {
+//            return $this->fields[$field];
+//        }
+//        return null;
+//    }
 
     /**
      * Helper function to restructure author arrays including relators
