@@ -713,7 +713,7 @@ class SolrFindexMarc extends SolrMarc implements Constants
     public function getFreeKeywords()
     {
         $fields = $this->getMultiFields(['600', '610', '611', '630', '648', '650', '651', '655', '689']);
-        $sf7Whitelist = ["(dpeaa)DE-631", "(dpeaa)DE-24", "(dpeaa)DE-24/stga"];
+        $sf7Whitelist = ['(dpeaa)DE-631', '(dpeaa)DE-24', '(dpeaa)DE-24/stga'];
 
         $retVal = [];
         foreach ($fields as $field) {
@@ -724,8 +724,8 @@ class SolrFindexMarc extends SolrMarc implements Constants
             $sf2 = $this->getSubfield($field, '2');
             $sf7 = $this->getSubfield($field, '7');
 
-            if(!empty($sf2) && $sf2 !== 'gnd' && in_array($sf7, $sf7Whitelist)) {
-                $retVal = array_merge($retVal, $this->getSubfieldsByRegex($fields, '/^[a-z]$/'));
+            if($sf2 !== 'gnd' && in_array($sf7, $sf7Whitelist)) {
+                $retVal = array_merge($retVal, $this->getSubfieldsByRegex($field, '/^[a-z]$/'));
             }
         }
         return $retVal;

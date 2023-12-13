@@ -217,9 +217,12 @@ if (!empty($subjects) && $this->client()->is('show_rvk')): ?>
                 'RecordDriver/DefaultRecord/parts/singlesubject.phtml',
                 ['subjects' => $subjects, 'type' => 'gnd', 'linktype' => 'gnd']
             ) ?>
-            <?php if ($this->client()->is('showFreeSubjects')): ?>
-                <?php $freeSubjects = $this->driver->tryMethod('getFreeSubjects'); if($freeSubjects): ?>
-                    <?= implode(' ', $freeSubjects); ?>
+            <?php if ($this->client()->is('showFreeKeywords')): ?>
+                <?php $freeSubjects = $this->driver->tryMethod('getFreeKeywords'); if($freeSubjects): ?>
+                    <?= $this->context($this)->renderInContext(
+                        'RecordDriver/DefaultRecord/parts/singlesubject.phtml',
+                        ['subjects' => $freeSubjects, 'type' => 'free', 'linktype' => 'free']
+                    ) ?>
                 <?php endif; ?>
             <?php endif ?>
         </td>
