@@ -17,7 +17,7 @@ $class = '';
 <?php
 
 
-$url = $this->recordLink()->getUrl($this->driver) . '/ILLForm';
+$url = $this->recordLink()->getUrl($this->driver, ['excludeSearchId' => true]) . '/ILLForm';
 if ($content['customUrl'] && $this->client()->getTag() !== 'fl-dienst' ) {
     $url = $this->openUrl($this->driver, 'illform')->getUrl();
 } elseif($this->client()->getTag() === 'fl-dienst') {
