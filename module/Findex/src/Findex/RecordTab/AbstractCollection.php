@@ -59,12 +59,12 @@ abstract class AbstractCollection extends \BszCommon\RecordTab\AbstractCollectio
     {
         $id = $this->driver->getUniqueID();
         // in local tab, we need to filter by isil
-        $filterOr = [];
-        foreach ($this->isils as $isil) {
-            $filterOr[] = 'collection_details:ISIL_' . $isil;
-        }
+//        $filterOr = [];
+//        foreach ($this->isils as $isil) {
+//            $filterOr[] = 'collection_details:ISIL_' . $isil;
+//        }
         $params = new ParamBag();
-        $params->add('fq', implode(' OR ', $filterOr));
+//        $params->add('fq', implode(' OR ', $filterOr));
         $params->add('fq', '-id:' . $id);
         $params->add('fq', $this->getFilterString());
 
