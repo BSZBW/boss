@@ -94,7 +94,7 @@ class SolrFindexMarc extends SolrMarc implements Constants
      */
     public function getNetwork()
     {
-        // TODO
+        return 'KXP';
     }
 
     /**
@@ -729,6 +729,11 @@ class SolrFindexMarc extends SolrMarc implements Constants
             }
         }
         return $retVal;
+    }
+
+    public function getHoldingIsils(): array
+    {
+        return $this->getHoldingIsilsFromField('980', 'x');
     }
 
 }

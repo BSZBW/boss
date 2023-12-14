@@ -95,5 +95,9 @@
     <?php if (isset($row['ilslink']) && ($recallButtonCounter > 0)): ?>
     <?php $text = $class === 'Bsz\ILS\Driver\NoILS' ? $this->transEsc('Local Online Access') : $this->transEsc('recall/hold');?>
         <a href="<?=$row['ilslink']?>" class="btn btn-primary btn-sm recallholdButtonLink external "><?=$text?></a>
+    <?php elseif($class == 'Bsz\ILS\Driver\NoILS'): ?>
+        <? $ppn = $this->driver->tryMethod('getPPN'); if(!empty($ppn) && ($this->driver->isJournal() || $this->driver->isSerial())): ?>
+            <?=$this->recordLink()->linkPPNButton($this->driver) ?>
+        <? endif; ?>
     <?php endif; ?>
 <?php endif; ?>

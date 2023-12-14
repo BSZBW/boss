@@ -615,4 +615,31 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
 
         return $retVal;
     }
+
+    protected function getHoldingIsilsFromField(string $fieldTag, string $subfieldCode): array
+    {
+        $isils = $this->mainConfig->getIsilAvailability();
+        if (count($isils) == 0) {
+            return [];
+        }
+        foreach ($isils as $k => $isil) {
+            $isils[$k] = '^' . preg_quote($isil, '/') . '$';
+        }
+        $pattern = implode('|', $isils);
+        $pattern = '/' . str_replace('\*', '.*', $pattern) . '/';
+
+        $fields = $this->getFields($fieldTag);
+
+        $retVal = [];
+        foreach ($fields as $field) {
+            if(!is_array($field)) {
+                continue;
+            }
+            $sf = $this->getSubfield($field, $subfieldCode);
+            if(preg_match($pattern, $sf)) {
+                $retVal[] = $sf;
+            }
+        }
+        return $retVal;
+    }
 }

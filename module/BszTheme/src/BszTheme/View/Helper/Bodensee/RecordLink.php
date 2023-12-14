@@ -93,7 +93,7 @@ class RecordLink extends \VuFind\View\Helper\Root\RecordLinker
         // library).
         // otherwise use the network OPAC urls, which can be found in BSZ.ini
 
-        if ($driver->getNetwork() == 'SWB' && $recordHelper->isAtFirstIsil()) {
+        if (in_array($driver->getNetwork(), ['SWB', 'KXP']) && $recordHelper->isAtFirstIsil()) {
             $url = str_replace('%PPN%', $ppn, $url);
             $label = 'ILL::library_opac';;
         } else {

@@ -953,6 +953,11 @@ class SolrGviMarc extends SolrMarc implements Constants
         return $holdings;
     }
 
+    public function getHoldingIsils()
+    {
+        return $this->getHoldingIsilsFromField('924', 'b');
+    }
+
     /**
      * Returns url  from 856|u
      * @return String
