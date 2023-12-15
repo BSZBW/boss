@@ -736,4 +736,43 @@ class SolrFindexMarc extends SolrMarc implements Constants
         return $this->getHoldingIsilsFromField('980', 'x');
     }
 
+    public function getBibliographicalContext()
+    {
+        return $this->getContextFromField('787');
+    }
+
+    protected function getContextFromField(string $fieldTag): array
+    {
+        $retVal = [];
+        foreach ($this->getFields($fieldTag) as $field) {
+            $tmp = [];
+            if ($field['i1'] == 0) {
+
+                $sfw = $this->getSubfield($field, 'w');
+                if(!empty($sfw)) {
+                    $tmp['ppn'] =  preg_replace('/\(.*\)(.*)/', '$1', $sfw);
+                }
+
+                $sfi = $this->getSubfield($field, 'i');
+                if(!empty($sfi)) {
+                    $tmp['prefix'] = $sfi;
+                }
+
+                $sft = $this->getSubfield($field, 't');
+                if(!empty($sft)) {
+                    $tmp['label'] = $sft;
+                }
+
+                $sfn = $this->getSubfield($field, 'n');
+                if(!empty($sfn)) {
+                    $tmp['postfix'] = $sfn;
+                }
+            }
+            if (isset($tmp['ppn'], $tmp['label'])) {
+                $retVal[] = $tmp;
+            }
+        }
+        return array_filter($retVal);
+    }
+
 }

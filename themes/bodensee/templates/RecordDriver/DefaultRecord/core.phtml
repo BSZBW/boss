@@ -181,12 +181,12 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
                     <th><?=$this->transEsc('other_appearance')?></th>
                     <td>
                         <p>
-                        <? foreach($parallel as $para): ?>
-                            <? if (isset($para['prefix'])): ?><?=$this->transEsc($para['prefix'])?> <? endif ?>
-                            <? if (isset($para['ppn'], $para['label'])) : ?>
-                                <a class="searchicon" href="<?=$this->recordLink()->getUrl($para['ppn'])?>" ><?=$this->transEsc($para['label'])?></a>
+                        <? foreach($parallel as $ctx): ?>
+                            <? if (isset($ctx['prefix'])): ?><?=$this->transEsc($ctx['prefix'])?> <? endif ?>
+                            <? if (isset($ctx['ppn'], $ctx['label'])) : ?>
+                                <a class="searchicon" href="<?=$this->recordLink()->getUrl($ctx['ppn'])?>" ><?=$this->transEsc($ctx['label'])?></a>
                             <? endif; ?>
-                            <? if (isset($para['postfix'])): ?> (<?=$this->transEsc($para['postfix'])?>)<? endif ?>
+                            <? if (isset($ctx['postfix'])): ?> (<?=$this->transEsc($ctx['postfix'])?>)<? endif ?>
                         <br/>
                         <? endforeach; ?></td>
                         </p>
@@ -273,6 +273,25 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
                 </td>
             </tr>
             <? endif; ?>
+
+            <?php if($this->client()->is('show_bib_context')): ?>
+                <?php $context = $this->driver->tryMethod('getBibliographicalContext'); if ($context): ?>
+                    <tr>
+                        <th><?=$this->transEsc('bib_context')?></th>
+                        <td>
+                            <p>
+                                <? foreach($context as $ctx): ?>
+                                <? if (isset($ctx['prefix'])): ?><?=$this->transEsc($ctx['prefix'])?> <? endif ?>
+                                <? if (isset($ctx['ppn'], $ctx['label'])) : ?>
+                                    <a class="searchicon" href="<?=$this->recordLink()->getUrl($ctx['ppn'])?>" ><?=$this->transEsc($ctx['label'])?></a>
+                                <? endif; ?>
+                                <? if (isset($ctx['postfix'])): ?> (<?=$this->transEsc($ctx['postfix'])?>)<? endif ?>
+                                <br/>
+                            <? endforeach; ?></td>
+                        </p>
+                    </tr>
+                <?php endif; ?>
+            <?php endif; ?>
 
             <? $childRecordCount = $this->driver->tryMethod('getChildRecordCount'); if ($childRecordCount): ?>
             <tr>
