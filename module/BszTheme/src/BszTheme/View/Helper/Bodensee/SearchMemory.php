@@ -50,6 +50,7 @@ class SearchMemory extends \VuFind\View\Helper\Root\SearchMemory
         $lastLink = parent::getLastSearchLink($link, $prefix, $suffix);
         if($lastLink == '') {
             $urlHelper = $this->getView()->plugin('url');
+            $lastLink = $urlHelper('home');
         }
         return $lastLink;
     }

@@ -1,25 +1,26 @@
 <?php foreach ($checkboxFilters as $current): ?>
     <?php if($results->getResultTotal() > 0 || $current['selected'] || $current['alwaysVisible']): ?>
-    <div class="facet verticalcenter">
-        <a class="checkbox-filter" href="<?=$current['selected'] ? $results->getUrlQuery()->removeFilter($current['filter']) : $results->getUrlQuery()->addFilter($current['filter']);?>" data-facet="<?=$this->escapeHtmlAttr($current['filter'])?>" data-facet="<?=$this->escapeHtmlAttr($current['filter'])?>">
-            <?php if ($current['selected']): ?>
-                <span class="sr-only"><?=$this->transEsc('clear_tag_filter') ?></span>
-            <?php endif; ?>
-            <span class="text">
+        <div class="facet verticalcenter">
+            <a class="checkbox-filter" href="<?=$current['selected'] ? $results->getUrlQuery()->removeFilter($current['filter']) : $results->getUrlQuery()->addFilter($current['filter']);?>" data-facet="<?=$this->escapeHtmlAttr($current['filter'])?>" data-facet="<?=$this->escapeHtmlAttr($current['filter'])?>">
+                <?php if ($current['selected']): ?>
+                    <span class="sr-only"><?=$this->transEsc('clear_tag_filter') ?></span>
+                <?php endif; ?>
+                <span class="text">
         <i class="fa fa-<?=$current['selected'] ? 'check-square-o' : 'square-o' ?>"></i>
                 <?=$this->transEsc($current['desc']) ?>
       </span>
-            <?php if (!$current['selected']): ?>
-                <span class="badge avail-count"></span>
-            <?php endif; ?>
-        </a>
-        <?php if ($this->client()->is($current['desc'])): ?>
-            <?php $imgLink = $this->imageLink('/logo/bibliographies/' . $current['desc'] .".png" ); ?>
-            <img class="lineicon" src="<?=$imgLink?>" alt="<?=$current['desc']?>">
-        <?php endif ?>
-        <?php if ($this->client()->is('wlb_facet_tooltip') && (strpos($current['desc'], 'ePflicht') !== false)): ?>
-            <a class="external hasicon" href="https://www.wlb-stuttgart.de/die-wlb/wir-ueber-uns/abteilungen/pflichtexemplare/"><span class="" data-toggle="tooltip" title="<?=$this->transEsc('ePflicht-BW Tooltip')?>"><i class="fa fa-info-circle text-success"></i></span></a>
-        <?php endif ?>
-    </div>
+                <?php if (!$current['selected']): ?>
+                    <span class="badge avail-count"></span>
+                <?php endif; ?>
+            </a>
+
+            <?php if ($this->client()->is($current['desc'])): ?>
+                <?php $imgLink = $this->imageLink('/logo/bibliographies/' . $current['desc'] .".png" ); ?>
+                <img class="lineicon" src="<?=$imgLink?>" alt="<?=$current['desc']?>">
+            <?php endif ?>
+            <?php if ($this->client()->is('wlb_facet_tooltip') && (strpos($current['desc'], 'ePflicht') !== false)): ?>
+                <a class="external hasicon" href="https://www.wlb-stuttgart.de/die-wlb/wir-ueber-uns/abteilungen/pflichtexemplare/"><span class="" data-toggle="tooltip" title="<?=$this->transEsc('ePflicht-BW Tooltip')?>"><i class="fa fa-info-circle text-success"></i></span></a>
+            <?php endif ?>
+        </div>
     <?php endif; ?>
 <?php endforeach; ?>

@@ -1,80 +1,89 @@
-<?
-  $this->headScript()->appendFile('facets.js');
+<?php
+$this->headScript()->appendFile('facets.js');
 
-  // Save results/options to $this so they are available to sub-templates:
-  $this->results = $results = $this->recommend->getResults();
-  $this->options = $options = $results->getOptions();
-?>
-<? if ($results->getResultTotal() > 0): ?>
-  <h4><?=$this->transEsc(isset($this->overrideSideFacetCaption) ? $this->overrideSideFacetCaption : 'Narrow Search')?></h4>
-<? endif; ?>
-<? $checkboxFilters = $results->getParams()->getCheckboxFacets(); ?>
-<? $checkboxesShown = false; ?>
-<? if (count($checkboxFilters) > 0):
-    foreach ($checkboxFilters as $current) {
-      if ($results->getResultTotal() > 0 || $current['selected'] || $current['alwaysVisible']) {
-        $checkboxesShown = true;
-        break;
-      }
+// Save results/options to $this so they are available to sub-templates:
+$this->results = $results = $this->recommend->getResults();
+$this->options = $options = $results->getOptions();
+$collapsedFacets = $this->recommend->getCollapsedFacets();
+$forceUncollapsedFacets = [];
+
+// Make sure facets with active selections are not collapsed:
+$filterList = $results->getParams()->getFilterList(true);
+foreach ($filterList as $field => $filters) {
+    foreach ($filters as $filter) {
+        $index = isset($filter['field']) ? array_search($filter['field'], $collapsedFacets) : false;
+        if ($index !== false) {
+            unset($collapsedFacets[$index]); // Open if we have a match
+            $forceUncollapsedFacets[] = $filter['field'];
+        }
     }
-  ?>
-  <?if ($checkboxesShown):?>
+}
+
+$hierarchicalFacets = $this->recommend->getHierarchicalFacets();
+if ($hierarchicalFacets) {
+    // jstree.min.js used to be injected by hierarchical-facet.js, but with deferred
+    // processing it's called too late to append anything to the headers.
+    $this->headScript()->appendFile('vendor/jsTree/jstree.min.js');
+    $this->headScript()->appendFile('jstree-vufind-facet-plugin.js');
+
+}
+?>
+<!-- BSZ: "Back" button removed
+<button class="close-offcanvas btn btn-link" data-toggle="offcanvas"><?=$this->transEsc('navigate_back') ?></button>
+-->
+<?php
+$checkboxFilters = $this->recommend->getCheckboxFacetSet();
+$hasVisibleCheckboxes = false;
+if (count($checkboxFilters) > 0) {
+    foreach ($checkboxFilters as $current) {
+        if ($results->getResultTotal() > 0 || $current['alwaysVisible']) {
+            $hasVisibleCheckboxes = true;
+            break;
+        }
+    }
+}
+?>
+<?php if ($results->getResultTotal() > 0 || $hasVisibleCheckboxes): ?>
+    <!--BSZ: Smaller caption-->
+    <h4><?=$this->transEsc(isset($this->overrideSideFacetCaption) ? $this->overrideSideFacetCaption : 'Narrow Search')?></h4>
+    <!--
+    <h2><?=$this->transEsc($this->slot('side-facet-caption')->get('Refine Results')) ?></h2>
+    -->
+    <span class="sr-only"><?=$this->transEscAttr('page_reload_on_select_hint') ?></span>
+<?php endif; ?>
+<?php if ($hasVisibleCheckboxes): ?>
     <div class="checkboxFilter">
-      <?=$this->context($this)->renderInContext('Recommend/SideFacets/checkbox-filters.phtml', ['checkboxFilters' => $checkboxFilters, 'results' => $results]); ?>
+        <?=$this->context($this)->renderInContext('Recommend/SideFacets/checkbox-filters.phtml', ['checkboxFilters' => $checkboxFilters, 'results' => $results]); ?>
     </div>
-  <? endif; ?>
-<? endif; ?>
-<? $extraFilters = isset($this->extraSideFacetFilters) ? $this->extraSideFacetFilters : []; ?>
-<? $collapsedFacets = $this->recommend->getCollapsedFacets() ?>
-<? $filterList = array_merge($results->getParams()->getFilterList(true), $extraFilters); ?>
-<? if (!empty($filterList)): ?>
-  <?=$this->context($this)->renderInContext('Recommend/SideFacets/filter-list.phtml', [
-    'collapsedFacets' => $collapsedFacets,
-    'extraFilters' => $extraFilters,
-    'filterList' => $filterList,
-  ]); ?>
-<? endif; ?>
-<?= isset($this->sideFacetExtraControls) ? $this->sideFacetExtraControls : '' ?>
-<? $sideFacetSet = $this->recommend->getFacetSet(); $rangeFacets = $this->recommend->getAllRangeFacets(); ?>
-<? $hierarchicalFacets = $this->recommend->getHierarchicalFacets() ?>
-<? $hierarchicalFacetSortOptions = $this->recommend->getHierarchicalFacetSortOptions() ?>
-<? if (!empty($sideFacetSet) && $results->getResultTotal() > 0): ?>
-  <? foreach ($sideFacetSet as $title => $cluster): ?>
-    <? if ($title == 'consortium' && !$this->searchTabs()->isILL($this->searchClassId)):
-        continue;
-        endif; ?>
-    <div class="facet-group" id="side-panel-<?=$this->escapeHtmlAttr($title) ?>">
-      <button class="title<? if(in_array($title, $collapsedFacets)): ?> collapsed<? endif ?>" data-toggle="collapse" href="#side-collapse-<?=$this->escapeHtmlAttr($title) ?>" >
-        <?=$this->transEsc($cluster['label'])?>
-      </button>
-      <div id="side-collapse-<?=$this->escapeHtmlAttr($title) ?>" class="collapse<? if(!in_array($title, $collapsedFacets)): ?> in<? endif ?>">
-        <? if (isset($rangeFacets[$title]) && $rangeFacets[$title]['type'] === 'fulldate'): ?>
-          <?=$this->context($this)->renderInContext('Recommend/SideFacets/range-calendar.phtml', ['title' => $title, 'facet' => $rangeFacets[$title]]); ?>
-        <? elseif (isset($rangeFacets[$title]) && $rangeFacets[$title]['type'] === 'date'): ?>
-              <?=$this->context($this)->renderInContext('Recommend/SideFacets/range-slider.phtml', ['title' => $title, 'facet' => $rangeFacets[$title]]); ?>
-        <? else: ?>
-          <? $contextVars = [
-            'allowExclude' => $this->recommend->excludeAllowed($title),
-            'title' => $title,
-            'sortOptions' => isset($hierarchicalFacetSortOptions[$title]) ? $hierarchicalFacetSortOptions[$title] : '',
-            'collapsedFacets' => $collapsedFacets
-          ]; ?>
-          <? if (in_array($title, $hierarchicalFacets)): ?>
-            <?=$this->context($this)->renderInContext('Recommend/SideFacets/hierarchical-facet.phtml', $contextVars); ?>
-            <noscript>
-          <? endif; ?>
-          <? $contextVars = [
-            'options' => $options,
-            'allowExclude' => $this->recommend->excludeAllowed($title),
-            'facets_before_more' => $this->recommend->getShowMoreSetting($title),
-            'showMoreInLightbox' => $this->recommend->getShowInLightboxSetting($title)
-          ]; ?>
-          <?=$this->context($this)->renderInContext('Recommend/SideFacets/cluster-list.phtml', array_merge($contextVars, ['title' => $title, 'cluster' => $cluster])); ?>
-          <? if (in_array($title, $hierarchicalFacets)): ?>
-            </noscript>
-          <? endif; ?>
-        <? endif; ?>
-      </div>
-    </div>
-  <? endforeach; ?>
-<? endif; ?>
+<?php endif; ?>
+<?= $this->sideFacetExtraControls ?? '' ?>
+<?php $sideFacetSet = $this->recommend->getFacetSet(); ?>
+<?php $hierarchicalFacets = $this->recommend->getHierarchicalFacets() ?>
+<?php $hierarchicalFacetSortOptions = $this->recommend->getHierarchicalFacetSortOptions() ?>
+<?php if (!empty($sideFacetSet) && $results->getResultTotal() > 0): ?>
+    <?php foreach ($sideFacetSet as $title => $cluster): ?>
+        <?php $collapsed = in_array($title, $collapsedFacets); ?>
+        <?php // Data-title attribute is for analytics use.  Do not remove. ?>
+        <div class="facet-group" id="side-panel-<?=$this->escapeHtmlAttr($title) ?>" data-title="<?=$this->escapeHtmlAttr($cluster['label']) ?>">
+            <h3 class="facet-title">
+                <button class="title<?php if ($collapsed): ?> collapsed<?php endif ?>" data-toggle="collapse" data-target="#side-collapse-<?=$this->escapeHtmlAttr($title) ?>" >
+                    <span class="facet-title"><?=$this->transEsc($cluster['label'])?></span>
+                    <?=$this->icon('collapse', 'facet-title-icon') ?>
+                </button>
+            </h3>
+            <div id="side-collapse-<?=$this->escapeHtmlAttr($title) ?>" role="listbox" aria-expanded="<?=$collapsed ? 'false' : 'true'?>" class="collapse<?php if (!$collapsed): ?> in<?php endif ?>"<?php if (in_array($title, $forceUncollapsedFacets)): ?> data-force-in="1"<?php endif ?>>
+                <?=
+                $this->context($this)->renderInContext(
+                    'Recommend/SideFacets/facet.phtml',
+                    [
+                        'facet' => $title,
+                        'cluster' => $cluster,
+                        'collapsedFacets' => $collapsedFacets,
+                    ]
+                );
+                ?>
+            </div>
+        </div>
+    <?php endforeach; ?>
+<?php endif; ?>
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, 'registerSideFacetTruncation();', 'SET');?>
