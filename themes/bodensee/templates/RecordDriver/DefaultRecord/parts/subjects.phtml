@@ -1,6 +1,6 @@
 <?php $rand = rand(0, 9999) ?>
 <?php $notations = $this->driver->tryMethod('getRVKNotations');
-if (!empty($notations) && $this->client()->is('show_rvk')): ?>
+if (!empty($notations) && $this->client()->is('show_rvk') &&!$this->client()->is('wlb2')): ?>
     <?php $contentDisplayed = true; ?>
     <tr>
         <th>
@@ -16,6 +16,8 @@ if (!empty($notations) && $this->client()->is('show_rvk')): ?>
                     $descriptionHtml .= '</ol>';
                     if ($descriptionHtml == '<ol></ol>') {
                         $descriptionHtml = '';
+                    } else {
+                        $descriptionHtml = '<h5>' . $this->transEsc('RVK') . '</h5>' . $descriptionHtml;
                     }
 
                     ?>
@@ -27,6 +29,73 @@ if (!empty($notations) && $this->client()->is('show_rvk')): ?>
           </span>
                 <?php endforeach; ?>
             </td>
+        <?php endif; ?>
+        <?php unset($notations) ?>
+    </tr>
+<?php endif; ?>
+
+<?php $bwlbNotations = $this->driver->tryMethod('getSystematics'); ?>
+<?php if ((!empty($notations) || !empty($bwlbNotations)) && $this->client()->is('wlb2')): ?>
+    <?php $contentDisplayed = true; ?>
+    <tr>
+        <th>
+            <span class="text-nowrap"><?= $this->transEsc('systematics') ?></span>
+        </th>
+        <?php if (is_array($notations)): ?>
+            <td>
+                <?php foreach ($notations as $shortcut => $description): ?>
+                    <?php $descriptionHtml = '<ol>';
+                    foreach ($description as $item) {
+                        $descriptionHtml .= '<li>' . $item . '</li>';
+                    }
+                    $descriptionHtml .= '</ol>';
+                    if ($descriptionHtml == '<ol></ol>') {
+                        $descriptionHtml = '';
+                    } else {
+                        $descriptionHtml = '<h5>' . $this->transEsc('RVK') . '</h5>' . $descriptionHtml;
+                    }
+
+                    ?>
+                    <span class="notationLine markjs">
+                <a data-toggle="tooltip" data-placement="right" data-html="true"
+                   href="<?= $this->record($this->driver)->getLink('rvknotation', $shortcut, $this->searchClassId) ?>"
+                   class="searchicon"
+                   title="<?= $descriptionHtml ?>"><?= $this->transEsc($shortcut) ?></a>
+          </span>
+                <?php endforeach; ?>
+                <?php foreach ($bwlbNotations as $item): ?>
+                    <?php
+                    $description = '';
+                    $abbrev = $this->bwlbConcordance($item);
+                    foreach ($abbrev as $key => $value) {
+                        $description .= '<tr>';
+                        $description .= '<td style="text-align:left; padding-right:10px">' . $key . '</td>';
+                        $description .= '<td style="text-align:left">' . $value . '</td>';
+                        $description .= '</tr>';
+                    }
+                    if (!empty($description)) {
+                        $header = '<h5>' . $this->transEsc('BWLB') . '</h5>';
+                        $description = $header . '<table><tbody>' . $description . '</tbody></table>';
+                    }
+                    ?>
+                    <?php if(empty($description)): ?>
+                        <span class="text-nowrap"><?=$item ?></span>
+                    <?php else: ?>
+                        <script>
+                          var myDefaultWhiteList = $.fn.popover.Constructor.DEFAULTS.whiteList
+                          myDefaultWhiteList.table = []
+                          myDefaultWhiteList.tbody = []
+                          myDefaultWhiteList.tr = []
+                          myDefaultWhiteList.h5 = []
+                          myDefaultWhiteList.td = ['style']
+                        </script>
+                        <a data-toggle="tooltip" data-placement="right" data-html="true" class="searchicon"
+                           href="<?= $this->record($this->driver)->getLink('bwlb', $item, $this->searchClassId) ?>"
+                           title="<?= $this->escapeHtml($description) ?>"><?=$item ?></a>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </td>
+
         <?php endif; ?>
         <?php unset($notations) ?>
     </tr>

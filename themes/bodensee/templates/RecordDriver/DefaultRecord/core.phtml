@@ -325,49 +325,6 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
 
             <?=$this->render('RecordDriver/DefaultRecord/parts/subjects.phtml')?>
 
-            <?php $systematics = $this->driver->tryMethod('getSystematics'); if ($systematics): ?>
-                <tr>
-                    <th> <?= $this->transEsc('systematics'); ?></th>
-                    <td>
-                        <?php foreach ($systematics as $item): ?>
-                            <?php
-                                $description = '';
-                                $abbrev = $this->bwlbConcordance($item);
-                                foreach ($abbrev as $key => $value) {
-                                    $description .= '<tr>';
-                                    $description .= '<td style="text-align:left; padding-right:10px">' . $key . '</td>';
-                                    $description .= '<td style="text-align:left">' . $value . '</td>';
-                                    $description .= '</tr>';
-                                }
-                                if (!empty($description)) {
-                                    $description = '<table><tbody>' . $description . '</tbody></table>';
-                                }
-//                                foreach ($abbrev as $key => $value) {
-//                                    $description .= '<li value="17">' .$value . '</li>';
-//                                }
-//                                if(!empty($description)) {
-//                                    $description = '<ol>' . $description . '</ol>';
-//                                }
-                            ?>
-                            <?php if(empty($description)): ?>
-                                <span class="text-nowrap"><?=$item ?></span>
-                            <?php else: ?>
-                                <script>
-                                  var myDefaultWhiteList = $.fn.popover.Constructor.DEFAULTS.whiteList
-                                  myDefaultWhiteList.table = []
-                                  myDefaultWhiteList.tbody = []
-                                  myDefaultWhiteList.tr = []
-                                  myDefaultWhiteList.td = ['style']
-                                </script>
-                                <a data-toggle="tooltip" data-html="true" class="searchicon"
-                                   href="<?= $this->record($this->driver)->getLink('bwlb', $item, $this->searchClassId) ?>"
-                                   title="<?= $this->escapeHtml($description) ?>"><?=$item ?></a>
-                            <?php endif; ?>
-                        <?php endforeach; ?>
-                    </td>
-                </tr>
-            <?php endif; ?>
-
             <?php $contents = $this->driver->tryMethod('getKindContent'); if ($contents): ?>
                 <tr>
                     <th><?=$this->transEsc('Kind/Content')?></th>
