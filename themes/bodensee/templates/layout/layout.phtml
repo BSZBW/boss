@@ -22,6 +22,8 @@
             'rel' => 'search'
         ]
       );
+
+    $icons = !isset($this->renderingError) ? $this->render('js-icons.phtml') : '{}';
     ?>
     <?$this->headMeta()->appendProperty('og:type', 'website')?>
     <?$this->headMeta()->appendProperty('og:title',$this->headTitle()->renderTitle())?>
@@ -121,7 +123,7 @@
                   'viewBookBag' => 'View Book Bag',
                   'illFormError' => 'ILL::form_error',
                   'illCostsError' => 'ILL::costs_error',
-                  'illYearError' => 'ILL::error_year'
+                  'illYearError' => 'ILL::error_year',
                 ]
               );
           }
@@ -139,11 +141,12 @@
     ?>
     <?php
       $root = rtrim($this->url('home'), '/');
-      $translations = $this->jsTranslations()->getJSON();
+      $translations = !isset($this->renderingError) ? $this->render('js-translations.phtml') : '{}';
       $dsb = DEFAULT_SEARCH_BACKEND;
       $setupJS = <<<JS
 VuFind.path = '{$root}';
 VuFind.defaultSearchBackend = '{$dsb}';
+VuFind.addIcons({$icons});
 VuFind.addTranslations({$translations});
 JS;
       $this->headScript()->appendScript($setupJS);
