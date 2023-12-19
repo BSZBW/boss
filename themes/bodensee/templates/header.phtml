@@ -31,6 +31,13 @@
                         <a id="feedbackLink" data-lightbox href="<?=$this->url('feedback-home') ?>"><i class="fa fa-envelope" aria-hidden="true"></i> <?=$this->transEsc("Feedback")?></a>
                     </li>
                 <?php endif; ?>
+                <?php if ($this->client()->is('wlb2')): ?>
+                    <li>
+                        <div style="padding: 15px 10px 15px 8px;">
+                        <img src="<?= $this->imageLink('beta_badge.png') ?>" alt="BETA" style="height: 2em">
+                        </div>
+                    </li>
+                <?php endif ?>
                 <?php $cart = $this->cart(); if ($cart->isActive()): ?>
                     <li id="cartSummary">
                         <a id="cartItems" data-lightbox title="<?=$this->transEsc('View Book Bag')?>" href="<?=$this->url('cart-home')?>">
