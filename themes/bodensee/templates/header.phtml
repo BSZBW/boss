@@ -33,9 +33,9 @@
                 <?php endif; ?>
                 <?php if ($this->client()->is('wlb2')): ?>
                     <li>
-                        <div style="padding: 15px 10px 15px 8px;">
-                        <img src="<?= $this->imageLink('beta_badge.png') ?>" alt="BETA" style="height: 2em">
-                        </div>
+                        <a href="<?= $this->url('home') ?>">
+                            <img src="<?= $this->imageLink('beta_badge.png') ?>" alt="BETA" style="height: 2em">
+                        </a>
                     </li>
                 <?php endif ?>
                 <?php $cart = $this->cart(); if ($cart->isActive()): ?>
