@@ -516,7 +516,7 @@ class SolrFindexMarc extends SolrMarc implements Constants
             }
             $sfa = $this->getSubfield($field, 'a');
             $sf2 = $this->getSubfield($field, '2');
-            if ($sf2 === 'local' && !empty($sfa)) {
+            if ($sf2 == 'local' && !empty($sfa)) {
                 $retVal[] = $sfa;
             }
         }
@@ -712,7 +712,7 @@ class SolrFindexMarc extends SolrMarc implements Constants
 
     public function getFreeKeywords()
     {
-        $fields = $this->getMultiFields(['600', '610', '611', '630', '648', '650', '651', '655', '689']);
+        $fields = $this->getMultiFields(['600', '610', '611', '630', '650', '651', '655', '689']);
         $sf7Whitelist = ['(dpeaa)DE-631', '(dpeaa)DE-24', '(dpeaa)DE-24/stga'];
 
         $retVal = [];
@@ -773,6 +773,45 @@ class SolrFindexMarc extends SolrMarc implements Constants
             }
         }
         return array_filter($retVal);
+    }
+
+    /**
+     * get local Urls from 981|r
+     * @return array
+     */
+    public function getLocalUrls()
+    {
+        $isils = $this->mainConfig->getIsils();
+        $isils4local = $this->mainConfig->get('Site')->get('isil_local_url');
+
+        if (empty($isils4local)) {
+            $isils = [array_shift($isils)];
+        } else {
+            $isils = explode(',', $isils4local);
+        }
+
+        $retVal = [];
+        $urlsOnly = [];
+
+        $f981 = $this->getFields('981');
+        foreach ($f981 as $field) {
+            if(!is_array($field)) {
+                continue;
+            }
+
+            $sfr = $this->getSubfield($field, 'r');
+            $sfx = $this->getSubfield($field, 'x');
+
+            if(!empty($sfr) && in_array($sfx, $isils) && !in_array($sfr, $urlsOnly)) {
+                $retVal[] = [
+                    'url' => $sfr,
+                    'label' => $sfr,
+                    'isil' => $sfx
+                ];
+            }
+
+        }
+        return $retVal;
     }
 
 }
