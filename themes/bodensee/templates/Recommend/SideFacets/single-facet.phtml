@@ -36,7 +36,8 @@ if (($pos = strpos($displayText, 'rvk ')) !== false) {
     $displayText = substr($displayText, $pos + 4 );
 }
 if(($pos = strpos($displayText, 'bwlb ')) !== false) {
-    $displayText = $this->transEsc('BWLB::' . substr($displayText, $pos + 5));
+    $num = substr($displayText, $pos + 5);
+    $displayText = $num . " " . $this->transEsc('BWLB::' . substr($displayText, $pos + 5));
 }
 //End BSZ
 
