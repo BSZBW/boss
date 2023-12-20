@@ -49,7 +49,7 @@
         <p><?=$this->transEsc('ILL::help_intro2')?></p>
         <p><?=$this->transEsc('ILL::help_intro3')?></p>
 
-        <form data-format="<?=$type?>" class="<?=$type?> form-horizontal" id="form-ill" action="<?=$this->recordLink()->getUrl($this->driver)?>/ILLForm" method="POST" role="form">
+        <form data-format="<?=$type?>" class="<?=$type?> form-horizontal" id="form-ill" action="<?=$this->recordLink()->getUrl($this->driver ?? '')?>/ILLForm" method="POST" role="form">
             <div class="form-group form-group-sm">
             <? if (isset($params['Bestellform'])):
                 $form = $params['Bestellform'];
