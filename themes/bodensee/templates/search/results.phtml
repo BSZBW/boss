@@ -138,7 +138,19 @@
     <?php endif; ?>
 </div>
 <div class="<?=$this->layoutClass('sidebar')?>">
-  <?php foreach ($this->results->getRecommendations('side') as $current): ?>
-    <?=$this->recommend($current)?>
-  <?php endforeach; ?>
+    <?php
+        $searchButtons = [];
+        $otherRecommendations = [];
+        foreach ($this->results->getRecommendations('side') as $current) {
+            if ($current instanceof \Bsz\Recommend\SearchButtons) {
+                $searchButtons[] = $current;
+            } else {
+                $otherRecommendations[] = $current;
+            }
+        }
+    ?>
+    <?= $this->context($this)->renderInContext('Recommend/AllSearchButtons.phtml', ['buttons' => $searchButtons]); ?>
+    <?php foreach ($otherRecommendations as $recommendation): ?>
+        <?= $this->recommend($recommendation); ?>
+    <?php endforeach; ?>
 </div>
