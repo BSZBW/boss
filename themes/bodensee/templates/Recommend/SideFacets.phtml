@@ -45,12 +45,26 @@ if (count($checkboxFilters) > 0) {
 ?>
 <?php if ($results->getResultTotal() > 0 || $hasVisibleCheckboxes): ?>
     <!--BSZ: Smaller caption-->
-    <h4><?=$this->transEsc(isset($this->overrideSideFacetCaption) ? $this->overrideSideFacetCaption : 'Narrow Search')?></h4>
+    <h4><?=$this->transEsc($this->overrideSideFacetCaption ?? 'Narrow Search')?></h4>
     <!--
     <h2><?=$this->transEsc($this->slot('side-facet-caption')->get('Refine Results')) ?></h2>
     -->
     <span class="sr-only"><?=$this->transEscAttr('page_reload_on_select_hint') ?></span>
 <?php endif; ?>
+
+<!-- BSZ: Show "Remove search filters" -->
+<?php $extraFilters = $this->extraSideFacetFilters ?? []; ?>
+<?php $collapsedFacets = $this->recommend->getCollapsedFacets() ?>
+<?php $filterList = array_merge($results->getParams()->getFilterList(true), $extraFilters); ?>
+<?php if (!empty($filterList)): ?>
+    <?=$this->context($this)->renderInContext('Recommend/SideFacets/filter-list.phtml', [
+        'collapsedFacets' => $collapsedFacets,
+        'extraFilters' => $extraFilters,
+        'filterList' => $filterList,
+    ]); ?>
+<?php endif; ?>
+<!-- END BSZ -->
+
 <?php if ($hasVisibleCheckboxes): ?>
     <div class="checkboxFilter">
         <?=$this->context($this)->renderInContext('Recommend/SideFacets/checkbox-filters.phtml', ['checkboxFilters' => $checkboxFilters, 'results' => $results]); ?>
