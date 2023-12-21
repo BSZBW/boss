@@ -62,7 +62,8 @@ JS;
           </div>
       <?php endif; ?>
       <?php if ($this->client()->getTag() != 'goethe' && $this->client()->getTag() != 'fl-recherche'):?>
-      <div class="col-xs-6 col-sm-4 pull-right">
+      <?php $logoClass = $this->client()->is('show_header_logo') ? 'hidden-lg' : ''; ?>
+      <div class="col-xs-6 col-sm-4 pull-right <?= $logoClass ?>">
           <?=$this->clientAsset()->getLogoHtml()?>
       </div>
       <?php endif; ?>

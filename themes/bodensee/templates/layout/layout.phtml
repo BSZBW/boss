@@ -1,6 +1,18 @@
 <?=$this->doctype('HTML5')?>
 <html lang="<?=$this->layout()->userLang?>"<?php if ($this->layout()->rtl): ?> dir="rtl"<?php endif; ?>>
 <head>
+    <style>
+        .beta {
+            border: 2px solid red;
+            border-radius: 5px;
+            padding:3px; color:red;
+            font-weight:bold
+        }
+        .beta:hover {
+            color:LightCoral;
+            border-color:LightCoral;
+        }
+    </style>
     <?php $this->setupThemeResources(); ?>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>

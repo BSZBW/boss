@@ -32,9 +32,9 @@
                     </li>
                 <?php endif; ?>
                 <?php if($this->client()->is('wlb2')): ?>
-                <li class="beta">
-                    <a href="<?= $this->url('home') ?>">
-                        <span style="border: 2px solid red;border-radius: 5px; padding:5px; color:red; font-weight: bold;">BETA</span>
+                <li class="visible-lg">
+                    <a href="<?= $this->url('home') ?>" style="background:none">
+                        <span class="beta">BETA</span>
                     </a>
                 </li>
                 <?php endif; ?>
@@ -116,6 +116,11 @@
                     </a>
                 </li>
             </ul>
+            <?php if ($this->client()->is('show_header_logo')): ?>
+                <a href="/" class="pull-right">
+                  <img src="<?= $this->imageLink('logo/wlb2.png') ?>" style="height:3em">
+                </a>
+            <?php endif; ?>
         </div>
         <?php endif ?>
 
