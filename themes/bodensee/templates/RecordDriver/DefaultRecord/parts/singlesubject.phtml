@@ -26,11 +26,7 @@ endif; ?>
             <?php endforeach; ?>
         <?php // case 3: subjects in string ?>
         <?php else: ?>
-            <?php if (strlen($key) > 2 && $this->type !== 'gnd'):
-                $href = $this->record($this->driver)->getLink($this->linktype, $key, $this->searchClassId);
-            else:
-                $href = $this->record($this->driver)->getLink($this->linktype, $field, $this->searchClassId);
-            endif; ?>
+            <?php $href = $this->record($this->driver)->getLink($this->linktype, $key, $this->searchClassId); ?>
             <a class="markjs searchicon <?php if ($count >= $max): ?><?=$this->type?>subjects-<?=$rand?> collapse-inline collapse multi-collapse<?php endif; ?>"
                title="<?= $this->escapeHtmlAttr($field) ?>"
                href="<?=$href?>"><?= trim($this->escapeHtml($field)) ?></a>
