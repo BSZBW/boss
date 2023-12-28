@@ -13,10 +13,12 @@
                 <?= $block ?>
             <?php endif; ?>
         <?php endforeach; ?>
+        <?php if($this->client()->is('wlb2')): ?>
         <li class="hidden-lg">
             <a href="<?=$this->url('home')?>" style="background:none">
                 <span class="beta">BETA</span>
             </a>
         </li>
+        <?php endif; ?>
     </ul>
 <?php endif; ?>
