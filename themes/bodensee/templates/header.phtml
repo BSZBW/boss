@@ -1,8 +1,27 @@
 <div class="navbar navbar-default navbar-fixed-top">
+    <?php if($this->client()->is('wlb2')): ?>
+    <div class="container">
+        <div class="navbar-header">
+            <?php if (!isset($frame)): ?>
+                <button type="button" class="navbar-toggle btn btn-primary" data-toggle="collapse" data-target="#header-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <i class="fa fa-bars"></i>
+                </button>
+            <?php endif; ?>
+        </div>
+        <div class="navbar-toggle pull-left">
+            <a href="<?=$this->client()->getWebsite('')?>">
+                <img src="<?= $this->imageLink('logo/wlb2.png') ?>" style="height:3em;margin:5px" alt="Logo Bibliothek">
+            </a>
+            </a>
+        </div>
+    </div>
+    <?php endif; ?>
+
     <div class="container">
         <a class="sr-only" href="#content"><?=$this->transEsc('Skip to content') ?></a>
         <div class="navbar-header">
-            <?php if (!isset($frame)): ?>
+            <?php if (!isset($frame) && !$this->client()->is('wlb2')): ?>
                 <button type="button" class="navbar-toggle btn btn-primary" data-toggle="collapse" data-target="#header-collapse">
                     <span class="sr-only">Toggle navigation</span>
                     <i class="fa fa-bars"></i>
