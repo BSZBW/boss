@@ -688,7 +688,10 @@ class SolrFindexMarc extends SolrMarc implements Constants
                     }
 
                 }
-                $gnd[$id] = $this->addDelimiterChars($tmp);
+                $gnd[$id] = [
+                    'type' => 'gnd',
+                    'data' => $this->addDelimiterChars($tmp)
+                ];
             }
         }
         return $gnd;
@@ -712,10 +715,10 @@ class SolrFindexMarc extends SolrMarc implements Constants
 
     public function getFreeKeywords()
     {
-        $fields = $this->getMultiFields(['600', '610', '611', '630', '650', '651', '655', '689']);
+        $fields = $this->getMultiFields(['600', '610', '611', '630', '648', '650', '651', '655', '689']);
         $sf7Whitelist = ['(dpeaa)DE-631', '(dpeaa)DE-24', '(dpeaa)DE-24/stga'];
 
-        $retVal = [];
+        $data = [];
         foreach ($fields as $field) {
             if(!is_array($field)) {
                 continue;
@@ -724,9 +727,18 @@ class SolrFindexMarc extends SolrMarc implements Constants
             $sf2 = $this->getSubfield($field, '2');
             $sf7 = $this->getSubfield($field, '7');
 
-            if($sf2 !== 'gnd' && in_array($sf7, $sf7Whitelist)) {
-                $retVal = array_merge($retVal, $this->getSubfieldsByRegex($field, '/^[a-z]$/'));
+            if($field['tag'] !== '648' && 'sf2' !== 'gnd' && in_array($sf7, $sf7Whitelist)) {
+                $data = array_merge($data, $this->getSubfieldsByRegex($field, '/^[a-z]$/'));
+            } elseif ($field['tag'] == '648' && $field['i2'] == '7') {
+                $data = array_merge($data, $this->getSubfieldsByRegex($field, '/^[a-z]$/'));
             }
+        }
+        $retVal = [];
+        foreach ($data as $item) {
+            $retVal[] = [
+                'type' => 'free',
+                'data' => $item
+            ];
         }
         return $retVal;
     }
@@ -808,6 +820,7 @@ class SolrFindexMarc extends SolrMarc implements Constants
                     'label' => $sfr,
                     'isil' => $sfx
                 ];
+                $urlsOnly[] = $sfr;
             }
 
         }

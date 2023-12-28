@@ -140,7 +140,10 @@ class SolrGviMarc extends SolrMarc implements Constants
                     }
 
                 }
-                $gnd[$id] = $this->addDelimiterChars($tmp);
+                $gnd[$id] = [
+                    'type' => 'gnd',
+                    'data' => $this->addDelimiterChars($tmp)
+                ];
             }
         }
         return array_unique($gnd);

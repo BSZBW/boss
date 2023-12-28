@@ -271,6 +271,9 @@ if (!empty($subjects) && $this->client()->is('show_rvk')): ?>
 <?php endif; ?>
 <?php $subjects = $this->driver->tryMethod('getGNDSubjectHeadings'); ?>
 <?php if (!empty($subjects) && $this->client()->is('show_gnd')): ?>
+    <?php if ($this->client()->is('showFreeKeywords')): ?>
+        <?php $subjects = array_merge($subjects,  $this->driver->tryMethod('getFreeKeywords') ?? []); ?>
+    <?php endif; ?>
     <tr>
         <th>
             <?php
@@ -286,14 +289,6 @@ if (!empty($subjects) && $this->client()->is('show_rvk')): ?>
                 'RecordDriver/DefaultRecord/parts/singlesubject.phtml',
                 ['subjects' => $subjects, 'type' => 'gnd', 'linktype' => 'gnd']
             ) ?>
-            <?php if ($this->client()->is('showFreeKeywords')): ?>
-                <?php $freeSubjects = $this->driver->tryMethod('getFreeKeywords'); if($freeSubjects): ?>
-                    <?= $this->context($this)->renderInContext(
-                        'RecordDriver/DefaultRecord/parts/singlesubject.phtml',
-                        ['subjects' => $freeSubjects, 'type' => 'free', 'linktype' => 'free']
-                    ) ?>
-                <?php endif; ?>
-            <?php endif ?>
         </td>
     </tr>
     <?php unset($subjects) ?>
