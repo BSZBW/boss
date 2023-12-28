@@ -17,4 +17,9 @@ trait GndHelperTrait
         }
         return false;
     }
+
+    public function exploreLinkFromId(string $id): string
+    {
+        return 'https://explore.gnd.network/gnd/' . urlencode($id);
+    }
 }

@@ -9,9 +9,19 @@ class GndLink extends AbstractHelper
 {
     use GndHelperTrait;
 
-    public function __invoke(String $gndId)
+    public function __invoke()
     {
-        return $this->gndLinkFromId($gndId);
+        return $this;
+    }
+
+    public function fromDnb(string $id): string
+    {
+        return $this->gndLinkFromId($id);
+    }
+
+    public function fromExplore(string $id): string
+    {
+        return $this->exploreLinkFromId($id);
     }
 
 }
