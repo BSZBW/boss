@@ -272,7 +272,7 @@ if (!empty($subjects) && $this->client()->is('show_rvk')): ?>
 <?php $subjects = $this->driver->tryMethod('getGNDSubjectHeadings'); ?>
 <?php if (!empty($subjects) && $this->client()->is('show_gnd')): ?>
     <?php if ($this->client()->is('showFreeKeywords')): ?>
-        <?php $subjects = array_merge($subjects,  $this->driver->tryMethod('getFreeKeywords') ?? []); ?>
+        <?php $subjects = $subjects + ($this->driver->tryMethod('getFreeKeywords') ?? []); ?>
     <?php endif; ?>
     <tr>
         <th>
