@@ -2,6 +2,7 @@
     $count = 0;
     $rand = rand(0, 9999);
     $max = 5;
+    $selectors = [];
 ?>
 <?php if(!isset($this->linktype)):
     $this->linktype = 'subject';
@@ -17,6 +18,7 @@ endif; ?>
             $type = $this->type;
             $field = $f;
         }
+        $selectors[] = '.'.$type.'subjects-'.$rand;
     ?>
     <span class="subjectLine" property="keywords">
          <?php $subject = ''; ?>
@@ -47,9 +49,17 @@ endif; ?>
                href="<?=$href?>"><?= trim($this->escapeHtml($field)) ?></a>
             <?php $count++ ?>
         <? endif; ?>
+        <?php if($type == 'gnd'): ?>
+            <a class="external hasicon <?php if ($count >= $max): ?><?=$type?>subjects-<?=$rand?> collapse-inline collapse multi-collapse<?php endif; ?>" data-toggle="tooltip" title="<?=$this->transEsc('GND_OGND_link')?>" href=<?= $this->gndLink()->fromDnb($key) ?>>
+                <i class="fa fa-external-link"></i>
+            </a>
+            <a class="external hasicon <?php if ($count >= $max): ?><?=$type?>subjects-<?=$rand?> collapse-inline collapse multi-collapse<?php endif; ?>" data-toggle="tooltip" title="<?=$this->transEsc('GND_DNB_link')?>" href=<?= $this->gndLink()->fromExplore($key) ?>>
+                <i class="fa fa-external-link-square"></i>
+            </a>
+        <?php endif; ?>
       </span>
 <?php endforeach; ?>
 
 <?php if($count > $max): ?>
-    <?=$this->showmore('.'.$type.'subjects-'.$rand, false)?>
+    <?=$this->showmore(implode(', ', array_unique($selectors)), false)?>
 <?endif; ?>
