@@ -727,7 +727,7 @@ class SolrFindexMarc extends SolrMarc implements Constants
             $sf2 = $this->getSubfield($field, '2');
             $sf7 = $this->getSubfield($field, '7');
 
-            if($field['tag'] !== '648' && 'sf2' !== 'gnd' && in_array($sf7, $sf7Whitelist)) {
+            if($field['tag'] !== '648' && $sf2 !== 'gnd' && in_array($sf7, $sf7Whitelist)) {
                 $data = array_merge($data, $this->getSubfieldsByRegex($field, '/^[a-z]$/'));
             } elseif ($field['tag'] == '648' && $field['i2'] == '7') {
                 $data = array_merge($data, $this->getSubfieldsByRegex($field, '/^[a-z]$/'));
