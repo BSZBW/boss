@@ -43,7 +43,7 @@ if (!empty($notations) && $this->client()->is('show_rvk') &&!$this->client()->is
         </th>
         <?php if (is_array($notations)): ?>
             <td>
-                <?php foreach ($notations as $shortcut => $description): ?>
+                <?php foreach ($notations ?? [] as $shortcut => $description): ?>
                     <?php $descriptionHtml = '<ol>';
                     foreach ($description as $item) {
                         $descriptionHtml .= '<li>' . $item . '</li>';
@@ -63,7 +63,7 @@ if (!empty($notations) && $this->client()->is('show_rvk') &&!$this->client()->is
                    title="<?= $descriptionHtml ?>"><?= $this->transEsc($shortcut) ?></a>
           </span>
                 <?php endforeach; ?>
-                <?php foreach ($bwlbNotations as $item): ?>
+                <?php foreach ($bwlbNotations ?? [] as $item): ?>
                     <?php
                     $description = '';
                     $abbrev = $this->bwlbConcordance($item);
