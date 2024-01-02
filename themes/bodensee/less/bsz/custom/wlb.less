@@ -1,10 +1,29 @@
 // Switch on/off highlighting visibility using
-// background color in alpha channel 
-// rgba(255,255,0,0) = off, 
+// background color in alpha channel
+// rgba(255,255,0,0) = off,
 // rgba(255,255,0,1) = maximum saturation
 
 
 // decent gray gradient
 body:not(.frame) {
     #gradient.vertical(darken(#fff, 30%); #fff; 15%; 90%);
+}
+
+.facet.verticalcenter:nth-child(3), .facet.verticalcenter:nth-child(6) {
+    border-bottom: 1px solid @gray-dark;
+    margin-bottom: @grid-gutter-width/2-3;
+    padding-bottom: @grid-gutter-width/2;
+}
+.facet.verticalcenter:last-of-type {
+    margin-bottom: @grid-gutter-width/2;
+}
+
+//.checkbox-filter .text {
+//    margin-left: 13px;
+//    text-indent: -8px;
+//}
+
+#advSearchForm .checkbox-filters {
+    column-count: 2;
+    margin-bottom: @grid-gutter-width;
 }
