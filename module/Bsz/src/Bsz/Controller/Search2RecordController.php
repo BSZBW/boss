@@ -76,6 +76,7 @@ class Search2RecordController extends \VuFind\Controller\Search2recordController
      */
     public function ILLFormAction()
     {
+        echo ('reached ill form');
         $isilsParam = $this->params()->fromQuery('isil');
         if ($isilsParam) {
             return $this->processIsil();
