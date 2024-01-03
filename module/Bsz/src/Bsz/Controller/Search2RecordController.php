@@ -311,6 +311,20 @@ class Search2RecordController extends \VuFind\Controller\Search2recordController
         return $view;
     }
 
+    protected function createViewModel($params = null)
+    {
+        $layout = $this->params()
+            ->fromPost('layout', $this->params()->fromQuery('layout', false));
+        if ('lightbox' === $layout) {
+            $this->layout()->setTemplate('layout/lightbox');
+        }
+        $view = new ViewModel($params);
+        $this->layout()->searchClassId = $view->searchClassId = $this->sourceId;
+        $route = $this->params()->fromRoute();
+        $view->driver = isset($route['id']) ? $this->loadRecord() : null;
+        return $view;
+    }
+
     private function doRequest($url, $params)
     {
         $config = $this->serviceLocator->get('Bsz\Config\Client')->get('ILL');
