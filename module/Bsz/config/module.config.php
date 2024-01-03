@@ -277,6 +277,7 @@ $staticRoutes = [
 ];
 $recordRoutes = [
     'record' => 'Record',
+    'search2record'=> 'Search2Record'
 ];
 
 $routeGenerator = new RouteGenerator();
