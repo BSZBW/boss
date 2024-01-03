@@ -4,6 +4,7 @@
     $this->headScript()->appendFile("vendor/bootstrap-datepicker.".$this->layout()->userLang.".min.js");
     $this->headScript()->appendFile("ill.js");
 
+    echo('test');
     $this->layout()->breadcrumbs = '<li>' . $this->searchMemory()->getLastSearchLink($this->transEsc('Search'), '', '</li> ')
     . '<li class="active">' . $this->transEsc('ILL::request_title') . '</li>';
     $collapse = 'panel-collapse collapse';
