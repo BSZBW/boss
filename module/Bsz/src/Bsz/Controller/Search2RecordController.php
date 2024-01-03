@@ -47,6 +47,8 @@ class Search2RecordController extends \VuFind\Controller\Search2recordController
 
     const TIMEOUT = 120;
 
+    protected $orderId = 0;
+
     protected Config $config;
     /**
      * Constructor
