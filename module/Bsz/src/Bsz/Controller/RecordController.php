@@ -161,7 +161,7 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
                     'params' => $params,
                     'submitDisabled' => $submitDisabled,
                     'orderId' => $this->orderId
-                ])->setTemplate('record/illform');
+                ])->setTemplate('record/illform.phtml');
         return $view;
     }
 

@@ -166,7 +166,7 @@ class Search2RecordController extends \VuFind\Controller\Search2recordController
             'params' => $params,
             'submitDisabled' => $submitDisabled,
             'orderId' => $this->orderId
-        ])->setTemplate('record/illform');
+        ])->setTemplate('record/illform.phtml');
         return $view;
     }
 
