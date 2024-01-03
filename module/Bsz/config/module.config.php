@@ -32,6 +32,7 @@ $config = [
         'factories' => [
             'Bsz\Controller\SearchController' => Factory::class,
             'Bsz\Controller\RecordController' => 'Bsz\Controller\Factory::getRecordController',
+            'Bsz\Controller\Search2RecordController' => 'Bsz\Controller\Factory::getSearch2RecordController',
             'Bsz\Controller\EdsrecordController' => Factory::class,
             'Bsz\Controller\MyResearchController' => Factory::class,
             'Bsz\Controller\HoldingController' => Factory::class,
@@ -50,6 +51,7 @@ $config = [
             'VuFind\Controller\EdsrecordController'    => 'Bsz\Controller\EdsrecordController',
             'VuFind\Controller\MyResearchController'   => 'Bsz\Controller\MyResearchController',
             'VuFind\Controller\CoverController' => 'Bsz\Controller\CoverController',
+            'VuFind\Controller\Search2recordController' => 'Bsz\Controller\Search2RecordController'
         ]
     ],
     'router' => [

@@ -67,6 +67,14 @@ class Factory implements FactoryInterface
         );
     }
 
+    public static function getSearch2RecordController(ContainerInterface $container)
+    {
+        return new Search2RecordController(
+            $container,
+            $container->get('VuFind\Config')->get('config')
+        );
+    }
+
     /**
      * Create an object
      *
