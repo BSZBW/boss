@@ -40,7 +40,7 @@ if (!empty($addThis)) {
                     <?php foreach ($exportFormats as $exportFormat): ?>
                         <li>
                             <a <?php if ($this->export()->needsRedirect($exportFormat)): ?>target="<?= $this->escapeHtmlAttr($exportFormat) ?>Main"
-                               <?php endif; ?>href="<?= $this->recordLink()->getActionUrl($this->driver, 'Export') ?>?style=<?= $this->escapeHtmlAttr($exportFormat) ?>"
+                               <?php endif; ?>href="<?= $this->recordLink()->getActionUrl($this->driver, 'Export', [], '', ['excludeSearchId' => true]) ?>?style=<?= $this->escapeHtmlAttr($exportFormat) ?>"
                                rel="nofollow"><?= $this->transEsc('Export to') ?> <?= $this->transEsc($this->export()->getLabelForFormat($exportFormat)) ?></a>
                         </li>
                     <?php endforeach; ?>
