@@ -19,5 +19,13 @@
         </h3>
     <?php endif ?>
 
-    <h4><?= $this->transEsc('Please try again later') ?>...</h4>
+    <?php
+        $msg = strtolower($this->exception->getMessage());
+        $isRecordError = preg_match('/record .* does not exist/', $msg) || str_contains($msg, 'bad request');
+    if ($this->client()->is('wlb2') && $isRecordError): ?>
+        <div class="alert alert-danger">
+            Leider ist hier ein Fehler aufgetreten. Melden Sie sich bei Bedarf bei <a href="mailto:katalogplus@wlb-stuttgart.de">katalogplus@wlb-stuttgart.de</a>.
+        </div>
+    <?php endif; ?>
+    <!--<h4><?= $this->transEsc('Please try again later') ?>...</h4>-->
 </div>
