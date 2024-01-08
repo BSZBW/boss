@@ -23,6 +23,7 @@ class Factory
         return new Ezb(
             $config->OpenURL->url,
             $container->get('VuFind\Http')->createClient(),
+            $container->get(\VuFind\Net\UserIpReader::class),
             'bibid=' . $config->OpenURL->bibid
         );
     }
