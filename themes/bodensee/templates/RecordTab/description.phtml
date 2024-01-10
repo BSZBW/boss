@@ -12,7 +12,7 @@
     <tr>
       <th><?=$this->abbrev('PPN')?></th>
       <td class="markjs">
-        <?=$this->recordLink()->linkPPN($this->driver) ?>
+          <?= $this->clipboard($ppn) ?>
       </td>
     </tr>
   <?php endif; ?>
