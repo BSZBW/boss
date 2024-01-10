@@ -13,9 +13,6 @@ $content = $this->tab->getContent();
             <th class="col-sm-1 col-xs-1 hidden-xs"><?= $this->transEsc('Contact') ?></th>
             <th><?= $this->transEsc('Library') ?></th>
             <th><?= $this->transEsc('Call Number') ?></th>
-            <?php if ($this->client()->is('show_ill_column')): ?>
-                <th class="col-sm-2 col-xs-2 hidden-xs"><?= $this->transEsc('Interlibrary Loan') ?></th>
-            <?php endif; ?>
             <?php if ($this->driver->isJournal()): ?>
                 <th><?= $this->transEsc('Collection') ?></th><?php endif; ?>
 
@@ -83,15 +80,6 @@ $content = $this->tab->getContent();
                             <?= $this->transEsc('NoCallnumber') ?>
                         <?php endif; ?>
                     </td>
-
-                    <?php if ($this->client()->is('show_ill_column')): ?>
-                        <td>
-                            <?php if (isset($result['ill_indicator'])): ?><i
-                                class="fa <?= $this->record($this->driver)->indicator2icon($result['ill_indicator']) ?>"></i> <?php endif; ?>
-                            <span
-                                class="text hidden-xs"><?= isset($result['ill_indicator']) ? $this->transEsc($this->record($this->driver)->indicator2status($result['ill_indicator'])) : '-' ?></span>
-                        </td>
-                    <?php endif; ?>
 
                     <?php if ($this->driver->isJournal()): ?>
                         <?php if (isset($result['issue']) && is_array($result['issue'])): ?>
