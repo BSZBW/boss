@@ -21,27 +21,42 @@
 
 namespace Findex\RecordTab;
 
+use Bsz\Config\Client;
 use Bsz\Config\Library;
 use Bsz\RecordTab\Libraries as BszLibrariesTab;
 
 class FindexLibraries extends BszLibrariesTab
 {
+    protected Client $client;
 
+    public function __construct(\Bsz\Config\Libraries $libraries, Client $client)
+    {
+        parent::__construct(
+            $libraries,
+            !$client->is('disable_library_tab'),
+            $client->getTag() === 'swb' ?? false
+        );
+        $this->client = $client;
+    }
+
+    protected $content = null;
     /**
      * @return array|mixed
      */
     public function getContent()
     {
         if (null === $this->content) {
-            $this->content = $this->driver->tryMethod('getField980');
-        }
-        if (is_array($this->content)) {
-            foreach ($this->content as $k => $f924) {
-                $library = $this->libraries->getByIsil($f924['isil']);
-                if ($library instanceof Library) {
-                    $this->content[$k]['name'] = $library->getName();
-                    $this->content[$k]['opacurl'] = $library->getOpacUrl();
-                    $this->content[$k]['homepage'] = $library->getHomepage();
+            $this->content = [];
+            $content =  $this->driver->tryMethod('getField980');
+            if (is_array($content)) {
+                foreach ($content as $k => $f924) {
+                    $library = $this->libraries->getByIsil($f924['isil']);
+                    if ($library instanceof Library) {
+                        $this->content[$k] = $f924;
+                        $this->content[$k]['name'] = $library->getName();
+                        $this->content[$k]['opacurl'] = $library->getOpacUrl();
+                        $this->content[$k]['homepage'] = $library->getHomepage();
+                    }
                 }
             }
         }
@@ -53,31 +68,7 @@ class FindexLibraries extends BszLibrariesTab
      */
     public function isActive()
     {
-        // If accessPermission is set, check for authorization to enable tab
-        $parent = true;
-
-        if (!empty($this->accessPermission)) {
-            $auth = $this->getAuthorizationService();
-            if (!$auth) {
-                throw new \Exception('Authorization service missing');
-            }
-            $parent =  $auth->isGranted($this->accessPermission);
-        }
-
-        if (null === $this->content) {
-            $this->content = $this->driver->tryMethod('getField980');
-        }
-        if ($this->swbonly) {
-            foreach ($this->content as $k => $field) {
-                if (isset($field['region']) && strtoupper($field['region']) !== 'BSZ') {
-                    unset($this->content[$k]);
-                }
-            }
-        }
-        if ($parent && $this->content) {
-            return true;
-        }
-        return false;
+        return (!empty($this->getContent()) || $this->client->is('wlb2'));
     }
 
 }

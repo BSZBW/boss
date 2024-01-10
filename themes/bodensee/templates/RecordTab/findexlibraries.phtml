@@ -112,6 +112,16 @@ $content = $this->tab->getContent();
         });
       });
     </script>
+    <?php if ($this->client()->is('wlb2') && $this->driver->tryMethod('isFromCollection', ['GBV_KXP'])): ?>
+        <a class="btn btn-success" href="<?=$this->url('search2record', ['id' => '(DE-627)' .  $this->driver->getUniqueId()])?>"> <?=$this->transEsc('check_ill_availability')?> </a>
+    <?php endif; ?>
 <?php else: ?>
-    <p><?= $this->transEsc('nohit_heading') ?></p>
+    <span><?=$this->transEsc('no_local_hit')?> </span>
+    <?php if ($this->client()->is('wlb2') && $this->driver->tryMethod('isFromCollection', ['GBV_KXP'])): ?>
+        <div><a class="btn btn-success" href="<?=$this->url('search2record', ['id' => '(DE-627)' .  $this->driver->getUniqueId()])?>"> <?=$this->transEsc('check_ill_availability')?> </a> </div>
+    <?php elseif($this->client()->is('wlb2')): ?>
+        <div>
+            <span><?=$this->transEsc('try_ill_search')?>: <a href="<?=$this->url('search2-home')?>"><?=$this->transEsc('to_ill_search')?></a></span>
+        </div>
+    <?php endif; ?>
 <?php endif; ?>

@@ -827,4 +827,18 @@ class SolrFindexMarc extends SolrMarc implements Constants
         return $retVal;
     }
 
+    public function isFromCollection(string $collCode): bool
+    {
+        $f912 = $this->getFields('912');
+        foreach ($f912 as $field) {
+            if(!is_array($field)) {
+                continue;
+            }
+            if ($collCode == $this->getSubfield($field, 'a')) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
