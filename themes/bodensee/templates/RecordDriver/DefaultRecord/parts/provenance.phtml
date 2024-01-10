@@ -8,7 +8,7 @@
 
 <?php if (isset($provenance['name'])): ?>
     <?php if (isset($provenance['gnd'])): ?>
-        <a class="external hasicon" data-toggle="tooltip" title="<?=$this->transEsc('DNB_link')?>" href="<?=$this->gndLink()->fromDnb($provenance['gnd'])?>">
+        <a class="external hasicon" data-toggle="tooltip" title="<?=$this->transEsc('DNB_link')?>" href="<?=$this->gndLink()->fromExplore($provenance['gnd'])?>">
             <?= $this->escapeHtml($provenance['name']) ?>
             <i class="fa fa-database"></i>
         </a>
