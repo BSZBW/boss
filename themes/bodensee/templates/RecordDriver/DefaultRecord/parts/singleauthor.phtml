@@ -8,7 +8,8 @@
     <a data-placement="right" data-toggle="tooltip" title="<?=$this->transEsc('Search GND-ID')?>: <?=$this->escapeHtml($gnd)?>" class="hidden-print searchLink" href="<?=$this->url('search-results')?>?lookfor=gnd_from:<?=$this->escapeHtml($gnd)?>&amp;type=AllFields<?= $hiddenFilterString ?>"></a><span class="visible-print">GND-ID: <?=$this->escapeHtml($gnd)?></span><? endif; ?>
 <? if (!empty($role)): ?>, <?=$this->transEsc('CreatorRoles::'.$role)?><? endif; ?>
 <?php if(isset($gnd)):?>
- <a class="external hasicon" data-toggle="tooltip" title="<?=$this->transEsc('DNB_link')?>" href="https://d-nb.info/gnd/<?=urlencode($gnd)?>">
+<?php $gndLink = $this->gndLink()->fromExplore($gnd); ?>
+ <a class="external hasicon" data-toggle="tooltip" title="<?=$this->transEsc('DNB_link')?>" href="<?=$this->escapeHtmlAttr($gndLink)?>">
     <i class="fa fa-database"></i>
 </a>
 <?php endif ?>
