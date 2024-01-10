@@ -152,6 +152,9 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
             if (!isset($arrsub['isil'])) {
                 $arrsub['isil'] = '';
             }
+            if(isset($arrsub['call_number']) && $arrsub['call_number'] == '--%%--') {
+                unset($arrsub['call_number']);
+            }
             // handle recurring subfields - convert them to array
             foreach ($arrsub as $k => $sub) {
                 if (strpos($sub, ' | ')) {

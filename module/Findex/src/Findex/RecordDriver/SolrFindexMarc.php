@@ -254,6 +254,9 @@ class SolrFindexMarc extends SolrMarc implements Constants
             if (!isset($arrsub['isil'])) {
                 $arrsub['isil'] = '';
             }
+            if(isset($arrsub['call_number']) && $arrsub['call_number'] == '--%%--') {
+                unset($arrsub['call_number']);
+            }
             // handle recurring subfields - convert them to array
             foreach ($arrsub as $k => $sub) {
                 if (str_contains($sub, ' | ')) {
