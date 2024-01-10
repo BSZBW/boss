@@ -146,7 +146,7 @@ class SolrGviMarc extends SolrMarc implements Constants
                 ];
             }
         }
-        return array_unique($gnd);
+        return $gnd;
     }
 
     /** Get all STandardtheaurus Wirtschaft keywords

@@ -94,7 +94,6 @@ class RecordLink extends \VuFind\View\Helper\Root\RecordLinker
         // otherwise use the network OPAC urls, which can be found in BSZ.ini
 
         if (in_array($driver->getNetwork(), ['SWB', 'KXP']) && $recordHelper->isAtFirstIsil()) {
-            $url = str_replace('%PPN%', $ppn, $url);
             $label = 'ILL::library_opac';;
         } else {
             $label = 'ILL::check_availability_network_opac';
@@ -102,9 +101,9 @@ class RecordLink extends \VuFind\View\Helper\Root\RecordLinker
             $network = $driver->getNetwork();
             if (array_key_exists($network, $opacList)) {
                 $url = $opacList[$network];
-                $url = str_replace('%PPN%', $ppn, $url);
             }
         }
+        $url = str_replace('%PPN%', $ppn, $url);
         return [
             'link' => $url,
             'ppn' => $ppn,
