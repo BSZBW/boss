@@ -10,7 +10,7 @@
     <?php if (isset($provenance['gnd'])): ?>
         <a class="external hasicon" data-toggle="tooltip" title="<?=$this->transEsc('DNB_link')?>" href="<?=$this->gndLink()->fromExplore($provenance['gnd'])?>">
             <?= $this->escapeHtml($provenance['name']) ?>
-            <i class="fa fa-database"></i>
+            <i class="fa fa-info-circle"></i>
         </a>
     <?php else: ?>
         <?= $this->escapeHtml($provenance['name']) ?>

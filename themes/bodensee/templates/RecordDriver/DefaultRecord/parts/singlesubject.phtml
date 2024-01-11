@@ -51,7 +51,7 @@ endif; ?>
         <? endif; ?>
         <?php if($type == 'gnd'): ?>
             <a class="external hasicon <?php if ($count >= $max): ?><?=$type?>subjects-<?=$rand?> collapse-inline collapse multi-collapse<?php endif; ?>" data-toggle="tooltip" title="<?=$this->transEsc('GND_DNB_link')?>" href=<?= $this->gndLink()->fromExplore($key) ?>>
-                <i class="fa fa-external-link-square"></i>
+                <i class="fa fa-info-circle"></i>
             </a>
         <?php endif; ?>
       </span>
