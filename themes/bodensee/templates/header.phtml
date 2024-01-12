@@ -52,8 +52,17 @@
                 <?php endif; ?>
                 <?php if($this->client()->is('wlb2')): ?>
                 <li class="visible-lg">
+                    <?php
+                    $suffix = '';
+                    if (isset($_SERVER['HTTP_HOST'])) {
+                        $host = strtolower($_SERVER['HTTP_HOST']);
+                        if (str_contains($host, 'bosstest')) {
+                            $suffix = '-Test';
+                        }
+                    }
+                    ?>
                     <a href="<?= $this->url('home') ?>" style="background:none">
-                        <span class="beta">BETA</span>
+                        <span class="beta">BETA <?=$suffix?></span>
                     </a>
                 </li>
                 <?php endif; ?>
