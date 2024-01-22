@@ -1,0 +1,7 @@
+<?php $imgLink= $this->imageLink('/logo/bibliographies/' . $this->imgFile); ?>
+<?php if (isset($this->url)): ?>
+    <a href="<?= $this->url ?>" target="_blank" rel="noopener noreferrer">
+        <img class="lineicon" alt="<?= $this->alt ?>" src="<?= $imgLink ?>"/></a>
+<?php else: ?>
+    <img class="lineicon" alt="<?= $this->alt ?>" src="<?= $imgLink ?>" />
+<?php endif; ?>

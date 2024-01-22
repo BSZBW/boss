@@ -436,8 +436,7 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
                     <?php foreach ($bibliographies as $bibliography):?>
                         <?php if ($this->client()->is($bibliography)): ?>
                         <div class="verticalcenter">
-                            <?php $imgLink= $this->imageLink('/logo/bibliographies/' . $bibliography .".png" ); ?>
-                            <img class="lineicon" src="<?=$imgLink?>" alt="<?=$bibliography?>" />
+                            <?= $this->bibliographyIcon($bibliography) ?>
                             <span style="vertical-align: middle"><?=$this->transEsc($bibliography)?></span>
                         </div>
                         <?php endif;?>

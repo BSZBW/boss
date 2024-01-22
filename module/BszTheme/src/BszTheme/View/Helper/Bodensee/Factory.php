@@ -242,4 +242,12 @@ class Factory
             $config->getTag()
         );
     }
+
+    public static function getBibliographyIcon(ContainerInterface $container): BibliographyIcon
+    {
+        return new BibliographyIcon(
+            $container->get('Bsz\Config\Client')
+        );
+    }
+
 }

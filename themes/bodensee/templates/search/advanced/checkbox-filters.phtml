@@ -7,8 +7,7 @@
           <?=$this->transEsc($current['desc'])?>
         </label>
           <?php if ($this->client()->is($current['desc'])): ?>
-              <?php $imgLink = $this->imageLink('/logo/bibliographies/' . $current['desc'] .".png" ); ?>
-              <img class="lineicon" src="<?=$imgLink?>" alt="<?=$current['desc']?>">
+            <?= $this->bibliographyIcon($current['desc']) ?>
           <?php endif ?>
       </div>
     <?php endforeach; ?>
