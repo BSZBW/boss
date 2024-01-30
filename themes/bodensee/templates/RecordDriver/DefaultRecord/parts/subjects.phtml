@@ -269,11 +269,14 @@ if (!empty($subjects) && $this->client()->is('show_rvk')): ?>
     </tr>
     <?php unset($subjects) ?>
 <?php endif; ?>
-<?php $subjects = $this->driver->tryMethod('getGNDSubjectHeadings'); ?>
-<?php if (!empty($subjects) && $this->client()->is('show_gnd')): ?>
-    <?php if ($this->client()->is('showFreeKeywords')): ?>
-        <?php $subjects = $subjects + ($this->driver->tryMethod('getFreeKeywords') ?? []); ?>
-    <?php endif; ?>
+<?php
+$subjects = $this->driver->tryMethod('getGNDSubjectHeadings');
+if ($this->client()->is('showFreeKeywords')) {
+    $subjects = $subjects + ($this->driver->tryMethod('getFreeKeywords') ?? []);
+}
+$ihoebSubjects = $this->driver->tryMethod('getIhbSubjects');
+?>
+<?php if ((!empty($subjects) || !empty($ihoebSubjects)) && $this->client()->is('show_gnd')): ?>
     <tr>
         <th>
             <?php
@@ -285,10 +288,41 @@ if (!empty($subjects) && $this->client()->is('show_rvk')): ?>
             <span class="text-nowrap"><?= $text ?>:</span>
         </th>
         <td>
+            <?php if(!empty($subjects)): ?>
             <?= $this->context($this)->renderInContext(
                 'RecordDriver/DefaultRecord/parts/singlesubject.phtml',
                 ['subjects' => $subjects, 'type' => 'gnd', 'linktype' => 'gnd']
             ) ?>
+            <?php endif; ?>
+
+            <?php if (!empty($ihoebSubjects)): ?>
+                <?php if (!empty($subjects)):?><br><br><?php endif;?>
+                <b><u>Internationale Hölderlin-Bibliographie: Systemstellen - Schlagwörter:</u></b> <br>
+                <?php $values = []; ?>
+                <?php foreach ($ihoebSubjects['main'] ?? [] as $s): ?>
+                    <?php
+                        $terms = array_map(function ($k) use ($s){
+                            return [
+                                ['data' => $k, 'type' => 'Systemstelle'],
+                                ['data' => $s['value']['term'], 'type' => 'Schlagwort']
+                            ];
+                        }, $s['key']);
+                    ?>
+                    <?php $values[] = [
+                        'data' => implode(' ', $s['key']) . ' ' . $s['value']['display'],
+                        'term' => $terms
+                    ]; ?>
+                <?php endforeach; ?>
+                <?php unset($s); ?>
+                <?php foreach ($ihoebSubjects['secondary'] ?? [] as $s): ?>
+                    <?php $terms = ['data' => $s['term'], 'type' => 'Schlagwort'] ?>
+                    <?php $values[] = ['data' => $s['display'], 'term' => [[$terms]]] ?>
+                <?php endforeach; ?>
+                 <?= $this->context($this)->renderInContext(
+                    'RecordDriver/DefaultRecord/parts/singlesubject.phtml',
+                    ['subjects' => $values, 'type' => 'ihoeb', 'linktype' => 'ihoeb']
+                )?>
+            <?php endif; ?>
         </td>
     </tr>
     <?php unset($subjects) ?>

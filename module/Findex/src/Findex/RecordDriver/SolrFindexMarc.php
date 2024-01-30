@@ -226,7 +226,6 @@ class SolrFindexMarc extends SolrMarc implements Constants
             'x' => 'isil',
             'c' => 'region',
             'd' => 'call_number',
-            'k' => 'url',
             'l' => 'url_label',
             'z' => 'issue'
         ];
@@ -842,6 +841,49 @@ class SolrFindexMarc extends SolrMarc implements Constants
             }
         }
         return false;
+    }
+
+    public function getIhbSubjects()
+    {
+        $fields = array_merge(
+            $this->getFields('982'),
+            $this->getFields('983')
+        );
+
+        $keys = [];
+        $values = [];
+        foreach ($fields as $field) {
+            if(!is_array($field) || 'DE-24' !== $this->getSubfield($field, 'x')) {
+                continue;
+            }
+
+            $sf8 = $this->getSubfield($field, '8');
+            if(empty($sf8)) {
+                continue;
+            }
+
+            if($field['tag'] == '983') {
+                $keys[$sf8][] = $this->getSubfield($field, 'a');
+            } else if($field['tag'] == '982' && !isset($values['sf8'])) {
+                $sfa = $this->getSubfield($field, 'a');
+                $value = preg_replace('/["~]/', '', $sfa);
+                if(str_starts_with($value, 'ZZ')) {
+                    $value = substr($value, 2) . ' (Aufführungsort)';
+                }
+                $values[$sf8] = ['display' => $value, 'term' => $sfa];
+            }
+        }
+
+        $retVal = [];
+        foreach ($values as $k => $v) {
+            if (array_key_exists($k, $keys)) {
+                $retVal['main'][] = ['key' => $keys[$k], 'value' => $v];
+            } else {
+                $retVal['secondary'][] = $v;
+            }
+        }
+
+        return $retVal;
     }
 
 }

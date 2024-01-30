@@ -9,14 +9,16 @@
 endif; ?>
 <?php foreach ($this->subjects as $key => $f): ?>
     <?php
-        if(is_array($f) && array_key_exists('type', $f) && array_key_exists('data', $f)) {
-            $linktype = $f['type'];
-            $type = $f['type'];
+        if(is_array($f) && array_key_exists('data', $f)) {
+            $linktype = $f['type'] ?? $linktype;
+            $type = $f['type'] ??  $this->type;
             $field = $f['data'];
+            $searchterm = $f['term'] ?? ((strlen($key) > 2) ? $key : $field);
         } else {
             $linktype = $this->linktype;
             $type = $this->type;
             $field = $f;
+            $searchterm = (strlen($key) > 2) ? $key : $field;
         }
         $selectors[] = '.'.$type.'subjects-'.$rand;
     ?>
@@ -34,16 +36,12 @@ endif; ?>
         <?php // case 2: subjects in array ?>
         <?php elseif (is_array($field) && count($field) > 1): ?>
             <?php foreach ($field as $subfield): ?>
-                <a class="markjs searchicon <?php if($count >= $max): ?><?=$type?>subjects-<?=$rand?>collapse-inline  collapse multi-collapse<?php endif; ?>" title="<?=$this->escapeHtmlAttr($subfield)?>" href="<?=$this->record($this->driver)->getLink('subject', $subfield, $this->searchClassId)?>"><?=trim($this->escapeHtml($subfield))?></a>
+                <a class="markjs searchicon <?php if($count >= $max): ?><?=$type?>subjects-<?=$rand?>collapse-inline collapse multi-collapse<?php endif; ?>" title="<?=$this->escapeHtmlAttr($subfield)?>" href="<?=$this->record($this->driver)->getLink('subject', $subfield, $this->searchClassId)?>"><?=trim($this->escapeHtml($subfield))?></a>
                 <?php $count++ ?>
             <?php endforeach; ?>
         <?php // case 3: subjects in string ?>
         <?php else: ?>
-            <?php if (strlen($key) > 2 ):
-                $href = $this->record($this->driver)->getLink($linktype, $key, $this->searchClassId);
-            else:
-                $href = $this->record($this->driver)->getLink($linktype, $field, $this->searchClassId);
-            endif; ?>
+            <?php $href = $this->record($this->driver)->getLink($linktype, $searchterm, $this->searchClassId);?>
             <a class="markjs searchicon <?php if ($count >= $max): ?><?=$type?>subjects-<?=$rand?> collapse-inline collapse multi-collapse<?php endif; ?>"
                title="<?= $this->escapeHtmlAttr($field) ?>"
                href="<?=$href?>"><?= trim($this->escapeHtml($field)) ?></a>
