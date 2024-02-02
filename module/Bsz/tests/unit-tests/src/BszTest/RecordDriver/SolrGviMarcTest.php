@@ -237,8 +237,8 @@ class SolrGviMarcTest extends TestCase
         foreach ($this->getSolrRecords() as $driver) {
             $ids = $driver->getContainerIds();
             foreach ($ids as $id) {
-                $this->assertNotRegExp('/\(DE-576\)/', $id);
-                $this->assertNotRegExp('/\(DE-600\)/', $id);
+                $this->assertDoesNotMatchRegularExpression('/\(DE-576\)/', $id);
+                $this->assertDoesNotMatchRegularExpression('/\(DE-600\)/', $id);
                 $this->assertMatchesRegularExpression('/\(DE-/', $id);
             }
         }
