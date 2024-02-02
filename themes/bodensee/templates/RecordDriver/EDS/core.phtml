@@ -120,7 +120,10 @@
             $name = isset($customLink['Text']) ? $customLink['Text'] : '';
 
             if ($this->client()->is('eds_han_link')):
-                $url = 'https://widgets.ebscohost.com/prod/customlink/hanapi/hanapi.php?profile=4dfs1q6ik97P45Pr6Mmmy9nUotvMptHd2uHU0qfH3ZXc1NLa0%2BGS2dfXpcnqtJihxZy1strSy9bd2eTe4K6s3dmiqenjh8ja7dyW5afew6SS&DestinationURL='.urlencode($url);
+                // TODO: Needs to be made configurable
+                // elk-wue only
+                $profile = "4dfs1uetk6jI5NGh6tnekeDOodvF55Hb1eGizNrR2dbdn8nd1qTM5sGIp8SbuK7nwtHV3Nzg69C0q9zcnrbZ6YbH3enphuum3cagnw%3D%3D";
+                $url = 'https://widgets.ebscohost.com/prod/customlink/hanapi/hanapi.php?profile='.$profile.'&DestinationURL='.urlencode($url);
             endif; ?>
         <tr>
           <td>
