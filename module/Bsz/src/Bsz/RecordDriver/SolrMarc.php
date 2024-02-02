@@ -578,7 +578,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
             $entry = [];
 
             $sf5 = $this->getSubfield($field, '5');
-            if (!empty($isils) && !in_array($sf5, $isils)) {
+            if ($isils != ['*'] && !in_array($sf5, $isils)) {
                 continue;
             }
             $sf3 = $this->getSubfield($field, '3');

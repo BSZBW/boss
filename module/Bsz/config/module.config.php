@@ -222,6 +222,14 @@ $config = [
                     'VuFind\Search\Search2\Params' =>   'Bsz\Search\Search2\Params',
                 ]
             ],
+            'search_results' => [
+                'factories' => [
+                    'Bsz\Search\EDS\Results' => 'VuFind\Search\Results\ResultsFactory'
+                ],
+                'aliases' => [
+                    'VuFind\Search\EDS\Results' => 'Bsz\Search\EDS\Results'
+                ]
+            ],
             'ils_driver' => [
                 'factories' => [
                     'Bsz\ILS\Driver\DAIAbsz' => 'Bsz\ILS\Driver\DAIAFactory',
