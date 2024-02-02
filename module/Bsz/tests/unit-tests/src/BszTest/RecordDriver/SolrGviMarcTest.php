@@ -189,7 +189,7 @@ class SolrGviMarcTest extends TestCase
 
                 // for multiple places, the year might be empty for the latter ones.
                 if (!empty($year)) {
-                    $this->assertRegExp('/\d{4}/', $year);
+                    $this->assertMatchesRegularExpression('/\d{4}/', $year);
                 }
             }
         }
@@ -239,7 +239,7 @@ class SolrGviMarcTest extends TestCase
             foreach ($ids as $id) {
                 $this->assertNotRegExp('/\(DE-576\)/', $id);
                 $this->assertNotRegExp('/\(DE-600\)/', $id);
-                $this->assertRegExp('/\(DE-/', $id);
+                $this->assertMatchesRegularExpression('/\(DE-/', $id);
             }
         }
     }
@@ -252,7 +252,7 @@ class SolrGviMarcTest extends TestCase
         foreach ($this->getSolrRecords() as $driver) {
             $dates = $driver->getPublicationDates();
             foreach ($dates as $date) {
-                $this->assertRegExp('/\d{4}/', $date);
+                $this->assertMatchesRegularExpression('/\d{4}/', $date);
             }
         }
     }
@@ -305,7 +305,7 @@ class SolrGviMarcTest extends TestCase
         foreach ($this->getSolrRecords() as $driver) {
             $f924 = $driver->getField924();
             foreach ($f924 as $field) {
-                $this->assertRegExp('/^DE-|^AT-|^LFER|^CH-/', $field['isil']);
+                $this->assertMatchesRegularExpression('/^DE-|^AT-|^LFER|^CH-/', $field['isil']);
             }
         }
     }
