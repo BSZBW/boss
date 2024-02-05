@@ -5,6 +5,10 @@ namespace Bsz\Search\EDS;
 class Results extends \VuFind\Search\EDS\Results
 {
 
+    /*
+     * Postprocessing of EDS facets. Make the display text uppercase and translate
+     * it if necessary
+     */
     protected function buildFacetList(array $facetList, array $filter = null): array
     {
         $parent = parent::buildFacetList($facetList, $filter);
