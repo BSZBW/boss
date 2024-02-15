@@ -101,15 +101,29 @@ $content = $this->tab->getContent();
       });
     </script>
     <?php if ($this->client()->is('wlb2') && $this->driver->tryMethod('isFromCollection', ['GBV_KXP'])): ?>
+        <?php
+            $id = '(DE-627)' .  $this->driver->getUniqueId();
+            $exists = $this->idVerifier($id, 'Search2');
+        ?>
         <a class="btn btn-success" href="<?=$this->url('search2record', ['id' => '(DE-627)' .  $this->driver->getUniqueId()])?>"> <?=$this->transEsc('check_ill_availability')?> </a>
     <?php endif; ?>
 <?php else: ?>
-    <span><?=$this->transEsc('no_local_hit')?> </span>
-    <?php if ($this->client()->is('wlb2') && $this->driver->tryMethod('isFromCollection', ['GBV_KXP'])): ?>
-        <div><a class="btn btn-success" href="<?=$this->url('search2record', ['id' => '(DE-627)' .  $this->driver->getUniqueId()])?>"> <?=$this->transEsc('check_ill_availability')?> </a> </div>
-    <?php elseif($this->client()->is('wlb2')): ?>
-        <div>
-            <span><?=$this->transEsc('try_ill_search')?>: <a href="<?=$this->url('search2-home')?>"><?=$this->transEsc('to_ill_search')?></a></span>
-        </div>
+    <div><?=$this->transEsc('no_local_hit')?> </div>
+    <?php if ($this->client()->is('wlb2')): ?>
+        <?php if ($this->driver->tryMethod('isArticle')): ?>
+            <div><b><em><?= $this->transEsc('check_parent_availability') ?></em></b></div>
+        <?php endif; ?>
+        <?php
+        $id =$id = '(DE-627)' .  $this->driver->getUniqueId();
+        if($this->driver->tryMethod('isFromCollection', ['GBV_KXP']) && $this->idVerifier($id, 'Search2')):
+        ?>
+            <div><a class="ill-link" target=_blank" rel="noopener noreferrer" href="<?=$this->url('search2record', ['id' => '(DE-627)' .  $this->driver->getUniqueId()])?>"> <?=$this->transEsc('check_ill_availability')?> </a> </div>
+        <?php else: ?>
+            <div><?=$this->transEsc('try_ill_search')?>:</div>
+            <div>
+                <?php $lookfor = '"' . $this->driver->getTitle() . '"'; ?>
+                <a class="ill-link" target=_blank" rel="noopener noreferrer"  href="<?=$this->url('search2-results', [], ['query' => ['lookfor' => $lookfor, 'type' => 'AllFields']])?>"><?=$this->transEsc('to_ill_search')?></a>
+            </div>
+        <?php endif; ?>
     <?php endif; ?>
 <?php endif; ?>

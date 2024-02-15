@@ -42,7 +42,8 @@ $config = [
             'illform' => 'BszTheme\View\Helper\Bodensee\Factory::getIllForm',
             'BszTheme\View\Helper\Bodensee\Wayfless' => 'BszTheme\View\Helper\Bodensee\Factory::getWayfless',
             'BszTheme\View\Helper\Bodensee\BwlbConcordance' =>  \Laminas\ServiceManager\Factory\InvokableFactory::class,
-            'BszTheme\View\Helper\Bodensee\GndLink' => \Laminas\ServiceManager\Factory\InvokableFactory::class
+            'BszTheme\View\Helper\Bodensee\GndLink' => \Laminas\ServiceManager\Factory\InvokableFactory::class,
+            'BszTheme\View\Helper\Bodensee\IdVerifier' => 'BszTheme\View\Helper\Bodensee\Factory::getIdVerifier'
         ],
         'aliases' => [
             'VuFind\View\Helper\Bootstrap3\LayoutClass' => 'Bsz\View\Helper\Bootstrap3\LayoutClass',
@@ -55,7 +56,8 @@ $config = [
             'wayfless' => 'BszTheme\View\Helper\Bodensee\Wayfless',
             'gndLink' => 'BszTheme\View\Helper\Bodensee\GndLink',
             'recordLink' => 'VuFind\View\Helper\Root\RecordLinker',
-            'bwlbConcordance' => 'BszTheme\View\Helper\Bodensee\BwlbConcordance'
+            'bwlbConcordance' => 'BszTheme\View\Helper\Bodensee\BwlbConcordance',
+            'idVerifier' => 'BszTheme\View\Helper\Bodensee\IdVerifier'
         ]
     ],
     'icons' => [
