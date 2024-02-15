@@ -250,4 +250,12 @@ class Factory
         );
     }
 
+    public static function getIdVerifier(ContainerInterface $container)
+    {
+        return new IdVerifier(
+            $container->get("VuFind\Search")
+        );
+    }
+
+
 }
