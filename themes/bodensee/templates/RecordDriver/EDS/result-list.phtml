@@ -1,4 +1,5 @@
 <?php
+  $profileId = "4dfs1uetk6jI5NGh6tnekeDOodvF55Hb1eGizNrR2dbdn8nd1qTM5sGIp8SbuK7nwtHV3Nzg69C0q9zcnrbZ6YbH3enphuum3cagnw%3D%3D";
   $this->headLink()->appendStylesheet('EDS.css');
   $accessLevel = $this->driver->getAccessLevel();
   $restrictedView = empty($accessLevel) ? false : true;
@@ -58,7 +59,7 @@
           <?php
           $url = 'https://doi.org/'.$this->driver->getDoi();
           if ($this->client()->is('eds_han_link')):
-              $url = 'https://widgets.ebscohost.com/prod/customlink/hanapi/hanapi.php?profile=4dfs1q6ik97P45Pr6Mmmy9nUotvMptHd2uHU0qfH3ZXc1NLa0%2BGS2dfXpcnqtJihxZy1strSy9bd2eTe4K6s3dmiqenjh8ja7dyW5afew6SS&DestinationURL='.urlencode($url);
+              $url = 'https://widgets.ebscohost.com/prod/customlink/hanapi/hanapi.php?profile=' . $profileId . '&DestinationURL='.urlencode($url);
           endif;
           ?>
       <div class="resulItemLine1">
@@ -76,7 +77,7 @@
                         $name = isset($customLink['Text']) ? $customLink['Text'] : '';
 
                         if ($this->client()->is('eds_han_link')):
-                            $url = 'https://widgets.ebscohost.com/prod/customlink/hanapi/hanapi.php?profile=4dfs1q6ik97P45Pr6Mmmy9nUotvMptHd2uHU0qfH3ZXc1NLa0%2BGS2dfXpcnqtJihxZy1strSy9bd2eTe4K6s3dmiqenjh8ja7dyW5afew6SS&DestinationURL='.urlencode($url);
+                            $url = 'https://widgets.ebscohost.com/prod/customlink/hanapi/hanapi.php?profile=' . $profileId . '&DestinationURL='.urlencode($url);
                         endif; ?>
                     <strong><a href="<?=$this->driver->linkUrls($this->escapeHtmlAttr(str_replace('http://dx.doi.org', 'https://doi.org', $url)))?>" target="_blank" title="<?=$mot?>" class="custom-link">
                         <?php if ($icon): ?><img src="<?=$icon?>" /> <?php endif; ?><?=$name?>
