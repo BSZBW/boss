@@ -4,6 +4,7 @@
 // Set page title.
 $this->headTitle($this->translate('Libraries') . ': ' . $this->driver->getBreadcrumb());
 $content = $this->tab->getContent();
+$wlbHasHoldings = false;
 ?>
 
 <?php if (isset($content) && count($content) > 0): ?>
@@ -22,6 +23,7 @@ $content = $this->tab->getContent();
         <?php foreach ($content as $result): ?>
             <tr>
                 <?php if (is_string($result['isil']) && preg_match('/^[A-Z]{2}-/', $result['isil'])): ?>
+                    <?php $wlbHasHoldings = $wlbHasHoldings || ($result['isil'] == 'DE-24'); ?>
                     <td class="hidden-xs">
                         <?php if ($result['isil'] !== 'LFER'): ?>
                             <span class="text-nowrap">
@@ -100,12 +102,8 @@ $content = $this->tab->getContent();
         });
       });
     </script>
-    <?php if ($this->client()->is('wlb2') && $this->driver->tryMethod('isFromCollection', ['GBV_KXP'])): ?>
-        <?php
-            $id = '(DE-627)' .  $this->driver->getUniqueId();
-            $exists = $this->idVerifier($id, 'Search2');
-        ?>
-        <a class="btn btn-success" href="<?=$this->url('search2record', ['id' => '(DE-627)' .  $this->driver->getUniqueId()])?>"> <?=$this->transEsc('check_ill_availability')?> </a>
+    <?php if ($this->client()->is('wlb2') && !$wlbHasHoldings): ?>
+        <?= $this->render('RecordTab/parts/toillbutton.phtml') ?>
     <?php endif; ?>
 <?php else: ?>
     <div><?=$this->transEsc('no_local_hit')?> </div>
@@ -113,17 +111,6 @@ $content = $this->tab->getContent();
         <?php if ($this->driver->tryMethod('isArticle')): ?>
             <div><b><em><?= $this->transEsc('check_parent_availability') ?></em></b></div>
         <?php endif; ?>
-        <?php
-        $id =$id = '(DE-627)' .  $this->driver->getUniqueId();
-        if($this->driver->tryMethod('isFromCollection', ['GBV_KXP']) && $this->idVerifier($id, 'Search2')):
-        ?>
-            <div><a class="ill-link" target=_blank" rel="noopener noreferrer" href="<?=$this->url('search2record', ['id' => '(DE-627)' .  $this->driver->getUniqueId()])?>"> <?=$this->transEsc('check_ill_availability')?> </a> </div>
-        <?php else: ?>
-            <div><?=$this->transEsc('try_ill_search')?></div>
-            <div>
-                <?php $lookfor = '"' . $this->driver->getTitle() . '"'; ?>
-                <a class="ill-link" target=_blank" rel="noopener noreferrer"  href="<?=$this->url('search2-results', [], ['query' => ['lookfor' => $lookfor, 'type' => 'AllFields']])?>"><?=$this->transEsc('to_ill_search')?></a>
-            </div>
-        <?php endif; ?>
+        <?= $this->render('RecordTab/parts/toillbutton.phtml') ?>
     <?php endif; ?>
 <?php endif; ?>
