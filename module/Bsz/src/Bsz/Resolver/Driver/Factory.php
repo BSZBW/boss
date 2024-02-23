@@ -58,7 +58,8 @@ class Factory
         $library = $libraries->getByIsil('DE-16');
         return new Ill(
             $library->getCustomUrl(),
-            $container->get('VuFind\Http')->createClient()
+            $container->get('VuFind\Http')->createClient(),
+            $container->get(\VuFind\Net\UserIpReader::class)
         );
     }
 }
