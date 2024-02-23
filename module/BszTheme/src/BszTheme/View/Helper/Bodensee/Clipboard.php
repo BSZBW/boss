@@ -21,7 +21,7 @@
 
 namespace BszTheme\View\Helper\Bodensee;
 
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 
 /**
  * Add a copy to clipboard icon to text content

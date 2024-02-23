@@ -29,6 +29,8 @@
 namespace Finc\RecordDriver;
 
 use Bsz\RecordDriver\HelperTrait;
+use Bsz\RecordDriver\Response\PublicationDetails;
+use VuFindSearch\Command\SearchCommand;
 use VuFindSearch\Query\Query as Query;
 
 /**
@@ -90,37 +92,31 @@ trait SolrMarcFincTrait
         ];
 
         foreach ($fieldsToCheck as $field => $subfields) {
-            $urls = $this->getMarcRecord()->getFields($field);
+            $urls = $this->getFields($field);
             if ($urls) {
                 foreach ($urls as $url) {
-                    $isil = $url->getSubfield('9');
-                    $indicator1 = $url->getIndicator('1');
-                    $indicator2 = $url->getIndicator('2');
+                    $isil =$this->getSubfield($url, '9');
+                    $indicator1 = $url['i1'];
+                    $indicator2 = $url['i2'];
 
                     $isISIL = false;
 
-                    if ($isil) {
-                        $isil = $isil->getData();
-                        if (true === in_array($isil, $this->isil)) {
-                            $isISIL = true;
-                        }
+                    if ($isil && in_array($isil, $this->isil)) {
+                        $isISIL = true;
                     } elseif (!$this->_isEBLRecord()) {
                         $isISIL = true;
                     }
 
                     if ($isISIL) {
                         // Is there an address in the current field?
-                        $address = $url->getSubfield('u');
-                        if ($address) {
-                            $address = $address->getData();
-
+                        $address = $this->getSubfield($url, 'u');
+                        if (!empty($address)) {
                             $tmpArr = [];
                             // Is there a description?  If not, just use the URL
                             // itself.
                             foreach (['y', '3', 'z', 'x'] as $current) {
-                                $desc = $url->getSubfield($current);
-                                if ($desc) {
-                                    $desc = $desc->getData();
+                                $desc = $this->getSubfield($url, $current);
+                                if (!empty($desc)) {
                                     $tmpArr[] = $desc;
                                 }
                             }
@@ -198,13 +194,14 @@ trait SolrMarcFincTrait
     public function getLocalOrderInformation()
     {
         // loop through all existing LocalMarcFieldOfLibrary
-        if ($fields = $this->getMarcRecord()->getFields(
+        if ($fields = $this->getFields(
             $this->getLocalMarcFieldOfLibrary())
         ) {
             foreach ($fields as $field) {
                 // return the first occurance of $m
-                if ($field->getSubfield('m')) {
-                    return $field->getSubfield('m')->getData();
+                $sfm = $this->getSubfield($field, 'm');
+                if ($sfm) {
+                    return $sfm;
                 }
             }
         }
@@ -304,21 +301,19 @@ trait SolrMarcFincTrait
     {
         //return $this->_getFieldArray('770', array('i','t')); // has been originally 'd','h','n','x' but only 'i' and 't' for ubl requested;
         $array = [];
-        $supplement = $this->getMarcRecord()->getFields('770');
+        $supplement = $this->getFields('770');
         // if not return void value
         if (!$supplement) {
             return $array;
         } // end if
 
         foreach ($supplement as $key => $line) {
-            $array[$key]['pretext'] = ($line->getSubfield('i'))
-                ? $line->getSubfield('i')->getData() : '';
-            $array[$key]['text'] = ($line->getSubfield('t'))
-                ? $line->getSubfield('t')->getData() : '';
+            $sfi = $this->getSubfield($line, 'i');
+            $array[$key]['pretext'] = $this->getSubfield($line, 'i');
+            $array[$key]['text'] = $this->getSubfield($line, 't');
             // get ppns of bsz
-            $linkFields = $line->getSubfields('w');
-            foreach ($linkFields as $current) {
-                $text = $current->getData();
+            $linkFields = $this->getSubfields($line, 'w');
+            foreach ($linkFields as $text) {
                 // Extract parenthetical prefixes:
                 if (preg_match(self::BSZ_PATTERN, $text, $matches)) {
                     //$id = $this->checkIfRecordExists($matches[2]);
@@ -348,18 +343,17 @@ trait SolrMarcFincTrait
         $lookfor_indicator = '8';
         $retval = [];
 
-        $fields = $this->getMarcRecord()->getFields('024');
+        $fields = $this->getFields('024');
         if (!$fields) {
             return null;
         }
         foreach ($fields as $field) {
             // ->getIndicator(position)
-            $subjectrow = $field->getIndicator('1');
+            $subjectrow = $field['i1'];
             if ($subjectrow == $lookfor_indicator) {
-                if ($subfield = $field->getSubfield('a')) {
-                    if (preg_match('/^VD/i', $subfield->getData()) > 0) {
-                        $retval[] = $subfield->getData();
-                    }
+                $sfa = $this->getSubfield($field, 'a');
+                if (preg_match('/^VD/i', $sfa) > 0) {
+                    $retval[] = $sfa;
                 }
             }
         }
@@ -409,18 +403,18 @@ trait SolrMarcFincTrait
     protected function getLinkedField($field, $fieldIterator = false)
     {
         // we need to know which field we are dealing with
-        $tagNo = $field->getTag();
+        $tagNo = $field['tag'];
 
         // if we found a subfield 6 in given field we can compute the content of
         // subfield 6 in the corresponding field 880
-        if ($sub6 = $field->getSubfield(6)) {
-            $sub6Id = $tagNo . substr($sub6->getData(), 3);
+        if ($sf6 = $this->getSubfield($field, '6')) {
+            $sub6Id = $tagNo . substr($sf6, 3);
 
             // now cycle through all available fields 880 and return the field with
             // the exact match on computed $sub6Id
-            if ($linkedFields = $this->getMarcRecord()->getFields('880')) {
+            if ($linkedFields = $this->getFields('880')) {
                 foreach ($linkedFields as $current) {
-                    if ($sub6Id == $current->getSubfield(6)->getData()) {
+                    if ($sub6Id == $this->getSubfield($current, '6')) {
                         return $current;
                     }
                 }
@@ -430,10 +424,10 @@ trait SolrMarcFincTrait
         // alternative approach, cycle through all available fields 880 and return
         // the field with a field and iterator match.
         if ($fieldIterator !== false) {
-            if ($linkedFields = $this->getMarcRecord()->getFields('880')) {
+            if ($linkedFields = $this->getFields('880')) {
                 $i = 0;
                 foreach ($linkedFields as $current) {
-                    if ($tagNo == substr($current->getSubfield(6)->getData(), 0, 3)
+                    if ($tagNo == substr($this->getSubfield($current, '6'), 0, 3)
                     ) {
                         if ($fieldIterator == $i) {
                             return $current;
@@ -480,10 +474,7 @@ trait SolrMarcFincTrait
 
         // Try to look up the specified field, return empty array if it doesn't
         // exist.
-        $fields = $this->getMarcRecord()->getFields($field);
-        if (!is_array($fields)) {
-            return $matches;
-        }
+        $fields = $this->getFields($field);
 
         $i = 0;
         // Extract all the linked fields.
@@ -528,37 +519,40 @@ trait SolrMarcFincTrait
         // loop through all defined marcFields
         foreach ($marcFields as $marcField) {
             // now select all fields for the current marcField
-            if ($fields = $this->getMarcRecord()->getFields($marcField)) {
+            if ($fields = $this->getFields($marcField)) {
                 // loop through all fields of the current marcField
-                foreach ($fields as $i => $current) {
+                foreach ($fields as $current) {
                     // Marc 264abc should only be displayed if Ind.2==1
                     // Display any other Marc field if defined above
-                    if ($marcField != '264'
-                        || ($marcField == '264' && $current->getIndicator(2) == 1)
-                    ) {
-                        $place = $current->getSubfield('a')
-                            ? $current->getSubfield('a')->getData() : null;
-                        $name = $current->getSubfield('b')
-                            ? $current->getSubfield('b')->getData() : null;
-                        $date = $current->getSubfield('c')
-                            ? $current->getSubfield('c')->getData() : null;
+                    if ($marcField != '264' || $current['i2'] == 1) {
+                        $sfa = $this->getSubfield($current, 'a');
+                        $place = empty($sfa) ? null: $sfa;
+
+                        $sfb = $this->getSubfield($current, 'b');
+                        $name = empty($sfb) ? null: $sfb;
+
+                        $sfc = $this->getSubfield($current, 'c');
+                        $date = empty($sfc) ? null: $sfc;
 
                         // Build objects to represent each set of data; these will
                         // transform seamlessly into strings in the view layer.
-                        $retval[] = new \Bsz\RecordDriver\Response\PublicationDetails(
+                        $retval[] = new PublicationDetails(
                             $place, $name, $date
                         );
 
                         // Build the publication details with additional graphical notations
                         // for the current set of publication details
-                        if ($linkedField = $this->getLinkedField($current, $i)) {
-                            $retval[] = new \Bsz\RecordDriver\Response\PublicationDetails(
-                                $linkedField->getSubfield('a')
-                                    ? $linkedField->getSubfield('a')->getData() : null,
-                                $linkedField->getSubfield('b')
-                                    ? $linkedField->getSubfield('b')->getData() : null,
-                                $linkedField->getSubfield('c')
-                                    ? $linkedField->getSubfield('c')->getData() : null
+                        //TODO: Wo kommt das $i her?
+                        if ($linkedField = $this->getLinkedField($current)) {
+
+                            $sfa = $this->getSubfield($linkedField, 'a');
+                            $sfb = $this->getSubfield($linkedField, 'b');
+                            $sfc = $this->getSubfield($linkedField, 'c');
+
+                            $retval[] = new PublicationDetails(
+                                empty($sfa) ? null : $sfa,
+                                empty($sfc) ? null : $sfb,
+                                empty($sfc) ? null : $sfc
                             );
                         }
                     }
@@ -577,37 +571,34 @@ trait SolrMarcFincTrait
     public function getTitleDetails()
     {
         $title = '';
-        if ($field = $this->getMarcRecord()->getField('245')) {
-            if ($subfield = $field->getSubfield('a')) {
-                // modified due to #13670
-                // > Titel: 245$a $n $p $h $b $c
-                $title = $subfield->getData();
-                $title = $this->cleanString($title);
+        if ($field = $this->getField('245')) {
+            if ($subfield = $this->getSubfield($field, 'a')) {
+                $title = $this->cleanString($subfield);
                 foreach (['n', 'p', 'h', 'b', 'c'] as $subkey) {
-                    if ($subfield = $field->getSubfield($subkey)) {
-                        $title .= ' ' . $subfield->getData();
+                    if ($subfield = $this->getSubfield($field, $subkey)) {
+                        $title .= ' ' . $subfield;
                     }
                 }
             }
         }
-        if ($field = $this->getMarcRecord()->getField('249')) {
+        if ($field = $this->getField('249')) {
             // 249$a and 249$v are repeatable
-            if ($subfields = $field->getSubfields('a')) {
-                $vs = $field->getSubfields('v');
-                foreach ($subfields as $i=>$a) {
-                    $title .= '. ' . $a->getData();
-                    if (isset($vs[$i])) {
-                        $title .= ' / ' . $vs[$i]->getData();
+            if ($subfields = $this->getSubfields($field, 'a')) {
+                $vs = $this->getSubfields($field, 'v');
+                foreach ($subfields as $sf) {
+                    $title .= '. ' . $sf['data'];
+                    if (isset($vs[$sf['code']])) {
+                        $title .= ' / ' . $vs[$sf['code']]['data']; //TODO: Stimmt das?
                     }
                 }
             }
             // 249$b is non repeatable and applies to all $a$v combinations
-            if ($field->getSubfield('b')) {
-                $title .= ' : ' . $field->getSubfield('b')->getData();
+            if ($this->getSubfield($field, 'b')) {
+                $title .= ' : ' . $this->getSubfield($field, 'b');
             }
             // 249$c is non repeatable and applies to all $a$v combinations
-            if ($field->getSubfield('c')) {
-                $title .= ' / ' . $field->getSubfield('c')->getData();
+            if ($this->getSubfield($field, 'c')) {
+                $title .= ' / ' . $this->getSubfield($field, 'c');
             }
         }
 
@@ -638,9 +629,8 @@ trait SolrMarcFincTrait
      */
     public function getTitleShort() : string
     {
-        $field = $this->getMarcRecord()->getField('245');
-        $subfield = $field->getSubfield('a');
-        $title = $subfield ? $subfield->getData() : '';
+        $field = $this->getField('245');
+        $title = $this->getSubfield($field, 'a');
         return $this->cleanString($title);
     }
 
@@ -650,10 +640,9 @@ trait SolrMarcFincTrait
      */
     public function getSubtitle() : string
     {
-        $field = $this->getMarcRecord()->getField('245');
-        $subfield = $field->getSubfield('b');
-        $title = $subfield ? $subfield->getData() : '';
-        return $this->cleanString($title);
+        $field = $this->getField('245');
+        $sfb = $this->getSubfield($field, 'b');
+        return $this->cleanString($sfb);
     }
 
     /**
@@ -677,21 +666,22 @@ trait SolrMarcFincTrait
             return rtrim($string, " \t\n\r\0\x0B" . '.:-/');
         };
 
-        if ($fields = $this->getMarcRecord()->getFields('505')) {
+        if ($fields = $this->getFields('505')) {
             foreach ($fields as $field) {
-                if ($subfields = $field->getSubfields('t')) {
-                    $rs = $field->getSubfields('r');
-                    foreach ($subfields as $i=>$subfield) {
-                        // each occurance of $t gets $a pretached if it exists
-                        if (isset($rs[$i])) {
-                            $workPartTitles[] =
-                                $truncateTrail($subfield->getData()) . ': ' .
-                                $truncateTrail($rs[$i]->getData());
-                        } else {
-                            $workPartTitles[] =
-                                $truncateTrail($subfield->getData());
-                        }
-                    }
+                if ($subfields = $this->getSubfields($field, 't')) {
+                    $rs = $this->getSubfields($field, 'r');
+                    //TODO: Was ist das i???
+//                    foreach ($subfields as $i=>$subfield) {
+//                        // each occurance of $t gets $a pretached if it exists
+//                        if (isset($rs[$i])) {
+//                            $workPartTitles[] =
+//                                $truncateTrail($subfield->getData()) . ': ' .
+//                                $truncateTrail($rs[$i]->getData());
+//                        } else {
+//                            $workPartTitles[] =
+//                                $truncateTrail($subfield->getData());
+//                        }
+//                    }
                 }
             }
         }
@@ -713,12 +703,14 @@ trait SolrMarcFincTrait
             return rtrim($string, " \t\n\r\0\x0B" . '.:-/');
         };
 
-        if ($fields = $this->getMarcRecord()->getFields('700')) {
+        if ($fields = $this->getFields('700')) {
             foreach ($fields as $field) {
-                if ($field->getSubfield('t') && $field->getSubfield('a')) {
+                $sfa = $this->getSubfield($field, 'a');
+                $sft = $this->getSubfield($field, 't');
+                if ($sfa && $sft) {
                     $workTitles[] =
-                        $truncateTrail($field->getSubfield('a')->getData()) . ': ' .
-                        $truncateTrail($field->getSubfield('t')->getData());
+                        $truncateTrail($sfa) . ': ' .
+                        $truncateTrail($sft);
                 }
             }
         }
@@ -761,8 +753,7 @@ trait SolrMarcFincTrait
                 // always in subfield v regardless of whether we are dealing
                 // with 440, 490, 800 or 830 -- hence the hard-coded array
                 // rather than another parameter in $fieldInfo).
-                $number
-                    = $this->getSubfieldArray($field, ['v']);
+                $number = $this->getSubfieldArray($field, ['v']);
                 if (isset($number[0])) {
                     $currentArray['number'] = $number[0];
                 }
@@ -775,7 +766,7 @@ trait SolrMarcFincTrait
         // Loop through the field specification....
         foreach ($fieldInfo as $field => $subfields) {
             // Did we find any matching fields?
-            $series = $this->getMarcRecord()->getFields($field);
+            $series = $this->getFields($field);
             if (is_array($series)) {
                 // use the fieldIterator as fallback for linked data in field 880 that
                 // is not linked via $6
@@ -810,17 +801,17 @@ trait SolrMarcFincTrait
         $retval = [];
         $match = [];
 
-        $fields = $this->getMarcRecord()->getFields('971');
+        $fields = $this->getFields('971');
         if (!$fields) {
             return [];
         }
 
         $key = 0;
         foreach ($fields as $field) {
-            if ($subfield = $field->getSubfield('k')) {
+            if ($subfield = $this->getSubfield($field, 'k')) {
                 preg_match(
                     '/(.*)##(.*)##(.*)/',
-                    trim($subfield->getData()),
+                    trim($subfield),
                     $match
                 );
                 $retval[$key]['callnumber'] = trim($match[1]);
@@ -874,15 +865,15 @@ trait SolrMarcFincTrait
     {
         $retval = [];
 
-        $fields = $this->getMarcRecord()->getFields(
+        $fields = $this->getFields(
             $this->getLocalMarcFieldOfLibrary()
         );
         if (!$fields) {
             return null;
         }
         foreach ($fields as $key => $field) {
-            if ($q = $field->getSubfield('q')) {
-                $retval[$key] = $q->getData();
+            if ($q = $this->getSubfield($field, 'q')) {
+                $retval[$key] = $q;
             }
         }
         return $retval;
@@ -896,19 +887,19 @@ trait SolrMarcFincTrait
     protected function getLocalClassSubjects()
     {
         $array = [];
-        $classsubjects = $this->getMarcRecord()->getFields('979');
+        $classsubjects = $this->getFields('979');
         // if not return void value
         if (!$classsubjects) {
             return $array;
         } // end if
         foreach ($classsubjects as $key => $line) {
             // if subfield with class subjects exists
-            if ($line->getSubfield('f')) {
+            if ($this->getSubfield($line, 'f')) {
                 // get class subjects
-                $array[$key]['nb'] = $line->getSubfield('f')->getData();
+                $array[$key]['nb'] = $this->getSubfield($line, 'f');
             } // end if subfield a
-            if ($line->getSubfield('9')) {
-                $array[$key]['data'] = $line->getSubfield('9')->getData();
+            if ($this->getSubfield($line, '9')) {
+                $array[$key]['data'] = $this->getSubfield($line, '9');
             }
         } // end foreach
         return $array;
@@ -994,14 +985,13 @@ trait SolrMarcFincTrait
     {
         $retval = [];
 
-        $fields = $this->getMarcRecord()
-            ->getFields($this->getLocalMarcFieldOfLibrary());
+        $fields = $this->getFields($this->getLocalMarcFieldOfLibrary());
         if (!$fields) {
             return null;
         }
         foreach ($fields as $key => $field) {
-            if ($q = $field->getSubfield('f')) {
-                $retval[$key][] = $q->getData();
+            if ($q = $this->getSubfield($field, 'f')) {
+                $retval[$key][] = $q;
             }
         }
         return $retval;
@@ -1034,19 +1024,19 @@ trait SolrMarcFincTrait
     {
         $retval = [];
 
-        $fields = $this->getMarcRecord()->getFields('937');
+        $fields = $this->getFields('937');
         if (!$fields) {
             return null;
         }
         foreach ($fields as $key => $field) {
-            if ($d = $field->getSubfield('d')) {
-                $retval[$key][] = $d->getData();
+            if ($d = $this->getSubfield($field, 'd')) {
+                $retval[$key][] = $d;
             }
-            if ($e = $field->getSubfield('e')) {
-                $retval[$key][] = $e->getData();
+            if ($e = $this->getSubfield($field, 'e')) {
+                $retval[$key][] = $e;
             }
-            if ($f = $field->getSubfield('f')) {
-                $retval[$key][] = $f->getData();
+            if ($f = $this->getSubfield($field, 'f')) {
+                $retval[$key][] = $f;
             }
         }
         return $retval;
@@ -1061,7 +1051,7 @@ trait SolrMarcFincTrait
     public function getNewerTitles()
     {
         $array = [];
-        $previous = $this->getMarcRecord()->getFields('785');
+        $previous = $this->getFields('785');
 
         // if no entry return void
         if (!$previous) {
@@ -1069,18 +1059,14 @@ trait SolrMarcFincTrait
         }
 
         foreach ($previous as $key => $line) {
-            $array[$key]['pretext'] = ($line->getSubfield('i'))
-                ? $line->getSubfield('i')->getData() : '';
-            $array[$key]['text'] = ($line->getSubfield('a'))
-                ? $line->getSubfield('a')->getData() : '';
+            $array[$key]['pretext'] = $this->getSubfield($line, 'i');
+            $array[$key]['text'] = ($this->getSubfield($line, 'a'));
             if (empty($array[$key]['text'])) {
-                $array[$key]['text'] = ($line->getSubfield('t'))
-                    ? $line->getSubfield('t')->getData() : '';
+                $array[$key]['text'] = ($this->getSubfield($line, 't'));
             }
             // get ppns of bsz
-            $linkFields = $line->getSubfields('w');
-            foreach ($linkFields as $current) {
-                $text = $current->getData();
+            $linkFields = $this->getSubfields($line, 'w');
+            foreach ($linkFields as $text) {
                 // Extract parenthetical prefixes:
                 if (preg_match(self::BSZ_PATTERN, $text, $matches)) {
                     $array[$key]['record_id'] = $matches[2] . $matches[3];
@@ -1120,21 +1106,20 @@ trait SolrMarcFincTrait
         // container for collecting recordIDs to the result array #12941
         $tempIds = [];
 
-        $fields = $this->getMarcRecord()->getFields('787');
+        $fields = $this->getFields('787');
         if (!$fields) {
             return null;
         }
         foreach ($fields as $field) {
             // don't do anything unless we have something in $a
-            if ($a = $field->getSubfield('a')) {
+            if ($a = $this->getSubfield($field, 'a')) {
                 // do we have a main entry heading?
-                if ($i = $field->getSubfield('i')) {
+                if ($i = $this->getSubfield($field, 'i')) {
                     // build the text to be displayed from subfields $a and/or $t
-                    $text = ($t = $field->getSubfield('t'))
-                        ? $a->getData() . ': ' . $t->getData()
-                        : $a->getData();
+                    $text = ($t = $this->getSubfield($field, 't'))
+                        ? $a . ': ' . $t : $a;
 
-                    $linkFields = $field->getSubfields('w');
+                    $linkFields = $this->getSubfields($field, 'w');
                     foreach ($linkFields as $current) {
                         $ids = $current->getData();
 
@@ -1143,7 +1128,8 @@ trait SolrMarcFincTrait
                             // use the same key to set the record_id into the
                             // $retval array like it is used for the other
                             // content below
-                            $tempIds[$i->getData()]['record_id']
+                            //TODO Stimmt das?
+                            $tempIds[$i]['record_id']
                                 = $matches[2] . $matches[3];
                         }
                     } // end foreach
@@ -1153,8 +1139,7 @@ trait SolrMarcFincTrait
                     $tempIds = $this->addFincIDToRecord($tempIds);
 
                     // does a linked record exist
-                    $link = ($w = $field->getSubfield('w'))
-                        ? $w->getData() : '';
+                    $link = $this->getSubfield($field, 'w');
 
                     // we expect the links to be ppns prefixed with an ISIL so
                     // strip the ISIL
@@ -1163,20 +1148,20 @@ trait SolrMarcFincTrait
                     );
 
                     $record_id = null;
-                    if (!empty($tempIds[$i->getData()]['id'])) {
-                        $record_id = $tempIds[$i->getData()]['record_id'];
+                    if (!empty($tempIds[$i]['id'])) {
+                        $record_id = $tempIds[$i]['record_id'];
                     }
 
                     $id = null;
-                    if (!empty($tempIds[$i->getData()]['id'])) {
-                        $id = $tempIds[$i->getData()]['id'];
+                    if (!empty($tempIds[$i]['id'])) {
+                        $id = $tempIds[$i]['id'];
                     }
 
                     // let's use the main entry heading as associative key and
                     // push the gathered content into the retval array
                     // add recordIDs 'record_id' and 'id' to the result array
                     // cmp. #12941
-                    $retval[$i->getData()][] = [
+                    $retval[$i][] = [
                         'text' => $text,
                         'link' => (!empty($ppn) ? $ppn : $link),
                         'record_id' => $record_id,
@@ -1186,7 +1171,7 @@ trait SolrMarcFincTrait
                     // no main entry heading found, so push subfield a's content
                     // into retval using the defaultHeading
                     $retval[$defaultHeading][] = [
-                        'text' => $a->getData(),
+                        'text' => $a,
                         'link' => ''
                     ];
                 }
@@ -1222,21 +1207,18 @@ trait SolrMarcFincTrait
         $i = 0;
 
         foreach ($fields as $field) {
-            $related = $this->getMarcRecord()->getFields($field);
+            $related = $this->getFields($field);
             // if no entry break it
             if ($related) {
                 foreach ($related as $key => $line) {
                     // check if subfields i or t exist. if yes do a record.
-                    if ($line->getSubfield('i') || $line->getSubfield('t')) {
-                        $array[$i]['identifier'] = ($line->getSubfield('i'))
-                            ? $line->getSubfield('i')->getData() : '';
-                        $array[$i]['text'] = ($line->getSubfield('t'))
-                            ? $line->getSubfield('t')->getData() : '';
+                    if ($this->getSubfield($line, 'i') || $this->getSubfield($line, 't')) {
+                        $array[$i]['identifier'] =  $this->getSubfield($line, 'i');
+                        $array[$i]['text'] = $this->getSubfield($line, 't');
                         // get ppns of bsz
-                        $linkFields = $line->getSubfields('w');
+                        $linkFields = $this->getSubfields($line, 'w');
                         if (is_array($linkFields) && count($linkFields) > 0) {
-                            foreach ($linkFields as $current) {
-                                $text = $current->getData();
+                            foreach ($linkFields as $text) {
                                 // Extract parenthetical prefixes:
                                 if (preg_match(self::BSZ_PATTERN, $text, $matches)) {
                                     $array[$key]['record_id'] = $matches[2] . $matches[3];
@@ -1262,7 +1244,7 @@ trait SolrMarcFincTrait
     public function getPreviousTitles()
     {
         $array = [];
-        $previous = $this->getMarcRecord()->getFields('780');
+        $previous = $this->getFields('780');
 
         // if no entry return void
         if (!$previous) {
@@ -1270,18 +1252,14 @@ trait SolrMarcFincTrait
         }
 
         foreach ($previous as $key => $line) {
-            $array[$key]['pretext'] = ($line->getSubfield('i'))
-                ? $line->getSubfield('i')->getData() : '';
-            $array[$key]['text'] = ($line->getSubfield('a'))
-                ? $line->getSubfield('a')->getData() : '';
+            $array[$key]['pretext'] = $this->getSubfield($line, 'i');
+            $array[$key]['text'] = $this->getSubfield($line, 'a');
             if (empty($array[$key]['text'])) {
-                $array[$key]['text'] = ($line->getSubfield('t'))
-                    ? $line->getSubfield('t')->getData() : '';
+                $array[$key]['text'] = $this->getSubfield($line, 't');
             }
             // get ppns of bsz
-            $linkFields = $line->getSubfields('w');
-            foreach ($linkFields as $current) {
-                $text = $current->getData();
+            $linkFields = $this->getSubfields($line, 'w');
+            foreach ($linkFields as $text) {
                 // Extract parenthetical prefixes:
                 if (preg_match(self::BSZ_PATTERN, $text, $matches)) {
                     $array[$key]['record_id'] = $matches[2] . $matches[3];
@@ -1319,7 +1297,8 @@ trait SolrMarcFincTrait
             )) {
                 if (empty($converted['error'])) {
                     $rhs = explode(' ', trim($converted['rhs']));
-                    return  money_format('%.2n', $rhs[0]);
+                    //TODO: Formatierung??
+                    return number_format($rhs[0], 2) . '€';
                 }
             }
             return $currency . " " . $price;
@@ -1374,7 +1353,7 @@ trait SolrMarcFincTrait
     /* removed erroneous inheritance, this function is present and working in SolrDefaultFincTrait, DM
         public function getSourceID()
         {
-            $source_ids = $this->getMarcRecord()->getFields('980');
+            $source_ids = $this->getFields('980');
             if (!$source_ids) {
                 return null;
             }
@@ -1392,7 +1371,7 @@ trait SolrMarcFincTrait
     {
         $array = [];
         if (null != $this->getLocalMarcFieldOfLibrary()) {
-            $udk = $this->getMarcRecord()->getFields(
+            $udk = $this->getFields(
                 $this->getLocalMarcFieldOfLibrary()
             );
             // if not return void value
@@ -1402,14 +1381,14 @@ trait SolrMarcFincTrait
 
             foreach ($udk as $key => $line) {
                 // if subfield with udk exists
-                if ($line->getSubfield('f')) {
+                if ($this->getSubfield($line, 'f')) {
                     // get udk
-                    $array[$key]['index'] = $line->getSubfield('f')->getData();
+                    $array[$key]['index'] = $this->getSubfield($line, 'f');
                     // get udk notation
                     // fixes by update of File_MARC to version 0.8.0
                     // @link https://intern.finc.info/issues/2068
                     /*
-                    if ($notation = $line->getSubfield('n')) {
+                    if ($notation = $this->getSubfield($line, 'n')) {
                         // get first value
                         $array[$key]['notation'][] = $notation->getData();
                         // iteration over udk notation
@@ -1420,10 +1399,10 @@ trait SolrMarcFincTrait
                     } // end if subfield n
                     unset($notation);
                     */
-                    if ($record = $line->getSubfields('n')) {
+                    if ($record = $this->getSubfields($line, 'n')) {
                         // iteration over rvk notation
                         foreach ($record as $field) {
-                            $array[$key]['notation'][] = $field->getData();
+                            $array[$key]['notation'][] = $field;
                         }
                     } // end if subfield n
                 } // end if subfield f
@@ -1444,18 +1423,15 @@ trait SolrMarcFincTrait
         // result array to return
         $retval = [];
 
-        $results = $this->getMarcRecord()->getFields('700');
+        $results = $this->getFields('700');
         if (!$results) {
             return $retval;
         }
 
         foreach ($results as $key => $line) {
-            $retval[$key]['name'] = ($line->getSubfield('a'))
-                ? $line->getSubfield('a')->getData() : '';
-            $retval[$key]['dates'] = ($line->getSubfield('d'))
-                ? $line->getSubfield('d')->getData() : '';
-            $retval[$key]['relator'] = ($line->getSubfield('e'))
-                ? $line->getSubfield('e')->getData() : '';
+            $retval[$key]['name'] = $this->getSubfield($line, 'a');
+            $retval[$key]['dates'] = $this->getSubfield($line, 'd');
+            $retval[$key]['relator'] = $this->getSubfield($line, 'e');
         }
         // echo "<pre>"; print_r($retval); echo "</pre>";
         return $retval;
@@ -1475,22 +1451,22 @@ trait SolrMarcFincTrait
         $i = 0;
 
         foreach ($fields as $field) {
-            $related = $this->getMarcRecord()->getFields($field);
+            $related = $this->getFields($field);
             // if no entry stop
             if ($related) {
                 // loop through all found fields
-                foreach ($related as $key => $line) {
+                foreach ($related as $line) {
                     // first lets look for identifiers - identifiers are vital as
                     // those are used to identify the text in the frontend (e.g. as
                     // table headers)
                     // so, proceed only if we have an identifier
-                    if ($line->getSubfield('i')) {
+                    if ($this->getSubfield($line, 'i')) {
                         // lets collect the text
                         // https://intern.finc.info/issues/6896#note-7
                         $text = [];
                         foreach ($subfields as $subfield) {
-                            if ($line->getSubfield($subfield)) {
-                                $text[] = $line->getSubfield($subfield)->getData();
+                            if ($this->getSubfield($line, $subfield)) {
+                                $text[] =$this->getSubfield($line, $subfield);
                             }
                         }
 
@@ -1499,15 +1475,13 @@ trait SolrMarcFincTrait
                         if (count($text) > 0) {
                             $array[$i] = [
                                 'text'       => implode(', ', $text),
-                                'identifier' => ($line->getSubfield('i'))
-                                    ? $line->getSubfield('i')->getData() : ''
+                                'identifier' => $this->getSubfield($line, 'i')
                             ];
 
                             // finally we can try to use given PPNs (from the BSZ) to
                             // link the record
-                            if ($linkFields = $line->getSubfields('w')) {
-                                foreach ($linkFields as $current) {
-                                    $text = $current->getData();
+                            if ($linkFields = $this->getSubfields($line, 'w')) {
+                                foreach ($linkFields as $text) {
                                     // Extract parenthetical prefixes:
                                     if (preg_match(self::BSZ_PATTERN, $text, $matches)) {
                                         $array[$i]['record_id']
@@ -1550,11 +1524,11 @@ trait SolrMarcFincTrait
         $i = 0;
 
         foreach ($fields as $field => $subfields) {
-            $related = $this->getMarcRecord()->getFields($field);
+            $related = $this->getFields($field);
             // if no entry stop
             if ($related) {
                 // loop through all found fields
-                foreach ($related as $key => $line) {
+                foreach ($related as $line) {
                     // first lets look for identifiers - identifiers are vital as
                     // those are used to identify the text in the frontend (e.g. as
                     // table headers)
@@ -1564,12 +1538,12 @@ trait SolrMarcFincTrait
                     // https://intern.finc.info/issues/6896#note-7
                     $text = [];
                     foreach ($subfields as $subfield => list($l_delim, $r_delim)) {
-                        $val = $line->getSubfield($subfield);
+                        $val = $this->getSubfield($line, $subfield);
                         if ($field == '773' && $subfield == 'a') {
                             if ($line->getIndicator(1) == 1) {
-                                $field245 = $this->getMarcRecord()->getField('245');
-                                if ($sub245a = $field245->getSubfield('a')) {
-                                    $text[] = $sub245a->getData();
+                                $field245 = $this->getField('245');
+                                if ($sub245a = $this->getSubfield($field245, 'a')) {
+                                    $text[] = $sub245a;
                                 }
                                 unset($subfields['t']);
                             } elseif (empty($val)) {
@@ -1600,16 +1574,16 @@ trait SolrMarcFincTrait
 
                     // we can have text without links but no links without text, so
                     // only proceed if we actually have a value for the text
+                    $sfi = $this->getSubfield($line, 'i');
                     if (count($text) > 0) {
                         $array[$i] = [
                             'text'       => implode('', $text),
-                            'identifier' => ($line->getSubfield('i'))
-                                ? $line->getSubfield('i')->getData() : 'Set Multipart'
+                            'identifier' => empty($sfi) ? 'Set Multipart' : $sfi
                         ];
 
                         // finally we can try to use given PPNs (from the BSZ) to
                         // link the record
-                        if ($linkFields = $line->getSubfields('w')) {
+                        if ($linkFields = $this->getSubfields($line, 'w')) {
                             foreach ($linkFields as $current) {
                                 $text = $current->getData();
                                 // Extract parenthetical prefixes:
@@ -1641,14 +1615,15 @@ trait SolrMarcFincTrait
     {
         $retval = [];
 
-        $fields = $this->getMarcRecord()->getFields('546');
+        $fields = $this->getFields('546');
 
         if (!$fields) {
             return null;
         }
         foreach ($fields as $field) {
-            if ($subfield = $field->getSubfield('a')) {
-                $retval[] = $subfield->getData();
+            $sfa = $this->getSubfield($field, 'a');
+            if(!empty($sfa)) {
+                $retval[] = $sfa;
             }
         }
         return $retval;
@@ -1693,12 +1668,18 @@ trait SolrMarcFincTrait
                 if ($sid = $this->fields['source_id']) {
                     $query .= ' AND source_id:' . $sid;
                 }
-                $result = $this->searchService->search('Solr', new Query($query));
-                if (count($result) === 0) {
+                $command = new SearchCommand(
+                    $this->getSourceIdentifier(),
+                    new Query($query),
+                    0
+                );
+                $result = $this->searchService->invoke($command)->getResult();
+                $records = $result->getRecords();
+                if (empty($records)) {
                     $this->debug('Could not retrieve id for record with ' . $query);
                     return null;
                 }
-                return current($result->getRecords())->getUniqueId();
+                return current($records)->getUniqueId();
             }
             $this->debug('Pregmatch pattern in getHierarchyParentID failed for ' .
                 $value
@@ -1710,16 +1691,15 @@ trait SolrMarcFincTrait
         // getHierchyParentTitle) and build the $parentID array
         foreach ($fieldList as $fieldNumbers) {
             foreach ($fieldNumbers as $fieldNumber) {
-                $fields = $this->getMarcRecord()->getFields($fieldNumber);
+                $fields = $this->getFields($fieldNumber);
                 foreach ($fields as $field) {
-                    if ($field->getSubfield('w')) {
-                        $parentID[] = $idRetrieval(
-                            $field->getSubfield('w')->getData()
-                        );
+                    $sfw = $this->getSubfield($field, 'w');
+                    if (!empty($sfw)) {
+                        $parentID[] = $idRetrieval($sfw);
                     } elseif ($fieldNumber == '490') {
                         // https://intern.finc.info/issues/8704
                         if ($field->getIndicator(1) == 0
-                            && $subfield = $field->getSubfield('a')
+                            && $subfield = $this->getSubfield($field, 'a')
                         ) {
                             $parentID[] = null;
                         }
@@ -1748,32 +1728,32 @@ trait SolrMarcFincTrait
 
         // https://intern.finc.info/issues/8725
         $vgSelect = function ($field) {
-            if ($field->getSubfield('v')) {
-                return $field->getSubfield('v')->getData();
-            } elseif ($field->getSubfield('g')) {
-                return $field->getSubfield('g')->getData();
+            if ($this->getSubfield($field, 'v')) {
+                return $this->getSubfield($field, 'v');
+            } elseif ($this->getSubfield($field, 'g')) {
+                return $this->getSubfield($field, 'g');
             }
             return false;
         };
 
         // start with 490 (https://intern.finc.info/issues/8704)
-        $fields = $this->getMarcRecord()->getFields('490');
+        $fields = $this->getFields('490');
         foreach ($fields as $field) {
             if ($field->getIndicator(1) == 0
-                && $subfield = $field->getSubfield('a')
+                && $subfield = $this->getSubfield($field, 'a')
             ) {
-                $parentTitle[] = $subfield->getData(); // {490a}
+                $parentTitle[] = $subfield; // {490a}
             }
         }
 
         // now check if 773 is available and LDR 7 != (a || s)
-        $fields = $this->getMarcRecord()->getFields('773');
-        if ($fields && !in_array($this->getMarcRecord()->getLeader()[7], ['a', 's'])) {
+        $fields = $this->getFields('773');
+        if ($fields && !in_array($this->getLeader(7), ['a', 's'])) {
             foreach ($fields as $field) {
-                if ($field245 = $this->getMarcRecord()->getField('245')) {
+                if ($field245 = $this->getField('245')) {
                     $parentTitle[] =
-                        ($field245->getSubfield('a') ? $field245->getSubfield('a')->getData() : '') .
-                        ($field->getSubfield('g') ? '; ' . $field->getSubfield('g')->getData() : '')
+                        ($this->getSubfield($field245, 'a') ? $this->getSubfield($field245, 'a') : '') .
+                        ($this->getSubfield($field, 'g') ? '; ' . $this->getSubfield($field, 'g') : '')
                     ; // {245a}{; 773g}
                 }
             }
@@ -1781,9 +1761,9 @@ trait SolrMarcFincTrait
             // build the titles differently if LDR 7 == (a || s)
             foreach ($fields as $field) {
                 $parentTitle[] =
-                    ($field->getSubfield('a') ? $field->getSubfield('a')->getData() : '') .
-                    ($field->getSubfield('t') ? ': ' . $field->getSubfield('t')->getData() : '') .
-                    ($field->getSubfield('g') ? ', ' . $field->getSubfield('g')->getData() : '')
+                    ($this->getSubfield($field, 'a') ? $this->getSubfield($field, 'a') : '') .
+                    ($this->getSubfield($field, 't') ? ': ' . $this->getSubfield($field, 't') : '') .
+                    ($this->getSubfield($field, 'g') ? ', ' . $this->getSubfield($field, 'g') : '')
                 ; // {773a}{: 773t}{, g}
             }
         }
@@ -1791,21 +1771,21 @@ trait SolrMarcFincTrait
         // now proceed with 8xx fields
         $fieldList = ['800', '810', '811'];
         foreach ($fieldList as $fieldNumber) {
-            $fields = $this->getMarcRecord()->getFields($fieldNumber);
+            $fields = $this->getFields($fieldNumber);
             foreach ($fields as $field) {
                 $parentTitle[] =
-                    ($field->getSubfield('a') ? $field->getSubfield('a')->getData() : '') .
-                    ($field->getSubfield('t') ? ': ' . $field->getSubfield('t')->getData() : '') .
+                    ($this->getSubfield($field, 'a') ? $this->getSubfield($field, 'a') : '') .
+                    ($this->getSubfield($field, 't') ? ': ' . $this->getSubfield($field, 't') : '') .
                     ($vgSelect($field) ? ' ; ' . $vgSelect($field) : '')
                 ; // {800a: }{800t}{ ; 800v}
             }
         }
 
         // handle field 830 differently
-        $fields = $this->getMarcRecord()->getFields('830');
+        $fields = $this->getFields('830');
         foreach ($fields as $field) {
             $parentTitle[] =
-                ($field->getSubfield('a') ? $field->getSubfield('a')->getData() : '') .
+                ($this->getSubfield($field, 'a') ? $this->getSubfield($field, 'a') : '') .
                 ($vgSelect($field) ? ' ; ' . $vgSelect($field) : '')
             ; // {830a}{ ; 830v}
         }
@@ -1830,7 +1810,7 @@ trait SolrMarcFincTrait
         $firstindicator = 'x';
         $retval = [];
 
-        $fields = $this->getMarcRecord()->getFields('689');
+        $fields = $this->getFields('689');
         foreach ($fields as $field) {
             $subjectrow = $field->getIndicator('1');
             if ($subjectrow != $firstindicator) {
@@ -1838,18 +1818,18 @@ trait SolrMarcFincTrait
                 $firstindicator = $subjectrow;
             }
             // #5668 #5046 BSZ MARC may contain uppercase subfields but solrmarc set to lowercase them which introduces single char topics
-            if ($subfields = $field->getSubfields('a')) {
+            if ($subfields = $this->getSubfields($field, 'a')) {
                 foreach ($subfields as $subfield) {
                     if (strlen($subfield->getData()) > 1) {
                         $retval[$key]['subject'][] = $subfield->getData();
                     }
                 }
             }
-            if ($subfield = $field->getSubfield('t')) {
-                $retval[$key]['subject'][] = $subfield->getData();
+            if ($subfield = $this->getSubfield($field, 't')) {
+                $retval[$key]['subject'][] = $subfield;
             }
-            if ($subfield = $field->getSubfield('9')) {
-                $retval[$key]['subsubject'] = $subfield->getData();
+            if ($subfield = $this->getSubfield($field, '9')) {
+                $retval[$key]['subsubject'] = $subfield;
             }
         }
         return  $retval;
@@ -1876,8 +1856,8 @@ trait SolrMarcFincTrait
             $this->mainConfig->SubjectHeadings->remove->toArray() : [];
 
         $skipThisField = function ($field) use ($skipTerms) {
-            $subField = $field->getSubField('2');
-            return !($subField && in_array($subField->getData(), $skipTerms));
+            $subField = $this->getSubfield($field, '2');
+            return !($subField && in_array($subField, $skipTerms));
         };
 
         // This is all the collected data:
@@ -1886,7 +1866,7 @@ trait SolrMarcFincTrait
         // Try each MARC field one at a time:
         foreach ($fields as $field) {
             // Do we have any results for the current field?  If not, try the next.
-            $results = $this->getMarcRecord()->getFields($field);
+            $results = $this->getFields($field);
             if (!$results) {
                 continue;
             }
@@ -1900,13 +1880,13 @@ trait SolrMarcFincTrait
                 if ($skipThisField($result)) {
 
                     // Get all the chunks and collect them together:
-                    $subfields = $result->getSubfields();
+                    $subfields = $result['subfields'];
                     if ($subfields) {
                         foreach ($subfields as $subfield) {
                             // Numeric subfields are for control purposes and should not
                             // be displayed:
-                            if (!is_numeric($subfield->getCode())) {
-                                $current[] = $subfield->getData();
+                            if (!is_numeric($subfield['code'])) {
+                                $current[] = $subfield['data'];
                             }
                         }
                         // If we found at least one chunk, add a heading to our result:
@@ -2036,12 +2016,12 @@ trait SolrMarcFincTrait
         // map of subfield to returning value key
         $mapper = ['a' => 'scale', 'c' => 'coordinates'];
 
-        $fields = $this->getMarcRecord()->getFields('255');
+        $fields = $this->getFields('255');
         foreach ($fields as $f) {
             foreach ($mapper as $subfield => $key) {
-                $sub = $f->getSubField($subfield);
+                $sub = $this->getSubField($f, $subfield);
                 if ($sub) {
-                    $retVal[$i][$key] = $sub->getData();
+                    $retVal[$i][$key] = $sub;
                 }
             }
             $i++;
@@ -2068,13 +2048,13 @@ trait SolrMarcFincTrait
     {
         $retVal = [];
         $subFields = ['a','b','c','d','g'];
-        $field = $this->getMarcRecord()->getFields('502');
+        $field = $this->getFields('502');
 
         foreach ($field as $subfield) {
             foreach ($subFields as $fld) {
-                $sfld = $subfield->getSubField($fld);
+                $sfld = $this->getSubfield($subfield, $fld);
                 if ($sfld) {
-                    $retVal[$fld] = $sfld->getData();
+                    $retVal[$fld] = $sfld;
                 }
             }
         }
@@ -2118,7 +2098,11 @@ trait SolrMarcFincTrait
             . ' AND NOT id:' . $this->getUniqueID()
         );
 
-        $result = $this->searchService->search($backend_id, $query, 0, $limit);
+        $cmd = new SearchCommand(
+            $backend_id, $query, 0, $limit
+        );
+
+        $result = $this->searchService->invoke($cmd)->getResult();
         $return['first_results'] = $result->getRecords();
         if ($result->getTotal() > $limit) {
             $return['more_query'] = $query->getString();
@@ -2135,21 +2119,21 @@ trait SolrMarcFincTrait
     {
         $array = [];
 
-        $rvk = $this->getMarcRecord()->getFields('936');
+        $rvk = $this->getFields('936');
         // if not return void value
         if (!$rvk) {
             return $array;
         } // end if
         foreach ($rvk as $key => $line) {
             // if subfield with rvk exists
-            if ($line->getSubfield('a')) {
+            if ($this->getSubfield($line, 'a')) {
                 // get rvk
-                $array[$key]['rvk'] = $line->getSubfield('a')->getData();
+                $array[$key]['rvk'] = $this->getSubfield($line, 'a');
                 // get rvk nomination
-                if ($line->getSubfield('b')) {
-                    $array[$key]['name'] = $line->getSubfield('b')->getData();
+                if ($this->getSubfield($line, 'b')) {
+                    $array[$key]['name'] = $this->getSubfield($line, 'b');
                 }
-                if ($record = $line->getSubfields('k')) {
+                if ($record = $this->getSubfields($line, 'k')) {
                     // iteration over rvk notation
                     foreach ($record as $field) {
                         $array[$key]['level'][] = $field->getData();
@@ -2199,15 +2183,15 @@ trait SolrMarcFincTrait
     public function getMediennummer()
     {
         // loop through all existing LocalMarcFieldOfLibrary
-        if ($fields = $this->getMarcRecord()->getFields(
+        if ($fields = $this->getFields(
             $this->getLocalMarcFieldOfLibrary())
         ) {
             foreach ($fields as $field) {
                 // return the first occurance of $m
-                $field = $field->getSubfield('a');
+                $field = $this->getSubfield($field, 'a');
                 if ($field) {
                     $matches = [];
-                    if (preg_match('/\w+$/', $field->getData(), $matches)) {
+                    if (preg_match('/\w+$/', $field, $matches)) {
                         return $matches[0];
                     }
                 }
@@ -2219,9 +2203,9 @@ trait SolrMarcFincTrait
     {
         $retval = [];
         foreach (['130','240'] as $pos => $field_name) {
-            if ($field = $this->getMarcRecord()->getField($field_name)) {
+            if ($field = $this->getField($field_name)) {
                 if ($field_name === '240') {
-                    if ($field->getIndicator('1') === '0') {
+                    if ($field['i1'] === '0') {
                         //"Not printed or displayed"
                         continue;
                     }
@@ -2230,8 +2214,8 @@ trait SolrMarcFincTrait
                     'title' => 'a',
                     'lang' => 'g'
                          ] as $key => $sub_name) {
-                    if ($line = $field->getSubfield($sub_name)) {
-                        $retval[$key] = $line->getData();
+                    if ($line = $this->getSubfield($field, $sub_name)) {
+                        $retval[$key] = $line;
                     }
                 }
                 return $retval;

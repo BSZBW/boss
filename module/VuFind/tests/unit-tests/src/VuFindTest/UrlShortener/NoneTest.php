@@ -1,8 +1,9 @@
 <?php
+
 /**
  * "None" URL shortener test.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2019.
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:testing:unit_tests Wiki
  */
+
 namespace VuFindTest\UrlShortener;
 
 use VuFind\UrlShortener\None;
@@ -56,12 +58,12 @@ class NoneTest extends \PHPUnit\Framework\TestCase
      * Test that resolve is not supported.
      *
      * @return void
-     *
-     * @expectedException        Exception
-     * @expectedExceptionMessage UrlShortener None is unable to resolve shortlinks.
      */
     public function testNoResolution()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('UrlShortener None is unable to resolve shortlinks.');
+
         $none = new None();
         $none->resolve('foo');
     }

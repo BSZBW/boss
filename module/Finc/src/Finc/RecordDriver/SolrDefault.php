@@ -33,8 +33,8 @@ namespace Finc\RecordDriver;
 
 use VuFind\Log\LoggerAwareTrait;
 use VuFind\Search\SearchRunner;
-use Zend\Config\Config;
-use Zend\Log\LoggerAwareInterface as LoggerAwareInterface;
+use Laminas\Config\Config;
+use Laminas\Log\LoggerAwareInterface as LoggerAwareInterface;
 
 /**
  * finc specific model for Solr records based on the stock
@@ -92,13 +92,13 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault implements
      *
      * @return mixed
      */
-    public function getField($field)
-    {
-        if (isset($this->fields[$field])) {
-            return $this->fields[$field];
-        }
-        return null;
-    }
+//    public function getField($field)
+//    {
+//        if (isset($this->fields[$field])) {
+//            return $this->fields[$field];
+//        }
+//        return null;
+//    }
 
     /**
      * Helper function to restructure author arrays including relators

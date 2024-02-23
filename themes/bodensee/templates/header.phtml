@@ -1,8 +1,27 @@
 <div class="navbar navbar-default navbar-fixed-top">
+    <?php if($this->client()->is('wlb2')): ?>
+    <div class="container">
+        <div class="navbar-header">
+            <?php if (!isset($frame)): ?>
+                <button type="button" class="navbar-toggle btn btn-primary" data-toggle="collapse" data-target="#header-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <i class="fa fa-bars"></i>
+                </button>
+            <?php endif; ?>
+        </div>
+        <div class="navbar-toggle pull-left">
+            <a href="<?=$this->client()->getWebsite('')?>">
+                <img src="<?= $this->imageLink('logo/wlb.png') ?>" style="height:3em;margin:5px" alt="Logo Bibliothek">
+            </a>
+            </a>
+        </div>
+    </div>
+    <?php endif; ?>
+
     <div class="container">
         <a class="sr-only" href="#content"><?=$this->transEsc('Skip to content') ?></a>
         <div class="navbar-header">
-            <?php if (!isset($frame)): ?>
+            <?php if (!isset($frame) && !$this->client()->is('wlb2')): ?>
                 <button type="button" class="navbar-toggle btn btn-primary" data-toggle="collapse" data-target="#header-collapse">
                     <span class="sr-only">Toggle navigation</span>
                     <i class="fa fa-bars"></i>
@@ -30,6 +49,22 @@
                     <li>
                         <a id="feedbackLink" data-lightbox href="<?=$this->url('feedback-home') ?>"><i class="fa fa-envelope" aria-hidden="true"></i> <?=$this->transEsc("Feedback")?></a>
                     </li>
+                <?php endif; ?>
+                <?php if($this->client()->is('wlb2')): ?>
+                <li class="visible-lg">
+                    <?php
+                    $suffix = '';
+                    if (isset($_SERVER['HTTP_HOST'])) {
+                        $host = strtolower($_SERVER['HTTP_HOST']);
+                        if (str_contains($host, 'bosstest')) {
+                            $suffix = '-Test';
+                        }
+                    }
+                    ?>
+                    <a href="<?= $this->url('home') ?>" style="background:none">
+                        <span class="beta">BETA <?=$suffix?></span>
+                    </a>
+                </li>
                 <?php endif; ?>
                 <?php $cart = $this->cart(); if ($cart->isActive()): ?>
                     <li id="cartSummary">
@@ -109,6 +144,11 @@
                     </a>
                 </li>
             </ul>
+            <?php if ($this->client()->is('show_header_logo')): ?>
+                <a href="/" class="visible-lg pull-right">
+                  <img src="<?= $this->imageLink('logo/wlb.png') ?>" style="height:3em" alt="Logo Bibliothek">
+                </a>
+            <?php endif; ?>
         </div>
         <?php endif ?>
 

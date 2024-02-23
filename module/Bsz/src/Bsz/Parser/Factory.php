@@ -25,7 +25,7 @@
  */
 namespace Bsz\Parser;
 
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
  * Description of Factory

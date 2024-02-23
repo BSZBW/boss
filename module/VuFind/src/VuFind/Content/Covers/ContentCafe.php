@@ -1,8 +1,9 @@
 <?php
+
 /**
  * ContentCafe cover content loader.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2010.
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
+
 namespace VuFind\Content\Covers;
 
 /**
@@ -55,9 +57,9 @@ class ContentCafe extends \VuFind\Content\AbstractCover
     /**
      * Constructor
      *
-     * @param \Zend\Config\Config $config Configuration
+     * @param \Laminas\Config\Config $config Configuration
      */
-    public function __construct(\Zend\Config\Config $config)
+    public function __construct(\Laminas\Config\Config $config)
     {
         $this->password = $config->pw;
         $this->baseURL = $config->url ?? 'http://contentcafe2.btol.com';

@@ -41,7 +41,7 @@ namespace Bsz\Recommend;
  * @link     http://vufind.org/wiki/vufind2:recommendation_modules Wiki
  */
 class SearchButtons implements \VuFind\Recommend\RecommendInterface,
-    \VuFindHttp\HttpServiceAwareInterface, \Zend\Log\LoggerAwareInterface
+    \VuFindHttp\HttpServiceAwareInterface, \Laminas\Log\LoggerAwareInterface
 {
     use \VuFind\Log\LoggerAwareTrait;
     use \VuFindHttp\HttpServiceAwareTrait;

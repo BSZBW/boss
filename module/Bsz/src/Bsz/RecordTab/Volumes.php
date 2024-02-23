@@ -58,7 +58,7 @@ class Volumes extends AbstractCollection
     protected function display($record): bool
     {
         $id = $this->driver->getUniqueID();
-        $fields = $record->getAllFieldsArray([773 => ['w'], 800 => ['w']]);
+        $fields = $record->getAllFieldsArray([773 => ['w'], 800 => ['w'], 810 => ['w'], 811 => ['w'], 830 => ['w']]);
         return in_array($id, $fields) && !$record->isArticle();
     }
 

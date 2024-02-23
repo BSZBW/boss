@@ -10,12 +10,11 @@ use Bsz\Config\Library;
 use VuFind\Auth\PluginManager;
 use VuFind\Cookie\CookieManager;
 use VuFind\Db\Table\User as UserTable;
-use Zend\Config\Config;
-use Zend\Session\SessionManager;
-use Zend\Validator\Csrf;
+use Laminas\Config\Config;
+use Laminas\Session\SessionManager;
+use Laminas\Validator\Csrf;
 
 class Manager extends \VuFind\Auth\Manager
-    implements \ZfcRbac\Identity\IdentityProviderInterface
 {
     /**
      *

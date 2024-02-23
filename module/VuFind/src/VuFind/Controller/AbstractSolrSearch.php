@@ -1,8 +1,9 @@
 <?php
+
 /**
  * AbstractSearch with Solr-specific features added.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2010.
  *
@@ -25,7 +26,10 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Site
  */
+
 namespace VuFind\Controller;
+
+use function in_array;
 
 /**
  * AbstractSearch with Solr-specific features added.
@@ -38,6 +42,8 @@ namespace VuFind\Controller;
  */
 class AbstractSolrSearch extends AbstractSearch
 {
+    use Feature\RecordVersionsSearchTrait;
+
     /**
      * Handle an advanced search
      *
@@ -74,7 +80,8 @@ class AbstractSolrSearch extends AbstractSearch
         }
         if (isset($specialFacets['checkboxes'])) {
             $view->checkboxFacets = $this->processAdvancedCheckboxes(
-                $specialFacets['checkboxes'], $view->saved
+                $specialFacets['checkboxes'],
+                $view->saved
             );
         }
         $view->ranges = $this->getAllRangeSettings($specialFacets, $view->saved);
@@ -92,24 +99,26 @@ class AbstractSolrSearch extends AbstractSearch
     protected function getIllustrationSettings($savedSearch = false)
     {
         $illYes = [
-            'text' => 'Has Illustrations', 'value' => 1, 'selected' => false
+            'text' => 'Has Illustrations', 'value' => 1, 'selected' => false,
         ];
         $illNo = [
-            'text' => 'Not Illustrated', 'value' => 0, 'selected' => false
+            'text' => 'Not Illustrated', 'value' => 0, 'selected' => false,
         ];
         $illAny = [
-            'text' => 'No Preference', 'value' => -1, 'selected' => false
+            'text' => 'No Preference', 'value' => -1, 'selected' => false,
         ];
 
         // Find the selected value by analyzing facets -- if we find match, remove
         // the offending facet to avoid inappropriate items appearing in the
         // "applied filters" sidebar!
-        if ($savedSearch
+        if (
+            $savedSearch
             && $savedSearch->getParams()->hasFilter('illustrated:Illustrated')
         ) {
             $illYes['selected'] = true;
             $savedSearch->getParams()->removeFilter('illustrated:Illustrated');
-        } elseif ($savedSearch
+        } elseif (
+            $savedSearch
             && $savedSearch->getParams()->hasFilter('illustrated:"Not Illustrated"')
         ) {
             $illNo['selected'] = true;
@@ -132,8 +141,11 @@ class AbstractSolrSearch extends AbstractSearch
      *
      * @return array Sorted facets, with selected values flagged.
      */
-    protected function processAdvancedFacets($facetList, $searchObject = false,
-        $hierarchicalFacets = [], $hierarchicalFacetsSortOptions = []
+    protected function processAdvancedFacets(
+        $facetList,
+        $searchObject = false,
+        $hierarchicalFacets = [],
+        $hierarchicalFacetsSortOptions = []
     ) {
         // Process the facets
         $facetHelper = null;
@@ -166,7 +178,8 @@ class AbstractSolrSearch extends AbstractSearch
                 // If we haven't already found a selected facet and the current
                 // facet has been applied to the search, we should store it as
                 // the selected facet for the current control.
-                if ($searchObject
+                if (
+                    $searchObject
                     && $searchObject->getParams()->hasFilter($fullFilter)
                 ) {
                     $list['list'][$key]['selected'] = true;

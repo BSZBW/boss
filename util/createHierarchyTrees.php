@@ -8,7 +8,7 @@
  *
  * -!!!!-This script is specifically for trees built for JSTree from Solr.-!!!!-
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) National Library of Ireland 2012.
  *
@@ -32,7 +32,7 @@
  * @link     https://vufind.org/wiki Wiki
  */
 
-// Manipulate command line to load correct route, then load Zend Framework:
+// Manipulate command line to load correct route, then run the main index page:
 array_unshift($_SERVER['argv'], array_shift($_SERVER['argv']), 'util', 'createHierarchyTrees');
 $_SERVER['argc'] += 2;
 require_once __DIR__ . '/../public/index.php';

@@ -1,6 +1,6 @@
 <?php $rand = rand(0, 9999) ?>
 <?php $notations = $this->driver->tryMethod('getRVKNotations');
-if (!empty($notations) && $this->client()->is('show_rvk')): ?>
+if (!empty($notations) && $this->client()->is('show_rvk') &&!$this->client()->is('wlb2')): ?>
     <?php $contentDisplayed = true; ?>
     <tr>
         <th>
@@ -16,6 +16,8 @@ if (!empty($notations) && $this->client()->is('show_rvk')): ?>
                     $descriptionHtml .= '</ol>';
                     if ($descriptionHtml == '<ol></ol>') {
                         $descriptionHtml = '';
+                    } else {
+                        $descriptionHtml = '<h5>' . $this->transEsc('RVK') . '</h5>' . $descriptionHtml;
                     }
 
                     ?>
@@ -27,6 +29,73 @@ if (!empty($notations) && $this->client()->is('show_rvk')): ?>
           </span>
                 <?php endforeach; ?>
             </td>
+        <?php endif; ?>
+        <?php unset($notations) ?>
+    </tr>
+<?php endif; ?>
+
+<?php $bwlbNotations = $this->driver->tryMethod('getSystematics'); ?>
+<?php if ((!empty($notations) || !empty($bwlbNotations)) && $this->client()->is('wlb2')): ?>
+    <?php $contentDisplayed = true; ?>
+    <tr>
+        <th>
+            <span class="text-nowrap"><?= $this->transEsc('systematics') ?></span>
+        </th>
+        <?php if (is_array($notations)): ?>
+            <td>
+                <?php foreach ($notations ?? [] as $shortcut => $description): ?>
+                    <?php $descriptionHtml = '<ol>';
+                    foreach ($description as $item) {
+                        $descriptionHtml .= '<li>' . $item . '</li>';
+                    }
+                    $descriptionHtml .= '</ol>';
+                    if ($descriptionHtml == '<ol></ol>') {
+                        $descriptionHtml = '';
+                    } else {
+                        $descriptionHtml = '<h5>' . $this->transEsc('RVK') . '</h5>' . $descriptionHtml;
+                    }
+
+                    ?>
+                    <span class="notationLine markjs">
+                <a data-toggle="tooltip" data-placement="right" data-html="true"
+                   href="<?= $this->record($this->driver)->getLink('rvknotation', $shortcut, $this->searchClassId) ?>"
+                   class="searchicon"
+                   title="<?= $descriptionHtml ?>"><?= $this->transEsc($shortcut) ?></a>
+          </span>
+                <?php endforeach; ?>
+                <?php foreach ($bwlbNotations ?? [] as $item): ?>
+                    <?php
+                    $description = '';
+                    $abbrev = $this->bwlbConcordance($item);
+                    foreach ($abbrev as $key => $value) {
+                        $description .= '<tr>';
+                        $description .= '<td style="text-align:left; padding-right:10px">' . $key . '</td>';
+                        $description .= '<td style="text-align:left">' . $value . '</td>';
+                        $description .= '</tr>';
+                    }
+                    if (!empty($description)) {
+                        $header = '<h5>' . $this->transEsc('BWLB') . '</h5>';
+                        $description = $header . '<table><tbody>' . $description . '</tbody></table>';
+                    }
+                    ?>
+                    <?php if(empty($description)): ?>
+                        <span class="text-nowrap"><?=$item ?></span>
+                    <?php else: ?>
+                        <script>
+                          var myDefaultWhiteList = $.fn.popover.Constructor.DEFAULTS.whiteList
+                          myDefaultWhiteList.table = []
+                          myDefaultWhiteList.tbody = []
+                          myDefaultWhiteList.tr = []
+                          myDefaultWhiteList.h5 = []
+                          myDefaultWhiteList.td = ['style']
+                        </script>
+                        <a data-toggle="tooltip" data-placement="right" data-html="true" class="searchicon"
+                           href="<?= $this->record($this->driver)->getLink('bwlb', $item, $this->searchClassId) ?>"
+                           title="<?= $this->escapeHtml($description) ?>"><?=$item ?></a>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </td>
+
         <?php endif; ?>
         <?php unset($notations) ?>
     </tr>
@@ -200,17 +269,60 @@ if (!empty($subjects) && $this->client()->is('show_rvk')): ?>
     </tr>
     <?php unset($subjects) ?>
 <?php endif; ?>
-<?php $subjects = $this->driver->tryMethod('getGNDSubjectHeadings'); ?>
-<?php if (!empty($subjects) && $this->client()->is('show_gnd')): ?>
+<?php
+$subjects = $this->driver->tryMethod('getGNDSubjectHeadings');
+if ($this->client()->is('showFreeKeywords')) {
+    $subjects = $subjects + ($this->driver->tryMethod('getFreeKeywords') ?? []);
+}
+$ihoebSubjects = $this->driver->tryMethod('getIhbSubjects');
+?>
+<?php if ((!empty($subjects) || !empty($ihoebSubjects)) && $this->client()->is('show_gnd')): ?>
     <tr>
         <th>
-            <span class="text-nowrap"><?= $this->abbrev('GND') ?>-<?= $this->transEsc('Subjects') ?>:</span>
+            <?php
+            $text = $this->transEsc('Subjects');
+            if(!$this->client()->is('wlb2')) {
+                $text = $this->abbrev('GND') . '-' . $text;
+            }
+            ?>
+            <span class="text-nowrap"><?= $text ?>:</span>
         </th>
         <td>
+            <?php if(!empty($subjects)): ?>
             <?= $this->context($this)->renderInContext(
                 'RecordDriver/DefaultRecord/parts/singlesubject.phtml',
                 ['subjects' => $subjects, 'type' => 'gnd', 'linktype' => 'gnd']
             ) ?>
+            <?php endif; ?>
+
+            <?php if (!empty($ihoebSubjects)): ?>
+                <?php if (!empty($subjects)):?><br><br><?php endif;?>
+                <b><u>Internationale Hölderlin-Bibliographie: Systemstellen - Schlagwörter:</u></b> <br>
+                <?php $values = []; ?>
+                <?php foreach ($ihoebSubjects['main'] ?? [] as $s): ?>
+                    <?php
+                        $terms = array_map(function ($k) use ($s){
+                            return [
+                                ['data' => $k, 'type' => 'Systemstelle'],
+                                ['data' => $s['value']['term'], 'type' => 'Schlagwort']
+                            ];
+                        }, $s['key']);
+                    ?>
+                    <?php $values[] = [
+                        'data' => implode(' ', $s['key']) . ' ' . $s['value']['display'],
+                        'term' => $terms
+                    ]; ?>
+                <?php endforeach; ?>
+                <?php unset($s); ?>
+                <?php foreach ($ihoebSubjects['secondary'] ?? [] as $s): ?>
+                    <?php $terms = ['data' => $s['term'], 'type' => 'Schlagwort'] ?>
+                    <?php $values[] = ['data' => $s['display'], 'term' => [[$terms]]] ?>
+                <?php endforeach; ?>
+                 <?= $this->context($this)->renderInContext(
+                    'RecordDriver/DefaultRecord/parts/singlesubject.phtml',
+                    ['subjects' => $values, 'type' => 'ihoeb', 'linktype' => 'ihoeb']
+                )?>
+            <?php endif; ?>
         </td>
     </tr>
     <?php unset($subjects) ?>
@@ -219,7 +331,7 @@ if (!empty($subjects) && $this->client()->is('show_rvk')): ?>
 <?php if (!empty($subjects) && $this->client()->is('show_local')): ?>
     <tr>
         <th>
-            <span class="text-nowrap"><?= $this->abbrev('GND') ?>-<?= $this->transEsc('Local Subjects') ?>:</span>
+            <span class="text-nowrap"><?php if (!$this->client()->is('wlb2)')): ?><?= $this->abbrev('GND') ?>-<?php endif; ?><?= $this->transEsc('Local Subjects') ?>:</span>
         </th>
         <td>
             <?= $this->context($this)->renderInContext(

@@ -21,7 +21,7 @@
 
 namespace Findex;
 
-use Zend\Mvc\MvcEvent;
+use Laminas\Mvc\MvcEvent;
 
 class Module
 {
@@ -42,7 +42,7 @@ class Module
      */
     public function getAutoloaderConfig()
     {
-        return [            'Zend\Loader\StandardAutoloader' => [
+        return [            'Laminas\Loader\StandardAutoloader' => [
             'namespaces' => [
                 __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
             ],

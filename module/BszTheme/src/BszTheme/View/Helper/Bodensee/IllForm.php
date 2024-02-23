@@ -22,7 +22,7 @@
 namespace BszTheme\View\Helper\Bodensee;
 
 use Bsz\RecordDriver\SolrMarc;
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 
 /**
  * View helper for ill form

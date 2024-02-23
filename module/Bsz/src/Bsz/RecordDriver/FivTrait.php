@@ -21,14 +21,15 @@
 namespace Bsz\RecordDriver;
 
 trait FivTrait {
+
+    use AdvancedMarcReaderTrait;
     /**
      * @param string $type all, main_topic, partial_aspect
      *
      * @return array
-     * @throws File_MARC_Exception
      *
      */
-    public function getFivSubjects($type = 'all')
+    public function getFivSubjects(string $type = 'all'): array
     {
         $notationList = [];
 
@@ -38,17 +39,19 @@ trait FivTrait {
         } elseif ($type === 'partial_aspects') {
             $ind2 = 1;
         }
-        foreach ($this->getMarcRecord()->getFields('938') as $field) {
-            $suba = $field->getSubField('a');
-            $subs2 = $field->getSubfields(2);
-            foreach ($subs2 as $sub2) {
+        foreach ($this->getFields('938') as $field) {
+            if(!is_array($field)) {
+                continue;
+            }
 
-                if ($suba && $field->getIndicator(1) == 1
-                    && (empty($sub2) || $sub2->getData() != 'gnd')
-                    && ((isset($ind2) && $field->getIndicator(2) == $ind2) || !isset($ind2))
+            $suba = $this->getSubfield($field, 'a');
+            foreach ($this->getSubfields($field, '2') as $sub2) {
+
+                if (!empty($suba) && $field['i1'] == 1
+                    && (empty($sub2) || $sub2 != 'gnd')
+                    && ((isset($ind2) && $field['i2'] == $ind2) || !isset($ind2))
                 ) {
-                    $data = $suba->getData();
-                    $data = preg_replace('/!.*!|:/i', '', $data);
+                    $data = preg_replace('/!.*!|:/i', '', $suba);
                     $notationList[] = $data;
                 }
             }
@@ -63,16 +66,17 @@ trait FivTrait {
     {
         $classificationList = [];
 
-        foreach ($this->getMarcRecord()->getFields('936') as $field) {
-            $suba = $field->getSubField('a');
-            $sub2 = $field->getSubfield('2');
-            if ($suba && $sub2 && $field->getIndicator(1) == 'f'
-                && $field->getIndicator(2) == 'i'
+        foreach ($this->getFields('936') as $field) {
+            if(!is_array($field)) {
+                continue;
+            }
+            $suba = $this->getSubField($field, 'a');
+            $sub2 = $this->getSubfield($field,'2');
+            if (!empty($suba) && !empty($sub2) && $field['i1'] == 'f'
+                && $field['i2'] == 'i'
             ) {
-                $sub2data = $field->getSubfield('2')->getData();
-                if (preg_match('/^fiv[rs]/', $sub2data)) {
-                    $data = $suba->getData();
-                    $data = preg_replace('/!.*!|:/i', '', $data);
+                if (preg_match('/^fiv[rs]/', $sub2)) {
+                    $data = preg_replace('/!.*!|:/i', '', $suba);
                     $classificationList[] = $data;
                 }
             }
@@ -87,16 +91,15 @@ trait FivTrait {
     {
         $classificationList = [];
 
-        foreach ($this->getMarcRecord()->getFields('936') as $field) {
-            $suba = $field->getSubField('a');
-            $sub2 = $field->getSubfield('2');
-            if ($suba && $sub2 && $field->getIndicator(1) == 'f'
-                && $field->getIndicator(2) == 'i'
-            ) {
-                $sub2data = $field->getSubfield('2')->getData();
-                if (preg_match('/^fivw/', $sub2data)) {
-                    $data = $suba->getData();
-                    $data = preg_replace('/!.*!|:/i', '', $data);
+        foreach ($this->getFields('936') as $field) {
+            if(!is_array($field)) {
+                continue;
+            }
+            $suba = $this->getSubField($field, 'a');
+            $sub2 = $this->getSubField($field, '2');
+            if ($suba && $sub2 && $field['i1'] == 'f' && $field['i2'] == 'i') {
+                if (preg_match('/^fivw/', $sub2)) {
+                    $data = preg_replace('/!.*!|:/i', '', $suba);
                     $classificationList[] = $data;
                 }
             }
@@ -113,14 +116,15 @@ trait FivTrait {
         $subjectList = [];
         $arrsub = [];
 
-        foreach ($this->getMarcRecord()->getFields('982') as $field) {
-            $suba = $field->getSubField('a');
-            $subx = $field->getSubfield('x');
+        foreach ($this->getFields('982') as $field) {
+            if(!is_array($field)) {
+                continue;
+            }
+            $suba = $this->getSubField($field, 'a');
+            $subx = $this->getSubfield($field, 'x');
             if ($suba && $subx) {
-                $subxdata = $field->getSubfield('x')->getData();
-                if ($subxdata == 'DE-Lg3') {
-                    $data = $field->getSubfield('a')->getData();
-                    $subjectList[] = $data;
+                if ($subx == 'DE-Lg3') {
+                    $subjectList[] = $suba;
                 }
             }
         }

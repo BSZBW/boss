@@ -1,8 +1,9 @@
 <?php
+
 /**
- * Url view helper (extending core Zend helper with additional functionality)
+ * Url view helper (extending core Laminas helper with additional functionality)
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2019.
  *
@@ -25,12 +26,16 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
+
 namespace VuFind\View\Helper\Root;
 
-use Zend\Http\PhpEnvironment\Request;
+use Laminas\Http\PhpEnvironment\Request;
+
+use function func_get_args;
+use function func_num_args;
 
 /**
- * Url view helper (extending core Zend helper with additional functionality)
+ * Url view helper (extending core Laminas helper with additional functionality)
  *
  * @category VuFind
  * @package  View_Helpers
@@ -38,7 +43,7 @@ use Zend\Http\PhpEnvironment\Request;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
-class Url extends \Zend\View\Helper\Url
+class Url extends \Laminas\View\Helper\Url
 {
     /**
      * Request (or null if unavailable)
@@ -66,8 +71,8 @@ class Url extends \Zend\View\Helper\Url
      * @param bool              $reuseMatchedParams Whether to reuse matched
      * parameters
      *
-     * @see Zend\Mvc\Router\RouteInterface::assemble()
-     * @see Zend\Router\RouteInterface::assemble()
+     * @see Laminas\Mvc\Router\RouteInterface::assemble()
+     * @see Laminas\Router\RouteInterface::assemble()
      *
      * @throws Exception\RuntimeException If no RouteStackInterface was provided
      * @throws Exception\RuntimeException If no RouteMatch was provided
@@ -79,7 +84,10 @@ class Url extends \Zend\View\Helper\Url
      * @return string Url For the link href attribute
      */
     public function __invoke(
-        $name = null, $params = [], $options = [], $reuseMatchedParams = false
+        $name = null,
+        $params = [],
+        $options = [],
+        $reuseMatchedParams = false
     ) {
         // If argument list is empty, return object for method access:
         return func_num_args() == 0 ? $this : parent::__invoke(...func_get_args());
@@ -101,6 +109,8 @@ class Url extends \Zend\View\Helper\Url
             'query' => array_merge($requestQuery, $params),
             'normalize_path' => false, // fix for VUFIND-1392
         ];
-        return $this->__invoke(null, [], $options, $reuseMatchedParams);
+        // If we don't have a route match, direct any url's to default route:
+        $routeName = $this->routeMatch ? null : 'default';
+        return ($this)($routeName, [], $options, $reuseMatchedParams);
     }
 }

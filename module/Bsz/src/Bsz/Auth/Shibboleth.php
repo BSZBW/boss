@@ -3,6 +3,8 @@ namespace Bsz\Auth;
 
 use Bsz\Config\Libraries;
 use Bsz\Config\Library;
+use Laminas\Http\PhpEnvironment\Request;
+use VuFind\Auth\Shibboleth\ConfigurationLoaderInterface;
 use VuFind\Exception\Auth as AuthException;
 
 /**
@@ -18,14 +20,16 @@ class Shibboleth extends \VuFind\Auth\Shibboleth
     /**
      * Constructor
      *
-     * @param \Zend\Session\ManagerInterface $sessionManager Session manager
+     * @param \Laminas\Session\ManagerInterface $sessionManager Session manager
      */
     public function __construct(
-        \Zend\Session\ManagerInterface $sessionManager,
+        \Laminas\Session\ManagerInterface $sessionManager,
+        ConfigurationLoaderInterface $configurationLoader,
+        Request $request,
         Libraries $libraries,
         $isil)
     {
-        $this->sessionManager = $sessionManager;
+        parent::__construct($sessionManager, $configurationLoader, $request);
         $this->libraries = $libraries;
         $this->isil = $isil;
     }
@@ -33,7 +37,7 @@ class Shibboleth extends \VuFind\Auth\Shibboleth
     /**
      * Attempt to authenticate the current user.  Throws exception if login fails.
      *
-     * @param \Zend\Http\PhpEnvironment\Request $request Request object containing
+     * @param \Laminas\Http\PhpEnvironment\Request $request Request object containing
      * account credentials.
      *
      * @throws AuthException

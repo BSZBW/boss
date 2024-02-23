@@ -23,7 +23,7 @@ namespace Bsz\ILL;
 
 use Bsz\Exception;
 use Bsz\RecordDriver\SolrMarc;
-use Zend\Config\Config;
+use Laminas\Config\Config;
 
 /**
  * Class to determing availability via inter-library loan

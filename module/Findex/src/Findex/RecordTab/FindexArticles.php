@@ -52,6 +52,11 @@ class FindexArticles extends AbstractCollection
         return 'Articles';
     }
 
+    public function getFilterString(): string
+    {
+        return 'format_phy_str_mv:Article';
+    }
+
 
     /**
      * @param ??? $record Indicates whether a given record should be displayed in this tab
@@ -59,7 +64,8 @@ class FindexArticles extends AbstractCollection
      */
     protected function display($record): bool
     {
-        return $record->isArticle();
+        return true;
+//        return $record->isArticle();
     }
 
 }

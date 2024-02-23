@@ -22,9 +22,8 @@
 namespace Bsz\RecordDriver;
 
 use Bsz\Exception;
-use File_MARC_Exception;
-use VuFind\RecordDriver\IlsAwareTrait;
-use VuFind\RecordDriver\MarcReaderTrait;
+use VuFind\RecordDriver\Feature\IlsAwareTrait;
+use VuFind\RecordDriver\Feature\MarcReaderTrait;
 
 /**
  * @author Cornelius Amzar <cornelius.amzar@bsz-bw.de>
@@ -33,6 +32,7 @@ class SolrGviMarc extends SolrMarc implements Constants
 {
     use IlsAwareTrait;
     use MarcReaderTrait;
+    use AdvancedMarcReaderTrait;
     use MarcAdvancedTraitBsz;
     use SubrecordTrait;
     use HelperTrait;
@@ -48,13 +48,12 @@ class SolrGviMarc extends SolrMarc implements Constants
      * specific.
      * @return array
      */
-    public function getAllSubjectHeadings($extended = false)
+    public function getAllSubjectHeadings($extended = false): array
     {
         // These are the fields that may contain subject headings:
         $fields = ['600', '610', '611', '630', '648', '650', '651', '655',
             '656', '689'];
-        $headings = $this->getSubjectHeadings($fields);
-        return $headings;
+        return $this->getSubjectHeadings($fields);
     }
 
     /**
@@ -63,7 +62,7 @@ class SolrGviMarc extends SolrMarc implements Constants
      * specific.
      * @return array
      */
-    public function getSubjectHeadings(array $fields)
+    public function getSubjectHeadings(array $fields): array
     {
         // This is all the collected data:
         $retval = [];
@@ -71,23 +70,26 @@ class SolrGviMarc extends SolrMarc implements Constants
         // Try each MARC field one at a time:
         foreach ($fields as $field) {
             // Do we have any results for the current field?  If not, try the next.
-            $results = $this->getMarcRecord()->getFields($field);
-            if (!$results) {
+            $results = $this->getFields($field);
+
+            //TODO: Necessary?
+            if (empty($results)) {
                 continue;
             }
 
             // If we got here, we found results -- let's loop through them.
             foreach ($results as $result) {
+                if(!is_array($result)) {
+                    continue;
+                }
 
                 // Get all the chunks and collect them together:
-                $subfields = $result->getSubfields();
-                if ($subfields) {
-                    foreach ($subfields as $subfield) {
-                        // Numeric subfields are for control purposes and should not
-                        // be displayed:
-                        if (preg_match('/[a-z]/', $subfield->getCode())) {
-                            array_push($retval, $subfield->getData());
-                        }
+                $subfields =$result['subfields'];
+                foreach ($subfields as $subfield) {
+                    // Numeric subfields are for control purposes and should not
+                    // be displayed:
+                    if (preg_match('/[a-z]/', $subfield['code'])) {
+                        $retval[] = $subfield['data'];
                     }
                 }
             }
@@ -104,12 +106,10 @@ class SolrGviMarc extends SolrMarc implements Constants
     public function getRVKSubjectHeadings()
     {
         $rvkchain = [];
-        foreach ($this->getMarcRecord()->getFields('936') as $field) {
-            if ($field->getIndicator(1) == 'r'
-                && $field->getIndicator(2) == 'v'
-            ) {
-                foreach ($field->getSubFields('k') as $item) {
-                    $rvkchain[] = $item->getData();
+        foreach ($this->getMarcReader()->getFields('936') as $field) {
+            if ($field['i1'] == 'r' && $field['i2'] == 'v') {
+                foreach ($this->getSubfields($field, 'k') as $item) {
+                    $rvkchain[] = $item;
                 }
             }
         }
@@ -123,43 +123,43 @@ class SolrGviMarc extends SolrMarc implements Constants
     public function getGNDSubjectHeadings()
     {
         $gnd = [];
-        foreach ($this->getMarcRecord()->getFields('689') as $field) {
-            $sub2 = $field->getSubfield(2);
-            if (is_object($sub2) && $sub2->getData() == 'gnd') {
-                $subfields = $field->getSubfields();
+        foreach ($this->getFields('689') as $field) {
+            $sf2 = $this->getSubfield($field, '2');
+            if ($sf2 == 'gnd') {
                 $tmp = [];
                 $id = 0;
-                foreach ($subfields as $subfield) {
-                    if (preg_match('/[a-z]/', $subfield->getCode())) {
-                        $tmp[$subfield->getCode()] = $subfield->getData();
-                    } elseif ($subfield->getCode() == 0
-                        && preg_match('/\(DE-588\)/', $subfield->getData())
+                foreach ($field['subfields'] ?? [] as $subfield) {
+                    $sfCode = $subfield['code'] ?? '';
+                    $sfData = $subfield['data'] ?? '';
+                    if (preg_match('/[a-z]/', $sfCode)) {
+                        $tmp[$sfCode] = $sfData;
+                    } elseif ($sfCode == 0
+                        && preg_match('/\(DE-588\)/', $sfData)
                     ) {
-                        $id = preg_replace('/\(.*\)/','',  $subfield->getData());
+                        $id = preg_replace('/\(.*\)/','',  $sfData);
                     }
 
                 }
-                $gnd[$id] = $this->addDelimiterChars($tmp);
+                $gnd[$id] = [
+                    'type' => 'gnd',
+                    'data' => $this->addDelimiterChars($tmp)
+                ];
             }
         }
-        return array_unique($gnd);
+        return $gnd;
     }
 
     /** Get all STandardtheaurus Wirtschaft keywords
      *
      * @return array
-     * @throws File_MARC_Exception
      */
     public function getSTWSubjectHeadings()
     {
         // Disable this output
         $return = [];
-        foreach ($this->getMarcRecord()->getFields('650') as $field) {
-            $suba = $field->getSubField('a');
-            $sub2 = $field->getSubfield(2);
-            if (is_object($sub2) && $sub2->getData() == 'stw') {
-                $data = $suba->getData();
-                $return[] = $data;
+        foreach ($this->getFields('650') as $field) {
+            if ($this->getSubfield($field, '2') == 'stw') {
+                $return[] = $this->getSubfield($field, 'a');
             }
         }
         return array_unique($return);
@@ -176,30 +176,39 @@ class SolrGviMarc extends SolrMarc implements Constants
         $replace = [
             '"' => "'",
         ];
-        foreach ($this->getMarcRecord()->getFields('084') as $field) {
-            $suba = $field->getSubField('a');
-            $sub2 = $field->getSubfield('2');
-            if ($suba && $sub2) {
-                $sub2data = $field->getSubfield('2')->getData();
-                if (strtolower($sub2data) == 'rvk') {
-                    $title = [];
-                    foreach ($field->getSubFields('k') as $item) {
-                        $title[] = htmlentities($item->getData());
-                    }
-                    $notationList[$suba->getData()] = $title;
+        foreach ($this->getFields('084') as $field) {
+            if(!is_array($field)) {
+                continue;
+            }
+
+            //Keys for arrays should not be empty
+            $sfa = $this->getSubfield($field, 'a');
+            if(empty($sfa)) {
+                continue;
+            }
+
+            if (strtolower($this->getSubfield($field, '2')) == 'rvk') {
+                $title = [];
+                foreach ($this->getSubfields($field, 'k') as $item) {
+                    $title[] = htmlentities($item);
                 }
+                $notationList[$sfa] = $title;
             }
         }
-        foreach ($this->getMarcRecord()->getFields('936') as $field) {
-            $suba = $field->getSubField('a');
-            if ($suba && $field->getIndicator(1) == 'r'
-                && $field->getIndicator(2) == 'v'
-            ) {
+        foreach ($this->getFields('936') as $field) {
+            if(!is_array($field)) {
+                continue;
+            }
+            $sfa = $this->getSubfield($field, 'a');
+            if (empty($sfa)) {
+                continue;
+            }
+            if ($field['i1'] == 'r' && $field['i2'] == 'v') {
                 $title = [];
-                foreach ($field->getSubFields('k') as $item) {
-                    $title[] = htmlentities($item->getData());
+                foreach ($this->getSubfields($field, 'k') as $item) {
+                    $title[] = htmlentities($item);
                 }
-                $notationList[$suba->getData()] = $title;
+                $notationList[$sfa] = $title;
             }
         }
         return $notationList;
@@ -209,10 +218,9 @@ class SolrGviMarc extends SolrMarc implements Constants
      * @param string $type all, main_topic, partial_aspect
      *
      * @return array
-     * @throws File_MARC_Exception
      *
      */
-    public function getFivSubjects($type = 'all')
+    public function getFivSubjects(string $type = 'all')
     {
         $notationList = [];
 
@@ -223,15 +231,14 @@ class SolrGviMarc extends SolrMarc implements Constants
             $ind2 = 1;
         }
 
-        foreach ($this->getMarcRecord()->getFields('938') as $field) {
-            $suba = $field->getSubField('a');
-            $sub2 = $field->getSubfield(2);
-            if ($suba && $field->getIndicator(1) == 1
-                && (empty($sub2) || $sub2->getData() != 'gnd')
-                && ((isset($ind2) && $field->getIndicator(2) == $ind2) || !isset($ind2))
+        foreach ($this->getFields('938') as $field) {
+            $sf2 = $this->getSubfield($field, '2');
+            if ($field['i1'] == 1
+                && (empty($sf2) || $sf2 != 'gnd')
+                && ((isset($ind2) && $field['i2']== $ind2) || !isset($ind2))
             ) {
-                $data = $suba->getData();
-                $data = preg_replace('/!.*!|:/i', '', $data);
+                $sfa = $this->getSubfield($field, 'a');
+                $data = preg_replace('/!.*!|:/i', '', $sfa);
                 $notationList[] = $data;
             }
         }
@@ -244,9 +251,9 @@ class SolrGviMarc extends SolrMarc implements Constants
      * monographic items.
      * @return array
      */
-    public function getDateSpan()
+    public function getDateSpan(): array
     {
-        return $this->getFieldArray('362', ['a']);
+        return $this->getFieldArray('362', ['a'], false);
     }
 
     /**
@@ -386,10 +393,9 @@ class SolrGviMarc extends SolrMarc implements Constants
     {
         $return = [];
         $years = [];
-        $f008 = $this->getMarcRecord()->getField('008');
+        $f008 = $this->getField('008');
         $matches = [];
-        if (is_object($f008)) {
-            $f008 = $f008->getData();
+        if (is_string($f008)) {
             preg_match('/^(\d{2})(\d{2})(\d{2})([a-z])(\d{4})/', $f008, $matches);
         }
         if (array_key_exists(5, $matches)) {
@@ -402,7 +408,7 @@ class SolrGviMarc extends SolrMarc implements Constants
                 264 => 'c',
             ];
             $years = $this->getFieldsArray($fields);
-
+            //TODO: getFieldsArray still correct?
             foreach ($years as $k => $year) {
                 if ($year == 'anfangs' || $year == 'früher' || $year == 'teils') {
                     unset($years[$k]);
@@ -482,7 +488,7 @@ class SolrGviMarc extends SolrMarc implements Constants
      */
     public function getTitleSection()
     {
-        return $this->getFirstFieldValue('245', ['n', 'p'], false);
+        return $this->getFirstFieldValue('245', ['n', 'p']);
     }
 
     /**
@@ -492,7 +498,7 @@ class SolrGviMarc extends SolrMarc implements Constants
      */
     public function getTitleStatement()
     {
-        return $this->getFirstFieldValue('245', ['c'], false);
+        return $this->getFirstFieldValue('245', ['c']);
     }
 
     /**
@@ -501,7 +507,7 @@ class SolrGviMarc extends SolrMarc implements Constants
      */
     public function getTOC()
     {
-        return isset($this->fields['contents']) ? $this->fields['contents'] : [];
+        return $this->fields['contents'] ?? [];
     }
 
     /**
@@ -522,63 +528,77 @@ class SolrGviMarc extends SolrMarc implements Constants
 
         $urls = [];
         $urlFields = array_merge(
-            $this->getMarcRecord()->getFields('856'),
-            $this->getMarcRecord()->getFields('555')
+            $this->getFields('856'),
+            $this->getFields('555')
         );
 
         // Special case Proquest eBooks for DE-950
         $isils = $this->getFieldArray('924', ['b'], false);
-        $is950 = in_array('DE-950', $isils) ? true : false;
+        $is950 = in_array('DE-950', $isils);
 
-        foreach ($urlFields as $f) {
-            $url = [];
-            $sf = $f->getSubField('u');
-            $ind1 = $f->getIndicator(1);
-            $ind2 = $f->getIndicator(2);
-            if (!$sf) {
+        foreach ($urlFields as $field) {
+            if(!is_array($field)) {
                 continue;
             }
+
+            $url = [];
+
+            //If the url is empty, we want to continue
+            $sfu = $this->getSubfield($field, 'u');
+            if (empty($sfu)) {
+                continue;
+            }
+
+            $ind1 = $field['i1'];
+            $ind2 = $field['i2'];
+
             //  we don't want to show licensed content
             //  ind1,2 = 4,0 is probably lincensed content.
             //  only if we find a kostenfrei in |z, we use the link
             //  special case: DE-950 Proquest links are shown
             if (!$is950 && $ind1 == 4 && $ind2 == 0) {
-                $sfz = $f->getSubField('z');
-                if (is_object($sfz)) {
-                    if (stripos($sfz->getData(), 'Kostenfrei') === false) {
-                        continue;
-                    }
-                } else {
+                $sfz = $this->getSubfield($field, 'z');
+                if(!str_contains(strtolower($sfz), 'kostenfrei')) {
                     continue;
                 }
+                //TODO: Can this be deleted?
+//                if (is_object($sfz)) {
+//                    if (stripos($sfz->getData(), 'Kostenfrei') === false) {
+//                        continue;
+//                    }
+//                } else {
+//                    continue;
+//                }
             }
 
-            $url['url'] = $sf->getData();
+
+            $url['url'] = $this->getSubfield($field, 'u');
 
             // add urn:nbn Resolver baseurl if missing
-            if (strpos($url['url'], 'urn:nbn') !== false && strpos($url['url'], 'http') === false) {
+            if (str_contains($url['url'], 'urn:nbn')
+                && !str_contains($url['url'], 'http')
+            ) {
                 $url['desc'] = $url['url'];
                 $url['url'] = 'https://nbn-resolving.org/' . $url['url'];
             }
 
             // add hdl: Resolver baseurl if missing
-            $sf2 = $f->getSubField('2');
-            if (is_object($sf2)) {
-                if ($sf2->getData() === 'hdl' && strpos($url['url'], 'http') === false) {
-                    $url['desc'] = $url['url'];
-                    $url['url'] = 'https://hdl.handle.net/' . $url['url'];
-                }
+            $sf2 = $this->getSubfield($field, '2');
+            if ($sf2 === 'hdl' && !str_contains($url['url'], 'http')) {
+                $url['desc'] = $url['url'];
+                $url['url'] = 'https://hdl.handle.net/' . $url['url'];
             }
 
-            if (($sf = $f->getSubField('3')) && strlen($sf->getData()) > 2) {
-                $url['desc'] = $sf->getData();
-            } elseif (($sf = $f->getSubField('y'))) {
-                $url['desc'] = $sf->getData();
-            } elseif (($sf = $f->getSubField('z')) && strpos('Kostenfrei', $sf->getData()) !== false) {
+            //TODO: Cornelius fragen
+            if (($sfu = $this->getSubfield($field, '3')) && strlen($sfu) > 2) {
+                $url['desc'] = $sfu;
+            } elseif ($sfu = $this->getSubfield($field, 'y')) {
+                $url['desc'] = $sfu;
+            } elseif (($sfu = $this->getSubField($field,'z')) && strpos('Kostenfrei', $sfu) !== false) {
                 // x is marked as nonpublic!
                 $url['desc'] = 'Full Text';
-            } elseif (($sf = $f->getSubField('n'))) {
-                $url['desc'] = $sf->getData();
+            } elseif (($sfu = $this->getSubField($field,'n'))) {
+                $url['desc'] = $sfu;
             } elseif ($ind1 == 4 && ($ind2 == 1 || $ind2 == 0)) {
                 $url['desc'] = 'Online Access';
             } elseif ($ind1 == 4 && ($ind2 == 1 || $ind2 == 0)) {
@@ -622,7 +642,7 @@ class SolrGviMarc extends SolrMarc implements Constants
      */
     public function getSortTitle()
     {
-        return isset($this->fields['title_sort']) ? $this->fields['title_sort'] : parent::getSortTitle();
+        return $this->fields['title_sort'] ?? parent::getSortTitle();
     }
 
     /**
@@ -631,7 +651,7 @@ class SolrGviMarc extends SolrMarc implements Constants
      */
     public function getLongLat()
     {
-        return isset($this->fields['long_lat']) ? $this->fields['long_lat'] : false;
+        return $this->fields['long_lat'] ?? false;
     }
 
     /**
@@ -757,8 +777,7 @@ class SolrGviMarc extends SolrMarc implements Constants
      */
     public function getLibraries()
     {
-        $libraries = $this->getFieldArray(924, ['b']);
-        return $libraries;
+        return $this->getFieldArray(924, ['b']);
     }
 
     /**
@@ -783,12 +802,14 @@ class SolrGviMarc extends SolrMarc implements Constants
     {
         $related = [];
         # 775 is RAK and 776 RDA *confused*
-        $f77x = $this->getMarcRecord()->getFields('77[56]', true);
+        $f77x = array_merge(
+            $this->getFields('775'),
+            $this->getFields('776')
+        );
         foreach ($f77x as $field) {
             $tmp = [];
-            $subfields = $field->getSubfields();
-            foreach ($subfields as $subfield) {
-                switch ($subfield->getCode()) {
+            foreach ($field['subfields'] ?? [] as $subfield) {
+                switch ($subfield['code']) {
                     case 'i':
                         $label = 'description';
                         break;
@@ -805,14 +826,14 @@ class SolrGviMarc extends SolrMarc implements Constants
                         $label = 'unknown_field';
                 }
                 if (!array_key_exists($label, $tmp)) {
-                    $tmp[$label] = $subfield->getData();
+                    $tmp[$label] = $subfield['data'];
                 }
                 if (!array_key_exists('description', $tmp)) {
                     $tmp['description'] = 'Parallelausgabe';
                 }
             }
             // exclude DNB records
-            if (isset($tmp['id']) && strpos($tmp['id'], 'DE-600') === false) {
+            if (isset($tmp['id']) && !str_contains($tmp['id'], 'DE-600')) {
                 $related[] = $tmp;
             }
         }
@@ -935,6 +956,11 @@ class SolrGviMarc extends SolrMarc implements Constants
         return $holdings;
     }
 
+    public function getHoldingIsils()
+    {
+        return $this->getHoldingIsilsFromField('924', 'b');
+    }
+
     /**
      * Returns url  from 856|u
      * @return String
@@ -1011,24 +1037,35 @@ class SolrGviMarc extends SolrMarc implements Constants
      * This method is basically a duplicate of getAllRecordLinks but
      * much easier designer and works well with German library links
      * @return array
-     * @throws File_MARC_Exception
      */
     public function getParallelEditions()
     {
         $retval = [];
-        foreach ($this->getMarcRecord()->getfields(776) as $field) {
+        foreach ($this->getFields(776) as $field) {
+            if(!is_array($field)) {
+                continue;
+            }
             $tmp = [];
-            if ($field->getIndicator(1) == 0) {
-                $tmp['ppn'] = $field->getSubfield('w') ? $field->getSubfield('w')->getData() : null;
+            if ($field['i1'] == 0) {
 
-                if ($field->getSubfield('i')) {
-                    $tmp['prefix'] = $field->getSubfield('i')->getData();
+                $sfw = $this->getSubfield($field, 'w');
+                if(!empty($sfw)) {
+                    $tmp['ppn'] = $sfw;
                 }
-                if ($field->getSubfield('t')) {
-                    $tmp['label'] = $field->getSubfield('t')->getData();
+
+                $sfi = $this->getSubfield($field, 'i');
+                if (!empty($sfi)) {
+                    $tmp['prefix'] = $sfi;
                 }
-                if ($field->getSubfield('n')) {
-                    $tmp['postfix'] = $field->getSubfield('n')->getData();
+
+                $sft = $this->getSubfield($field, 't');
+                if(!empty($sft)) {
+                    $tmp['label'] = $sft;
+                }
+
+                $sfn = $this->getSubfield($field, 'n');
+                if(!empty($sfn)) {
+                    $tmp['postfix'] = $sfn;
                 }
             }
             if (isset($tmp['ppn'], $tmp['label'])) {
@@ -1156,7 +1193,7 @@ class SolrGviMarc extends SolrMarc implements Constants
         $params['rft.volume'] = $this->getContainerVolume();
         $params['rft.issue'] = $this->getContainerIssue();
         $params['rft.date'] = $this->getContainerYear();
-        if (strpos($this->getContainerPages(), '-') !== false) {
+        if (str_contains($this->getContainerPages(), '-')) {
             $params['rft.pages'] = $this->getContainerPages();
         } else {
             $params['rft.spage'] = $this->getContainerPages();
@@ -1216,6 +1253,7 @@ class SolrGviMarc extends SolrMarc implements Constants
 
         $places = [];
         foreach ($fields as $no => $subfield) {
+            //TODO: Use getFieldsArray?
             $raw = $this->getFieldArray($no, (array)$subfield, false);
             if (count($raw) > 0 && !empty($raw[0])) {
                 if (is_array($raw)) {
@@ -1250,20 +1288,24 @@ class SolrGviMarc extends SolrMarc implements Constants
         $matches = [];
         $consortial = $this->getConsortialIDs();
         foreach ($consortial as $id) {
-            $substr = preg_match('/\(DE-\d{3}\)ZDB(.*)/', $id, $matches);
+            preg_match('/\(DE-\d{3}\)ZDB(.*)/', $id, $matches);
             if (!empty($matches) && $matches[1] !== '') {
                 $zdb = $matches[1];
             }
         }
 
         // Pull ZDB ID out of recurring field 016
-        foreach ($this->getMarcRecord()->getFields('016') as $field) {
+        foreach ($this->getFields('016') as $field) {
+            if(!is_array($field)) {
+                continue;
+            }
+
             $isil = $data = '';
-            foreach ($field->getSubfields() as $subfield) {
-                if ($subfield->getCode() == 'a') {
-                    $data = $subfield->getData();
-                } elseif ($subfield->getCode() == '2') {
-                    $isil = $subfield->getData();
+            foreach ($field['subfields'] ?? [] as $subfield) {
+                if ($subfield['code'] == 'a') {
+                    $data = $subfield['data'];
+                } elseif ($subfield['code'] == '2') {
+                    $isil = $subfield['data'];
                 }
             }
             if ($isil == 'DE-600') {
@@ -1280,22 +1322,17 @@ class SolrGviMarc extends SolrMarc implements Constants
     public function isEPflicht() : bool
     {
         $fields = $this->getFieldArray('912', ['a']);
-        foreach ($fields as $field) {
-            if ($field === 'EPF-BW-GESAMT') {
-                return !$this->isBLB();
-            }
-        }
-        return false;
+        return in_array('EPF-BW-GESAMT', $fields, true) && !$this->isBLB();
     }
 
 
     private function isBLB(): bool
     {
-        $f583 = $this->getMarcRecord()->getFields('583', false);
+        $f583 = $this->getFields('583');
         foreach ($f583 as $field) {
-            $sff = $field->getSubfield('f');
-            $sf5 = $field->getSubfield('5');
-            if (($sff && ($sff->getData() === 'PEBW')) && ($sf5 && ($sf5->getData() === 'DE-31'))){
+            $sff = $this->getSubfield($field, 'f');
+            $sf5 = $this->getSubfield($field, '5');
+            if(($sff === 'PEBW') && ($sf5 === 'DE-31')) {
                 return true;
             }
         }

@@ -1,8 +1,9 @@
 <?php
+
 /**
  * "Get Autocomplete Suggestions" AJAX handler
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2018.
  *
@@ -25,12 +26,13 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
+
 namespace VuFind\AjaxHandler;
 
+use Laminas\Mvc\Controller\Plugin\Params;
+use Laminas\Stdlib\Parameters;
 use VuFind\Autocomplete\Suggester;
 use VuFind\Session\Settings as SessionSettings;
-use Zend\Mvc\Controller\Plugin\Params;
-use Zend\Stdlib\Parameters;
 
 /**
  * "Get Autocomplete Suggestions" AJAX handler

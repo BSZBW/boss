@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Reviews content loader plugin manager
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2010.
  *
@@ -25,7 +26,10 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:plugins:hierarchy_components Wiki
  */
+
 namespace VuFind\Content\Reviews;
+
+use VuFind\Content\Deprecated;
 
 /**
  * Reviews content loader plugin manager
@@ -44,8 +48,10 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
      * @var array
      */
     protected $aliases = [
-        'amazon' => Amazon::class,
-        'amazoneditorial' => AmazonEditorial::class,
+        Amazon::class => Deprecated::class,
+        AmazonEditorial::class => Deprecated::class,
+        'amazon' => Deprecated::class,
+        'amazoneditorial' => Deprecated::class,
         'booksite' => Booksite::class,
         'demo' => Demo::class,
         'guardian' => Guardian::class,
@@ -59,11 +65,10 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
      * @var array
      */
     protected $factories = [
-        Amazon::class => \VuFind\Content\AbstractAmazonFactory::class,
-        AmazonEditorial::class => \VuFind\Content\AbstractAmazonFactory::class,
         Booksite::class => BooksiteFactory::class,
-        Demo::class => \Zend\ServiceManager\Factory\InvokableFactory::class,
-        Guardian::class => \Zend\ServiceManager\Factory\InvokableFactory::class,
+        Demo::class => \Laminas\ServiceManager\Factory\InvokableFactory::class,
+        Deprecated::class => \Laminas\ServiceManager\Factory\InvokableFactory::class,
+        Guardian::class => \Laminas\ServiceManager\Factory\InvokableFactory::class,
         Syndetics::class => \VuFind\Content\AbstractSyndeticsFactory::class,
         SyndeticsPlus::class => \VuFind\Content\AbstractSyndeticsFactory::class,
     ];

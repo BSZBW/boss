@@ -1,18 +1,22 @@
 <div class="col-lg-4 col-md-6 col-sm-12">
 
     <dl class="dl-horizontal">
-    <?php $callNos = $this->tab->getUniqueCallNumbers($this->holding['items']); if (!empty($callNos)): ?>
-    <dt><?=$this->transEsc("Call Number")?></dt>
+    <?php //$callNos = $this->tab->getUniqueCallNumbers($this->holding['items']); if (!empty($callNos)): ?>
+<!--    <dt>--><?php //=$this->transEsc("Call Number")?><!--</dt>-->
 
-    <dd><?php foreach ($callNos as $callNo): ?>
-          <?php if ($this->callnumberHandler): ?>
-            <a href="<?=$this->url('alphabrowse-home') ?>?source=<?=$this->escapeHtmlAttr($this->callnumberHandler) ?>&amp;from=<?=$this->escapeHtmlAttr($callNo) ?>"><?=$this->escapeHtml($callNo)?></a>
-          <?php else: ?>
-            <?=$this->escapeHtml($callNo)?>
-          <?php endif; ?>
-          <br />
-        <?php endforeach; ?>
-    </dd>
+<!--    <dd>--><?php //foreach ($callNos as $callNo): ?>
+<!--          --><?php //if ($this->callnumberHandler): ?>
+<!--            <a href="--><?php //=$this->url('alphabrowse-home') ?><!--?source=--><?php //=$this->escapeHtmlAttr($this->callnumberHandler) ?><!--&amp;from=--><?php //=$this->escapeHtmlAttr($callNo) ?><!--">--><?php //=$this->escapeHtml($callNo)?><!--</a>-->
+<!--          --><?php //else: ?>
+<!--            --><?php //=$this->escapeHtml($callNo)?>
+<!--          --><?php //endif; ?>
+<!--          <br />-->
+<!--        --><?php //endforeach; ?>
+<!--    </dd>-->
+<!--    --><?php //endif; ?>
+    <?php if (!empty($row['callnumber'])): ?>
+        <dt><?=$this->transEsc("Call Number")?></dt>
+        <dd><?=$this->escapeHtml($row['callnumber'])?></dd>
     <?php endif; ?>
     <?php if (!empty($row['number'])): ?>
         <dt><?=$this->transEsc('Local IDN')?></dt>
@@ -47,8 +51,10 @@
         <dd><?=$this->escapeHtml($row['status'])?></dd>
     <? endif; ?>
     </dl>
+    <?php if(!$this->client()->is('only_one_holds_button')): ?>
     <? $ppn = $this->driver->tryMethod('getPPN'); if(!empty($ppn) && ($this->driver->isJournal() || $this->driver->isSerial())): ?>
         <?=$this->recordLink()->linkPPNButton($this->driver) ?>
     <? endif; ?>
+    <?php endif; ?>
 </div>
 

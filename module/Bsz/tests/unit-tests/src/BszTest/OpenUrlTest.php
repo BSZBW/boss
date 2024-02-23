@@ -23,7 +23,7 @@ namespace BszTest;
 
 use Bsz\Parser\OpenUrl;
 use PHPUnit\Framework\TestCase;
-use Zend\Config\Config;
+use Laminas\Config\Config;
 
 class OpenUrlTest extends TestCase
 {

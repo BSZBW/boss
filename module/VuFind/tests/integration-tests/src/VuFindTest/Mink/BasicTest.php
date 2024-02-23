@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Very simple Mink test class.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2011.
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Page
  */
+
 namespace VuFindTest\Mink;
 
 /**
@@ -37,10 +39,8 @@ namespace VuFindTest\Mink;
  * @link     https://vufind.org Main Page
  * @retry    4
  */
-class BasicTest extends \VuFindTest\Unit\MinkTestCase
+class BasicTest extends \VuFindTest\Integration\MinkTestCase
 {
-    use \VuFindTest\Unit\AutoRetryTrait;
-
     /**
      * Test that the home page is available.
      *
@@ -68,10 +68,12 @@ class BasicTest extends \VuFindTest\Unit\MinkTestCase
         $this->findCss($page, '#searchForm_lookfor')
             ->setValue('id:testsample1');
         $this->clickCss($page, '.btn.btn-primary');
-        $this->snooze();
+        $this->waitForPageLoad($page);
 
         // Check for sample driver location/call number in output (this will
         // only appear after AJAX returns):
+        $this->unFindCss($page, '.callnumber.ajax-availability');
+        $this->unFindCss($page, '.location.ajax-availability');
         $this->assertEquals(
             'A1234.567',
             $this->findCss($page, '.callnumber')->getText()
@@ -100,7 +102,7 @@ class BasicTest extends \VuFindTest\Unit\MinkTestCase
         // Change the language:
         $this->clickCss($page, '.language.dropdown');
         $this->clickCss($page, '.language.dropdown li:not(.active) a');
-        $this->snooze();
+        $this->waitForPageLoad($page);
         // Check footer help-link
         $this->assertNotEquals(
             'Search Tips',
@@ -120,11 +122,11 @@ class BasicTest extends \VuFindTest\Unit\MinkTestCase
         $page = $session->getPage();
         // Open Search tips lightbox
         $this->clickCss($page, 'footer .help-link');
-        $this->snooze();
+        $this->waitForPageLoad($page);
         // Click a jump link
         $this->clickCss($page, '.modal-body .HelpMenu a');
         // Make sure we're still in the Search Tips
-        $this->snooze();
+        $this->waitForPageLoad($page);
         $this->findCss($page, '.modal-body .HelpMenu');
     }
 }

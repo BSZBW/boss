@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Mink search actions test class.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2011.
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Page
  */
+
 namespace VuFindTest\Mink;
 
 /**
@@ -37,10 +39,8 @@ namespace VuFindTest\Mink;
  * @link     https://vufind.org Main Page
  * @retry    4
  */
-class CallnumberBrowseTest extends \VuFindTest\Unit\MinkTestCase
+class CallnumberBrowseTest extends \VuFindTest\Integration\MinkTestCase
 {
-    use \VuFindTest\Unit\AutoRetryTrait;
-
     /**
      * Record ID to use in testing.
      *
@@ -49,24 +49,12 @@ class CallnumberBrowseTest extends \VuFindTest\Unit\MinkTestCase
     protected $id = 'testdeweybrowse';
 
     /**
-     * Standard setup method.
-     *
-     * @return void
-     */
-    public function setUp()
-    {
-        // Give up if we're not running in CI:
-        if (!$this->continuousIntegrationRunning()) {
-            return $this->markTestSkipped('Continuous integration not running.');
-        }
-    }
-
-    /**
      * Set config for callnumber tests
      * Sets callnumber_handler to false
      *
      * @param string $nos  multiple_call_nos setting
      * @param string $locs multiple_locations setting
+     * @param bool   $full Show full status setting
      *
      * @return void
      */
@@ -80,9 +68,9 @@ class CallnumberBrowseTest extends \VuFindTest\Unit\MinkTestCase
                         'multiple_call_nos' => $nos,
                         'multiple_locations' => $locs,
                         'callnumber_handler' => false,
-                        'show_full_status' => $full
-                    ]
-                ]
+                        'show_full_status' => $full,
+                    ],
+                ],
             ]
         );
     }
@@ -97,30 +85,40 @@ class CallnumberBrowseTest extends \VuFindTest\Unit\MinkTestCase
      */
     protected function checkLink($link, $type)
     {
-        $this->assertTrue(is_object($link));
+        $this->assertIsObject($link);
         $href = $link->getAttribute('href');
-        $this->assertContains($type, $href);
+        $this->assertStringContainsString($type, $href);
         $this->assertNotEquals('', $link->getText());
-        $this->assertContains($link->getText(), $href);
+        $hrefCallnum = explode('&from=', $href)[1];
+        $this->assertStringEndsWith($hrefCallnum, $link->getText());
     }
 
+    /**
+     * Set up configuration for testing with multiple call numbers.
+     *
+     * @return void
+     */
     protected function setupMultipleCallnumbers()
     {
-        $this->changeConfigs([
+        $this->changeConfigs(
+            [
             'config' => [
-                'Catalog' => ['driver' => 'Demo']
+                'Catalog' => ['driver' => 'Demo'],
             ],
             'Demo' => [
-                'Holdings' => [
-                    $this->id => json_encode([
+                'StaticHoldings' => [
+                    $this->id => json_encode(
+                        [
                         ['callnumber' => 'CallNumberOne', 'location' => 'Villanova'],
                         ['callnumber' => 'CallNumberTwo', 'location' => 'Villanova'],
                         ['callnumber' => 'CallNumberThree', 'location' => 'Phobos'],
-                        ['callnumber' => 'CallNumberFour', 'location' => 'Phobos']
-                    ])
-                ]
+                        ['callnumber' => 'CallNumberFour', 'location' => 'Phobos'],
+                        ]
+                    ),
+                ],
+            ],
             ]
-        ]);
+        );
     }
 
     /**
@@ -135,26 +133,31 @@ class CallnumberBrowseTest extends \VuFindTest\Unit\MinkTestCase
     protected function activateAndTestLinks($type, $page, $expectLinks)
     {
         // Single callnumbers (Sample)
-        $this->changeConfigs([
-            'config' => [
-                'Catalog' => ['driver' => 'Sample'],
-                'Item_Status' => ['callnumber_handler' => $type]
+        $this->changeConfigs(
+            [
+                'config' => [
+                    'Catalog' => ['driver' => 'Sample'],
+                    'Item_Status' => ['callnumber_handler' => $type],
+                ],
             ]
-        ]);
-        $this->getMinkSession()->reload();
-        $this->snooze();
-        $link = $page->find('css', '.callnumber a,.groupCallnumber a,.fullCallnumber a');
+        );
+        $callnumberSelector = '.callnumber a,.groupCallnumber a,.fullCallnumber a';
+        $session = $this->getMinkSession();
+        $session->reload();
+        $this->waitForPageLoad($page);
+        $link = $this->findCss($page, $callnumberSelector);
         $this->checkLink($link, $type);
 
         // Multiple callnumbers
         $this->setupMultipleCallnumbers();
-        $this->getMinkSession()->reload();
-        $this->snooze();
-        $link = $page->find('css', '.callnumber a,.groupCallnumber a,.fullCallnumber a');
+        $session->reload();
+        $this->waitForPageLoad($page);
         if ($expectLinks) {
+            $link = $this->findCss($page, $callnumberSelector);
             $this->checkLink($link, $type);
         } else {
-            $this->assertTrue(null === $link);
+            $link = $page->find('css', $callnumberSelector);
+            $this->assertNull($link);
         }
     }
 
@@ -164,6 +167,7 @@ class CallnumberBrowseTest extends \VuFindTest\Unit\MinkTestCase
      * @param string $nos         multiple_call_nos setting
      * @param string $locs        multiple_locations setting
      * @param bool   $expectLinks whether or not links are expected for multiple callnumbers in this config
+     * @param bool   $full        Show full status setting
      *
      * @return void
      */
@@ -188,9 +192,6 @@ class CallnumberBrowseTest extends \VuFindTest\Unit\MinkTestCase
      */
     public function testFirstAndMsg()
     {
-        $this->changeConfigs([
-            'config' => ['Item_Status' => ['show_full_status' => false]]
-        ]);
         $this->validateSetting('first');
     }
 

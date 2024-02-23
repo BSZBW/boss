@@ -21,7 +21,7 @@
  */
 namespace BszTheme\View\Helper\Bodensee;
 
-use Zend\Config\Config;
+use Laminas\Config\Config;
 
 /**
  * Record driver view helper
@@ -229,11 +229,12 @@ class Record extends \VuFind\View\Helper\Root\Record
      */
     public function isAtFirstIsil()
     {
-        $holdings = $this->driver->tryMethod('getLocalHoldings');
+//        $holdings = $this->driver->tryMethod('getLocalHoldings');
+        $holdings = $this->driver->tryMethod('getHoldingIsils');
         $firstIsil = reset($this->localIsils);
 
         foreach ($holdings as $holding) {
-            if (preg_match("/(^$firstIsil\$)|($firstIsil)[-\/\s]+/", $holding['isil'])) {
+            if (preg_match("/(^$firstIsil\$)|($firstIsil)[-\/\s]+/", $holding)) {
                 return true;
             }
         }

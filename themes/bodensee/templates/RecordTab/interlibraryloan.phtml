@@ -17,7 +17,7 @@ $class = '';
 <?php
 
 
-$url = $this->recordLink()->getUrl($this->driver) . '/ILLForm';
+$url = $this->recordLink()->getUrl($this->driver, ['excludeSearchId' => true]) . '/ILLForm';
 if ($content['customUrl'] && $this->client()->getTag() !== 'fl-dienst' ) {
     $url = $this->openUrl($this->driver, 'illform')->getUrl();
 } elseif($this->client()->getTag() === 'fl-dienst') {
@@ -42,8 +42,9 @@ if ($content['customUrl'] && $this->client()->getTag() !== 'fl-dienst' ) {
                 <li><?= $this->transEsc('ILL::library_opac') ?>
                     : <?= $this->recordLink()->linkPPN($this->driver) ?></li>
             <?php else: ?>
+                <?php $route = $this->client()->is('wlb2') ? '/Search2Record/' : '/Record/' ; ?>
                 <li><a class=""
-                       href="<?= '/Record/' . $id ?>"><?php if (isset($linklabels[$k])): ?><?= $this->transEsc($linklabels[$k]) ?><?php else: ?><?= $id ?><?php endif; ?></a>
+                       href="<?= $route . $id ?>"><?php if (isset($linklabels[$k])): ?><?= $this->transEsc($linklabels[$k]) ?><?php else: ?><?= $id ?><?php endif; ?></a>
                 </li>
             <?php endif ?>
         <?php endforeach; ?>

@@ -28,13 +28,13 @@ use VuFind\Controller\ILLRequestsTrait;
 use VuFind\Controller\StorageRetrievalRequestsTrait;
 use VuFind\Log\Logger;
 use VuFind\Log\LoggerAwareTrait;
-use Zend\Config\Config as Config;
-use Zend\Dom\Query;
-use Zend\Http\Client;
-use Zend\Http\Header\SetCookie;
-use Zend\Log\LoggerAwareInterface as LoggerAwareInterface;
-use Zend\ServiceManager\ServiceManager as ServiceManager;
-use Zend\View\Model\ViewModel;
+use Laminas\Config\Config as Config;
+use Laminas\Dom\Query;
+use Laminas\Http\Client;
+use Laminas\Http\Header\SetCookie;
+use Laminas\Log\LoggerAwareInterface as LoggerAwareInterface;
+use Laminas\ServiceManager\ServiceManager as ServiceManager;
+use Laminas\View\Model\ViewModel;
 
 /**
  * This class was created to make a default record tab behavior possible
@@ -161,7 +161,7 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
                     'params' => $params,
                     'submitDisabled' => $submitDisabled,
                     'orderId' => $this->orderId
-                ])->setTemplate('record/illform');
+                ])->setTemplate('record/illform.phtml');
         return $view;
     }
 
@@ -377,7 +377,7 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
             $this->layout()->setTemplate('layout/lightbox');
         }
         $view = new ViewModel($params);
-        $this->layout()->searchClassId = $view->searchClassId = $this->searchClassId;
+        $this->layout()->searchClassId = $view->searchClassId = $this->sourceId;
         // we don't use a driver in this action
         // $view->driver = $this->loadRecord();
         return $view;
@@ -432,7 +432,7 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
             $this->layout()->setTemplate('layout/lightbox');
         }
         $view = new ViewModel($params);
-        $this->layout()->searchClassId = $view->searchClassId = $this->searchClassId;
+        $this->layout()->searchClassId = $view->searchClassId = $this->sourceId;
         $route = $this->params()->fromRoute();
         $view->driver = isset($route['id']) ? $this->loadRecord() : null;
         return $view;
@@ -444,7 +444,7 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
         // send real order
         $client = new Client();
         $client->setEncType(Client::ENC_URLENCODED);
-        $client->setAdapter('\Zend\Http\Client\Adapter\Curl')
+        $client->setAdapter('\Laminas\Http\Client\Adapter\Curl')
                 ->setUri($url)
                 ->setMethod('POST')
                 ->setOptions(['timeout' => static::TIMEOUT])
@@ -453,7 +453,7 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
         $response = $client->send();
 
         // create GET request for better logging - this request is never sent!
-        $client->setAdapter('\Zend\Http\Client\Adapter\Curl')
+        $client->setAdapter('\Laminas\Http\Client\Adapter\Curl')
                 ->setUri($url)
                 ->setMethod('GET')
                 ->setParameterGet($params)

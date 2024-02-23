@@ -2,6 +2,8 @@
 namespace Bsz\Auth;
 
 use Interop\Container\ContainerInterface;
+use VuFind\Auth\Shibboleth\MultiIdPConfigurationLoader;
+use VuFind\Auth\Shibboleth\SingleIdPConfigurationLoader;
 
 /**
  * Description of Factory
@@ -10,6 +12,7 @@ use Interop\Container\ContainerInterface;
  */
 class Factory
 {
+    const SHIBBOLETH_CONFIG_FILE_NAME = 'Shibboleth';
     /**
      * Construct the authentication manager.
      *
@@ -31,7 +34,7 @@ class Factory
             // the configuration if necessary.
             $catalog = $container->get('VuFind\ILSConnection');
             if ($catalog->loginIsHidden()) {
-                $config = new \Zend\Config\Config($config->toArray(), true);
+                $config = new \Laminas\Config\Config($config->toArray(), true);
                 $config->Authentication->hideLogin = true;
                 $config->setReadOnly();
             }
@@ -55,7 +58,6 @@ class Factory
         return $manager;
     }
 
-
     public function __invoke(ContainerInterface $container, $requestedName) {
         $client = $container->get('Bsz\Config\Client');
         return new $requestedName(
@@ -64,4 +66,5 @@ class Factory
             $client->getIsils()
         );
     }
+
 }

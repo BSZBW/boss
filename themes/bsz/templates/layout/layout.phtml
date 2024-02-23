@@ -19,7 +19,7 @@
  *
  */
 
-use Zend\View\Helper\HeadScript;
+use Laminas\View\Helper\HeadScript;
 
 ?>
 <?=$this->doctype('HTML5')?>
@@ -116,7 +116,7 @@ use Zend\View\Helper\HeadScript;
             'no_result' => 'no result'
         ]);
           if ($cart->isActive()) {
-              $this->headScript()->appendFile("vendor/cookies.js");
+              $this->headScript()->appendFile("vendor/js.cookie.js");
               $this->headScript()->appendFile("cart.js");
               $domain = $cart->getCookieDomain();
               if (!empty($domain)) {
@@ -242,7 +242,7 @@ JS;
         <?=$this->render('footer.phtml')?>
       </div>
     </footer>
-    <?=$this->render('bsz/browserupdate.phtml')?>
+<!--    --><?php //=$this->render('bsz/browserupdate.phtml')?>
     <!-- MODAL IN CASE WE NEED ONE -->
     <div id="modal" class="modal fade hidden-print" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
       <div class="modal-dialog">
@@ -261,8 +261,8 @@ JS;
     <div class="offcanvas-overlay" data-toggle="offcanvas"></div>
     <?=$this->googleanalytics()?>
     <?=$this->piwik()?>
-    <?php if ($this->recaptcha()->active()): ?>
-      <?=$this->inlineScript(HeadScript::FILE, "https://www.google.com/recaptcha/api.js?onload=recaptchaOnLoad&render=explicit&hl=" . $this->layout()->userLang, 'SET')?>
-    <?php endif; ?>
+    <?php foreach ($this->captcha()->js() as $jsInclude):?>
+        <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::FILE, $jsInclude, 'SET')?>
+    <?php endforeach; ?>
   </body>
 </html>

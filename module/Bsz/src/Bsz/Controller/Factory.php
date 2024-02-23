@@ -20,7 +20,7 @@
 namespace Bsz\Controller;
 
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Factory for all controllers which needs params
@@ -62,6 +62,14 @@ class Factory implements FactoryInterface
     public static function getRecordController(ContainerInterface $container)
     {
         return new RecordController(
+            $container,
+            $container->get('VuFind\Config')->get('config')
+        );
+    }
+
+    public static function getSearch2RecordController(ContainerInterface $container)
+    {
+        return new Search2RecordController(
             $container,
             $container->get('VuFind\Config')->get('config')
         );

@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Proxy URL view helper
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2010.
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
+
 namespace VuFind\View\Helper\Root;
 
 /**
@@ -36,19 +38,19 @@ namespace VuFind\View\Helper\Root;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
-class ProxyUrl extends \Zend\View\Helper\AbstractHelper
+class ProxyUrl extends \Laminas\View\Helper\AbstractHelper
 {
     /**
      * VuFind configuration
      *
-     * @var \Zend\Config\Config
+     * @var \Laminas\Config\Config
      */
     protected $config;
 
     /**
      * Constructor
      *
-     * @param \Zend\Config\Config $config VuFind configuration
+     * @param \Laminas\Config\Config $config VuFind configuration
      */
     public function __construct($config = null)
     {

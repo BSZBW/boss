@@ -1,8 +1,9 @@
 <?php
+
 /**
  * SFX Link Resolver Driver
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Royal Holloway, University of London
  *
@@ -28,6 +29,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:plugins:link_resolver_drivers Wiki
  */
+
 namespace VuFind\Resolver\Driver;
 
 /**
@@ -44,17 +46,17 @@ class Sfx extends AbstractBase
     /**
      * HTTP client
      *
-     * @var \Zend\Http\Client
+     * @var \Laminas\Http\Client
      */
     protected $httpClient;
 
     /**
      * Constructor
      *
-     * @param string            $baseUrl    Base URL for link resolver
-     * @param \Zend\Http\Client $httpClient HTTP client
+     * @param string               $baseUrl    Base URL for link resolver
+     * @param \Laminas\Http\Client $httpClient HTTP client
      */
-    public function __construct($baseUrl, \Zend\Http\Client $httpClient)
+    public function __construct($baseUrl, \Laminas\Http\Client $httpClient)
     {
         parent::__construct($baseUrl);
         $this->httpClient = $httpClient;
@@ -98,7 +100,7 @@ class Sfx extends AbstractBase
             return $records;
         }
 
-        $root = $xml->xpath("//ctx_obj_targets");
+        $root = $xml->xpath('//ctx_obj_targets');
         $xml = $root[0];
         foreach ($xml->children() as $target) {
             $record = [];

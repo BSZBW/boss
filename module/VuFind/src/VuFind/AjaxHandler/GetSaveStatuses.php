@@ -1,8 +1,9 @@
 <?php
+
 /**
  * "Get Save Statuses" AJAX handler
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2018.
  *
@@ -25,13 +26,17 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
+
 namespace VuFind\AjaxHandler;
 
+use Laminas\Mvc\Controller\Plugin\Params;
+use Laminas\Mvc\Controller\Plugin\Url;
 use VuFind\Db\Row\User;
 use VuFind\I18n\Translator\TranslatorAwareInterface;
 use VuFind\Session\Settings as SessionSettings;
-use Zend\Mvc\Controller\Plugin\Params;
-use Zend\Mvc\Controller\Plugin\Url;
+
+use function count;
+use function is_array;
 
 /**
  * "Get Save Statuses" AJAX handler

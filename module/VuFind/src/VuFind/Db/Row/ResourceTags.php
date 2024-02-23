@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Row Definition for resource_tags
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2010.
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Site
  */
+
 namespace VuFind\Db\Row;
 
 /**
@@ -41,7 +43,7 @@ class ResourceTags extends RowGateway
     /**
      * Constructor
      *
-     * @param \Zend\Db\Adapter\Adapter $adapter Database adapter
+     * @param \Laminas\Db\Adapter\Adapter $adapter Database adapter
      */
     public function __construct($adapter)
     {

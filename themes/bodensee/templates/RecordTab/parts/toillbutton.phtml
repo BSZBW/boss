@@ -1,0 +1,19 @@
+<?php $searchButton = false; ?>
+<?php if($this->driver->tryMethod('isFromCollection', ['GBV_KXP'])): ?>
+    <?php
+        $id = '(DE-627)' .  $this->driver->getUniqueId();
+        $exists = $this->idVerifier($id, 'Search2');
+    ?>
+    <?php if($exists): ?>
+        <div><a class="ill-link" target=_blank" rel="noopener noreferrer" href="<?=$this->url('search2record', ['id' => $id])?>"> <?=$this->transEsc('check_ill_availability')?> </a> </div>
+    <?php else: ?>
+        <?php $searchButton = true; ?>
+    <?php endif; ?>
+<?php else: ?>
+    <?php $searchButton = true; ?>
+<?php endif; ?>
+
+<?php if ($searchButton): ?>
+    <?php $lookfor = '"' . $this->driver->getTitle() . '"'; ?>
+    <div><a class="ill-link" target=_blank" rel="noopener noreferrer"  href="<?=$this->url('search2-results', [], ['query' => ['lookfor' => $lookfor, 'type' => 'AllFields']])?>"><?=$this->transEsc('to_ill_search')?></a></div>
+<?php endif; ?>

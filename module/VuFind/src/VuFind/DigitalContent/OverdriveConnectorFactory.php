@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Overdrive Connector factory.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2018.
  *
@@ -28,12 +29,16 @@
  *           License
  * @link     https://vufind.org/wiki/development Wiki
  */
+
 namespace VuFind\DigitalContent;
 
-use Interop\Container\ContainerInterface;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Psr\Container\ContainerExceptionInterface as ContainerException;
+use Psr\Container\ContainerInterface;
 
 /**
- * Generic Amazon content plugin factory.
+ * Overdrive Connector factory.
  *
  * @category VuFind
  * @package  DigitalContent
@@ -44,7 +49,7 @@ use Interop\Container\ContainerInterface;
  * @link     https://vufind.org/wiki/development Wiki
  */
 class OverdriveConnectorFactory implements
-    \Zend\ServiceManager\Factory\FactoryInterface
+    \Laminas\ServiceManager\Factory\FactoryInterface
 {
     /**
      * Create an object
@@ -58,37 +63,46 @@ class OverdriveConnectorFactory implements
      * @throws ServiceNotFoundException if unable to resolve the service.
      * @throws ServiceNotCreatedException if an exception is raised when
      * creating a service.
-     * @throws ContainerException if any other error occurs
+     * @throws ContainerException&\Throwable if any other error occurs
      */
     public function __invoke(
-        ContainerInterface $container, $requestedName,
+        ContainerInterface $container,
+        $requestedName,
         array $options = null
     ) {
         if ($options !== null) {
             throw new \Exception('Unexpected options sent to factory!');
         }
 
-        $config = $container->get('VuFind\Config\PluginManager')->get('config');
-        $odConfig = $container->get('VuFind\Config\PluginManager')->get(
-            'Overdrive'
-        );
-        $auth = $container->get('VuFind\Auth\ILSAuthenticator');
+        $configManager = $container->get(\VuFind\Config\PluginManager::class);
+        $config = $configManager->get('config');
+        $odConfig = $configManager->get('Overdrive');
+
+        // Allow simulated connection if configured:
+        if ($odConfig->API->simulateConnection ?? false) {
+            return new FakeOverdriveConnector($config, $odConfig);
+        }
+        $auth = $container->get(\VuFind\Auth\ILSAuthenticator::class);
         $sessionContainer = null;
 
         if (PHP_SAPI !== 'cli') {
-            $sessionContainer = new \Zend\Session\Container(
+            $sessionContainer = new \Laminas\Session\Container(
                 'DigitalContent\OverdriveController',
-                $container->get('Zend\Session\SessionManager')
+                $container->get(\Laminas\Session\SessionManager::class)
             );
         }
         $connector = new $requestedName(
-            $config, $odConfig, $auth, $sessionContainer
+            $config,
+            $odConfig,
+            $auth,
+            $sessionContainer
         );
 
         // Populate cache storage
         $connector->setCacheStorage(
-            $container->get('VuFind\Cache\Manager')->getCache(
-                'object', "Overdrive"
+            $container->get(\VuFind\Cache\Manager::class)->getCache(
+                'object',
+                'Overdrive'
             )
         );
 

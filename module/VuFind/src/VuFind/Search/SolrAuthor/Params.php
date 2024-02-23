@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Author aspect of the Search Multi-class (Params)
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2010.
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Site
  */
+
 namespace VuFind\Search\SolrAuthor;
 
 /**
@@ -41,7 +43,7 @@ class Params extends \VuFind\Search\Solr\Params
     /**
      * Support method for _initSearch() -- handle basic settings.
      *
-     * @param \Zend\StdLib\Parameters $request Parameter object representing user
+     * @param \Laminas\Stdlib\Parameters $request Parameter object representing user
      * request.
      *
      * @return bool True if search settings were found, false if not.

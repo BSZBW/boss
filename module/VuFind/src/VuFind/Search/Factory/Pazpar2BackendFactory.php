@@ -3,7 +3,7 @@
 /**
  * Factory for Pazpar2 backends.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2013.
  *
@@ -26,18 +26,14 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Site
  */
+
 namespace VuFind\Search\Factory;
 
-use Interop\Container\ContainerInterface;
-
-use VuFindHttp\HttpService;
-
+use Psr\Container\ContainerInterface;
 use VuFindSearch\Backend\Pazpar2\Backend;
 use VuFindSearch\Backend\Pazpar2\Connector;
 use VuFindSearch\Backend\Pazpar2\QueryBuilder;
 use VuFindSearch\Backend\Pazpar2\Response\RecordCollectionFactory;
-
-use Zend\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Factory for Pazpar2 backends.
@@ -48,26 +44,19 @@ use Zend\ServiceManager\Factory\FactoryInterface;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Site
  */
-class Pazpar2BackendFactory implements FactoryInterface
+class Pazpar2BackendFactory extends AbstractBackendFactory
 {
     /**
      * Logger.
      *
-     * @var \Zend\Log\LoggerInterface
+     * @var \Laminas\Log\LoggerInterface
      */
     protected $logger;
 
     /**
-     * Superior service manager.
-     *
-     * @var ContainerInterface
-     */
-    protected $serviceLocator;
-
-    /**
      * VuFind configuration
      *
-     * @var \Zend\Config\Config
+     * @var \Laminas\Config\Config
      */
     protected $config;
 
@@ -84,7 +73,7 @@ class Pazpar2BackendFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $sm, $name, array $options = null)
     {
-        $this->serviceLocator = $sm;
+        $this->setup($sm);
         $this->config = $this->serviceLocator
             ->get(\VuFind\Config\PluginManager::class)
             ->get('Pazpar2');
@@ -128,7 +117,7 @@ class Pazpar2BackendFactory implements FactoryInterface
     {
         $connector = new Connector(
             $this->config->General->base_url,
-            $this->serviceLocator->get(HttpService::class)->createClient()
+            $this->createHttpClient()
         );
         $connector->setLogger($this->logger);
         return $connector;

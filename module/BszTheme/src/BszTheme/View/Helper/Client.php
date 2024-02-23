@@ -20,7 +20,7 @@
 namespace BszTheme\View\Helper;
 
 use Bsz\Config\Client as ConfigClient;
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 
 /**
  * Stellt Funktionen für den Mandant/die Sichten

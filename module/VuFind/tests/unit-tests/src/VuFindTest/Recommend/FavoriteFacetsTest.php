@@ -1,8 +1,9 @@
 <?php
+
 /**
  * FavoriteFacets recommendation module Test Class
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2010.
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:testing:unit_tests Wiki
  */
+
 namespace VuFindTest\Recommend;
 
 use VuFind\Recommend\FavoriteFacets;
@@ -38,8 +40,10 @@ use VuFind\Recommend\FavoriteFacets;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:testing:unit_tests Wiki
  */
-class FavoriteFacetsTest extends \VuFindTest\Unit\TestCase
+class FavoriteFacetsTest extends \PHPUnit\Framework\TestCase
 {
+    use \VuFindTest\Feature\ConfigPluginManagerTrait;
+
     /**
      * Test facet initialization with disabled tags.
      *
@@ -62,7 +66,8 @@ class FavoriteFacetsTest extends \VuFindTest\Unit\TestCase
     {
         $results = $this->getMockResults();
         $params = $results->getParams();
-        $params->expects($this->once())->method('addFacet')->with($this->equalTo('tags'), $this->equalTo('Your Tags'), $this->equalTo(false));
+        $params->expects($this->once())->method('addFacet')
+            ->with($this->equalTo('tags'), $this->equalTo('Your Tags'), $this->equalTo(false));
         $this->getFavoriteFacets($results);
     }
 
@@ -72,48 +77,36 @@ class FavoriteFacetsTest extends \VuFindTest\Unit\TestCase
      * @param \VuFind\Search\Solr\Results                 $results      results object
      * @param string                                      $tagSetting   Are tags enabled?
      * @param string                                      $settings     settings
-     * @param \Zend\StdLib\Parameters                     $request      request
-     * @param \VuFind\Search\Solr\HierarchicalFacetHelper $facetHelper  hierarchical facet helper (true to build default, null to omit)
+     * @param \Laminas\Stdlib\Parameters                  $request      request
+     * @param \VuFind\Search\Solr\HierarchicalFacetHelper $facetHelper  hierarchical facet helper
+     * (true to build default, null to omit)
      * @param \VuFind\Config\PluginManager                $configLoader config loader
      *
      * @return FavoriteFacets
      */
-    protected function getFavoriteFacets($results = null, $tagSetting = 'enabled', $settings = '', $request = null, $facetHelper = null, $configLoader = null)
-    {
-        if (null === $configLoader) {
-            $configLoader = $this->getMockConfigLoader();
-        }
+    protected function getFavoriteFacets(
+        $results = null,
+        $tagSetting = 'enabled',
+        $settings = '',
+        $request = null,
+        $facetHelper = null,
+        $configLoader = null
+    ) {
         if (null === $results) {
             $results = $this->getMockResults();
         }
-        if (true === $facetHelper) {
-            $facetHelper = new \VuFind\Search\Solr\HierarchicalFacetHelper();
-        }
-        if (null === $request) {
-            $request = new \Zend\StdLib\Parameters([]);
-        }
-        $sf = new FavoriteFacets($configLoader, $facetHelper, $tagSetting);
+        $sf = new FavoriteFacets(
+            $configLoader ?? $this->getMockConfigPluginManager([]),
+            $facetHelper ?? new \VuFind\Search\Solr\HierarchicalFacetHelper(),
+            $tagSetting
+        );
         $sf->setConfig($settings);
-        $sf->init($results->getParams(), $request);
+        $sf->init(
+            $results->getParams(),
+            $request ?? new \Laminas\Stdlib\Parameters([])
+        );
         $sf->process($results);
         return $sf;
-    }
-
-    /**
-     * Get a mock config loader.
-     *
-     * @param array  $config Configuration to return
-     * @param string $key    Key to store configuration under
-     *
-     * @return \VuFind\Config\PluginManager
-     */
-    protected function getMockConfigLoader($config = [], $key = 'config')
-    {
-        $loader = $this->getMockBuilder(\VuFind\Config\PluginManager::class)
-            ->disableOriginalConstructor()->getMock();
-        $loader->expects($this->any())->method('get')->with($this->equalTo($key))
-            ->will($this->returnValue(new \Zend\Config\Config($config)));
-        return $loader;
     }
 
     /**

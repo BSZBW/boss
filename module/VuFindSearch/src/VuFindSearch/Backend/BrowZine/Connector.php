@@ -3,7 +3,7 @@
 /**
  * BrowZine connector.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2017.
  *
@@ -26,9 +26,10 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org
  */
+
 namespace VuFindSearch\Backend\BrowZine;
 
-use Zend\Http\Client as HttpClient;
+use Laminas\Http\Client as HttpClient;
 
 /**
  * BrowZine connector.
@@ -39,7 +40,7 @@ use Zend\Http\Client as HttpClient;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org
  */
-class Connector implements \Zend\Log\LoggerAwareInterface
+class Connector implements \Laminas\Log\LoggerAwareInterface
 {
     use \VuFind\Log\LoggerAwareTrait;
 

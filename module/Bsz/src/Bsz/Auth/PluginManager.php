@@ -40,7 +40,7 @@ use VuFind\Auth\MultiILS;
 use Bsz\Auth\Shibboleth;
 use Bsz\Auth\Factory;
 use VuFind\Auth\SIP2;
-use Zend\ServiceManager\Factory\InvokableFactory;
+use Laminas\ServiceManager\Factory\InvokableFactory;
 
 class PluginManager extends \VuFind\Auth\PluginManager
 {

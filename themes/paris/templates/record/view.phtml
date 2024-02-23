@@ -23,7 +23,7 @@
 */
 $this->layout()->title = $this->driver->getShortTitle();
 
-use Zend\View\Helper\HeadScript;
+use Laminas\View\Helper\HeadScript;
 
 ?>
 
@@ -124,7 +124,7 @@ use Zend\View\Helper\HeadScript;
                             }
                             $tab_classes[] = 'initiallyActive';
                             $this->layout()->breadcrumbs = '<li>' . $this->searchMemory()->getLastSearchLink($this->transEsc('Search'), '', '</li> ') .
-                                '<li class="active">' . $this->recordLink()->getBreadcrumb($this->driver) . '</li> ';
+                                '<li class="active">' . $this->recordLink()->getBreadcrumbHtml($this->driver) . '</li> ';
                             $activeTabObj = $obj;
                         }
 

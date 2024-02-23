@@ -121,14 +121,14 @@ JS;
     <?php if ($this->client()->getRSSFeed() !== null): ?>
         <div id="RSSFeedResultsDeferred" class="col-sm-6">
             <p><?=$this->transEsc("Loading")?>... <img src="<?=$this->imageLink('ajax_loading.gif')?>" /></p>
-            <?=$this->inlineScript(\Zend\View\Helper\HeadScript::SCRIPT, "var url = VuFind.path + '/AJAX/Recommend?mod=StartPageNews';$('#RSSFeedResultsDeferred').load(url);", 'SET')?>        </div>
+            <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, "var url = VuFind.path + '/AJAX/Recommend?mod=StartPageNews';$('#RSSFeedResultsDeferred').load(url);", 'SET')?>        </div>
     <?php endif; ?>
 
 
-  <?=$this->inlineScript(\Zend\View\Helper\HeadScript::SCRIPT, $ilsStatusScript, 'SET'); ?>
+  <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $ilsStatusScript, 'SET'); ?>
 
   <?//$this->context($this)->renderInContext("search/searchbox.phtml", ['ignoreHiddenFilterMemory' => true])?>
-  <?=$this->inlineScript(\Zend\View\Helper\HeadScript::SCRIPT, '$("#searchForm_lookfor").focus();', 'SET'); ?>
+  <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, '$("#searchForm_lookfor").focus();', 'SET'); ?>
 </div>
 
 <?php if (isset($facetList) && is_array($facetList)): ?>
@@ -145,7 +145,7 @@ $(document).ready(function() {
 });
 JS;
         ?>
-        <?=$this->inlineScript(\Zend\View\Helper\HeadScript::SCRIPT, $script, 'SET'); ?>
+        <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET'); ?>
         <div class="home-facet <?=$this->escapeHtmlAttr($field) ?>">
           <h2><?=$this->transEsc('home_browse') . ' ' . $this->transEsc($details['label'])?></h2>
           <div id="facet_<?=$this->escapeHtml($field)?>" class="jstree-facet"

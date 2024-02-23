@@ -52,9 +52,16 @@ class FindexVolumes extends AbstractCollection
         return 'Volumes';
     }
 
+    public function getFilterString(): string
+    {
+        return '-format_phy_str_mv:Article';
+    }
+
+
     protected function display($record): bool
     {
-        return !$record->isArticle();
+        return true;
+//        return !$record->isArticle();
     }
 
 }

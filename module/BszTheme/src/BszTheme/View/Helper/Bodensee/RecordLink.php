@@ -27,7 +27,7 @@ use Bsz\RecordDriver\SolrMarc;
  *
  * @author Cornelius Amzar <cornelius.amzar@bsz-bw.de>
  */
-class RecordLink extends \VuFind\View\Helper\Root\RecordLink
+class RecordLink extends \VuFind\View\Helper\Root\RecordLinker
 {
     /**
      *
@@ -40,7 +40,7 @@ class RecordLink extends \VuFind\View\Helper\Root\RecordLink
      */
     protected $baseUrl;
 
-    public function __construct(\VuFind\Record\Router $router, \Zend\Config\Config $config, $baseUrl = null)
+    public function __construct(\VuFind\Record\Router $router, \Laminas\Config\Config $config, $baseUrl = null)
     {
         parent::__construct($router);
         $this->baseUrl = $baseUrl;
@@ -93,8 +93,7 @@ class RecordLink extends \VuFind\View\Helper\Root\RecordLink
         // library).
         // otherwise use the network OPAC urls, which can be found in BSZ.ini
 
-        if ($driver->getNetwork() == 'SWB' && $recordHelper->isAtFirstIsil()) {
-            $url = str_replace('%PPN%', $ppn, $url);
+        if (in_array($driver->getNetwork(), ['SWB', 'KXP']) && $recordHelper->isAtFirstIsil()) {
             $label = 'ILL::library_opac';;
         } else {
             $label = 'ILL::check_availability_network_opac';
@@ -102,9 +101,9 @@ class RecordLink extends \VuFind\View\Helper\Root\RecordLink
             $network = $driver->getNetwork();
             if (array_key_exists($network, $opacList)) {
                 $url = $opacList[$network];
-                $url = str_replace('%PPN%', $ppn, $url);
             }
         }
+        $url = str_replace('%PPN%', $ppn, $url);
         return [
             'link' => $url,
             'ppn' => $ppn,
@@ -139,4 +138,21 @@ class RecordLink extends \VuFind\View\Helper\Root\RecordLink
         }
         return $this->getView()->render('Helpers/singleauthor.phtml', $params);
     }
+
+    public function getChildSearchUrl($driver, $filterString)
+    {
+        $urlHelper = $this->getView()->plugin('url');
+        $route = $this->getSearchActionForSource($driver->getSourceIdentifier());
+        $id = urlencode(addcslashes($driver->getUniqueID(), '"'));
+
+        $filter = urlencode(addcslashes($filterString, '"'));
+        $filter = empty($filterString) ? '' :  '&hiddenFilters[]=' .$filter;
+        return $urlHelper($route)
+            . '?lookfor=' . $id
+            . '&type=ParentID'
+            . '&sort=publishDateSort desc, id asc'
+            . '&hiddenFilter[]=-id:' . $id
+            . $filter;
+    }
+
 }

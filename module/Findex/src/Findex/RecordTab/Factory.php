@@ -24,7 +24,7 @@ namespace Findex\RecordTab;
 use Bsz\RecordTab\Articles;
 use Bsz\RecordTab\Volumes;
 use Interop\Container\ContainerInterface;
-use Zend\Http\PhpEnvironment\Request;
+use Laminas\Http\PhpEnvironment\Request;
 
 class Factory
 {
@@ -39,8 +39,7 @@ class Factory
     {
         $libraries = $container->get('Bsz\Config\Libraries');
         $client = $container->get('Bsz\Config\Client');
-        $swbonly = $client->getTag() === 'swb' ?? false;
-        return new FindexLibraries($libraries, !$client->is('disable_library_tab'), $swbonly);
+        return new FindexLibraries($libraries, $client);
     }
     /**
      * Factory for volumes tab

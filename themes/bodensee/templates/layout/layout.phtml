@@ -1,7 +1,19 @@
 <?=$this->doctype('HTML5')?>
 <html lang="<?=$this->layout()->userLang?>"<?php if ($this->layout()->rtl): ?> dir="rtl"<?php endif; ?>>
 <head>
-    <?php $this->headThemeResources(); ?>
+    <style>
+        .beta {
+            border: 2px solid red;
+            border-radius: 5px;
+            padding:3px; color:red;
+            font-weight:bold
+        }
+        .beta:hover {
+            color:LightCoral;
+            border-color:LightCoral;
+        }
+    </style>
+    <?php $this->setupThemeResources(); ?>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="robots" content="noindex, nofollow"/>
@@ -22,6 +34,8 @@
             'rel' => 'search'
         ]
       );
+
+    $icons = !isset($this->renderingError) ? $this->render('js-icons.phtml') : '{}';
     ?>
     <?$this->headMeta()->appendProperty('og:type', 'website')?>
     <?$this->headMeta()->appendProperty('og:title',$this->headTitle()->renderTitle())?>
@@ -93,7 +107,7 @@
             'no_result' => 'no result'
         ]);
           if ($cart->isActive()) {
-              $this->headScript()->appendFile("vendor/cookies.js");
+              $this->headScript()->appendFile("vendor/js.cookie.js");
               $this->headScript()->appendFile("cart.js");
               $domain = $cart->getCookieDomain();
               if (!empty($domain)) {
@@ -121,7 +135,7 @@
                   'viewBookBag' => 'View Book Bag',
                   'illFormError' => 'ILL::form_error',
                   'illCostsError' => 'ILL::costs_error',
-                  'illYearError' => 'ILL::error_year'
+                  'illYearError' => 'ILL::error_year',
                 ]
               );
           }
@@ -139,11 +153,12 @@
     ?>
     <?php
       $root = rtrim($this->url('home'), '/');
-      $translations = $this->jsTranslations()->getJSON();
+      $translations = !isset($this->renderingError) ? $this->render('js-translations.phtml') : '{}';
       $dsb = DEFAULT_SEARCH_BACKEND;
       $setupJS = <<<JS
 VuFind.path = '{$root}';
 VuFind.defaultSearchBackend = '{$dsb}';
+VuFind.addIcons({$icons});
 VuFind.addTranslations({$translations});
 JS;
       $this->headScript()->appendScript($setupJS);
@@ -205,7 +220,7 @@ JS;
         <?=$this->render('footer.phtml')?>
       </div>
     </footer>
-    <?=$this->render('bsz/browserupdate.phtml')?>
+<!--    --><?php //=$this->render('bsz/browserupdate.phtml')?>
     <!-- MODAL IN CASE WE NEED ONE -->
     <div id="modal" class="modal fade hidden-print" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
       <div class="modal-dialog">
@@ -223,8 +238,8 @@ JS;
     <div class="offcanvas-toggle" data-toggle="offcanvas"><i class="fa fa-caret-left" title="<?=$this->transEsc('sidebar_expand') ?>"></i></div>
     <div class="offcanvas-overlay" data-toggle="offcanvas"></div>
     <?=$this->googleanalytics()?>
-    <?php if ($this->recaptcha()->active()): ?>
-      <?=$this->inlineScript(\Zend\View\Helper\HeadScript::FILE, "https://www.google.com/recaptcha/api.js?onload=recaptchaOnLoad&render=explicit&hl=" . $this->layout()->userLang, 'SET')?>
-    <?php endif; ?>
+    <?php foreach ($this->captcha()->js() as $jsInclude):?>
+        <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::FILE, $jsInclude, 'SET')?>
+    <?php endforeach; ?>
   </body>
 </html>

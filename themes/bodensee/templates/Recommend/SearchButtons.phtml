@@ -8,9 +8,9 @@ $label = $this->recommend->getLabel();
 
 ?>
 <?php if (!empty($url)): ?>
-    <?php if (!empty($label)): ?>
-        <div class="searchbuttonLabel h4 col-sm-12 col-md-12"><?= $this->transEsc('SearchButtons::' . $label) ?></div>
-    <?php endif; ?>
+<!--    --><?php //if (!empty($label)): ?>
+<!--        <div class="searchbuttonLabel h4 col-sm-12 col-md-12">--><?php //= $this->transEsc('SearchButtons::' . $label) ?><!--</div>-->
+<!--    --><?php //endif; ?>
     <div class="searchbutton col-sm-12 col-md-<?= $colNumber ?> col-xs-<?= $colNumber ?>"
          style="padding-left:2px;padding-right:2px;">
         <?php if ($this->client()->getTag() === 'athen'):

@@ -1,9 +1,10 @@
 <?php
+
 /**
  * Database utility class. May be used as a service or as a standard
- * Zend Framework factory.
+ * Laminas factory.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2010.
  *
@@ -26,15 +27,19 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Site
  */
+
 namespace VuFind\Db;
 
-use Interop\Container\ContainerInterface;
-use Zend\Config\Config;
-use Zend\Db\Adapter\Adapter;
+use Laminas\Config\Config;
+use Laminas\Db\Adapter\Adapter;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Psr\Container\ContainerExceptionInterface as ContainerException;
+use Psr\Container\ContainerInterface;
 
 /**
  * Database utility class. May be used as a service or as a standard
- * Zend Framework factory.
+ * Laminas factory.
  *
  * @category VuFind
  * @package  Db
@@ -42,7 +47,7 @@ use Zend\Db\Adapter\Adapter;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Site
  */
-class AdapterFactory implements \Zend\ServiceManager\Factory\FactoryInterface
+class AdapterFactory implements \Laminas\ServiceManager\Factory\FactoryInterface
 {
     /**
      * VuFind configuration
@@ -74,9 +79,11 @@ class AdapterFactory implements \Zend\ServiceManager\Factory\FactoryInterface
      * @throws ServiceNotFoundException if unable to resolve the service.
      * @throws ServiceNotCreatedException if an exception is raised when
      * creating a service.
-     * @throws ContainerException if any other error occurs
+     * @throws ContainerException&\Throwable if any other error occurs
      */
-    public function __invoke(ContainerInterface $container, $requestedName,
+    public function __invoke(
+        ContainerInterface $container,
+        $requestedName,
         array $options = null
     ) {
         if (!empty($options)) {
@@ -88,7 +95,7 @@ class AdapterFactory implements \Zend\ServiceManager\Factory\FactoryInterface
     }
 
     /**
-     * Obtain a Zend\DB connection using standard VuFind configuration.
+     * Obtain a Laminas\DB connection using standard VuFind configuration.
      *
      * @param string $overrideUser Username override (leave null to use username
      * from config.ini)
@@ -104,7 +111,9 @@ class AdapterFactory implements \Zend\ServiceManager\Factory\FactoryInterface
             throw new \Exception('"database" setting missing');
         }
         return $this->getAdapterFromConnectionString(
-            $this->config->Database->database, $overrideUser, $overridePass
+            $this->config->Database->database,
+            $overrideUser,
+            $overridePass
         );
     }
 
@@ -118,18 +127,35 @@ class AdapterFactory implements \Zend\ServiceManager\Factory\FactoryInterface
     public function getDriverName($type)
     {
         switch (strtolower($type)) {
-        case 'mysql':
-            return 'mysqli';
-        case 'oci8':
-            return 'Oracle';
-        case 'pgsql':
-            return 'Pdo_Pgsql';
+            case 'mysql':
+                return 'mysqli';
+            case 'oci8':
+                return 'Oracle';
+            case 'pgsql':
+                return 'Pdo_Pgsql';
         }
         return $type;
     }
 
     /**
-     * Obtain a Zend\DB connection using an option array.
+     * Get options for the selected driver.
+     *
+     * @param string $driver Driver name
+     *
+     * @return array
+     */
+    protected function getDriverOptions($driver)
+    {
+        switch ($driver) {
+            case 'mysqli':
+                return ($this->config->Database->verify_server_certificate ?? false)
+                    ? [] : [MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT];
+        }
+        return [];
+    }
+
+    /**
+     * Obtain a Laminas\DB connection using an option array.
      *
      * @param array $options Options for building adapter
      *
@@ -140,11 +166,18 @@ class AdapterFactory implements \Zend\ServiceManager\Factory\FactoryInterface
         // Set up custom options by database type:
         $driver = strtolower($options['driver']);
         switch ($driver) {
-        case 'mysqli':
-            $options['charset'] = isset($this->config->Database->charset)
-                ? $this->config->Database->charset : 'utf8';
-            $options['options'] = ['buffer_results' => true];
-            break;
+            case 'mysqli':
+                $options['charset'] = $this->config->Database->charset ?? 'utf8mb4';
+                if (strtolower($options['charset']) === 'latin1') {
+                    throw new \Exception(
+                        'The latin1 encoding is no longer supported for MySQL'
+                        . ' databases in VuFind. Please convert your database'
+                        . ' to utf8 using VuFind 7.x or earlier BEFORE'
+                        . ' upgrading to this version.'
+                    );
+                }
+                $options['options'] = ['buffer_results' => true];
+                break;
         }
 
         // Set up database connection:
@@ -163,7 +196,7 @@ class AdapterFactory implements \Zend\ServiceManager\Factory\FactoryInterface
     }
 
     /**
-     * Obtain a Zend\DB connection using a connection string.
+     * Obtain a Laminas\DB connection using a connection string.
      *
      * @param string $connectionString Connection string of the form
      * [db_type]://[username]:[password]@[host]/[db_name]
@@ -174,40 +207,54 @@ class AdapterFactory implements \Zend\ServiceManager\Factory\FactoryInterface
      *
      * @return Adapter
      */
-    public function getAdapterFromConnectionString($connectionString,
-        $overrideUser = null, $overridePass = null
+    public function getAdapterFromConnectionString(
+        $connectionString,
+        $overrideUser = null,
+        $overridePass = null
     ) {
-        list($type, $details) = explode('://', $connectionString);
+        [$type, $details] = explode('://', $connectionString);
         preg_match('/(.+)@([^@]+)\/(.+)/', $details, $matches);
         $credentials = $matches[1] ?? null;
+        $host = $port = null;
         if (isset($matches[2])) {
-            if (strpos($matches[2], ':') !== false) {
-                list($host, $port) = explode(':', $matches[2]);
+            if (str_contains($matches[2], ':')) {
+                [$host, $port] = explode(':', $matches[2]);
             } else {
                 $host = $matches[2];
             }
         }
         $dbName = $matches[3] ?? null;
         if (strstr($credentials, ':')) {
-            list($username, $password) = explode(':', $credentials, 2);
+            [$username, $password] = explode(':', $credentials, 2);
         } else {
             $username = $credentials;
             $password = null;
         }
-        $username = null !== $overrideUser ? $overrideUser : $username;
-        $password = null !== $overridePass ? $overridePass : $password;
+        $username = $overrideUser ?? $username;
+        $password = $overridePass ?? $password;
+
+        $driverName = $this->getDriverName($type);
+        $driverOptions = $this->getDriverOptions($driverName);
 
         // Set up default options:
         $options = [
-            'driver' => $this->getDriverName($type),
-            'hostname' => $host ?? null,
+            'driver' => $driverName,
+            'hostname' => $host,
             'username' => $username,
             'password' => $password,
-            'database' => $dbName
+            'database' => $dbName,
+            'use_ssl' => $this->config->Database->use_ssl ?? false,
+            'driver_options' => $driverOptions,
         ];
         if (!empty($port)) {
             $options['port'] = $port;
         }
-        return $this->getAdapterFromOptions($options);
+        // Get extra custom options from config:
+        $extraOptions = isset($this->config->Database->extra_options)
+            ? $this->config->Database->extra_options->toArray()
+            : [];
+        // Note: $options takes precedence over $extraOptions -- we don't want users
+        // using extended settings to override values from core settings.
+        return $this->getAdapterFromOptions($options + $extraOptions);
     }
 }

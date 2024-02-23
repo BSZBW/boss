@@ -1,12 +1,13 @@
 <?php
   // Set page title.
-use Zend\View\Helper\HeadScript;
-use Zend\View\Helper\InlineScript;
+use Laminas\View\Helper\HeadScript;
+use Laminas\View\Helper\InlineScript;
 
 $this->headTitle($this->translate('Search Home'));
 
   // Disable top search box -- this page has a special layout.
-  $this->layout()->searchbox = $this->render('search/searchbox.phtml');
+//  $this->layout()->searchbox = $this->render('search/searchbox.phtml');
+$this->layout()->searchbox = $this->context($this)->renderInContext('search/searchbox.phtml', ['isHome' => true]);
 
   // Set default value if necessary:
   if (!isset($this->searchClassId)) {
@@ -61,15 +62,21 @@ JS;
           </div>
       <?php endif; ?>
       <?php if ($this->client()->getTag() != 'goethe' && $this->client()->getTag() != 'fl-recherche'):?>
-      <div class="col-xs-6 col-sm-4 pull-right">
-          <?=$this->clientAsset()->getLogoHtml()?>
-      </div>
+      <?php if (!$this->client()->is('show_header_logo')): ?>
+          <div class="col-xs-6 col-sm-4 pull-right">
+              <?=$this->clientAsset()->getLogoHtml()?>
+          </div>
+      <?php else: ?>
+          <div class="hidden-lg" style="padding:30px"></div>
+      <?php endif; ?>
       <?php endif; ?>
   </div>
   <div class="row ">
       <div class="col-sm-12">
           <?php if (($this->client()->isIsilSession() && empty($this->client()->getIsils())) || !$this->client()->isIsilSession()): ?>
+          <?php if(!$this->client()->is('wlb2')): ?>
             <h2><?=$this->transEsc('homepage_heading')?> <small><?=$this->transEsc('homepage_subheading')?></small></h2>
+          <?php endif; ?>
           <?php elseif ($this->client()->isIsilSession() && $this->client()->hasIsilSession()): ?>
             <h2><?=$this->escapeHtml((string)$library)?> <small><?=$this->transEsc('homepage_subheading')?></small></h2>
           <?php endif; ?>

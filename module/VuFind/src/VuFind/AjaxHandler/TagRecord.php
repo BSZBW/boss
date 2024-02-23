@@ -1,8 +1,9 @@
 <?php
+
 /**
  * AJAX handler to tag/untag a record.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2018.
  *
@@ -25,13 +26,16 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
+
 namespace VuFind\AjaxHandler;
 
+use Laminas\Mvc\Controller\Plugin\Params;
 use VuFind\Db\Row\User;
 use VuFind\I18n\Translator\TranslatorAwareInterface;
 use VuFind\Record\Loader;
 use VuFind\Tags;
-use Zend\Mvc\Controller\Plugin\Params;
+
+use function strlen;
 
 /**
  * AJAX handler to tag/untag a record.

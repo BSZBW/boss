@@ -3,7 +3,7 @@
 /**
  * Unit tests for simple JSON-based record collection factory.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2010.
  *
@@ -26,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org
  */
+
 namespace VuFindTest\Backend\Solr\Json\Response;
 
 use PHPUnit\Framework\TestCase;
@@ -52,19 +53,19 @@ class RecordCollectionFactoryTest extends TestCase
         $json = json_encode(['response' => ['start' => 0, 'docs' => [[], [], []]]]);
         $fact = new RecordCollectionFactory();
         $coll = $fact->factory(json_decode($json, true));
-        $this->assertEquals(3, count($coll));
+        $this->assertCount(3, $coll);
     }
 
     /**
      * Test invalid input.
      *
      * @return void
-     *
-     * @expectedException        VuFindSearch\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Unexpected type of value: Expected array, got string
      */
     public function testInvalidInput()
     {
+        $this->expectException(\VuFindSearch\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unexpected type of value: Expected array, got string');
+
         $fact = new RecordCollectionFactory();
         $coll = $fact->factory('garbage');
     }

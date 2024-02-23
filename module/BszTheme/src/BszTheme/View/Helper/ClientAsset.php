@@ -22,7 +22,7 @@
 namespace BszTheme\View\Helper;
 
 use Bsz\Config\Library;
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 
 /**
  * This view helper is used to provide client specific assets, like images.

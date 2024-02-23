@@ -25,7 +25,7 @@ use Bsz\Exception;
 use Bsz\ILL\Logic;
 use BszTest\RecordDriver\SolrGviMarcTest;
 use PHPUnit\Framework\TestCase;
-use Zend\Config\Config;
+use Laminas\Config\Config;
 
 /**
  * Class LogicTest

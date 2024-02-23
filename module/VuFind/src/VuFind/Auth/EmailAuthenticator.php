@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Class for managing email-based authentication.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) The National Library of Finland 2019.
  *
@@ -25,11 +26,14 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:plugins:authentication_handlers Wiki
  */
+
 namespace VuFind\Auth;
 
-use VuFind\DB\Table\AuthHash as AuthHashTable;
+use Laminas\Http\PhpEnvironment\RemoteAddress;
+use Laminas\Http\PhpEnvironment\Request;
+use VuFind\Db\Table\AuthHash as AuthHashTable;
 use VuFind\Exception\Auth as AuthException;
-use Zend\Http\PhpEnvironment\RemoteAddress;
+use VuFind\Validator\CsrfInterface;
 
 /**
  * Class for managing email-based authentication.
@@ -50,14 +54,14 @@ class EmailAuthenticator implements \VuFind\I18n\Translator\TranslatorAwareInter
     /**
      * Session Manager
      *
-     * @var \Zend\Session\SessionManager
+     * @var \Laminas\Session\SessionManager
      */
     protected $sessionManager = null;
 
     /**
      * CSRF Validator
      *
-     * @var \VuFind\Validator\Csrf $csrf CSRF validator
+     * @var CsrfInterface
      */
     protected $csrf = null;
 
@@ -71,7 +75,7 @@ class EmailAuthenticator implements \VuFind\I18n\Translator\TranslatorAwareInter
     /**
      * View Renderer
      *
-     * @var \Zend\View\Renderer\RendererInterface
+     * @var \Laminas\View\Renderer\RendererInterface
      */
     protected $viewRenderer = null;
 
@@ -85,7 +89,7 @@ class EmailAuthenticator implements \VuFind\I18n\Translator\TranslatorAwareInter
     /**
      * Configuration
      *
-     * @var \Zend\Config\Config
+     * @var \Laminas\Config\Config
      */
     protected $config;
 
@@ -106,19 +110,22 @@ class EmailAuthenticator implements \VuFind\I18n\Translator\TranslatorAwareInter
     /**
      * Constructor
      *
-     * @param \Zend\Session\SessionManager          $session      Session Manager
-     * @param \VuFind\Validator\Csrf                $csrf         CSRF Validator
-     * @param \VuFind\Mailer\Mailer                 $mailer       Mailer
-     * @param \Zend\View\Renderer\RendererInterface $viewRenderer View Renderer
-     * @param RemoteAddress                         $remoteAddr   Remote address
-     * @param \Zend\Config\Config                   $config       Configuration
-     * @param AuthHashTable                         $authHash     AuthHash Table
+     * @param \Laminas\Session\SessionManager          $session      Session Manager
+     * @param CsrfInterface                            $csrf         CSRF Validator
+     * @param \VuFind\Mailer\Mailer                    $mailer       Mailer
+     * @param \Laminas\View\Renderer\RendererInterface $viewRenderer View Renderer
+     * @param RemoteAddress                            $remoteAddr   Remote address
+     * @param \Laminas\Config\Config                   $config       Configuration
+     * @param AuthHashTable                            $authHash     AuthHash Table
      */
-    public function __construct(\Zend\Session\SessionManager $session,
-        \VuFind\Validator\Csrf $csrf, \VuFind\Mailer\Mailer $mailer,
-        \Zend\View\Renderer\RendererInterface $viewRenderer,
+    public function __construct(
+        \Laminas\Session\SessionManager $session,
+        CsrfInterface $csrf,
+        \VuFind\Mailer\Mailer $mailer,
+        \Laminas\View\Renderer\RendererInterface $viewRenderer,
         RemoteAddress $remoteAddr,
-        \Zend\Config\Config $config, AuthHashTable $authHash
+        \Laminas\Config\Config $config,
+        AuthHashTable $authHash
     ) {
         $this->sessionManager = $session;
         $this->csrf = $csrf;
@@ -134,28 +141,31 @@ class EmailAuthenticator implements \VuFind\I18n\Translator\TranslatorAwareInter
      *
      * Stores the required information in the session.
      *
-     * @param string $email     Email address to send the link to
-     * @param array  $data      Information from the authentication request (such as
-     * user details)
-     * @param array  $urlParams Default parameters for the generated URL
-     * @param string $linkRoute The route to use as the base url for the login link
-     * @param string $subject   Email subject
-     * @param string $template  Email message template
+     * @param string $email       Email address to send the link to
+     * @param array  $data        Information from the authentication request (such as user details)
+     * @param array  $urlParams   Default parameters for the generated URL
+     * @param string $linkRoute   The route to use as the base url for the login link
+     * @param array  $routeParams Route parameters
+     * @param string $subject     Email subject
+     * @param string $template    Email message template
      *
      * @return void
      */
-    public function sendAuthenticationLink($email, $data,
-        $urlParams, $linkRoute = 'myresearch-home',
+    public function sendAuthenticationLink(
+        $email,
+        $data,
+        $urlParams,
+        $linkRoute = 'myresearch-home',
+        $routeParams = [],
         $subject = 'email_login_subject',
         $template = 'Email/login-link.phtml'
     ) {
         // Make sure we've waited long enough
-        $recoveryInterval = isset($this->config->Authentication->recover_interval)
-            ? $this->config->Authentication->recover_interval
-            : 60;
+        $recoveryInterval = $this->config->Authentication->recover_interval ?? 60;
         $sessionId = $this->sessionManager->getId();
 
-        if (($row = $this->authHashTable->getLatestBySessionId($sessionId))
+        if (
+            ($row = $this->authHashTable->getLatestBySessionId($sessionId))
             && time() - strtotime($row['created']) < $recoveryInterval
         ) {
             throw new AuthException('authentication_error_in_progress');
@@ -166,7 +176,7 @@ class EmailAuthenticator implements \VuFind\I18n\Translator\TranslatorAwareInter
             'timestamp' => time(),
             'data' => $data,
             'email' => $email,
-            'ip' => $this->remoteAddress->getIpAddress()
+            'ip' => $this->remoteAddress->getIpAddress(),
         ];
         $hash = $this->csrf->getHash(true);
 
@@ -182,7 +192,7 @@ class EmailAuthenticator implements \VuFind\I18n\Translator\TranslatorAwareInter
         $urlParams['hash'] = $hash;
         $viewParams = $linkData;
         $viewParams['url'] = $serverHelper(
-            $urlHelper($linkRoute, [], ['query' => $urlParams])
+            $urlHelper($linkRoute, $routeParams, ['query' => $urlParams])
         );
         $viewParams['title'] = $this->config->Site->title;
 
@@ -209,21 +219,26 @@ class EmailAuthenticator implements \VuFind\I18n\Translator\TranslatorAwareInter
         $row = $this->authHashTable
             ->getByHashAndType($hash, AuthHashTable::TYPE_EMAIL, false);
         if (!$row) {
-            throw new AuthException('authentication_error_denied');
+            // Assume the hash has already been used or has expired
+            throw new AuthException('authentication_error_expired');
         }
         $linkData = json_decode($row['data'], true);
-        $row->delete();
-
-        if (time() - strtotime($row['created']) > $this->loginRequestValidTime) {
-            throw new AuthException('authentication_error_denied');
-        }
 
         // Require same session id or IP address:
         $sessionId = $this->sessionManager->getId();
-        if ($row['session_id'] !== $sessionId
+        if (
+            $row['session_id'] !== $sessionId
             && $linkData['ip'] !== $this->remoteAddress->getIpAddress()
         ) {
-            throw new AuthException('authentication_error_denied');
+            throw new AuthException('authentication_error_session_ip_mismatch');
+        }
+
+        // Only delete the token now that we know the requester is correct. Otherwise
+        // it may end up deleted due to e.g. safe link check by the email server.
+        $row->delete();
+
+        if (time() - strtotime($row['created']) > $this->loginRequestValidTime) {
+            throw new AuthException('authentication_error_expired');
         }
 
         return $linkData['data'];
@@ -232,11 +247,11 @@ class EmailAuthenticator implements \VuFind\I18n\Translator\TranslatorAwareInter
     /**
      * Check if the given request is a valid login request
      *
-     * @param \Zend\Http\PhpEnvironment\Request $request Request object.
+     * @param Request $request Request object.
      *
      * @return bool
      */
-    public function isValidLoginRequest(\Zend\Http\PhpEnvironment\Request $request)
+    public function isValidLoginRequest(Request $request)
     {
         $hash = $request->getPost()->get(
             'hash',

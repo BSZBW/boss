@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Recommendation module plugin manager
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2010.
  *
@@ -25,9 +26,10 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:plugins:recommendation_modules Wiki
  */
+
 namespace VuFind\Recommend;
 
-use Zend\ServiceManager\Factory\InvokableFactory;
+use Laminas\ServiceManager\Factory\InvokableFactory;
 
 /**
  * Recommendation module plugin manager
@@ -55,12 +57,21 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
         'collectionsidefacets' => CollectionSideFacets::class,
         'doi' => DOI::class,
         'dplaterms' => DPLATerms::class,
+        'edsresults' => EDSResults::class,
+        'edsresultsdeferred' => EDSResultsDeferred::class,
+        'epfresults' => EPFResults::class,
+        'epfresultsdeferred' => EPFResultsDeferred::class,
         'europeanaresults' => EuropeanaResults::class,
         'europeanaresultsdeferred' => EuropeanaResultsDeferred::class,
         'expandfacets' => ExpandFacets::class,
         'externalsearch' => ExternalSearch::class,
         'facetcloud' => FacetCloud::class,
         'favoritefacets' => FavoriteFacets::class,
+        'libguidesprofile' => LibGuidesProfile::class,
+        'libguidesresults' => LibGuidesResults::class,
+        'libguidesresultsdeferred' => LibGuidesResultsDeferred::class,
+        'libguidesazresults' => LibGuidesAZResults::class,
+        'libguidesazresultsdeferred' => LibGuidesAZResultsDeferred::class,
         'libraryh3lp' => Libraryh3lp::class,
         'mapselection' => MapSelection::class,
         'sidefacets' => SideFacets::class,
@@ -85,7 +96,7 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
         'topfacets' => TopFacets::class,
         'visualfacets' => VisualFacets::class,
         'webresults' => WebResults::class,
-        'worldcatidentities' => WorldCatIdentities::class,
+        'worldcatidentities' => Deprecated::class,
         'worldcatterms' => Deprecated::class,
     ];
 
@@ -105,12 +116,21 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
         Deprecated::class => InvokableFactory::class,
         DOI::class => InvokableFactory::class,
         DPLATerms::class => DPLATermsFactory::class,
+        EDSResults::class => InjectSearchRunnerFactory::class,
+        EDSResultsDeferred::class => InvokableFactory::class,
+        EPFResults::class => InjectSearchRunnerFactory::class,
+        EPFResultsDeferred::class => InvokableFactory::class,
         EuropeanaResults::class => EuropeanaResultsFactory::class,
         EuropeanaResultsDeferred::class => InvokableFactory::class,
         ExpandFacets::class => ExpandFacetsFactory::class,
         ExternalSearch::class => InvokableFactory::class,
-        FacetCloud::class => InvokableFactory::class,
+        FacetCloud::class => ExpandFacetsFactory::class,
         FavoriteFacets::class => FavoriteFacetsFactory::class,
+        LibGuidesProfile::class => LibGuidesProfileFactory::class,
+        LibGuidesResults::class => InjectSearchRunnerFactory::class,
+        LibGuidesResultsDeferred::class => InvokableFactory::class,
+        LibGuidesAZResults::class => InjectSearchRunnerFactory::class,
+        LibGuidesAZResultsDeferred::class => InvokableFactory::class,
         Libraryh3lp::class => InvokableFactory::class,
         MapSelection::class => MapSelectionFactory::class,
         OpenLibrarySubjects::class => InvokableFactory::class,
@@ -120,7 +140,7 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
         RecommendLinks::class => InjectConfigManagerFactory::class,
         RemoveFilters::class => InvokableFactory::class,
         SideFacets::class => SideFacetsFactory::class,
-        SideFacetsDeferred::class => InjectConfigManagerFactory::class,
+        SideFacetsDeferred::class => SideFacetsFactory::class,
         SpellingSuggestions::class => InvokableFactory::class,
         SummonBestBets::class => InjectResultsManagerFactory::class,
         SummonBestBetsDeferred::class => InvokableFactory::class,
@@ -134,7 +154,6 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
         TopFacets::class => InjectConfigManagerFactory::class,
         VisualFacets::class => InjectConfigManagerFactory::class,
         WebResults::class => InjectSearchRunnerFactory::class,
-        WorldCatIdentities::class => WorldCatIdentitiesFactory::class,
     ];
 
     /**
@@ -146,7 +165,8 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
      * @param array $v3config                  If $configOrContainerInstance is a
      * container, this value will be passed to the parent constructor.
      */
-    public function __construct($configOrContainerInstance = null,
+    public function __construct(
+        $configOrContainerInstance = null,
         array $v3config = []
     ) {
         // These objects are not meant to be shared -- every time we retrieve one,

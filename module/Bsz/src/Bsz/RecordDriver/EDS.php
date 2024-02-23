@@ -35,8 +35,7 @@ class EDS extends \VuFind\RecordDriver\EDS
      */
     public function getPubType()
     {
-        $type = isset($this->fields['Header']['PubType'])
-            ? $this->fields['Header']['PubType'] : '';
+        $type = $this->fields['Header']['PubType'] ?? '';
         return $type;
     }
 
@@ -49,9 +48,18 @@ class EDS extends \VuFind\RecordDriver\EDS
     /**
      * Get the items of the record.
      *
-     * @return array
+     * @param null $context
+     * @param null $labelFilter
+     * @param null $groupFilter
+     * @param null $nameFilter *
+     *
+* @return array
      */
-    public function getItems()
+    public function getItems(
+        $context = null,
+        $labelFilter = null,
+        $groupFilter = null,
+        $nameFilter = null)
     {
         $items = [];
         if (isset($this->fields['Items']) && !empty($this->fields['Items'])) {

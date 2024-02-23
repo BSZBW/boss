@@ -2,9 +2,8 @@
 if ($bibliographies != false && count($bibliographies) > 0):
     foreach ($bibliographies as $bib): ?>
         <?php if ($this->client()->is($bib)): ?>
-            <?php $imgLink= $this->imageLink('/logo/bibliographies/' . $bib .".png" ); ?>
             <span data-toggle="tooltip" title="<?=$this->transEsc($bib . "_label")?>">
-            <img class="lineicon" src="<?=$imgLink?>" alt="<?=$bib?>"/>
+            <?= $this->bibliographyIcon($bib) ?>
             </span>
         <?php endif;?>
     <?php endforeach ?>

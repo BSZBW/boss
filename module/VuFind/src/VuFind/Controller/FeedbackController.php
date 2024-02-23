@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Controller for configurable forms (feedback etc).
  *
- * PHP version 7
+ * PHP version 8
  *
  * @category VuFind
  * @package  Controller
@@ -11,11 +12,13 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Site
  */
+
 namespace VuFind\Controller;
 
-use VuFind\Exception\Mail as MailException;
+use Laminas\Log\LoggerAwareInterface;
+use Laminas\View\Model\ViewModel;
 use VuFind\Form\Form;
-use Zend\Mail\Address;
+use VuFind\Log\LoggerAwareTrait;
 
 /**
  * Controller for configurable forms (feedback etc).
@@ -27,12 +30,21 @@ use Zend\Mail\Address;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
-class FeedbackController extends AbstractBase
+class FeedbackController extends AbstractBase implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
+    /**
+     * Feedback form class
+     *
+     * @var string
+     */
+    protected $formClass = \VuFind\Form\Form::class;
+
     /**
      * Display Feedback home form.
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return ViewModel
      */
     public function homeAction()
     {
@@ -41,9 +53,9 @@ class FeedbackController extends AbstractBase
 
     /**
      * Handles rendering and submit of dynamic forms.
-     * Form configurations are specified in FeedbackForms.json
+     * Form configurations are specified in FeedbackForms.yaml.
      *
-     * @return void
+     * @return mixed
      */
     public function formAction()
     {
@@ -54,8 +66,16 @@ class FeedbackController extends AbstractBase
 
         $user = $this->getUser();
 
-        $form = $this->serviceLocator->get(\VuFind\Form\Form::class);
-        $form->setFormId($formId);
+        $form = $this->serviceLocator->get($this->formClass);
+        $prefill = $this->params()->fromQuery();
+        $params = [];
+        if ($refererHeader = $this->getRequest()->getHeader('Referer')) {
+            $params['referrer'] = $refererHeader->getFieldValue();
+        }
+        if ($userAgentHeader = $this->getRequest()->getHeader('User-Agent')) {
+            $params['userAgent'] = $userAgentHeader->getFieldValue();
+        }
+        $form->setFormId($formId, $params, $prefill);
 
         if (!$form->isEnabled()) {
             throw new \VuFind\Exception\Forbidden("Form '$formId' is disabled");
@@ -66,59 +86,39 @@ class FeedbackController extends AbstractBase
         }
 
         $view = $this->createViewModel(compact('form', 'formId', 'user'));
-        $view->useRecaptcha
-            = $this->recaptcha()->active('feedback') && $form->useCaptcha();
+        $view->useCaptcha
+            = $this->captcha()->active('feedback') && $form->useCaptcha();
 
         $params = $this->params();
         $form->setData($params->fromPost());
 
-        if (!$this->formWasSubmitted('submit', $view->useRecaptcha)) {
+        if (!$this->formWasSubmitted('submit', $view->useCaptcha)) {
             $form = $this->prefillUserInfo($form, $user);
             return $view;
         }
 
-        if (! $form->isValid()) {
+        if (!$form->isValid()) {
             return $view;
         }
 
-        list($messageParams, $template)
-            = $form->formatEmailMessage($this->params()->fromPost());
-        $emailMessage = $this->getViewRenderer()->partial(
-            $template, ['fields' => $messageParams]
-        );
-
-        list($senderName, $senderEmail) = $this->getSender();
-
-        $replyToName = $params->fromPost(
-            'name',
-            $user ? trim($user->firstname . ' ' . $user->lastname) : null
-        );
-        $replyToEmail = $params->fromPost(
-            'email',
-            $user ? $user->email : null
-        );
-
-        $recipients = $form->getRecipient();
-
-        $emailSubject = $form->getEmailSubject($params->fromPost());
-
-        $sendSuccess = true;
-        foreach ($recipients as $recipient) {
-            list($success, $errorMsg) = $this->sendEmail(
-                $recipient['name'], $recipient['email'], $senderName, $senderEmail,
-                $replyToName, $replyToEmail, $emailSubject, $emailMessage
+        $primaryHandler = $form->getPrimaryHandler();
+        $success = $primaryHandler->handle($form, $params, $user ?: null);
+        if ($success) {
+            $view->setVariable('successMessage', $form->getSubmitResponse());
+            $view->setTemplate('feedback/response');
+        } else {
+            $this->flashMessenger()->addErrorMessage(
+                $this->translate('could_not_process_feedback')
             );
-
-            $sendSuccess = $sendSuccess && $success;
-            if (!$success) {
-                $this->showResponse(
-                    $view, $form, false, $errorMsg
-                );
-            }
         }
 
-        if ($sendSuccess) {
-            $this->showResponse($view, $form, true);
+        $handlers = $form->getSecondaryHandlers();
+        foreach ($handlers as $handler) {
+            try {
+                $handler->handle($form, $params, $user ?: null);
+            } catch (\Exception $e) {
+                $this->logError($e->getMessage());
+            }
         }
 
         return $view;
@@ -138,76 +138,10 @@ class FeedbackController extends AbstractBase
             $form->setData(
                 [
                  'name' => $user->firstname . ' ' . $user->lastname,
-                 'email' => $user['email']
+                 'email' => $user['email'],
                 ]
             );
         }
         return $form;
-    }
-
-    /**
-     * Send form data as email.
-     *
-     * @param string $recipientName  Recipient name
-     * @param string $recipientEmail Recipient email
-     * @param string $senderName     Sender name
-     * @param string $senderEmail    Sender email
-     * @param string $replyToName    Reply-to name
-     * @param string $replyToEmail   Reply-to email
-     * @param string $emailSubject   Email subject
-     * @param string $emailMessage   Email message
-     *
-     * @return array with elements success:boolean, errorMessage:string (optional)
-     */
-    protected function sendEmail(
-        $recipientName, $recipientEmail, $senderName, $senderEmail,
-        $replyToName, $replyToEmail, $emailSubject, $emailMessage
-    ) {
-        try {
-            $mailer = $this->serviceLocator->get(\VuFind\Mailer\Mailer::class);
-            $mailer->send(
-                new Address($recipientEmail, $recipientName),
-                new Address($senderEmail, $senderName),
-                $emailSubject, $emailMessage, null, $replyToEmail
-            );
-            return [true, null];
-        } catch (MailException $e) {
-            return [false, $e->getMessage()];
-        }
-    }
-
-    /**
-     * Show response after form submit.
-     *
-     * @param View    $view     View
-     * @param Form    $form     Form
-     * @param boolean $success  Was email sent successfully?
-     * @param string  $errorMsg Error message (optional)
-     *
-     * @return array with name, email
-     */
-    protected function showResponse($view, $form, $success, $errorMsg = null)
-    {
-        if ($success) {
-            $this->flashMessenger()->addMessage(
-                $form->getSubmitResponse(), 'success'
-            );
-        } else {
-            $this->flashMessenger()->addMessage($errorMsg, 'error');
-        }
-    }
-
-    /**
-     * Return email sender from configuration.
-     *
-     * @return array with name, email
-     */
-    protected function getSender()
-    {
-        $config = $this->getConfig()->Feedback;
-        $email = $config->sender_email ?? 'noreply@vufind.org';
-        $name = $config->sender_name ?? 'VuFind Feedback';
-
-        return [$name, $email];
     }
 }

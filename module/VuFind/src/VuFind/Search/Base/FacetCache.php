@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Abstract Base FacetCache.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2018.
  *
@@ -25,9 +26,12 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
+
 namespace VuFind\Search\Base;
 
 use VuFind\Cache\Manager as CacheManager;
+
+use function in_array;
 
 /**
  * Solr FacetCache Factory.
@@ -90,7 +94,13 @@ abstract class FacetCache
     protected function getCacheKey()
     {
         $params = $this->results->getParams();
-        $settings = [$params->getFacetConfig(), $params->getHiddenFilters()];
+        $facetConfig = $params->getFacetConfig();
+        $settings = [
+            $facetConfig,
+            $params->getHiddenFilters(),
+            // Factor operator settings into cache key:
+            array_map([$params, 'getFacetOperator'], array_keys($facetConfig)),
+        ];
         return $this->language . md5(print_r($settings, true));
     }
 

@@ -3,7 +3,7 @@
 /**
  * Unit tests for BrowZine query builder
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2017.
  *
@@ -26,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org
  */
+
 namespace VuFindTest\Backend\BrowZine;
 
 use PHPUnit\Framework\TestCase;
@@ -62,12 +63,12 @@ class QueryBuilderTest extends TestCase
      * Test advanced query parsing (not currently supported)
      *
      * @return void
-     *
-     * @expectedException        \Exception
-     * @expectedExceptionMessage Query groups not supported
      */
     public function testAdvanced()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Query groups not supported');
+
         $qb = new QueryBuilder();
         $qb->build(new QueryGroup('AND', []));
     }

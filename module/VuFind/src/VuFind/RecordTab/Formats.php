@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Digital Content Formats tab
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2010.
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:plugins:record_tabs Wiki
  */
+
 namespace VuFind\RecordTab;
 
 /**
@@ -50,9 +52,8 @@ class Formats extends AbstractBase
      * Constructor
      *
      * @param bool $enabled is this tab enabled?
-     * @param bool $urc     use recaptcha?
      */
-    public function __construct($enabled = true, $urc = false)
+    public function __construct($enabled = true)
     {
         $this->enabled = $enabled;
     }

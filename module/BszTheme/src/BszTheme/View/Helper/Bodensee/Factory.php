@@ -242,4 +242,20 @@ class Factory
             $config->getTag()
         );
     }
+
+    public static function getBibliographyIcon(ContainerInterface $container): BibliographyIcon
+    {
+        return new BibliographyIcon(
+            $container->get('Bsz\Config\Client')
+        );
+    }
+
+    public static function getIdVerifier(ContainerInterface $container)
+    {
+        return new IdVerifier(
+            $container->get("VuFind\Search")
+        );
+    }
+
+
 }

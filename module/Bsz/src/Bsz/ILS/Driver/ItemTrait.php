@@ -52,12 +52,6 @@ trait ItemTrait
     protected function getItemLocation($item)
     {
         $location = [];
-        if (isset($item['department'])
-            && array_key_exists('content', $item['department'])
-        ) {
-            $location[] = str_replace('Deutsches Zentrum für Luft- und Raumfahrt ,'
-                    . ' ', 'DLR, ', $item['department']['content']);
-        }
         if (isset($item['storage'])
             && array_key_exists('content', $item['storage'])
         ) {

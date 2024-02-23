@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Head script view helper (extended for VuFind's theme system)
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2010.
  *
@@ -25,9 +26,12 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
+
 namespace VuFindTheme\View\Helper;
 
 use VuFindTheme\ThemeInfo;
+
+use function array_key_exists;
 
 /**
  * Head script view helper (extended for VuFind's theme system)
@@ -37,9 +41,12 @@ use VuFindTheme\ThemeInfo;
  * @author   Demian Katz <demian.katz@villanova.edu>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
+ *
+ * @method getWhitespace(string|int $indent)
+ * @method getIndent()
+ * @method getSeparator()
  */
-class HeadScript extends \Zend\View\Helper\HeadScript
-    implements \Zend\Log\LoggerAwareInterface
+class HeadScript extends \Laminas\View\Helper\HeadScript implements \Laminas\Log\LoggerAwareInterface
 {
     use ConcatTrait {
         getMinifiedData as getBaseMinifiedData;
@@ -54,16 +61,26 @@ class HeadScript extends \Zend\View\Helper\HeadScript
     protected $themeInfo;
 
     /**
+     * CSP nonce
+     *
+     * @var string
+     */
+    protected $cspNonce;
+
+    /**
      * Constructor
      *
      * @param ThemeInfo   $themeInfo Theme information service
      * @param string|bool $plconfig  Config for current application environment
+     * @param string      $nonce     Nonce from nonce generator
      */
-    public function __construct(ThemeInfo $themeInfo, $plconfig = false)
+    public function __construct(ThemeInfo $themeInfo, $plconfig = false, $nonce = '')
     {
         parent::__construct();
         $this->themeInfo = $themeInfo;
         $this->usePipeline = $this->enabledInConfig($plconfig);
+        $this->cspNonce = $nonce;
+        $this->optionalAttributes[] = 'nonce';
     }
 
     /**
@@ -103,6 +120,7 @@ class HeadScript extends \Zend\View\Helper\HeadScript
             }
         }
 
+        $this->addNonce($item);
         return parent::itemToString($item, $indent, $escapeStart, $escapeEnd);
     }
 
@@ -115,13 +133,16 @@ class HeadScript extends \Zend\View\Helper\HeadScript
      *
      * @return void
      */
-    public function forcePrependFile($src = null, $type = 'text/javascript',
+    public function forcePrependFile(
+        $src = null,
+        $type = 'text/javascript',
         array $attrs = []
     ) {
         // Look for existing entry and remove it if found. Comparison method
         // copied from isDuplicate().
         foreach ($this->getContainer() as $offset => $item) {
-            if (($item->source === null)
+            if (
+                ($item->source === null)
                 && array_key_exists('src', $item->attributes)
                 && ($src === $item->attributes['src'])
             ) {
@@ -204,5 +225,17 @@ class HeadScript extends \Zend\View\Helper\HeadScript
             $data .= ';';
         }
         return $data;
+    }
+
+    /**
+     * Add a nonce to the item
+     *
+     * @param stdClass $item Item
+     *
+     * @return void
+     */
+    protected function addNonce($item)
+    {
+        $item->attributes['nonce'] = $this->cspNonce;
     }
 }

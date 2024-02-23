@@ -21,6 +21,7 @@
 
 namespace Bsz\Module\Config;
 
+use Bsz\Auth\ShibbolethFactory;
 use Bsz\Controller\Factory;
 use Bsz\Auth\Factory as AuthFactory;
 use Bsz\Route\RouteGenerator;
@@ -31,6 +32,7 @@ $config = [
         'factories' => [
             'Bsz\Controller\SearchController' => Factory::class,
             'Bsz\Controller\RecordController' => 'Bsz\Controller\Factory::getRecordController',
+            'Bsz\Controller\Search2RecordController' => 'Bsz\Controller\Factory::getSearch2RecordController',
             'Bsz\Controller\EdsrecordController' => Factory::class,
             'Bsz\Controller\MyResearchController' => Factory::class,
             'Bsz\Controller\HoldingController' => Factory::class,
@@ -49,6 +51,7 @@ $config = [
             'VuFind\Controller\EdsrecordController'    => 'Bsz\Controller\EdsrecordController',
             'VuFind\Controller\MyResearchController'   => 'Bsz\Controller\MyResearchController',
             'VuFind\Controller\CoverController' => 'Bsz\Controller\CoverController',
+            'VuFind\Controller\Search2recordController' => 'Bsz\Controller\Search2RecordController'
         ]
     ],
     'router' => [
@@ -107,7 +110,7 @@ $config = [
         'plugin_managers' => [
             'auth' => [
                 'factories' => [
-                   'Bsz\Auth\Shibboleth' => AuthFactory::class,
+                   'Bsz\Auth\Shibboleth' => ShibbolethFactory::class,
                    'Bsz\Auth\Koha' => AuthFactory::class,
                 ],
                 'aliases' => [
@@ -206,7 +209,6 @@ $config = [
             'search_backend' => [
                 'factories' => [
                     'Solr' => 'Bsz\Search\Factory\SolrDefaultBackendFactory',
-                    'EDS' => 'Bsz\Search\Factory\EdsBackendFactory',
                 ],
             ],
             'search_params'  => [
@@ -217,6 +219,14 @@ $config = [
                 'aliases' => [
                     'VuFind\Search\Solr\Params' =>      'Bsz\Search\Solr\Params',
                     'VuFind\Search\Search2\Params' =>   'Bsz\Search\Search2\Params',
+                ]
+            ],
+            'search_results' => [
+                'factories' => [
+                    'Bsz\Search\EDS\Results' => 'VuFind\Search\Results\ResultsFactory'
+                ],
+                'aliases' => [
+                    'VuFind\Search\EDS\Results' => 'Bsz\Search\EDS\Results'
                 ]
             ],
             'ils_driver' => [
@@ -253,7 +263,7 @@ $config = [
                 ],
                 'aliases' => [
                     'VuFind\Resolver\Driver\Redi' => 'Bsz\Resolver\Driver\Redi',
-                    'VuFind\Resolver\Driver\Ezb'  => 'Bsz\Resolver\Driver\Ezb',
+                    'VuFind\Resolver\Driver\Jop'  => 'Bsz\Resolver\Driver\Ezb',
                     'ill' => 'Bsz\Resolver\Driver\Ill'
                 ]
             ],
@@ -274,6 +284,7 @@ $staticRoutes = [
 ];
 $recordRoutes = [
     'record' => 'Record',
+    'search2record'=> 'Search2Record'
 ];
 
 $routeGenerator = new RouteGenerator();

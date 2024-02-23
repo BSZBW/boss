@@ -20,10 +20,12 @@
  */
 namespace Finc\RecordDriver;
 
-use VuFind\RecordDriver\IlsAwareTrait;
-use VuFind\RecordDriver\MarcAdvancedTrait;
-use VuFind\RecordDriver\MarcBasicTrait;
-use VuFind\View\Helper\Root\RecordLink;
+use Bsz\RecordDriver\AdvancedMarcReaderTrait;
+use BszTheme\View\Helper\Bodensee\RecordLink;
+use VuFind\RecordDriver\Feature\IlsAwareTrait;
+use VuFind\RecordDriver\Feature\MarcAdvancedTrait;
+use VuFind\RecordDriver\Feature\MarcBasicTrait;
+use VuFind\View\Helper\Root\RecordLinker;
 use VuFind\XSLT\Processor as XSLTProcessor;
 
 /**
@@ -38,15 +40,10 @@ use VuFind\XSLT\Processor as XSLTProcessor;
  */
 class SolrMarc extends SolrDefault
 {
+    use AdvancedMarcReaderTrait;
     use IlsAwareTrait;
     use MarcBasicTrait;
     use MarcAdvancedTrait;
-    /**
-     * MARC record. Access only via getMarcRecord() as this is initialized lazily.
-     *
-     * @var \File_MARC_Record
-     */
-    protected $lazyMarcRecord = null;
 
     /**
      * ILS connection
@@ -91,7 +88,7 @@ class SolrMarc extends SolrDefault
     public function getAllSubjectHeadings($extended = false)
     {
         // These are the fields that may contain subject headings:
-        $fields = [
+        $fieldCodes = [
             '600', '610', '611', '630', '648', '650', '651', '653', '655', '656'
         ];
 
@@ -99,32 +96,23 @@ class SolrMarc extends SolrDefault
         $retval = [];
 
         // Try each MARC field one at a time:
-        foreach ($fields as $field) {
+        foreach ($fieldCodes as $fieldCode) {
             // Do we have any results for the current field?  If not, try the next.
-            $results = $this->getMarcRecord()->getFields($field);
-            if (!$results) {
-                continue;
-            }
+            $results = $this->getFields($fieldCode);
 
             // If we got here, we found results -- let's loop through them.
-            foreach ($results as $result) {
+            foreach ($results as $field) {
                 // Start an array for holding the chunks of the current heading:
                 $current = [];
-
                 // Get all the chunks and collect them together:
-                $subfields = $result->getSubfields();
-                if ($subfields) {
-                    foreach ($subfields as $subfield) {
-                        // Numeric subfields are for control purposes and should not
-                        // be displayed:
-                        if (!is_numeric($subfield->getCode())) {
-                            $current[] = $subfield->getData();
-                        }
+                $subfields = $this->getAllSubfields($field);
+                foreach ($subfields as $subfield) {
+                    if (!is_numeric($subfield['code'])) {
+                        $current[] = $subfield['data'];
                     }
-                    // If we found at least one chunk, add a heading to our result:
-                    if (!empty($current)) {
-                        $retval[] = $current;
-                    }
+                }
+                if (!empty($current)) {
+                    $retval[] = $current;
                 }
             }
         }
@@ -152,8 +140,7 @@ class SolrMarc extends SolrDefault
      */
     public function getBibliographicLevel()
     {
-        $leader = $this->getMarcRecord()->getLeader();
-        $biblioLevel = strtoupper($leader[7]);
+        $biblioLevel = strtoupper($this->getLeader(7));
 
         switch ($biblioLevel) {
         case 'M': // Monograph
@@ -197,6 +184,7 @@ class SolrMarc extends SolrDefault
      *
      * @return array
      */
+    //TODO: Deprected?
     protected function getFieldArray($field, $subfields = null, $concat = true,
         $separator = ' '
     ) {
@@ -210,11 +198,7 @@ class SolrMarc extends SolrDefault
 
         // Try to look up the specified field, return empty array if it doesn't
         // exist.
-        $fields = $this->getMarcRecord()->getFields($field);
-        if (!is_array($fields)) {
-            return $matches;
-        }
-
+        $fields = $this->getFields($field);
         // Extract all the requested subfields, if applicable.
         foreach ($fields as $currentField) {
             $next = $this
@@ -308,20 +292,18 @@ class SolrMarc extends SolrDefault
         // consistent with default SolrMarc handling of names/dates.
         $pubResults = $copyResults = [];
 
-        $fields = $this->getMarcRecord()->getFields('264');
-        if (is_array($fields)) {
-            foreach ($fields as $currentField) {
-                $currentVal = $this
-                    ->getSubfieldArray($currentField, [$subfield], true, $separator);
-                if (!empty($currentVal)) {
-                    switch ($currentField->getIndicator('2')) {
+        $fields = $this->getFields('264');
+        foreach ($fields as $field) {
+            $currentVal = $this
+                ->getSubfieldArray($field, [$subfield], true, $separator);
+            if (!empty($currentVal)) {
+                switch ($field['i2']) {
                     case '1':
                         $pubResults = array_merge($pubResults, $currentVal);
                         break;
                     case '4':
                         $copyResults = array_merge($copyResults, $currentVal);
                         break;
-                    }
                 }
             }
         }
@@ -438,29 +420,26 @@ class SolrMarc extends SolrDefault
         $matches = [];
 
         // Loop through the field specification....
-        foreach ($fieldInfo as $field => $subfields) {
+        foreach ($fieldInfo as $fieldCode => $subfields) {
             // Did we find any matching fields?
-            $series = $this->getMarcRecord()->getFields($field);
-            if (is_array($series)) {
-                foreach ($series as $currentField) {
-                    // Can we find a name using the specified subfield list?
-                    $name = $this->getSubfieldArray($currentField, $subfields);
-                    if (isset($name[0])) {
-                        $currentArray = ['name' => $name[0]];
+            $series = $this->getFields($fieldCode);
+            foreach ($series as $field) {
+                // Can we find a name using the specified subfield list?
+                $name = $this->getSubfieldArray($field, $subfields);
+                if (isset($name[0])) {
+                    $currentArray = ['name' => $name[0]];
 
-                        // Can we find a number in subfield v?  (Note that number is
-                        // always in subfield v regardless of whether we are dealing
-                        // with 440, 490, 800 or 830 -- hence the hard-coded array
-                        // rather than another parameter in $fieldInfo).
-                        $number
-                            = $this->getSubfieldArray($currentField, ['v']);
-                        if (isset($number[0])) {
-                            $currentArray['number'] = $number[0];
-                        }
-
-                        // Save the current match:
-                        $matches[] = $currentArray;
+                    // Can we find a number in subfield v?  (Note that number is
+                    // always in subfield v regardless of whether we are dealing
+                    // with 440, 490, 800 or 830 -- hence the hard-coded array
+                    // rather than another parameter in $fieldInfo).
+                    $number = $this->getSubfieldArray($field, ['v']);
+                    if (isset($number[0])) {
+                        $currentArray['number'] = $number[0];
                     }
+
+                    // Save the current match:
+                    $matches[] = $currentArray;
                 }
             }
         }
@@ -475,14 +454,14 @@ class SolrMarc extends SolrDefault
      * together in specified order if found).  If concat is false, the array
      * will contain a separate entry for each subfield value found.
      *
-     * @param object $currentField Result from File_MARC::getFields.
-     * @param array  $subfields    The MARC subfield codes to read
-     * @param bool   $concat       Should we concatenate subfields?
-     * @param string $separator    Separator string (used only when $concat === true)
+     * @param object $field     Result from File_MARC::getFields.
+     * @param array  $subfields The MARC subfield codes to read
+     * @param bool   $concat    Should we concatenate subfields?
+     * @param string $separator Separator string (used only when $concat === true)
      *
      * @return array
      */
-    protected function getSubfieldArray($currentField, $subfields, $concat = true,
+    protected function getSubfieldArray($field, $subfields, $concat = true,
         $separator = ' '
     ) {
         // Start building a line of text for the current field
@@ -490,7 +469,7 @@ class SolrMarc extends SolrDefault
 
         // Loop through all subfields, collecting results that match the whitelist;
         // note that it is important to retain the original MARC order here!
-        $allSubfields = $currentField->getSubfields();
+        $allSubfields = $field->getSubfields();
         if (!empty($allSubfields)) {
             foreach ($allSubfields as $currentSubfield) {
                 if (in_array($currentSubfield->getCode(), $subfields)) {
@@ -567,21 +546,18 @@ class SolrMarc extends SolrDefault
     public function getTOC()
     {
         // Return empty array if we have no table of contents:
-        $fields = $this->getMarcRecord()->getFields('505');
-        if (!$fields) {
-            return [];
-        }
+        $fields = $this->getFields('505');
 
         // If we got this far, we have a table -- collect it as a string:
         $toc = [];
         foreach ($fields as $field) {
-            $subfields = $field->getSubfields();
+            $subfields = $this->getAllSubfields($field);
             foreach ($subfields as $subfield) {
                 // Break the string into appropriate chunks, filtering empty strings,
                 // and merge them into return array:
                 $toc = array_merge(
                     $toc,
-                    array_filter(explode('--', $subfield->getData()), 'trim')
+                    array_filter(explode('--', $subfield['data']), 'trim')
                 );
             }
         }
@@ -599,13 +575,13 @@ class SolrMarc extends SolrDefault
     public function getHierarchicalPlaceNames()
     {
         $placeNames = [];
-        if ($fields = $this->getMarcRecord()->getFields('752')) {
+        if ($fields = $this->getFields('752')) {
             foreach ($fields as $field) {
-                $subfields = $field->getSubfields();
+                $subfields = $this->getAllSubfields($field);
                 $current = [];
                 foreach ($subfields as $subfield) {
-                    if (!is_numeric($subfield->getCode())) {
-                        $current[] = $subfield->getData();
+                    if (!is_numeric($subfield['code'])) {
+                        $current[] = $subfield['data'];
                     }
                 }
                 $placeNames[] = implode(' -- ', $current);
@@ -638,25 +614,22 @@ class SolrMarc extends SolrDefault
             '555' => ['a']         // Cumulative index/finding aids
         ];
 
-        foreach ($fieldsToCheck as $field => $subfields) {
-            $urls = $this->getMarcRecord()->getFields($field);
+        foreach ($fieldsToCheck as $fieldCode => $subfieldCode) {
+            $urls = $this->getFields($fieldCode);
             if ($urls) {
                 foreach ($urls as $url) {
                     // Is there an address in the current field?
-                    $address = $url->getSubfield('u');
-                    if ($address) {
-                        $address = $address->getData();
+                    $address = $this->getSubfield($url, 'u');
+                    if (!empty($address)) {
 
                         // Is there a description?  If not, just use the URL itself.
-                        foreach ($subfields as $current) {
-                            $desc = $url->getSubfield($current);
+                        foreach ($subfieldCode as $current) {
+                            $desc =$this->getSubfield($url, $current);
                             if ($desc) {
                                 break;
                             }
                         }
-                        if ($desc) {
-                            $desc = $desc->getData();
-                        } else {
+                        if(empty($desc)) {
                             $desc = $address;
                         }
 
@@ -696,22 +669,19 @@ class SolrMarc extends SolrDefault
         $retVal = [];
         foreach ($fieldsNames as $value) {
             $value = trim($value);
-            $fields = $this->getMarcRecord()->getFields($value);
-            if (!empty($fields)) {
-                foreach ($fields as $field) {
-                    // Check to see if we should display at all
-                    if ($useVisibilityIndicator) {
-                        $visibilityIndicator = $field->getIndicator('1');
-                        if ($visibilityIndicator == '1') {
-                            continue;
-                        }
+            $fields = $this->getFields($value);
+            foreach ($fields as $field) {
+                // Check to see if we should display at all
+                if ($useVisibilityIndicator) {
+                    if ($field['i1'] == '1') {
+                        continue;
                     }
+                }
 
-                    // Get data for field
-                    $tmp = $this->getFieldData($field);
-                    if (is_array($tmp)) {
-                        $retVal[] = $tmp;
-                    }
+                // Get data for field
+                $tmp = $this->getFieldData($field);
+                if (is_array($tmp)) {
+                    $retVal[] = $tmp;
                 }
             }
         }
@@ -723,28 +693,28 @@ class SolrMarc extends SolrDefault
      * into the field number where relevant to generate a note to associate
      * with a record link.
      *
-     * @param File_MARC_Data_Field $field Field to examine
+     * @param array $field Field to examine
      *
      * @return string
      */
     protected function getRecordLinkNote($field)
     {
         // If set, use relationship information from subfield i
-        if ($subfieldI = $field->getSubfield('i')) {
-            $data = trim($subfieldI->getData());
+        if ($sfi = $this->getSubfield($field, 'i')) {
+            $data = trim($sfi);
             if (!empty($data)) {
                 return $data;
             }
         }
 
         // Normalize blank relationship indicator to 0:
-        $relationshipIndicator = $field->getIndicator('2');
+        $relationshipIndicator = $field['i2'];
         if ($relationshipIndicator == ' ') {
             $relationshipIndicator = '0';
         }
 
         // Assign notes based on the relationship type
-        $value = $field->getTag();
+        $value = $field['tag'];
         switch ($value) {
         case '780':
             if (in_array($relationshipIndicator, range('0', '7'))) {
@@ -764,7 +734,7 @@ class SolrMarc extends SolrDefault
     /**
      * Returns the array element for the 'getAllRecordLinks' method
      *
-     * @param File_MARC_Data_Field $field Field to examine
+     * @param array $field Field to examine
      *
      * @return array|bool                 Array on success, boolean false if no
      * valid link could be found in the data.
@@ -772,9 +742,7 @@ class SolrMarc extends SolrDefault
     protected function getFieldData($field)
     {
         // Make sure that there is a t field to be displayed:
-        if ($title = $field->getSubfield('t')) {
-            $title = $title->getData();
-        } else {
+        if (!$title = $this->getSubfield($field, 't')){
             return false;
         }
 
@@ -782,7 +750,7 @@ class SolrMarc extends SolrDefault
             ? $this->mainConfig->Record->marc_links_link_types
             : 'id,oclc,dlc,isbn,issn,title';
         $linkTypes = explode(',', $linkTypeSetting);
-        $linkFields = $field->getSubfields('w');
+        $linkFields = $this->getSubfields($field, 'w');
 
         // Run through the link types specified in the config.
         // For each type, check field for reference
@@ -812,17 +780,19 @@ class SolrMarc extends SolrDefault
                 }
                 break;
             case 'isbn':
-                if ($isbn = $field->getSubfield('z')) {
+                if ($isbn = $this->getSubfield($field, 'z')) {
                     $link = [
-                        'type' => 'isn', 'value' => trim($isbn->getData()),
+                        'type' => 'isn',
+                        'value' => trim($isbn),
                         'exclude' => $this->getUniqueId()
                     ];
                 }
                 break;
             case 'issn':
-                if ($issn = $field->getSubfield('x')) {
+                if ($issn = $this->getSubfield($field, 'x')) {
                     $link = [
-                        'type' => 'isn', 'value' => trim($issn->getData()),
+                        'type' => 'isn',
+                        'value' => trim($issn),
                         'exclude' => $this->getUniqueId()
                     ];
                 }
@@ -855,8 +825,7 @@ class SolrMarc extends SolrDefault
      */
     protected function getIdFromLinkingField($idField, $prefix = null, $raw = false)
     {
-        $text = $idField->getData();
-        if (preg_match('/\(([^)]+)\)(.+)/', $text, $matches)) {
+        if (preg_match('/\(([^)]+)\)(.+)/', $idField, $matches)) {
             // If prefix matches, return ID:
             if ($matches[1] == $prefix) {
                 // Special case -- LCCN should not be stripped:
@@ -866,7 +835,7 @@ class SolrMarc extends SolrDefault
             }
         } elseif ($prefix == null) {
             // If no prefix was given or found, we presume it is a raw bib record
-            return $text;
+            return $idField;
         }
         return false;
     }
@@ -880,7 +849,7 @@ class SolrMarc extends SolrDefault
      *
      * @return array
      */
-    public function getFormattedMarcDetails($field, $data)
+    public function getFormattedMarcDetails($defaultField, $data)
     {
         // Initialize return array
         $matches = [];
@@ -888,13 +857,10 @@ class SolrMarc extends SolrDefault
 
         // Try to look up the specified field, return empty array if it doesn't
         // exist.
-        $fields = $this->getMarcRecord()->getFields($field);
-        if (!is_array($fields)) {
-            return $matches;
-        }
+        $fields = $this->getFields($defaultField);
 
         // Extract all the requested subfields, if applicable.
-        foreach ($fields as $currentField) {
+        foreach ($fields as $field) {
             foreach ($data as $key => $info) {
                 $split = explode("|", $info);
                 if ($split[0] == "msg") {
@@ -914,7 +880,7 @@ class SolrMarc extends SolrDefault
                         $subfields = str_split($split[1]);
                     }
                     $result = $this->getSubfieldArray(
-                        $currentField, $subfields, true
+                        $field, $subfields, true
                     );
                     $matches[$i][$key] = count($result) > 0
                         ? (string)$result[0] : '';
@@ -930,74 +896,54 @@ class SolrMarc extends SolrDefault
      * Return an XML representation of the record using the specified format.
      * Return false if the format is unsupported.
      *
-     * @param string     $format     Name of format to use (corresponds with OAI-PMH
+     * @param string     $format  Name of format to use (corresponds with OAI-PMH
      * metadataPrefix parameter).
-     * @param string     $baseUrl    Base URL of host containing VuFind (optional;
+     * @param string     $baseUrlFi Base URL of host containing VuFind (optional;
      * may be used to inject record URLs into XML when appropriate).
-     * @param RecordLink $recordLink Record link helper (optional; may be used to
+     * @param RecordLinker $linker  Record link helper (optional; may be used to
      * inject record URLs into XML when appropriate).
      *
      * @return mixed         XML, or false if format unsupported.
      */
-    public function getXML($format, $baseUrl = null, $recordLink = null)
+    public function getXML($format, $baseUrl = null, $linker = null)
     {
         // Special case for MARC:
         if ($format == 'marc21') {
-            $xml = $this->getMarcRecord()->toXML();
-            $xml = str_replace(
-                [chr(27), chr(28), chr(29), chr(30), chr(31)], ' ', $xml
+            $sanitizeXmlRegEx
+                = '[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+';
+            $xml = simplexml_load_string(
+                trim(
+                    preg_replace(
+                        "/$sanitizeXmlRegEx/u",
+                        ' ',
+                        $this->getMarcReader()->toFormat('MARCXML')
+                    )
+                )
             );
-            $xml = simplexml_load_string($xml);
             if (!$xml || !isset($xml->record)) {
                 return false;
             }
 
             // Set up proper namespacing and extract just the <record> tag:
-            $xml->record->addAttribute('xmlns', "http://www.loc.gov/MARC21/slim");
+            $xml->record->addAttribute('xmlns', 'http://www.loc.gov/MARC21/slim');
+            // There's a quirk in SimpleXML that strips the first namespace
+            // declaration, hence the double xmlns: prefix:
+            $xml->record->addAttribute(
+                'xmlns:xmlns:xsi',
+                'http://www.w3.org/2001/XMLSchema-instance'
+            );
             $xml->record->addAttribute(
                 'xsi:schemaLocation',
                 'http://www.loc.gov/MARC21/slim ' .
                 'http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd',
                 'http://www.w3.org/2001/XMLSchema-instance'
             );
-            $xml->record->addAttribute('type', 'Bibliographic');
+            $xml->record->addAttribute('type', $this->xmlType);
             return $xml->record->asXML();
         }
 
         // Try the parent method:
-        return parent::getXML($format, $baseUrl, $recordLink);
-    }
-
-    /**
-     * Get access to the raw File_MARC object.
-     *
-     * @return \File_MARCBASE
-     * @throws \File_MARC_Exception
-     */
-    public function getMarcRecord()
-    {
-        if (null === $this->lazyMarcRecord) {
-            $marc = trim($this->fields['fullrecord']);
-
-            // check if we are dealing with MARCXML
-            if (substr($marc, 0, 1) == '<') {
-                $marc = new \File_MARCXML($marc, \File_MARCXML::SOURCE_STRING);
-            } else {
-                // When indexing over HTTP, SolrMarc may use entities instead of
-                // certain control characters; we should normalize these:
-                $marc = str_replace(
-                    ['#29;', '#30;', '#31;'], ["\x1D", "\x1E", "\x1F"], $marc
-                );
-                $marc = new \File_MARC($marc, \File_MARC::SOURCE_STRING);
-            }
-
-            $this->lazyMarcRecord = $marc->next();
-            if (!$this->lazyMarcRecord) {
-                throw new \File_MARC_Exception('Cannot Process MARC Record');
-            }
-        }
-
-        return $this->lazyMarcRecord;
+        return parent::getXML($format, $baseUrl, $linker);
     }
 
     /**
@@ -1037,7 +983,7 @@ class SolrMarc extends SolrDefault
                 'marcRecord property is deprecated; use getMarcRecord()',
                 E_USER_DEPRECATED
             );
-            return $this->getMarcRecord();
+            return $this->getMarcReader();
         }
         return null;
     }

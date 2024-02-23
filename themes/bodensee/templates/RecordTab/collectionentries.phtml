@@ -1,0 +1,42 @@
+<?php
+// Set page title.
+$title = $this->tab->getDescription();
+$this->headTitle($this->translate($title) . ': ' . $this->driver->getBreadcrumb());
+
+$max = $this->tab->getMaxResults();
+$content = $this->tab->getResults();
+?>
+
+<?php if (isset($content) && count($content) > 0): ?>
+    <?php $showMore = false; ?>
+    <table class="table table-striped table-condensed tablesorter">
+        <thead>
+        <tr>
+            <th class="col-xs-8"><?= $this->transEsc('Title') ?></th>
+            <th class="col-xs-1"><?= $this->transEsc('Year') ?></th>
+            <th class="col-xs-2"><?= $this->transEsc('Author') ?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($content as $i => $result): ?>
+            <?php
+            if ($i == $max) {
+                $showMore = true;
+                break;
+            }
+            ?>
+            <tr>
+                <td><a class="internal"
+                       href="<?= $this->recordLink()->getUrl($result) ?>"><?= $this->string()->cleanEsc($result->getTitle()) ?> <?= $this->string()->cleanEsc($result->getTitleSection()) ?></a>
+                </td>
+                <td><?= implode(', ', $result->getPublicationDates()) ?></td>
+                <td><?= $result->getPrimaryAuthor() ?></td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+    <?php $href = $this->escapeHtmlAttr($this->recordLinker()->getChildSearchUrl($this->driver, $this->tab->getFilterString()));?>
+    <?php if ($showMore): ?>
+        <a class="btn btn-info btn-xs" href="<?= $href ?>"><?=$this->transEsc('see all')?></a>
+    <?php endif; ?>
+<?php endif; ?>

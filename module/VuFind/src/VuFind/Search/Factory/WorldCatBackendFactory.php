@@ -3,7 +3,7 @@
 /**
  * Factory for WorldCat backends.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2013.
  *
@@ -26,16 +26,14 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Site
  */
+
 namespace VuFind\Search\Factory;
 
-use Interop\Container\ContainerInterface;
-
+use Psr\Container\ContainerInterface;
 use VuFindSearch\Backend\WorldCat\Backend;
 use VuFindSearch\Backend\WorldCat\Connector;
 use VuFindSearch\Backend\WorldCat\QueryBuilder;
 use VuFindSearch\Backend\WorldCat\Response\XML\RecordCollectionFactory;
-
-use Zend\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Factory for WorldCat backends.
@@ -46,33 +44,26 @@ use Zend\ServiceManager\Factory\FactoryInterface;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Site
  */
-class WorldCatBackendFactory implements FactoryInterface
+class WorldCatBackendFactory extends AbstractBackendFactory
 {
     /**
      * Logger.
      *
-     * @var \Zend\Log\LoggerInterface
+     * @var \Laminas\Log\LoggerInterface
      */
     protected $logger;
 
     /**
-     * Superior service manager.
-     *
-     * @var ContainerInterface
-     */
-    protected $serviceLocator;
-
-    /**
      * VuFind configuration
      *
-     * @var \Zend\Config\Config
+     * @var \Laminas\Config\Config
      */
     protected $config;
 
     /**
      * WorldCat configuration
      *
-     * @var \Zend\Config\Config
+     * @var \Laminas\Config\Config
      */
     protected $wcConfig;
 
@@ -89,7 +80,7 @@ class WorldCatBackendFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $sm, $name, array $options = null)
     {
-        $this->serviceLocator = $sm;
+        $this->setup($sm);
         $this->config = $this->serviceLocator
             ->get(\VuFind\Config\PluginManager::class)
             ->get('config');
@@ -125,13 +116,14 @@ class WorldCatBackendFactory implements FactoryInterface
      */
     protected function createConnector()
     {
-        $wsKey = isset($this->config->WorldCat->apiKey)
-            ? $this->config->WorldCat->apiKey : null;
+        $wsKey = $this->config->WorldCat->apiKey ?? null;
         $connectorOptions = isset($this->wcConfig->Connector)
             ? $this->wcConfig->Connector->toArray() : [];
-        $client = $this->serviceLocator->get(\VuFindHttp\HttpService::class)
-            ->createClient();
-        $connector = new Connector($wsKey, $client, $connectorOptions);
+        $connector = new Connector(
+            $wsKey,
+            $this->createHttpClient(),
+            $connectorOptions
+        );
         $connector->setLogger($this->logger);
         return $connector;
     }
@@ -143,8 +135,7 @@ class WorldCatBackendFactory implements FactoryInterface
      */
     protected function createQueryBuilder()
     {
-        $exclude = isset($this->config->WorldCat->OCLCCode)
-            ? $this->config->WorldCat->OCLCCode : null;
+        $exclude = $this->config->WorldCat->OCLCCode ?? null;
         return new QueryBuilder($exclude);
     }
 

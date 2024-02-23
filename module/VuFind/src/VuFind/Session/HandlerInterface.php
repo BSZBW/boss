@@ -1,11 +1,12 @@
 <?php
+
 /**
  * Session handler interface
  *
  * Copyright (C) Villanova University 2018,
  *               Leipzig University Library <info@ub.uni-leipzig.de> 2018.
  *
- * PHP version 7
+ * PHP version 8
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -27,11 +28,11 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:plugins:session_handlers Wiki
  */
+
 namespace VuFind\Session;
 
+use Laminas\Session\SaveHandler\SaveHandlerInterface;
 use VuFind\Db\Table\DbTableAwareInterface;
-use Zend\Config\Config;
-use Zend\Session\SaveHandler\SaveHandlerInterface;
 
 /**
  * Session handler interface
@@ -58,14 +59,4 @@ interface HandlerInterface extends SaveHandlerInterface, DbTableAwareInterface
      * @return void
      */
     public function disableWrites();
-
-    /**
-     * Set configuration.
-     *
-     * @param Config $config Session configuration ([Session] section of
-     * config.ini)
-     *
-     * @return void
-     */
-    public function setConfig(Config $config);
 }

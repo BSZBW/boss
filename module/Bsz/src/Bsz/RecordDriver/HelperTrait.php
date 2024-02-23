@@ -50,7 +50,7 @@ trait HelperTrait
                 $output .= '. ';
             } elseif ($key == 'n' && (isset($input['p']) || isset($input['c']))) {
                 $output .= ', ';
-            } elseif ($key == 'a' && (isset($input['p']) || isset($input['c']))) {
+            } elseif ($key == 'a' && (isset($input['p']) || isset($input['c']) || isset($input['d']))) {
                 $output .= ', ';
             } else {
                 $output .= ' ';

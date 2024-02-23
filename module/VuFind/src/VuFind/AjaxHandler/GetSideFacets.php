@@ -1,8 +1,9 @@
 <?php
+
 /**
  * "Get Side Facets" AJAX handler
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) The National Library of Finland 2018-2019.
  *
@@ -25,8 +26,11 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
+
 namespace VuFind\AjaxHandler;
 
+use Laminas\Mvc\Controller\Plugin\Params;
+use Laminas\View\Renderer\RendererInterface;
 use VuFind\Recommend\PluginManager as RecommendPluginManager;
 use VuFind\Recommend\SideFacets;
 use VuFind\Search\Base\Results;
@@ -35,8 +39,9 @@ use VuFind\Search\SearchRunner;
 use VuFind\Search\Solr\HierarchicalFacetHelper;
 use VuFind\Search\UrlQueryHelper;
 use VuFind\Session\Settings as SessionSettings;
-use Zend\Mvc\Controller\Plugin\Params;
-use Zend\View\Renderer\RendererInterface;
+
+use function in_array;
+use function is_callable;
 
 /**
  * "Get Side Facets" AJAX handler
@@ -47,8 +52,7 @@ use Zend\View\Renderer\RendererInterface;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
-class GetSideFacets extends \VuFind\AjaxHandler\AbstractBase
-    implements \Zend\Log\LoggerAwareInterface
+class GetSideFacets extends \VuFind\AjaxHandler\AbstractBase implements \Laminas\Log\LoggerAwareInterface
 {
     use \VuFind\Log\LoggerAwareTrait;
 
@@ -94,13 +98,16 @@ class GetSideFacets extends \VuFind\AjaxHandler\AbstractBase
      * @param RecommendPluginManager  $rpm      Recommend plugin manager
      * @param SearchRunner            $sr       Search runner
      * @param HierarchicalFacetHelper $fh       Facet helper
-     * @param \Zend\Config\Config     $fc       Facet config
+     * @param \Laminas\Config\Config  $fc       Facet config
      * @param RendererInterface       $renderer View renderer
      */
-    public function __construct(SessionSettings $ss,
+    public function __construct(
+        SessionSettings $ss,
         \VuFind\Recommend\PluginManager $rpm,
-        SearchRunner $sr, HierarchicalFacetHelper $fh,
-        \Zend\Config\Config $fc, RendererInterface $renderer
+        SearchRunner $sr,
+        HierarchicalFacetHelper $fh,
+        \Laminas\Config\Config $fc,
+        RendererInterface $renderer
     ) {
         $this->sessionSettings = $ss;
         $this->recommendPluginManager = $rpm;
@@ -132,6 +139,16 @@ class GetSideFacets extends \VuFind\AjaxHandler\AbstractBase
             return $this->formatResponse('', self::STATUS_HTTP_ERROR);
         }
 
+        // Set appropriate query suppression / extra field behavior:
+        $queryHelper = $results->getUrlQuery();
+        $queryHelper->setSuppressQuery((bool)($request['querySuppressed'] ?? false));
+        $extraFields = array_filter(explode(',', $request['extraFields'] ?? ''));
+        foreach ($extraFields as $field) {
+            if (isset($request[$field])) {
+                $queryHelper->setDefaultParameter($field, $request[$field]);
+            }
+        }
+
         $recommend = $results->getRecommendations($configLocation)[0] ?? null;
         if (null === $recommend) {
             return $this->formatResponse(
@@ -143,12 +160,15 @@ class GetSideFacets extends \VuFind\AjaxHandler\AbstractBase
         $context = [
             'recommend' => $recommend,
             'params' => $results->getParams(),
-            'searchClassId' => $request['searchClassId'] ?? DEFAULT_SEARCH_BACKEND
+            'searchClassId' => $request['searchClassId'] ?? DEFAULT_SEARCH_BACKEND,
         ];
         if (isset($request['enabledFacets'])) {
             // Render requested facets separately
             $facets = $this->formatFacets(
-                $context, $recommend, $request['enabledFacets'], $results
+                $context,
+                $recommend,
+                $request['enabledFacets'],
+                $results
             );
             return $this->formatResponse(compact('facets'));
         }
@@ -174,7 +194,8 @@ class GetSideFacets extends \VuFind\AjaxHandler\AbstractBase
     {
         $setupCallback = function ($runner, $params, $searchId) use ($index, $loc) {
             $listener = new RecommendListener(
-                $this->recommendPluginManager, $searchId
+                $this->recommendPluginManager,
+                $searchId
             );
             $config = [];
             $rawConfig = $params->getOptions()
@@ -214,17 +235,17 @@ class GetSideFacets extends \VuFind\AjaxHandler\AbstractBase
      *
      * @return array
      */
-    protected function formatFacets($context, SideFacets $recommend, $facets,
+    protected function formatFacets(
+        $context,
+        SideFacets $recommend,
+        $facets,
         Results $results
     ) {
         $response = [];
-        $hierarchicalFacets = [];
         $options = $results->getOptions();
-        if (is_callable([$options, 'getHierarchicalFacets'])) {
-            $hierarchicalFacets = $options->getHierarchicalFacets();
-            $hierarchicalFacetSortOptions
-                = $recommend->getHierarchicalFacetSortOptions();
-        }
+        $hierarchicalFacets = $options->getHierarchicalFacets();
+        $hierarchicalFacetSortOptions
+            = $recommend->getHierarchicalFacetSortOptions();
         $facetSet = $recommend->getFacetSet();
         $urlHelper = $results->getUrlQuery();
         foreach ($facets as $facet) {
@@ -269,13 +290,16 @@ class GetSideFacets extends \VuFind\AjaxHandler\AbstractBase
      * Get facet data for a hierarchical facet
      *
      * @param string         $facet       Facet
-     * @param array          $sortOptions Hierarhical facet sort options
+     * @param array          $sortOptions Hierarchical facet sort options
      * @param array          $facetList   Facet list
      * @param UrlQueryHelper $urlHelper   UrlQueryHelper for creating facet URLs
      *
      * @return array
      */
-    protected function getHierarchicalFacetData($facet, $sortOptions, $facetList,
+    protected function getHierarchicalFacetData(
+        $facet,
+        $sortOptions,
+        $facetList,
         UrlQueryHelper $urlHelper
     ) {
         if (!empty($sortOptions[$facet])) {
@@ -286,10 +310,14 @@ class GetSideFacets extends \VuFind\AjaxHandler\AbstractBase
         }
 
         $result = $this->facetHelper->buildFacetArray(
-            $facet, $facetList, $urlHelper, false
+            $facet,
+            $facetList,
+            $urlHelper,
+            false
         );
 
-        if (!empty($this->facetConfig->FacetFilters->$facet)
+        if (
+            !empty($this->facetConfig->FacetFilters->$facet)
             || !empty($this->facetConfig->ExcludeFilters->$facet)
         ) {
             $filters = !empty($this->facetConfig->FacetFilters->$facet)

@@ -22,10 +22,10 @@
 namespace Bsz\Config;
 
 use Exception;
-use Zend\Config\Config;
-use Zend\Config\Reader\Ini;
-use Zend\Http\PhpEnvironment\Request;
-use Zend\Session\Container as SessContainer;
+use Laminas\Config\Config;
+use Laminas\Config\Reader\Ini;
+use Laminas\Http\PhpEnvironment\Request;
+use Laminas\Session\Container as SessContainer;
 
 /**
  * Client class extends VuFinds configuration to fit our needs.
@@ -250,12 +250,15 @@ class Client extends Config
         return $isils;
     }
 
-    public function getProvenances()
+    public function getProvenances(): array
     {
         $section = $this->get('Provenances');
         if ($section != null) {
             $raw = trim($section->get('isil'));
             if (!empty($raw)) {
+                if ($raw == '*') {
+                    return [$raw];
+                }
                 return explode(',', $raw);
             }
         }
@@ -396,13 +399,10 @@ class Client extends Config
         foreach ($dirs as $dir) {
             try {
                 $config = $Reader->fromFile($dir . '/config/vufind/config.ini');
-                if (strpos($config['Site']['url'], 'dlr-') === false) {
-                    $tmp = [
-                        'title' => $config['Site']['title'],
-                        'url' => $config['Site']['url']
-                    ];
-                    $configs[] = $tmp;
-                }
+                $configs[] = [
+                    'title' => $config['Site']['title'],
+                    'url' => $config['Site']['url']
+                ];
             } catch (Exception $ex) {
                 continue;
             }

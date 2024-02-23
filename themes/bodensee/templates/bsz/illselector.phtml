@@ -1,5 +1,5 @@
 <?
-    $this->headScript(\Zend\View\Helper\HeadScript::FILE, 'vendor/bootstrap-typeahead.min.js');
+    $this->headScript(\Laminas\View\Helper\HeadScript::FILE, 'vendor/bootstrap-typeahead.min.js');
     $account = $this->auth()->getManager();
 ?>
 <?php if(!$account->isLoggedIn()): ?>

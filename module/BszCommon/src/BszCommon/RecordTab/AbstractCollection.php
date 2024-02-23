@@ -21,6 +21,7 @@
 namespace BszCommon\RecordTab;
 
 use VuFind\RecordTab\AbstractBase;
+use VuFindSearch\Command\SearchCommand;
 use VuFindSearch\ParamBag;
 use VuFindSearch\Query\Query;
 use VuFindSearch\Service as SearchService;
@@ -35,7 +36,7 @@ abstract class AbstractCollection extends AbstractBase
     /**
      * @var int
      */
-    const LIMIT = 50;
+    protected int $limit = 20;
 
     /**
      * Search service
@@ -65,6 +66,11 @@ abstract class AbstractCollection extends AbstractBase
         $this->searchService = $search;
     }
 
+    public function getMaxResults()
+    {
+        return $this->limit;
+    }
+
     /**
      * Returns a list of all records that should be displayed in this tab.
      *
@@ -80,16 +86,18 @@ abstract class AbstractCollection extends AbstractBase
             $query = $this->getQuery();
             $params = $this->getParams();
 
-            $records = $this->searchService->search(
-                $this->getRecordDriver()->getSourceIdentifier(),
+            $command = new SearchCommand(
+            $this->getRecordDriver()->getSourceIdentifier(),
                 $query,
                 0,
-                static::LIMIT,
+                $this->getMaxResults() + 1,
                 $params
-            )->getRecords();
+            );
+
+            $records = $this->searchService->invoke($command)->getResult();
 
             $this->results = [];
-            foreach ($records as $r) {
+            foreach ($records->getRecords() as $r) {
                 if($this->display($r)) {
                     $this->results[] = $r;
                 }

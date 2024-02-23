@@ -7,7 +7,9 @@
  */
 namespace Bsz\Resolver\Driver;
 
-class Ezb extends \VuFind\Resolver\Driver\Ezb
+use VuFind\Net\UserIpReader;
+
+class Ezb extends \VuFind\Resolver\Driver\Jop
 {
     protected $pid;
 
@@ -15,11 +17,11 @@ class Ezb extends \VuFind\Resolver\Driver\Ezb
      * Constructor
      *
      * @param string            $baseUrl    Base URL for link resolver
-     * @param \Zend\Http\Client $httpClient HTTP client
+     * @param \Laminas\Http\Client $httpClient HTTP client
      */
-    public function __construct($baseUrl, \Zend\Http\Client $httpClient, $pid = '')
+    public function __construct($baseUrl, \Laminas\Http\Client $httpClient, UserIpReader $userIpReader, $pid = '')
     {
-        parent::__construct($baseUrl, $httpClient);
+        parent::__construct($baseUrl, $httpClient, $userIpReader);
         $this->pid = $pid;
     }
 

@@ -40,7 +40,7 @@ $helpPost = isset($help['post']) ? $this->translate($help['post']) : null;
             </div>
         <?php endif ?>
         <?php $currentGroup = null; ?>
-        <?php foreach($form->getElements() as $el): ?>
+        <?php foreach($form->getFormElementConfig() as $el): ?>
         <?php
 
         $formElement = $form->get($el['name']);
@@ -91,7 +91,7 @@ $helpPost = isset($help['post']) ? $this->translate($help['post']) : null;
                             <?=$helpPost?>
                         </div>
                     <?php endif ?>
-                    <?=$this->recaptcha()->html($this->useRecaptcha) ?>
+                    <?=$this->captcha()->html($this->useCaptcha) ?>
                 <?php endif ?>
                 <?= $this->formRow($formElement) ?>
             </div>

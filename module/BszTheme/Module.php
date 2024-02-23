@@ -42,7 +42,7 @@ class Module
     public function getAutoloaderConfig()
     {
         return [
-            'Zend\Loader\StandardAutoloader' => [
+            'Laminas\Loader\StandardAutoloader' => [
                 'namespaces' => [
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
                 ],
@@ -77,6 +77,7 @@ class Module
                 'IllForm' =>        'BszTheme\View\Helper\Bodensee\Factory::getIllForm',
                 'libraries' =>      'BszTheme\View\Helper\Factory::getLibraries',
                 'mapongo' =>      'BszTheme\View\Helper\Bodensee\Factory::getMapongo',
+                'bibliographyIcon' => 'BszTheme\View\Helper\Bodensee\Factory::getBibliographyIcon',
             ],
             'invokables' => [
                 'string' => 'BszTheme\View\Helper\StringHelper',

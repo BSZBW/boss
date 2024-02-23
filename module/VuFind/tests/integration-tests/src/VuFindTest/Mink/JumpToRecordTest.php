@@ -1,8 +1,9 @@
 <?php
+
 /**
  * "Jump to record" test class.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2018.
  *
@@ -25,7 +26,10 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Page
  */
+
 namespace VuFindTest\Mink;
+
+use function strlen;
 
 /**
  * "Jump to record" test class.
@@ -37,10 +41,8 @@ namespace VuFindTest\Mink;
  * @link     https://vufind.org Main Page
  * @retry    4
  */
-class JumpToRecordTest extends \VuFindTest\Unit\MinkTestCase
+class JumpToRecordTest extends \VuFindTest\Integration\MinkTestCase
 {
-    use \VuFindTest\Unit\AutoRetryTrait;
-
     /**
      * Test that we can jump to the first record in a single-record result set.
      *
@@ -49,7 +51,7 @@ class JumpToRecordTest extends \VuFindTest\Unit\MinkTestCase
     public function testJumpToFirst()
     {
         $this->changeConfigs(
-            ["config" => ["Record" => ["jump_to_single_search_result" => true]]]
+            ['config' => ['Record' => ['jump_to_single_search_result' => true]]]
         );
 
         $page = $this->performSearch('id:testbug2');
@@ -72,8 +74,10 @@ class JumpToRecordTest extends \VuFindTest\Unit\MinkTestCase
 
         $expected = 'Showing 1 - 1 results of 1 for search \'id:testbug2\'';
         $this->assertEquals(
-            $expected, substr(
-                $this->findCss($page, '.search-stats')->getText(), 0,
+            $expected,
+            substr(
+                $this->findCss($page, '.search-stats')->getText(),
+                0,
                 strlen($expected)
             )
         );

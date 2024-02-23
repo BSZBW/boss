@@ -1,8 +1,9 @@
 <?php
+
 /**
  * KeepAlive test class.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2018.
  *
@@ -25,11 +26,12 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Page
  */
+
 namespace VuFindTest\AjaxHandler;
 
+use Laminas\Session\SessionManager;
 use VuFind\AjaxHandler\KeepAlive;
 use VuFind\AjaxHandler\KeepAliveFactory;
-use Zend\Session\SessionManager;
 
 /**
  * KeepAlive test class.
@@ -54,7 +56,7 @@ class KeepAliveTest extends \VuFindTest\Unit\AjaxHandlerTest
         $this->container->set(SessionManager::class, $sm);
         $factory = new KeepAliveFactory();
         $handler = $factory($this->container, KeepAlive::class);
-        $params = new \Zend\Mvc\Controller\Plugin\Params();
+        $params = new \Laminas\Mvc\Controller\Plugin\Params();
         $this->assertEquals([true], $handler->handleRequest($params));
     }
 }

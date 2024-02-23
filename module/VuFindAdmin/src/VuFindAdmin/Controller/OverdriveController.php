@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Admin Tag Controller
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2010.
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Site
  */
+
 namespace VuFindAdmin\Controller;
 
 /**
@@ -54,23 +56,21 @@ class OverdriveController extends AbstractAdmin
      */
     protected function getParam($param)
     {
-        return (isset($this->params[$param]))
-            ? $this->params[$param]
-            : $this->params()->fromPost(
-                $param,
-                $this->params()->fromQuery($param, null)
-            );
+        return $this->params[$param] ?? $this->params()->fromPost(
+            $param,
+            $this->params()->fromQuery($param, null)
+        );
     }
 
     /**
      * Tag Details
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function homeAction()
     {
         $connector  = $this->serviceLocator
-            ->get('VuFind\DigitalContent\OverdriveConnector');
+            ->get(\VuFind\DigitalContent\OverdriveConnector::class);
 
         $view = $this->createViewModel();
         $view->setTemplate('admin/overdrive/home');

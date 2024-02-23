@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Factory for instantiating Session Manager
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2016.
  *
@@ -25,11 +26,15 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
+
 namespace VuFind\Session;
 
-use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
-use Zend\Session\SessionManager;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Laminas\ServiceManager\Factory\FactoryInterface;
+use Laminas\Session\SessionManager;
+use Psr\Container\ContainerExceptionInterface as ContainerException;
+use Psr\Container\ContainerInterface;
 
 /**
  * Factory for instantiating Session Manager
@@ -58,7 +63,8 @@ class ManagerFactory implements FactoryInterface
         $options = 'cli' !== PHP_SAPI ? [
             'cookie_httponly' => $cookieManager->isHttpOnly(),
             'cookie_path' => $cookieManager->getPath(),
-            'cookie_secure' => $cookieManager->isSecure()
+            'cookie_secure' => $cookieManager->isSecure(),
+            'cookie_samesite' => $cookieManager->getSameSite(),
         ] : [];
 
         $domain = $cookieManager->getDomain();
@@ -91,11 +97,8 @@ class ManagerFactory implements FactoryInterface
             throw new \Exception('Cannot initialize session; configuration missing');
         }
 
-        $sessionPluginManager = $container
-            ->get(\VuFind\Session\PluginManager::class);
-        $sessionHandler = $sessionPluginManager->get($config->Session->type);
-        $sessionHandler->setConfig($config->Session);
-        return $sessionHandler;
+        return $container->get(\VuFind\Session\PluginManager::class)
+            ->get($config->Session->type);
     }
 
     /**
@@ -133,9 +136,11 @@ class ManagerFactory implements FactoryInterface
      * @throws ServiceNotFoundException if unable to resolve the service.
      * @throws ServiceNotCreatedException if an exception is raised when
      * creating a service.
-     * @throws ContainerException if any other error occurs
+     * @throws ContainerException&\Throwable if any other error occurs
      */
-    public function __invoke(ContainerInterface $container, $requestedName,
+    public function __invoke(
+        ContainerInterface $container,
+        $requestedName,
         array $options = null
     ) {
         if (!empty($options)) {
@@ -143,7 +148,7 @@ class ManagerFactory implements FactoryInterface
         }
 
         // Build configuration:
-        $sessionConfig = new \Zend\Session\Config\SessionConfig();
+        $sessionConfig = new \Laminas\Session\Config\SessionConfig();
         $sessionConfig->setOptions($this->getOptions($container));
 
         // Build session manager and attach handler:
@@ -155,7 +160,7 @@ class ManagerFactory implements FactoryInterface
 
         // Verify that any existing session has the correct path to avoid using
         // a cookie from a service higher up in the path hierarchy.
-        $storage = new \Zend\Session\Container('SessionState', $sessionManager);
+        $storage = new \Laminas\Session\Container('SessionState', $sessionManager);
         if (null !== $storage->cookiePath) {
             if ($storage->cookiePath != $sessionConfig->getCookiePath()) {
                 // Disable writes temporarily to keep the existing session intact
@@ -168,6 +173,11 @@ class ManagerFactory implements FactoryInterface
             }
         } else {
             $storage->cookiePath = $sessionConfig->getCookiePath();
+        }
+
+        // Set session start time:
+        if (empty($storage->sessionStartTime)) {
+            $storage->sessionStartTime = time();
         }
 
         // Check if we need to immediately stop it based on the settings object

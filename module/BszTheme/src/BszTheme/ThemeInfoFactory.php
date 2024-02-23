@@ -2,8 +2,7 @@
 
 namespace BszTheme;
 
-use Zend\Http\Request;
-use Zend\ServiceManager\ServiceManager;
+use Psr\Container\ContainerInterface;
 
 /**
  * VuFind creates its ThemeInfo in a dynamic way. We use a factory here
@@ -14,13 +13,13 @@ class ThemeInfoFactory extends \VuFindTheme\ThemeInfoFactory
     /**
      * Create ThemeInfo instance
      *
-     * @param ServiceManager $sm
+     * @param ContainerInterface $container
      *
      * @return ThemeInfo
      */
-    public static function getThemeInfo(ServiceManager $sm)
+    public static function getThemeInfo(ContainerInterface $container)
     {
-        $config = $sm->get('Bsz\Config\Client');
+        $config = $container->get('Bsz\Config\Client');
         $tag = 'swb';
         if (!$config->get('Site')->offsetExists('tag')) {
             $url = $config->get('Site')->get('url');
@@ -31,6 +30,17 @@ class ThemeInfoFactory extends \VuFindTheme\ThemeInfoFactory
         } elseif ($config->get('Site')->offsetExists('tag')) {
             $tag = $config->get('Site')->get('tag');
         }
-        return new ThemeInfo(realpath(APPLICATION_PATH . '/themes'), 'bodensee', $tag);
+        $themeInfo =  new ThemeInfo(realpath(APPLICATION_PATH . '/themes'), 'bodensee', $tag);
+
+        $cacheConfig = [
+            'adapter' => \Laminas\Cache\Storage\Adapter\Memory::class,
+            'options' => ['memory_limit' => -1],
+        ];
+        $cache = $container->get(\Laminas\Cache\Service\StorageAdapterFactory::class)
+            ->createFromArrayConfiguration($cacheConfig);
+
+        $themeInfo->setCache($cache);
+
+        return $themeInfo;
     }
 }

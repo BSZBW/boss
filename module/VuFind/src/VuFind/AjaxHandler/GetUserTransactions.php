@@ -1,8 +1,9 @@
 <?php
+
 /**
  * "Get User Transactions" AJAX handler
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2018.
  *
@@ -25,9 +26,10 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
+
 namespace VuFind\AjaxHandler;
 
-use Zend\Mvc\Controller\Plugin\Params;
+use Laminas\Mvc\Controller\Plugin\Params;
 
 /**
  * "Get User Transactions" AJAX handler
@@ -40,6 +42,15 @@ use Zend\Mvc\Controller\Plugin\Params;
  */
 class GetUserTransactions extends AbstractIlsAndUserAction
 {
+    use \VuFind\ILS\Logic\SummaryTrait;
+
+    /**
+     * Paginator
+     *
+     * @var \VuFind\ILS\PaginationHelper
+     */
+    protected $paginationHelper = null;
+
     /**
      * Handle a request.
      *
@@ -52,29 +63,57 @@ class GetUserTransactions extends AbstractIlsAndUserAction
         $this->disableSessionWrites();  // avoid session write timing bug
         $patron = $this->ilsAuthenticator->storedCatalogLogin();
         if (!$patron) {
-            return $this->formatResponse('', self::STATUS_HTTP_NEED_AUTH, 401);
+            return $this->formatResponse('', self::STATUS_HTTP_NEED_AUTH);
         }
         if (!$this->ils->checkCapability('getMyTransactions')) {
-            return $this->formatResponse('', self::STATUS_HTTP_ERROR, 405);
+            return $this->formatResponse('', self::STATUS_HTTP_ERROR);
         }
-        $items = $this->ils->getMyTransactions($patron);
-        $counts = [
-            'ok' => 0,
-            'warn' => 0,
-            'overdue' => 0
-        ];
-        foreach ($items['records'] as $item) {
-            if (!isset($item['dueStatus'])) {
-                continue;
+
+        $counts = [];
+        $functionConfig = $this->ils->checkFunction('getMyTransactions', $patron);
+        $page = 1;
+        do {
+            // Try to use large page size, but take ILS limits into account
+            $pageOptions = $this->getPaginationHelper()
+                ->getOptions($page, null, 1000, $functionConfig);
+            $result = $this->ils
+                ->getMyTransactions($patron, $pageOptions['ilsParams']);
+
+            $summary = $this->getTransactionSummary($result['records']);
+            foreach ($summary as $key => $value) {
+                $counts[$key] = ($counts[$key] ?? 0) + $value;
             }
-            if ($item['dueStatus'] == 'overdue') {
-                $counts['overdue'] += 1;
-            } elseif ($item['dueStatus'] == 'due') {
-                $counts['warn'] += 1;
-            } else {
-                $counts['ok'] += 1;
-            }
-        }
+            $pageEnd = $pageOptions['ilsPaging']
+                ? ceil($result['count'] / $pageOptions['limit'])
+                : 1;
+            $page++;
+        } while ($page <= $pageEnd);
+
         return $this->formatResponse($counts);
+    }
+
+    /**
+     * Set the ILS pagination helper
+     *
+     * @param \VuFind\ILS\PaginationHelper $helper Pagination helper
+     *
+     * @return void
+     */
+    protected function setPaginationHelper($helper)
+    {
+        $this->paginationHelper = $helper;
+    }
+
+    /**
+     * Get the ILS pagination helper
+     *
+     * @return \VuFind\ILS\PaginationHelper
+     */
+    protected function getPaginationHelper()
+    {
+        if (null === $this->paginationHelper) {
+            $this->paginationHelper = new \VuFind\ILS\PaginationHelper();
+        }
+        return $this->paginationHelper;
     }
 }

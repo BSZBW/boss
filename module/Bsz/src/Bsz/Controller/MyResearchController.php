@@ -1,9 +1,9 @@
 <?php
 namespace Bsz\Controller;
 
-use Zend\Http\Header\SetCookie;
-use Zend\Session\Container as SessionContainer;
-use Zend\Session\SessionManager;
+use Laminas\Http\Header\SetCookie;
+use Laminas\Session\Container as SessionContainer;
+use Laminas\Session\SessionManager;
 
 /**
  * Bsz adaption of MyResearchController

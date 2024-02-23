@@ -1,8 +1,9 @@
 <?php
+
 /**
  * FacetList content block.
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2018.
  *
@@ -25,11 +26,12 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:plugins:recommendation_modules Wiki
  */
+
 namespace VuFind\ContentBlock;
 
+use Laminas\Config\Config;
 use VuFind\Config\PluginManager as ConfigManager;
 use VuFind\Search\FacetCache\PluginManager as FacetCacheManager;
-use Zend\Config\Config;
 
 /**
  * FacetList content block.

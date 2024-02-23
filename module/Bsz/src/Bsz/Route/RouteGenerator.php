@@ -26,16 +26,14 @@ namespace Bsz\Route;
  */
 class RouteGenerator extends \VuFind\Route\RouteGenerator
 {
+
     /**
-     * Constructor
-     *
-     * @param array $nonTabRecordActions List of non-tab record actions (null
-     * for default).
+     * @param array|null $nonTabRecordActions
      */
     public function __construct(array $nonTabRecordActions = null)
     {
         if (null === $nonTabRecordActions) {
-            $this->nonTabRecordActions = [
+            self::$nonTabRecordActions = [
                 'AddComment', 'DeleteComment', 'AddTag', 'DeleteTag', 'Save',
                 'Email', 'SMS', 'Cite', 'Export', 'RDF', 'Hold', 'BlockedHold',
                 'Home', 'StorageRetrievalRequest', 'AjaxTab',
@@ -43,7 +41,7 @@ class RouteGenerator extends \VuFind\Route\RouteGenerator
                 'PDF', 'ILLForm'
             ];
         } else {
-            $this->nonTabRecordActions = $nonTabRecordActions;
+            self::$nonTabRecordActions = $nonTabRecordActions;
         }
     }
 }

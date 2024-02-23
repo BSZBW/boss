@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Record driver plugin manager
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2010.
  *
@@ -25,9 +26,12 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:plugins:record_drivers Wiki
  */
+
 namespace VuFind\RecordDriver;
 
-use Zend\ServiceManager\Factory\InvokableFactory;
+use Laminas\ServiceManager\Factory\InvokableFactory;
+
+use function is_callable;
 
 /**
  * Record driver plugin manager
@@ -49,11 +53,14 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
         'browzine' => BrowZine::class,
         'eds' => EDS::class,
         'eit' => EIT::class,
+        'epf' => EPF::class,
         'libguides' => LibGuides::class,
+        'libguidesaz' => LibGuidesAZ::class,
         'missing' => Missing::class,
         'pazpar2' => Pazpar2::class,
         'primo' => Primo::class,
         'search2default' => Search2Default::class,
+        'solrarchivesspace' => SolrArchivesSpace::class,
         'solrauth' => SolrAuthMarc::class, // legacy name
         'solrauthdefault' => SolrAuthDefault::class,
         'solrauthmarc' => SolrAuthMarc::class,
@@ -70,7 +77,7 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
     /**
      * Default delegator factories.
      *
-     * @var string[][]|\Zend\ServiceManager\Factory\DelegatorFactoryInterface[][]
+     * @var string[][]|\Laminas\ServiceManager\Factory\DelegatorFactoryInterface[][]
      */
     protected $delegators = [
         SolrMarc::class => [IlsAwareDelegatorFactory::class],
@@ -86,11 +93,14 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
         BrowZine::class => InvokableFactory::class,
         EDS::class => NameBasedConfigFactory::class,
         EIT::class => NameBasedConfigFactory::class,
+        EPF::class => NameBasedConfigFactory::class,
         LibGuides::class => InvokableFactory::class,
+        LibGuidesAZ::class => InvokableFactory::class,
         Missing::class => AbstractBaseFactory::class,
         Pazpar2::class => NameBasedConfigFactory::class,
         Primo::class => NameBasedConfigFactory::class,
         Search2Default::class => SolrDefaultFactory::class,
+        SolrArchivesSpace::class => SolrDefaultFactory::class,
         SolrAuthDefault::class => SolrDefaultWithoutSearchServiceFactory::class,
         SolrAuthMarc::class => SolrDefaultWithoutSearchServiceFactory::class,
         SolrDefault::class => SolrDefaultFactory::class,
@@ -112,7 +122,8 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
      * @param array $v3config                  If $configOrContainerInstance is a
      * container, this value will be passed to the parent constructor.
      */
-    public function __construct($configOrContainerInstance = null,
+    public function __construct(
+        $configOrContainerInstance = null,
         array $v3config = []
     ) {
         // These objects are not meant to be shared -- every time we retrieve one,
@@ -126,7 +137,8 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
         // Add an initializer for setting up hierarchies
         $initializer = function ($sm, $instance) {
             $hasHierarchyType = is_callable([$instance, 'getHierarchyType']);
-            if ($hasHierarchyType
+            if (
+                $hasHierarchyType
                 && is_callable([$instance, 'setHierarchyDriverManager'])
             ) {
                 if ($sm && $sm->has(\VuFind\Hierarchy\Driver\PluginManager::class)) {
@@ -136,7 +148,7 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
                 }
             }
         };
-        $this->addInitializer($initializer, false);
+        $this->addInitializer($initializer);
     }
 
     /**
@@ -159,7 +171,9 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
      *
      * @return AbstractBase
      */
-    public function getSolrRecord($data, $keyPrefix = 'Solr',
+    public function getSolrRecord(
+        $data,
+        $keyPrefix = 'Solr',
         $defaultKeySuffix = 'Default'
     ) {
         $key = $keyPrefix . ucwords(

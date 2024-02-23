@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Password Access authentication class
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Villanova University 2019.
  *
@@ -26,10 +27,13 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Page
  */
+
 namespace VuFind\Auth;
 
 use VuFind\Db\Row\User;
 use VuFind\Exception\Auth as AuthException;
+
+use function in_array;
 
 /**
  * Password Access authentication class
@@ -44,11 +48,11 @@ use VuFind\Exception\Auth as AuthException;
 class PasswordAccess extends AbstractBase
 {
     /**
-     * Get configuration (load automatically if not previously set).  Throw an
+     * Get configuration (load automatically if not previously set). Throw an
      * exception if the configuration is invalid.
      *
      * @throws AuthException
-     * @return \Zend\Config\Config
+     * @return \Laminas\Config\Config
      */
     public function getConfig()
     {
@@ -62,9 +66,9 @@ class PasswordAccess extends AbstractBase
     }
 
     /**
-     * Attempt to authenticate the current user.  Throws exception if login fails.
+     * Attempt to authenticate the current user. Throws exception if login fails.
      *
-     * @param \Zend\Http\PhpEnvironment\Request $request Request object containing
+     * @param \Laminas\Http\PhpEnvironment\Request $request Request object containing
      * account credentials.
      *
      * @throws AuthException

@@ -24,6 +24,8 @@ use VuFind\RecordDriver\Response\PublicationDetails;
 
 trait OriginalLanguageTrait
 {
+    use AdvancedMarcReaderTrait;
+
     /**
      * @return string
      */
@@ -70,16 +72,16 @@ trait OriginalLanguageTrait
     public function getOriginalLanguage($targetField, $targetSubfield): string
     {
         $return = '';
-        $fields = $this->getMarcRecord()->getFields('880');
+        $fields = $this->getFields('880');
 
         foreach ($fields as $field) {
-            $subfield6 = $field->getSubfield('6')->getData();
-            $sf = $field->getSubfield($targetSubfield);
-            if ($sf !== false) {
-                $data = trim($sf->getData());
-                if (substr_count($subfield6, $targetField) > 0 && isset($data)) {
-                    $return = $data;
-                }
+            if(!is_array($field)) {
+                continue;
+            }
+            $sf6 = $this->getSubfield($field, '6');
+            $data = trim($this->getSubfield($field, $targetSubfield));
+            if (substr_count($sf6, $targetField) > 0 && !empty($data)) {
+                $return = $data;
             }
         }
         return $return;
@@ -91,7 +93,7 @@ trait OriginalLanguageTrait
      * @param string $separator
      * @return array
      */
-    public function getOriginalLanguageArray(array $targets, $separator = ' '): array
+    public function getOriginalLanguageArray(array $targets, string $separator = ' '): array
     {
         $return = [];
         foreach ($targets as $tag => $subfields) {
