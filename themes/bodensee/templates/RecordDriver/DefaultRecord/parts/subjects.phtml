@@ -297,7 +297,7 @@ $ihoebSubjects = $this->driver->tryMethod('getIhbSubjects');
 
             <?php if (!empty($ihoebSubjects)): ?>
                 <?php if (!empty($subjects)):?><br><br><?php endif;?>
-                <b><u>Internationale Hölderlin-Bibliographie: Systemstellen - Schlagwörter:</u></b> <br>
+                Internationale Hölderlin-Bibliographie: Systemstellen - Schlagwörter:<br>
                 <?php $values = []; ?>
                 <?php foreach ($ihoebSubjects['main'] ?? [] as $s): ?>
                     <?php
