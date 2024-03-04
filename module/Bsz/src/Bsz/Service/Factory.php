@@ -31,8 +31,10 @@ class Factory
         if (!array_key_exists($tabname, $filterConfig)) {
             $filterConfig[$tabname] = [];
         }
-        foreach ($isils as $isil) {
-            $filter = '~institution_id:"' . $isil . '"';
+
+        if(!empty($isils)) {
+            $filters = array_map(function($is) {return 'institution_id:"' . $is . '"';}, $isils);
+            $filter = '(' . implode(' OR ', $filters) . ')';
             if (array_key_exists($tabname, $filterConfig)
                 && !in_array($filter, $filterConfig[$tabname])) {
                 array_push($filterConfig[$tabname], $filter);
