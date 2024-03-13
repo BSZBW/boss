@@ -54,12 +54,12 @@
             <? if (isset($params['Bestellform'])):
                 $form = $params['Bestellform'];
             endif; ?>
-            <div class="col-sm-2">
-                <? if ($this->firstLibrary->allowsLend()): ?>
+            <?php if ($this->firstLibrary->allowsLend() && $type !== 'article'): ?>
+                <div class="col-sm-2">
                     <input type="radio" id="ill-lend" name="Bestellform" data-bestellform=""  value="Leihen" <? if($form == 'Leihen'):?>checked<?endif; ?> required />
                     <span for="ill-copy"><strong><?=$this->transEsc('lend')?></strong></span>
-                <? endif; ?>
-            </div>
+                </div>
+             <?php endif;?>
             <div class="col-sm-2">
                 <? if ($this->firstLibrary->allowsCopy()): ?>
                     <input type="radio" id="ill-copy" name="Bestellform" data-bestellform="" value="Kopie" <? if($form == 'Kopie'):?>checked<?endif; ?> required />
