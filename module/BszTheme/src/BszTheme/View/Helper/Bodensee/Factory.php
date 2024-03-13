@@ -257,5 +257,12 @@ class Factory
         );
     }
 
+    public static function getRecordDetails(ContainerInterface $container)
+    {
+        return new RecordDetailsHelper(
+            $container->get('VuFind\Config')
+        );
+    }
+
 
 }

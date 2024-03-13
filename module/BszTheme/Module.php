@@ -78,6 +78,7 @@ class Module
                 'libraries' =>      'BszTheme\View\Helper\Factory::getLibraries',
                 'mapongo' =>      'BszTheme\View\Helper\Bodensee\Factory::getMapongo',
                 'bibliographyIcon' => 'BszTheme\View\Helper\Bodensee\Factory::getBibliographyIcon',
+                'recordDetails' => 'BszTheme\View\Helper\Bodensee\Factory::getRecordDetails'
             ],
             'invokables' => [
                 'string' => 'BszTheme\View\Helper\StringHelper',

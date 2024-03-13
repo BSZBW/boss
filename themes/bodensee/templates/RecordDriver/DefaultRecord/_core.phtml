@@ -1,4 +1,4 @@
-<?php
+<?
 /*
  * Copyright 2021 (C) Bibliotheksservice-Zentrum Baden-
  * Württemberg, Konstanz, Germany
@@ -52,18 +52,6 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
                 <strong><?= $this->transEsc("Saved in") ?>:</strong>
             </div>
         <? endif; ?>
-
-
-        <?php $details = $this->recordDetails($this->driver); ?>
-        <?php $showList = $this->config()->get('FullView'); ?>
-        <?php foreach ($showList->get('Items') as $key => $value): ?>
-            <?php $content = $details->get($key); ?>
-            <?php if (isset($content)): ?>
-                <tr>
-                    <th></th>
-                </tr>
-            <?php endif; ?>
-        <?php endforeach; ?>
         <? /* Display Main Details */ ?>
         <table class="table table-striped">
             <? $container = $this->driver->tryMethod('getContainer');
