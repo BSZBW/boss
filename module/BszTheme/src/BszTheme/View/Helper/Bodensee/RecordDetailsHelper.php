@@ -3,20 +3,20 @@
 namespace BszTheme\View\Helper\Bodensee;
 
 use BszCommon\RecordDriver\RecordDetails;
-use Laminas\Config\Config;
 use Laminas\View\Helper\AbstractHelper;
+use Psr\Container\ContainerInterface;
 
 class RecordDetailsHelper extends AbstractHelper
 {
-    protected $config;
+    protected $container;
 
-    public function __construct($config)
+    public function __construct(ContainerInterface $container)
     {
-        $this->config = $config;
+        $this->container = $container;
     }
 
     public function __invoke($driver)
     {
-        return new RecordDetails($driver, $this->config);
+        return new RecordDetails($driver, $this->container);
     }
 }

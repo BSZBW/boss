@@ -55,15 +55,22 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
 
 
         <?php $details = $this->recordDetails($this->driver); ?>
-        <?php $showList = $this->config()->get('FullView'); ?>
-        <?php foreach ($showList->get('Items') as $key => $value): ?>
-            <?php $content = $details->get($key); ?>
-            <?php if (isset($content)): ?>
-                <tr>
-                    <th></th>
-                </tr>
-            <?php endif; ?>
-        <?php endforeach; ?>
+        <?php $detailList = $this->detailList(); ?>
+        <table class="table table-striped">
+            <?php foreach ($detailList as $item): ?>
+                <?php $data = $details->get($item['method']); ?>
+                <?php if($data): ?>
+                    <tr>
+                    <th><?=$this->transEsc($item['label']); ?></th>
+                    <td><?=$this->record($this->driver)->renderTemplate(
+                            $item['template'],
+                            ['data' => $data] + $item['context']
+                        ); ?>
+                    </td>
+                    </tr>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </table>
         <? /* Display Main Details */ ?>
         <table class="table table-striped">
             <? $container = $this->driver->tryMethod('getContainer');

@@ -259,9 +259,13 @@ class Factory
 
     public static function getRecordDetails(ContainerInterface $container)
     {
-        return new RecordDetailsHelper(
-            $container->get('VuFind\Config')
-        );
+        return new RecordDetailsHelper($container);
+    }
+
+    public static function getRecordDetailList(ContainerInterface $container)
+    {
+        $config = $container->get('VuFind\Config')->get('FullView');
+        return new RecordDetailList($config);
     }
 
 
