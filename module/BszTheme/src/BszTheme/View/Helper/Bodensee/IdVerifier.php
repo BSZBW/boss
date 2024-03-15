@@ -22,8 +22,8 @@ class IdVerifier extends AbstractHelper
 
     public function __invoke(string $id, string $sourceId): bool
     {
-        $query = new Query("id: " . $id);
-        $command = new SearchCommand($sourceId, $query, 0, 0, null);
+        $query = new Query('id:"' . $id . '"');
+        $command = new SearchCommand($sourceId, $query, 0, 1, null);
 
         $result = $this->searchService->invoke($command)->getResult();
 
