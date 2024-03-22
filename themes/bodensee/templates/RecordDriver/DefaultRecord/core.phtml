@@ -58,16 +58,18 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
         <?php $detailList = $this->detailList(); ?>
         <table class="table table-striped">
             <?php foreach ($detailList as $item): ?>
-                <?php $data = $details->get($item['method']); ?>
-                <?php if($data): ?>
+                <?php $req = $details->checkRequirements($item['requirements']); if($req): ?>
+                <?php $data = $details->get($item['methods']); ?>
+                <?php if($data || $item['allowEmpty']): ?>
                     <tr>
-                    <th><?=$this->transEsc($item['label']); ?></th>
+                    <th><?=$this->abbrevHeadline($item['label']); ?></th>
                     <td><?=$this->record($this->driver)->renderTemplate(
                             $item['template'],
                             ['data' => $data] + $item['context']
                         ); ?>
                     </td>
                     </tr>
+                <?php endif; ?>
                 <?php endif; ?>
             <?php endforeach; ?>
         </table>
@@ -428,7 +430,6 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
             </tr>
         <? endif; ?>
       <? endif; ?>
-
       <? if ($this->usertags()->getMode() !== 'disabled'): ?>
         <? $tagList = $this->driver->getTags(); ?>
         <tr>

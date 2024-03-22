@@ -1,0 +1,20 @@
+<?php foreach ($this->data as $shortcut => $description): ?>
+    <?php $descriptionHtml = '<ol>';
+    foreach ($description as $item) {
+        $descriptionHtml .= '<li>' . $item . '</li>';
+    }
+    $descriptionHtml .= '</ol>';
+    if ($descriptionHtml == '<ol></ol>') {
+        $descriptionHtml = '';
+    } else {
+        $descriptionHtml = '<h5>' . $this->transEsc('RVK') . '</h5>' . $descriptionHtml;
+    }
+
+    ?>
+    <span class="notationLine markjs">
+        <a data-toggle="tooltip" data-placement="right" data-html="true"
+           href="<?= $this->record($this->driver)->getLink('rvknotation', $shortcut, $this->searchClassId) ?>"
+           class="searchicon"
+           title="<?= $descriptionHtml ?>"><?= $this->transEsc($shortcut) ?></a>
+    </span>
+<?php endforeach; ?>

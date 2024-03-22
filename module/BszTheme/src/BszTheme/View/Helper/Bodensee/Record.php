@@ -117,6 +117,23 @@ class Record extends \VuFind\View\Helper\Root\Record
         return $sources;
     }
 
+    public function getLinkDetails2()
+    {
+        $openUrl = $this->getView()->plugin('openUrl');
+        $openUrlActive = $openUrl($this->driver, 'record')->isActive();
+        return $this->getLinkDetails($openUrlActive);
+    }
+
+    public function getOpenUrlTemplate()
+    {
+        $openUrl = $this->getView()->plugin('openUrl');
+        $openUrl = $openUrl($this->driver, 'record');
+        if($openUrl->isActive()) {
+            return $openUrl->renderTemplate();
+        }
+        return '';
+    }
+
     /**
      * Generate a thumbnail URL (return false if unsupported).
      *
@@ -289,5 +306,26 @@ class Record extends \VuFind\View\Helper\Root\Record
                 'driver' => $this->driver
             ]
         );
+    }
+
+    public function getLabels()
+    {
+        $retVal = [];
+        if($this->driver->tryMethod('isEPflicht')) {
+            $retVal[] = [
+                'class' => 'label-warning',
+                'short' => 'ePflicht-BW Label',
+                'long' => 'ePflicht-BW Text'
+            ];
+        }
+        if($this->driver->tryMethod('isLFER')) {
+            $retVal[] = [
+                'class' => 'label-lfer',
+                'short' => 'lizenzfrei',
+                'long' => 'LFER_long'
+            ];
+        }
+
+        return $retVal;
     }
 }

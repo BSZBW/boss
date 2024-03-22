@@ -1,0 +1,30 @@
+<?php $rand = rand(0, 9999) ?>
+<?php $count = 0; ?>
+<div class="subjectLine" property="keywords">
+    <?php foreach ($this->data as $field): ?>
+        <?php $subject = ''; ?>
+        <?php if (is_array($field) && count($field) == 1): $field = explode('--', $field[0]); ?>
+            <?php $i = 0;
+            foreach ($field as $subfield): ?>
+                <?= ($i++ == 0) ? '' : ' &gt; ' ?>
+                <?php $subject = trim($subject . ' ' . $subfield); ?>
+                <?php //Die Links hatten eine Klasse backlink. Diese führt mit einer
+                // bestimmten Browsererweiterung (uBlock / AdBlock?) zu komischer
+                // Darstellung beim Hovern
+                ?>
+                <a class="markjs searchicon"
+                   title="<?= $this->escapeHtmlAttr($subject) ?>"
+                   href="<?= $this->record($this->driver)->getLink('subject', $subject, $this->searchClassId) ?>"><?= trim($this->escapeHtml($subfield)) ?></a>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <a class="markjs searchicon <?php if ($count >= 5): ?>rvksubjects-<?= $rand ?> collapse-inline collapse multi-collapse <?php endif; ?>"
+               title="<?= $this->escapeHtmlAttr($field) ?>"
+               href="<?= $this->record($this->driver)->getLink('rvkheading', $field, $this->searchClassId) ?>">
+                <?= trim($this->escapeHtml($field)) ?></a>
+        <?php endif; ?>
+        <?php $count++ ?>
+    <?php endforeach; ?>
+    <?php if ($count > 5): ?>
+        <?= $this->showmore('.rvksubjects-' . $rand, false) ?>
+    <?php endif; ?>
+</div>

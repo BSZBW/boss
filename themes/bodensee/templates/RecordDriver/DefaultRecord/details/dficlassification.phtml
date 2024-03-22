@@ -1,0 +1,8 @@
+<?php foreach ($this->data as $notation): ?>
+    <span class="notationLine markjs">
+        <a data-toggle="tooltip" data-placement="right" data-html="true"
+           href="<?= $this->record($this->driver)->getLink('dficlassification', $notation, $this->searchClassId) ?>"
+           class="searchicon"
+           title="<?= $this->transEsc($notation) ?>"><?=$notation?> <?=$this->transEsc('FIV::'.preg_replace('/\s/', '', strtolower($notation))) ?></a>
+    </span>
+<?php endforeach; ?>
