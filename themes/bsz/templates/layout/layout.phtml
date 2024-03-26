@@ -46,6 +46,7 @@ use Laminas\View\Helper\HeadScript;
         ]
       );
     ?>
+    <?php $icons = !isset($this->renderingError) ? $this->render('js-icons.phtml') : '{}'; ?>
     <?$this->headMeta()->appendProperty('og:type', 'website')?>
     <?$this->headMeta()->appendProperty('og:title',$this->headTitle()->renderTitle())?>
     <?$this->headMeta()->appendProperty('og:name', 'BOSS: BSZ - One Stop Search')?>
@@ -169,6 +170,7 @@ use Laminas\View\Helper\HeadScript;
       $setupJS = <<<JS
 VuFind.path = '{$root}';
 VuFind.defaultSearchBackend = '{$dsb}';
+VuFind.addIcons({$icons});
 VuFind.addTranslations({$translations});
 JS;
       $this->headScript()->appendScript($setupJS);

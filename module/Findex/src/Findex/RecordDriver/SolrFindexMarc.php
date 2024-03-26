@@ -430,7 +430,7 @@ class SolrFindexMarc extends SolrMarc implements Constants
             if ($field['i1'] == 0) {
 
                 $sfw = $this->getSubfield($field, 'w');
-                if(!empty($sfw)) {
+                if(str_starts_with($sfw, '(DE-627')) {
                     $tmp['ppn'] =  preg_replace('/\(.*\)(.*)/', '$1', $sfw);
                 }
 
