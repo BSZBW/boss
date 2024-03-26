@@ -886,4 +886,39 @@ class SolrFindexMarc extends SolrMarc implements Constants
         return $retVal;
     }
 
+    public function getZdbId()
+    {
+        $zdb = '';
+        $substr = '';
+        $matches = [];
+        $consortial = $this->getConsortialIDs();
+        foreach ($consortial as $id) {
+            preg_match('/\(DE-\d{3}\)ZDB(.*)/', $id, $matches);
+            if (!empty($matches) && $matches[1] !== '') {
+                $zdb = $matches[1];
+            }
+        }
+
+        // Pull ZDB ID out of recurring field 016
+        foreach ($this->getFields('016') as $field) {
+            if(!is_array($field)) {
+                continue;
+            }
+
+            $isil = $data = '';
+            foreach ($field['subfields'] ?? [] as $subfield) {
+                if ($subfield['code'] == 'a') {
+                    $data = $subfield['data'];
+                } elseif ($subfield['code'] == '2') {
+                    $isil = $subfield['data'];
+                }
+            }
+            if ($isil == 'DE-600') {
+                $zdb = $data;
+            }
+        }
+
+        return $zdb;
+    }
+
 }

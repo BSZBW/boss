@@ -1,5 +1,5 @@
 <?php $count = 0; ?>
-<?php $separator = $this->escapeHtml($this->separator ?? ' '); ?>
+<?php $separator = $this->separatot ? $this->escapeHtml($this->separator) : '<br>' ?>
 <?php foreach ($this->data as $item): ?>
     <?=$this->transEsc($item)?><?php if($count > 0):?><?=$separator?><?php endif;?>
     <?php $count++; ?>

@@ -17,7 +17,9 @@ class AbbrevHeadline extends AbstractHelper
             'RVK' => 'RVK',
             'FIV' => 'FIV',
             'STW' => 'STW',
-            'GND' => 'GND'
+            'GND' => 'GND',
+            'PPN' => 'PPN',
+            'GTIN' => 'GTIN'
         ];
     }
 

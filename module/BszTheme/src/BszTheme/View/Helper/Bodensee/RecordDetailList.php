@@ -35,10 +35,11 @@ class RecordDetailList extends AbstractHelper
 //        return $retVal;
 //    }
 
-    public function __invoke(): array
+    public function __invoke(string $section = 'Items'): array
     {
         $retVal = [];
-        foreach ($this->config->Items ?? [] as $key => $value) {
+        $list = $this->config->get($section)->toArray();
+        foreach ($list ?? [] as $key => $value) {
 
             $defaultMethod = 'get' . $key;
             $default = [

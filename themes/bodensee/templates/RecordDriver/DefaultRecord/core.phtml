@@ -53,26 +53,11 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
             </div>
         <? endif; ?>
 
-
-        <?php $details = $this->recordDetails($this->driver); ?>
-        <?php $detailList = $this->detailList(); ?>
-        <table class="table table-striped">
-            <?php foreach ($detailList as $item): ?>
-                <?php $req = $details->checkRequirements($item['requirements']); if($req): ?>
-                <?php $data = $details->get($item['methods']); ?>
-                <?php if($data || $item['allowEmpty']): ?>
-                    <tr>
-                    <th><?=$this->abbrevHeadline($item['label']); ?></th>
-                    <td><?=$this->record($this->driver)->renderTemplate(
-                            $item['template'],
-                            ['data' => $data] + $item['context']
-                        ); ?>
-                    </td>
-                    </tr>
-                <?php endif; ?>
-                <?php endif; ?>
-            <?php endforeach; ?>
-        </table>
+        <?php $detailList = $this->detailList('Items'); ?>
+        <?=$this->record($this->driver)->renderTemplate(
+            'table.phtml',
+            ['data' => $detailList]
+        ) ?>
         <? /* Display Main Details */ ?>
         <table class="table table-striped">
             <? $container = $this->driver->tryMethod('getContainer');
