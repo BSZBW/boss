@@ -52,6 +52,7 @@ class RecordDetailList extends AbstractHelper
                     ]],
                     'important' => []
                 ],
+                'class' => '',
                 'allowEmpty' => false,
                 'requirements' => [],
                 'template' => 'details/' . strtolower($key) . '.phtml',
@@ -71,6 +72,7 @@ class RecordDetailList extends AbstractHelper
                     'calls' => $this->getMethods($section, $defaultMethod),
                     'important' => $this->extractImportant($section)
                 ],
+                'class' => $this->getHtmlClass($section),
                 'requirements' => $this->getRequirements($section),
                 'template' => $template,
                 'context' => $this->getContext2($section),
@@ -215,6 +217,11 @@ class RecordDetailList extends AbstractHelper
     protected function getAllowEmpty(Config $section): bool
     {
         return $section->get('allowEmpty') === 'true';
+    }
+
+    protected function getHtmlClass(Config $section)
+    {
+        return $section->get('class', '');
     }
 
 }

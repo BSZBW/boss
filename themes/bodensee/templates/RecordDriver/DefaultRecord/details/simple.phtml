@@ -1,1 +1,2 @@
-<?=$this->escapeHtml($this->data)?>
+<?php $plugins = $this->plugins ?? 'escapeHtml' ?>
+<?=$this->pluginChain($this->data, $plugins)?>

@@ -8,7 +8,8 @@
                 <?php $hasContent = true; ?>
                 <tr>
                     <th><?=$this->abbrevHeadline($item['label']); ?></th>
-                    <td><?=$this->record($this->driver)->renderTemplate(
+                    <?php $classStr = empty($item['class']) ? '' : 'class="' . $item['class'] . '"' ?>
+                    <td <?=$classStr?>><?=$this->record($this->driver)->renderTemplate(
                             $item['template'],
                             ['data' => $data] + $item['context']
                         ); ?>

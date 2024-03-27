@@ -87,7 +87,8 @@ class Module
                 'showmore' => 'BszTheme\View\Helper\Bodensee\Showmore',
                 'clipboard' => 'BszTheme\View\Helper\Bodensee\Clipboard',
                 'bools' => 'BszTheme\View\Helper\Bodensee\BoolHelper',
-                'abbrevHeadline' => 'BszTheme\View\Helper\Bodensee\AbbrevHeadline'
+                'abbrevHeadline' => 'BszTheme\View\Helper\Bodensee\AbbrevHeadline',
+                'pluginChain' => 'BszTheme\View\Helper\Bodensee\PluginChain'
             ],
         ];
     }
