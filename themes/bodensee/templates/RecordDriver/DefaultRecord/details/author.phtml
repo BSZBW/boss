@@ -9,7 +9,7 @@
     ?>
     <?php if ($count > 0):?><br><?php endif;?>
     <a class="<?=$this->type?> markjs" href="<?=$this->record($this->driver)->getLink('author', $name, $this->searchClassId)?>"><?=$this->transEsc($name)?><?php if (isset($live)):?>, <?=$this->escapeHtml($live)?><?php endif; ?></a><?php if (!empty($gnd)): ?>
-        <a data-placement="right" data-toggle="tooltip" title="<?=$this->transEsc('Search GND-ID')?>: <?=$this->escapeHtml($gnd)?>" class="hidden-print searchLink" href="<?=$this->url('search-results')?>?lookfor=gnd_from:<?=$this->escapeHtml($gnd)?>&amp;type=AllFields<?= $hf ?>"></a><span class="visible-print">GND-ID: <?=$this->escapeHtml($gnd)?></span><?php endif; ?>
+        <a data-placement="right" data-toggle="tooltip" title="<?=$this->transEsc('Search GND-ID')?>: <?=$this->escapeHtml($gnd)?>" class="hidden-print searchLink" href="<?=$this->url('search-results')?>?lookfor=&quot;<?=$this->escapeHtml($gnd)?>&quot;&amp;type=GNDId<?= $hf ?>"></a><span class="visible-print">GND-ID: <?=$this->escapeHtml($gnd)?></span><?php endif; ?>
 <!-- --><?php if (!empty($role)): ?>, <?=$this->transEsc('CreatorRoles::'.$role)?><?php endif; ?>
     <?php if(isset($gnd)):?>
         <?php $gndLink = $this->gndLink()->fromExplore($gnd); ?>
