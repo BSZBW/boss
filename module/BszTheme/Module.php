@@ -78,12 +78,17 @@ class Module
                 'libraries' =>      'BszTheme\View\Helper\Factory::getLibraries',
                 'mapongo' =>      'BszTheme\View\Helper\Bodensee\Factory::getMapongo',
                 'bibliographyIcon' => 'BszTheme\View\Helper\Bodensee\Factory::getBibliographyIcon',
+                'recordDetails' => 'BszTheme\View\Helper\Bodensee\Factory::getRecordDetails',
+                'detailList' => 'BszTheme\View\Helper\Bodensee\Factory::getRecordDetailList'
             ],
             'invokables' => [
                 'string' => 'BszTheme\View\Helper\StringHelper',
                 'abbrev' => 'BszTheme\View\Helper\Bodensee\Abbrev',
                 'showmore' => 'BszTheme\View\Helper\Bodensee\Showmore',
-                'clipboard' => 'BszTheme\View\Helper\Bodensee\Clipboard'
+                'clipboard' => 'BszTheme\View\Helper\Bodensee\Clipboard',
+                'bools' => 'BszTheme\View\Helper\Bodensee\BoolHelper',
+                'abbrevHeadline' => 'BszTheme\View\Helper\Bodensee\AbbrevHeadline',
+                'pluginChain' => 'BszTheme\View\Helper\Bodensee\PluginChain'
             ],
         ];
     }

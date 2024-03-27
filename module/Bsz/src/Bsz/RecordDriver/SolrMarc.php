@@ -47,6 +47,8 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
     protected $runner;
     protected $container = [];
 
+    protected $lazyLocalUrls;
+
     /**
      * is this item a collection
      * @return bool
@@ -570,8 +572,14 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
         return $f007_0 . $f007_1;
     }
 
-    public function getProvenances(array $isils = []): array
+    public function getProvenances(string $isils): array
     {
+        if($isils == '*') {
+            $isils = ['*'];
+        }else {
+            $isils = array_map('trim', explode(',', $isils));
+        }
+
         $retVal = [];
         $f561 = $this->getFields('561');
         foreach ($f561 as $field) {
@@ -645,4 +653,24 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
         }
         return $retVal;
     }
+
+    public function getLocalUrls()
+    {
+        return [];
+    }
+
+    public function retrieveLocalUrls()
+    {
+        if($this->lazyLocalUrls == null) {
+            $this->lazyLocalUrls = $this->getLocalUrls();
+        }
+        return $this->lazyLocalUrls;
+    }
+
+    public function hasLocalUrls(): bool
+    {
+        $localUrls = $this->retrieveLocalUrls();
+        return isset($localUrls[0]['url']);
+    }
+
 }

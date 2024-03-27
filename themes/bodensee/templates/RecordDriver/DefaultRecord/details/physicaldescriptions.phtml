@@ -1,0 +1,8 @@
+<?php if (!empty($this->data['physicalOl'])): ?>
+    <?php foreach ($this->data['physicalOl'] as $k => $field): ?>
+        <?=$this->escapeHtml($field)?><?php if (isset($this->data['physical'][$k+1])):?> ; <?php endif?>
+    <?php endforeach; ?>
+    <br/><?php endif; ?>
+<?php foreach ($this->data['physical'] as $k => $field): ?>
+    <?=$this->escapeHtml($field)?><?php if (isset($this->data['physical'][$k+1])):?> ; <?php endif?>
+<?php endforeach; ?>

@@ -52,27 +52,6 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
                 <strong><?= $this->transEsc("Saved in") ?>:</strong>
             </div>
         <? endif; ?>
-
-        <?php $details = $this->recordDetails($this->driver); ?>
-        <?php $detailList = $this->detailList(); ?>
-        <table class="table table-striped">
-            <?php foreach ($detailList as $item): ?>
-                <?php $req = $details->checkRequirements($item['requirements']); if($req): ?>
-                    <?php $data = $details->get($item['methods']); ?>
-                    <?php if($data): ?>
-                        <tr>
-                            <th><?=$this->abbrevHeadline($item['label']); ?></th>
-                            <td><?=$this->record($this->driver)->renderTemplate(
-                                    $item['template'],
-                                    ['data' => $data] + $item['context']
-                                ); ?>
-                            </td>
-                        </tr>
-                    <?php endif; ?>
-                <?php endif; ?>
-            <?php endforeach; ?>
-        </table>
-
         <? /* Display Main Details */ ?>
         <table class="table table-striped">
             <? $container = $this->driver->tryMethod('getContainer');
@@ -122,7 +101,7 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
             <tr>
                 <th><?=$this->transEsc('New Title')?></th>
                 <td><? foreach($nextTitles as $field): ?>
-                    <a href="<?=$this->url('search-results')?>?lookfor=%22<?=urlencode($field)?>%22&amp;type=AllFields&amp;filter[]=~format:%22Journal%22<?= $hiddenFilterString ?>"><?=$this->escapeHtml($field)?></a><br/>
+                    <a href="<?=$this->url('search-results')?>?lookfor=%22<?=urlencode($field)?>%22&amp;type=AllFields&amp;filter[]=~material_content_type:%22Journal/Magazine%22<?= $hiddenFilterString ?>"><?=$this->escapeHtml($field)?></a><br/>
                   <? endforeach; ?></td>
             </tr>
             <? endif; ?>
@@ -132,7 +111,7 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
                 <th><?=$this->transEsc('Previous Title')?></th>
                 <td>
                   <? foreach($prevTitles as $field): ?>
-                     <a href="<?=$this->url('search-results')?>?lookfor=%22<?=urlencode($field)?>%22&amp;type=AllFields&amp;filter[]=~format:%22Journal%22<?= $hiddenFilterString ?>"><?=$this->escapeHtml($field)?></a><br/>
+                     <a href="<?=$this->url('search-results')?>?lookfor=%22<?=urlencode($field)?>%22&amp;type=AllFields&amp;filter[]=~material_content_type:%22Journal/Magazine%22<?= $hiddenFilterString ?>"><?=$this->escapeHtml($field)?></a><br/>
                   <? endforeach; ?>
                 </td>
             </tr>
@@ -202,12 +181,12 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
                     <th><?=$this->transEsc('other_appearance')?></th>
                     <td>
                         <p>
-                        <? foreach($parallel as $para): ?>
-                            <? if (isset($para['prefix'])): ?><?=$this->transEsc($para['prefix'])?> <? endif ?>
-                            <? if (isset($para['ppn'], $para['label'])) : ?>
-                                <a class="searchicon" href="<?=$this->recordLink()->getUrl($para['ppn'])?>" ><?=$this->transEsc($para['label'])?></a>
+                        <? foreach($parallel as $ctx): ?>
+                            <? if (isset($ctx['prefix'])): ?><?=$this->transEsc($ctx['prefix'])?> <? endif ?>
+                            <? if (isset($ctx['ppn'], $ctx['label'])) : ?>
+                                <a class="searchicon" href="<?=$this->recordLink()->getUrl($ctx['ppn'])?>" ><?=$this->transEsc($ctx['label'])?></a>
                             <? endif; ?>
-                            <? if (isset($para['postfix'])): ?> (<?=$this->transEsc($para['postfix'])?>)<? endif ?>
+                            <? if (isset($ctx['postfix'])): ?> (<?=$this->transEsc($ctx['postfix'])?>)<? endif ?>
                         <br/>
                         <? endforeach; ?></td>
                         </p>
@@ -295,13 +274,66 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
             </tr>
             <? endif; ?>
 
+            <?php if($this->client()->is('show_bib_context')): ?>
+                <?php $context = $this->driver->tryMethod('getBibliographicalContext'); if ($context): ?>
+                    <tr>
+                        <th><?=$this->transEsc('bib_context')?></th>
+                        <td>
+                            <p>
+                                <? foreach($context as $ctx): ?>
+                                <? if (isset($ctx['prefix'])): ?><?=$this->transEsc($ctx['prefix'])?> <? endif ?>
+                                <? if (isset($ctx['ppn'], $ctx['label'])) : ?>
+                                    <a class="searchicon" href="<?=$this->recordLink()->getUrl($ctx['ppn'])?>" ><?=$this->transEsc($ctx['label'])?></a>
+                                <? endif; ?>
+                                <? if (isset($ctx['postfix'])): ?> (<?=$this->transEsc($ctx['postfix'])?>)<? endif ?>
+                                <br/>
+                            <? endforeach; ?></td>
+                        </p>
+                    </tr>
+                <?php endif; ?>
+            <?php endif; ?>
+
             <? $childRecordCount = $this->driver->tryMethod('getChildRecordCount'); if ($childRecordCount): ?>
             <tr>
                 <th><?=$this->transEsc('child_records')?></th>
                 <td><a href="<?=$this->recordLink()->getChildRecordSearchUrl($this->driver)?>"><?=$this->transEsc('child_record_count', array('%%count%%' => $childRecordCount))?></a></td>
             </tr>
             <? endif; ?>
+
+            <? $oldPrintGenre = $this->driver->tryMethod('getOldPrintGenre'); if ($oldPrintGenre): ?>
+                <tr>
+                    <th><?= $this->transEsc('old_print_genre') ?></th>
+                    <td>
+                        <? foreach ($oldPrintGenre as $item): ?>
+                        <?= $this->escapeHtml($item) ?><br>
+                        <? endforeach; ?>
+                    </td>
+                </tr>
+            <? endif; ?>
+
+            <? $provenances = $this->driver->tryMethod('getProvenances', [$this->client()->getProvenances()]); if ($provenances): ?>
+            <tr>
+                <th><?=$this->transEsc('provenances')?></th>
+                <td>
+                    <? foreach ($provenances as $item): ?>
+                    <?=$this->context($this)->renderInContext('RecordDriver/DefaultRecord/parts/provenance.phtml', ['provenance' => $item])?>
+                    <br>
+                    <? endforeach; ?>
+                </td>
+            </tr>
+            <? endif ?>
+
             <?=$this->render('RecordDriver/DefaultRecord/parts/subjects.phtml')?>
+
+            <?php $contents = $this->driver->tryMethod('getKindContent'); if ($contents): ?>
+                <tr>
+                    <th><?=$this->transEsc('Kind/Content')?></th>
+                    <td>
+                        <?php $items = array_map(function ($i) {return $this->escapeHtml($i); }, $contents); ?>
+                        <?= implode(", ", $items); ?>
+                    </td>
+                </tr>
+            <?php endif; ?>
 
             <?
                   $openUrl = $this->openUrl($this->driver, 'record');
@@ -349,7 +381,7 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
                     <tr>
                       <th><?=$this->transEsc('External Resources')?></th>
                       <td><? foreach ($urls as $current): ?>
-                              <a class="external" href="<?=$this->wayfless($current['url'], $this->client()->getIsils(), )?>"><?=$this->transEsc($current['desc'])?></a><br/>
+                              <a class="external" href="<?=$this->wayfless($current['url'], $this->client()->getIsils())?>"><?=$this->transEsc($current['desc'])?></a><br/>
                           <? endforeach; ?></td>
                     </tr>
                 <? endif; ?>
@@ -396,6 +428,39 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
             </td>
         </tr>
         <? endif; ?>
+            <?php $bibliographies = $this->driver->tryMethod('getBibliographies');
+            if ($bibliographies != false && count($bibliographies) > 0):?>
+            <tr>
+                <th><?=$this->transEsc('Bibliographie')?></th>
+                <td>
+                    <?php foreach ($bibliographies as $bibliography):?>
+                        <?php if ($this->client()->is($bibliography)): ?>
+                        <div class="verticalcenter">
+                            <?= $this->bibliographyIcon($bibliography) ?>
+                            <span style="vertical-align: middle"><?=$this->transEsc($bibliography)?></span>
+                        </div>
+                        <?php endif;?>
+                    <?php endforeach;?>
+                </td>
+            </tr>
+        <?php endif ?>
+            <?php if($this->client()->is('wlb_facet_tooltip')):?>
+            <?php $isEPflicht = $this->driver->tryMethod('isEPflicht'); ?>
+            <?php $isLFER = $this->driver->tryMethod('isLFER'); ?>
+            <?php if ($isEPflicht || $isLFER):?>
+                <tr>
+                    <th><?=$this->transEsc('Source')?></th>
+                    <td>
+                    <?php if ($isEPflicht):?>
+                    <p><span class="label label-warning"><?=$this->transEsc('ePflicht-BW Label')?></span> <?=$this->transEsc('ePflicht-BW Text')?></p>
+                    <?php endif; ?>
+                    <?php if ($isLFER):?>
+                    <p><span class="label label-lfer"><?=$this->transEsc('lizenzfrei')?></span> <?=$this->transEsc('LFER_long')?></p>
+                    <?php endif; ?>
+                    </td>
+                </tr>
+            <?php endif ?>
+            <?php endif ?>
     </table>
     <?/* End Main Details */?>
     </div>

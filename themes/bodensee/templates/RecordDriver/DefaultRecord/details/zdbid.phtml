@@ -1,0 +1,7 @@
+<?php $rand = rand(0, 2000); ?>
+<span class="markjs">
+    <a id="clipboard-zdb-<?= $rand ?>" class="external"
+       href="https://zdb-katalog.de/list.xhtml?t=<?= $this->escapeHtml($this->data) ?>&key=zdb"><?= $this->escapeHtml($this->data) ?>
+    </a>
+    <?= $this->clipboard('', 'clipboard-zdb-' . $rand) ?>
+</span>

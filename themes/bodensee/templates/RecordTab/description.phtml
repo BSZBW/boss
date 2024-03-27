@@ -6,6 +6,13 @@
 // Grab clean ISBN for convenience:
     $isbn = $this->driver->getCleanISBN();
 ?>
+
+<?php $entries = $this->detailList('Details'); ?>
+<?= $this->record($this->driver)->renderTemplate(
+    'table.phtml',
+    ['data' => $entries]
+) ?>
+
 <table class="table table-striped">
   <?php $ppn = $this->driver->tryMethod('getPPN'); if (!empty($ppn)): ?>
   <?php $contentDisplayed = true; ?>
@@ -283,7 +290,7 @@
   <?php endif; ?>
 </table>
 
-<script type="text/javascript">
+<script type="text/javascript"><
     $(document).ready(function(){
         performMark('.tab-content .markjs');
     })

@@ -250,19 +250,13 @@ class Client extends Config
         return $isils;
     }
 
-    public function getProvenances(): array
+    public function getProvenances(): string
     {
         $section = $this->get('Provenances');
         if ($section != null) {
-            $raw = trim($section->get('isil'));
-            if (!empty($raw)) {
-                if ($raw == '*') {
-                    return [$raw];
-                }
-                return explode(',', $raw);
-            }
+            return trim($section->get('isil'));
         }
-        return [];
+        return '*';
     }
 
     /**

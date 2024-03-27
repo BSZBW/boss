@@ -54,4 +54,17 @@ class SearchMemory extends \VuFind\View\Helper\Root\SearchMemory
         }
         return $lastLink;
     }
+
+    public function getHiddenFilterString(string $searchClassId): string
+    {
+        $hiddenFilters = $this->getLastHiddenFilters($searchClassId);
+        $hiddenFilterString = '';
+        $escapeHtmlAttr = $this->getView()->plugin('escapeHtmlAttr');
+        foreach ($hiddenFilters as $key => $filter) {
+            foreach ($filter as $value) {
+                $hiddenFilterString .= '&hiddenFilters[]=' . $escapeHtmlAttr($key) . ':' . $escapeHtmlAttr($value);
+            }
+        }
+        return $hiddenFilterString;
+    }
 }

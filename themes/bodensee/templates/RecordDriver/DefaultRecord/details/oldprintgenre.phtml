@@ -1,0 +1,6 @@
+<?php $count = 0; ?>
+<?php foreach ($this->data as $item): ?>
+    <?php if ($count > 0):?><br><?php endif;?>
+    <?= $this->escapeHtml($item) ?>
+    <?php $count++; ?>
+<?php endforeach; ?>

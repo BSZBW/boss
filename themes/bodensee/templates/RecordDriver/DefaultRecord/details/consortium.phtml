@@ -1,0 +1,7 @@
+<?php $count = 0;?>
+<?php $consortiums = explode(',', $this->data); ?>
+<?php foreach ($consortiums as $con): ?>
+    <?php if($count>0):?>, <?php endif?>
+    <?=$this->abbrev(trim($con))?>
+    <?php $count++?>
+<?php endforeach; ?>

@@ -386,7 +386,7 @@ class SolrFindexMarc extends SolrMarc implements Constants
 
     public function getBibliographies()
     {
-        $return = [];
+        $retVal = [];
         $f935 = $this->getFields('935');
 
         foreach ($f935 as $field) {
@@ -397,11 +397,11 @@ class SolrFindexMarc extends SolrMarc implements Constants
             foreach ($this->getSubfields($field, 'a') as $sfa) {
                 $content = strtoupper($sfa);
                 if ($this->mainConfig->is($content)) {
-                    $return[] = $content;
+                    $retVal[] = $content;
                 }
             }
         }
-        return $return;
+        return $retVal;
     }
 
     public function getLocalSubjects()
@@ -884,6 +884,41 @@ class SolrFindexMarc extends SolrMarc implements Constants
         }
 
         return $retVal;
+    }
+
+    public function getZdbId()
+    {
+        $zdb = '';
+        $substr = '';
+        $matches = [];
+        $consortial = $this->getConsortialIDs();
+        foreach ($consortial as $id) {
+            preg_match('/\(DE-\d{3}\)ZDB(.*)/', $id, $matches);
+            if (!empty($matches) && $matches[1] !== '') {
+                $zdb = $matches[1];
+            }
+        }
+
+        // Pull ZDB ID out of recurring field 016
+        foreach ($this->getFields('016') as $field) {
+            if(!is_array($field)) {
+                continue;
+            }
+
+            $isil = $data = '';
+            foreach ($field['subfields'] ?? [] as $subfield) {
+                if ($subfield['code'] == 'a') {
+                    $data = $subfield['data'];
+                } elseif ($subfield['code'] == '2') {
+                    $isil = $subfield['data'];
+                }
+            }
+            if ($isil == 'DE-600') {
+                $zdb = $data;
+            }
+        }
+
+        return $zdb;
     }
 
 }
