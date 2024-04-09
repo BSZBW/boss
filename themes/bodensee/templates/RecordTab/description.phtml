@@ -18,7 +18,7 @@
   <?php $contentDisplayed = true; ?>
     <tr>
       <th><?=$this->abbrev('PPN')?></th>
-      <td class="markjs">
+      <td>
           <?= $this->clipboard($ppn) ?>
       </td>
     </tr>
@@ -27,7 +27,7 @@
   <?php $contentDisplayed = true; ?>
     <tr>
       <th><?=$this->transEsc('ZDB-ID')?></th>
-      <td class="markjs">
+      <td>
           <?php if (isset($zdb)): ?>
               <a id="clipboard-zdb-<?= $rand ?>" class="external"
                  href="https://zdb-katalog.de/list.xhtml?t=<?= $this->escapeHtml($zdb) ?>&key=zdb"><?= $this->escapeHtml($zdb) ?></a>
@@ -42,7 +42,7 @@
   ?>
     <tr>
         <th><?=$this->transEsc('Note')?></th>
-        <td class="markjs"><?=$this->escapeHtml($note)?></td>
+        <td><?=$this->escapeHtml($note)?></td>
     </tr>
   <?php endif; ?>
 
@@ -50,7 +50,7 @@
     <?php $contentDisplayed = true; ?>
     <tr>
       <th><?=$this->transEsc('Summary')?></th>
-      <td class="markjs">
+      <td>
         <?php foreach ($summ as $field): ?>
           <?=$this->escapeHtml($field)?><br/>
         <?php endforeach; ?>
@@ -63,7 +63,7 @@
          ?>
          <tr>
              <th><?= $this->abbrev('GTIN') ?></th>
-             <td class="markjs"><?= $this->clipboard($ean) ?></td>
+             <td><?= $this->clipboard($ean) ?></td>
          </tr>
      <?php endif; ?>
 
@@ -71,7 +71,7 @@
     <?php $contentDisplayed = true; ?>
     <tr>
       <th><?=$this->transEsc('Published')?></th>
-      <td class="markjs">
+      <td>
         <?php foreach ($dateSpan as $field): ?>
           <?=$this->escapeHtml($field)?><br/>
         <?php endforeach; ?>
@@ -83,7 +83,7 @@
     <?php $contentDisplayed = true; ?>
     <tr>
       <th><?=$this->transEsc('Item Description')?></th>
-      <td class="markjs">
+      <td>
         <?php foreach ($notes as $field): ?>
           <?=$this->escapeHtml($field)?><br/>
         <?php endforeach; ?>
@@ -132,7 +132,7 @@
     <?php $contentDisplayed = true; ?>
     <tr>
       <th><?=$this->transEsc('Audience')?></th>
-      <td class="markjs">
+      <td>
         <?php foreach ($audience as $field): ?>
           <?=$this->escapeHtml($field)?><br/>
         <?php endforeach; ?>
@@ -168,7 +168,7 @@
     <?php $contentDisplayed = true; ?>
     <tr>
       <th><?=$this->transEsc('Bibliography')?></th>
-      <td class="markjs">
+      <td>
         <?php foreach ($bib as $field): ?>
           <?=$this->escapeHtml($field)?><br/>
         <?php endforeach; ?>
@@ -180,7 +180,7 @@
     <?php $contentDisplayed = true; ?>
     <tr>
       <th><?=$this->abbrev('ISBN', 'ISBN_long')?></th>
-      <td class="markjs">
+      <td>
         <?php foreach ($isbns as $field): ?>
             <?= $this->clipboard($field) ?><br/>
         <?php endforeach; ?>
@@ -192,7 +192,7 @@
     <?php $contentDisplayed = true; ?>
     <tr>
       <th><?=$this->abbrev('ISSN', 'ISSN_long')?></th>
-      <td class="markjs">
+      <td>
         <?php foreach ($issns as $field): ?>
             <?= $this->clipboard($field) ?><br/>
         <?php endforeach; ?>
@@ -264,7 +264,7 @@
         <?php $contentDisplayed = true; ?>
         <tr>
             <th><?=$this->transEsc('remarks')?></th>
-            <td class="markjs">
+            <td>
                 <?php foreach ($remarks as $field): ?>
                     <?=$this->escapeHtml($field)?><br/>
                 <?php endforeach; ?>
@@ -277,7 +277,7 @@
         <?php $bibliorelationsids = $this->driver->tryMethod('getBiblioRelationsIds'); ?>
         <tr>
             <th><?=$this->transEsc('Bibliographic Relations')?></th>
-            <td class="markjs">
+            <td>
                 <?php foreach ($bibliorelations as $field): ?>
                     <?=$this->escapeHtml($field)?><br/>
                 <?php endforeach; ?>
@@ -289,9 +289,3 @@
     <tr><td><?=$this->transEsc('no_description')?></td></tr>
   <?php endif; ?>
 </table>
-
-<script type="text/javascript"><
-    $(document).ready(function(){
-        performMark('.tab-content .markjs');
-    })
-</script>

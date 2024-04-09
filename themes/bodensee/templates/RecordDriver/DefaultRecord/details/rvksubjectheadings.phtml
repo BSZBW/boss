@@ -12,12 +12,12 @@
                 // bestimmten Browsererweiterung (uBlock / AdBlock?) zu komischer
                 // Darstellung beim Hovern
                 ?>
-                <a class="markjs searchicon"
+                <a class="searchicon"
                    title="<?= $this->escapeHtmlAttr($subject) ?>"
                    href="<?= $this->record($this->driver)->getLink('subject', $subject, $this->searchClassId) ?>"><?= trim($this->escapeHtml($subfield)) ?></a>
             <?php endforeach; ?>
         <?php else: ?>
-            <a class="markjs searchicon <?php if ($count >= 5): ?>rvksubjects-<?= $rand ?> collapse-inline collapse multi-collapse <?php endif; ?>"
+            <a class="searchicon <?php if ($count >= 5): ?>rvksubjects-<?= $rand ?> collapse-inline collapse multi-collapse <?php endif; ?>"
                title="<?= $this->escapeHtmlAttr($field) ?>"
                href="<?= $this->record($this->driver)->getLink('rvkheading', $field, $this->searchClassId) ?>">
                 <?= trim($this->escapeHtml($field)) ?></a>

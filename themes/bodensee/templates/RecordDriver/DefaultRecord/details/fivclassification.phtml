@@ -1,6 +1,6 @@
 <?php foreach ($this->data as $notation): ?>
     <?php $trans = 'FIV::'.preg_replace('/\.|\s.*/', '', strtolower($notation))?>
-    <span class="notationLine markjs">
+    <span class="notationLine">
         <a href="<?=$this->record($this->driver)->getLink('fivclassification', $notation, $this->searchClassId)?>" class="searchicon"><?=$this->transEsc($trans)?></a>
     </span>
 <?php endforeach; ?>

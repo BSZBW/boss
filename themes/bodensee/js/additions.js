@@ -1,43 +1,3 @@
-function   performMark(selector = '.markjs') {
-    var lookfor = '';
-    var input_simple = $('#searchForm_lookfor').val();
-    var input_adv = $('li.adv_lookfor').text();
-    if (typeof input_simple !== 'undefined' && input_simple.trim() !== '') {
-        // remove boole expressions with AND OR NOT when capitalletters and seperated from words
-        lookfor = input_simple.replace(/((\sOR\s))|((\sAND\s))|((\sNOT\s))/g, ' ');
-        // remove single numbers - they will appear everywhere
-        lookfor = lookfor.replace(/\s\d\s/g, ' ');
-    } else if (typeof input_adv !== 'undefined'  && input_adv.trim() !== '') {
-        lookfor = input_adv;
-        var mapObj = {
-            "Alle Felder:":"", "All Fields:":"",
-            "Titel:":"", "Title:":"",
-            "Verfasser:":"", "Author:":"",
-            "Schlagwort:":"", "Subject:":"",
-            "Verlag:":"", "Publisher:":"",
-            "UND":"", "AND":"",
-            "NICHT":"", "NOT":"",
-            "ODER":"", "OR":""
-        };
-        var re = new RegExp(Object.keys(mapObj).join("|"),"g");
-        lookfor = lookfor.replace(re, function(matched){
-            return mapObj[matched];
-        });
-    }
-    lookfor = lookfor.replace(/[\/\[;\.,\\\-\–\—\‒_\(\)\{\}\[\]\!'\"=]/g, ' ');
-    terms = lookfor.split(' ').filter(function(el) { return el; });
-    $(selector).mark(terms, {
-        "wildcards": "enabled",
-        "accuracy": "partially",
-        "synonyms": {
-            "ss": "ß",
-            "ö": "oe",
-            "ü": "ue",
-            "ä": "ae"
-        }
-    });
-}
-
 /**
  * Deprecated, don't use this anymore, use bootstrap collapse
  */
@@ -558,9 +518,6 @@ $(document).ready(function() {
     $('[data-toggle="popover"]').popover({
         trigger: 'click focus'
     });
-    if ($.fn.mark) {
-        performMark();
-    }
     openUrlTooltip();
     checkAdvSearch();
     textToggle();

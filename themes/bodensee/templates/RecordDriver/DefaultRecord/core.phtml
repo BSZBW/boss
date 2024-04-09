@@ -35,7 +35,7 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
         $sectionol = $this->driver->tryMethod('getTitleSectionOl');
         $titleol = $this->driver->tryMethod('getTitleOl');
         ?>
-        <h3 property="name" class="markjs">
+        <h3 property="name">
             <?php if (empty($titleol)): ?>
             <?=$this->escapeHtml($title) ?><br/><?= $this->string()->cleanEsc($section) ?>
             <?php else: ?>
@@ -90,7 +90,7 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
             if ($this->driver->isArticle() && !empty($journalTitle)): ?>
                  <tr>
                 <th><?=$this->transEsc('Published in')?></th>
-                <td class="markjs">
+                <td>
                     <?= $this->string()->cleanEsc($journalTitle)?>
                     <? if (!empty($issue)): ?>
                         <?= $this->string()->cleanEsc($issue) ?>
@@ -128,7 +128,7 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
             <? if (isset($authors['primary']) && !empty($authors['primary'])): ?>
             <tr>
                 <th><?=$this->transEsc('Main Author')?></th>
-                <td property="author" class="markjs">
+                <td property="author">
                     <? foreach ($authors['primary'] as $name => $info): ?>
                         <?=$this->context($this)->renderInContext('RecordDriver/DefaultRecord/parts/singleauthor.phtml', ['name' => $name, 'info' => $info, 'type' => 'person','hiddenFilterString' => $hiddenFilterString])?>
                     <? endforeach; ?>
@@ -139,7 +139,7 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
             <? if (isset($authors['corporate']) && !empty($authors['corporate'])): ?>
             <tr>
                 <th><?=$this->transEsc('Corporate Author')?></th>
-                <td property="creator" class="markjs">
+                <td property="creator">
                 <? foreach ($authors['corporate'] as $name => $info): ?>
                     <?=$this->context($this)->renderInContext('RecordDriver/DefaultRecord/parts/singleauthor.phtml', ['name' => $name, 'info' => $info, 'type' => 'corporation', 'hiddenFilterString' => $hiddenFilterString])?>
                     <br/>
@@ -150,7 +150,7 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
             <? if (isset($authors['secondary']) && !empty($authors['secondary'])): ?>
             <tr>
                 <th><?=$this->transEsc('Other Authors')?></th>
-                <td class="markjs">
+                <td>
                     <? foreach ($authors['secondary'] as $name => $info): ?>
                         <?=$this->context($this)->renderInContext('RecordDriver/DefaultRecord/parts/singleauthor.phtml', ['name' => $name, 'info' => $info, 'type' => 'person', 'hiddenFilterString' => $hiddenFilterString])?>
                         <br/>
@@ -164,7 +164,7 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
             <? if (isset($cast) && !empty($cast)): ?>
                 <tr>
                     <th><?=$this->transEsc('MusicalCast')?></th>
-                    <td property="cast" class="markjs">
+                    <td property="cast">
                         <? foreach ($cast as $item): ?>
                             <?= $item ?><br/>
                         <? endforeach; ?>
@@ -232,12 +232,12 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
                if (!empty($isbn)): ?>
                    <tr>
                        <th><?= $this->abbrev('ISBN', 'ISBN_long') ?></th>
-                       <td class="markjs"><?= $this->clipboard($this->driver->getCleanISBN()) ?></td>
+                       <td><?= $this->clipboard($this->driver->getCleanISBN()) ?></td>
                    </tr>
                <? elseif (!empty($issn)): ?>
                    <tr>
                        <th><?= $this->abbrev('ISSN', 'ISSN_long') ?></th>
-                       <td class="markjs"><?= $this->clipboard($this->driver->getCleanISSN()) ?></td>
+                       <td><?= $this->clipboard($this->driver->getCleanISSN()) ?></td>
                    </tr>
                <? endif; ?>
 
@@ -252,7 +252,7 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
 
             <? $publicationsOl = $this->driver->tryMethod('getPublicationDetailsOl') ?>
             <? $publications = $this->driver->getPublicationDetails(); if (!empty($publications)): ?>
-                <tr class="markjs">
+                <tr>
                     <th><?= $this->transEsc('Published') ?></th>
                     <td>
                         <? if (isset($publicationsOl)): ?>
@@ -274,7 +274,7 @@ $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassI
             if (!empty($edition)): ?>
             <tr>
                 <th><?=$this->transEsc('Edition')?></th>
-                <td property="bookEdition" class="markjs"><? if (!empty($editionol)): ?><?=$this->escapeHtml($editionol)?><br/>><? endif; ?>
+                <td property="bookEdition"><? if (!empty($editionol)): ?><?=$this->escapeHtml($editionol)?><br/>><? endif; ?>
                     <?=$this->escapeHtml($edition)?>
                 </td>
             </tr>

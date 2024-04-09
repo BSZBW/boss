@@ -1,7 +1,7 @@
 <?php $rand = rand(0, 9999) ?>
 <?php $count = 0; ?>
 <?php foreach ($this->data as $notation): ?>
-    <div class="notationLine markjs">
+    <div class="notationLine">
         <?php if(is_array($notation)): ?>
             <?php foreach ($notation as $key => $value): ?>
                 <a href="<?=$this->record($this->driver)->getLink('dfi2060subject', $value, $this->searchClassId) ?>"

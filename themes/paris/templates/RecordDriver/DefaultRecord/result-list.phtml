@@ -49,7 +49,7 @@ $coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'sm
         <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID())?>" class="hiddenId" />
         <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getSourceIdentifier())?>" class="hiddenSource" />
         <span class="" style="float:left;"><?=$this->recordNumber?></span>.
-        <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title getFull markjs" data-view="<?=$this->params->getOptions()->getListViewOption() ?>">
+        <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title getFull" data-view="<?=$this->params->getOptions()->getListViewOption() ?>">
             <?=$this->record($this->driver)->getTitleHtml()?>
         </a>
         <?php if ($titlesection = $this->driver->getTitleSection()):?>
@@ -200,7 +200,7 @@ $coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'sm
 
                                 </div>
                                 <div class="col-xs-8 col-sm-10">
-                                    <a class="title markjs" href="<?=$this->recordLink()->getUrl($sub)?>">
+                                    <a class="title" href="<?=$this->recordLink()->getUrl($sub)?>">
                                         <?=$this->record($sub)->getTitleHtml()?>
                                     </a>
                                     <?php if ($titlesection = $sub->getTitleSection()):?>
@@ -223,7 +223,7 @@ $coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'sm
                                      ])?>
                                     <?php if (!empty($edition)): ?>
                                         <dt><?=$this->transEsc('Edition')?></dt>
-                                        <dd><span property="bookEdition" class="markjs"><?=$this->escapeHtml($edition)?></span></dd>
+                                        <dd><span property="bookEdition"><?=$this->escapeHtml($edition)?></span></dd>
                                         <?php endif; ?>
                                     <?php if (strlen($this->driver->tryMethod('getConsortium')) > 0): ?>
                                         <div class="ill-source">

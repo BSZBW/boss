@@ -15,11 +15,6 @@ $content = $this->driver->tryMethod('getGroupField');
     </table>
 <?php endif; ?>
 <?= Processor::process('record-marc.xsl', $this->driver->getXML('marc21'))?>
-<script type="text/javascript">
-    $(document).ready(function(){
-        performMark('.tab-content td');
-    })
-</script>
 
 <h3>Solr-Indexfelder</h3>
 <table class="citation table table-striped">
