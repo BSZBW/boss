@@ -54,7 +54,11 @@ trait MarcAuthorTrait
     {
         $primary = $this->getMarcFieldsAuthor('100', ['0']);
         foreach ($primary as &$value) {
-            $value = preg_replace('/\(.*\)/', '', $value);
+            $value = preg_replace(
+                '/\(.*\)/',
+                '',
+                $value ?? ''
+            );
         }
         unset($value);
         return $primary;
@@ -97,7 +101,11 @@ trait MarcAuthorTrait
     {
         $secondary = $this->getMarcFieldsAuthor('700', ['0']);
         foreach ($secondary as &$value) {
-            $value = preg_replace('/\(.*\)/', '', $value);
+            $value = preg_replace(
+                '/\(.*\)/',
+                '',
+                $value ?? ''
+            );
         }
         unset($value);
         return $secondary;
@@ -132,7 +140,7 @@ trait MarcAuthorTrait
     }
 
     /**
-     * Retur given MARC fields not only those who have the given subfields.
+     * Return given MARC fields not only those who have the given subfields.
      *
      * @param int $tag
      * @param array $subfields
