@@ -64,6 +64,8 @@ trait FacetRestrictionsTrait
      */
     protected $facetMatchesByField = [];
 
+    protected $facetPrefixByKey = [];
+
     /**
      * Initialize facet prefix and matches from a Config object.
      *
@@ -81,6 +83,17 @@ trait FacetRestrictionsTrait
         }
         foreach ($config->facet_matches_by_field ?? [] as $k => $v) {
             $this->facetMatchesByField[$k] = $v;
+        }
+        foreach ($config->facet_prefix_by_key ?? [] as $k => $v) {
+            $split = explode("=", $v);
+            if(count($split) > 1) {
+                $field = $split[0];
+                $prefix = $split[1];
+            }else {
+                $field = $k;
+                $prefix = $split[0];
+            }
+            $this->facetPrefixByKey[$k] = compact('field', 'prefix');
         }
     }
 
@@ -159,6 +172,11 @@ trait FacetRestrictionsTrait
     {
         $multifieldprefix = $this->facetPrefixByMultiField[$field] ?? [];
         return $multifieldprefix;
+    }
+
+    protected function getPrefixForKey($field)
+    {
+        return $this->facetPrefixByKey[$field] ?? [];
     }
 
 }

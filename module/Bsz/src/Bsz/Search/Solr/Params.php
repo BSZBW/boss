@@ -252,6 +252,11 @@ class Params extends \VuFind\Search\Solr\Params
                     $facetField = '{!key=' . $facetField . ' facet.prefix=' . $facetField . '}' . $multifieldPrefix;
                 }
 
+                $keyPrefix = $this->getPrefixForKey($facetField);
+                if(!empty($keyPrefix)) {
+                    $facetField = '{!key=' . $facetField . ' facet.prefix=' . $keyPrefix['prefix'] . '}' . $keyPrefix['field'];
+                }
+
                 $fieldPrefix = $this->getFacetPrefixForField($facetField);
                 if (!empty($fieldPrefix)) {
                     $facetSet["f.{$facetField}.facet.prefix"] = $fieldPrefix;
