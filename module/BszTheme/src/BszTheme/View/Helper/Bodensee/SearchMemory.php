@@ -40,8 +40,8 @@ class SearchMemory extends \VuFind\View\Helper\Root\SearchMemory
             return null;
         }
         $url = $this->memory->retrieveSearch();
-        $query_str = parse_url($url, PHP_URL_QUERY);
-        parse_str($query_str, $queryArray);
+        $query_str = parse_url($url ?? '', PHP_URL_QUERY);
+        parse_str($query_str ?? '', $queryArray);
         return $queryArray['lookfor'] ?? null;
     }
 
