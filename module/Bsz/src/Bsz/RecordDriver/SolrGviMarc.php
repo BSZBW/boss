@@ -894,7 +894,7 @@ class SolrGviMarc extends SolrMarc implements Constants
             $link = str_replace(
                 'http://dx.doi.org',
                 'https://doi.org',
-                $link
+                $link ?? ''
             );
 
             // Prevent adding the same url multiple times
