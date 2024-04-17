@@ -91,6 +91,15 @@ JS;
               <p><?=$this->transEsc('homepage_text_2')?></p>
           <?php endif; ?>
 
+          <?php if ($this->client()->is('fernleihe') && $library->getRss() != null): ?>
+          <div class="row">
+                <div id="LibNewsRSS" class="col-sm-12">
+                    <p><?=$this->transEsc("Loading")?>... <img src="<?=$this->imageLink('ajax_loading.gif')?>" /></p>
+                    <?=$this->inlineScript(InlineScript::SCRIPT, "var url = VuFind.path + '/AJAX/Recommend?mod=LibraryNews';$('#LibNewsRSS').load(url);", 'SET')?>
+                </div>
+            </div>
+         <?php endif; ?>
+
           <?php if ($this->client()->is('isil_session')): ?>
               <?=$this->partial('bsz/illselector.phtml')?>
           <?php endif; ?>
