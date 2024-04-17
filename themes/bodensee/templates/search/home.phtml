@@ -91,7 +91,7 @@ JS;
               <p><?=$this->transEsc('homepage_text_2')?></p>
           <?php endif; ?>
 
-          <?php if ($this->client()->is('fernleihe') && $library->getRss() != null): ?>
+          <?php if ($this->client()->is('fernleihe') && $library != null && $library->getRss() != null): ?>
           <div class="row">
                 <div id="LibNewsRSS" class="col-sm-12">
                     <p><?=$this->transEsc("Loading")?>... <img src="<?=$this->imageLink('ajax_loading.gif')?>" /></p>
