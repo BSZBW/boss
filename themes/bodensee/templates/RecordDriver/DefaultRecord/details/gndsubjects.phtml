@@ -1,4 +1,4 @@
-<?php $allSubjects = $this->data['gnd'] + $this->data['free']; ?>
+<?php $allSubjects = ($this->data['gnd'] ?? []) + ($this->data['free'] ?? []); ?>
 <?= $this->record($this->driver)->renderTemplate(
     "details/subjectlist.phtml",
     ['data' => $allSubjects, 'type' => 'gnd', 'linktype' => 'gnd']
