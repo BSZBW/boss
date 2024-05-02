@@ -1,6 +1,6 @@
 <?php
 // TODO: fold this logic into record driver methods at some point:
-$marc = $this->driver->tryMethod('getMarcRecord');
+$marc = $this->driver->tryMethod('getMarcReader');
 if (is_object($marc)) {
     $marcPhdField = $marc->getField('502');
     $marcProceedingsField = $marc->getField('711');
@@ -22,7 +22,7 @@ if ($marcProceedingsField) {
 }
 
 // Open format tag:
-echo '@' . $format . "{\n";
+echo '@' . $format . "{";
 
 // Citation key:
 echo $this->driver->getSourceIdentifier() . '-' . $this->driver->getUniqueId() . ",\n";
@@ -125,16 +125,28 @@ if (is_array($notes)) {
     }
 }
 
+$count = 0;
+$needsSep = false;
 foreach ($this->record($this->driver)->getUrlList() as $url) {
-    echo "url = {{$url}}\n";
+    $needsSep = true;
+    if($count > 0) {
+        echo ",\n";
+    }
+    echo "url = {{$url}}";
+    $count++;
 }
 $isbn = $this->driver->getCleanIsbn(); if(!empty($isbn)) {
-    echo "isbn = {{$isbn}}\n";
+    $needsSep = true;
+    echo ",\nisbn = {{$isbn}}";
 }
 $issn = $this->driver->getCleanIssn(); if(!empty($issn)) {
-    echo "issn = {{$issn}}\n";
+    $needsSep = true;
+    echo ",\nissn = {{$issn}}";
 }
 
+if($needsSep) {
+    echo "\n";
+}
 // Record separator:
 echo "}\n\n";
 ?>
