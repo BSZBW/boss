@@ -1,0 +1,21 @@
+<div class="col-sm-12">
+    <h2><?=$this->transEsc('ILL::request_submit_ok')?></h2>
+    <noscript><p class="alert alert-danger"><?=$this->transEsc('Please enable JavaScript.')?></p></noscript>
+    <?=$this->flashmessages()?>
+    <?php if ($this->orderId > 0):?>
+        <p><?=$this->transEsc('ILL::request_submit_ok_text')?><strong><?=$this->escapeHtml($this->orderId)?></strong></p>
+    <?php else: ?>
+        <p><?=$this->transEsc('ILL::request_submit_ok_text_0')?></p>
+    <?php endif; ?>
+
+    <p><?=$this->transEsc('ILL::request_submit_ok_text_2')?></p>
+    <?php $isilsClosePopup = ['DE-31', 'DE-93'] ?>
+    <?php foreach ($isilsClosePopup as $isil):?>
+        <?php if (in_array($isil, $this->client()->getIsils())): ?>
+            <div class="alert alert-info">
+                <p><?=$this->transEsc('ILL::request_submit_ok_text_3')?></p>
+                <?php break; ?>
+            </div>
+        <?php endif ?>
+    <?php endforeach ?>
+</div>
