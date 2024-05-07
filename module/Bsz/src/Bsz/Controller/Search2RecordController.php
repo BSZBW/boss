@@ -141,6 +141,9 @@ class Search2RecordController extends \VuFind\Controller\Search2recordController
                     $dom = new Query($response->getBody());
                     $message = $dom->queryXPath('ergebnis/text()')->getDocument();
                     $success = $this->parseResponse($message);
+                    if($success) {
+                        return $this->redirect()->toRoute('search2record-illsuccess', [], ['query' => ['orderId' => $this->orderId]]);
+                    }
                 } catch (Exception $ex) {
                     $this->flashMessenger()->addErrorMessage('ILL::request_error_technical');
                     $this->logError($params['Sigel'] . ': Error while parsing HTML response from ZFL server');
@@ -170,6 +173,14 @@ class Search2RecordController extends \VuFind\Controller\Search2recordController
             'orderId' => $this->orderId
         ])->setTemplate('record/illform.phtml');
         return $view;
+    }
+
+    public function ILLSuccessAction()
+    {
+        $orderId = $this->params()->fromQuery('orderId') ?? 0;
+        return $this->createViewModel([
+            'orderId' => $orderId
+        ])->setTemplate('record/illsuccess.phtml');
     }
 
     public function freeFormAction()

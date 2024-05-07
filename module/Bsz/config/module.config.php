@@ -31,6 +31,7 @@ $config = [
     'controllers' => [
         'factories' => [
             'Bsz\Controller\SearchController' => Factory::class,
+            'Bsz\Controller\Search2Controller' => Factory::class,
             'Bsz\Controller\RecordController' => 'Bsz\Controller\Factory::getRecordController',
             'Bsz\Controller\Search2RecordController' => 'Bsz\Controller\Factory::getSearch2RecordController',
             'Bsz\Controller\EdsrecordController' => Factory::class,
@@ -47,6 +48,7 @@ $config = [
             'Bsz' => 'Bsz\Controller\BszController',
             // overwriting
             'VuFind\Controller\SearchController'    => 'Bsz\Controller\SearchController',
+            'VuFind\Controller\Search2Controller'    => 'Bsz\Controller\Search2Controller',
             'VuFind\Controller\RecordController'    => 'Bsz\Controller\RecordController',
             'VuFind\Controller\EdsrecordController'    => 'Bsz\Controller\EdsrecordController',
             'VuFind\Controller\MyResearchController'   => 'Bsz\Controller\MyResearchController',
@@ -209,6 +211,7 @@ $config = [
             'search_backend' => [
                 'factories' => [
                     'Solr' => 'Bsz\Search\Factory\SolrDefaultBackendFactory',
+                    'Search2' => 'Bsz\Search\Factory\Search2BackendFactory'
                 ],
             ],
             'search_params'  => [
@@ -276,6 +279,8 @@ $staticRoutes = [
     'Test/Record', 'Test/phpinfo', 'Test/zfl',
     'Bsz/index', 'Bsz/library',
     'Record/Freeform',
+    'Record/ILLSuccess',
+    'Search2Record/ILLSuccess',
     'Holding/Query',
     'Bsz/Privacy',
     'Bsz/Dedup',
