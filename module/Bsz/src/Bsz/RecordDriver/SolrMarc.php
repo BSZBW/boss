@@ -707,8 +707,8 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
             $retVal[] = $this->formatMarcField(
                 $field,
                 '$t / $r ($g)',
-                ['g' => ', '],
-                ['t']
+                ['t'],
+                ['g' => ', ']
             );
 
         }

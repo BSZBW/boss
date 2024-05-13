@@ -134,6 +134,9 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
                     $dom = new Query($response->getBody());
                     $message = $dom->queryXPath('ergebnis/text()')->getDocument();
                     $success = $this->parseResponse($message);
+                    if($success) {
+                        return $this->redirect()->toRoute('record-illsuccess', [], ['query' => ['orderId' => $this->orderId]]);
+                    }
                 } catch (Exception $ex) {
                     $this->flashMessenger()->addErrorMessage('ILL::request_error_technical');
                     $this->logError($params['Sigel'] . ': Error while parsing HTML response from ZFL server');
@@ -163,6 +166,14 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
                     'orderId' => $this->orderId
                 ])->setTemplate('record/illform.phtml');
         return $view;
+    }
+
+    public function ILLSuccessAction()
+    {
+        $orderId = $this->params()->fromQuery('orderId') ?? 0;
+        return $this->createViewModel([
+            'orderId' => $orderId
+        ])->setTemplate('record/illsuccess.phtml');
     }
 
     public function freeFormAction()

@@ -25,6 +25,7 @@ use Bsz\Config\Dedup;
 use DateTime;
 use VuFind\Config\PluginManager;
 use VuFind\Search\Solr\HierarchicalFacetHelper;
+use VuFindSearch\ParamBag;
 
 class Params extends \VuFind\Search\Search2\Params
 {
@@ -48,6 +49,151 @@ class Params extends \VuFind\Search\Search2\Params
         parent::__construct($options, $configLoader, $facetHelper);
         $this->dedup = $dedup;
     }
+
+    /**
+     * Create search backend parameters for advanced features.
+     *
+     * @return ParamBag
+     */
+    public function getBackendParameters()
+    {
+        $backendParams = new ParamBag();
+        $backendParams->add('year', (int)date('Y') + 1);
+
+        $this->restoreFromCookie();
+
+        // Fetch group params for deduplication
+        $config = $this->configLoader->get('Search2');
+        $index = $config->get('Index');
+        $group = false;
+
+        $dedupParams = $this->dedup->getCurrentSettings();
+
+        if (isset($dedupParams['group'])) {
+            $group = $dedupParams['group'];
+        } elseif ($index->get('group') !== null) {
+            $group = $index->get('group');
+        }
+
+        if ((bool)$group === true) {
+            $backendParams->add('group', 'true');
+
+            $group_field = '';
+            $group_limit = 0;
+
+            if ($index->get('group.field') !== null) {
+                $group_field = $index->get('group.field');
+            }else if (isset($dedupParams['group_field'])) {
+                $group_field = $dedupParams['group_field'];
+            }
+            $backendParams->add('group.field', $group_field);
+
+            if ($index->get('group.limit') !== null) {
+                $group_limit = $index->get('group.limit');
+            }else if (isset($dedupParams['group_limit'])) {
+                $group_limit = $dedupParams['group_limit'];
+            }
+            $backendParams->add('group.limit', $group_limit);
+        }
+        // search those shards that answer, accept partial results
+        $backendParams->add('shards.tolerant', 'true');
+
+        // maximum search time in ms
+        // $backendParams->add('timeAllowed', '4000');
+
+        // defaultOperator=AND was removed in schema.xml
+        $backendParams->add('q.op', "AND");
+
+        // increase performance for facet queries
+        $backendParams->add('facet.threads', "4");
+
+        // Spellcheck
+        $backendParams->set(
+            'spellcheck',
+            $this->getOptions()->spellcheckEnabled() ? 'true' : 'false'
+        );
+
+        // Facets
+        $facets = $this->getFacetSettings();
+        if (!empty($facets)) {
+            $backendParams->add('facet', 'true');
+
+            foreach ($facets as $key => $value) {
+                // prefix keys with "facet" unless they already have a "f." prefix:
+                $fullKey = substr($key, 0, 2) == 'f.' ? $key : "facet.$key";
+                $backendParams->add($fullKey, $value);
+            }
+            $backendParams->add('facet.mincount', 1);
+        }
+
+        // Filters
+        $filters = $this->getFilterSettings();
+        foreach ($filters as $filter) {
+            $backendParams->add('fq', $filter);
+        }
+
+        // Shards
+        $allShards = $this->getOptions()->getShards();
+        $shards = $this->getSelectedShards();
+        if (empty($shards)) {
+            $shards = array_keys($allShards);
+        }
+
+        // If we have selected shards, we need to format them:
+        if (!empty($shards)) {
+            $selectedShards = [];
+            foreach ($shards as $current) {
+                $selectedShards[$current] = $allShards[$current];
+            }
+            $shards = $selectedShards;
+            $backendParams->add('shards', implode(',', $selectedShards));
+        }
+
+        // Sort
+        $sort = $this->getSort();
+        if ($sort) {
+            // If we have an empty search with relevance sort, see if there is
+            // an override configured:
+            if ($sort == 'relevance' && $this->getQuery()->getAllTerms() == ''
+                && ($relOv = $this->getOptions()->getEmptySearchRelevanceOverride())
+            ) {
+                $sort = $relOv;
+            }
+            $backendParams->add('sort', $this->normalizeSort($sort));
+        }
+
+        // Highlighting disabled
+        $backendParams->add('hl', 'false');
+
+        // Pivot facets for visual results
+
+        if ($pf = $this->getPivotFacets()) {
+            $backendParams->add('facet.pivot', $pf);
+        }
+
+        return $backendParams;
+    }
+
+    /**
+     * This method reads the cookie and stores the information into the session
+     * So we only need to process session bwlow.
+     *
+     */
+    protected function restoreFromCookie()
+    {
+        if (isset($this->cookie)) {
+            if (isset($this->cookie->group2)) {
+                $this->container->offsetSet('group', $this->cookie->group2);
+            }
+            if (isset($this->cookie->group_field2)) {
+                $this->container->offsetSet('group_field', $this->cookie->group_field2);
+            }
+            if (isset($this->cookie->group_limit2)) {
+                $this->container->offsetSet('group_limit', $this->cookie->group_limit2);
+            }
+        }
+    }
+
     /**
      * Return current facet configurations
      *
