@@ -41,7 +41,7 @@ $library = $this->libraries()->getFirstActive($this->client()->getIsils());
     <?php $identity = $account->getIdentity() ?>
     <div CLASS="col-sm-12 col-sm-offset-3">
         <p>
-            <i class="fa fa-check text-success"></i> <?= $this->transEsc('shib_already_logged_in') ?>
+            <i class="fa fa-check text-success"></i> <?= $this->transEsc('shib_already_logged_in_with_id') . ' <b>' . htmlspecialchars($identity->username) .  '</b>.'?>
         </p>
     </div>
     <!-- user name may be replaced before sending to zfl server -->
