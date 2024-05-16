@@ -31,6 +31,7 @@ $form = '';
         <? endif; ?>
     </div>
 </div>
+<?php if (!$this->client()->is('wlb2')): ?>
 <div class="form-group form-group-sm library-places">
     <label class="control-label col-sm-<?=$labelSize?>"><?=$this->transEsc('Places')?>*</label>
     <div class="col-sm-<?=$inputSize ?>">
@@ -59,6 +60,7 @@ $form = '';
         <? endif; ?>
     </div>
 </div>
+<?php endif; ?>
 <? if($this->libraries()->hasActivePlaces($this->client()->getIsils())): ?>
 <div class="form-group form-group-sm">
     <label class="control-label col-sm-<?=$labelSize?>" for="ill-delivery_until"><?=$this->transEsc('delivery_until')?>*</label>

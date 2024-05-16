@@ -31,7 +31,7 @@ function illFormLogic() {
             if ($('.flash-message').length === 0) {
                 $('#form-ill').prepend($('<div>', {
                     class: 'flash-message alert alert-danger',
-                    text: VuFind.translate('illFormError')
+                    text: VuFind.translate('illFormError').replaceAll("&quot;", '"')
                 }));
             }
         }
