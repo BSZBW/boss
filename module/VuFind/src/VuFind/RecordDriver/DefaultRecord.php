@@ -482,7 +482,7 @@ class DefaultRecord extends AbstractBase
     public function getAuthorRole(string $role)
     {
         $authors = $this->getDeduplicatedAuthors(['role', 'gnd', 'live']);
-        return $authors[$role];
+        return $authors[$role] ?? [];
     }
 
     /**
