@@ -39,8 +39,18 @@ if ($content['customUrl'] && $this->client()->getTag() !== 'fl-dienst' ) {
     <?php if (count($ppns) > 0): ?>
         <?php foreach ($ppns as $k => $id): ?>
             <?php if ($linklabels[$k] == 'ILL::library_opac'): ?>
-                <li><?= $this->transEsc('ILL::library_opac') ?>
-                    : <?= $this->recordLink()->linkPPN($this->driver) ?></li>
+                <?php if ($this->client()->is('wlb2')): ?>
+                    <?php $ppn = $id;
+                    $ppn = preg_replace('/^\(.*\)/', '', $id);
+                    $exists = $this->idVerifier($ppn, 'Solr');
+                    if($exists):
+                        ?>
+                        <li><a href="/Record/<?=$ppn?>"><?=$this->transEsc('ILL::to_local_hit')?></a></li>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <li><?= $this->transEsc('ILL::library_opac') ?>
+                        : <?= $this->recordLink()->linkPPN($this->driver) ?></li>
+                <?php endif; ?>
             <?php elseif ($this->client()->is('wlb2') && $linklabels[$k] == 'ILL::to_local_hit'): ?>
                 <?php $ppn = $id;
                 $ppn = preg_replace('/^\(.*\)/', '', $id);
