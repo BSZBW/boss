@@ -111,7 +111,9 @@ $wlbHasHoldings = false;
         <?php endif; ?>
     <?php endif; ?>
 <?php else: ?>
-    <div><?=$this->transEsc('no_local_hit')?> </div>
+    <?php if (!$this->client()->is('wlb2')): ?>
+        <div><?=$this->transEsc('no_local_hit')?> </div>
+    <?php endif; ?>
     <?php if ($this->client()->is('wlb2')): ?>
         <?php if ($this->driver->tryMethod('isArticle')): ?>
             <div><b><em><?= $this->transEsc('check_parent_availability') ?></em></b></div>
