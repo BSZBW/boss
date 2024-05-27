@@ -88,7 +88,14 @@
         </div>
       </div>
       <div class="help-block">
-           <strong><?=$this->transEsc('empty_search_text')?></strong>
+          <?php if($this->client()->is('wlb2')): ?>
+            <ul>
+                <li><?=$this->transEsc('no_empty_search')?></li>
+                <li><?=$this->transEsc('note_case_sensitivity')?></li>
+            </ul>
+          <?php else: ?>
+            <strong><?=$this->transEsc('empty_search_text')?></strong>
+          <?php endif; ?>
       </div>
       <span id="groupPlaceHolder" class="hidden">
         <i class="fa fa-plus-circle" aria-hidden="true"></i>
