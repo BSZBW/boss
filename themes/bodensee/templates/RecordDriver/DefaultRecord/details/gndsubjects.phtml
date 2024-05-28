@@ -1,0 +1,34 @@
+<?php $allSubjects = ($this->data['gnd'] ?? []) + ($this->data['free'] ?? []); ?>
+<?= $this->record($this->driver)->renderTemplate(
+    "details/subjectlist.phtml",
+    ['data' => $allSubjects, 'type' => 'gnd', 'linktype' => 'gnd']
+)?>
+
+<?php if (!empty($this->data['ihoeb'])): ?>
+    <?php if (!empty($allSubjects)):?><br><br><?php endif;?>
+    Internationale Hölderlin-Bibliographie: Systemstellen - Schlagwörter:<br>
+    <?php $values = []; ?>
+    <?php foreach ($this->data['ihoeb']['main'] ?? [] as $s): ?>
+        <?php
+        $terms = array_map(function ($k) use ($s){
+            return [
+                ['data' => $k, 'type' => 'Systemstelle'],
+                ['data' => $s['value']['term'], 'type' => 'Schlagwort']
+            ];
+        }, $s['key']);
+        ?>
+        <?php $values[] = [
+            'data' => implode(' ', $s['key']) . ' ' . $s['value']['display'],
+            'term' => $terms
+        ]; ?>
+    <?php endforeach; ?>
+    <?php unset($s); ?>
+    <?php foreach ($this->data['ihoeb']['secondary'] ?? [] as $s): ?>
+        <?php $terms = ['data' => $s['term'], 'type' => 'Schlagwort'] ?>
+        <?php $values[] = ['data' => $s['display'], 'term' => [[$terms]]] ?>
+    <?php endforeach; ?>
+    <?= $this->record($this->driver)->renderTemplate(
+        'details/subjectlist.phtml',
+        ['data' => $values, 'type' => 'ihoeb', 'linktype' => 'ihoeb']
+    )?>
+<?php endif; ?>

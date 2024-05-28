@@ -133,7 +133,7 @@ trait ContainerTrait
     }
 
     /**
-     * For rticles: get container title
+     * For Articles: get container title
      * @return type
      */
     public function getContainerTitle()
@@ -143,7 +143,11 @@ trait ContainerTrait
         ];
         $array = $this->getFieldsArray($fields);
         $title = array_shift($array);
-        return str_replace('In: ', '', $title);
+        return str_replace(
+            'In: ',
+            '',
+            $title ?? ''
+        );
     }
 
     /**

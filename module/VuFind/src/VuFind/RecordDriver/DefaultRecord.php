@@ -479,6 +479,12 @@ class DefaultRecord extends AbstractBase
         return $authors;
     }
 
+    public function getAuthorRole(string $role)
+    {
+        $authors = $this->getDeduplicatedAuthors(['role', 'gnd', 'live']);
+        return $authors[$role] ?? [];
+    }
+
     /**
      * Get the edition of the current record.
      *

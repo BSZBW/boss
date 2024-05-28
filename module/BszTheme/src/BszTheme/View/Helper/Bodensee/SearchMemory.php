@@ -40,8 +40,8 @@ class SearchMemory extends \VuFind\View\Helper\Root\SearchMemory
             return null;
         }
         $url = $this->memory->retrieveSearch();
-        $query_str = parse_url($url, PHP_URL_QUERY);
-        parse_str($query_str, $queryArray);
+        $query_str = parse_url($url ?? '', PHP_URL_QUERY);
+        parse_str($query_str ?? '', $queryArray);
         return $queryArray['lookfor'] ?? null;
     }
 
@@ -53,5 +53,18 @@ class SearchMemory extends \VuFind\View\Helper\Root\SearchMemory
             $lastLink = $urlHelper('home');
         }
         return $lastLink;
+    }
+
+    public function getHiddenFilterString(string $searchClassId): string
+    {
+        $hiddenFilters = $this->getLastHiddenFilters($searchClassId);
+        $hiddenFilterString = '';
+        $escapeHtmlAttr = $this->getView()->plugin('escapeHtmlAttr');
+        foreach ($hiddenFilters as $key => $filter) {
+            foreach ($filter as $value) {
+                $hiddenFilterString .= '&hiddenFilters[]=' . $escapeHtmlAttr($key) . ':' . $escapeHtmlAttr($value);
+            }
+        }
+        return $hiddenFilterString;
     }
 }

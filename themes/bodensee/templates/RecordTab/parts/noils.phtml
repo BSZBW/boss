@@ -26,7 +26,7 @@
         <dt><?=$this->transEsc('storage')?></dt>
         <dd><?=$this->escapeHtml($row['storage'])?></dd>
     <?php endif; ?>
-    <?php if (!empty($row['availability'])): ?>
+    <?php if (!empty($row['availability']) && !$this->client()->is('wlb2')): ?>
         <dt><?=$this->transEsc('ILL::indicator')?></dt>
         <dd><i class="fa <?=$this->record($this->driver)->indicator2icon($row['availability'])?>"></i> <?=$this->transEsc($this->record($this->driver)->indicator2status($row['availability']))?></dd>
     <?php endif; ?>

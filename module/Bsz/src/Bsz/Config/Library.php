@@ -52,6 +52,7 @@ class Library
     protected $boss;
     protected $lend_copy;
     protected $country;
+    protected $rss;
 
     /**
      * @param $data
@@ -75,6 +76,7 @@ class Library
         $this->logout = $data['shibboleth_logout'] ?? null;
         $this->regex = $data['regex'] ?? null;
         $this->lend_copy = isset($data['lend_copy']) ? str_split($data['lend_copy'], 1) : [0b1, 0b1];
+        $this->rss = $data['rss'] ?? null;
     }
 
     /**
@@ -327,5 +329,10 @@ class Library
     {
         $auths = $this->getAuth();
         return array_shift($auths);
+    }
+
+    public function getRss()
+    {
+        return$this->rss;
     }
 }

@@ -39,8 +39,26 @@ if ($content['customUrl'] && $this->client()->getTag() !== 'fl-dienst' ) {
     <?php if (count($ppns) > 0): ?>
         <?php foreach ($ppns as $k => $id): ?>
             <?php if ($linklabels[$k] == 'ILL::library_opac'): ?>
-                <li><?= $this->transEsc('ILL::library_opac') ?>
-                    : <?= $this->recordLink()->linkPPN($this->driver) ?></li>
+                <?php if ($this->client()->is('wlb2')): ?>
+                    <?php $ppn = $id;
+                    $ppn = preg_replace('/^\(.*\)/', '', $id);
+                    $exists = $this->idVerifier($ppn, 'Solr');
+                    if($exists):
+                        ?>
+                        <li><a href="/Record/<?=$ppn?>"><?=$this->transEsc('ILL::to_local_hit')?></a></li>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <li><?= $this->transEsc('ILL::library_opac') ?>
+                        : <?= $this->recordLink()->linkPPN($this->driver) ?></li>
+                <?php endif; ?>
+            <?php elseif ($this->client()->is('wlb2') && $linklabels[$k] == 'ILL::to_local_hit'): ?>
+                <?php $ppn = $id;
+                $ppn = preg_replace('/^\(.*\)/', '', $id);
+                $exists = $this->idVerifier($ppn, 'Solr');
+                if($exists):
+                ?>
+                <a href="/Record/<?=$ppn?>"><?=$this->transEsc($linklabels[$k])?></a>
+                <?php endif; ?>
             <?php else: ?>
                 <?php $route = $this->client()->is('wlb2') ? '/Search2Record/' : '/Record/' ; ?>
                 <li><a class=""
@@ -50,11 +68,13 @@ if ($content['customUrl'] && $this->client()->getTag() !== 'fl-dienst' ) {
         <?php endforeach; ?>
     <?php else: ?>
         <?php $link = $this->recordLink()->linkPPN($this->driver) ?>
-        <?php if (!empty($link)): ?>
+        <?php if (!empty($link) && !$this->client()->is('wlb2')): ?>
             <li><?= $this->transEsc('ILL::to_network_opac') ?>: <?= $link ?></li>
         <?php endif; ?>
+        <?php if ($status && $this->client()->is('wlb2') && $this->driver->tryMethod('isArticle')): ?>
+            <li><b><em><?= $this->transEsc('check_parent_availability') ?></em></b></li>
+        <?php endif; ?>
     <?php endif; ?>
-
 </ul>
 <?php if($this->client()->getTag() !== 'fl-dienst'):?>
     <?php if (isset($library) && $status && $library->loginEnabled() && !$account->isLoggedIn()): ?>

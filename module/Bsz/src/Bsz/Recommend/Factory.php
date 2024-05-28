@@ -110,4 +110,25 @@ class Factory
 
         return $rss;
     }
+
+    public static function getLibraryNews(ContainerInterface $container)
+    {
+        $client = $container->get('Bsz\Config\Client');
+        $libraries = $container->get('Bsz\Config\Libraries');
+
+        $library = $libraries->getFirstActive($client->getIsils());
+        $feedUrl = $library->getRss() ? $library->getRss() . ':3' : null;
+        $rss = new RSSFeedResults($feedUrl);
+        $config = \HTMLPurifier_Config::createDefault();
+        $config->set('HTML.Allowed', 'p, a, br, strong, em, ul, ol, li, b, i');
+        $config->set('HTML.AllowedAttributes', 'a.href');
+        $config->set('HTML.TargetBlank', true);
+        $config->set('HTML.Linkify', true);
+        $config->set('HTML.AutoParagraph', true);
+        $purifier = new \HTMLPurifier($config);
+
+        $rss->attachHtmlPurifier($purifier);
+
+        return $rss;
+    }
 }

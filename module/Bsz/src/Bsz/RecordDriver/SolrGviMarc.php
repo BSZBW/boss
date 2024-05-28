@@ -894,7 +894,7 @@ class SolrGviMarc extends SolrMarc implements Constants
             $link = str_replace(
                 'http://dx.doi.org',
                 'https://doi.org',
-                $link
+                $link ?? ''
             );
 
             // Prevent adding the same url multiple times
@@ -1193,7 +1193,7 @@ class SolrGviMarc extends SolrMarc implements Constants
         $params['rft.volume'] = $this->getContainerVolume();
         $params['rft.issue'] = $this->getContainerIssue();
         $params['rft.date'] = $this->getContainerYear();
-        if (str_contains($this->getContainerPages(), '-')) {
+        if (str_contains($this->getContainerPages() ?? '', '-')) {
             $params['rft.pages'] = $this->getContainerPages();
         } else {
             $params['rft.spage'] = $this->getContainerPages();

@@ -47,6 +47,8 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
     protected $runner;
     protected $container = [];
 
+    protected $lazyLocalUrls;
+
     /**
      * is this item a collection
      * @return bool
@@ -570,8 +572,14 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
         return $f007_0 . $f007_1;
     }
 
-    public function getProvenances(array $isils = []): array
+    public function getProvenances(string $isils): array
     {
+        if($isils == '*') {
+            $isils = ['*'];
+        }else {
+            $isils = array_map('trim', explode(',', $isils));
+        }
+
         $retVal = [];
         $f561 = $this->getFields('561');
         foreach ($f561 as $field) {
@@ -645,4 +653,201 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
         }
         return $retVal;
     }
+
+    public function getLocalUrls()
+    {
+        return [];
+    }
+
+    public function retrieveLocalUrls()
+    {
+        if($this->lazyLocalUrls == null) {
+            $this->lazyLocalUrls = $this->getLocalUrls();
+        }
+        return $this->lazyLocalUrls;
+    }
+
+    public function hasLocalUrls(): bool
+    {
+        $localUrls = $this->retrieveLocalUrls();
+        return isset($localUrls[0]['url']);
+    }
+
+    public function getMoreTitles(): array
+    {
+        $retVal = [];
+
+        $fields = $this->getMultiFields(['246', '247']);
+        foreach ($fields as $field) {
+            if(!is_array($field) || !in_array($field['i1'], ['0', '1'])) {
+                continue;
+            }
+
+            $retVal[] = $this->getSubfield($field, 'a');
+        }
+
+        return array_filter($retVal);
+    }
+
+    public function getContained(): array
+    {
+        $retVal = array_merge(
+            $this->getFieldArray('249', ['a']),
+            $this->getFieldArray('501', ['a'])
+        );
+
+        $f505 = $this->getFields('505');
+        foreach ($f505 as $field) {
+            if(!is_array($field)) {
+                continue;
+            }
+
+            $retVal[] = $this->getSubfield($field, 'a');
+
+            $retVal[] = $this->formatMarcField(
+                $field,
+                '$t / $r ($g)',
+                ['t'],
+                ['g' => ', ']
+            );
+
+        }
+
+        return array_filter($retVal);
+    }
+
+
+    public function getFulLDescription(): array
+    {
+        return array_merge(
+            $this->getFieldArray('500', ['a']),
+            $this->getFieldArray('515', ['a']),
+            $this->getFieldArray('520', ['a']),
+            $this->getFieldArray('546', ['a']),
+            $this->getFieldArray('242', ['a']),
+            $this->getFieldArray('518', ['a']),
+            $this->getFieldArray('511', ['a']),
+            $this->getFieldArray('510', ['a']),
+            $this->getFieldArray('521', ['a']),
+        );
+    }
+
+    public function getDissertationNote()
+    {
+        return $this->getFormattedMarcFields('502', [
+            '$a',
+            ['$b, $c, $d ($g)', 'bcd', ['g' => ', ']]
+        ]);
+    }
+
+    public function getProduction()
+    {
+        return array_merge(
+            $this->getFieldArray('508', ['a']),
+            $this->getFieldArray('937', ['a', 'b', 'c'], true, ' / ')
+        );
+    }
+
+    public function getReproduction()
+    {
+        return $this->getFormattedMarcFields('533', [
+            ['$a, $b, $c, $e', 'abcde', []],
+            '$n'
+        ]);
+    }
+
+    public function getHardSoftware()
+    {
+        return $this->getFieldArray('538', ['a']);
+    }
+
+    public function getRegister()
+    {
+        return $this->getFieldArray('555', ['a']);
+    }
+
+    protected function getFormattedMarcFields($fieldTag, $formatSpecs): array
+    {
+        $retVal = [];
+        foreach ($this->getFields($fieldTag) as $field) {
+            if(!is_array($field)) {
+                continue;
+            }
+
+            foreach ($formatSpecs as $spec) {
+                if(is_string($spec)) {
+                    $formatStr = $spec;
+                    $important = [];
+                    $repeatable = [];
+                }elseif (is_array($spec)) {
+                    $formatStr = $spec[0];
+                    $important = $spec[1] ? mb_str_split($spec[1]) : [];
+                    $repeatable = $spec[2] ?? [];
+                }else {
+                    continue;
+                }
+                $retVal[] = $this->formatMarcField($field, $formatStr, $important, $repeatable);
+            }
+        }
+        return array_filter($retVal);
+    }
+
+    protected function formatMarcField($field, $formatStr, $important = [], $repeatable = []): string
+    {
+        $retVal = [];
+        $found = [];
+
+        $formats = preg_split(
+            '/(\$[a-zA-Z0-9])/',
+            $formatStr,
+            -1,
+            PREG_SPLIT_DELIM_CAPTURE
+        );
+
+        foreach ($formats as $str) {
+            $matches = [];
+            if(!preg_match('/\$([a-zA-z0-9])/', $str, $matches)) {
+                $retVal[] = [0, $str];
+                continue;
+            }
+            $sf = $matches[1];
+            if (array_key_exists($sf, $repeatable)) {
+                $sfText = implode($repeatable[$sf], $this->getSubfields($field, $sf));
+            }else {
+                $sfText = $this->getSubfield($field, $sf);
+            }
+
+            if(!empty($sfText)) {
+                $found[] = $sf;
+                $retVal[] = [1, str_replace('$'.$sf, $sfText, $str)];
+            }
+        }
+
+        if(empty($important)) {
+            return $this->buildString($retVal);
+        }
+        foreach ($important as $sfKey) {
+            if (in_array($sfKey, $found)) {
+                return $this->buildString($retVal);
+            }
+        }
+        return '';
+    }
+
+    protected function buildString(array $values): string
+    {
+        $str = '';
+        $sep = '';
+        foreach ($values as $value) {
+            if($value[0] == 0) {
+                $sep .= $value[1];
+            }else {
+                $str .= empty($str) ? '' : $sep;
+                $str .= $value[1];
+                $sep = '';
+            }
+        }
+        return $str;
+    }
+
 }

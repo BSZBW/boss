@@ -1,0 +1,10 @@
+<?php $count = 0; ?><!--
+--><?php foreach ($this->data as $item): ?><!--
+ --><?php if ($count > 0):?>-<?php endif;?><!--
+ --><?php if(isset($item['description'])):?><!--
+      --><abbr title="<?=$this->transEsc($item['description'])?>"><?=$this->escapeHtml($item['abbrev'])?></abbr><!--
+ --><?php else:?><!--
+      --><?=$this->transEsc($item['abbrev'])?><!--
+ --><?php endif; ?><!--
+ --><?php $count++; ?><!--
+--><?php endforeach; ?>

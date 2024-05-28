@@ -1,0 +1,14 @@
+<span>
+    <?= $this->string()->cleanEsc($this->data['journalTitle'])?>
+    <?php $issue = $this->data['issue'] ?? null; ?>
+    <?php if (!empty($issue)): ?>
+        <?= $this->string()->cleanEsc($issue) ?>
+    <?php else: ?>
+        <?php
+        $relParts = $this->data['relParts'] ?? null;
+        $year = $this->data['year'] ?? null;
+        $pages = $this->data['pages'] ?? null;
+        ?>
+        <?php if (!empty($relParts)): ?>. - <?=$relParts?><?php else: ?><?php if (!empty($year)): ?>. - <?=$this->string()->cleanEsc($year)?><?php endif; ?><?php if (!empty($pages)): ?>, S. <?=$pages?><?php endif; ?><?php endif; ?>
+    <?php endif; ?>
+</span>

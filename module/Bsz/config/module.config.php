@@ -125,6 +125,7 @@ $config = [
                     'Bsz\Recommend\SearchButtons' => 'Bsz\Recommend\Factory::getSearchButtons',
                     'Bsz\Recommend\RSSFeedResults' => 'Bsz\Recommend\Factory::getRSSFeedResults',
                     'Bsz\Recommend\StartPageNews' => 'Bsz\Recommend\Factory::getStartpageNews',
+                    'LibraryNews' => 'Bsz\Recommend\Factory::getLibraryNews'
                 ],
                 'invokables' => [
                     'Bsz\Recommend\RSSFeedResultsDeferred' => 'Bsz\Recommend\RSSFeedResultsDeferred',

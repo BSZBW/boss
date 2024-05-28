@@ -1,0 +1,22 @@
+<?php $count = 0;?>
+<span <?php if(isset($this->property)):?>property="<?=$this->property?>"<?php endif;?>>
+<?php $hf = $this->searchMemory()->getHiddenFilterString($this->searchClassId); ?>
+<?php foreach ($this->data as $name => $info): ?>
+    <?php
+    $gnd = $info['gnd'][0] ?? null;
+    $live = $info['live'][0] ?? null;
+    $role = $info['role'][0] ?? null;
+    ?>
+    <?php if ($count > 0):?><br><?php endif;?>
+    <a class="<?=$this->type?>" href="<?=$this->record($this->driver)->getLink('author', $name, $this->searchClassId)?>"><?=$this->transEsc($name)?><?php if (isset($live)):?>, <?=$this->escapeHtml($live)?><?php endif; ?></a><?php if (!empty($gnd)): ?>
+        <a data-placement="right" data-toggle="tooltip" title="<?=$this->transEsc('Search GND-ID')?>: <?=$this->escapeHtml($gnd)?>" class="hidden-print searchLink" href="<?=$this->url('search-results')?>?lookfor=&quot;<?=$this->escapeHtml($gnd)?>&quot;&amp;type=GNDId<?= $hf ?>"></a><span class="visible-print">GND-ID: <?=$this->escapeHtml($gnd)?></span><?php endif; ?>
+<!-- --><?php if (!empty($role)): ?>, <?=$this->transEsc('CreatorRoles::'.$role)?><?php endif; ?>
+    <?php if(isset($gnd)):?>
+        <?php $gndLink = $this->gndLink()->fromExplore($gnd); ?>
+        <a class="external hasicon" data-toggle="tooltip" title="<?=$this->transEsc('DNB_link')?>" href="<?=$this->escapeHtmlAttr($gndLink)?>">
+            <i class="fa fa-info-circle"></i>
+        </a>
+    <?php endif ?>
+    <?php $count++;?>
+<?php endforeach; ?>
+</span>

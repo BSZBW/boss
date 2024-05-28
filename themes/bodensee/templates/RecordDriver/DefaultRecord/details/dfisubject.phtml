@@ -1,0 +1,23 @@
+<?php $rand = rand(0, 9999) ?>
+<?php $count = 0; ?>
+<?php foreach ($this->data as $notation): ?>
+    <div class="notationLine">
+        <?php if(is_array($notation)): ?>
+            <?php foreach ($notation as $key => $value): ?>
+                <a href="<?=$this->record($this->driver)->getLink('dfi2060subject', $value, $this->searchClassId) ?>"
+                   class="searchicon <?php if ($count >= 5): ?>dfisubjects-<?= $rand ?> collapse-inline collapse multi-collapse <?php endif; ?>"
+                ><?=$this->escapeHtml($value)?>
+                </a>
+                <?php $count++; ?>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <a href="<?=$this->record($this->driver)->getLink('dfi2060subject', $notation, $this->searchClassId) ?>"
+               class="searchicon <?php if ($count >= 5): ?>dfisubjects-<?= $rand ?> collapse-inline collapse multi-collapse <?php endif; ?>"
+            ><?=$this->escapeHtml($notation)?></a>
+            <?php $count++; ?>
+        <?php endif; ?>
+    </div>
+<?php endforeach; ?>
+<?php if ($count > 5): ?>
+    <?= $this->showmore('.dfisubjects-' . $rand, false) ?>
+<?php endif; ?>

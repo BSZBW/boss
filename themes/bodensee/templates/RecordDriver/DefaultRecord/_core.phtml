@@ -1,0 +1,475 @@
+<?
+/*
+ * Copyright 2021 (C) Bibliotheksservice-Zentrum Baden-
+ * Württemberg, Konstanz, Germany
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ */
+
+$hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassId);
+    $hiddenFilterString = '';
+    foreach ($hiddenFilters as $key => $filter) {
+        foreach ($filter as $value) {
+            $hiddenFilterString .= '&hiddenFilters[]=' . $this->escapeHtmlAttr($key) . ':' . $this->escapeHtmlAttr($value);
+        }
+    }
+?>
+<div class="row" vocab="http://schema.org/" resource="#record">
+    <div class="col-xs-12 col-sm-9">
+        <?php
+        $title = $this->driver->getTitle();
+        $section = $this->driver->getTitleSection();
+        $sectionol = $this->driver->tryMethod('getTitleSectionOl');
+        $titleol = $this->driver->tryMethod('getTitleOl');
+        ?>
+        <h3 property="name">
+            <?php if (empty($titleol)): ?>
+            <?=$this->escapeHtml($title) ?><br/><?= $this->string()->cleanEsc($section) ?>
+            <?php else: ?>
+            <?=$this->escapeHtml($titleol) ?><br/><?= $this->escapeHtml($sectionol) ?>
+            <?php endif; ?>
+        </h3>
+        <? if (!empty($titleol)): ?>
+            <h4><?=$this->escapeHtml($title) ?><br/><?= $this->string()->cleanEsc($section) ?></h4>
+        <? endif; ?>
+
+        <? if ($this->userlist()->getMode() !== 'disabled'): ?>
+            <? /* Display the lists that this record is saved to */ ?>
+            <div class="savedLists hidden alert alert-info" id="savedLists">
+                <strong><?= $this->transEsc("Saved in") ?>:</strong>
+            </div>
+        <? endif; ?>
+        <? /* Display Main Details */ ?>
+        <table class="table table-striped">
+            <? $container = $this->driver->tryMethod('getContainer');
+            if ($container) : ?>
+                <tr>
+                    <th><?= $this->transEsc('collective_editions') ?></th>
+                    <td><? foreach ($container as $cont): ?>
+                            <a class="internal"
+                               href="<?= $this->recordLink()->getUrl($cont) ?>"><?= $this->string()->cleanEsc($cont->getTitle()) ?></a>
+                            <br/>
+                        <? endforeach; ?></td>
+                </tr>
+            <? endif; ?>
+
+            <?=$this->render('RecordDriver/DefaultRecord/parts/series.phtml')?>
+
+            <? $volume = $this->driver->tryMethod('getVolumeNumber'); ?>
+            <? if (!empty($volume)): ?>
+                <tr>
+                    <th><?=$this->transEsc('Volume/Issue')?></th>
+                    <td><?=$this->escapeHtml($volume)?></td>
+                </tr>
+            <? endif; ?>
+
+            <? $journalTitle = $this->driver->getContainerTitle();
+              $issue =      $this->driver->getContainerIssue();
+              $relParts =   $this->driver->getContainerRelParts();
+              $year =       $this->driver->getContainerYear();
+              $pages =      $this->driver->getContainerPages();
+            if ($this->driver->isArticle() && !empty($journalTitle)): ?>
+                 <tr>
+                <th><?=$this->transEsc('Published in')?></th>
+                <td>
+                    <?= $this->string()->cleanEsc($journalTitle)?>
+                    <? if (!empty($issue)): ?>
+                        <?= $this->string()->cleanEsc($issue) ?>
+                    <? else: ?>
+                        <? if (!empty($relParts)): ?>. - <?=$relParts?><? else: ?><? if (!empty($year)): ?>. - <?=$this->string()->cleanEsc($year)?><? endif; ?><? if (!empty($pages)): ?>, S. <?=$pages?><? endif; ?><? endif; ?>
+                    <? endif; ?>
+
+                </td>
+            </tr>
+            <? endif; ?>
+
+            <? $nextTitles = $this->driver->getNewerTitles(); $prevTitles = $this->driver->getPreviousTitles(); ?>
+            <? if (!empty($nextTitles)): ?>
+            <tr>
+                <th><?=$this->transEsc('New Title')?></th>
+                <td><? foreach($nextTitles as $field): ?>
+                    <a href="<?=$this->url('search-results')?>?lookfor=%22<?=urlencode($field)?>%22&amp;type=AllFields&amp;filter[]=~material_content_type:%22Journal/Magazine%22<?= $hiddenFilterString ?>"><?=$this->escapeHtml($field)?></a><br/>
+                  <? endforeach; ?></td>
+            </tr>
+            <? endif; ?>
+
+            <? if (!empty($prevTitles)): ?>
+            <tr>
+                <th><?=$this->transEsc('Previous Title')?></th>
+                <td>
+                  <? foreach($prevTitles as $field): ?>
+                     <a href="<?=$this->url('search-results')?>?lookfor=%22<?=urlencode($field)?>%22&amp;type=AllFields&amp;filter[]=~material_content_type:%22Journal/Magazine%22<?= $hiddenFilterString ?>"><?=$this->escapeHtml($field)?></a><br/>
+                  <? endforeach; ?>
+                </td>
+            </tr>
+            <? endif; ?>
+
+            <? $authors = $this->driver->getDeduplicatedAuthors(['role', 'gnd', 'live']); ?>
+
+            <? if (isset($authors['primary']) && !empty($authors['primary'])): ?>
+            <tr>
+                <th><?=$this->transEsc('Main Author')?></th>
+                <td property="author">
+                    <? foreach ($authors['primary'] as $name => $info): ?>
+                        <?=$this->context($this)->renderInContext('RecordDriver/DefaultRecord/parts/singleauthor.phtml', ['name' => $name, 'info' => $info, 'type' => 'person','hiddenFilterString' => $hiddenFilterString])?>
+                    <? endforeach; ?>
+                </td>
+            </tr>
+            <? endif; ?>
+
+            <? if (isset($authors['corporate']) && !empty($authors['corporate'])): ?>
+            <tr>
+                <th><?=$this->transEsc('Corporate Author')?></th>
+                <td property="creator">
+                <? foreach ($authors['corporate'] as $name => $info): ?>
+                    <?=$this->context($this)->renderInContext('RecordDriver/DefaultRecord/parts/singleauthor.phtml', ['name' => $name, 'info' => $info, 'type' => 'corporation', 'hiddenFilterString' => $hiddenFilterString])?>
+                    <br/>
+                <? endforeach; ?>
+                </td>
+            </tr>
+            <? endif; ?>
+            <? if (isset($authors['secondary']) && !empty($authors['secondary'])): ?>
+            <tr>
+                <th><?=$this->transEsc('Other Authors')?></th>
+                <td>
+                    <? foreach ($authors['secondary'] as $name => $info): ?>
+                        <?=$this->context($this)->renderInContext('RecordDriver/DefaultRecord/parts/singleauthor.phtml', ['name' => $name, 'info' => $info, 'type' => 'person', 'hiddenFilterString' => $hiddenFilterString])?>
+                        <br/>
+                    <? endforeach; ?>
+                </td>
+            </tr>
+            <? endif;?>
+
+            <? $cast = $this->driver->tryMethod('getMusicalCast'); ?>
+
+            <? if (isset($cast) && !empty($cast)): ?>
+                <tr>
+                    <th><?=$this->transEsc('MusicalCast')?></th>
+                    <td property="cast">
+                        <? foreach ($cast as $item): ?>
+                            <?= $item ?><br/>
+                        <? endforeach; ?>
+                    </td>
+                </tr>
+            <? endif; ?>
+
+            <? $formats = $this->driver->getFormats(); if (!empty($formats)): ?>
+            <tr>
+                <th><?=$this->transEsc('Format')?></th>
+                <td><? foreach($formats as $format): ?>
+                    <span class="format" title="<?=$format?>"><?=$this->transEsc('Formats::'.$format)?></span>
+                    <? endforeach; ?>
+                </td>
+            </tr>
+            <? endif; ?>
+
+            <? $parallel = $this->driver->tryMethod('getParallelEditions'); if (!empty($parallel) && $this->client()->is('show_other_appearance')): ?>
+                <tr>
+                    <th><?=$this->transEsc('other_appearance')?></th>
+                    <td>
+                        <p>
+                        <? foreach($parallel as $ctx): ?>
+                            <? if (isset($ctx['prefix'])): ?><?=$this->transEsc($ctx['prefix'])?> <? endif ?>
+                            <? if (isset($ctx['ppn'], $ctx['label'])) : ?>
+                                <a class="searchicon" href="<?=$this->recordLink()->getUrl($ctx['ppn'])?>" ><?=$this->transEsc($ctx['label'])?></a>
+                            <? endif; ?>
+                            <? if (isset($ctx['postfix'])): ?> (<?=$this->transEsc($ctx['postfix'])?>)<? endif ?>
+                        <br/>
+                        <? endforeach; ?></td>
+                        </p>
+                </tr>
+            <? endif; ?>
+
+            <? $scale = $this->driver->tryMethod('getScale'); if (!empty($scale)): ?>
+            <tr>
+                <th><?=$this->transEsc('Scale')?></th>
+                <td>
+                    <?=$this->escapeHtml($scale)?><br/>
+                </td>
+            </tr>
+            <? endif; ?>
+
+            <? $physical = $this->driver->getPhysicalDescriptions();
+            $physicalol = $this->driver->tryMethod('getPhysicalDescriptionsOl');
+
+            if (!empty($physical)): ?>
+            <tr>
+                <th><?=$this->transEsc('Physical Description')?></th>
+                <td><? if (!empty($physicalol)): ?>
+                        <? foreach ($physicalol as $k => $field): ?>
+                            <?=$this->escapeHtml($field)?><? if (isset($physical[$k+1])):?> ; <?endif?>
+                        <? endforeach; ?>
+                        <br/><? endif; ?>
+                    <? foreach ($physical as $k => $field): ?>
+                        <?=$this->escapeHtml($field)?><? if (isset($physical[$k+1])):?> ; <?endif?>
+                    <? endforeach; ?>
+                </td>
+            </tr>
+            <? endif; ?>
+
+            <?
+               $isbn = $this->driver->getCleanISBN();
+               $issn = $this->driver->getCleanISSN();
+               if (!empty($isbn)): ?>
+                   <tr>
+                       <th><?= $this->abbrev('ISBN', 'ISBN_long') ?></th>
+                       <td><?= $this->clipboard($this->driver->getCleanISBN()) ?></td>
+                   </tr>
+               <? elseif (!empty($issn)): ?>
+                   <tr>
+                       <th><?= $this->abbrev('ISSN', 'ISSN_long') ?></th>
+                       <td><?= $this->clipboard($this->driver->getCleanISSN()) ?></td>
+                   </tr>
+               <? endif; ?>
+
+            <? $langs = $this->driver->getLanguages(); if (!empty($langs)): ?>
+            <tr>
+                <th><?=$this->transEsc('Language')?></th>
+                <? $count = 0 ?>
+                <td><? foreach ($langs as $lang): ?><? if($count > 0):?>; <?endif;?><?= $this->transEsc($lang)?><? $count++?><? endforeach; ?>
+                </td>
+            </tr>
+            <? endif; ?>
+
+            <? $publicationsOl = $this->driver->tryMethod('getPublicationDetailsOl') ?>
+            <? $publications = $this->driver->getPublicationDetails(); if (!empty($publications)): ?>
+                <tr>
+                    <th><?= $this->transEsc('Published') ?></th>
+                    <td>
+                        <? if (isset($publicationsOl)): ?>
+                            <? foreach ($publicationsOl as $field): ?>
+                                <?=$this->context($this)->renderInContext('RecordDriver/DefaultRecord/parts/publication.phtml', ['publication' => $field])?>
+                                <br/>
+                            <? endforeach; ?>
+                        <? endif; ?>
+                        <? foreach ($publications as $field): ?>
+                            <?=$this->context($this)->renderInContext('RecordDriver/DefaultRecord/parts/publication.phtml', ['publication' => $field])?>
+                            <br/>
+                        <? endforeach; ?>
+                    </td>
+                </tr>
+            <? endif; ?>
+
+            <? $edition = $this->driver->getEdition();
+            $editionol = $this->driver->tryMethod('getEditionOl');
+            if (!empty($edition)): ?>
+            <tr>
+                <th><?=$this->transEsc('Edition')?></th>
+                <td property="bookEdition"><? if (!empty($editionol)): ?><?=$this->escapeHtml($editionol)?><br/>><? endif; ?>
+                    <?=$this->escapeHtml($edition)?>
+                </td>
+            </tr>
+            <? endif; ?>
+
+            <?php if($this->client()->is('show_bib_context')): ?>
+                <?php $context = $this->driver->tryMethod('getBibliographicalContext'); if ($context): ?>
+                    <tr>
+                        <th><?=$this->transEsc('bib_context')?></th>
+                        <td>
+                            <p>
+                                <? foreach($context as $ctx): ?>
+                                <? if (isset($ctx['prefix'])): ?><?=$this->transEsc($ctx['prefix'])?> <? endif ?>
+                                <? if (isset($ctx['ppn'], $ctx['label'])) : ?>
+                                    <a class="searchicon" href="<?=$this->recordLink()->getUrl($ctx['ppn'])?>" ><?=$this->transEsc($ctx['label'])?></a>
+                                <? endif; ?>
+                                <? if (isset($ctx['postfix'])): ?> (<?=$this->transEsc($ctx['postfix'])?>)<? endif ?>
+                                <br/>
+                            <? endforeach; ?></td>
+                        </p>
+                    </tr>
+                <?php endif; ?>
+            <?php endif; ?>
+
+            <? $childRecordCount = $this->driver->tryMethod('getChildRecordCount'); if ($childRecordCount): ?>
+            <tr>
+                <th><?=$this->transEsc('child_records')?></th>
+                <td><a href="<?=$this->recordLink()->getChildRecordSearchUrl($this->driver)?>"><?=$this->transEsc('child_record_count', array('%%count%%' => $childRecordCount))?></a></td>
+            </tr>
+            <? endif; ?>
+
+            <? $oldPrintGenre = $this->driver->tryMethod('getOldPrintGenre'); if ($oldPrintGenre): ?>
+                <tr>
+                    <th><?= $this->transEsc('old_print_genre') ?></th>
+                    <td>
+                        <? foreach ($oldPrintGenre as $item): ?>
+                        <?= $this->escapeHtml($item) ?><br>
+                        <? endforeach; ?>
+                    </td>
+                </tr>
+            <? endif; ?>
+
+            <? $provenances = $this->driver->tryMethod('getProvenances', [$this->client()->getProvenances()]); if ($provenances): ?>
+            <tr>
+                <th><?=$this->transEsc('provenances')?></th>
+                <td>
+                    <? foreach ($provenances as $item): ?>
+                    <?=$this->context($this)->renderInContext('RecordDriver/DefaultRecord/parts/provenance.phtml', ['provenance' => $item])?>
+                    <br>
+                    <? endforeach; ?>
+                </td>
+            </tr>
+            <? endif ?>
+
+            <?=$this->render('RecordDriver/DefaultRecord/parts/subjects.phtml')?>
+
+            <?php $contents = $this->driver->tryMethod('getKindContent'); if ($contents): ?>
+                <tr>
+                    <th><?=$this->transEsc('Kind/Content')?></th>
+                    <td>
+                        <?php $items = array_map(function ($i) {return $this->escapeHtml($i); }, $contents); ?>
+                        <?= implode(", ", $items); ?>
+                    </td>
+                </tr>
+            <?php endif; ?>
+
+            <?
+                  $openUrl = $this->openUrl($this->driver, 'record');
+                  $openUrlActive = $openUrl->isActive();
+                  // Account for replace_other_urls setting
+                  $urls = $this->record($this->driver)->getLinkDetails($openUrlActive);
+            ?>
+
+            <? // Show local urls or SWB-links but not both ?>
+            <? $localUrls = $this->driver->tryMethod('getLocalUrls')?>
+            <? if (!empty($localUrls[0]['url'])): ?>
+                <tr>
+                    <th><?= $this->transEsc('Local Online Access') ?></th>
+                    <td>
+                        <?php $localUrls = $this->driver->tryMethod('getLocalUrls'); ?>
+                        <?php // Show local Urls?>
+                        <?php if (!empty($localUrls[0]['url'])): ?>
+                            <div>
+                                <?php foreach ($localUrls as $current): ?>
+                                    <?php if (is_array($current['label'])): ?>
+                                        <a class="external localUrls"
+                                           href="<?= $current['url'] ?>"><?= $this->transEsc($current['label'][0]) ?></a>
+                                        <?php if ($this->client()->is('local_url_help_regex') && isset($current['label'][1])): ?>
+                                            <?php $htmllink = preg_replace(
+                                                $this->client()->getHelpRegEx(),
+                                                "<a class='external' href='" . $this->client()->getHelpUrl() . "'>" . $this->client()->getHelpGroups() . "</a>",
+                                                $this->transEsc($current['label'][1])
+                                            ) ?>
+                                            <?= $htmllink ?>
+                                        <?php elseif (isset($current['label'][1])): ?>
+                                            &ndash; <?= $this->transEsc($current['label'][1]) ?>
+                                            <br/>
+                                        <?php endif; ?>
+                                    <?php else: ?>
+                                        <a class="external"
+                                           href="<?= $current['url'] ?>"><?= $this->transEsc($current['label']) ?></a>
+                                    <?php endif ?>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif ?>
+                    </td>
+                </tr>
+            <? else: ?>
+                <? if (!empty($urls)): ?>
+                    <tr>
+                      <th><?=$this->transEsc('External Resources')?></th>
+                      <td><? foreach ($urls as $current): ?>
+                              <a class="external" href="<?=$this->wayfless($current['url'], $this->client()->getIsils())?>"><?=$this->transEsc($current['desc'])?></a><br/>
+                          <? endforeach; ?></td>
+                    </tr>
+                <? endif; ?>
+            <? endif; ?>
+      <? $html = $openUrl->renderTemplate() ?>
+      <? if ($openUrlActive && strlen($html) > 0): ?>
+      <tr>
+          <th><?=$this->transEsc('Link Resolver')?></th>
+          <td><?=$html?></td>
+      </tr>
+      <? endif; ?>
+
+      <? if ($this->client()->is('show_network')): ?>
+        <? if( strlen($this->driver->getConsortium()) > 0): ?>
+            <?  $consortium = $this->driver->getConsortium();
+            $consortiums = explode(', ', $consortium);
+            ?>
+            <tr>
+                <th><?=$this->transEsc('Network')?></th>
+                <td><?$count = 0; foreach ($consortiums as $con): ?>
+<?php if($count>0):?>, <?php endif?><?=$this->abbrev($con)?>
+<?php $count++?>
+<? endforeach; ?>
+                </td>
+            </tr>
+        <? endif; ?>
+      <? endif; ?>
+
+      <? if ($this->usertags()->getMode() !== 'disabled'): ?>
+        <? $tagList = $this->driver->getTags(); ?>
+        <tr>
+            <th><?=$this->transEsc('Tags')?></th>
+            <td>
+                <span class="pull-right">
+                  <i class="fa fa-plus"></i> <a id="tagRecord" class="modal-link" href="<?=$this->recordLink()->getActionUrl($this->driver, 'AddTag')?>" title="<?=$this->transEsc('Add Tag')?>"><?=$this->transEsc('Add Tag')?></a>
+                </span>
+                <div id="tagList">
+                  <? if (count($tagList) > 0): ?>
+                    <? $i = 0; foreach ($tagList as $tag): ?><?=($i++ == 0)?'':', '?><a href="<?=$this->url('tag-home')?>?lookfor=<?=urlencode($tag->tag)?>"><?=$this->escapeHtml($tag->tag)?></a> (<?=$this->escapeHtml($tag->cnt)?>)<? endforeach; ?>
+                  <? else: ?>
+                    <?=$this->transEsc('No Tags')?>, <?=$this->transEsc('Be the first to tag this record')?>!
+                  <? endif; ?>
+                </div>
+            </td>
+        </tr>
+        <? endif; ?>
+            <?php $bibliographies = $this->driver->tryMethod('getBibliographies');
+            if ($bibliographies != false && count($bibliographies) > 0):?>
+            <tr>
+                <th><?=$this->transEsc('Bibliographie')?></th>
+                <td>
+                    <?php foreach ($bibliographies as $bibliography):?>
+                        <?php if ($this->client()->is($bibliography)): ?>
+                        <div class="verticalcenter">
+                            <?= $this->bibliographyIcon($bibliography) ?>
+                            <span style="vertical-align: middle"><?=$this->transEsc($bibliography)?></span>
+                        </div>
+                        <?php endif;?>
+                    <?php endforeach;?>
+                </td>
+            </tr>
+        <?php endif ?>
+            <?php if($this->client()->is('wlb_facet_tooltip')):?>
+            <?php $isEPflicht = $this->driver->tryMethod('isEPflicht'); ?>
+            <?php $isLFER = $this->driver->tryMethod('isLFER'); ?>
+            <?php if ($isEPflicht || $isLFER):?>
+                <tr>
+                    <th><?=$this->transEsc('Source')?></th>
+                    <td>
+                    <?php if ($isEPflicht):?>
+                    <p><span class="label label-warning"><?=$this->transEsc('ePflicht-BW Label')?></span> <?=$this->transEsc('ePflicht-BW Text')?></p>
+                    <?php endif; ?>
+                    <?php if ($isLFER):?>
+                    <p><span class="label label-lfer"><?=$this->transEsc('lizenzfrei')?></span> <?=$this->transEsc('LFER_long')?></p>
+                    <?php endif; ?>
+                    </td>
+                </tr>
+            <?php endif ?>
+            <?php endif ?>
+    </table>
+    <?/* End Main Details */?>
+    </div>
+    <div class="col-xs-6 col-sm-3 col-md-2 col-xs-offset-3 col-sm-offset-0" >
+        <a class="cover" data-img-url="<?=$this->record($this->driver)->getThumbnail('large')?>">
+            <?=$this->context($this)->renderInContext('record/cover.phtml', [
+                'cover' => $this->record($this->driver)->getThumbnail('large'),
+
+            ])?>
+        </a>
+    </div>
+</div>

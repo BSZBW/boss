@@ -1,0 +1,8 @@
+<?php foreach ($this->data as $bibliography):?>
+    <?php if ($this->client()->is($bibliography)): ?>
+        <div class="verticalcenter">
+            <?= $this->bibliographyIcon($bibliography) ?>
+            <span style="vertical-align: middle"><?=$this->transEsc($bibliography)?></span>
+        </div>
+    <?php endif;?>
+<?php endforeach;?>
