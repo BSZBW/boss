@@ -1,7 +1,17 @@
+<?php
+$hasCallNo = false;
+foreach ($this->statusItems as $item) {
+    if (isset($item['callnumber']) && strtolower($item['callnumber']) !== 'unknown') {
+        $hasCallNo = true;
+    }
+}
+?>
 <table class="table table-condensed">
   <tr>
     <th><?=$this->transEsc('Location')?></th>
+      <?php if ($hasCallNo): ?>
     <th><?=$this->transEsc('Call Number')?></th>
+      <?php endif; ?>
     <th><?=$this->transEsc('Status')?></th>
   </tr>
   <?php $count = 0; foreach ($this->statusItems as $item): ?>
@@ -29,13 +39,16 @@
           <?=$locationText?>
         <?php endif; ?>
       </td>
+        <?php if ($hasCallNo): ?>
       <td class="fullCallnumber">
+          <?php $callNo = (strtolower($item['callnumber']) == 'unknown') ? '' : $item['callnumber'] ?>
         <?php if ($this->callnumberHandler): ?>
-          <a href="<?=$this->url('alphabrowse-home') ?>?source=<?=$this->escapeHtmlAttr($this->callnumberHandler) ?>&amp;from=<?=$this->escapeHtmlAttr($item['callnumber']) ?>"><?=$this->escapeHtml($item['callnumber'])?></a>
+          <a href="<?=$this->url('alphabrowse-home') ?>?source=<?=$this->escapeHtmlAttr($this->callnumberHandler) ?>&amp;from=<?=$this->escapeHtmlAttr($callNo) ?>"><?=$this->escapeHtml($callNo)?></a>
         <?php else: ?>
-          <span><?= preg_replace('/^.*\s\|\s/', '', $this->string()->cleanEsc($item['callnumber'])); ?></span>
+          <span><?= preg_replace('/^.*\s\|\s/', '', $this->string()->cleanEsc($callNo)); ?></span>
         <?php endif; ?>
       </td>
+        <?php endif; ?>
       <td class="fullAvailability">
         <?php if (isset($item['use_unknown_message']) && $item['use_unknown_message']): ?>
          <span class="text-nowrap">
