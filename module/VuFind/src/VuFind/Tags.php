@@ -66,7 +66,7 @@ class Tags
      */
     public function parse($tags)
     {
-        preg_match_all('/"[^"]*"|[^ ]+/', trim($tags), $words);
+        preg_match_all('/"[^"]*"|[^ ]+/', trim($tags ?? ''), $words);
         $result = [];
         foreach ($words[0] as $tag) {
             // Wipe out double-quotes and trim over-long tags:

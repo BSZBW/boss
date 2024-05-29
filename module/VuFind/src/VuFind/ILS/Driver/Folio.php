@@ -409,6 +409,9 @@ class Folio extends AbstractAPI implements
         $idType = $this->getBibIdType();
         $idField = $idType === 'instance' ? 'id' : $idType;
 
+        // BSZ
+        $bibId = preg_replace('/\(DE-627\)/', '', $bibId);
+
         $query = [
             'query' => '(' . $idField . '=="' . $this->escapeCql($bibId) . '")',
         ];
@@ -443,7 +446,7 @@ class Folio extends AbstractAPI implements
     {
         $status = [];
         foreach ($idList as $id) {
-            $status[] = $this->getStatus($id);
+            $status[] = $this->getStatus(preg_replace('/\(DE-627\)/', '', $id));
         }
         return $status;
     }

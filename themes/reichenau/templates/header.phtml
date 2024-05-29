@@ -1,0 +1,157 @@
+<div class="navbar navbar-default navbar-fixed-top">
+    <?php if($this->client()->is('wlb2')): ?>
+    <div class="container">
+        <div class="navbar-header">
+            <?php if (!isset($frame)): ?>
+                <button type="button" class="navbar-toggle btn btn-primary" data-toggle="collapse" data-target="#header-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <i class="fa fa-bars"></i>
+                </button>
+            <?php endif; ?>
+        </div>
+        <div class="navbar-toggle pull-left">
+            <a href="<?=$this->client()->getWebsite('')?>">
+                <img src="<?= $this->imageLink('logo/wlb.png') ?>" style="height:3em;margin:5px" alt="Logo Bibliothek">
+            </a>
+            </a>
+        </div>
+    </div>
+    <?php endif; ?>
+
+    <div class="container">
+        <a class="sr-only" href="#content"><?=$this->transEsc('Skip to content') ?></a>
+        <div class="navbar-header">
+            <?php if (!isset($frame) && !$this->client()->is('wlb2')): ?>
+                <button type="button" class="navbar-toggle btn btn-primary" data-toggle="collapse" data-target="#header-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <i class="fa fa-bars"></i>
+                </button>
+            <?php endif; ?>
+            <?php if ($this->client()->is('show_small_logo')): ?>
+            <?php $lang = $this->layout()->userLang?>
+            <?php if ($this->client()->getTag() == 'athen' && $lang == 'en'): $lang = 'de'; endif; ?>
+            <a class="navbar-brand external hasicon" href="<?=$this->client()->getWebsite('', $lang)?>">
+                <img class="img-responsive" src="<?=$this->imageLink($this->clientAsset()->getSmallLogo()) ?>"/>
+            </a>
+            <?php endif ?>
+
+        </div>
+        <?php $account = $this->auth()->getManager(); ?>
+        <?php if ($this->layout()->searchbox !== false && !$this->client()->is('disable_searchbar')): ?>
+            <div class="navbar-left">
+                <?=$this->layout()->searchbox ?>
+            </div>
+        <?php endif; ?>
+        <?php if (!isset($this->layout()->renderingError)): ?>
+        <div class="collapse navbar-collapse" id="header-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <?php if ($this->feedback()->tabEnabled()): ?>
+                    <li>
+                        <a id="feedbackLink" data-lightbox href="<?=$this->url('feedback-home') ?>"><i class="fa fa-envelope" aria-hidden="true"></i> <?=$this->transEsc("Feedback")?></a>
+                    </li>
+                <?php endif; ?>
+                <?php if($this->client()->is('wlb2')): ?>
+                <li class="visible-lg">
+                    <?php
+                    $suffix = '';
+                    if (isset($_SERVER['HTTP_HOST'])) {
+                        $host = strtolower($_SERVER['HTTP_HOST']);
+                        if (str_contains($host, 'bosstest')) {
+                            $suffix = '-Test';
+                        }
+                    }
+                    ?>
+                    <a href="<?= $this->url('home') ?>" style="background:none">
+                        <span class="beta">BETA <?=$suffix?></span>
+                    </a>
+                </li>
+                <?php endif; ?>
+                <?php $cart = $this->cart(); if ($cart->isActive()): ?>
+                    <li id="cartSummary">
+                        <a id="cartItems" data-lightbox title="<?=$this->transEsc('View Book Bag')?>" href="<?=$this->url('cart-home')?>">
+                            <i class="fa fa-list" aria-hidden="true"></i> <strong><?=count($cart->getItems())?></strong> <?=$this->transEsc('items')?>
+                            <span class="full<?=!$cart->isFull() ? ' hidden' : '' ?>">(<?=$this->transEsc('bookbag_full') ?>)</span>
+                        </a>
+                    </li>
+                <?php endif; ?>
+                <?php if (count($this->client()->getIsils()) > 0 && is_object($account) && $account->loginEnabled()): // hide login/logout if unavailable?>
+                    <li class="logoutOptions<?php if (!$account->isLoggedIn()): ?> hidden<?php endif ?>">
+                        <a href="<?=$this->url('myresearch-home', [], ['query' => ['redirect' => 0]])?>"><i class="fa fa-star" aria-hidden="true"></i> <?=$this->transEsc("Your Account")?></a>
+                    </li>
+                    <li class="logoutOptions<?php if (!$account->isLoggedIn()): ?> hidden<?php endif ?>">
+                        <a href="<?=$this->url('myresearch-logout')?>" class="logout"><i class="fa fa-sign-out" aria-hidden="true"></i> <?=$this->transEsc("Log Out")?></a>
+                    </li>
+                    <li id="loginOptions"<?php if ($account->isLoggedIn()): ?> class="hidden"<?php endif ?>>
+                        <?php if ($account->getSessionInitiator($this->serverUrl($this->url('myresearch-home')))): ?>
+                            <a data-toggle="tooltip" data-placement="bottom" title="<?=$this->transEsc('Institutional Login Tooltip')?>" href="<?=$this->url('myresearch-userlogin')?>"><i class="fa fa-sign-in" aria-hidden="true"></i> <?=$this->transEsc("Institutional Login")?></a>
+                        <?php else: ?>
+                            <a href="<?=$this->url('myresearch-userlogin')?>" data-lightbox><i class="fa fa-sign-in" aria-hidden="true"></i> <?=$this->transEsc("Login")?></a>
+                        <?php endif; ?>
+                    </li>
+                <?php endif; ?>
+                <?php if (strlen($this->client()->getWebsite('adis')) > 0): ?>
+                    <li>
+                        <a class="external" href="<?=$this->client()->getWebsite('adis')?>"><i class="fa fa-user"></i> <?=$this->transEsc('header_login_link')?></a>
+                    </li>
+                <?php endif; ?>
+                <?php if (isset($this->layout()->themeOptions) && count($this->layout()->themeOptions) > 1): ?>
+                    <li class="theme dropdown">
+                        <form method="post" name="themeForm" id="themeForm">
+                            <input type="hidden" name="ui"/>
+                        </form>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?=$this->transEsc("Theme")?> <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <?php foreach ($this->layout()->themeOptions as $current): ?>
+                                <li <?= $current['selected'] ? ' class="active"' : '' ?>><a href="#"
+                                                                                            onClick="document.themeForm.ui.value='<?= $this->escapeHtmlAttr($current['name']) ?>';document.themeForm.submit()"><?= $this->transEsc($current['desc']) ?></a>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </li>
+                <?php endif; ?>
+
+                <?php if (isset($this->layout()->allLangs) && count($this->layout()->allLangs) > 1): ?>
+                    <li class="language dropdown">
+                        <form method="post" name="langForm" id="langForm">
+                            <input type="hidden" name="mylang"/>
+                        </form>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img
+                                    src="<?= $this->imageLink('flags/' . $this->layout()->userLang . '.png') ?>"
+                                    alt="Language Flag"/> <i class="fa fa-caret-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <?php foreach ($this->layout()->allLangs as $langCode => $langName): ?>
+                                <li <?= $this->layout()->userLang == $langCode ? ' class="active"' : '' ?>>
+                                    <a class="" href="#"
+                                       onClick="document.langForm.mylang.value='<?= $langCode ?>';document.langForm.submit()">
+                                        <img src="<?= $this->imageLink('flags/' . $langCode . '.png') ?>"
+                                             alt="Flag <?= $this->displayLanguageOption($langName) ?>"/>
+                                        <?= $this->displayLanguageOption($langName) ?>
+                                    </a>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </li>
+                <?php endif; ?>
+                <li class="home">
+                    <a class="lang-<?= $this->layout()->userLang ?> ellipsis" href="<?= $this->url('home') ?>"><i
+                                class="fa fa-home"></i><span class="sr-only"><?= $this->transEsc('Home') ?></span>
+                        <?php if ($this->client()->isIsilSession() && $this->client()->hasIsilSession()): ?>
+                            <?php $library = $this->libraries()->getFirstActive($this->client()->getIsils()) ?>
+                            <?= $this->escapeHtml((string)$library) ?>
+                        <?php elseif ($this->client()->isIsilSession() && !$this->client()->hasIsilSession()): ?>
+                            <?= $this->transEsc('ILL::button_choose_library') ?>
+                        <?php endif; ?>
+                    </a>
+                </li>
+            </ul>
+            <?php if ($this->client()->is('show_header_logo')): ?>
+                <a href="/" class="visible-lg pull-right">
+                  <img src="<?= $this->imageLink('logo/wlb.png') ?>" style="height:3em" alt="Logo Bibliothek">
+                </a>
+            <?php endif; ?>
+        </div>
+        <?php endif ?>
+
+
+    </div>
+</div>
