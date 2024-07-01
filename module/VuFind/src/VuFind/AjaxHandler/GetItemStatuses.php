@@ -628,6 +628,12 @@ class GetItemStatuses extends AbstractBase implements
                         compact('searchId')
                     );
                 }
+
+                // BSZ
+                if (substr($_SERVER['SERVER_NAME'] ,0,4) == "test")  {
+                    $current['id'] = '(DE-627)' . $current['id'];
+                }
+
                 $current['record_number'] = array_search($current['id'], $ids);
                 $statuses[] = $current;
 

@@ -1,0 +1,204 @@
+<?php
+// Set up convenience variables:
+$account = $this->auth()->getManager();
+$user = $account->isLoggedIn();
+$openUrl = $this->openUrl($this->driver, 'holdings');
+$openUrlActive = $openUrl->isActive();
+// Account for replace_other_urls setting
+$urls = $this->record($this->driver)->getLinkDetails($openUrlActive);
+$offlineMode = $this->ils()->getOfflineMode();
+try {
+    $holdings = $this->driver->getRealTimeHoldings();
+} catch (\VuFind\Exception\ILS $e) {
+    $holdings = [
+        'holdings' => [],
+        'electronic_holdings' => [],
+        'total' => 0,
+        'page' => 0,
+        'itemLimit' => 0
+    ];
+    $offlineMode = 'ils-offline';
+}
+
+// Set page title.
+$this->headTitle($this->translate('Holdings') . ': ' . preg_replace('/|/', '', $this->driver->getBreadcrumb()));
+?>
+
+<?=$this->context($this)->renderInContext('librarycards/selectcard.phtml', ['user' => $this->auth()->isLoggedIn()]); ?>
+
+<?php if (!empty($holdings['blocks'])):?>
+    <div id="account-block-msg" class="alert alert-danger">
+        <?=$this->transEsc('account_block_options_missing', ['%%details%%' => implode('; ', $holdings['blocks'])]) ?>
+    </div>
+<?php endif; ?>
+
+<?=($offlineMode == "ils-offline") ? $this->render('Helpers/ils-offline.phtml') : ''?>
+
+<?php if (($this->ils()->getHoldsMode() == 'driver' && !empty($holdings['holdings'])) || $this->ils()->getTitleHoldsMode() == 'driver'): ?>
+    <?php if ($account->loginEnabled() && $offlineMode != 'ils-offline'): ?>
+        <?php if (!$user): ?>
+            <div class="alert alert-info">
+                <a href="<?=$this->recordLink()->getTabUrl($this->driver, 'Holdings')?>?login=true&amp;catalogLogin=true" data-lightbox><?=$this->transEsc("hold_login")?></a>
+            </div>
+        <?php elseif (!$user->cat_username): ?>
+            <div class="alert alert-info">
+                <?=$this->translate("hold_profile_html", ['%%url%%' => $this->recordLink()->getTabUrl($this->driver, 'Holdings') . '?catalogLogin=true'])?>
+            </div>
+        <?php endif; ?>
+    <?php endif; ?>
+<?php endif; ?>
+<?php $holdingTitleHold = $this->driver->tryMethod('getRealTimeTitleHold'); if (!empty($holdingTitleHold)): ?>
+    <a class="placehold" data-lightbox title="<?=$this->transEsc('request_place_text')?>" href="<?=$this->recordLink()->getRequestUrl($holdingTitleHold)?>"><i class="fa fa-flag" aria-hidden="true"></i>&nbsp;<?=$this->transEsc('title_hold_place')?></a>
+<?php endif; ?>
+<?php // removed online access as this is listed in main section ?>
+<?php $recallButtonCounter = 0 ?>
+<?php if (isset($holdings['holdings'])): ?>
+    <?php // -- SOLR -- ?>
+    <?php foreach ($holdings['holdings'] as $holding): ?>
+        <div class="row">
+            <div class="col-sm-12">
+                <h4>
+                    <?php $locationText = $this->transEsc('location_' . $holding['location'], [], $holding['location']); ?>
+                    <?php if (isset($holding['locationhref']) && $holding['locationhref']): ?>
+                        <a href="<?=$holding['locationhref']?>" target="_blank"><?=$locationText?></a>
+                    <?php else: ?>
+                        <?=$locationText?>
+                    <?php endif; ?>
+                </h4>
+            </div>
+        </div>
+
+        <?php $knownLocations = []; ?>
+        <div class="row">
+            <?php foreach ($holding['items'] as $row): ?>
+                <?php if (!in_array($row['location'], $knownLocations)): ?>
+                    <?php $knownLocations[] = $row['location'] ?>
+                <?php endif; ?>
+                <?php if (isset($row['status']) && $row['status'] != 'For reference' &&
+                    $row['status'] != 'Lost' &&
+                    $row['status'] != 'Missing' &&
+                    $row['status'] != 'Permanent on loan'):
+                    $recallButtonCounter++;
+                endif; ?>
+                <?php if ($this->ils()->getDriverClass() == 'Bsz\ILS\Driver\DAIA'): //start of new/adis DAIA code?>
+                    <?=$this->render('RecordTab/parts/adisdaia.phtml', ['row' => $row, 'driver' => $this->driver, 'recallButtonCounter' => $recallButtonCounter])?>
+                <?php elseif ($this->ils()->getDriverClass() == 'Bsz\ILS\Driver\DAIAbsz'): // start of old DAIA code?>
+                    <?=$this->render('RecordTab/parts/olddaia.phtml', ['row' => $row, 'driver' => $this->driver])?>
+                <?php elseif ($this->ils()->getDriverClass() == 'Bsz\ILS\Driver\NoILS'): // NoILS?>
+                    <?=$this->render('RecordTab/parts/noils.phtml', ['row' => $row, 'driver' => $this->driver, 'tab' => $this->tab, 'holding' => $holding])?>
+                <?php endif; // End of old DAIA code?>
+            <?php endforeach; ?>
+        </div>
+    <?php endforeach; ?>
+
+    <?php //var_dump($_SERVER['SERVER_NAME']); ?>
+<?php if (substr($_SERVER['SERVER_NAME'] ,0,4) == "test"): ?>
+    <?php //if($this->client()->is('test')): ?>
+
+        <?php // -- Folio OKAPI -- ?>
+        <?php foreach ($holdings['holdings'] ?? [] as $holding): ?>
+            <h2>
+                <?php $locationTextEsc = $this->transEscWithPrefix('location_', $holding['location']); ?>
+                <?php if ($holding['locationhref'] ?? false): ?>
+                    <a href="<?=$this->escapeHtmlAttr($holding['locationhref'])?>" target="_blank"><?=$locationTextEsc?></a>
+                <?php else: ?>
+                    <?=$locationTextEsc?>
+                <?php endif; ?>
+            </h2>
+            <?php
+            $truncateSettings = [
+                'rows' => $this->config()->getHoldingsItemLimit(),
+            ];
+            ?>
+            <table class="table table-striped truncate-field" data-truncate="<?=$this->htmlSafeJsonEncode($truncateSettings)?>">
+                <caption class="sr-only"><?=$this->transEsc('holdings_details_from', ['%%location%%' => $this->transEsc($holding['location'])]) ?></caption>
+                <?php $callNos = $this->tab->getUniqueCallNumbers($holding['items'], true); ?>
+                <?php if (!empty($callNos)): ?>
+                    <tr>
+                        <th><?=$this->transEsc('Call Number')?>: </th>
+                        <td>
+                            <?php foreach ($callNos as $callNo): ?>
+                                <?php if ($this->callnumberHandler): ?>
+                                    <a href="<?=$this->url('alphabrowse-home') ?>?source=<?=$this->escapeHtmlAttr($this->callnumberHandler) ?>&amp;from=<?=$this->escapeHtmlAttr($callNo['callnumber']) ?>"><?=$this->escapeHtml($callNo['display'])?></a>
+                                <?php else: ?>
+                                    <?=$this->escapeHtml($callNo['display'])?>
+                                <?php endif; ?>
+                                <br>
+                            <?php endforeach; ?>
+                        </td>
+                    </tr>
+                <?php endif; ?>
+                <?php foreach ($holding['textfields'] ?? [] as $textFieldName => $textFields): ?>
+                    <tr>
+                        <?php // Translation for summary is a special case for backwards-compatibility ?>
+                        <th><?=$textFieldName == 'summary' ? $this->transEsc('Volume Holdings') : $this->transEsc(ucfirst($textFieldName))?>:</th>
+                        <td>
+                            <?php foreach ($textFields as $current): ?>
+                                <?=$this->linkify($this->escapeHtml($current))?><br>
+                            <?php endforeach; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                <?php foreach ($holding['items'] as $row): ?>
+                    <?php
+                    try {
+                        echo $this->context($this)->renderInContext(
+                            'RecordTab/holdingsils/' . $this->tab->getTemplate() . '.phtml',
+                            ['holding' => $row]
+                        );
+                    } catch (Exception $e) {
+                        echo $this->context($this)->renderInContext(
+                            'RecordTab/holdingsils/standard.phtml',
+                            ['holding' => $row]
+                        );
+                    }
+                    ?>
+                <?php endforeach; ?>
+                <?php if (!empty($holding['purchase_history'])): ?>
+                    <tr>
+                        <th><?=$this->transEsc('Most Recent Received Issues')?>:</th>
+                        <td>
+                            <?php foreach ($holding['purchase_history'] as $current): ?>
+                                <?=$this->escapeHtml($current['issue'])?><br>
+                            <?php endforeach; ?>
+                        </td>
+                    </tr>
+                <?php endif; ?>
+            </table>
+        <?php endforeach; ?>
+        <?php if (!empty($holdings['total']) && $paginator = $this->tab->getPaginator($holdings['total'], $holdings['page'], $holdings['itemLimit'])): ?>
+            <?=$this->paginationControl($paginator, 'Sliding', 'Helpers/pagination.phtml', ['page' => $holdings['page']])?>
+        <?php endif; ?>
+        <?php $history = $this->driver->getRealTimeHistory(); ?>
+        <?php if (is_array($history) && !empty($history)): ?>
+            <h2><?=$this->transEsc('Most Recent Received Issues')?></h2>
+            <table class="table table-striped">
+                <?php foreach ($history as $row): ?>
+                    <tr><td><?=$this->escapeHtml($row['issue'])?></td></tr>
+                <?php endforeach; ?>
+            </table>
+        <?php endif; ?>
+
+        <?php
+        /*
+            <pre><?php //print_r($holdings); ?></pre>
+        */
+        ?>
+
+    <?php endif; ?>
+
+    <?php /* One Recall/Holds-Button for all items */ ?>
+    <?php $class = $this->ils()->getDriverClass(); ?>
+    <?php if ($this->client()->is('only_one_holds_button') && ($class == 'Bsz\ILS\Driver\DAIA' || $class == 'Bsz\ILS\Driver\NoILS')): ?>
+        <?php if (isset($row['ilslink']) && ($recallButtonCounter > 0)): ?>
+            <?php $text = $class === 'Bsz\ILS\Driver\NoILS' ? $this->transEsc('Local Online Access') : $this->transEsc('recall/hold');?>
+            <a href="<?=$row['ilslink']?>" class="btn btn-primary btn-sm recallholdButtonLink external "><?=$text?></a>
+        <?php elseif($class == 'Bsz\ILS\Driver\NoILS'): ?>
+            <? $ppn = $this->driver->tryMethod('getPPN'); if(!empty($ppn) && ($this->driver->isJournal() || $this->driver->isSerial())): ?>
+                <?=$this->recordLink()->linkPPNButton($this->driver) ?>
+            <? endif; ?>
+        <?php endif; ?>
+    <?php endif; ?>
+
+
+<?php endif; ?> <?php // Ende von Test erkannt ?>
