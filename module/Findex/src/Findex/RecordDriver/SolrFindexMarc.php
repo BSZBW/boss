@@ -921,4 +921,29 @@ class SolrFindexMarc extends SolrMarc implements Constants
         return $zdb;
     }
 
+    public function getContainerIssue()
+    {
+        $f952 = $this->getFieldArray('952', ['e']);
+        return $f952[0] ?? '';
+    }
+
+    /**
+     * Get the Container issue from different fields
+     * @return string
+     */
+    public function getContainerDetails()
+    {
+        $fields = [
+            936 => ['e'],
+            953 => ['e'],
+            773 => ['g']
+        ];
+        $issue = $this->getFieldsArray($fields);
+        if (count($issue) > 0 && !empty($issue[0])) {
+            $string = array_shift($issue);
+            return $string;
+        }
+        return '';
+    }
+
 }
