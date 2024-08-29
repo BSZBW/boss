@@ -217,7 +217,9 @@
             <span class="icon-link__label"><?=$this->transEsc('Delete') ?></span>
           </a>
           <ul class="dropdown-menu" role="menu" aria-labelledby="<?=$dLabel ?>">
-            <li><a id="confirm_delete_item_<?=$this->escapeHtmlAttr($id);?>" title="<?=$this->transEscAttr('confirm_delete_brief')?>"><?=$this->transEsc('confirm_dialog_yes')?></a></li>
+            <li>
+                <a onclick="$.post('<?=$deleteUrl ?>',{'delete':'<?=$id ?>','source':'<?=$source ?>','confirm':true},function(){location.reload(false)})" title="<?=$this->transEscAttr('confirm_delete_brief')?>"><?=$this->transEsc('confirm_dialog_yes')?></a>
+            </li>
             <li><a><?=$this->transEsc('confirm_dialog_no')?></a></li>
           </ul>
         </div>
