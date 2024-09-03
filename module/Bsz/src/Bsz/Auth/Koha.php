@@ -120,16 +120,12 @@ class Koha extends \VuFind\Auth\AbstractBase
         $json_response = $response->getContent();
         $data_response = json_decode($json_response);
 
-        if ($response->getStatusCode() === 200) {
-            if ($data_response->auth == true) {
-                return true;
-            } else {
-                return false;
-            }
+        if ($response->getStatusCode() === 200 && $data_response->auth == true) {
+            return true;
         } elseif ($response->getStatusCode() === 403) {
             throw new AuthException('Invalid API token: '.$data_response->detail);
         } else {
-            throw new AuthException($data_response->detail);
+            throw new AuthException($data_response->message);
         }
     }
 
