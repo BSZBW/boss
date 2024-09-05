@@ -193,11 +193,7 @@ VuFind.register('lightbox', function Lightbox() {
         render(content);
       })
       .fail(function lbAjaxFail(deferred, errorType, msg) {
-        const json = JSON.parse(deferred.responseText);
-        const errors = ("errors" in json) ? json.errors : [];
-        const error0 = (0 in errors) ? errors[0] : [];
-        const message = ("message" in error0) ? error0.message : msg;
-        showAlert(VuFind.translate('error_occurred') + '<br/>' + VuFind.translate(message), 'danger');
+        showAlert(VuFind.translate('error_occurred') + '<br/>' + msg, 'danger');
       });
     return _xhr;
   }
