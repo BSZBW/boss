@@ -946,4 +946,20 @@ class SolrFindexMarc extends SolrMarc implements Constants
         return '';
     }
 
+    public function supportsAjaxStatus()
+    {
+        if ($this->mainConfig->isIsilSession() && !$this->mainConfig->hasIsilSession()) {
+            return false;
+        }
+
+        if ($this->isArticle() ||
+            $this->isElectronicBook() ||
+            $this->isSerial() ||
+            $this->isCollection()
+        ) {
+            return false;
+        }
+        return true;
+    }
+
 }
