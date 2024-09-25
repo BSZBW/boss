@@ -62,6 +62,8 @@ class Logic
     protected $linklabels = [];
     protected $messages = [];
     protected $libraries = [];
+
+    protected $ppnMessages = [];
     /**
      * @var array
      */
@@ -93,6 +95,7 @@ class Logic
         $this->swbppns = [];
         $this->parallelppns = [];
         $this->linklabels = [];
+        $this->ppnMessages = [];
     }
 
     /**
@@ -262,6 +265,11 @@ class Logic
         return $this->linklabels;
     }
 
+    public function getPPNMessages(): array
+    {
+        return $this->ppnMessages;
+    }
+
     /**
      * Checks whether record is from HEBIS and it's ID begins with 8
      * @return boolean
@@ -329,6 +337,7 @@ class Logic
         ) {
             $this->swbppns[] = $this->driver->getPPN();
             $this->linklabels[] = 'ILL::library_opac';
+            $this->ppnMessages[$this->driver->getPPN()] = 'ILL::library_opac';
             $status = true;
         } elseif ($network !== 'SWB' && $network !== 'ZDB'
             && $this->queryWebservice()
@@ -395,6 +404,7 @@ class Logic
                             // save PPN
                             $this->swbppns[] = '(DE-627)' . $ppn;
                             $this->linklabels[] = 'ILL::to_local_hit';
+                            $this->ppnMessages['(DE-627)' . $ppn] = 'ILL::to_local_hit';
                             $this->libraries[] = $entry['isil'];
                         }
                     }
@@ -405,6 +415,7 @@ class Logic
                 reset($result['holdings']);
                 $this->swbppns[] = '(DE-627)' . key($result['holdings']);
                 $this->linklabels[] = 'ILL::to_swb_hit';
+                $this->ppnMessages['(DE-627)' . key($result['holdings'])] = 'ILL::to_swb_hit';
             }
         }
         // check if any of the isils from webservic matches local isils
@@ -471,6 +482,7 @@ class Logic
                     $hasParallel = true;
                     $this->parallelppns[] = $record->getUniqueId();
                     $this->linklabels[] = 'ILL::to_parallel_edition';
+                    $this->ppnMessages[$record->getUniqueId()] = 'ILL::to_parallel_edition';
                 }
             }
         }

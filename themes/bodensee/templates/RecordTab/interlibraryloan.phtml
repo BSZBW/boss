@@ -6,6 +6,7 @@ $content = $this->tab->getContent();
 $messages = $content['messages'];
 $ppns = $content['ppns'];
 $linklabels = $content['linklabels'];
+$ppnMessages = $content['ppnMessages'];
 $status = $content['status'];
 $library = $content['library'];
 $networks = $this->driver->tryMethod('getConsortium');
@@ -38,7 +39,8 @@ if ($content['customUrl'] && $this->client()->getTag() !== 'fl-dienst' ) {
     <?php endif; ?>
     <?php if (count($ppns) > 0): ?>
         <?php foreach ($ppns as $k => $id): ?>
-            <?php if ($linklabels[$k] == 'ILL::library_opac'): ?>
+            <?php $ll = $ppnMessages[$id] ?? null; ?>
+            <?php if ($ll == 'ILL::library_opac'): ?>
                 <?php if ($this->client()->is('wlb2')): ?>
                     <?php $ppn = $id;
                     $ppn = preg_replace('/^\(.*\)/', '', $id);
@@ -51,18 +53,18 @@ if ($content['customUrl'] && $this->client()->getTag() !== 'fl-dienst' ) {
                     <li><?= $this->transEsc('ILL::library_opac') ?>
                         : <?= $this->recordLink()->linkPPN($this->driver) ?></li>
                 <?php endif; ?>
-            <?php elseif ($this->client()->is('wlb2') && $linklabels[$k] == 'ILL::to_local_hit'): ?>
+            <?php elseif ($this->client()->is('wlb2') && $ll == 'ILL::to_local_hit'): ?>
                 <?php $ppn = $id;
                 $ppn = preg_replace('/^\(.*\)/', '', $id);
                 $exists = $this->idVerifier($ppn, 'Solr');
                 if($exists):
                 ?>
-                <a href="/Record/<?=$ppn?>"><?=$this->transEsc($linklabels[$k])?></a>
+                <a href="/Record/<?=$ppn?>"><?=$this->transEsc($ll)?></a>
                 <?php endif; ?>
             <?php else: ?>
                 <?php $route = $this->client()->is('wlb2') ? '/Search2Record/' : '/Record/' ; ?>
                 <li><a class=""
-                       href="<?= $route . $id ?>"><?php if (isset($linklabels[$k])): ?><?= $this->transEsc($linklabels[$k]) ?><?php else: ?><?= $id ?><?php endif; ?></a>
+                       href="<?= $route . $id ?>"><?php if (isset($ll)): ?><?= $this->transEsc($ll) ?><?php else: ?><?= $id ?><?php endif; ?></a>
                 </li>
             <?php endif ?>
         <?php endforeach; ?>
