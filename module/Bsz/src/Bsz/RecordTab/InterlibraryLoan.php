@@ -118,6 +118,7 @@ class InterlibraryLoan extends AbstractBase
             'messages' => $this->logic->getMessages(),
             'ppns' => $this->logic->getPPNs(),
             'linklabels' => $this->logic->getLinkLabels(),
+            'ppnMessages' => $this->logic->getPPNMessages(),
             'library' => $this->library,
             'customUrl' => $customUrl
         ];
