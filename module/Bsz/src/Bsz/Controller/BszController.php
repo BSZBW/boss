@@ -152,7 +152,7 @@ class BszController extends AbstractBase
             $client = $this->serviceLocator->get(Client::class);
             $libraries = $this->serviceLocator->get(Libraries::class);
             $library = $libraries->getFirstActive($client->getIsils());
-            if ($library instanceof Bsz\Config\Library) {
+            if ($library instanceof \Bsz\Config\Library) {
                 $homepage = $library->getHomepage();
                 return $this->redirect()->toUrl($homepage);
             } else {
