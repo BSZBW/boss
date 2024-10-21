@@ -251,12 +251,13 @@ $config = [
                     'Bsz\AjaxHandler\DedupCheckbox' =>      'Bsz\AjaxHandler\Factory::getDedupCheckbox',
                     'Bsz\AjaxHandler\SaveIsil' =>           'Bsz\AjaxHandler\Factory::getSaveIsil',
                     'Bsz\AjaxHandler\LibrariesTypeahead' => 'Bsz\AjaxHandler\Factory::getLibrariesTypeahead',
-
+                    'Bsz\AjaxHandler\GetHanId' => 'Bsz\AjaxHandler\Factory::getHanId'
                 ],
                 'aliases' => [
                     'dedupCheckbox' => 'Bsz\AjaxHandler\DedupCheckbox',
                     'saveIsil' => 'Bsz\AjaxHandler\SaveIsil',
-                    'librariesTypeahead' => 'Bsz\AjaxHandler\LibrariesTypeahead'
+                    'librariesTypeahead' => 'Bsz\AjaxHandler\LibrariesTypeahead',
+                    'getHanId' => 'Bsz\AjaxHandler\GetHanId'
                 ]
             ],
             'resolver_driver' => [
@@ -264,6 +265,7 @@ $config = [
                     'Bsz\Resolver\Driver\Ezb' => 'Bsz\Resolver\Driver\Factory::getEzb',
                     'Bsz\Resolver\Driver\Redi' => 'Bsz\Resolver\Driver\Factory::getRedi',
                     'Bsz\Resolver\Driver\Ill' => 'Bsz\Resolver\Driver\Factory::getIll',
+                    'Bsz\Resolver\Driver\HanApi' => 'Bsz\Resolver\Driver\Factory::getHanApi'
                 ],
                 'aliases' => [
                     'VuFind\Resolver\Driver\Redi' => 'Bsz\Resolver\Driver\Redi',

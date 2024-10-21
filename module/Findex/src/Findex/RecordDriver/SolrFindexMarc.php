@@ -946,4 +946,36 @@ class SolrFindexMarc extends SolrMarc implements Constants
         return '';
     }
 
+    public function supportsAjaxStatus()
+    {
+        if ($this->mainConfig->isIsilSession() && !$this->mainConfig->hasIsilSession()) {
+            return false;
+        }
+
+        if ($this->isArticle() ||
+            $this->isElectronicBook() ||
+            $this->isSerial() ||
+            $this->isCollection()
+        ) {
+            return false;
+        }
+        return true;
+    }
+
+    public function getFirstUrl(string $desc = '')
+    {
+        $f856 = $this->getFields('856');
+        $first = '';
+        foreach ($f856 as $field) {
+            $sfu = $this->getSubfield($field, 'u');
+            $sfx = $this->getSubfield($field, 'x');
+
+            if (!empty($sfu) && (empty($desc) || ($sfx == $desc))) {
+                return $sfu;
+            }else if (empty($first) && !empty($sfu)) {
+                $first = $sfu;
+            }
+        }
+        return $first;
+    }
 }

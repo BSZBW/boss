@@ -268,5 +268,14 @@ class Factory
         return new RecordDetailList($config);
     }
 
+    public static function getHanApi(ContainerInterface $container)
+    {
+        $config = $container->get('VuFind\Config')->get('config')->get('HanApi') ?? null;
+        return new HanApi(
+            $config,
+            $container->get('ViewHelperManager')->get('context')
+        );
+    }
+
 
 }

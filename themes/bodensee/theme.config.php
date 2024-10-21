@@ -42,7 +42,8 @@ $config = [
             'BszTheme\View\Helper\Bodensee\Wayfless' => 'BszTheme\View\Helper\Bodensee\Factory::getWayfless',
             'BszTheme\View\Helper\Bodensee\BwlbConcordance' =>  \Laminas\ServiceManager\Factory\InvokableFactory::class,
             'BszTheme\View\Helper\Bodensee\GndLink' => \Laminas\ServiceManager\Factory\InvokableFactory::class,
-            'BszTheme\View\Helper\Bodensee\IdVerifier' => 'BszTheme\View\Helper\Bodensee\Factory::getIdVerifier'
+            'BszTheme\View\Helper\Bodensee\IdVerifier' => 'BszTheme\View\Helper\Bodensee\Factory::getIdVerifier',
+            'BszTheme\View\Helper\Bodensee\HanApi' => 'BszTheme\View\Helper\Bodensee\Factory::getHanApi'
         ],
         'aliases' => [
             'VuFind\View\Helper\Bootstrap3\LayoutClass' => 'Bsz\View\Helper\Bootstrap3\LayoutClass',
@@ -56,7 +57,8 @@ $config = [
             'gndLink' => 'BszTheme\View\Helper\Bodensee\GndLink',
             'recordLink' => 'VuFind\View\Helper\Root\RecordLinker',
             'bwlbConcordance' => 'BszTheme\View\Helper\Bodensee\BwlbConcordance',
-            'idVerifier' => 'BszTheme\View\Helper\Bodensee\IdVerifier'
+            'idVerifier' => 'BszTheme\View\Helper\Bodensee\IdVerifier',
+            'hanApi' => 'BszTheme\View\Helper\Bodensee\HanApi'
         ]
     ],
     'icons' => [
