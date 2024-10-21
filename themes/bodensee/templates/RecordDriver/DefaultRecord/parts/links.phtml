@@ -11,6 +11,8 @@ if (!is_array($urls)):
     $urls = [];
 endif;
 
+$hanApi = $this->hanApi($this->driver, '');
+
 $localUrls = $this->driver->tryMethod('getLocalUrls'); ?>
 <?php // Show local Urls?>
 <?php if (!empty($localUrls[0]['url'])): ?>
@@ -55,6 +57,9 @@ $localUrls = $this->driver->tryMethod('getLocalUrls'); ?>
 //     themes/bodensee/Helpers/openurl.phtml
 //     openurl.js
 ?>
+<?php if ($hanApi->isActive()): ?>
+    <?= $hanApi->renderTemplate() ?>
+<?php endif; ?>
 <?php if ($openUrlActive): ?>
     <?= $openUrl->renderTemplate() ?>
 <?php endif; ?>

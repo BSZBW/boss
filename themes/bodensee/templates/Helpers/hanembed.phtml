@@ -1,0 +1,10 @@
+<?php echo $this->inlineScript(\Laminas\View\Helper\HeadScript::FILE, 'hanembed.js', 'SET'); ?>
+<div>
+<span class="hanControls hanEmbed <?=$this->autoloadClass?>">
+    <a href="" class="fulltext">
+        <span title="<?=$this->escapeHtml($this->data)?>" class="hanInfo"></span>
+        <?=$this->transEsc('Online lesen')?>
+    </a>
+</span>
+<div class="resolver hidden"><?=$this->transEsc('loading_ellipsis')?></div>
+</div>

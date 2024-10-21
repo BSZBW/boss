@@ -57,4 +57,14 @@ class Factory
             $container->get('Request')->getUri()->getHost()
         );
     }
+
+    public static function getHanId(ContainerInterface $container)
+    {
+        $client = $container->get(\VuFindHttp\HttpService::class)->createClient();
+        return new GetHanId(
+            $client,
+            $container->get('ViewRenderer'),
+            $container->get('VuFind\Config')->get('config')
+        );
+    }
 }

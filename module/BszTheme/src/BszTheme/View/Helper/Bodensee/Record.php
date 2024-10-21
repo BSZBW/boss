@@ -134,6 +134,16 @@ class Record extends \VuFind\View\Helper\Root\Record
         return '';
     }
 
+    public function getHanEmbed()
+    {
+        $han = $this->getView()->plugin('hanApi');
+        $han = $han($this->driver, 'hanAutoload');
+        if ($han->isActive()) {
+            return $han->renderTemplate();
+        }
+        return '';
+    }
+
     /**
      * Generate a thumbnail URL (return false if unsupported).
      *
