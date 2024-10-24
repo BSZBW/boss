@@ -46,10 +46,12 @@ class HanApi extends AbstractHelper
             return false;
         }
 
-        $isArticle = $this->driver->tryMethod('isArticle');
-        $isElectronic = $this->driver->tryMethod('isElectronic');
+        return true;
 
-        return $isArticle && $isElectronic;
+//        $isArticle = $this->driver->tryMethod('isArticle');
+//        $isElectronic = $this->driver->tryMethod('isElectronic');
+//
+//        return $isArticle && $isElectronic;
     }
 
     protected function getParams()
