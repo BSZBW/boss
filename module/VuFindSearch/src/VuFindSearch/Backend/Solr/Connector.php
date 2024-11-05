@@ -312,7 +312,7 @@ class Connector implements \Laminas\Log\LoggerAwareInterface
             };
         } else {
             $method = Request::METHOD_GET;
-            $urlSuffix .= '?' . 'year=2023&' . $paramString;
+            $urlSuffix .= '?' . $paramString;
             $callback = null;
         }
 

@@ -336,7 +336,6 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
             . 'API shutdown. It has been removed from your settings.',
             'The WorldCatEditions related record module is no longer supported due to OCLC\'s '
             . 'xID API shutdown. It has been removed from your settings.',
-            'WARNING: Could not find DAIA.ini file; check your ILS driver configuration.'
         ];
         $this->assertEquals($expectedWarnings, $upgrader->getWarnings());
     }
@@ -525,10 +524,7 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
     {
         $upgrader = $this->getUpgrader('primo');
         $upgrader->run();
-        $expectedWarnings = [
-            'WARNING: Could not find DAIA.ini file; check your ILS driver configuration.',
-        ];
-        $this->assertEquals($expectedWarnings, $upgrader->getWarnings());
+        $this->assertEquals([], $upgrader->getWarnings());
         $results = $upgrader->getNewConfigs();
         $this->assertEquals(
             'http://my-id.hosted.exlibrisgroup.com:1701',

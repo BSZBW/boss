@@ -850,4 +850,10 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
         return $str;
     }
 
+    public function getAuthorRole(string $role)
+    {
+        $authors = $this->getDeduplicatedAuthors(['role', 'gnd', 'live']);
+        return $authors[$role] ?? [];
+    }
+
 }

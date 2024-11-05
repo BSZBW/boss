@@ -14,6 +14,8 @@ use VuFindSearch\ParamBag;
  */
 class Params extends \VuFind\Search\Solr\Params
 {
+    use MoreFacetRestrictionsTrait;
+
     protected $dedup;
     protected $limit = 10;
 
@@ -32,6 +34,10 @@ class Params extends \VuFind\Search\Solr\Params
         HierarchicalFacetHelper $facetHelper = null
     ) {
         parent::__construct($options, $configLoader, $facetHelper);
+
+        $config = $configLoader->get($options->getFacetsIni());
+        $this->initMoreFacetRestrictionsFromConfig($config->Results_Settings ?? null);
+
         $this->dedup = $dedup;
     }
 

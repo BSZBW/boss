@@ -32,7 +32,7 @@ use function is_array;
 class OverdriveController extends AbstractBase implements LoggerAwareInterface
 {
     use \VuFind\Log\LoggerAwareTrait {
-        LoggerAwareTrait::logError as error;
+        logError as error;
     }
 
     /**

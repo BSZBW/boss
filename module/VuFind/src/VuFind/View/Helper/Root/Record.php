@@ -327,7 +327,7 @@ class Record extends \Laminas\View\Helper\AbstractHelper
     public function getTitleHtml($maxLength = 180)
     {
         $highlightedTitle = $this->driver->tryMethod('getHighlightedTitle');
-        $title = trim($this->driver->tryMethod('getTitle')[0]);
+        $title = trim($this->driver->tryMethod('getTitle'));
         if (!empty($highlightedTitle)) {
             $highlight = $this->getView()->plugin('highlight');
             $addEllipsis = $this->getView()->plugin('addEllipsis');

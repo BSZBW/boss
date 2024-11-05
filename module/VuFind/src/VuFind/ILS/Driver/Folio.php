@@ -409,9 +409,6 @@ class Folio extends AbstractAPI implements
         $idType = $this->getBibIdType();
         $idField = $idType === 'instance' ? 'id' : $idType;
 
-        // BSZ
-        $bibId = preg_replace('/\(DE-627\)/', '', $bibId);
-
         $query = [
             'query' => '(' . $idField . '=="' . $this->escapeCql($bibId) . '")',
         ];
@@ -446,7 +443,7 @@ class Folio extends AbstractAPI implements
     {
         $status = [];
         foreach ($idList as $id) {
-            $status[] = $this->getStatus(preg_replace('/\(DE-627\)/', '', $id));
+            $status[] = $this->getStatus($id);
         }
         return $status;
     }
@@ -1416,10 +1413,10 @@ class Folio extends AbstractAPI implements
                 'expire' => $expireDate ?? '',
                 'id' => $this->getBibId(
                     $hold->instanceId,
-                    $hold->holdingsRecordId,
-                    $hold->itemId
+                    $hold->holdingsRecordId ?? null,
+                    $hold->itemId ?? null
                 ),
-                'item_id' => $hold->itemId,
+                'item_id' => $hold->itemId ?? null,
                 'reqnum' => $hold->id,
                 // Title moved from item to instance in Lotus release:
                 'title' => $hold->instance->title ?? $hold->item->title ?? '',

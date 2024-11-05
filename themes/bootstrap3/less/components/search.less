@@ -19,7 +19,12 @@
 // Hide these on mobile
 @media (max-width: 767px) {
   #datevispublishDatexWrapper,
-  .result .checkbox { display: none; }
+  // Bulk action checkboxes:
+  #search-cart-form .result .checkbox,
+  // Search result bulk action buttons:
+  #search-cart-form .bulkActionButtons,
+  // Favorites bulk action buttons:
+  form[name="bulkActionForm"] .bulkActionButtons { display: none; }
 }
 
 .searchHomeContent { .clearfix(); }
@@ -152,7 +157,6 @@ header .container.navbar { margin-bottom: 0; }
 .result {
   display: flex;
   padding-top: 1rem;
-  padding-bottom: 1rem;
 
   .record-checkbox,
   .record-number { display: none; }

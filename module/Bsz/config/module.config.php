@@ -238,11 +238,13 @@ $config = [
                     'Bsz\ILS\Driver\DAIAbsz' => 'Bsz\ILS\Driver\DAIAFactory',
                     'Bsz\ILS\Driver\DAIA' => 'Bsz\ILS\Driver\DAIAFactory',
                     'Bsz\ILS\Driver\NoILS' => 'Bsz\ILS\Driver\NoILSFactory',
+                    'Bsz\ILS\Driver\Folio' => 'VuFind\ILS\Driver\FolioFactory'
                 ],
                 'aliases' => [
                     'DAIAbsz' => 'Bsz\ILS\Driver\DAIAbsz',
                     'VuFind\ILS\Driver\DAIA' => 'Bsz\ILS\Driver\DAIA',
                     'VuFind\ILS\Driver\NoILS' => 'Bsz\ILS\Driver\NoILS',
+                    'VuFind\ILS\Driver\Folio' => 'Bsz\ILS\Driver\Folio'
                 ]
 
             ],

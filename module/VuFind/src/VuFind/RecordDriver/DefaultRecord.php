@@ -479,12 +479,6 @@ class DefaultRecord extends AbstractBase
         return $authors;
     }
 
-    public function getAuthorRole(string $role)
-    {
-        $authors = $this->getDeduplicatedAuthors(['role', 'gnd', 'live']);
-        return $authors[$role] ?? [];
-    }
-
     /**
      * Get the edition of the current record.
      *
@@ -1529,7 +1523,7 @@ class DefaultRecord extends AbstractBase
     public function getUniqueID()
     {
         if (!isset($this->fields['id'])) {
-            throw new Exception('ID not set!');
+            throw new \Exception('ID not set!');
         }
         return $this->fields['id'];
     }
