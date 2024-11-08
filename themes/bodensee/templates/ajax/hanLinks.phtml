@@ -1,4 +1,7 @@
 <div class="hanlinks">
+    <?php if (empty($this->data)): ?>
+        <?= $this->transEsc('no_link_available') ?>
+    <?php endif; ?>
     <ul>
         <?php foreach ($this->data as $item): ?>
         <li>
