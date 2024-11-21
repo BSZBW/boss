@@ -76,7 +76,7 @@ CREATE TABLE `libraries`
     `shibboleth_idp`    varchar(256) CHARACTER SET latin1       DEFAULT NULL,
     `shibboleth_logout` varchar(256) COLLATE latin1_german1_ci  DEFAULT NULL,
     `regex`             varchar(256) COLLATE latin1_german1_ci  DEFAULT NULL,
-    `lend_copy`         binary(2) DEFAULT 11,
+    /*`lend_copy`         binary(2) DEFAULT 11,*/
     PRIMARY KEY (`isil`),
     KEY                 `fk_libraries_1_idx` (`fk_country`),
     KEY                 `fk_libraries_2_idx` (`fk_auth`),
