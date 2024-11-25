@@ -1,5 +1,5 @@
 {
-    "name": "vufind/vufind",
+    "name": "config/vufind/vufind",
     "description": "A flexible discovery layer.",
     "authors": [
         {

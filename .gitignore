@@ -40,7 +40,6 @@ data/
 /themes/**/css/*.css
 /themes/**/css/*.map
 /themes/**/make/*.d
-/config
 import/solrmarc.log
 /harvest/elib
 /harvest/Koha
