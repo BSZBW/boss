@@ -94,6 +94,17 @@ class DefaultRecordTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test getSchemaOrgFormatsArray for a record.
+     *
+     * @return void
+     */
+    public function testGetSchemaOrgFormatsArray()
+    {
+        $formats = ['Book'];
+        $this->assertEquals($formats, $this->getDriver()->getSchemaOrgFormatsArray());
+    }
+
+    /**
      * Test getSchemaOrgFormats for a record.
      *
      * @return void
@@ -322,7 +333,7 @@ class DefaultRecordTest extends \PHPUnit\Framework\TestCase
         $fixture = $this->getJsonFixture('misc/testbug2.json');
         $fields = $fixture['response']['docs'][0];
         $mock = $this->getMockBuilder(\VuFind\RecordDriver\DefaultRecord::class)
-            ->setMethods(['getBookOpenUrlParams'])
+            ->onlyMethods(['getBookOpenUrlParams'])
             ->getMock();
         $mock->setRawData($fields);
         $mock->expects($this->any())
@@ -488,7 +499,7 @@ class DefaultRecordTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function getCleanISBNsProvider(): array
+    public static function getCleanISBNsProvider(): array
     {
         return [
             [
@@ -541,7 +552,7 @@ class DefaultRecordTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test whether author deduplication works corrrectly.
+     * Test whether author deduplication works correctly.
      *
      * @return void
      */

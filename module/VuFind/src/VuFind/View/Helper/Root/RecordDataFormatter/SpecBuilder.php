@@ -29,8 +29,6 @@
 
 namespace VuFind\View\Helper\Root\RecordDataFormatter;
 
-use function array_key_exists;
-
 /**
  * Specification builder for record driver data formatting view helper
  *
@@ -55,11 +53,6 @@ class SpecBuilder
      * @var int
      */
     protected $maxPos = 0;
-
-    /**
-     * If alternative script should be prioritized by combine alt render method
-     */
-    protected $defaultPrioritizeAlt = false;
 
     /**
      * Constructor
@@ -98,6 +91,18 @@ class SpecBuilder
     }
 
     /**
+     * Remove a previously set generic spec line.
+     *
+     * @param string $key Label associated with this spec line
+     *
+     * @return void
+     */
+    public function removeLine($key)
+    {
+        unset($this->spec[$key]);
+    }
+
+    /**
      * Construct a multi-function template spec line.
      *
      * @param string   $key        Label to associate with this spec line
@@ -124,10 +129,6 @@ class SpecBuilder
      */
     public function setCombineAltLine($key, $dataMethod, $options = [])
     {
-
-        if ($this->defaultPrioritizeAlt && !array_key_exists('prioritizeAlt', $options)) {
-            $options['prioritizeAlt'] = true;
-        }
         $this->setLine($key, $dataMethod, 'CombineAlt', $options);
     }
 
@@ -145,18 +146,6 @@ class SpecBuilder
     {
         $options['template'] = $template;
         $this->setLine($key, $dataMethod, 'RecordDriverTemplate', $options);
-    }
-
-    /**
-     * Set default prioritize alternative scripts
-     *
-     * @param bool $defaultPeferAlt Default prioritize alt
-     *
-     * @return void
-     */
-    public function setDefaultPrioritizeAlt($defaultPeferAlt)
-    {
-        $this->defaultPrioritizeAlt = $defaultPeferAlt;
     }
 
     /**

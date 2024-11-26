@@ -21,6 +21,9 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  .facet__list__item .facet {
+    display: flex;
+  }
 }
 
 .facet,
@@ -54,7 +57,12 @@
   .exclude {
     flex-shrink: 0;
     text-align: center;
-    padding-left: 0.5rem;
+    margin-left: 0.5rem;
+
+    body.rtl & {
+      padding-left: 0;
+      padding-right: 0.5rem;
+    }
   }
 }
 .facet-group .facet,
@@ -96,6 +104,23 @@
   overflow: hidden;
 }
 
+.multi-facet-selection {
+  .facet {
+    .exclude {
+      border: 2px dotted transparent;
+    }
+    .exclude.selected {
+      border: 2px dotted @list-group-active-bg;
+    }
+    .exclude {
+      .icon {
+        width: 1.5em;
+        height: 1.5em;
+      }
+    }
+  }
+}
+
 .top-facets-contents {
   display: block;
   margin: 2px 0;
@@ -116,8 +141,10 @@
   border: 1px solid @list-group-border;
 }
 
-.checkboxFilter {
+.checkbox-filters {
   padding-bottom: 0.5rem;
+  // For blocking overlay:
+  position: relative;
 }
 .checkbox-filter {
   display: flex;
@@ -159,13 +186,21 @@
   }
 }
 
-.full-facet-list { margin-top: 1rem; }
+.full-facets {
+  margin: 1rem 0;
+  border-top: 1px solid @list-group-border;
+  border-bottom: 1px solid @list-group-border;
+}
 .full-facet-list .active .fa.fa-times {
   float: right;
   margin-top: .25rem;
   margin-left: 0.5rem;
 }
 body.rtl .full-facet-list .active .fa.fa-times { float: left; }
+.full-facet-controls .form-group {
+  margin: 0;
+  padding: @padding-base-vertical 0;
+}
 
 .truncate-done {
   overflow: clip;
@@ -197,91 +232,33 @@ h3.facet-title {
   .author-list { flex: 0 1 100%; }
 }
 
-.facet-tree {
-  padding-left: 0;
+.multi-filters-selection {
+  padding: 1em 0;
+  background: white;
 
-  ul {
-    padding: 0;
-    width: 100%;
+  label {
+    font-weight: bold;
   }
 
-  li {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    // Ensure that there is enough room for a button focus outline:
-    padding-left: .2rem;
-
-    .facet-tree__toggle-expanded {
-      flex: 1 1;
-      border: 0;
-      background: none;
-      max-width: 1.5em;
-      padding: 0;
-
-      &:hover {
-        background-color: @list-group-hover-bg;
-      }
-
-      &[aria-expanded=false] {
-        .facet-tree__collapse {
-          display: none;
-        }
-        & ~ ul {
-          display: none;
-        }
-      }
-      &[aria-expanded=true] .facet-tree__expand {
-        display: none;
-      }
-    }
-
-    .facet-tree__item-container {
-      // Leave space for the open/close icon (see above):
-      width: calc(100% - 1.5em);
-
-      .text {
-        // Leave space for the badge:
-        width: calc(100% - 1.5em);
-      }
-
-      &--exclude .text {
-        // Leave space for the badge and exclude link:
-        width: calc(100% - 3.0em);
-      }
-
-      .facet-value {
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        display: inline;
-      }
-    }
-
-    // Child items:
-    ul {
-      padding-left: 1rem;
-      flex: 1;
-      .facet {
-        // Smaller padding to make the list a bit more condensed:
-        padding-top: 0.3rem;
-        padding-bottom: 0.3rem;
-      }
-    }
+  .apply-filters {
+    margin-top: 1em;
+    display: none;
   }
-
-  .facet {
-    border: 0;
-    padding-left: .1rem;
-  }
-
-  // Top level bottom border:
-  & > ul > li, .more-less-btn-wrapper {
-    border-bottom: 1px solid @list-group-border;
-  }
-  // Make the first child level start a bit higher to counter the padding of top
-  // level items:
-  & > ul > li > ul {
-    margin-top: -0.2rem;
+}
+.multi-facet-selection-active .apply-filters {
+  display: block;
+}
+.sidebar .multi-filters-selection {
+  position: sticky;
+  top: 0;
+  padding: 1em;
+  z-index: 40;
+  border-bottom: 1px solid @list-group-border;
+  box-shadow: 0 5px 5px -4px #000;
+}
+.multi-facet-selection-active {
+  // Hide submit buttons of range forms when multi-facet selection is active:
+  .facet input[type="submit"] {
+    display: none;
   }
 }

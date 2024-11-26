@@ -40,7 +40,8 @@ use Laminas\Http\Request as HttpRequest;
 use Laminas\Session\Container as SessionContainer;
 use VuFind\Date\DateException;
 use VuFind\Exception\ILS as ILSException;
-use VuFind\ILS\Logic\ItemStatus;
+use VuFind\ILS\Logic\AvailabilityStatus;
+use VuFind\ILS\Logic\AvailabilityStatusInterface;
 use VuFindSearch\Command\RandomCommand;
 use VuFindSearch\Query\Query;
 use VuFindSearch\Service as SearchService;
@@ -50,6 +51,7 @@ use function array_slice;
 use function count;
 use function in_array;
 use function is_callable;
+use function sprintf;
 use function strlen;
 
 /**
@@ -67,7 +69,7 @@ class Demo extends AbstractBase implements \VuFind\I18n\HasSorterInterface
     use \VuFind\I18n\HasSorterTrait;
 
     /**
-     * Catalog ID used to distinquish between multiple Demo driver instances with the
+     * Catalog ID used to distinguish between multiple Demo driver instances with the
      * MultiBackend driver
      *
      * @var string
@@ -476,14 +478,14 @@ class Demo extends AbstractBase implements \VuFind\I18n\HasSorterInterface
         $locationhref = ($location === 'Campus A') ? 'http://campus-a' : false;
         switch ($status) {
             case 'Uncertain':
-                $availability = ItemStatus::STATUS_UNCERTAIN;
+                $availability = AvailabilityStatusInterface::STATUS_UNCERTAIN;
                 break;
             case 'Available':
                 if (rand(1, 2) === 1) {
                     // Legacy boolean value
                     $availability = true;
                 } else {
-                    $availability = ItemStatus::STATUS_AVAILABLE;
+                    $availability = AvailabilityStatusInterface::STATUS_AVAILABLE;
                     $status = 'Item in Library';
                 }
                 break;
@@ -492,7 +494,7 @@ class Demo extends AbstractBase implements \VuFind\I18n\HasSorterInterface
                     // Legacy boolean value
                     $availability = false;
                 } else {
-                    $availability = ItemStatus::STATUS_UNAVAILABLE;
+                    $availability = AvailabilityStatusInterface::STATUS_UNAVAILABLE;
                 }
                 break;
         }
@@ -672,7 +674,12 @@ class Demo extends AbstractBase implements \VuFind\I18n\HasSorterInterface
      */
     public function getStatus($id)
     {
-        return $this->getSimulatedStatus($id);
+        $status = $this->getSimulatedStatus($id);
+        foreach (array_keys($status) as $i) {
+            $itemNum = $i + 1;
+            $status[$i] += $this->getNotesAndSummary($itemNum);
+        }
+        return $status;
     }
 
     /**
@@ -729,6 +736,19 @@ class Demo extends AbstractBase implements \VuFind\I18n\HasSorterInterface
 
         if ($json = $this->config['StaticHoldings'][$id] ?? null) {
             foreach (json_decode($json, true) as $i => $status) {
+                if ($status['use_status_class'] ?? false) {
+                    $availability = $status['availability'] ?? false;
+                    if ($status['use_unknown_message'] ?? false) {
+                        $availability = AvailabilityStatusInterface::STATUS_UNKNOWN;
+                    }
+                    $status['availability'] = new AvailabilityStatus(
+                        $availability,
+                        $status['status'] ?? '',
+                        $status['extraStatusInformation'] ?? []
+                    );
+                    unset($status['status']);
+                    unset($status['use_unknown_message']);
+                }
                 $this->setStatus($id, $status, $i > 0, $patron);
             }
         }
@@ -751,18 +771,17 @@ class Demo extends AbstractBase implements \VuFind\I18n\HasSorterInterface
     /**
      * Set Status
      *
-     * @param array $id      id for record
-     * @param array $holding associative array with options to specify
+     * @param string $id      id for record
+     * @param array  $holding associative array with options to specify
      *      number, barcode, availability, status, location,
      *      reserve, callnumber, duedate, is_holdable, and addLink
-     * @param bool  $append  add another record or replace current record
-     * @param array $patron  Patron data
+     * @param bool   $append  add another record or replace current record
+     * @param array  $patron  Patron data
      *
      * @return array
      */
-    protected function setStatus($id, $holding = [], $append = true, $patron = null)
+    protected function setStatus(string $id, $holding = [], $append = true, $patron = null)
     {
-        $id = (string)$id;
         $session = $this->getSession($patron['id'] ?? null);
         $i = isset($session->statuses[$id])
             ? count($session->statuses[$id]) + 1 : 1;
@@ -817,6 +836,29 @@ class Demo extends AbstractBase implements \VuFind\I18n\HasSorterInterface
     }
 
     /**
+     * Generate random notes and summary for inclusion in a status/holding array.
+     *
+     * @param int $itemNum Number of item having notes generated
+     *
+     * @return array
+     */
+    protected function getNotesAndSummary(int $itemNum): array
+    {
+        $noteCount = rand(1, 3);
+        $fields = ['holdings_notes' => [], 'item_notes' => [], 'summary' => []];
+        for ($j = 1; $j <= $noteCount; $j++) {
+            $fields['holdings_notes'][] = "Item $itemNum holdings note $j"
+                . ($j === 1 ? ' https://vufind.org/?f=1&b=2#sample_link' : '');
+            $fields['item_notes'][] = "Item $itemNum note $j";
+        }
+        $summCount = rand(1, 3);
+        for ($j = 1; $j <= $summCount; $j++) {
+            $fields['summary'][] = "Item $itemNum summary $j";
+        }
+        return $fields;
+    }
+
+    /**
      * Get Holding
      *
      * This is responsible for retrieving the holding information of a certain
@@ -848,23 +890,26 @@ class Demo extends AbstractBase implements \VuFind\I18n\HasSorterInterface
         // Add notes and summary:
         foreach (array_keys($status) as $i) {
             $itemNum = $i + 1;
-            $noteCount = rand(1, 3);
-            $status[$i]['holdings_notes'] = [];
-            $status[$i]['item_notes'] = [];
-            for ($j = 1; $j <= $noteCount; $j++) {
-                $status[$i]['holdings_notes'][] = "Item $itemNum holdings note $j"
-                    . ($j === 1 ? ' https://vufind.org/?f=1&b=2#sample_link' : '');
-                $status[$i]['item_notes'][] = "Item $itemNum note $j";
-            }
-            $summCount = rand(1, 3);
-            $status[$i]['summary'] = [];
-            for ($j = 1; $j <= $summCount; $j++) {
-                $status[$i]['summary'][] = "Item $itemNum summary $j";
-            }
+            $status[$i] += $this->getNotesAndSummary($itemNum);
             $volume = intdiv($issue, 4) + 1;
             $seriesIssue = $issue % 4;
             $issue = $issue + 1;
             $status[$i]['enumchron'] = "volume $volume, issue $seriesIssue";
+            if (rand(1, 100) <= ($this->config['Holdings']['boundWithProbability'] ?? 25)) {
+                $status[$i]['bound_with_records'] = [];
+                $boundWithCount = 3;
+                for ($j = 0; $j < $boundWithCount; $j++) {
+                    $randomRecord = array_combine(['bibId', 'title'], $this->getRandomBibIdAndTitle());
+                    $status[$i]['bound_with_records'][] = $randomRecord;
+                }
+                $boundWithIndex = rand(0, $boundWithCount + 1);
+                array_splice($status[$i]['bound_with_records'], $boundWithIndex, 0, [
+                    [
+                        'title' => 'The Title on This Page',
+                        'bibId' => $id,
+                    ],
+                ]);
+            }
         }
 
         // Filter out electronic holdings from the normal holdings list:
@@ -1034,8 +1079,16 @@ class Demo extends AbstractBase implements \VuFind\I18n\HasSorterInterface
                 $day_overdue = rand() % 30 + 5;
                 // Calculate checkout date:
                 $checkout = strtotime('now - ' . ($day_overdue + 14) . ' days');
-                // 50c a day fine?
-                $fine = $day_overdue * 0.50;
+                // 1 in 10 chance of this being a "Manual Fee":
+                if (rand(1, 10) === 1) {
+                    $fine = 2.50;
+                    $type = 'Manual Fee';
+                } else {
+                    // 50c a day fine
+                    $fine = $day_overdue * 0.50;
+                    // After 20 days it becomes 'Long Overdue'
+                    $type = $day_overdue > 20 ? 'Long Overdue' : 'Overdue';
+                }
 
                 $fineList[] = [
                     'amount'   => $fine * 100,
@@ -1043,8 +1096,9 @@ class Demo extends AbstractBase implements \VuFind\I18n\HasSorterInterface
                         ->convertToDisplayDate('U', $checkout),
                     'createdate' => $this->dateConverter
                         ->convertToDisplayDate('U', time()),
-                    // After 20 days it becomes 'Long Overdue'
-                    'fine'     => $day_overdue > 20 ? 'Long Overdue' : 'Overdue',
+                    'fine'     => $type,
+                    // Additional description for long overdue fines:
+                    'description' => 'Manual Fee' === $type ? 'Interlibrary loan request fee' : '',
                     // 50% chance they've paid half of it
                     'balance'  => (rand() % 100 > 49 ? $fine / 2 : $fine) * 100,
                     'duedate'  => $this->dateConverter->convertToDisplayDate(
@@ -1530,7 +1584,7 @@ class Demo extends AbstractBase implements \VuFind\I18n\HasSorterInterface
      * @param array $holdInfo Contains most of the same values passed to
      * placeHold, minus the patron data.
      *
-     * @return int
+     * @return int|null
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
