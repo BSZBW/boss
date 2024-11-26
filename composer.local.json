@@ -5,6 +5,7 @@
         "See https://github.com/wikimedia/composer-merge-plugin for more details."
     ],
     "require": {
-        "example/dependency": "1.0.0"
+        "ezyang/htmlpurifier": "4.13",
+        "ext-simplexml": "*"
     }
 }
