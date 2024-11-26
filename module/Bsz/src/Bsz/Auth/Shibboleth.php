@@ -4,6 +4,7 @@ namespace Bsz\Auth;
 use Bsz\Config\Libraries;
 use Bsz\Config\Library;
 use Laminas\Http\PhpEnvironment\Request;
+use VuFind\Auth\ILSAuthenticator;
 use VuFind\Auth\Shibboleth\ConfigurationLoaderInterface;
 use VuFind\Exception\Auth as AuthException;
 
@@ -26,10 +27,11 @@ class Shibboleth extends \VuFind\Auth\Shibboleth
         \Laminas\Session\ManagerInterface $sessionManager,
         ConfigurationLoaderInterface $configurationLoader,
         Request $request,
+        ILSAuthenticator $ilsAuthenticator,
         Libraries $libraries,
         $isil)
     {
-        parent::__construct($sessionManager, $configurationLoader, $request);
+        parent::__construct($sessionManager, $configurationLoader, $request, $ilsAuthenticator);
         $this->libraries = $libraries;
         $this->isil = $isil;
     }

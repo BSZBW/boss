@@ -22,6 +22,7 @@
 namespace Bsz\Search\Search2;
 
 use Bsz\Config\Dedup;
+use Bsz\Search\Solr\MoreFacetRestrictionsTrait;
 use DateTime;
 use VuFind\Config\PluginManager;
 use VuFind\Search\Solr\HierarchicalFacetHelper;
@@ -29,6 +30,8 @@ use VuFindSearch\ParamBag;
 
 class Params extends \VuFind\Search\Search2\Params
 {
+    use MoreFacetRestrictionsTrait;
+
     protected $dedup;
     protected $limit = 10;
 
@@ -47,6 +50,10 @@ class Params extends \VuFind\Search\Search2\Params
         HierarchicalFacetHelper $facetHelper = null
     ) {
         parent::__construct($options, $configLoader, $facetHelper);
+
+        $config = $configLoader->get($options->getFacetsIni());
+        $this->initMoreFacetRestrictionsFromConfig($config->Results_Settings ?? null);
+
         $this->dedup = $dedup;
     }
 

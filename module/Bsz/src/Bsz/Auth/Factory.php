@@ -46,14 +46,29 @@ class Factory
         }
 
         // Load remaining dependencies:
-        $userTable = $container->get('VuFind\DbTablePluginManager')->get('user');
-        $sessionManager = $container->get('VuFind\SessionManager');
-        $pm = $container->get('VuFind\AuthPluginManager');
-        $cookies = $container->get('VuFind\CookieManager');
-        $csrf = $container->get(\VuFind\Validator\Csrf::class);
+        $userService = $container->get(\VuFind\Db\Service\PluginManager::class)
+            ->get(\VuFind\Db\Service\UserServiceInterface::class);
+        $sessionManager = $container->get(\Laminas\Session\SessionManager::class);
+        $pm = $container->get(\VuFind\Auth\PluginManager::class);
+        $cookies = $container->get(\VuFind\Cookie\CookieManager::class);
+        $csrf = $container->get(\VuFind\Validator\CsrfInterface::class);
+        $loginTokenManager = $container->get(\VuFind\Auth\LoginTokenManager::class);
+        $ils = $container->get(\VuFind\ILS\Connection::class);
 
         // Build the object and make sure account credentials haven't expired:
-        $manager = new Manager($config, $userTable, $sessionManager, $pm, $cookies, $csrf, $library);
+        $manager = new Manager(
+            $config,
+            $userService,   // for UserServiceInterface
+            $userService,   // for UserSessionPersistenceInterface
+            $sessionManager,
+            $pm,
+            $cookies,
+            $csrf,
+            $loginTokenManager,
+            $ils,
+            $library
+        );
+        $manager->setIlsAuthenticator($container->get(\VuFind\Auth\ILSAuthenticator::class));
         $manager->checkForExpiredCredentials();
         return $manager;
     }

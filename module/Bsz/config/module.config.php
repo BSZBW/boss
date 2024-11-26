@@ -25,6 +25,7 @@ use Bsz\Auth\ShibbolethFactory;
 use Bsz\Controller\Factory;
 use Bsz\Auth\Factory as AuthFactory;
 use Bsz\Route\RouteGenerator;
+use VuFind\Controller\MyResearchControllerFactory;
 
 $config = [
 
@@ -35,7 +36,7 @@ $config = [
             'Bsz\Controller\RecordController' => 'Bsz\Controller\Factory::getRecordController',
             'Bsz\Controller\Search2RecordController' => 'Bsz\Controller\Factory::getSearch2RecordController',
             'Bsz\Controller\EdsrecordController' => Factory::class,
-            'Bsz\Controller\MyResearchController' => Factory::class,
+            'Bsz\Controller\MyResearchController' => MyResearchControllerFactory::class,
             'Bsz\Controller\HoldingController' => Factory::class,
             'Bsz\Controller\ShibController' => Factory::class,
             'Bsz\Controller\BszController' => Factory::class,

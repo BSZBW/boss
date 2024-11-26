@@ -27,6 +27,12 @@ class RecordCollection extends \VuFindSearch\Backend\Solr\Response\Json\RecordCo
      */
     public function __construct(array $response)
     {
+        if (
+            array_key_exists('response', $response)
+            && null === $response['response']
+        ) {
+            unset($response['response']);
+        }
         $this->response = array_replace_recursive(static::$template, $response);
 
         if (true === $this->isGrouped()) {
