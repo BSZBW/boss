@@ -50,7 +50,6 @@ class Library
     protected $regex;
     protected $live;
     protected $boss;
-    protected $lend_copy;
     protected $country;
     protected $rss;
 
@@ -75,7 +74,6 @@ class Library
         $this->idp = $data['shibboleth_idp'] ?? null;
         $this->logout = $data['shibboleth_logout'] ?? null;
         $this->regex = $data['regex'] ?? null;
-        $this->lend_copy = isset($data['lend_copy']) ? str_split($data['lend_copy'], 1) : [0b1, 0b1];
         $this->rss = $data['rss'] ?? null;
     }
 
@@ -289,22 +287,6 @@ class Library
     public function getRegex()
     {
         return (string)$this->regex;
-    }
-
-    /**
-     * @return bool
-     */
-    public function allowsLend()
-    {
-        return $this->lend_copy[0] == 0b1;
-    }
-
-    /**
-     * @return bool
-     */
-    public function allowsCopy()
-    {
-        return $this->lend_copy[1] == 0b1;
     }
 
     /**
