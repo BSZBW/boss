@@ -5,7 +5,11 @@
 <h3 id="<?=$this->idPrefix ?? ''?>acc-menu-acc-header"><?=$this->transEsc('Your Account')?></h3>
 <nav class="myresearch-menu" aria-labelledby="<?=$this->idPrefix ?? ''?>acc-menu-acc-header">
   <ul class="account-menu">
-    <?php foreach ($this->items as $item): ?>
+      <?php
+      /* BSZ                                       */
+      /* <?php foreach ($this->items as $item): ?> */
+      ?>
+    <?php foreach ($this->items ?: [] as $item): ?>
       <?=$this->render('myresearch/menu-item.phtml', ['active' => $this->active, ...$item])?>
     <?php endforeach; ?>
   </ul>
