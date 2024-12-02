@@ -29,6 +29,8 @@
 namespace Bsz\Auth;
 
 use Bsz\Config\Libraries;
+use Lcobucci\JWT\Exception;
+use VuFind\Db\Entity\UserEntityInterface;
 use VuFind\Exception\Auth as AuthException;
 use DOMImplementation;
 use SimpleXMLElement;
@@ -120,6 +122,7 @@ class NCIP extends AbstractBase
      * account credentials.
      *
      * @throws AuthException
+     * @throws \Exception
      * @return \VuFind\Db\Row\User Object representing logged-in user.
      */
     public function authenticate($request)
@@ -168,12 +171,12 @@ class NCIP extends AbstractBase
      *
      * @param array $result parsed result
      *
-     * @return \VuFind\Db\Table\UserRow Object representing logged-in user.
+     * @return UserEntityInterface representing logged-in user.
      */
     protected function generateUser($result)
     {
         $myPrivilege = null;
-        $user = $this->getUserTable()->getByUsername($result["uniqueUserId"]);
+        $user = $this->getOrCreateUserByUsername($result["uniqueUserId"]);
         // write userPrivilege in home_library of the user object
         $myUserPrivilege = explode(";", $result["userPrivilegeDescription"]);
         foreach ($myUserPrivilege as $group) {
@@ -342,13 +345,13 @@ class NCIP extends AbstractBase
     protected function sendRequest($message)
     {
         if (!extension_loaded('curl')) {
-            throw new Exception('Curl extension missing.');
+            throw new \Exception('Curl extension missing.');
         }
         if (!is_int($this->connectTimeout) || $this->connectTimeout <= 0) {
-            throw new Exception('NCIPConnection.connectTimeout invalid');
+            throw new \Exception('NCIPConnection.connectTimeout invalid');
         }
         if (!is_int($this->timeout) || $this->timeout <= 0) {
-            throw new Exception('NCIPConnection.timeout invalid');
+            throw new \Exception('NCIPConnection.timeout invalid');
         }
 
         $this->_curlHandle = curl_init();
@@ -391,13 +394,13 @@ class NCIP extends AbstractBase
      *
      * @param string $response Response from the ncip api.
      *
-     * @return Object result.
+     * @return Object|false result.
      */
     protected function parseLookupUserResponse($response)
     {
         try {
             $xml = new SimpleXmlElement($response);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             error_log('failed to parse ncip response: ' . $response);
             return false;
         }

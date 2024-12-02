@@ -46,7 +46,27 @@ class HanApi extends AbstractHelper
             return false;
         }
 
-        return true;
+        $showif = $this->hanConfig->get('showif');
+        if(!isset($showif)) {
+            return true;
+        }
+        if(is_string($showif)) {
+            $showif = [$showif];
+        }else {
+            $showif = $showif->toArray();
+        }
+        if(empty($showif)) {
+            return true;
+        }
+        foreach ($showif as $item) {
+            $parts = explode(':', $item);
+            $fun = $parts[0];
+            $args = (count($parts) > 1) ? explode(',', $parts[1]) : [];
+            if ($this->driver->tryMethod($fun, $args)) {
+                return true;
+            }
+        }
+        return false;
 
 //        $isArticle = $this->driver->tryMethod('isArticle');
 //        $isElectronic = $this->driver->tryMethod('isElectronic');
