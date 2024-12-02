@@ -9,9 +9,9 @@
       /* BSZ                                       */
       /* <?php foreach ($this->items as $item): ?> */
       ?>
-    <?php foreach ($this->items ?: [] as $item): ?>
-      <?=$this->render('myresearch/menu-item.phtml', ['active' => $this->active, ...$item])?>
-    <?php endforeach; ?>
+      <?php foreach ($this->items ?: [] as $item): ?>
+        <?=$this->render('myresearch/menu-item.phtml', ['active' => $this->active, ...$item])?>
+      <?php endforeach; ?>
   </ul>
 </nav>
 <?php if ($user && $this->userlist()->getMode() !== 'disabled'): ?>
