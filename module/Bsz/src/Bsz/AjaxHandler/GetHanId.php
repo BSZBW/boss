@@ -70,6 +70,7 @@ class GetHanId extends \VuFind\AjaxHandler\AbstractBase implements TranslatorAwa
     {
         $array = json_decode($rawData, true);
         $array = $array['scripts'] ?? [];
+        $retVal = [];
         foreach ($array as $item) {
             if (!isset($item['fulltext'])) {
                 continue;
