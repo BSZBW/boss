@@ -831,12 +831,14 @@ class SolrFindexMarc extends SolrMarc implements Constants
 
     public function isFromCollection(string $collCode): bool
     {
+        $collCodes = explode(';', $collCode);
         $f912 = $this->getFields('912');
         foreach ($f912 as $field) {
             if(!is_array($field)) {
                 continue;
             }
-            if ($collCode == $this->getSubfield($field, 'a')) {
+            $sfa = $this->getSubfield($field, 'a');
+            if (in_array($sfa, $collCodes)) {
                 return true;
             }
         }
