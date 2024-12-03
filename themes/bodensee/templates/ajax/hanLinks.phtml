@@ -2,11 +2,13 @@
     <?php if (empty($this->data)): ?>
         <?= $this->transEsc('no_link_available') ?>
     <?php endif; ?>
-    <ul>
-        <?php foreach ($this->data as $item): ?>
-            <li>
-                <a href="<?=$item['url']?>"><?=$item['title']?></a>
-            </li>
-        <?php endforeach; ?>
-    </ul>
+    <?php $count = 0; ?>
+    <?php foreach ($this->data as $item): ?>
+        <?php if ($count > 0): ?> <br> <?php endif; ?>
+        <a class="external" href="<?=$item['url']?>"><?=$item['title']?></a>
+        <?php if (!empty($item['license'])): ?>
+            - <?= $item['license'] ?>
+        <?php endif; ?>
+        <?php $count++; ?>
+    <?php endforeach; ?>
 </div>

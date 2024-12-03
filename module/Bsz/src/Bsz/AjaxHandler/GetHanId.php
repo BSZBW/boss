@@ -77,7 +77,10 @@ class GetHanId extends \VuFind\AjaxHandler\AbstractBase implements TranslatorAwa
             }
             $url = $baseUrl . $item['fulltext'];
             $title = $item['title'] ?? $url;
-            $retVal[] = array_filter(compact('url', 'title'));
+            $licenseInfo = $item['permission'] ?? [];
+            $licenseActive = $licenseInfo['active'] ?? false;
+            $license = $licenseActive ? ($licenseInfo['description'] ?? null) : null;
+            $retVal[] = array_filter(compact('url', 'title', 'license'));
         }
         return ['data' => $retVal];
     }
