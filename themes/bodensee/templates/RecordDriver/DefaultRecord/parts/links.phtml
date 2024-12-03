@@ -40,7 +40,7 @@ $localUrls = $this->driver->tryMethod('getLocalUrls'); ?>
     </div>
 <?php else: ?>
     <?php // Show SWB-links?>
-    <?php if (!$this->driver->isCollection()): ?>
+    <?php if (!$this->driver->isCollection() && !$this->client()->is('elk_wue')): ?>
         <?php if (count($urls) > 2): ?>
             <?php $urls = array_slice($urls, 0, 3) ?>
         <?php endif; ?>
@@ -48,6 +48,14 @@ $localUrls = $this->driver->tryMethod('getLocalUrls'); ?>
             <a href="<?= $this->escapeHtmlAttr($this->proxyUrl($current['url'])) ?>"
                class="fulltext external"><?= ($current['url'] == $current['desc']) ? $this->transEsc('Get full text') : $this->transEsc($current['desc']) ?></a>
             <br/>
+        <?php endforeach; ?>
+    <?php elseif ($this->client()->is('elk_wue')): ?>
+        <?php $urls = $this->driver->tryMethod('getFreeURLs') ?? []; ?>
+        <?php $count = 0; ?>
+        <?php foreach ($urls as $item): ?>
+            <?php if ($count > 0): ?> <br> <?php endif; ?>
+            <a class="external" href="<?=$item?>"><?=$this->transEsc($item)?></a>
+            <?php $count++; ?>
         <?php endforeach; ?>
     <?php endif; ?>
 <?php endif; ?>
