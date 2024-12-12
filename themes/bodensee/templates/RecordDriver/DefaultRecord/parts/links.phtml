@@ -11,7 +11,7 @@ if (!is_array($urls)):
     $urls = [];
 endif;
 
-$hanApi = $this->hanApi($this->driver, '');
+$hanApi = $this->hanApi($this->driver, '', 'results');
 
 $localUrls = $this->driver->tryMethod('getLocalUrls'); ?>
 <?php // Show local Urls?>

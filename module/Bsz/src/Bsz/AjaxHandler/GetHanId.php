@@ -36,6 +36,7 @@ class GetHanId extends \VuFind\AjaxHandler\AbstractBase implements TranslatorAwa
     public function handleRequest(Params $params)
     {
         $postParams = $params->fromQuery('params');
+        $alternative = $params->fromQuery('alternative');
 
         $baseUrl = $this->config->get('HanApi')->get('url');
         if (empty($baseUrl)) {
@@ -46,7 +47,7 @@ class GetHanId extends \VuFind\AjaxHandler\AbstractBase implements TranslatorAwa
         }
 
         $raw = $this->doRequest($baseUrl . '/hanapi/action', $postParams);
-        $view = $this->getItems($raw, $baseUrl);
+        $view = $this->getItems($raw, $baseUrl, $alternative);
         $html = $this->renderer->render('ajax/hanLinks.phtml', $view);
 
         return $this->formatResponse(compact('html'));
@@ -66,7 +67,7 @@ class GetHanId extends \VuFind\AjaxHandler\AbstractBase implements TranslatorAwa
         return $this->httpClient->send()->getBody();
     }
 
-    protected function getItems($rawData, $baseUrl)
+    protected function getItems($rawData, $baseUrl, $alternative)
     {
         $array = json_decode($rawData, true);
         $array = $array['scripts'] ?? [];
@@ -82,7 +83,10 @@ class GetHanId extends \VuFind\AjaxHandler\AbstractBase implements TranslatorAwa
             $license = $licenseActive ? ($licenseInfo['description'] ?? null) : null;
             $retVal[] = array_filter(compact('url', 'title', 'license'));
         }
-        return ['data' => $retVal];
+        return [
+            'data' => $retVal,
+            'alt' => $alternative
+        ];
     }
 
 }
