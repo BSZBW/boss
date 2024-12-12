@@ -137,7 +137,7 @@ class Record extends \VuFind\View\Helper\Root\Record
     public function getHanEmbed()
     {
         $han = $this->getView()->plugin('hanApi');
-        $han = $han($this->driver, 'hanAutoload');
+        $han = $han($this->driver, 'hanAutoload', 'record');
         if ($han->isActive()) {
             return $han->renderTemplate();
         }

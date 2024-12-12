@@ -1,6 +1,6 @@
 <div class="hanlinks">
     <?php if (empty($this->data)): ?>
-        <?= $this->transEsc('no_link_available') ?>
+        <?= $this->transEsc($this->alt); ?>
     <?php endif; ?>
     <?php $count = 0; ?>
     <?php foreach ($this->data as $item): ?>
