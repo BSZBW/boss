@@ -293,6 +293,35 @@ class SolrFindexMarc extends SolrMarc implements Constants
         return $result;
     }
 
+    /**
+     * This method supports wildcard operators in ISILs.
+     * @return array
+     */
+    public function getLocalHoldings()
+    {
+        $holdings = [];
+        $f980 = $this->getField980();
+        $isils = $this->mainConfig->getIsilAvailability();
+
+        if (count($isils) == 0) {
+            return [];
+        }
+
+        // Building a regex pattern
+        foreach ($isils as $k => $isil) {
+            $isils[$k] = '^' . preg_quote($isil, '/') . '$';
+        }
+        $pattern = implode('|', $isils);
+        $pattern = '/' . str_replace('\*', '.*', $pattern) . '/';
+        foreach ($f980 as $fields) {
+            if (is_string($fields['isil']) && preg_match($pattern, $fields['isil'])) {
+                $holdings[] = $fields;
+            }
+        }
+
+        return $holdings;
+    }
+
 
     /**
      * Returns Volume number
