@@ -24,6 +24,8 @@ use Bsz\Config\Client;
 use Bsz\RecordDriver\SolrGviMarc;
 use BszTest\ClientTest;
 use PHPUnit\Framework\TestCase;
+use VuFind\Config\PathResolver;
+use VuFind\Config\YamlReader;
 
 /**
  * Class SolrGviMarcTest
@@ -41,7 +43,7 @@ class SolrGviMarcTest extends TestCase
      */
     public function getSolrRecord($file = 'repetitorium.json'): SolrGviMarc
     {
-        $config = $this->getClient();
+        $config = $this->getClient('');
         $record = new SolrGviMarc($config);
         $fixture = $this->loadRecordFixture($file);
         $record->setRawData($fixture['response']['docs'][0]);
@@ -69,7 +71,7 @@ class SolrGviMarcTest extends TestCase
 
     protected function getClient() : Client
     {
-        $clienttest = new ClientTest();
+        $clienttest = new ClientTest('');
         $config = $clienttest->getBasicConfig();
         return $clienttest->getClient($config);
     }
@@ -98,7 +100,7 @@ class SolrGviMarcTest extends TestCase
     {
         $driver = $this->getSolrRecord();
 
-        $yamlReader = new \VuFind\Config\YamlReader();
+        $yamlReader = $this->getYamlReader();
         $formatConfig = $yamlReader->get('MarcFormats.yaml');
         $driver->attachFormatConfig($formatConfig);
 
@@ -134,7 +136,7 @@ class SolrGviMarcTest extends TestCase
         $drivers = $this->getSolrRecords();
         $differentFormats = [];
         foreach ($drivers as $driver) {
-            $yamlReader = new \VuFind\Config\YamlReader();
+            $yamlReader = $this->getYamlReader();
             $formatConfig = $yamlReader->get('MarcFormats.yaml');
             $formatConfigRda = $yamlReader->get('MarcFormatsRDA.yaml');
             $driver->attachFormatConfig($formatConfig, $formatConfigRda);
@@ -219,7 +221,7 @@ class SolrGviMarcTest extends TestCase
 
     public function testLocalHoldings()
     {
-        $clienttest = new ClientTest();
+        $clienttest = new ClientTest('');
         $config = $clienttest->getBasicConfig();
         $config->Site->isil = 'DE-3';
         $record = new SolrGviMarc($config);
@@ -312,7 +314,7 @@ class SolrGviMarcTest extends TestCase
 
     public function testField924RepeatedSubfields()
     {
-        $clienttest = new ClientTest();
+        $clienttest = new ClientTest('');
         $config = $clienttest->getBasicConfig();
         $config->Site->isil = 'DE-N1';
         $record = new SolrGviMarc($config);
@@ -334,5 +336,14 @@ class SolrGviMarcTest extends TestCase
         $this->assertEquals(count($localurls), 1);
         $this->assertIsArray($localurls[0]['label']);
         $this->assertEquals(count($localurls[0]['label']), 2);
+    }
+
+    protected function getYamlReader(): YamlReader
+    {
+        $pathResolver = new PathResolver([
+          'directory' => '/usr/local/boss-config/common',
+          'defaultConfigSubdir' =>   'config/vufind'
+        ], []);
+        return new YamlReader(null, $pathResolver);
     }
 }
