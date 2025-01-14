@@ -31,7 +31,8 @@ $form = '';
         <? endif; ?>
     </div>
 </div>
-<?php if (!$this->client()->is('wlb2')): ?>
+<?php $places = $library->getPlaces(); ?>
+<?php if (!$this->client()->is('wlb2') && count($places) > 0): ?>
 <div class="form-group form-group-sm library-places">
     <label class="control-label col-sm-<?=$labelSize?>"><?=$this->transEsc('Places')?>*</label>
     <div class="col-sm-<?=$inputSize ?>">
@@ -40,7 +41,6 @@ $form = '';
             <? $checked = isset($params['AusgabeOrt']) ? $params['AusgabeOrt'] :'';?>
             <? foreach($this->libraries as $libkey =>  $library): ?>
                 <div id="library-places-<?=$libkey?>" class="place <?if($libkey > 0):?>hidden<? endif; ?>">
-                <? $places = $library->getPlaces(); if(count($places) > 0): ?>
                     <? foreach ($places as $placekey => $place): ?>
                         <div class="radio">
                             <label for="ill-place-<?=$libkey.'-'.$placekey?>">
@@ -52,9 +52,6 @@ $form = '';
                             </label>
                         </div>
                     <? endforeach; ?>
-                <? else: ?>
-                    <span class="help-block"><?=$this->transEsc('ILL::no_places_configured')?></span>
-                <? endif; ?>
                 </div>
             <? endforeach; ?>
         <? endif; ?>
