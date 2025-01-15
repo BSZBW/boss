@@ -53,6 +53,7 @@ class Library
     protected $lend_copy;
     protected $country;
     protected $rss;
+    protected bool $hideCosts;
 
     /**
      * @param $data
@@ -77,6 +78,7 @@ class Library
         $this->regex = $data['regex'] ?? null;
         $this->lend_copy = isset($data['lend_copy']) ? str_split($data['lend_copy'], 1) : [0b1, 0b1];
         $this->rss = $data['rss'] ?? null;
+        $this->hideCosts = (bool)$data['hide_costs'];
     }
 
     /**
@@ -335,4 +337,10 @@ class Library
     {
         return$this->rss;
     }
+
+    public function hideCosts()
+    {
+        return $this->hideCosts;
+    }
+
 }
