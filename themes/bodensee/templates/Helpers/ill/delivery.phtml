@@ -31,16 +31,29 @@ $form = '';
         <? endif; ?>
     </div>
 </div>
-<?php $places = $library->getPlaces(); ?>
-<?php if (!$this->client()->is('wlb2') && count($places) > 0): ?>
+<?php
+$showPlaces = false;
+$showCosts = false;
+$this->libraries = $this->libraries()->getActive($this->client()->getIsils());
+foreach ($this->libraries as $lib) {
+    if (count($lib->getPlaces()) > 0) {
+        $showPlaces = true;
+    }
+    if (!$lib->hideCosts()) {
+        $showCosts = true;
+    }
+}
+
+?>
+<?php if (!$this->client()->is('wlb2') && $showPlaces): ?>
 <div class="form-group form-group-sm library-places">
     <label class="control-label col-sm-<?=$labelSize?>"><?=$this->transEsc('Places')?>*</label>
     <div class="col-sm-<?=$inputSize ?>">
-        <? $this->libraries = $this->libraries()->getActive($this->client()->getIsils()) ?>
         <? if(count($this->libraries) > 0): ?>
             <? $checked = isset($params['AusgabeOrt']) ? $params['AusgabeOrt'] :'';?>
             <? foreach($this->libraries as $libkey =>  $library): ?>
                 <div id="library-places-<?=$libkey?>" class="place <?if($libkey > 0):?>hidden<? endif; ?>">
+                    <?php $places = $library->getPlaces(); ?>
                     <? foreach ($places as $placekey => $place): ?>
                         <div class="radio">
                             <label for="ill-place-<?=$libkey.'-'.$placekey?>">
@@ -91,7 +104,7 @@ $form = '';
         <input type="checkbox" class="" id="ill-copy" name="Kopie" <? if (isset($params['Kopie'])):?>checked=""<? endif; ?>/>
     </div>
 </div>
-<? if (!$this->client()->is('ill_no_cost')): ?>
+<? if (!$this->client()->is('ill_no_cost') && $showCosts): ?>
 <div class=" form-group form-group-sm">
     <label class="control-label col-sm-<?=$labelSize?>" for="ill-costs"><?=$this->transEsc('costs')?>*</label>
     <div class="col-sm-<?=$inputSize?>">
@@ -99,7 +112,9 @@ $form = '';
         <span class="help-block with-errors"><?=$this->transEsc('ILL::help_costs')?></span>
     </div>
 </div>
-<? endif; ?>
+<?php else: ?>
+    <input type="hidden" class="form-control" id="ill-costs" required="true" value="8" name="MaxKostenKopie" data-costs="true" />
+<?php endif; ?>
 <div class=" form-group form-group-sm">
     <label class="control-label col-sm-<?=$labelSize?>" for="ill-remark"><?=$this->transEsc('remark')?></label>
     <div class="col-sm-<?=$inputSize ?>">

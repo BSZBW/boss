@@ -52,6 +52,7 @@ class Library
     protected $boss;
     protected $country;
     protected $rss;
+    protected bool $hideCosts;
 
     /**
      * @param $data
@@ -75,6 +76,7 @@ class Library
         $this->logout = $data['shibboleth_logout'] ?? null;
         $this->regex = $data['regex'] ?? null;
         $this->rss = $data['rss'] ?? null;
+        $this->hideCosts = (bool)$data['hide_costs'];
     }
 
     /**
@@ -317,4 +319,10 @@ class Library
     {
         return$this->rss;
     }
+
+    public function hideCosts()
+    {
+        return $this->hideCosts;
+    }
+
 }
