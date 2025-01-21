@@ -11,12 +11,12 @@ if (!is_array($urls)):
     $urls = [];
 endif;
 
-$hanApi = $this->hanApi($this->driver, '');
+$hanApi = $this->hanApi($this->driver, '', 'record');
 
 $localUrls = $this->driver->tryMethod('getLocalUrls'); ?>
 <?php // Show local Urls?>
 <?php if (!empty($localUrls[0]['url'])): ?>
-    <div>
+    <div style="overflow:clip">
         <?php foreach ($localUrls as $current): ?>
             <?php if (is_array($current['label'])):?>
                 <a class="external"
@@ -35,12 +35,13 @@ $localUrls = $this->driver->tryMethod('getLocalUrls'); ?>
                 <?php endif; ?>
             <?php else: ?>
                 <a class="external" href="<?=$current['url']?>"><?=$this->transEsc($current['label'])?></a>
+            <br>
             <?php endif ?>
         <?php endforeach; ?>
     </div>
 <?php else: ?>
     <?php // Show SWB-links?>
-    <?php if (!$this->driver->isCollection()): ?>
+    <?php if (!$this->driver->isCollection() && !$this->client()->is('elk_wue')): ?>
         <?php if (count($urls) > 2): ?>
             <?php $urls = array_slice($urls, 0, 3) ?>
         <?php endif; ?>
@@ -48,6 +49,14 @@ $localUrls = $this->driver->tryMethod('getLocalUrls'); ?>
             <a href="<?= $this->escapeHtmlAttr($this->proxyUrl($current['url'])) ?>"
                class="fulltext external"><?= ($current['url'] == $current['desc']) ? $this->transEsc('Get full text') : $this->transEsc($current['desc']) ?></a>
             <br/>
+        <?php endforeach; ?>
+    <?php elseif ($this->client()->is('elk_wue')): ?>
+        <?php $urls = $this->driver->tryMethod('getFreeURLs') ?? []; ?>
+        <?php $count = 0; ?>
+        <?php foreach ($urls as $item): ?>
+            <?php if ($count > 0): ?> <br> <?php endif; ?>
+            <a class="external" href="<?=$item?>"><?=$this->escapeHtml($item)?></a>
+            <?php $count++; ?>
         <?php endforeach; ?>
     <?php endif; ?>
 <?php endif; ?>

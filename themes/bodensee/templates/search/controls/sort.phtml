@@ -1,19 +1,15 @@
 <?php $list = $this->params->getSortList();
-
-
 if (!empty($list)): ?>
     <form class="form-inline search-sort" action="<?= $this->currentPath() ?>"
           method="get" name="sort">
-        <div class="form-group">
-            <?= $this->results->getUrlQuery()->asHiddenFields(['sort' => '/.*/']); ?>
-            <label for="sort_options_1"><?= $this->transEsc('Sort') ?></label>
-            <select id="sort_options_1" name="sort" class="jumpMenu form-control">
-                <?php foreach ($list as $sortType => $sortData): ?>
-                    <option value="<?= $this->escapeHtmlAttr($sortType) ?>"<?= $sortData['selected'] ? ' selected="selected"' : '' ?>><?= $this->transEsc($sortData['desc']) ?></option>
-                <?php endforeach; ?>
-            </select>
-            <noscript><input type="submit" class="btn btn-default"
-                             value="<?= $this->transEsc("Set") ?>"/></noscript>
-        </div>
+        <?= $this->results->getUrlQuery()->asHiddenFields(['sort' => '/.*/']); ?>
+        <label for="sort_options_1"><?= $this->transEsc('Sort') ?></label>
+        <select id="sort_options_1" name="sort" class="jumpMenu form-control">
+            <?php foreach ($list as $sortType => $sortData): ?>
+                <option value="<?= $this->escapeHtmlAttr($sortType) ?>"<?= $sortData['selected'] ? ' selected="selected"' : '' ?>><?= $this->transEsc($sortData['desc']) ?></option>
+            <?php endforeach; ?>
+        </select>
+        <noscript><input type="submit" class="btn btn-default"
+                         value="<?= $this->transEsc("Set") ?>"/></noscript>
     </form>
 <?php endif; ?>

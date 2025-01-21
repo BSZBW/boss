@@ -73,7 +73,7 @@ class LogicTest extends TestCase
 
     public function testAlwaysTrueModifier()
     {
-        $recordtest = new SolrGviMarcTest();
+        $recordtest = new SolrGviMarcTest('');
         $record = $recordtest->getSolrRecord('journal.json');
         // DE-16 has local holdings for this record
         $logic = $this->getLogic('~JournalAvailable', ['DE-16']);
@@ -90,7 +90,7 @@ class LogicTest extends TestCase
      */
     public function testNegateModifier()
     {
-        $recordtest = new SolrGviMarcTest();
+        $recordtest = new SolrGviMarcTest('');
         // record is a collection
         $record = $recordtest->getSolrRecord('brockhaus.json');
         $logic = $this->getLogic('!serialOrCollection', ['DE-16']);
@@ -110,7 +110,7 @@ class LogicTest extends TestCase
      */
     public function testIndicatorEvaluation()
     {
-        $recordtest = new SolrGviMarcTest();
+        $recordtest = new SolrGviMarcTest('');
         $record = $recordtest->getSolrRecord('repetitorium.json');
 
         $logic = $this->getLogic('Indicator');

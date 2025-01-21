@@ -16,26 +16,31 @@ class HanApi extends AbstractHelper
 
     protected $driver;
 
+    protected $area;
+
     public function __construct($config, $context)
     {
         $this->hanConfig = $config;
         $this->context = $context;
     }
 
-    public function __invoke($driver, $autoLoad): HanApi
+    public function __invoke($driver, $autoLoad, $area): HanApi
     {
         $this->driver = $driver;
         $this->autoload = $autoLoad;
+        $this->area = $area;
         return $this;
     }
 
     public function renderTemplate()
     {
+        $alternative = $this->getAlternative();
         return $this->context->__invoke($this->getView())->renderInContext(
             'Helpers/hanembed.phtml',
             [
                 'autoloadClass' => $this->autoload,
-                'data' => $this->getParams()
+                'data' => $this->getParams(),
+                'alternative' => $alternative
             ]
         );
     }
@@ -91,6 +96,17 @@ class HanApi extends AbstractHelper
         ]);
 
         return json_encode($params);
+    }
+
+    protected function getAlternative()
+    {
+        if ($this->area == 'results') {
+            return '';
+        }
+        $freeUrl = $this->driver->tryMethod('getFreeURLs');
+        return !empty($freeUrl)
+            ? 'Siehe "Kostenloser Online-Zugang"'
+            : 'no_link_available' ;
     }
 
 }

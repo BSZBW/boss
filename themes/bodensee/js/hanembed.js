@@ -1,11 +1,12 @@
 /*global VuFind */
 VuFind.register('hanembed', function HanEmbed() {
 
-  function _loadHanId($target, json) {
+  function _loadHanId($target, json, alt) {
     $target.addClass('ajax_availability');
     var url = VuFind.path + '/AJAX/JSON?' + $.param({
       method: 'getHanId',
-      params: json
+      params: json,
+      alternative: alt
     });
     $.ajax({
       dataType: 'json',
@@ -25,6 +26,7 @@ VuFind.register('hanembed', function HanEmbed() {
     var element = $(el);
     // Extract the OpenURL associated with the clicked element:
     var params = element.children('span.hanInfo:first').attr('title');
+    var alternative = element.children('span.hanAlternative:first').attr('title');
 
     // Hide the controls now that something has been clicked:
     var controls = element.parents('.hanControls');
@@ -36,7 +38,7 @@ VuFind.register('hanembed', function HanEmbed() {
     // If the target is already visible, a previous click has populated it;
     // don't waste time doing redundant work.
     if (target.hasClass('hidden')) {
-      _loadHanId(target.removeClass('hidden'), params);
+      _loadHanId(target.removeClass('hidden'), params, alternative);
     }
   }
 
