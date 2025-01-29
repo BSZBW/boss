@@ -1,4 +1,4 @@
-<?php $overrideText = $this->client()->get('Record')->get('override_text') ?? null; ?>
+<?php $overrideText = $this->client()->getOverrideText(); ?>
 <?php $count = 0; ?>
 <div>
     <?php foreach ($this->data as $current): ?>
