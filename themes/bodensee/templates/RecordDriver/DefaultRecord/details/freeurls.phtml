@@ -1,5 +1,5 @@
 <?php $count = 0; ?>
-<?php $overrideText = $this->client()->get('Record')->get('override_text') ?? null; ?>
+<?php $overrideText = $this->client()->getOverrideText(); ?>
 <?php foreach ($this->data as $current): ?>
     <?php if ($count > 0): ?><br><?php endif; ?>
     <?php $text = $overrideText ?? $current; ?>

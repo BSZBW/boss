@@ -3,7 +3,7 @@
     value for use in generating a COinS (Z3988) tag -- see bottom of file.
 */
 
-$overrideText = $this->client()->get('Record')->get('override_text');
+$overrideText = $this->client()->getOverrideText();
 // Account for replace_other_urls setting
 $openUrl = $this->openUrl($this->driver, 'results');
 $openUrlActive = $openUrl->isActive();
