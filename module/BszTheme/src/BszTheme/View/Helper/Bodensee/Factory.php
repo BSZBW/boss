@@ -25,6 +25,7 @@ use Bsz\Config\Library;
 use Bsz\Exception;
 use Interop\Container\ContainerInterface;
 use VuFind\Config\Locator;
+use VuFind\Tags\TagsService;
 
 /**
  * Factory for Bootstrap view helpers.
@@ -118,6 +119,7 @@ class Factory
     public static function getRecord(ContainerInterface $container)
     {
         return new Record(
+            $container->get(TagsService::class),
             $container->get('VuFind\Config')->get('config'),
             $container->get('VuFind\Config')->get('FormatIcons'),
             $container->get(Client::class)->getIsilAvailability()

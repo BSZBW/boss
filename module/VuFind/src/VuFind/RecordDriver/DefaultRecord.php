@@ -35,6 +35,7 @@ use VuFindCode\ISBN;
 use function count;
 use function in_array;
 use function is_array;
+use function sprintf;
 use function strlen;
 
 /**
@@ -121,6 +122,23 @@ class DefaultRecord extends AbstractBase
                 : [$i];
         };
         return array_map($callback, array_unique($headings));
+    }
+
+    /**
+     * Get the subject headings as a flat array of strings.
+     *
+     * @return array Subject headings
+     */
+    public function getAllSubjectHeadingsFlattened()
+    {
+        $headings = [];
+        $subjects = $this->getAllSubjectHeadings();
+        if (is_array($subjects)) {
+            foreach ($subjects as $subj) {
+                $headings[] = implode(' -- ', $subj);
+            }
+        }
+        return $headings;
     }
 
     /**
@@ -242,7 +260,7 @@ class DefaultRecord extends AbstractBase
      */
     public function getCallNumbers()
     {
-        return (array)($this->fields['callnumber-raw'] ?? []);
+        return array_unique((array)($this->fields['callnumber-raw'] ?? []));
     }
 
     /**
@@ -479,12 +497,6 @@ class DefaultRecord extends AbstractBase
         return $authors;
     }
 
-    public function getAuthorRole(string $role)
-    {
-        $authors = $this->getDeduplicatedAuthors(['role', 'gnd', 'live']);
-        return $authors[$role] ?? [];
-    }
-
     /**
      * Get the edition of the current record.
      *
@@ -546,7 +558,7 @@ class DefaultRecord extends AbstractBase
     public function getPrimaryAuthorsWithHighlighting()
     {
         $highlights = [];
-        // Create a map of de-highlighted valeus => highlighted values.
+        // Create a map of de-highlighted values => highlighted values.
         foreach ($this->getRawAuthorHighlights() as $current) {
             $dehighlighted = str_replace(
                 ['{{{{START_HILITE}}}}', '{{{{END_HILITE}}}}'],
@@ -1529,7 +1541,7 @@ class DefaultRecord extends AbstractBase
     public function getUniqueID()
     {
         if (!isset($this->fields['id'])) {
-            throw new Exception('ID not set!');
+            throw new \Exception('ID not set!');
         }
         return $this->fields['id'];
     }
@@ -1694,6 +1706,7 @@ class DefaultRecord extends AbstractBase
     public function getSchemaOrgFormatsArray()
     {
         $types = [];
+
         foreach ($this->getFormats() as $format) {
             switch ($format) {
                 case 'Book':
@@ -1717,6 +1730,14 @@ class DefaultRecord extends AbstractBase
                     $types['CreativeWork'] = 1;
             }
         }
+
+        // Check for functionality from IlsAwareTrait. If this record comes from a real ILS, we need
+        // to add a type of "Product" to support the system's use of https://schema.org/Offer to
+        // represent availability.
+        if ($this->tryMethod('hasILS') && isset($this->ils) && $this->ils->getOfflineMode() !== 'ils-none') {
+            $types['Product'] = 1;
+        }
+
         return array_keys($types);
     }
 
@@ -1726,6 +1747,8 @@ class DefaultRecord extends AbstractBase
      * itself if nothing else matches.
      *
      * @return string
+     *
+     * @deprecated Use \VuFind\View\Helper\Root\SchemaOrg::getRecordTypes()
      */
     public function getSchemaOrgFormats()
     {

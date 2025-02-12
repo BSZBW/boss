@@ -39,6 +39,24 @@ class SearchTabs extends \VuFind\View\Helper\Root\SearchTabs
         return false;
     }
 
+    public function getTabConfig(
+        $activeSearchClass,
+        $query,
+        $handler,
+        $type = 'basic',
+        $hiddenFilters = []
+    ) {
+      $config = parent::getTabConfig($activeSearchClass, $query, $handler, $type, $hiddenFilters);
+      $newTabs = [];
+      foreach ($config['tabs'] ?? [] as $tab) {
+            $newTab = $tab;
+            $newTab['icon'] = $this->getIcon($tab['id'] ?? '');
+            $newTabs[] = $newTab;
+      }
+      $config['tabs'] = $newTabs;
+      return $config;
+    }
+
     /**
      * Create information representing a selected tab.
      *
@@ -152,7 +170,7 @@ class SearchTabs extends \VuFind\View\Helper\Root\SearchTabs
      * @param string $id
      * @return string
      */
-    public static function getIcon($id)
+    protected function getIcon($id)
     {
         switch (strtolower($id)) {
             case 'summon':

@@ -462,7 +462,7 @@ class Polaris extends AbstractBase implements \VuFindHttp\HttpServiceAwareInterf
     /**
      * Get Pick Up Locations
      *
-     * This is responsible for gettting a list of valid library locations for
+     * This is responsible for getting a list of valid library locations for
      * holds / recall retrieval
      *
      * @param array $patron      Patron information returned by the patronLogin
@@ -697,7 +697,7 @@ class Polaris extends AbstractBase implements \VuFindHttp\HttpServiceAwareInterf
     {
         // duedate, id, barcode, renew (count), request (pending count),
         // volume (vol number), publication_year, renewable, message, title, item_id
-        // polaris apis: PatronItemsOutGet, Patron_RewewBlocksGet
+        // polaris apis: PatronItemsOutGet
         $transactions = [];
         $response = $this->makeRequest(
             "patron/{$patron['cat_username']}/itemsout/all",

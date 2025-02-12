@@ -71,7 +71,7 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
         'solrreserves' => SolrReserves::class,
         'solrweb' => SolrWeb::class,
         'summon' => Summon::class,
-        'worldcat' => WorldCat::class,
+        'worldcat2' => WorldCat2::class,
     ];
 
     /**
@@ -99,7 +99,7 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
         Missing::class => AbstractBaseFactory::class,
         Pazpar2::class => NameBasedConfigFactory::class,
         Primo::class => NameBasedConfigFactory::class,
-        Search2Default::class => SolrDefaultFactory::class,
+        Search2Default::class => Search2DefaultFactory::class,
         SolrArchivesSpace::class => SolrDefaultFactory::class,
         SolrAuthDefault::class => SolrDefaultWithoutSearchServiceFactory::class,
         SolrAuthMarc::class => SolrDefaultWithoutSearchServiceFactory::class,
@@ -110,7 +110,7 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
         SolrReserves::class => SolrDefaultWithoutSearchServiceFactory::class,
         SolrWeb::class => SolrWebFactory::class,
         Summon::class => SummonFactory::class,
-        WorldCat::class => NameBasedConfigFactory::class,
+        WorldCat2::class => NameBasedConfigFactory::class,
     ];
 
     /**
@@ -181,9 +181,14 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
         );
         $recordType = $this->has($key) ? $key : $keyPrefix . $defaultKeySuffix;
 
+        // Extract highlighting details injected earlier by
+        // \VuFindSearch\Backend\Solr\Response\Json\RecordCollectionFactory
+        $hl = $data['__highlight_details'] ?? [];
+        unset($data['__highlight_details']);
         // Build the object:
         $driver = $this->get($recordType);
         $driver->setRawData($data);
+        $driver->setHighlightDetails($hl);
         return $driver;
     }
 

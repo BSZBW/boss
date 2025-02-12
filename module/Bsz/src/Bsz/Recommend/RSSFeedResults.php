@@ -134,15 +134,14 @@ class RSSFeedResults implements \VuFind\Recommend\RecommendInterface,
         // [SideRecommendations]
         // AllFields[]=RSSFeedResultsDeferred:[url]:[limit]
 
-        if ($settings === null) {
+        if (empty($settings)) {
             $settings = $this->feed;
         }
 
-        // Parse out parameters:
-        list($url, $limit, $title) = explode(':', $settings);
-        $this->baseUrl = $url;
-        $this->limit = $limit ?? 5;
-        $this->searchSite = $title ?? '';
+        $parts = explode(':', $settings);
+        $this->baseUrl = $parts[0];
+        $this->limit = $parts[1] ?? 5;
+        $this->searchSite = $parts[2] ?? '';
     }
 
     /**

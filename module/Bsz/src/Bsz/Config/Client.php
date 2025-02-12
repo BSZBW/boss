@@ -465,4 +465,9 @@ class Client extends Config
         }
         return '';
     }
+
+    public function getOverrideText() {
+        $record = $this->get('Record');
+        return $record ? ($record->get('override_text') ?? null) : null;
+    }
 }

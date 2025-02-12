@@ -69,11 +69,12 @@ class PermissionManager
     /**
      * Determine if the user is authorized in a certain context or not
      *
-     * @param string $context Context for the permission behavior
+     * @param string $permission Permission
+     * @param mixed  $context    Context for the permission behavior (optional)
      *
      * @return bool
      */
-    public function isAuthorized($context)
+    public function isAuthorized($permission, $context = null)
     {
         $authService = $this->getAuthorizationService();
 
@@ -82,7 +83,7 @@ class PermissionManager
             return false;
         }
 
-        if ($authService->isGranted($context)) {
+        if ($authService->isGranted($permission, $context)) {
             return true;
         }
 
@@ -90,24 +91,38 @@ class PermissionManager
     }
 
     /**
-     * Check if a permission rule exists for a given context
+     * Get a list of all configured permissions.
      *
-     * @param string $context Context for the permission behavior
+     * @return string[]
+     */
+    public function getAllConfiguredPermissions(): array
+    {
+        $permissions = [];
+        foreach ($this->config as $value) {
+            $permissions = array_merge($permissions, (array)($value['permission'] ?? []));
+        }
+        return array_values(array_unique($permissions));
+    }
+
+    /**
+     * Check if a permission rule exists
+     *
+     * @param string $permission Permission
      *
      * @return bool
      */
-    public function permissionRuleExists($context)
+    public function permissionRuleExists($permission)
     {
         foreach ($this->config as $value) {
             if (!isset($value['permission'])) {
                 continue;
             }
-            if ($value['permission'] == $context) {
+            if ($value['permission'] == $permission) {
                 return true;
             }
             if (
                 is_array($value['permission'])
-                && in_array($context, $value['permission'])
+                && in_array($permission, $value['permission'])
             ) {
                 return true;
             }

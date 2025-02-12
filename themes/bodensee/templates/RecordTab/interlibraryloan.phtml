@@ -41,7 +41,7 @@ if ($content['customUrl'] && $this->client()->getTag() !== 'fl-dienst' ) {
         <?php foreach ($ppns as $k => $id): ?>
             <?php $ll = $ppnMessages[$id] ?? null; ?>
             <?php if ($ll == 'ILL::library_opac'): ?>
-                <?php if ($this->client()->is('wlb2')): ?>
+                <?php if ($this->client()->is('wlb2') || $this->client()->is('elk_wue')): ?>
                     <?php $ppn = $id;
                     $ppn = preg_replace('/^\(.*\)/', '', $id);
                     $exists = $this->idVerifier($ppn, 'Solr');
@@ -53,7 +53,7 @@ if ($content['customUrl'] && $this->client()->getTag() !== 'fl-dienst' ) {
                     <li><?= $this->transEsc('ILL::library_opac') ?>
                         : <?= $this->recordLink()->linkPPN($this->driver) ?></li>
                 <?php endif; ?>
-            <?php elseif ($this->client()->is('wlb2') && $ll == 'ILL::to_local_hit'): ?>
+            <?php elseif (($this->client()->is('wlb2') || $this->client()->is('elk_wue')) && $ll == 'ILL::to_local_hit'): ?>
                 <?php $ppn = $id;
                 $ppn = preg_replace('/^\(.*\)/', '', $id);
                 $exists = $this->idVerifier($ppn, 'Solr');
@@ -62,7 +62,7 @@ if ($content['customUrl'] && $this->client()->getTag() !== 'fl-dienst' ) {
                 <a href="/Record/<?=$ppn?>"><?=$this->transEsc($ll)?></a>
                 <?php endif; ?>
             <?php else: ?>
-                <?php $route = $this->client()->is('wlb2') ? '/Search2Record/' : '/Record/' ; ?>
+                <?php $route = ($this->client()->is('wlb2') || $this->client()->is('elk_wue')) ? '/Search2Record/' : '/Record/' ; ?>
                 <li><a class=""
                        href="<?= $route . $id ?>"><?php if (isset($ll)): ?><?= $this->transEsc($ll) ?><?php else: ?><?= $id ?><?php endif; ?></a>
                 </li>

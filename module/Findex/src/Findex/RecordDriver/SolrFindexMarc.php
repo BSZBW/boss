@@ -194,6 +194,31 @@ class SolrFindexMarc extends SolrMarc implements Constants
         return $urls;
     }
 
+    public function getFreeURLs(): array
+    {
+        $f856 = $this->getFields('856');
+
+        $urls = [];
+        foreach ($f856 as $field) {
+            if (!is_array($field)) {
+                continue;
+            }
+
+            $sfz = $this->getSubfield($field, 'z');
+            if (empty($sfz) || !preg_match('/kostenfrei|kostenlos/', strtolower($sfz))) {
+                continue;
+            }
+
+            $sfu = $this->getSubfield($field, 'u');
+            if (empty($sfu)) {
+                continue;
+            }
+
+            $urls[] = $sfu;
+        }
+        return $urls;
+    }
+
     public function getSeriesIds()
     {
         $fields = [
@@ -266,6 +291,35 @@ class SolrFindexMarc extends SolrMarc implements Constants
             $result[] = $arrsub;
         }
         return $result;
+    }
+
+    /**
+     * This method supports wildcard operators in ISILs.
+     * @return array
+     */
+    public function getLocalHoldings()
+    {
+        $holdings = [];
+        $f980 = $this->getField980();
+        $isils = $this->mainConfig->getIsilAvailability();
+
+        if (count($isils) == 0) {
+            return [];
+        }
+
+        // Building a regex pattern
+        foreach ($isils as $k => $isil) {
+            $isils[$k] = '^' . preg_quote($isil, '/') . '$';
+        }
+        $pattern = implode('|', $isils);
+        $pattern = '/' . str_replace('\*', '.*', $pattern) . '/';
+        foreach ($f980 as $fields) {
+            if (is_string($fields['isil']) && preg_match($pattern, $fields['isil'])) {
+                $holdings[] = $fields;
+            }
+        }
+
+        return $holdings;
     }
 
 
@@ -831,7 +885,6 @@ class SolrFindexMarc extends SolrMarc implements Constants
 
     public function isFromCollection(string $collCode): bool
     {
-
         $collCodes = explode(';', $collCode);
         $f912 = $this->getFields('912');
         foreach ($f912 as $field) {

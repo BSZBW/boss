@@ -20,7 +20,9 @@ foreach ($this->statusItems as $item) {
 } // Show no more than 5 items?>
         <?php $class = 'text-success';
         $icon = 'fa-check';
-        if ($item['availability'] == false) {
+        $availability = $item['availability']->isAvailable();
+        $status = strtolower($item['availability']->getStatusDescription());
+        if ($availability == false) {
             $class = "text-danger";
             $icon = 'fa-times';
         }
@@ -55,12 +57,12 @@ foreach ($this->statusItems as $item) {
              <i class="fa <?=$this->escapeHtmlAttr($icon)?> <?=$class?>"></i>
              <?=$this->transEsc("status_unknown_message")?>
          </span>
-        <?php elseif ($item['availability']): ?>
+        <?php elseif ($availability): ?>
           <span class="text-success text-nowrap">
             <i class="fa <?=$this->escapeHtmlAttr($icon)?> <?=$class?>"></i>
             <?=($item['reserve'] == 'Y') ? $this->transEsc("On Reserve") : $this->transEsc("Available")?>
           </span>
-        <?php elseif (strtolower($item['status']) === "on loan"): ?>
+        <?php elseif (strtolower($status) === "on loan"): ?>
             <span class="text-danger text-nowrap">
                 <i class="fa <?=$this->escapeHtmlAttr($icon)?> <?=$class?>"></i>
                 <?=$this->transEsc("On loan")?>
@@ -78,7 +80,6 @@ foreach ($this->statusItems as $item) {
            <br/>
             <?php // no idea why this is necessary here?>
             <?php $item['ilslink'] = str_replace('SOPAC', 'SMOPAC', $item['ilslink'])?>
-            <?php $status = strtolower($item['status'])?>
             <?php if ($status == 'on loan' && !empty($duedate)): ?>
                 <?=$this->transEsc('Due')?> <?=$this->escapeHtml($duedate)?>
                 <?php if (!empty($item['ilslink']) && !$this->client()->is('only_one_holds_button')): ?>
@@ -93,7 +94,7 @@ foreach ($this->statusItems as $item) {
                 <?php endif; ?>
             <?php else: ?>
                 <?=$this->transEsc('daia-' . $status)?>
-                <?php if (!empty($item['ilslink']) && !$this->client()->is('only_one_holds_button') && $this->client()->is('always_place_hold') && (strtolower($item['status']) != 'for reference') || $this->client()->is('show_readingroom_link') && !$isStorageReadingroom) : ?>
+                <?php if (!empty($item['ilslink']) && !$this->client()->is('only_one_holds_button') && $this->client()->is('always_place_hold') && ($status != 'for reference') || $this->client()->is('show_readingroom_link') && !$isStorageReadingroom) : ?>
                     &ndash;
                     <a class="open-popup" data-name="KIOSK" href="<?=$item['ilslink']?>"><?=$this->transEsc('Place a Hold')?></a>
                 <?php endif; ?>

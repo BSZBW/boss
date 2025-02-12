@@ -25,6 +25,7 @@ use Bsz\Auth\ShibbolethFactory;
 use Bsz\Controller\Factory;
 use Bsz\Auth\Factory as AuthFactory;
 use Bsz\Route\RouteGenerator;
+use VuFind\Controller\MyResearchControllerFactory;
 
 $config = [
 
@@ -35,7 +36,7 @@ $config = [
             'Bsz\Controller\RecordController' => 'Bsz\Controller\Factory::getRecordController',
             'Bsz\Controller\Search2RecordController' => 'Bsz\Controller\Factory::getSearch2RecordController',
             'Bsz\Controller\EdsrecordController' => Factory::class,
-            'Bsz\Controller\MyResearchController' => Factory::class,
+            'Bsz\Controller\MyResearchController' => MyResearchControllerFactory::class,
             'Bsz\Controller\HoldingController' => Factory::class,
             'Bsz\Controller\ShibController' => Factory::class,
             'Bsz\Controller\BszController' => Factory::class,
@@ -238,11 +239,13 @@ $config = [
                     'Bsz\ILS\Driver\DAIAbsz' => 'Bsz\ILS\Driver\DAIAFactory',
                     'Bsz\ILS\Driver\DAIA' => 'Bsz\ILS\Driver\DAIAFactory',
                     'Bsz\ILS\Driver\NoILS' => 'Bsz\ILS\Driver\NoILSFactory',
+                    'Bsz\ILS\Driver\Folio' => 'VuFind\ILS\Driver\FolioFactory'
                 ],
                 'aliases' => [
                     'DAIAbsz' => 'Bsz\ILS\Driver\DAIAbsz',
                     'VuFind\ILS\Driver\DAIA' => 'Bsz\ILS\Driver\DAIA',
                     'VuFind\ILS\Driver\NoILS' => 'Bsz\ILS\Driver\NoILS',
+                    'VuFind\ILS\Driver\Folio' => 'Bsz\ILS\Driver\Folio'
                 ]
 
             ],

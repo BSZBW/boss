@@ -2,10 +2,31 @@
 return [
     'extends' => 'root',
     'css' => [
-        //'vendor/bootstrap.min.css',
-        //'vendor/bootstrap-accessibility.css',
-        'compiled.css',
-        'print.css:print',
+        /**
+         * Entries in this section can either be specified as array or as string.
+         * Array format is preferred.
+         *
+         * Available array options:
+         * - file: the path to the file (either relative to the css directory of your
+         *   theme, or a URL)
+         * - load_after: Use this to explicitly load the file after the given other
+         *   file. This may NOT be used together with a priority setting.
+         * - priority: an optional priority (lower value means higher priority).
+         *      Default convention for VuFind's own themes:
+         *          - 1xx => vendor (third-party code)
+         *          - 2xx => VuFind library (general-purpose code)
+         *          - 3xx => VuFind scripts (highly VuFind-specific code)
+         * - media: e.g. 'print'
+         * - conditional: e.g. '!IE'
+         * - extras: array of additional attributes
+         *
+         * Strings are supported for backwards compatibility reasons. examples:
+         * - 'example.css' => same as ['file' => 'example.css']
+         * - 'example.css:print:!IE' => same as
+         *   ['file' => 'example.css', 'media' => 'print', 'conditional' => '!IE']
+         */
+        ['file' => 'compiled.css'],
+        ['file' => 'print.css', 'media' => 'print'],
     ],
     'js' => [
         /**
@@ -41,11 +62,14 @@ return [
         ['file' => 'vendor/autocomplete.js', 'priority' => 220],
         ['file' => 'lib/ajax_request_queue.js', 'priority' => 230],
         ['file' => 'common.js', 'priority' => 310],
-        ['file' => 'lightbox.js', 'priority' => 320],
-        ['file' => 'searchbox_controls.js', 'priority' => 330],
-        ['file' => 'truncate.js', 'priority' => 340],
-        ['file' => 'trigger_print.js', 'priority' => 350],
-        ['file' => 'observer_manager.js', 'priority' => 360],
+        ['file' => 'config.js', 'priority' => 320],
+        ['file' => 'lightbox.js', 'priority' => 330],
+        ['file' => 'searchbox_controls.js', 'priority' => 340],
+        ['file' => 'truncate.js', 'priority' => 350],
+        ['file' => 'trigger_print.js', 'priority' => 360],
+        ['file' => 'observer_manager.js', 'priority' => 370],
+        ['file' => 'openurl.js', 'priority' => 380],
+        ['file' => 'list_item_selection.js', 'priority' => 390],
     ],
     /**
      * Configuration for a single or multiple favicons.
@@ -74,6 +98,7 @@ return [
     'favicon' => 'vufind-favicon.ico',
     'helpers' => [
         'factories' => [
+            'VuFind\View\Helper\Bootstrap3\BulkAction' => 'VuFind\View\Helper\Root\BulkActionFactory',
             'VuFind\View\Helper\Bootstrap3\CopyToClipboardButton' => 'Laminas\ServiceManager\Factory\InvokableFactory',
             'VuFind\View\Helper\Bootstrap3\Flashmessages' => 'VuFind\View\Helper\Root\FlashmessagesFactory',
             'VuFind\View\Helper\Bootstrap3\Highlight' => 'Laminas\ServiceManager\Factory\InvokableFactory',
@@ -81,6 +106,7 @@ return [
             'VuFind\View\Helper\Bootstrap3\Search' => 'Laminas\ServiceManager\Factory\InvokableFactory',
         ],
         'aliases' => [
+            'bulkAction' => 'VuFind\View\Helper\Bootstrap3\BulkAction',
             'copyToClipboardButton' => 'VuFind\View\Helper\Bootstrap3\CopyToClipboardButton',
             'flashmessages' => 'VuFind\View\Helper\Bootstrap3\Flashmessages',
             'highlight' => 'VuFind\View\Helper\Bootstrap3\Highlight',
@@ -121,7 +147,7 @@ return [
         ],
         'aliases' => [
             /**
-             * Icons can be assigned or overriden here
+             * Icons can be assigned or overridden here
              *
              * Format: 'icon' => [set:]icon[:extra_classes]
              * Icons assigned without set will use the defaultSet.
@@ -140,6 +166,8 @@ return [
             'cart-empty' => 'FontAwesome:times',
             'cart-remove' => 'FontAwesome:minus-circle',
             'cite' => 'FontAwesome:asterisk',
+            'cites' => 'Unicode:275D',
+            'cited-by' => 'Unicode:275E',
             'collapse' => 'Collapse:_', // uses the icons below
             'collapse-close' => 'FontAwesome:chevron-up',
             'collapse-open' => 'FontAwesome:chevron-down',
@@ -216,6 +244,11 @@ return [
             'format-videocassette' => 'FontAwesome:video-camera',
             'format-videodisc' => 'FontAwesome:laptop',
             'format-videoreel' => 'FontAwesome:video-camera',
+            'hierarchy-collapse' => 'Alias:facet-collapse',
+            'hierarchy-collection' => 'FontAwesome:folder-open-o',
+            'hierarchy-expand' => 'Alias:facet-expand',
+            'hierarchy-noncollapsible' => 'Alias:facet-noncollapsible',
+            'hierarchy-record' => 'FontAwesome:file-o',
             'hierarchy-tree' => 'FontAwesome:sitemap',
             'lightbox-close' => 'FontAwesome:times',
             'more' => 'FontAwesome:chevron-circle-right',
@@ -224,18 +257,25 @@ return [
             'my-account-notification' => 'Alias:notification',
             'my-account-warning' => 'Alias:warning',
             'notification' => 'FontAwesome:bell',
+            'offcanvas-hide-left' => 'FontAwesome:angle-right',
+            'offcanvas-hide-right' => 'FontAwesome:angle-left',
+            'offcanvas-show-left' => 'FontAwesome:angle-double-left',
+            'offcanvas-show-right' => 'FontAwesome:angle-double-right',
             'options' => 'FontAwesome:gear',
             'overdrive' => 'FontAwesome:download',
-            'overdrive-cancel-hold' => 'FontAwesome:flag-o',
+            'overdrive-cancel-hold' => 'Alias:ui-cancel',
             'overdrive-checkout' => 'FontAwesome:arrow-left',
             'overdrive-checkout-rtl' => 'FontAwesome:arrow-right',
             'overdrive-download' => 'FontAwesome:download',
+            'overdrive-edit-hold' => 'Alias:ui-edit',
+            'overdrive-edit-hold-suspension' => 'FontAwesome:calendar',
             'overdrive-help' => 'FontAwesome:question-circle',
-            'overdrive-place-hold' => 'FontAwesome:flag-o',
-            'overdrive-return' => 'FontAwesome:arrow-right',
-            'overdrive-return-rtl' => 'FontAwesome:arrow-left',
+            'overdrive-place-hold' => 'Alias:place-hold',
+            'overdrive-return' => 'FontAwesome:undo',
+            'overdrive-return-rtl' => 'FontAwesome:undo',
             'overdrive-sign-in' => 'FontAwesome:sign-in',
             'overdrive-success' => 'FontAwesome:check',
+            'overdrive-suspend-hold' => 'Alias:place-hold',
             'overdrive-warning' => 'Alias:warning',
             'page-first' => 'FontAwesome:angle-double-left',
             'page-first-rtl' => 'FontAwesome:angle-double-right',
@@ -312,6 +352,30 @@ return [
             'view-visual' => 'FontAwesome:th-large',
             'warning' => 'FontAwesome:exclamation-triangle',
         ],
+    ],
+    /**
+     * Html elements can be made sticky which means that they don't leave the screen on scrolling.
+     * You can make an element sticky by adding an array with the css selector to stickyElements.
+     * Warning! The order of the entries in the config will be used to order the elements while they are sticky.
+     * If you want to add extra classes to some child elements of sticky elements you can add an array with their
+     * css selectors and the classes to stickyChildrenClasses. The default class is "hidden".
+     * You can also add "min-width" and "max-width" to the configs so that the effect only applies on specific
+     * screen sizes.
+     * Examples:
+     */
+    'stickyElements' => [
+        // Navbar Banner on non-mobile screens
+        //["selector" => ".banner.container.navbar", "min-width" => 768],
+        // Searchbox on search home page
+        //["selector" => ".searchHomeContent"],
+        // Searchbox on other pages
+        //["selector" => ".search.container.navbar"],
+        // Breadcrumbs on non-mobile screens
+        //["selector" => ".breadcrumbs", "min-width" => 768]
+    ],
+    'stickyChildrenClasses' => [
+        // Hide search tab selection on mobile screens
+        //["selector" => ".searchForm > .nav.nav-tabs", "class" => "hidden", "max-width" => 767]
     ],
     'doctype' => 'HTML5',
 ];

@@ -71,10 +71,11 @@
         <?php if (!in_array($row['location'], $knownLocations)): ?>
               <?php $knownLocations[] = $row['location'] ?>
         <?php endif; ?>
-        <?php if (isset($row['status']) && $row['status'] != 'For reference' &&
-           $row['status'] != 'Lost' &&
-           $row['status'] != 'Missing' &&
-           $row['status'] != 'Permanent on loan'):
+        <?php $status = $row['availability']->getStatusDescription(); ?>
+        <?php if (isset($status) && $status != 'For reference' &&
+           $status != 'Lost' &&
+           $status != 'Missing' &&
+           $status != 'Permanent on loan'):
            $recallButtonCounter++;
         endif; ?>
         <?php if ($this->ils()->getDriverClass() == 'Bsz\ILS\Driver\DAIA'): //start of new/adis DAIA code?>

@@ -32,6 +32,7 @@ namespace VuFind\Search;
 use VuFindSearch\Query\AbstractQuery;
 use VuFindSearch\Query\Query;
 use VuFindSearch\Query\QueryGroup;
+use VuFindSearch\Query\WorkKeysQuery;
 
 use function call_user_func;
 use function count;
@@ -182,6 +183,9 @@ class UrlQueryHelper
             if (!empty($type)) {
                 $this->urlParams['type'] = $type;
             }
+        } elseif ($this->queryObject instanceof WorkKeysQuery) {
+            $this->urlParams['id'] = $this->queryObject->getId();
+            $this->urlParams['search'] = 'versions';
         }
     }
 
@@ -336,7 +340,7 @@ class UrlQueryHelper
     /**
      * Remove all filters.
      *
-     * @return string
+     * @return UrlQueryHelper
      */
     public function removeAllFilters()
     {
@@ -350,7 +354,7 @@ class UrlQueryHelper
     /**
      * Reset default filter state.
      *
-     * @return string
+     * @return UrlQueryHelper
      */
     public function resetDefaultFilters()
     {
@@ -470,7 +474,7 @@ class UrlQueryHelper
      *
      * @param string $filter Filter to add
      *
-     * @return string
+     * @return UrlQueryHelper
      */
     public function removeFilter($filter)
     {
@@ -484,7 +488,7 @@ class UrlQueryHelper
      *
      * @param string $p New page parameter (null for NO page parameter)
      *
-     * @return string
+     * @return UrlQueryHelper
      */
     public function setPage($p)
     {
@@ -497,7 +501,7 @@ class UrlQueryHelper
      *
      * @param string $s New sort parameter (null for NO sort parameter)
      *
-     * @return string
+     * @return UrlQueryHelper
      */
     public function setSort($s)
     {
@@ -515,7 +519,7 @@ class UrlQueryHelper
      *
      * @param string $handler new Handler.
      *
-     * @return string
+     * @return UrlQueryHelper
      */
     public function setHandler($handler)
     {
@@ -536,7 +540,7 @@ class UrlQueryHelper
      *
      * @param string $v New sort parameter (null for NO view parameter)
      *
-     * @return string
+     * @return UrlQueryHelper
      */
     public function setViewParam($v)
     {
@@ -552,7 +556,7 @@ class UrlQueryHelper
      *
      * @param string $l New limit parameter (null for NO limit parameter)
      *
-     * @return string
+     * @return UrlQueryHelper
      */
     public function setLimit($l)
     {
@@ -565,12 +569,28 @@ class UrlQueryHelper
     }
 
     /**
+     * Return HTTP parameters to render the current page with a different jumpto
+     * parameter.
+     *
+     * @param null|false|int $jumpto If results page is skipped when a search has only one hit
+     *
+     * @return UrlQueryHelper
+     */
+    public function setJumpto(null|false|int $jumpto): UrlQueryHelper
+    {
+        return $this->updateQueryString(
+            'jumpto',
+            $jumpto
+        );
+    }
+
+    /**
      * Return HTTP parameters to render the current page with a different set
      * of search terms.
      *
      * @param string $lookfor New search terms
      *
-     * @return string
+     * @return UrlQueryHelper
      */
     public function setSearchTerms($lookfor)
     {
@@ -595,14 +615,14 @@ class UrlQueryHelper
                     if (!$this->filtered($paramName, $paramValue2, $filter)) {
                         $retVal .= '<input type="hidden" name="' .
                             htmlspecialchars($paramName) . '[]" value="' .
-                            htmlspecialchars($paramValue2) . '">';
+                            htmlspecialchars($paramValue2 ?? '') . '">';
                     }
                 }
             } else {
                 if (!$this->filtered($paramName, $paramValue, $filter)) {
                     $retVal .= '<input type="hidden" name="' .
                         htmlspecialchars($paramName) . '" value="' .
-                        htmlspecialchars($paramValue) . '">';
+                        htmlspecialchars($paramValue ?? '') . '">';
                 }
             }
         }
@@ -660,7 +680,7 @@ class UrlQueryHelper
      *                          for no default).
      * @param bool   $clearPage Should we clear the page number, if any?
      *
-     * @return string
+     * @return UrlQueryHelper
      */
     protected function updateQueryString(
         $field,
@@ -669,7 +689,7 @@ class UrlQueryHelper
         $clearPage = false
     ) {
         $params = $this->urlParams;
-        if (null === $value || $value == $default) {
+        if (null === $value || $value === $default) {
             unset($params[$field]);
         } else {
             $params[$field] = $value;

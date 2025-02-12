@@ -35,6 +35,7 @@ use VuFindSearch\ParamBag;
 use function count;
 use function in_array;
 use function is_array;
+use function sprintf;
 
 /**
  * Solr Search Parameters
@@ -180,7 +181,7 @@ class Params extends \VuFind\Search\Base\Params
             $this->filterList
         );
         foreach ($filterList as $field => $filter) {
-            if ($orFacet = (substr($field, 0, 1) == '~')) {
+            if ($orFacet = str_starts_with($field, '~')) {
                 $field = substr($field, 1);
             }
             foreach ($filter as $value) {
@@ -188,7 +189,7 @@ class Params extends \VuFind\Search\Base\Params
                 if ($field == '#') {
                     $q = $value;
                 } elseif (
-                    substr($value, -1) == '*'
+                    str_ends_with($value, '*')
                     || preg_match('/\[[^\]]+\s+TO\s+[^\]]+\]/', $value)
                 ) {
                     // Special case -- allow trailing wildcards and ranges
@@ -398,6 +399,19 @@ class Params extends \VuFind\Search\Base\Params
     }
 
     /**
+     * Initialize facet settings for the new items page.
+     *
+     * @return void
+     */
+    public function initNewItemsFacets()
+    {
+        // Load Advanced settings if NewItems settings are missing (fallback to defaults):
+        if (!$this->initFacetList('NewItems', 'NewItems_Settings')) {
+            $this->initAdvancedFacets();
+        }
+    }
+
+    /**
      * Add filters to the object based on values found in the request object.
      *
      * @param \Laminas\Stdlib\Parameters $request Parameter object representing user
@@ -532,7 +546,7 @@ class Params extends \VuFind\Search\Base\Params
 
             foreach ($facets as $key => $value) {
                 // prefix keys with "facet" unless they already have a "f." prefix:
-                $fullKey = substr($key, 0, 2) == 'f.' ? $key : "facet.$key";
+                $fullKey = str_starts_with($key, 'f.') ? $key : "facet.$key";
                 $backendParams->add($fullKey, $value);
             }
             $backendParams->add('facet.mincount', 1);
@@ -557,7 +571,6 @@ class Params extends \VuFind\Search\Base\Params
             foreach ($shards as $current) {
                 $selectedShards[$current] = $allShards[$current];
             }
-            $shards = $selectedShards;
             $backendParams->add('shards', implode(',', $selectedShards));
         }
 
@@ -641,7 +654,7 @@ class Params extends \VuFind\Search\Base\Params
         $caseInsensitiveRegex = '/^\(\[(.*) TO (.*)\] OR \[(.*) TO (.*)\]\)$/';
         if (preg_match('/^\[(.*) TO (.*)\]$/', $value, $matches)) {
             // Simple case: [X TO Y]
-            $filter['displayText'] = $matches[1] . '-' . $matches[2];
+            $filter['displayText'] = $matches[1] . ' - ' . $matches[2];
         } elseif (preg_match($caseInsensitiveRegex, $value, $matches)) {
             // Case insensitive case: [x TO y] OR [X TO Y]; convert
             // only if values in both ranges match up!
@@ -649,7 +662,7 @@ class Params extends \VuFind\Search\Base\Params
                 strtolower($matches[3]) == strtolower($matches[1])
                 && strtolower($matches[4]) == strtolower($matches[2])
             ) {
-                $filter['displayText'] = $matches[1] . '-' . $matches[2];
+                $filter['displayText'] = $matches[1] . ' - ' . $matches[2];
             }
         } elseif ($this->facetHelper && in_array($field, $hierarchicalFacets)) {
             // Display hierarchical facet levels nicely

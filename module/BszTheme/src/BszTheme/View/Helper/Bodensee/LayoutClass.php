@@ -49,7 +49,7 @@ class LayoutClass extends \VuFind\View\Helper\Bootstrap3\LayoutClass
      *
      * @return string       CSS classes to apply
      */
-    public function __invoke($class)
+    public function __invoke($class, $hasSidebar = true)
     {
         switch ($class) {
         case 'maximized':

@@ -22,6 +22,7 @@
 namespace BszTheme\View\Helper\Bodensee;
 
 use Laminas\Config\Config;
+use VuFind\Tags\TagsService;
 
 /**
  * Record driver view helper
@@ -44,11 +45,12 @@ class Record extends \VuFind\View\Helper\Root\Record
      * @param array $localIsils
      */
     public function __construct(
+        TagsService $tagsService,
         $config = null,
         Config $iconconfig = null,
         $localIsils = []
     ) {
-        parent::__construct($config);
+        parent::__construct($tagsService, $config);
         $this->localIsils = $localIsils;
         $this->iconconfig = $iconconfig;
     }
@@ -137,7 +139,7 @@ class Record extends \VuFind\View\Helper\Root\Record
     public function getHanEmbed()
     {
         $han = $this->getView()->plugin('hanApi');
-        $han = $han($this->driver, 'hanAutoload');
+        $han = $han($this->driver, 'hanAutoload', 'record');
         if ($han->isActive()) {
             return $han->renderTemplate();
         }
