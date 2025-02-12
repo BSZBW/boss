@@ -40,6 +40,8 @@ namespace VuFind\Search\Favorites;
  */
 class Options extends \VuFind\Search\Base\Options
 {
+    use \VuFind\Config\Feature\ExplodeSettingTrait;
+
     /**
      * Constructor
      *
@@ -52,17 +54,22 @@ class Options extends \VuFind\Search\Base\Options
         $this->defaultSort = 'title';
         $this->sortOptions = [
             'title' => 'sort_title', 'author' => 'sort_author',
-            'year DESC' => 'sort_year', 'year' => 'sort_year asc',
+            'year DESC' => 'sort_year', 'year' => 'sort_year_asc',
+            'last_saved DESC' => 'sort_saved', 'last_saved' => 'sort_saved_asc',
         ];
         $config = $configLoader->get($this->mainIni);
         if (isset($config->Social->lists_default_limit)) {
             $this->defaultLimit = $config->Social->lists_default_limit;
         }
         if (isset($config->Social->lists_limit_options)) {
-            $this->limitOptions = explode(',', $config->Social->lists_limit_options);
+            $this->limitOptions = $this->explodeListSetting($config->Social->lists_limit_options);
         }
         if (isset($config->Social->lists_view)) {
             $this->listviewOption = $config->Social->lists_view;
+        }
+        if (!empty($config->List_Sorting)) {
+            $this->sortOptions = $config->List_Sorting->toArray();
+            $this->defaultSort = array_keys($this->sortOptions)[0];
         }
     }
 

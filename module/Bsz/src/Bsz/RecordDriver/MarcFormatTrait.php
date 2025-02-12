@@ -100,7 +100,7 @@ trait MarcFormatTrait
         foreach ($allowed as $a) {
             $a = str_replace(['/', '[', ']'], '', $a);
             $regex = '/^' . $a . '/i';
-            if (preg_match($regex, $value)) {
+            if (preg_match($regex, $value ?? '')) {
                 return true;
             }
         }

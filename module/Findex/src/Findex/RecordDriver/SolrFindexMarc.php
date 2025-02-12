@@ -1034,4 +1034,5 @@ class SolrFindexMarc extends SolrMarc implements Constants
         }
         return $first;
     }
+
 }

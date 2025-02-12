@@ -217,7 +217,7 @@ class Summon extends DefaultRecord implements Feature\PreviousUniqueIdInterface
      *
      * @return array
      */
-    public function getISBNs() : array
+    public function getISBNs()
     {
         if (isset($this->fields['ISBN']) && is_array($this->fields['ISBN'])) {
             return $this->fields['ISBN'];
@@ -230,7 +230,7 @@ class Summon extends DefaultRecord implements Feature\PreviousUniqueIdInterface
      *
      * @return array
      */
-    public function getISSNs() : array
+    public function getISSNs()
     {
         $issns = [];
         if (isset($this->fields['ISSN'])) {

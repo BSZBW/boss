@@ -24,7 +24,7 @@ class StringHelper extends AbstractHelper
     public function cleanEsc($string)
     {
         $string = $this->view->escapeHtml($string);
-        $string = trim($string);
+        $string = trim($string ?? '');
         $string = preg_replace('/:$|\/$|,$/', '', $string);
         $string = trim($string);
         return $string;

@@ -1,7 +1,17 @@
+<?php
+$hasCallNo = false;
+foreach ($this->statusItems as $item) {
+    if (isset($item['callnumber']) && strtolower($item['callnumber']) !== 'unknown') {
+        $hasCallNo = true;
+    }
+}
+?>
 <table class="table table-condensed">
   <tr>
     <th><?=$this->transEsc('Location')?></th>
+      <?php if ($hasCallNo): ?>
     <th><?=$this->transEsc('Call Number')?></th>
+      <?php endif; ?>
     <th><?=$this->transEsc('Status')?></th>
   </tr>
   <?php $count = 0; foreach ($this->statusItems as $item): ?>
@@ -10,7 +20,9 @@
 } // Show no more than 5 items?>
         <?php $class = 'text-success';
         $icon = 'fa-check';
-        if ($item['availability'] == false) {
+        $availability = $item['availability']->isAvailable();
+        $status = strtolower($item['availability']->getStatusDescription());
+        if ($availability == false) {
             $class = "text-danger";
             $icon = 'fa-times';
         }
@@ -29,25 +41,28 @@
           <?=$locationText?>
         <?php endif; ?>
       </td>
+        <?php if ($hasCallNo): ?>
       <td class="fullCallnumber">
+          <?php $callNo = (strtolower($item['callnumber']) == 'unknown') ? '' : $item['callnumber'] ?>
         <?php if ($this->callnumberHandler): ?>
-          <a href="<?=$this->url('alphabrowse-home') ?>?source=<?=$this->escapeHtmlAttr($this->callnumberHandler) ?>&amp;from=<?=$this->escapeHtmlAttr($item['callnumber']) ?>"><?=$this->escapeHtml($item['callnumber'])?></a>
+          <a href="<?=$this->url('alphabrowse-home') ?>?source=<?=$this->escapeHtmlAttr($this->callnumberHandler) ?>&amp;from=<?=$this->escapeHtmlAttr($callNo) ?>"><?=$this->escapeHtml($callNo)?></a>
         <?php else: ?>
-          <span><?= preg_replace('/^.*\s\|\s/', '', $this->string()->cleanEsc($item['callnumber'])); ?></span>
+          <span><?= preg_replace('/^.*\s\|\s/', '', $this->string()->cleanEsc($callNo)); ?></span>
         <?php endif; ?>
       </td>
+        <?php endif; ?>
       <td class="fullAvailability">
         <?php if (isset($item['use_unknown_message']) && $item['use_unknown_message']): ?>
          <span class="text-nowrap">
              <i class="fa <?=$this->escapeHtmlAttr($icon)?> <?=$class?>"></i>
              <?=$this->transEsc("status_unknown_message")?>
          </span>
-        <?php elseif ($item['availability']): ?>
+        <?php elseif ($availability): ?>
           <span class="text-success text-nowrap">
             <i class="fa <?=$this->escapeHtmlAttr($icon)?> <?=$class?>"></i>
             <?=($item['reserve'] == 'Y') ? $this->transEsc("On Reserve") : $this->transEsc("Available")?>
           </span>
-        <?php elseif (strtolower($item['status']) === "on loan"): ?>
+        <?php elseif (strtolower($status) === "on loan"): ?>
             <span class="text-danger text-nowrap">
                 <i class="fa <?=$this->escapeHtmlAttr($icon)?> <?=$class?>"></i>
                 <?=$this->transEsc("On loan")?>
@@ -65,7 +80,6 @@
            <br/>
             <?php // no idea why this is necessary here?>
             <?php $item['ilslink'] = str_replace('SOPAC', 'SMOPAC', $item['ilslink'])?>
-            <?php $status = strtolower($item['status'])?>
             <?php if ($status == 'on loan' && !empty($duedate)): ?>
                 <?=$this->transEsc('Due')?> <?=$this->escapeHtml($duedate)?>
                 <?php if (!empty($item['ilslink']) && !$this->client()->is('only_one_holds_button')): ?>
@@ -80,7 +94,7 @@
                 <?php endif; ?>
             <?php else: ?>
                 <?=$this->transEsc('daia-' . $status)?>
-                <?php if (!empty($item['ilslink']) && !$this->client()->is('only_one_holds_button') && $this->client()->is('always_place_hold') && (strtolower($item['status']) != 'for reference') || $this->client()->is('show_readingroom_link') && !$isStorageReadingroom) : ?>
+                <?php if (!empty($item['ilslink']) && !$this->client()->is('only_one_holds_button') && $this->client()->is('always_place_hold') && ($status != 'for reference') || $this->client()->is('show_readingroom_link') && !$isStorageReadingroom) : ?>
                     &ndash;
                     <a class="open-popup" data-name="KIOSK" href="<?=$item['ilslink']?>"><?=$this->transEsc('Place a Hold')?></a>
                 <?php endif; ?>

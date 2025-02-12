@@ -19,7 +19,7 @@ class SearchMemory extends \VuFind\View\Helper\Root\SearchMemory
      *
      * @return string
      */
-    public function getLastSearchUrl()
+    public function getLastSearchUrl(): ?string
     {
         $last = $this->memory->retrieveSearch();
         if (!empty($last)) {

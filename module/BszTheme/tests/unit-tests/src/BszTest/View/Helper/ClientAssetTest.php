@@ -39,7 +39,7 @@ class ClientAssetTest extends TestCase
 
     public function testLibraryLogoViaSigel()
     {
-        $libraryTest = new LibraryTest();
+        $libraryTest = new LibraryTest('');
         $library = $libraryTest->getLibrary();
         $asset = new ClientAsset('swb', 'http://foo.bar', $library);
         $this->assertEquals($asset->getLogo(), 'logo/libraries/16.jpg');

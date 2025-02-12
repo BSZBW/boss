@@ -88,6 +88,9 @@ class Flashmessages extends AbstractHelper
      */
     public function __invoke()
     {
+        if (!empty($this->getView()->layout()->lightboxChild)) {
+            return '';
+        }
         $html = '';
         foreach ($this->namespaces as $ns) {
             $messages = array_merge(
@@ -130,7 +133,7 @@ class Flashmessages extends AbstractHelper
                         $default = $msg['default'] ?? null;
 
                         // Translate the message:
-                        $message = $translate($message, $tokens, $default);
+                        $message = $translate($message, $tokens, $default, $msg['icu'] ?? false);
                     }
                     // Escape the message unless requested not to:
                     if (!$msgHtml) {

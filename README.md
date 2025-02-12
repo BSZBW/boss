@@ -2,7 +2,7 @@
 
 ## Introduction
 BOSS is a fork of the VuFind project with adaptions for the German library system.
-BOSS is currently based on VuFind 6. BOSS is designed to support many local view
+BOSS is currently based on VuFind 10. BOSS is designed to support many local view
 with only one theme to keep it simple and reduce the cost of maintenance. 
 
 VuFind is an open source discovery environment for searching a collection of

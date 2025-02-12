@@ -51,7 +51,6 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
         'deleteRecordComment' => DeleteRecordComment::class,
         'doiLookup' => DoiLookup::class,
         'getACSuggestions' => GetACSuggestions::class,
-        'getFacetData' => GetFacetData::class,
         'getIlsStatus' => GetIlsStatus::class,
         'getItemStatuses' => GetItemStatuses::class,
         'getLibraryPickupLocations' => GetLibraryPickupLocations::class,
@@ -65,6 +64,7 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
         'getResolverLinks' => GetResolverLinks::class,
         'getResultCount' => GetResultCount::class,
         'getSaveStatuses' => GetSaveStatuses::class,
+        'getSearchResults' => GetSearchResults::class,
         'getSideFacets' => GetSideFacets::class,
         'getUserFines' => GetUserFines::class,
         'getUserHolds' => GetUserHolds::class,
@@ -79,7 +79,6 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
         'relaisOrder' => RelaisOrder::class,
         'systemStatus' => SystemStatus::class,
         'tagRecord' => TagRecord::class,
-        //'dedupCheckbox' => DedupCheckbox::class,
     ];
 
     /**
@@ -93,7 +92,6 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
         DeleteRecordComment::class => DeleteRecordCommentFactory::class,
         DoiLookup::class => DoiLookupFactory::class,
         GetACSuggestions::class => GetACSuggestionsFactory::class,
-        GetFacetData::class => GetFacetDataFactory::class,
         GetIlsStatus::class => GetIlsStatusFactory::class,
         GetItemStatuses::class => GetItemStatusesFactory::class,
         GetLibraryPickupLocations::class => AbstractIlsAndUserActionFactory::class,
@@ -108,6 +106,7 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
         GetResolverLinks::class => GetResolverLinksFactory::class,
         GetResultCount::class => GetResultCountFactory::class,
         GetSaveStatuses::class => GetSaveStatusesFactory::class,
+        GetSearchResults::class => GetSearchResultsFactory::class,
         GetSideFacets::class => GetSideFacetsFactory::class,
         GetUserFines::class => GetUserFinesFactory::class,
         GetUserHolds::class => AbstractIlsAndUserActionFactory::class,
@@ -123,7 +122,6 @@ class PluginManager extends \VuFind\ServiceManager\AbstractPluginManager
         RelaisOrder::class => AbstractRelaisActionFactory::class,
         SystemStatus::class => SystemStatusFactory::class,
         TagRecord::class => TagRecordFactory::class,
-        //DedupCheckbox::class => DedupCheckboxFactory::class,
     ];
 
     /**

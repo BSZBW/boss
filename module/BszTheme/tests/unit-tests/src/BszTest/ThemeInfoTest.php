@@ -35,7 +35,7 @@ class ThemeInfoTest extends TestCase
         $this->assertArrayHasKey('css', $info['bodensee']);
         $this->assertArrayHasKey('favicon', $info['bodensee']);
         $this->assertEquals(count($info['bodensee']['css']), 1);
-        $this->assertEquals($info['bodensee']['css'][0], 'wlb.css');
+        $this->assertEquals($info['bodensee']['css'][0]['file'], 'wlb.css');
         $this->assertArrayHasKey('js', $info['bodensee']);
         $this->assertTrue(in_array('additions.js', $info['bodensee']['js']));
     }

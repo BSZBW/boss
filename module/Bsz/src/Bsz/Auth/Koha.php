@@ -22,10 +22,10 @@
 namespace Bsz\Auth;
 
 use Bsz\Config\Libraries;
-use MongoDB\Driver\Exception\AuthenticationException;
-use VuFind\Exception\Auth as AuthException;
 use Laminas\Http\Client;
-use \Laminas\Http\Client as HttpClient;
+use Laminas\Http\Client as HttpClient;
+use VuFind\Db\Entity\UserEntityInterface;
+use VuFind\Exception\Auth as AuthException;
 
 class Koha extends \VuFind\Auth\AbstractBase
 {
@@ -51,15 +51,16 @@ class Koha extends \VuFind\Auth\AbstractBase
     /**
      * @param $request
      *
-     * @return \VuFind\Db\Row\User|\VuFind\Db\Table\UserRow
+     * @return UserEntityInterface
      * @throws AuthException
      */
-    public function authenticate($request)
+    public function authenticate($request): UserEntityInterface
     {
         if ($this->validateCredentials($request)) {
             $username =  trim($request->getPost()->get('username'));
             // If we made it this far, we should log in the user!
-            $user = $this->getUserTable()->getByUsername($username);
+            //$user = $this->getUserTable()->getByUsername($username);
+            $user = $this->getOrCreateUserByUsername($username);
 
             $user->save();
             return $user;
@@ -120,16 +121,12 @@ class Koha extends \VuFind\Auth\AbstractBase
         $json_response = $response->getContent();
         $data_response = json_decode($json_response);
 
-        if ($response->getStatusCode() === 200) {
-            if ($data_response->auth == true) {
-                return true;
-            } else {
-                return false;
-            }
+        if ($response->getStatusCode() === 200 && $data_response->auth == true) {
+            return true;
         } elseif ($response->getStatusCode() === 403) {
             throw new AuthException('Invalid API token: '.$data_response->detail);
         } else {
-            throw new AuthException($data_response->detail);
+            throw new AuthException($data_response->message);
         }
     }
 

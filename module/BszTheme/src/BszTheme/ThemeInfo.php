@@ -56,13 +56,11 @@ class ThemeInfo extends \VuFindTheme\ThemeInfo
             $this->allThemeInfo = [];
             $currentTheme = $this->getTheme();
             do {
-                $this->allThemeInfo[$currentTheme]
-                    = include $this->getThemeConfig($currentTheme);
-
+                $this->loadThemeConfig($currentTheme);
                 $currentTheme = $this->allThemeInfo[$currentTheme]['extends'];
             } while ($currentTheme);
 
-            $this->modifyArray($this->allThemeInfo);
+            $this->allThemeInfo = $this->modify($this->allThemeInfo);
 //            $this->allThemeInfo[$currentTheme]['favicon'] = $this->addClientFavicon();
 //            $css = $this->allThemeInfo[$currentTheme]['css'] ?? [];
 //            $css[] = $this->addClientStylesheet();
@@ -127,6 +125,31 @@ class ThemeInfo extends \VuFindTheme\ThemeInfo
                 $config[$k] = $this->addClientFavicon();
             }
         }
+        array_filter($config);
+    }
+
+    protected function modify(array $config): array
+    {
+        $retVal = [];
+        foreach ($config as $k => $v) {
+            if (is_array($v)) {
+                $v1 = $this->modify($v);
+                if (!empty($v1)) {
+                    if (is_string($k)) {
+                        $retVal[$k] = $v1;
+                    }else {
+                        $retVal[] = $v1;
+                    }
+                }
+            }else if ('{{client_stylesheet}}' == $v) {
+                $retVal[$k] = $this->addClientStylesheet();
+            } else if ('{{client_favicon}}' == $v) {
+                $retVal[$k] = $this->addClientFavicon();
+            } else if ('compiled.css' != $v) {
+                $retVal[$k] = $v;
+            }
+        }
+        return $retVal;
     }
 
     /**

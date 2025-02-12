@@ -73,4 +73,4 @@ class Params extends \VuFind\Search\Solr\Params
             $this->initAdvancedFacets();
         }
     }
-  }
+}

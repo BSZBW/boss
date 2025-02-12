@@ -74,7 +74,7 @@
                         <?php endif; ?>
                     </li>
                 <?php endif; ?>
-                <?php if (strlen($this->client()->getWebsite('adis')) > 0): ?>
+                <?php if (null !== $this->client()->getWebsite('adis') && strlen($this->client()->getWebsite('adis')) > 0): ?>
                     <li>
                         <a class="external"
                            href="<?= $this->client()->getWebsite('adis') ?>"><i

@@ -10,6 +10,7 @@ $this->layout()->breadcrumbs = '<li>' . $this->searchMemory()->getLastSearchLink
     <?=$this->flashmessages()?>
     <form class="form-inline" action="<?=$this->url('cart-processor')?>" method="post"  name="cartForm" data-lightbox-onsubmit="cartFormHandler">
         <input type="hidden" id="dropdown_value"/>
+        <input type="hidden" name="redirectInLightbox" value="true">
         <?php if (!$this->cart()->isEmpty()): ?>
             <div class="cart-controls clearfix">
                 <div class="checkbox pull-left flip">

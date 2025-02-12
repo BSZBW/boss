@@ -45,6 +45,7 @@ class LibraryTest extends TestCase
             'email' => '',
             'isil_availability' => 'DE-16-1',
             'regex' => '/@[a-zA-z0-9\.-]*/',
+            'hide_costs' => false
         ];
     }
 

@@ -48,6 +48,16 @@ use function count;
 class Params extends AbstractEDSParams
 {
     /**
+     * Fields that the EDS API will always filter multiple values using OR, not AND.
+     *
+     * @var array
+     */
+    protected $forcedOrFields = [
+        'ContentProvider',
+        'SourceType',
+    ];
+
+    /**
      * Settings for the date facet only
      *
      * @var array
@@ -93,6 +103,13 @@ class Params extends AbstractEDSParams
      * @var bool
      */
     protected $checkboxFacetsAugmented = false;
+
+    /**
+     * Default query adapter class (override to use EDS version)
+     *
+     * @var string
+     */
+    protected $queryAdapterClass = QueryAdapter::class;
 
     /**
      * Constructor
@@ -223,9 +240,9 @@ class Params extends AbstractEDSParams
     public function getFacetLabel($field, $value = null, $default = null)
     {
         // Also store Limiter/Search Mode IDs/Values in the config file
-        if (substr($field, 0, 6) == 'LIMIT|') {
+        if (str_starts_with($field, 'LIMIT|')) {
             $facetId = substr($field, 6);
-        } elseif (substr($field, 0, 11) == 'SEARCHMODE|') {
+        } elseif (str_starts_with($field, 'SEARCHMODE|')) {
             $facetId = substr($field, 11);
         } else {
             $facetId = $field;
@@ -312,7 +329,7 @@ class Params extends AbstractEDSParams
         $showField = [$this->getOptions(), 'getHumanReadableFieldName'];
 
         // Build display query:
-        return QueryAdapter::display($this->getQuery(), $translate, $showField);
+        return $this->getQueryAdapter()->display($this->getQuery(), $translate, $showField);
     }
 
     /**

@@ -23,7 +23,7 @@ $config = [
     'extends' => 'bootstrap3',
     'favicon' => '{{client_favicon}}',
     'css' => [
-        '{{client_stylesheet}}'
+        ['file' => '{{client_stylesheet}}']
     ],
     'js' => [
         'additions.js',

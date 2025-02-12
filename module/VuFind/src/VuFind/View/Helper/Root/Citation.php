@@ -37,6 +37,7 @@ use function count;
 use function function_exists;
 use function in_array;
 use function is_array;
+use function sprintf;
 use function strlen;
 
 /**
@@ -726,7 +727,7 @@ class Citation extends \Laminas\View\Helper\AbstractHelper implements Translator
             }
             array_push($newwords, $word);
 
-            $followsColon = substr($word, -1) == ':';
+            $followsColon = str_ends_with($word, ':');
         }
 
         // We've dealt with capitalization of words; now we need to deal with

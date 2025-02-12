@@ -168,7 +168,6 @@ class Upgrade
         $this->upgradeSms();
         $this->upgradeSummon();
         $this->upgradePrimo();
-        $this->upgradeWorldCat();
 
         // The previous upgrade routines may have added values to permissions.ini,
         // so we should save it last. It doesn't have its own upgrade routine.
@@ -621,23 +620,12 @@ class Upgrade
         }
 
         // Warn the user about deprecated WorldCat settings:
-        if (isset($newConfig['WorldCat']['LimitCodes'])) {
-            unset($newConfig['WorldCat']['LimitCodes']);
+        if (isset($newConfig['WorldCat'])) {
+            unset($newConfig['WorldCat']);
             $this->addWarning(
-                'The [WorldCat] LimitCodes setting never had any effect and has been'
-                . ' removed.'
+                'The [WorldCat] section of config.ini has been removed following'
+                . ' the shutdown of the v1 WorldCat search API; use WorldCat2.ini instead.'
             );
-        }
-        $badKeys
-            = ['id', 'xISBN_token', 'xISBN_secret', 'xISSN_token', 'xISSN_secret'];
-        foreach ($badKeys as $key) {
-            if (isset($newConfig['WorldCat'][$key])) {
-                unset($newConfig['WorldCat'][$key]);
-                $this->addWarning(
-                    'The [WorldCat] ' . $key . ' setting is no longer used and'
-                    . ' has been removed.'
-                );
-            }
         }
         if (
             isset($newConfig['Record']['related'])
@@ -707,6 +695,25 @@ class Upgrade
                 = (!str_contains($newConfig['Syndetics']['url'], 'https://'))
                 ? '' : 1;
             unset($newConfig['Syndetics']['url']);
+        }
+
+        // Convert spellchecker 'simple' option
+        if (
+            // If 'simple' is set
+            isset($newConfig['Spelling']['simple']) &&
+            // and 'dictionaries' is set to default
+            ($newConfig['Spelling']['dictionaries'] == ['default', 'basicSpell'])
+        ) {
+            $newConfig['Spelling']['dictionaries'] = $newConfig['Spelling']['simple']
+                ? ['basicSpell'] : ['default', 'basicSpell'];
+        }
+        unset($newConfig['Spelling']['simple']);
+
+        // Update mail config
+        if (isset($newConfig['Mail']['require_login'])) {
+            $require_login = $newConfig['Mail']['require_login'];
+            unset($newConfig['Mail']['require_login']);
+            $newConfig['Mail']['email_action'] = $require_login ? 'require_login' : 'enabled';
         }
 
         // Translate obsolete permission settings:
@@ -1214,59 +1221,6 @@ class Upgrade
     }
 
     /**
-     * Upgrade WorldCat.ini.
-     *
-     * @throws FileAccessException
-     * @return void
-     */
-    protected function upgradeWorldCat()
-    {
-        // If WorldCat is disabled in our current configuration, we don't need to
-        // load any WorldCat-specific settings:
-        if (!isset($this->newConfigs['config.ini']['WorldCat']['apiKey'])) {
-            return;
-        }
-
-        // we want to retain the old installation's search settings exactly as-is
-        $groups = [
-            'Basic_Searches', 'Advanced_Searches', 'Sorting',
-        ];
-        $this->applyOldSettings('WorldCat.ini', $groups);
-
-        // we need to fix an obsolete search setting for authors
-        foreach (['Basic_Searches', 'Advanced_Searches'] as $section) {
-            $new = [];
-            foreach ($this->newConfigs['WorldCat.ini'][$section] as $k => $v) {
-                if ($k == 'srw.au:srw.pn:srw.cn') {
-                    $k = 'srw.au';
-                }
-                $new[$k] = $v;
-            }
-            $this->newConfigs['WorldCat.ini'][$section] = $new;
-        }
-
-        // Deal with deprecated related record module.
-        $newConfig = & $this->newConfigs['WorldCat.ini'];
-        if (
-            isset($newConfig['Record']['related'])
-            && in_array('WorldCatEditions', $newConfig['Record']['related'])
-        ) {
-            $newConfig['Record']['related'] = array_diff(
-                $newConfig['Record']['related'],
-                ['WorldCatEditions']
-            );
-            $this->addWarning(
-                'The WorldCatEditions related record module is no longer '
-                . 'supported due to OCLC\'s xID API shutdown.'
-                . ' It has been removed from your settings.'
-            );
-        }
-
-        // save the file
-        $this->saveModifiedConfig('WorldCat.ini');
-    }
-
-    /**
      * Does the specified properties file contain any meaningful
      * (non-empty/non-comment) lines?
      *
@@ -1279,7 +1233,7 @@ class Upgrade
         // Does the file contain any meaningful lines?
         foreach (file($src) as $line) {
             $line = trim($line);
-            if (!empty($line) && substr($line, 0, 1) != '#') {
+            if ('' !== $line && !str_starts_with($line, '#')) {
                 return true;
             }
         }
@@ -1472,16 +1426,16 @@ class Upgrade
 
             // Is the current line a comment?  If so, add to the currentComments
             // string. Note that we treat blank lines as comments.
-            if (substr($trimmed, 0, 1) == ';' || empty($trimmed)) {
+            if ('' === $trimmed || str_starts_with($trimmed, ';')) {
                 $comments .= $line;
             } elseif (
-                substr($trimmed, 0, 1) == '['
+                str_starts_with($trimmed, '[')
                 && ($closeBracket = strpos($trimmed, ']')) > 1
             ) {
                 // Is the current line the start of a section?  If so, create the
                 // appropriate section of the return value:
                 $section = substr($trimmed, 1, $closeBracket - 1);
-                if (!empty($section)) {
+                if ('' !== $section) {
                     // Grab comments at the end of the line, if any:
                     if (($semicolon = strpos($trimmed, ';')) !== false) {
                         $inline = trim(substr($trimmed, $semicolon));
@@ -1498,7 +1452,7 @@ class Upgrade
                 // Is the current line a setting?  If so, add to the return value:
                 $set = trim(substr($trimmed, 0, $equals));
                 $set = trim(str_replace('[]', '', $set));
-                if (!empty($section) && !empty($set)) {
+                if ('' !== $section && '' !== $set) {
                     // Grab comments at the end of the line, if any:
                     if (($semicolon = strpos($trimmed, ';')) !== false) {
                         $inline = trim(substr($trimmed, $semicolon));

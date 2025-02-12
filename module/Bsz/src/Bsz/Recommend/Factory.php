@@ -102,8 +102,8 @@ class Factory
         $config->set('HTML.Allowed', 'p, a, br, strong, em, ul, ol, li, b, i');
         $config->set('HTML.AllowedAttributes', 'a.href');
         $config->set('HTML.TargetBlank', true);
-        $config->set('HTML.Linkify', true);
-        $config->set('HTML.AutoParagraph', true);
+        $config->set('AutoFormat.Linkify', true);
+        $config->set('AutoFormat.AutoParagraph', true);
         $purifier = new \HTMLPurifier($config);
 
         $rss->attachHtmlPurifier($purifier);

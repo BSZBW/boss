@@ -99,6 +99,11 @@ class SolrGviMarc extends SolrMarc implements Constants
         return array_unique($retval);
     }
 
+    public function getAllSubjectHeadingsFlattened()
+    {
+        return $this->getAllSubjectHeadings();
+    }
+
     /**
      * Get all subjects associated with this item. They are unique.
      * @return array
