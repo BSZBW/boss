@@ -199,4 +199,9 @@ class BszController extends AbstractBase
         ]);
         return $view;
     }
+
+    public function orderAction()
+    {
+        return $this->createViewModel();
+    }
 }
