@@ -1,10 +1,10 @@
 <?php
-$this->layout()->breadcrumbs .= '<li class="active">' . $this->transEsc('ILL::Resigning') . '</li>';
+$this->layout()->breadcrumbs .= '<li class="active">' . $this->transEsc('ILL::order') . '</li>';
 $this->headScript()->appendFile("ill.js");
-$this->headTitle()->setPrefix($this->transEsc('ILL::Resigning'));
+$this->headTitle()->setPrefix($this->transEsc('ILL::order'));
 ?>
 <div class="col-sm-12 col-md-8">
-    <h3><?=$this->transEsc('ILL::resigning_header')?></h3>
+    <h3><?=$this->transEsc('ILL::order')?></h3>
 
     <form class="form-horizontal" method="GET" action="<?=$this->url('search-results')?>">
         <input type="hidden" value="AND" name="join" />
@@ -12,10 +12,6 @@ $this->headTitle()->setPrefix($this->transEsc('ILL::Resigning'));
         <input type="hidden" name="hiddenFilters[]" value="-consortium:FL" />
         <input type="hidden" name="filter[]" value="~consortium:DE-576">
 
-        <?=$this->context($this)->renderInContext('bsz/input.phtml', [
-            'title' => 'PPN',
-            'field'  => 'id',
-            'value'  => ''])?>
         <?=$this->context($this)->renderInContext('bsz/input.phtml', [
             'title' => 'adv_search_title',
             'field'  => 'Title',
@@ -25,20 +21,24 @@ $this->headTitle()->setPrefix($this->transEsc('ILL::Resigning'));
             'field'  => 'Author',
             'value'  => ''])?>
         <?=$this->context($this)->renderInContext('bsz/input.phtml', [
-            'title' => 'adv_search_publisher',
-            'field'  => 'publisher',
-            'value'  => ''])?>
-        <?=$this->context($this)->renderInContext('bsz/input.phtml', [
             'title' => 'adv_search_isn',
             'field'  => 'ISN',
             'value'  => ''])?>
         <?=$this->context($this)->renderInContext('bsz/input.phtml', [
-            'title' => 'adv_search_zdbid',
-            'field'  => 'ZDB',
-            'value'  => ''])?>
-        <?=$this->context($this)->renderInContext('bsz/input.phtml', [
             'title' => 'adv_search_year',
             'field'  => 'year',
+            'value'  => ''])?>
+        <?=$this->context($this)->renderInContext('bsz/input.phtml', [
+            'title' => 'adv_search_publisher',
+            'field'  => 'publisher',
+            'value'  => ''])?>
+        <?=$this->context($this)->renderInContext('bsz/input.phtml', [
+            'title' => 'PPN',
+            'field'  => 'id',
+            'value'  => ''])?>
+        <?=$this->context($this)->renderInContext('bsz/input.phtml', [
+            'title' => 'adv_search_zdbid',
+            'field'  => 'ZDB',
             'value'  => ''])?>
 
         <div class="form-group form-group-sm">
