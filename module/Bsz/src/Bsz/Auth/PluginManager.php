@@ -21,26 +21,21 @@
 
 namespace Bsz\Auth;
 
-use Interop\Container\ContainerInterface;
+use Laminas\ServiceManager\Factory\InvokableFactory;
 use VuFind\Auth\AlmaDatabase;
 use VuFind\Auth\CAS;
-use Bsz\Auth\ChoiceAuth;
-use Bsz\Auth\ChoiceAuthFactory;
 use VuFind\Auth\Database;
 use VuFind\Auth\Email;
 use VuFind\Auth\EmailFactory;
 use VuFind\Auth\Facebook;
 use VuFind\Auth\FacebookFactory;
 use VuFind\Auth\ILS;
-use VuFind\Auth\IlsFactory;
+use VuFind\Auth\ILSFactory;
 use VuFind\Auth\LDAP;
 use VuFind\Auth\MultiAuth;
 use VuFind\Auth\MultiAuthFactory;
 use VuFind\Auth\MultiILS;
-use Bsz\Auth\Shibboleth;
-use Bsz\Auth\Factory;
 use VuFind\Auth\SIP2;
-use Laminas\ServiceManager\Factory\InvokableFactory;
 
 class PluginManager extends \VuFind\Auth\PluginManager
 {
