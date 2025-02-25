@@ -59,7 +59,7 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
 
     public function __construct(\VuFind\Date\Converter $converter, $isil, $baseUrl = '')
     {
-        $this->dateConverter = $converter;
+        parent::__construct($converter);
         $this->isil = $isil;
         if (strlen($baseUrl) > 0) {
             $this->baseUrl = $baseUrl;
@@ -393,7 +393,8 @@ class DAIAbsz extends \VuFind\ILS\Driver\DAIA
                 'location' => 'Dokumentenlieferdienst',
                 'ilslink' => 'https://elk-wue.bsz-bw.de/cgi-bin/koha/opac-request-article.pl?biblionumber=' . $doc_id,
                 'link' => 'https://elk-wue.bsz-bw.de/cgi-bin/koha/opac-request-article.pl?biblionumber=' . $doc_id,
-                'availability' => 'article',
+                'availability' => true,
+                'type' => 'article',
                 'status' => 'Available',
                 'checkILLRequest' => true,
                 'checkStorageRetrievalRequest' => true,

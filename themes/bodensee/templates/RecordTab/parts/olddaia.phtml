@@ -1,6 +1,9 @@
 <?php $check = (isset($row['check']) && $row['check']); ?>
 <?php $checkStorageRetrievalRequest = (isset($row['checkStorageRetrievalRequest']) && $row['checkStorageRetrievalRequest']); ?>
 <?php $checkILLRequest = (isset($row['checkILLRequest']) && $row['checkILLRequest']); ?>
+<?php $available = $row['availability']->isAvailable(); ?>
+<?php $status = $row['availability']->getStatusDescription(); ?>
+<?php $type = $row['type'] ?? ''; ?>
 <?php if (!$this->driver->isElectronicBook()): ?>
     <div class="col-lg-4 col-md-6 col-sm-12">
     <dl class="dl-horizontal">
@@ -21,31 +24,31 @@
 
         <dt><?=$this->transEsc('live_status')?></dt>
 
-        <?php if (isset($row['use_unknown_message']) && $row['use_unknown_message']): ?>
+        <?php if ($row['availability']->availabilityAsString() == 'unknown'): ?>
             <dd class="text-muted"><?=$this->transEsc("status_unknown_message")?></dd>
         <?php else: ?>
-                <?php if ($row['availability'] && $row['availability'] !== 'online'): ?>
+                <?php if ($available && $type !== 'online'): ?>
                   <?php /* Begin Available Items (Holds) */ ?>
                     <dd class="text-success"><?=$this->transEsc("Available")?><link property="availability" href="http://schema.org/InStock" /></dd>
                     <dd>
-                  <?// output of link removed because there were no link text - see history ?>
+                  <?php // output of link removed because there were no link text - see history ?>
                   <?php if (isset($row['storageRetrievalRequestLink']) && $row['storageRetrievalRequestLink']): ?>
                     <a class="hasicon <?=$checkStorageRetrievalRequest ? 'checkStorageRetrievalRequest ' : ''?> external hasicon placeStorageRetrievalRequest" data-name="aDIS BOSS2" data-size="md" href="<?=$this->recordLink()->getRequestUrl($row['storageRetrievalRequestLink'])?>" title="<?=$this->transEsc($checkStorageRetrievalRequest ? "storage_retrieval_request_check_text" : "storage_retrieval_request_place_text")?>"><i class="fa fa-flag"></i>&nbsp;<?=$this->transEsc($checkStorageRetrievalRequest ? "storage_retrieval_request_check_text" : "storage_retrieval_request_place_text")?></a>
                   <?php endif; ?>
                   <?php if (isset($row['ILLRequestLink']) && $row['ILLRequestLink']): ?>
                     <a class="hasicon <?=$checkILLRequest ? 'checkILLRequest ' : ''?>inlineblock external placeILLRequest" data-name="aDIS BOSS2" data-size="md" href="<?=$this->recordLink()->getRequestUrl($row['ILLRequestLink'])?>"  title="<?=$this->transEsc($checkILLRequest ? "ill_request_check_text" : "ill_request_place_text")?>"><i class="fa fa-flag"></i>&nbsp;<?=$this->transEsc($checkILLRequest ? "ill_request_check_text" : "ill_request_place_text")?></a>
                   <?php endif; ?>
-                  <?php if ($this->client()->is('always_place_hold') && $row['availability'] !== 'article'): ?>
+                  <?php if ($this->client()->is('always_place_hold') && $type !== 'article'): ?>
                     <a class="<?=$check ? 'checkRequest' : ''?> external hasicon inlineblock " data-name="aDIS BOSS2" data-size="md" href="<?=$this->recordLink()->getRequestUrl($row['link'])?>"><i class="fa fa-flag"></i>&nbsp;<?=$this->transEsc($check ? "Check Recall" : "Recall This")?></a>
                   <?php endif; ?>
                    </dd>
-                <?php elseif($row['availability'] && $row['availability'] === 'online'): ?>
+                <?php elseif($available && $type === 'online'): ?>
                     <dd class="text-success"><?=$this->transEsc("Available Online")?><link property="availability" href="http://schema.org/InStock" /></dd>
                     <dd><a href=<?=$row['link']?> class="external hasicon"><i class="fa fa-globe"></i> <?=$this->transEsc('Order Article')?></a></dd>
 
                 <?php else: ?>
                   <?php /* Begin Unavailable Items (Recalls) */ ?>
-                  <dd class="text-danger"><?php if (strlen($row['status']) > 0):?> <?= $this->transEsc($row['status']) ?> <?php else: ?> <?= $this->transEsc("unavailable") ?> <?php endif; ?>
+                  <dd class="text-danger"><?php if (strlen($status) > 0):?> <?= $this->transEsc($status) ?> <?php else: ?> <?= $this->transEsc("unavailable") ?> <?php endif; ?>
                   <?php if (isset($row['returnDate']) && $row['returnDate']): ?>&ndash; <span class="small"><?=$this->escapeHtml($row['returnDate'])?></span><?php endif; ?>
                   <?php if (isset($row['duedate']) && $row['duedate']): ?>
                     &ndash; <span class="small"><?=$this->transEsc("Due")?>: <?=$this->escapeHtml($row['duedate'])?></span>
@@ -69,7 +72,7 @@
             <?php if (isset($row['about']) && count($row['about']) > 0): ?>
                 <dd> <?=$this->transEsc(implode(', ', $row['about']))?></dd>
             <?php endif; ?>
-            <?php if (isset($row['availability']) && $row['availability'] === 'article'): ?>
+            <?php if ($type === 'article'): ?>
                 <dt></dt>
                 <dd><a href=<?=$row['link']?> class="external hasicon"><i class="fa fa-globe"></i> <?=$this->transEsc('Order Article')?></a></dd>
             <?php endif; ?>
