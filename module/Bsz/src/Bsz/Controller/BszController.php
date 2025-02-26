@@ -202,6 +202,9 @@ class BszController extends AbstractBase
 
     public function orderAction()
     {
+        if (isset($_SESSION['fernleihe']['bestellid'])) {
+            unset($_SESSION['fernleihe']['bestellid']);
+        }
         return $this->createViewModel();
     }
 }
