@@ -1,0 +1,40 @@
+.externalLink {
+    &:before {
+        content: '\f0ac';
+        font-family: 'FontAwesome';
+        display: inline-block;
+        padding-right: 0.3rem;
+
+    }
+}
+.internalLink {
+    &:before {
+        content: '\00BB';
+        display: inline-block;
+        padding-right: 0.5rem;
+    }
+}
+.searchLink {
+    &:before {
+      content: '\f002';
+        font-family: 'FontAwesome';
+        display: inline-block;
+        padding-right: 0.3rem;
+    }
+}
+a.person, a.author {
+    &:before {
+        content: '\f007';
+        font-family: 'FontAwesome';
+        display: inline-block;
+        padding-right: 0.3rem;
+    }
+}
+a.corporation {
+    &:before {
+        content: '\f0f8';
+        font-family: 'FontAwesome';
+        display: inline-block;
+        padding-right: 0.3rem;
+    }
+}

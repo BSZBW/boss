@@ -1,0 +1,34 @@
+<?php $suggestions = $this->recommend->getSuggestions();
+
+
+if (!empty($suggestions)): ?>
+    <?php $external = false ?>
+    <div class="alert alert-info">
+        <p><?= $this->transEsc('switchquery_intro') ?></p>
+        <ul>
+            <?php foreach ($suggestions as $desc => $query): ?>
+                <li><?= $this->transEsc($desc) ?>: <a
+                            href="<?= $this->recommend->getResults()->getUrlQuery()->setSearchTerms($query) ?>"><?= $this->escapeHtml($query) ?></a>.
+                </li>
+            <?php endforeach; ?>
+            <li><?= $this->transEsc('switchquery_removewords') ?></li>
+            <li><?= $this->transEsc('switchquery_typos') ?></li>
+            <li><?= $this->transEsc('switchquery_other') ?></li>
+        </ul>
+        <?php if ($this->searchTabs()->isILL($this->searchClassId)): ?>
+            <?php
+            $library = $this->libraries()->getFirstActive($this->client()->getIsils());
+            $url = $this->url('record-freeform');
+
+            if (isset($library) && $library->hasCustomUrl()) {
+                $url = $library->getCustomUrl();
+                $external = true;
+            }
+            ?>
+            <p><?= $this->transEsc('switchquery_ill') ?>
+                &nbsp;<a class="<?= $external ? 'external' : 'internal' ?>"
+                         href="<?= $url ?>"><?= $this->transEsc('ill_request_free_form') ?></a>
+            </p>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>

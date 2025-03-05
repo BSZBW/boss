@@ -1,0 +1,70 @@
+<?php
+$this->layout()->breadcrumbs .= '<li class="active">' . $this->transEsc('ILL::Resigning') . '</li>';
+$this->headScript()->appendFile("ill.js");
+$this->headTitle()->setPrefix($this->transEsc('ILL::Resigning'));
+?>
+<div class="col-sm-12">
+    <h3><?=$this->transEsc('ILL::resigning_header')?></h3>
+    <dl class="dl-horizontal align-table">
+    <?php foreach ($this->params as $param => $value): ?>
+        <?php if (strpos($param, '_r') !== false): ?>
+        <?php $param = str_replace('_r', '', $param)?>
+        <dt><?=$this->transEsc($param)?></dt>
+        <dd><?=$this->escapeHtml($value)?></dd>
+        <?php endif; ?>
+    <?php endforeach; ?>
+    </dl>
+</div>
+<div class="col-sm-12 col-md-8">
+
+    <form class="form-horizontal" method="GET" action="<?=$this->url('search-results')?>">
+        <input type="hidden" value="AND" name="join" />
+        <input type="hidden" value="AND" name="bool0[]" />
+        <input type="hidden" name="hiddenFilters[]" value="-consortium:FL" />
+        <div class="form-group form-group-sm">
+            <label class="control-label col-sm-4" for="network"><?=$this->transEsc('Network')?></label>
+            <div class="btn-group col-sm-8" data-toggle="buttons" id="network">
+                <?php foreach ($this->allNetworks as $name => $isil): ?>
+                    <label class="btn btn-default <?php if(in_array($name, $this->selectedNetworks)):?>active<?php endif; ?>"><input type="checkbox" <?php if(in_array($name, $this->selectedNetworks)):?>checked="checked" <?php endif; ?> name="filter[]" value="~consortium:<?=$this->escapeHtml($isil)?>" autocomplete="off"><?=$this->escapeHtml($name)?></label>
+                <?php endforeach; ?>
+                <label class="btn btn-default" id="reset-network-selection"><span ><i class="fa fa-times text-danger"></i></label>
+            </div>
+        </div>
+
+        <?=$this->context($this)->renderInContext('bsz/input.phtml', [
+            'title' => 'PPN',
+            'field'  => 'id',
+            'value'  => $this->params['ppn'] ?? ''])?>
+        <?=$this->context($this)->renderInContext('bsz/input.phtml', [
+            'title' => 'adv_search_title',
+            'field'  => 'Title',
+            'value'  => $this->params['titel'] ?? ''])?>
+        <?=$this->context($this)->renderInContext('bsz/input.phtml', [
+            'title' => 'adv_search_author',
+            'field'  => 'Author',
+            'value'  => $this->params['verfasser'] ?? ''])?>
+        <?=$this->context($this)->renderInContext('bsz/input.phtml', [
+            'title' => 'adv_search_publisher',
+            'field'  => 'publisher',
+            'value'  => $this->params['verlag'] ?? ''])?>
+        <?=$this->context($this)->renderInContext('bsz/input.phtml', [
+            'title' => 'adv_search_isn',
+            'field'  => 'ISN',
+            'value'  => $this->params['isn'] ?? ''])?>
+        <?=$this->context($this)->renderInContext('bsz/input.phtml', [
+            'title' => 'adv_search_zdbid',
+            'field'  => 'ZDB',
+            'value'  => $this->params['zdb_id'] ?? ''])?>
+        <?=$this->context($this)->renderInContext('bsz/input.phtml', [
+        'title' => 'adv_search_year',
+        'field'  => 'year',
+        'value'  => $this->params['erscheinungsjahr'] ?? ''])?>
+
+        <div class="form-group form-group-sm">
+            <div class="col-sm-8 pull-right">
+                <input class="btn btn-success" type="submit" name="submit" value="<?=$this->transEsc('Submit')?>" />
+                <input class="btn btn-danger" type="reset" name="submit" value="<?=$this->transEsc('Set back parts')?>" />
+            </div>
+        </div>
+    </form>
+</div>

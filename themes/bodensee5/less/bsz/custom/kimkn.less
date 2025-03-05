@@ -1,0 +1,66 @@
+// Switch on/off highlighting visibility using
+// background color in alpha channel 
+// rgba(255,255,0,0) = off, 
+// rgba(255,255,0,1) = maximum saturation
+// decent gray gradient
+//body:not(.frame) {
+//    #gradient.vertical(darken(#fff, 5%); #fff; 15%; 90%);
+//}
+
+.nav-tabs > li {
+    margin-bottom: 2px;
+}
+
+.nav-tabs > li:not(.active) > a {
+    background-color: darken(@brand-primary, 10%);    
+    color: #000
+}
+
+.nav-tabs > li.active > a, 
+.nav-tabs > li.active > a:focus, 
+.nav-tabs > li.active > a:hover {
+    color: #000;
+    background-color: white;
+}
+
+.btn-primary {
+  .button-variant(#000; @btn-primary-bg; @btn-primary-border);
+}
+
+.toolbar-btn,
+.record-nav .cart-add,
+.record-nav .cart-remove,
+.reset-filters-btn {
+  background-color: #fff;
+  &:hover {
+    background-color: #fff;
+  }
+}
+
+.well {
+    padding: 19px;
+    margin-bottom: 20px;
+    background-color: #f5f5f5;
+    border: 1px solid #f5f5f5;
+    border-radius: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.navbar-left {
+    margin-left: 0.5em;
+}
+
+.navbar-form .input-group {
+    border-bottom: 2px solid #59c7eb;
+    border-left: 2px solid #59c7eb;
+    border-top: 2px solid #59c7eb;
+}
+
+.nav-tabs > li.active a, .nav-tabs > li.active a:hover, .nav-tabs > li:not(.active) > a:hover,  .nav-tabs > li:not(.active) > a {
+    border-top: 3px solid #59c7eb;
+    border-left: 3px solid #59c7eb;
+    border-right: 3px solid #59c7eb;
+    border-bottom: 3px solid #fff;
+    z-index: 3;
+}

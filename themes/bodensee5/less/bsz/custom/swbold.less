@@ -1,0 +1,23 @@
+// Switch on/off highlighting visibility using
+// background color in alpha channel 
+// rgba(255,255,0,0) = off, 
+// rgba(255,255,0,1) = maximum saturation
+
+// intense background gradient
+body:not(.frame) {
+    background-image: linear-gradient(to bottom, #eaeaea 15%, #ddd 90%);
+    background-color: #C0C0C0;
+}
+
+.navbar-default {
+    background-color: #C0C0C0;
+    border-color: #C0C0C0;
+}
+
+.label-default {
+    background-color: inherit;
+}
+
+html body:not(.frame) {
+    padding-top: 100px;
+}

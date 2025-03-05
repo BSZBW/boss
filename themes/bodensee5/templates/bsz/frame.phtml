@@ -1,0 +1,160 @@
+<?php
+
+
+// Set default value if necessary:
+    if (!isset($this->searchClassId)) {
+        $this->searchClassId = 'Solr';
+    }
+
+    // Load search actions and settings (if any):
+    $options = $this->searchOptions($this->searchClassId);
+    $handlers = $this->searchbox()->getHandlers(
+        $this->searchClassId,
+        isset($this->searchIndex) ? $this->searchIndex : null
+    );
+    $handlerCount = count($handlers);
+    $basicSearch = $this->searchbox()->combinedHandlersActive() ? 'combined-searchbox' : $options->getSearchAction();
+    $searchHome = $options->getSearchHomeAction();
+    $advSearch = $options->getAdvancedSearchAction();
+    $lastSort = $this->searchMemory()->getLastSort($this->searchClassId);
+    $lastLimit = $this->searchMemory()->getLastLimit($this->searchClassId);
+    $ignoreHiddenFilterMemory = isset($this->ignoreHiddenFilterMemory) && $this->ignoreHiddenFilterMemory;
+    $ignoreHiddenFiltersInRequest = isset($this->ignoreHiddenFiltersInRequest) && $this->ignoreHiddenFiltersInRequest;
+    $hiddenFilters = $this->searchTabs()->getHiddenFilters($this->searchClassId, $ignoreHiddenFilterMemory, $ignoreHiddenFiltersInRequest);
+    if (empty($hiddenFilters) && !$ignoreHiddenFilterMemory) {
+        $hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassId);
+        if (empty($hiddenFilters)) {
+            $hiddenFilters = $this->searchTabs()->getHiddenFilters($this->searchClassId);
+        }
+    }
+$hiddenFilterParams = $this->searchTabs()->getCurrentHiddenFilterParams($this->searchClassId, $ignoreHiddenFilterMemory, '?');
+$disabled = '';
+if ($this->client()->isIsilSession() && !$this->client()->hasIsilSession()) {
+    $disabled = 'disabled';
+}
+?>
+<?php $tabConfig = $this->searchTabs()->getTabConfig($this->searchClassId, $this->lookfor, $this->searchIndex, 'basic', $hiddenFilters); ?>
+<?= $this->doctype('HTML5') ?>
+<html>
+<head>
+    <?= $this->headTitle($this->transEsc('Search')) ?>
+    <? $this->headThemeResources() ?>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="robots" content="noindex, nofollow"/>
+    <?= $this->headLink() ?>
+    <?php
+          // Remove unnecessary scripts
+          // we need jquery, bootstrap, common and additions here
+          // $this->headScript()->offsetUnset(1); // bootstrap
+          $this->headScript()->offsetUnset(2); // bootstrap accessabiblity
+          $this->headScript()->offsetUnset(3); // validator
+          $this->headScript()->offsetUnset(4); // form-attr-polyfill
+          $this->headScript()->offsetUnset(5); // autocomplete
+          // $this->headScript()->offsetUnset(6); // common
+          $this->headScript()->offsetUnset(7); // lightbox (Reference Error
+          // $this->headScript()->offsetUnset(8); // additions
+          $this->headScript()->offsetUnset(9); // jquery.mark
+        //$this->headScript()->offsetUnset(10); // ??
+
+    ?>
+    <?= $this->headScript() ?>
+</head>
+<body class="frame" data-url="<?= $this->serverUrl() ?>">
+<header class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <form id="searchForm" class="searchForm navbar-form navbar-left flip"
+                  method="GET"
+                  action="<?= $this->url($basicSearch) ?>?" name="searchForm"
+                  autocomplete="off" target="_blank">
+                <?= $this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs']]); ?>
+                <?php $placeholder = $this->searchbox()->getPlaceholderText($tabConfig['selected']['id'] ?? null); ?>
+                <div class="input-group has-feedback">
+                    <input <?= $disabled ?> id="searchForm_lookfor"
+                                            class="searchForm_lookfor form-control search-query<?php if ($this->searchbox()->autocompleteEnabled($this->searchClassId)): ?> autocomplete searcher:<?= $this->escapeHtmlAttr($this->searchClassId) ?><?php endif ?>"
+                                            type="text" name="lookfor"
+                                            value="<?php if ($this->searchType == 'basic'): echo $this->escapeHtmlAttr($this->lookfor);endif; ?>"<?php if ($placeholder): ?> placeholder="<?= $this->transEsc($placeholder) ?>"<?php endif ?>
+                                            title="<?= $this->transEsc('empty_search') ?>"
+                                            data-content="<?= $this->transEsc('empty_search_text') ?>"
+                                            autocomplete="on"/>
+                    <div class="input-group-btn">
+                        <button type="submit" class="btn btn-info <?= $disabled ?>">
+                            <i class="fa fa-search"
+                               aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="input-group-btn">
+                        <?php if ($advSearch): ?>
+                            <a href="<?= $this->url($advSearch) . ((isset($this->searchId) && $this->searchId) ? '?edit=' . $this->escapeHtmlAttr($this->searchId) : $hiddenFilterParams) ?>"
+                               class="btn btn-primary <?= $disabled ?>"
+                               rel="nofollow" target="_blank"><i
+                                        class='fa fa-search-plus'></i>
+                                <span class="text hidden-xs"><?= $this->transEsc("Advanced") ?>
+                            </a>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</header>
+<script type="text/javascript">
+    /**
+     * Here, we replace scripts from additions.js extended by special
+     * beheviour, we only need in the frame.
+     * */
+    $(document).ready(function () {
+        var $tabs = $('#searchForm .nav-tabs');
+        var $input = $('#searchForm_lookfor');
+        var $form = $('#searchForm');
+        var basicSearchUrl = '<?=$this->url($basicSearch) . $hiddenFilterParams?>';
+        var $advanced = $('form .btn-primary');
+
+        // limit to stop search
+        var limit = 2;
+        // add a href attribute to the first tab
+        $tabs.find('li.active a').attr('href', basicSearchUrl);
+
+        // avoid link execution when clicking tab - first remove event from additions.js
+        $tabs.find('li a').off();
+        $tabs.find('li a').click(function (e) {
+                e.preventDefault();
+                $tabs.find('li').removeClass('active');
+                $(this).parent().addClass('active');
+                var path = $(this).attr('href');
+                if (typeof path === undefined || path - length === 0) {
+                    path = basicSearchUrl;
+                } else if (path.indexOf('EDS') >= 0) {
+                    var href = '<?=$this->url($advSearch)?>'.replace('Search', 'EDS');
+                        $advanced.attr('href', href);
+                        path = path.replace('Home', 'Search');
+                    } else {
+                        var href = '<?=$this->url($advSearch)?>';
+                    $advanced.attr('href', href);
+                    path = path.replace('Home', 'Results');
+                }
+                path = path + '&';
+                $form.attr('action', path);
+                return false;
+            });
+
+            $form.off();
+            $form.submit(function (e) {
+                var url = $(this).attr('action') + $('#searchForm').serialize();
+                if ($input.val().replace(/[\*\s]/gi, "").length <= limit) {
+                    $input.attr('data-placement', 'bottom');
+
+                    $input.popover('show');
+                    return false;
+                } else {
+                    $input.popover('hide');
+                    window.open(url, '_blank');
+                    return false;
+                }
+
+            });
+        });
+    </script>
+    </body>
+</html>

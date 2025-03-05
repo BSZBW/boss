@@ -1,0 +1,115 @@
+<?php
+
+
+$this->headTitle($this->translate('Interlibrary Loan') . ': ' . $this->driver->getBreadcrumb());
+$content = $this->tab->getContent();
+$messages = $content['messages'];
+$ppns = $content['ppns'];
+$linklabels = $content['linklabels'];
+$ppnMessages = $content['ppnMessages'];
+$status = $content['status'];
+$library = $content['library'];
+$networks = $this->driver->tryMethod('getConsortium');
+$networks = explode(', ', $networks);
+$network = $this->driver->getNetwork();
+$class = '';
+?>
+
+<?php
+
+
+$url = $this->recordLink()->getUrl($this->driver, ['excludeSearchId' => true]) . '/ILLForm';
+if ($content['customUrl'] && $this->client()->getTag() !== 'fl-dienst' ) {
+    $url = $this->openUrl($this->driver, 'illform')->getUrl();
+} elseif($this->client()->getTag() === 'fl-dienst') {
+    $url = $content['customUrl'];
+}
+?>
+
+<?php
+    $account = $this->auth()->getManager();
+?>
+
+<strong><?= $this->transEsc('ILL::cond_heading') ?></strong>
+<ul class="help-text">
+    <?php if (isset($messages) && count($messages) > 0): ?>
+        <?php foreach ($messages as $message): ?>
+            <li><?= $this->transEsc($message) ?></li>
+        <?php endforeach; ?>
+    <?php endif; ?>
+    <?php if (count($ppns) > 0): ?>
+        <?php foreach ($ppns as $k => $id): ?>
+            <?php $ll = $ppnMessages[$id] ?? null; ?>
+            <?php if ($ll == 'ILL::library_opac'): ?>
+                <?php if ($this->client()->is('wlb2') || $this->client()->is('elk_wue')): ?>
+                    <?php $ppn = $id;
+                    $ppn = preg_replace('/^\(.*\)/', '', $id);
+                    $exists = $this->idVerifier($ppn, 'Solr');
+                    if($exists):
+                        ?>
+                        <li><a href="/Record/<?=$ppn?>"><?=$this->transEsc('ILL::to_local_hit')?></a></li>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <li><?= $this->transEsc('ILL::library_opac') ?>
+                        : <?= $this->recordLink()->linkPPN($this->driver) ?></li>
+                <?php endif; ?>
+            <?php elseif (($this->client()->is('wlb2') || $this->client()->is('elk_wue')) && $ll == 'ILL::to_local_hit'): ?>
+                <?php $ppn = $id;
+                $ppn = preg_replace('/^\(.*\)/', '', $id);
+                $exists = $this->idVerifier($ppn, 'Solr');
+                if($exists):
+                ?>
+                <a href="/Record/<?=$ppn?>"><?=$this->transEsc($ll)?></a>
+                <?php endif; ?>
+            <?php else: ?>
+                <?php $route = ($this->client()->is('wlb2') || $this->client()->is('elk_wue')) ? '/Search2Record/' : '/Record/' ; ?>
+                <li><a class=""
+                       href="<?= $route . $id ?>"><?php if (isset($ll)): ?><?= $this->transEsc($ll) ?><?php else: ?><?= $id ?><?php endif; ?></a>
+                </li>
+            <?php endif ?>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <?php $link = $this->recordLink()->linkPPN($this->driver) ?>
+        <?php if (!empty($link) && !$this->client()->is('wlb2')): ?>
+            <li><?= $this->transEsc('ILL::to_network_opac') ?>: <?= $link ?></li>
+        <?php endif; ?>
+        <?php if ($status && $this->client()->is('wlb2') && $this->driver->tryMethod('isArticle')): ?>
+            <li><b><em><?= $this->transEsc('check_parent_availability') ?></em></b></li>
+        <?php endif; ?>
+    <?php endif; ?>
+</ul>
+<?php if($this->client()->getTag() !== 'fl-dienst'):?>
+    <?php if (isset($library) && $status && $library->loginEnabled() && !$account->isLoggedIn()): ?>
+        <div class="alert alert-danger">
+            <?=$this->transEsc('You must be logged in first')?>
+        </div>
+    <?php elseif ($status): ?>
+        <a title="<?= $this->transEsc('Interlibrary Loan') ?>" accesskey=""
+           href="<?= $url ?>"
+           id="illform"
+           class="<?= $this->escapeHtmlAttr($class) ?> btn btn-success btn-sm <?php if ($this->customUrl): ?>external hasicon<?php endif; ?>"><?= $this->transEsc('Recall as Interlibrary Loan') ?></a>
+    <?php endif; ?>
+<?php elseif ($this->client()->getTag() === 'fl-dienst'): ?>
+
+
+    <!-- Split button -->
+    <div class="btn-group">
+        <a title="<?= $this->transEsc('Interlibrary Loan') ?>" accesskey=""
+           href="<?=$url?>"
+           id="illform"
+           class="<?= $this->escapeHtmlAttr($class) ?> btn btn-success <?php if ($this->customUrl): ?>external hasicon<?php endif; ?>"><?= $this->transEsc('Recall as Interlibrary Loan') ?></a>
+        <?php if (is_array($networks)):?>
+            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="caret"></span>
+            <span class="sr-only">Toggle Dropdown</span>
+          </button>
+          <ul class="dropdown-menu">
+                <?php foreach($networks as $net): ?>
+                    <?php $urllist = str_replace('=SWB', '='.$net, $url)?>
+                    <li><a href="<?=$urllist?>"><?=$net?></a></li>
+                <?php endforeach; ?>
+          </ul>
+      <?php endif; ?>
+    </div>
+<?php endif; ?>
+

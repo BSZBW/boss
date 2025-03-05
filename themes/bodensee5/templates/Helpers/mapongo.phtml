@@ -1,0 +1,18 @@
+<div class="mapongo row">
+    <?php if (!empty($this->imageurl)): ?>
+        <div class="col-sm-6">
+            <a href="<?= $this->linkurl ?>" class="external hasicon" title="Mapongo"
+               data-toggle="tooltip">
+                <img class="img-responsive" src="<?= $this->imageurl ?>"/>
+            </a>
+        </div>
+    <?php endif; ?>
+    <?php if (!empty($this->qrurl)): ?>
+        <div class="col-sm-6 hidden-xs">
+            <a href="<?= $this->linkurl ?>" class="external hasicon"
+               title="Mapongo QR-Code" data-toggle="tooltip">
+                <img class="img-responsive" src="<?= $this->qrurl ?>"/>
+            </a>
+        </div>
+    <?php endif; ?>
+</div>

@@ -1,0 +1,93 @@
+/*Umbauten am Footer für Smartphones*/
+@media (max-width: @screen-sm-min) {
+    footer {
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+
+            li {
+                float: left;
+                margin-right: 2em;
+            }
+        }
+    }
+
+}
+
+/* footer - auf Grundlage von finc */
+footer {
+    hr {
+        border: 0px solid @gray-lighter;
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+    .row div .well {
+        @media (min-width: @screen-sm-min) {
+            min-height: 10.1em;
+
+        }
+        @media (max-width: @screen-xs-max) {
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+        @media (min-width: @screen-sm-min) {
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+
+        margin-bottom: 0.2em;
+        padding-left: 15px;
+        padding-right: 15px;
+        background-color: transparent;
+        border: 0;
+    }
+
+    .well {
+        .box-shadow(inset 0 0px 0px rgba(0, 0, 0, 0));
+        h4, h5 {
+            color: lighten(@text-color, 10%);
+            font-weight: bold;
+        }
+
+        ul {
+            list-style: none outside none;
+            margin: 0;
+            padding: 0;
+
+            li {
+                padding-bottom: 5px;
+                a:hover {
+                    color: @brand-primary;
+                }
+                a {
+                    color: lighten(@text-color, 10%);
+                }
+                a,a:hover {
+                    text-decoration: none;
+                    font-size: @font-size-small;
+                }
+            }
+
+        }
+    }
+    small {
+        margin: 5px 15px;
+        font-size: @font-size-small;
+        color: @gray;
+        a, a:hover {
+            color: @gray;
+        }
+    }
+
+}
+
+.graybg {
+    background-color: @gray-lighter;
+}
+
+img.grayscale {
+    filter: grayscale(100%);
+    &:hover {
+        filter: none;
+    }
+}

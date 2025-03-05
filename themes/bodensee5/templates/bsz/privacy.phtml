@@ -1,0 +1,17 @@
+<?php
+
+
+// Set up breadcrumbs:
+if (isset($this->overrideTitle)) {
+    $this->layout()->breadcrumbs .= '<li class="active">' . $this->escapeHtml($this->overrideTitle) . '</li>';
+} else {
+    $this->layout()->breadcrumbs .= '<li class="active">' . $this->transEsc('Privacy') . '</li>';
+}
+$this->headTitle()->setPrefix($this->transEsc('Privacy'));
+?>
+<?php if (!empty($this->layout()->userLang)): ?>
+    <div class="col-sm-12">
+        <?= $this->render('bsz/privacy/' . $this->layout()->userLang . '.phtml') ?>
+    </div>
+<?php endif; ?>
+

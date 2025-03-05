@@ -1,0 +1,124 @@
+mark {
+    background: rgba(255,255,0,0.5) ;
+}
+
+
+
+// decent gray gradient
+//body:not(.frame) {
+//    #gradient.vertical(darken(@white, 5%); @white; 15%; 90%);
+//}
+
+.nav-tabs > li {
+    margin-bottom: 2px;
+}
+
+.nav-tabs{
+    li:not(.active) > a {
+        background-color: #f1f2f1;
+        color: @black !important;
+    }
+    li a:hover {
+        color: @gray2 !important;
+    }
+    li.active > a,
+    li.active > a:focus,
+    li.active > a:hover {
+        color: @gray2;
+        background-color: white;
+    }
+
+}
+
+.navbar-right {
+    li > a {
+        background-color: @green;
+        color: white !important;
+    }
+    li > a:hover {
+        background-color: darken(@green, 10%) !important;
+    }
+}
+
+
+.navbar-toggle {
+  .button-variant(#000; @btn-primary-bg; @btn-primary-border);
+}
+
+.well {
+    padding: 19px;
+    margin-bottom: 20px;
+}
+
+.navbar-left {
+    margin-left: 0;
+}
+
+.navbar-form .input-group {
+    border-bottom: 2px solid @gray1;
+    border-left: 2px solid @gray1;
+    border-top: 2px solid @gray1;
+}
+
+.nav-tabs > li.active a, .nav-tabs > li.active a:hover, .nav-tabs > li:not(.active) > a:hover,  .nav-tabs > li:not(.active) > a {
+    border-top: 3px solid @gray1;
+    border-left: 3px solid @gray1;
+    border-right: 3px solid @gray1;
+    border-bottom: 3px solid @white;
+    z-index: 3;
+}
+
+.h2, h2 {
+    color: @h2-color;
+}
+h3, .h3 {
+    color: @h3-color;
+}
+
+h4, .h4 {
+    color: lighten(@h3-color, 10%);
+}
+
+footer {
+    .graybg {
+       background-color:  @footer-bg-color;
+    }
+    .well {
+        p, li, a, a:hover {
+            color: white  !important;
+        }
+        h4, h5 {
+            color: white  !important;
+            text-transform: uppercase;
+
+        }
+    }
+}
+
+.facet-group {
+    .title {
+        border-left: 0;
+        border-right: 0;
+        border-top: 0;
+        border-bottom: 1px solid @gray3;
+        color: @black;
+        font-weight: normal !important;
+        font-size: 16px;
+
+    }
+}
+
+h1, h2 {
+    text-transform: uppercase;
+}
+
+.navbar-toggle {
+    width: 50px;
+    height: 50px;
+}
+.navbar-brand.external.hasicon {
+    background-color: @brand-primary !important;
+    &:hover {
+        background-color: darken(@brand-primary, 10%) !important;
+    }
+}

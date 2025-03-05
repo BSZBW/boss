@@ -1,0 +1,41 @@
+<hr/>
+<div class="row">
+    <div class="graybg clearfix">
+
+        <?php if ($this->client()->get('Footer')->get('classic') == 1): ?>
+            <?= $this->partial('bsz/footerbox.phtml', ['boxNo' => 1, 'heading' => $this->transEsc('Search Options')]) ?>
+            <?= $this->partial('bsz/footerbox.phtml', ['boxNo' => 2, 'heading' => $this->transEsc('Find More')]) ?>
+            <?= $this->partial('bsz/footerbox.phtml', ['boxNo' => 3, 'heading' => $this->transEsc('Help')]) ?>
+        <?php else: ?>
+            <?php
+            $count = $this->client()->get('Footer')->get('boxes');
+
+            for ($i = 1; $i <= $count; $i++) {
+
+                if ($this->client()->get('FooterBox' . $i) !== null) {
+                    echo $this->partial('bsz/well.phtml', [
+                        'count' => $count,
+                        'settings' => $this->client()->get('FooterBox' . $i)
+                    ]);
+                }
+            }
+            ?>
+        <?php endif; ?>
+    </div>
+
+</div>
+<div class="row lastline">
+    <small class="pull-left"><?php if ($this->client()->is('show_bw_logo')): ?><img
+            src="<?= $this->imageLink('bw.svg') ?>" alt="Baden-Württemberg"
+            style="width: 32px; padding-bottom: 3px;"/><?php endif ?><?= $this->transEsc('footer_custom_text') ?>
+    </small>
+    <small class="pull-right" role="contentinfo"><a
+                href="https://wiki.bsz-bw.de/display/BOSS/Roadmap"
+                class="external"><?= $this->escapeHtml($this->client()->getVersion()) ?></a>
+        &copy; <?= date('Y') ?> <a href="https://www.bsz-bw.de"
+                                   class="external hasicon">BSZ</a>
+        powered by <a href="https://vufind.org" class="external">VuFind</a> 10.1, <a
+                href="https://www.agv-gvi.de/" class="external">GVI</a>, Covers
+        &copy; <a href="https://Buchhandel.de" class="external">Buchhandel.de</a>
+    </small>
+</div>

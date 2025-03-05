@@ -1,0 +1,11 @@
+<?php if (!isset($this->indexStart)) $this->indexStart = 0; ?>
+<?php $i = $this->indexStart; ?>
+<?php foreach ($this->results->getResults() as $current): ?>
+  <?php $recordNumber = $this->results->getStartRecord() + $i - $this->indexStart; ?>
+  <div id="result<?=$i++ ?>" class="row result<?=$current->supportsAjaxStatus()?' ajaxItem':''?>">
+    <?php if (isset($this->showCheckboxes) && $this->showCheckboxes): ?>
+      <?=$this->record($current)->getCheckbox('', 'search-cart-form', $recordNumber)?>
+    <?php endif; ?>
+    <?=$this->record($current)->getSearchResult('list', $recordNumber)?>
+  </div>
+<?php endforeach; ?>

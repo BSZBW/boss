@@ -1,0 +1,12 @@
+<?php $rand = rand(0,1000)?>
+<? if (!empty($link)): ?>
+    <a href="<?= $link ?>" class="external"
+       <? if (isset($label)): ?>data-toggle="tooltip"
+       title="<?= $this->transEsc($label) ?>"<?php endif; ?>><span
+                id="clipboard-ppn-<?= $rand ?>"><?= $this->escapeHtml($ppn) ?></span></a>
+    <?= $this->clipboard('', 'clipboard-ppn-' . $rand) ?>
+<? else: ?>
+    <?= $this->clipboard($ppn) ?>
+<? endif; ?>
+&nbsp
+
