@@ -51,6 +51,10 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
 
     protected $orderId = 0;
 
+    protected $baseUrl;
+
+    protected $baseUrlAuth;
+
     /**
      * Constructor
      *
