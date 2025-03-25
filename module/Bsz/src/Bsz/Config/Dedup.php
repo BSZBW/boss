@@ -17,7 +17,7 @@ class Dedup
      */
     protected $container;
     protected $response;
-    protected $cookiedata;
+    protected $cookie;
 
     public function __construct($config, SessionContainer $container,
             $response, $cookiedata)
