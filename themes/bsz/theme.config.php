@@ -20,6 +20,6 @@
  */
 
 $config = [
-    'extends' => 'bodensee',
+    'extends' => 'bodensee5',
 ];
 return $config;
