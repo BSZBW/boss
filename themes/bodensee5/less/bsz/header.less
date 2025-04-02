@@ -1,0 +1,201 @@
+/*
+Header Bild und Logo
+*/
+
+header {
+    .brand-padding {
+        background-color: white;
+        padding: 5px;
+    }
+    .navbar .container{
+        @media (min-width: @screen-sm-min) {
+            padding-left: 0;
+            padding-right: 0;
+        }
+        z-index: 10;
+        margin-bottom: 0;
+
+    }
+    .navbar-collapse, .navbar-form {
+        border: 0 !important;
+    }
+    .navbar-header {
+        @media (min-width: @screen-sm-min) {
+            padding-left: @navbar-padding-horizontal;
+        }
+        @media (max-width: @screen-xs-max) {
+            margin-left: 0 !important;
+
+        }
+        float: right;
+    }
+    .navbar-right {
+        margin-left: 15px;
+        margin-right: 0 !important;
+    }
+    #searchForm {
+        //width: auto !important;
+        input[type=text]{
+            //display: inline-block;
+            font-size: 1.2em;
+        }
+
+        border: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        @media (min-width: @grid-float-breakpoint) {
+            padding-left: 0;
+            padding-right: 0;
+        }
+        @media (max-width: @grid-float-breakpoint-max) {
+            padding-right: 0;
+        }
+
+    }
+
+    .navbar-toggle {
+        margin: 0 !important;
+        border: 0;
+        padding: 4px 10px;
+        i {
+            font-size: @font-size-h1;
+        }
+
+    }
+    @media (max-width: @screen-lg-min) {
+        .navbar-form .input-group .input-group-btn {
+            // magic - this makes the search bar fill 100% width
+            /*width: 1% !important;*/
+        }
+    }
+
+
+}
+body.modal-open header .container.navbar {
+    z-index: 0 !important;
+}
+
+/*Searchtabs Styling*/
+header .nav-tabs {
+    border: 0 !important;
+}
+.nav-tabs > li {
+    margin-right: 0.5em;
+    margin-bottom: 0 !important;
+}
+.recordTabs {
+    border-bottom: 1px solid @gray-light;
+}
+.nav-tabs > li > a {
+    border-bottom: 0 !important;
+}
+
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:focus,
+.nav-tabs > li.active > a:hover {
+    color: @brand-primary;
+    background-color: white;
+}
+.nav-tabs > li:not(.active) > a {
+    background-color: darken(@brand-primary, 10%);
+    color: white
+}
+.nav-tabs > li.active > a {
+    background-color: #ffffff;
+    font-weight: bold;
+
+}
+.nav-tabs > li.active a:hover, .nav-tabs > li.active a {
+    border-top: 1px solid @navbar-default-border;
+    border-left: 1px solid @navbar-default-border;
+    border-right: 1px solid @navbar-default-border;
+}
+
+.nav-tabs > li:not(.active) > a:hover {
+    background-color: @nav-tabs-active-link-hover-bg;
+    color: @nav-tabs-active-link-hover-color;
+    border-top: 1px solid @brand-primary;
+    border-left: 1px solid @brand-primary;
+    border-right: 1px solid @brand-primary;
+
+}
+.advancedSearchLink {
+    border-radius: @border-radius-base;
+    i.fa {
+        //Make the button exactly same size as the main search button
+        font-size: 1.2em;
+    }
+    &:hover {
+        text-decoration: none;
+        background-color: darken(@brand-primary, 10%);
+    }
+    .text {
+        @media (max-width: @screen-lg-min) {
+            display: none;
+        }
+    }
+}
+
+.breadcrumbs .breadcrumb {
+
+    li {
+        color: @text-color;
+    }
+}
+
+#searchForm {
+    margin-top: 8px !important;
+    margin-bottom: 8px !important;
+    .box-shadow(none);
+}
+
+.navbar .dropdown a {
+    cursor: pointer;
+}
+
+.dropdown-header {
+  font-size: @font-size-large !important;
+}
+.navbar-brand.external.hasicon {
+    background-color: @navbar-default-bg;
+    padding: 5px 5px;
+    height: 50px;
+    width: 50px;
+    img {
+        height: auto;
+        width: 100%;
+    }
+}
+
+img.lineicon {
+    width: 2em;
+    height: 1.5em;
+    box-sizing: border-box;
+    object-fit: contain;
+}
+
+
+.verticalcenter {
+    align-items: center;
+}
+
+
+.navbar-header {
+    &:before {
+        content: '' !important;
+        display: none !important;
+    }
+}
+
+.searchForm_lookfor {
+    border: 1px solid transparent;
+}
+
+.navbar .delete-input {
+    i {
+        color: @brand-danger;
+    }
+    &:hover {
+        background-color: darken(@gray-lighter, 5%) !important;
+    }
+}

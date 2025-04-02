@@ -1,0 +1,39 @@
+<?php // This is a text-only email template; do not include HTML! ?>
+<?=$this->transEsc('mail_sender_not_checked')?>
+
+
+<?php if (!empty($this->message)): ?>
+<?=$this->translate("Message From Sender")?>:
+<?=$this->message?>
+
+<?php endif; ?>
+
+<?=$this->translate('Title')?>: <?=$this->driver->getTitle()?>
+
+<?=$this->translate('Author')?>: <?=$this->driver->getPrimaryAuthor()?>
+
+<?php if (!empty($this->driver->getCleanISBN())): ?>
+ISBN: <?=$this->driver->getCleanISBN()?>
+
+<?php endif; ?>
+<?php if (!empty($this->driver->getCleanISSN())): ?>
+ISSN: <?=$this->driver->getCleanISSN()?>
+
+<?php endif; ?>
+<?php $details = $this->driver->tryMethod('getPublicationDetails'); if($details):?>
+<?=$this->transEsc('Published') ?>: <?=implode(' ', $details)?>
+<?php endif; ?>
+
+
+<?=$this->translate('email_link')?>: <?=$this->serverUrl($this->recordLink()->getUrl($this->driver))?>
+
+
+<?=$this->transEsc('Kind regards')?>
+
+
+<?php if ($this->client()->getTag == 'swb' || $this->client()->getTag() == 'k10plus' || $this->client()->getTag() == 'k10plusdiscovery'): ?>
+<?=$this->transEsc('SWB')?>
+<?php else: ?>
+<?=$this->client()->getTitle()?>
+<?php endif; ?>
+

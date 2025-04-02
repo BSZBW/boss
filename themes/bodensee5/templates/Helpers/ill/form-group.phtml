@@ -1,0 +1,27 @@
+<?php $labelSize = 3; ?>
+<?php $inputSize = 9; ?>
+<?php $id = rand(0, 10000) ?>
+
+<div class="form-group form-group-sm <?php if ($this->required): ?>show required<?php endif; ?>">
+    <label class="control-label col-sm-<?= $labelSize ?>"
+           for="ill-<?= $id ?>"><?= $this->transEsc($this->label) ?></label>
+    <div class="col-sm-<?= $inputSize ?>">
+        <?php $title = is_array($this->value) ? implode(',', $this->value) : $this->value ?>
+        <input type="text" class="form-control"
+               id="ill-<?= $this->escapeHtmlAttr($id) ?>"
+               value="<?= preg_replace('/|/', '', $this->string()->cleanEsc($value)); ?>"
+               name="<?= $this->escapeHtmlAttr($this->name) ?>"
+               data-validate="<?= $this->required ? 'true' : 'false' ?>"
+               data-<?= strtolower($this->escapeHtmlAttr($this->name)) ?>="true"
+               placeholder="<?= $this->transEsc($this->placeholder) ?>"
+            <?= $this->illform($this->status, $this->driver)->maxlength($this->name) ?>
+            <?php if ($this->required): ?> required="true"<?php endif; ?>
+            <?php if (!empty($error)): ?>
+                data-error="<?= $this->transEsc($error) ?>"
+            <?php else: ?>
+                data-error="<?= $this->transEsc('ILL::form_error') ?>"
+            <?php endif; ?>/>
+        <span class="help-block with-errors">
+             </span>
+    </div>
+</div>

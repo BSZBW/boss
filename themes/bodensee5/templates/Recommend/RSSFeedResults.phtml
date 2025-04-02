@@ -1,0 +1,40 @@
+<?php $data = $this->recommend->getResults(); if (is_array($data)): ?>
+    <?php if (!empty($data['feedTitle'])): ?>
+        <h4><?= $this->transEsc($data['feedTitle']) ?></h4>
+    <?php endif ?>
+    <div class="panel-group no-padding">
+        <?php if ($this->layout()->userLang === 'de'): ?>
+            <?php $data['worksArray'] = [array_shift($data['worksArray'])] ?>
+        <?php elseif ($this->layout()->userLang === 'en'): ?>
+            <?php $data['worksArray'] = [end($data['worksArray'])] ?>
+        <?php endif ?>
+        <?php foreach ($data['worksArray'] as $workKey => $work): ?>
+            <?php if (in_array('danger', $work['categories'])): ?>
+                <?php $class = 'danger' ?>
+            <?php elseif (in_array('warning', $work['categories'])): ?>
+                <?php $class = 'warning' ?>
+            <?php else: ?>
+                <?php $class = 'default' ?>
+            <?php endif ?>
+            <div class="panel panel-<?= $class ?> ">
+                <div class="panel-heading">
+                    <?php if (isset($work['date'])): ?><?= $this->escapeHtml($work['date']->format('d.m.Y h:m')) ?><?php endif ?>
+                    <strong><?= $this->escapeHtml($this->truncate($work['title'], 120)) ?></strong>
+                </div>
+                <div class="panel-body">
+                    <?php if (isset($work['description'])): ?><?= $work['description'] ?><?php endif; ?>
+                    <?php if (isset($work['link'])): ?>
+                        <p><a href="<?= $this->escapeHtmlAttr($work['link']) ?>"
+                              class="external"
+                              target="_blank"><?= $this->transEsc('More Information')
+                                ?>
+                            </a></p>
+                    <?php endif ?>
+                    <?php if (isset($work['author'])): ?>
+                        <p class="small"><?= implode(', ', $work['author']) ?></p>
+                    <? endif ?>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+<?php endif; ?>

@@ -1,0 +1,123 @@
+<?php
+ $labelSize = 6;
+ $inputSize = 6;
+$form = '';
+?>
+<div class="form-group form-group-sm">
+    <label class="control-label col-sm-<?=$labelSize?>"><?=$this->transEsc('Library')?>*</label>
+    <div class="col-sm-<?=$inputSize ?>">
+        <? if(count($this->libraries) > 0): ?>
+            <? foreach($this->libraries as $libkey => $library): ?>
+                <? $checked = '' ?>
+                <? if (count($this->libraries) == 1) : ?>
+                    <?=$this->escapeHtml($library->getName())?>
+                    <input name="Sigel" type="hidden" value="<?=$this->escapeHtmlAttr($library->getSigel())?>"/>
+                <? else: ?>
+                    <div class="radio">
+                        <label for="ill-library-<?=$libkey?>">
+                            <? if (isset($params['Sigel'])):?>
+                                <? if ($params['Sigel'] == $library->getSigel()):?>
+                                    <? $checked = 'checked="checked"'?>
+                                <? endif ?>
+                            <? elseif($libkey == 0): ?>
+                                <? $checked = 'checked="checked"'?>
+                            <? endif; ?>
+                            <input required="true" name="Sigel" id="ill-library-<?=$libkey?>" type="radio" value="<?=$this->escapeHtmlAttr($library->getSigel())?>" <?=$checked?>/>
+                            <?=$this->escapeHtml($library->getName())?>
+                        </label>
+                    </div>
+                <? endif; ?>
+            <? endforeach; ?>
+        <? endif; ?>
+    </div>
+</div>
+<?php
+$showPlaces = false;
+$showCosts = false;
+$this->libraries = $this->libraries()->getActive($this->client()->getIsils());
+foreach ($this->libraries as $lib) {
+    if (count($lib->getPlaces()) > 0) {
+        $showPlaces = true;
+    }
+    if (!$lib->hideCosts()) {
+        $showCosts = true;
+    }
+}
+
+?>
+<?php if (!$this->client()->is('wlb2') && $showPlaces): ?>
+<div class="form-group form-group-sm library-places">
+    <label class="control-label col-sm-<?=$labelSize?>"><?=$this->transEsc('Places')?>*</label>
+    <div class="col-sm-<?=$inputSize ?>">
+        <? if(count($this->libraries) > 0): ?>
+            <? $checked = isset($params['AusgabeOrt']) ? $params['AusgabeOrt'] :'';?>
+            <? foreach($this->libraries as $libkey =>  $library): ?>
+                <div id="library-places-<?=$libkey?>" class="place <?if($libkey > 0):?>hidden<? endif; ?>">
+                    <?php $places = $library->getPlaces(); ?>
+                    <? foreach ($places as $placekey => $place): ?>
+                        <div class="radio">
+                            <label for="ill-place-<?=$libkey.'-'.$placekey?>">
+                                <input name="AusgabeOrt" id="ill-place-<?=$libkey.'-'.$placekey?>"
+                                   type="radio" value="<?=$this->escapeHtml($place->getCode())?>"
+                                   <?if($checked == $place): ?>checked<?endif; ?>
+                                />
+                                <?=$this->escapeHtml((string)$place)?>
+                            </label>
+                        </div>
+                    <? endforeach; ?>
+                </div>
+            <? endforeach; ?>
+        <? endif; ?>
+    </div>
+</div>
+<?php endif; ?>
+<? if($this->libraries()->hasActivePlaces($this->client()->getIsils())): ?>
+<div class="form-group form-group-sm">
+    <label class="control-label col-sm-<?=$labelSize?>" for="ill-delivery_until"><?=$this->transEsc('delivery_until')?>*</label>
+    <div class="col-sm-<?=$inputSize?> col-md-2">
+        <?
+            $date = new DateTime();
+            $date->add(new DateInterval('P100D'));
+        ?>
+        <div class="input-group date" data-format="dd.mm.YYYY" data-language="<?=$this->layout()->userLang?>">
+            <input type="text" class="form-control datepicker" required="true" id="ill-delivery_until" value="<?=isset($params['ErledFrist']) ? $params['ErledFrist'] : $date->format('d.m.Y')?>" name="ErledFrist"/>
+            <div class="input-group-addon"><i class="fa fa-calendar"></i><span class="sr-only"><?=$this->transEsc('Choose Date')?></span></div>
+        </div>
+            </div>
+        </div>
+<? endif; ?>
+<div class=" form-group form-group-sm">
+    <label class="control-label col-sm-<?=$labelSize?>" for="ill-other_edition"><?=$this->transEsc('other_edition')?></label>
+    <div class="col-sm-<?=$inputSize?> col-xs-1">
+        <input type="checkbox" class="" id="ill-other_edition" checked="checked" name="AndereAuflage" <? if (isset($params['AndereAuflage'])):?>checked=""<? endif; ?>/>
+    </div>
+</div>
+<div class=" form-group form-group-sm">
+    <label class="control-label col-sm-<?=$labelSize?>" for="ill-other_language"><?=$this->transEsc('other_language')?></label>
+    <div class="col-sm-<?=$inputSize?> col-xs-1">
+        <input type="checkbox" class="" id="ill-other_language" name="AndereSprache" <? if (isset($params['AndereSprache'])):?>checked=""<? endif; ?>/>
+    </div>
+</div>
+<div class=" form-group form-group-sm">
+    <label class="control-label col-sm-<?=$labelSize?>" for="ill-copy"><?=$this->transEsc('copy_if')?></label>
+    <div class="col-sm-<?=$inputSize?> col-xs-1">
+        <input type="checkbox" class="" id="ill-copy" name="Kopie" <? if (isset($params['Kopie'])):?>checked=""<? endif; ?>/>
+    </div>
+</div>
+<? if (!$this->client()->is('ill_no_cost') && $showCosts): ?>
+<div class=" form-group form-group-sm">
+    <label class="control-label col-sm-<?=$labelSize?>" for="ill-costs"><?=$this->transEsc('costs')?>*</label>
+    <div class="col-sm-<?=$inputSize?>">
+        <input type="number" class="form-control" id="ill-costs" required="true" min="0" max="30" value="<?=isset($params['MaxKostenKopie']) ? $params['MaxKostenKopie'] : 8 ?>" name="MaxKostenKopie" data-costs="true" data-error="<?=$this->transEsc('ILL::costs_error')?>" style="max-width: 6em;"/>
+        <span class="help-block with-errors"><?=$this->transEsc('ILL::help_costs')?></span>
+    </div>
+</div>
+<?php else: ?>
+    <input type="hidden" class="form-control" id="ill-costs" required="true" value="8" name="MaxKostenKopie" data-costs="true" />
+<?php endif; ?>
+<div class=" form-group form-group-sm">
+    <label class="control-label col-sm-<?=$labelSize?>" for="ill-remark"><?=$this->transEsc('remark')?></label>
+    <div class="col-sm-<?=$inputSize ?>">
+        <textarea <?=$this->illform($this->status, $this->driver)->maxlength('Bemerkung')?> class="form-control" id="ill-remark" name="Bemerkung"></textarea>
+    </div>
+</div>

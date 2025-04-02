@@ -1,0 +1,8 @@
+<?php $count = 0 ?>
+<?php $separator = $this->separator ? $this->escapeHtml($this->separator) : '<br>' ?>
+<?php $plugins = $this->plugins ?? 'escapeHtml' ?>
+<?php foreach ($this->data as $item): ?><!--
+ --><?php if($count > 0):?><?=$separator?><?php endif;?><!--
+ --><?=$this->pluginChain($item, $plugins) ?>
+    <?php $count++; ?>
+<?php endforeach; ?>

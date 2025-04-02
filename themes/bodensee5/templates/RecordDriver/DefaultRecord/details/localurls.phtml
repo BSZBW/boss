@@ -1,0 +1,30 @@
+<?php $overrideText = $this->client()->getOverrideText(); ?>
+<?php $count = 0; ?>
+<div>
+    <?php foreach ($this->data as $current): ?>
+        <?php if ($count > 0): ?>
+            <br>
+        <?php endif; ?>
+        <?php $count++; ?>
+        <?php if (is_array($current['label'])): ?>
+            <?php $text = $overrideText ?? $current['label'][0]; ?>
+            <a class="external localUrls"
+               href="<?= $current['url'] ?>"><?= $this->transEsc($text) ?></a>
+            <?php if ($this->client()->is('local_url_help_regex') && isset($current['label'][1])): ?>
+                <?php $htmllink = preg_replace(
+                    $this->client()->getHelpRegEx(),
+                    "<a class='external' href='" . $this->client()->getHelpUrl() . "'>" . $this->client()->getHelpGroups() . "</a>",
+                    $this->transEsc($current['label'][1])
+                ) ?>
+                <?= $htmllink ?>
+            <?php elseif (isset($current['label'][1])): ?>
+                &ndash; <?= $this->transEsc($current['label'][1]) ?>
+                <br/>
+            <?php endif; ?>
+        <?php else: ?>
+            <?php $text = $overrideText ?? $current['label']; ?>
+            <a class="external"
+               href="<?= $current['url'] ?>"><?= $this->transEsc($text) ?></a>
+        <?php endif ?>
+    <?php endforeach; ?>
+</div>

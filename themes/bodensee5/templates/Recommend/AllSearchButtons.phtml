@@ -1,0 +1,8 @@
+<?php if (!empty($buttons)): ?>
+    <h4> <?= $this->transEsc('SearchButtons::searchengines'); ?></h4>
+    <div style="display: flex; width: 100%; padding-bottom: 1em;">
+        <?php foreach ($buttons as $button): ?>
+            <?= $this->recommend($button); ?>
+        <?php endforeach; ?>
+    </div>
+<?php endif; ?>

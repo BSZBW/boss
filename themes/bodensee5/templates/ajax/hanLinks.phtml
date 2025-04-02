@@ -1,0 +1,14 @@
+<div class="hanlinks">
+    <?php if (empty($this->data)): ?>
+        <?= $this->transEsc($this->alt); ?>
+    <?php endif; ?>
+    <?php $count = 0; ?>
+    <?php foreach ($this->data as $item): ?>
+        <?php if ($count > 0): ?> <br> <?php endif; ?>
+        <a class="external" href="<?=$item['url']?>"><?=$item['title']?></a>
+        <?php if (!empty($item['license'])): ?>
+            - <?= $item['license'] ?>
+        <?php endif; ?>
+        <?php $count++; ?>
+    <?php endforeach; ?>
+</div>

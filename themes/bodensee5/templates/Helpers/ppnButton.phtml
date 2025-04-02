@@ -1,0 +1,3 @@
+<?php if ($this->client()->getTag() != 'hsfu' && !empty($link) && !empty($label)): ?>
+    <a href="<?=$link?>" class="external btn btn-primary btn-xs recallholdButtonLink" ><?=$this->transEsc($label)?></a>
+<?php endif; ?>

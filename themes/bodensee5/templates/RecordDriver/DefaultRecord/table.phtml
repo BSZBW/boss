@@ -1,0 +1,24 @@
+<?php $details = $this->recordDetails($this->driver); ?>
+<?php $hasContent = false; ?>
+<table class="table table-striped">
+    <?php foreach ($this->data as $item): ?>
+        <?php $req = $details->checkRequirements($item['requirements']); if($req): ?>
+            <?php $data = $details->get($item['methods']); ?>
+            <?php if($data || $item['allowEmpty']): ?>
+                <?php $hasContent = true; ?>
+                <tr>
+                    <th><?=$this->abbrevHeadline($item['label']); ?></th>
+                    <?php $classStr = empty($item['class']) ? '' : 'class="' . $item['class'] . '"' ?>
+                    <td <?=$classStr?>><?=$this->record($this->driver)->renderTemplate(
+                            $item['template'],
+                            ['data' => $data] + $item['context']
+                        ); ?>
+                    </td>
+                </tr>
+            <?php endif; ?>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</table>
+<?php if (!$hasContent): ?>
+    <tr><td><?=$this->transEsc('no_description')?></td></tr>
+<?php endif; ?>

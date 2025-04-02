@@ -1,0 +1,3 @@
+<?php foreach ($this->data as $label): ?>
+    <p><span class="label <?=$label['class']?>"><?=$this->transEsc($label['short'])?></span> <?=$this->transEsc($label['long'])?></p>
+<?php endforeach; ?>
