@@ -64,6 +64,8 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault implements
      */
     protected $indexExtension = '';
 
+    protected $runner;
+
     /**
      * Constructor
      *

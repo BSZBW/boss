@@ -49,6 +49,12 @@ class Search2RecordController extends \VuFind\Controller\Search2recordController
 
     protected $orderId = 0;
 
+    protected $searchClassId;
+
+    protected $baseUrl;
+
+    protected $baseUrlAuth;
+
     protected Config $config;
     /**
      * Constructor

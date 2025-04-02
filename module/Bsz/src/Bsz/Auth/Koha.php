@@ -24,21 +24,24 @@ namespace Bsz\Auth;
 use Bsz\Config\Libraries;
 use Laminas\Http\Client;
 use Laminas\Http\Client as HttpClient;
+use Laminas\Session\ManagerInterface;
 use VuFind\Db\Entity\UserEntityInterface;
 use VuFind\Exception\Auth as AuthException;
 
 class Koha extends \VuFind\Auth\AbstractBase
 {
-    protected $library;
+    protected ManagerInterface $sessionManager;
+
+    protected Libraries $library;
     protected $isil;
 
     /**
-     * @param \Laminas\Session\ManagerInterface $sessionManager
+     * @param ManagerInterface $sessionManager
      * @param Libraries $libraries
      * @param $isils
      */
     public function __construct(
-        \Laminas\Session\ManagerInterface $sessionManager,
+        ManagerInterface $sessionManager,
         Libraries $libraries,
         $isils
     ) {

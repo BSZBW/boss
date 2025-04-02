@@ -39,8 +39,10 @@ class Library
     protected $isil;
     protected $sigel;
     protected $homepage;
+    protected $isil_availability;
     protected $email;
     protected $auth;
+    protected $auth2;
     protected $places = null;
     protected $daia;
     protected $openurl;
