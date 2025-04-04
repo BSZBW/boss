@@ -146,7 +146,8 @@
             </ul>
             <?php if ($this->client()->is('show_header_logo')): ?>
                 <a href="/" class="visible-lg pull-right">
-                  <img src="<?= $this->imageLink('logo/wlb.png') ?>" style="height:3em" alt="Logo Bibliothek">
+                  <?php $logoFile = $this->clientAsset()->getLogo(); ?>
+                  <img src="<?= $this->imageLink($logoFile) ?>" style="height:3em" alt="Logo Bibliothek">
                 </a>
             <?php endif; ?>
         </div>
