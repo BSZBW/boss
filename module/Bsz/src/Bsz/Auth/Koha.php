@@ -22,6 +22,7 @@
 namespace Bsz\Auth;
 
 use Bsz\Config\Libraries;
+use Bsz\Config\Library;
 use Laminas\Http\Client;
 use Laminas\Http\Client as HttpClient;
 use Laminas\Session\ManagerInterface;
@@ -32,7 +33,7 @@ class Koha extends \VuFind\Auth\AbstractBase
 {
     protected ManagerInterface $sessionManager;
 
-    protected Libraries $library;
+    protected Library $library;
     protected $isil;
 
     /**
