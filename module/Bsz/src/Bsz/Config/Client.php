@@ -162,7 +162,7 @@ class Client extends Config
             $mode = 'website_' . $mode;
         }
 
-        $website = $this->get('Site')->get($mode);
+        $website = $this->get('Site')->get($mode) ?? '';
 
         if (isset($lang) && strpos($website, '%lang%') !== false) {
             $website = str_replace('%lang%', $lang, $website);
