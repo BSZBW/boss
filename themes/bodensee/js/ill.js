@@ -10,6 +10,10 @@ function illFormLogic() {
         $('#form-ill').validator('update');
     });
 
+  $('input[name=AuthMethod]').change(() => {
+    changeAuthMethod();
+  });
+
     // set the first place to checked
     if (!$("input[name='AusgabeOrt']:checked").val()) {
         $('.place input').first().prop('checked', true);
@@ -61,6 +65,14 @@ function illFormLogic() {
     });
 
 }
+
+function changeAuthMethod() {
+    var label = $('input[name=AuthMethod]:checked').val();
+    var method = (label === 'tan') ? 'TAN' : 'Passwort';
+    $('#auth-label').text(VuFind.translate(method) + '*');
+    $('#ill-auth').attr('name', method);
+}
+
 /*
  * This method switched the required state of copy form fields
  * it must be called at
@@ -210,5 +222,5 @@ $(document).ready(function() {
     illFormLogic();
     resigningForm();
     changeRequiredCopy($("input[name='Bestellform']:checked"));
-
+    changeAuthMethod();
 });

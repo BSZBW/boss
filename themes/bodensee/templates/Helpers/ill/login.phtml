@@ -7,6 +7,21 @@ $library = $this->libraries()->getFirstActive($this->client()->getIsils());
 
 ?>
 <?php if (!$account->loginEnabled() || !$library->loginEnabled()): ?>
+    <?php
+    $authMethods = $library->getAuth();
+    $hidden = count($authMethods) < 2 ? 'hidden' : '';
+    ?>
+    <div class="form-group form-group-sm <?=$hidden?>">
+        <label class="control-label col-sm-<?= $labelSize ?>"><?= $this->transEsc('Auth-Art') ?>*</label>
+        <div class="col-sm-3">
+            <?php $defaultMethod = $params['AuthMethod'] ?? $authMethods[0]; ?>
+            <?php foreach ($authMethods as $method): ?>
+                <?php $checked = ($method == $defaultMethod) ? 'checked' : ''; ?>
+                <input type="radio" id="auth-<?=$method?>" name="AuthMethod" value="<?=$method?>" <?=$checked?>/>
+                <label for="auth-<?=$method?>"><?=$this->transEsc($method)?></label>
+            <?php endforeach; ?>
+        </div>
+    </div>
     <div class=" form-group form-group-sm <?= isset($success) && !$success ? 'has-error' : '' ?>">
         <label class="control-label col-sm-<?= $labelSize ?>"
                for="ill-user"><?= $this->transEsc('Benutzernummer') ?>*</label>
@@ -16,27 +31,14 @@ $library = $this->libraries()->getFirstActive($this->client()->getIsils());
                    value="<?= $params['BenutzerNummer'] ?? '' ?>"/>
         </div>
     </div>
-    <?php $libraries = $this->libraries()->getActive($this->client()->getIsils()) ?>
-    <?php $firstLibrary = array_shift($libraries);
-    if (isset($firstLibrary) && in_array('tan', $firstLibrary->getAuth())): ?>
-        <div class=" form-group form-group-sm <?= isset($success) && !$success ? 'has-error' : '' ?>">
-            <label class="control-label col-sm-<?= $labelSize ?>"
-                   for="ill-tan"><?= $this->transEsc('TAN') ?>*</label>
-            <div class="col-sm-3">
-                <input type="password" class="form-control" id="ill-tan" name="TAN"
-                       required=""/>
-            </div>
+    <div class=" form-group form-group-sm <?= isset($success) && !$success ? 'has-error' : '' ?> ">
+        <label class="control-label col-sm-<?= $labelSize ?>" id="auth-label"
+               for="ill-auth"></label>
+        <div class="col-sm-3">
+            <input type="password" class="form-control" id="ill-auth"
+                   name="" required=""/>
         </div>
-    <?php else: ?>
-        <div class=" form-group form-group-sm <?= isset($success) && !$success ? 'has-error' : '' ?> ">
-            <label class="control-label col-sm-<?= $labelSize ?>"
-                   for="ill-password"><?= $this->transEsc('Password') ?>*</label>
-            <div class="col-sm-3">
-                <input type="password" class="form-control" id="ill-password"
-                       name="Passwort" required=""/>
-            </div>
-        </div>
-    <?php endif; ?>
+    </div>
 <?php elseif ($account->isLoggedIn()): ?>
     <?php $identity = $account->getIdentity() ?>
     <div CLASS="col-sm-12 col-sm-offset-3">
