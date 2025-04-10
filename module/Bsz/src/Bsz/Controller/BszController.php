@@ -62,7 +62,7 @@ class BszController extends AbstractBase
 
         $active = $this->libraries->getActive($isils);
         if (count($active) == 0) {
-            throw new Exception('Your ISILs are not valid or inactive', 533);
+            throw new Exception('isils_inactive', 533);
         }
 
         if (count($isils) > 0) {
