@@ -15,7 +15,7 @@
     <?php if (isset($this->display_exceptions)): ?>
         <h3>
             <b><?= $this->transEsc('ErrorMessage') ?>
-                :</b> <?= $this->escapeHtml($this->exception->getMessage()) ?>
+                :</b> <?= $this->transEsc($this->exception->getMessage()) ?>
         </h3>
     <?php endif ?>
 
