@@ -74,8 +74,8 @@ class LayoutClass extends \VuFind\View\Helper\Bootstrap3\LayoutClass
                 return "";
             }
             return $this->sidebarOnLeft
-                ? 'offcanvas offcanvas-left flip'
-                : 'offcanvas offcanvas-right flip';
+                ? 'vufind-offcanvas vufind-offcanvas-left flip'
+                : 'vufind-offcanvas vufind-offcanvas-right flip';
         }
     }
 }
