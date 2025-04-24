@@ -53,8 +53,8 @@ $this->headTitle($this->translate('Holdings') . ': ' . preg_replace('/|/', '
 <?php // removed online access as this is listed in main section ?>
 <?php $recallButtonCounter = 0 ?>
 <?php if (isset($holdings['holdings'])): ?>
-    <?php // -- SOLR -- ?>
-    <?php foreach ($holdings['holdings'] as $holding): ?>
+    <?php /** -- SOLR -- ?>
+        <?php foreach ($holdings['holdings'] as $holding): ?>
         <div class="row">
             <div class="col-sm-12">
                 <h4>
@@ -89,10 +89,10 @@ $this->headTitle($this->translate('Holdings') . ': ' . preg_replace('/|/', '
                 <?php endif; // End of old DAIA code?>
             <?php endforeach; ?>
         </div>
-    <?php endforeach; ?>
+        <?php endforeach; ?>
+    **/ ?> <?php //-- SOLR -- ?>
 
-    <?php //var_dump($_SERVER['SERVER_NAME']); ?>
-<?php if (substr($_SERVER['SERVER_NAME'] ,0,4) == "test"): ?>
+<?php if (substr($_SERVER['SERVER_NAME'] ,0,4) == "test" OR substr($_SERVER['SERVER_NAME'] ,0,6) == "mzbihs") : ?>
     <?php //if($this->client()->is('test')): ?>
 
         <?php // -- Folio OKAPI -- ?>
@@ -200,5 +200,4 @@ $this->headTitle($this->translate('Holdings') . ': ' . preg_replace('/|/', '
         <?php endif; ?>
     <?php endif; ?>
 
-
-<?php endif; ?> <?php // Ende von Test erkannt ?>
+ <?php endif; ?> <?php // Ende von test|mzbishs erkannt ?>
