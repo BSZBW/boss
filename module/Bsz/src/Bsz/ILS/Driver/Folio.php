@@ -7,7 +7,7 @@ class Folio extends \VuFind\ILS\Driver\Folio
 
     protected function getInstanceByBibId($bibId)
     {
-        $bibId = preg_replace('/\(DE-627\)/', '', $bibId);
+        $bibId = preg_replace('/\(.*\)/', '', $bibId);
         return parent::getInstanceByBibId($bibId);
     }
 
@@ -15,7 +15,7 @@ class Folio extends \VuFind\ILS\Driver\Folio
     {
         $ids = [];
         foreach ($idList as $id) {
-            $ids[] = preg_replace('/\(DE-627\)/', '', $id);
+            $ids[] = preg_replace('/\(.*\)/', '', $id);
         }
         return parent::getStatuses($ids);
     }
