@@ -563,10 +563,14 @@ class GetItemStatuses extends AbstractBase implements
                     );
                 }
 
-                // BSZ
+                /* BSZ: FOLIO Instance-Ids */
+                // There is no prefix in Folio HRIDs like (DE-627) = K10plus or (DE-603) = Hebis
                 if (substr($_SERVER['SERVER_NAME'] ,0,4) == "test")  {
                     $current['id'] = '(DE-627)' . $current['id'];
+                } elseif (substr($_SERVER['SERVER_NAME'] ,0,6) == "mzbihs") {
+                    $current['id'] = '(DE-603)' . $current['id'];
                 }
+                /* BSZ: End FOLIO Instance-Ids */
 
                 $current['record_number'] = array_search($current['id'], $ids);
                 $statuses[] = $current;
