@@ -26,7 +26,7 @@ use VuFindSearch\Service as SearchService;
 
 /**
  * @package Findex\RecordTab
- * @author Sebastian Sahli
+ * @author  Sebastian Sahli
  */
 abstract class AbstractCollection extends \BszCommon\RecordTab\AbstractCollection
 {
@@ -58,13 +58,15 @@ abstract class AbstractCollection extends \BszCommon\RecordTab\AbstractCollectio
     protected function getParams(): ParamBag
     {
         $id = $this->driver->getUniqueID();
-        // in local tab, we need to filter by isil
-//        $filterOr = [];
-//        foreach ($this->isils as $isil) {
-//            $filterOr[] = 'collection_details:ISIL_' . $isil;
-//        }
         $params = new ParamBag();
-//        $params->add('fq', implode(' OR ', $filterOr));
+        if (!empty($this->isils)) {
+            // in local tab, we need to filter by isil
+            $filterOr = [];
+            foreach ($this->isils as $isil) {
+                $filterOr[] = 'collection_details:ISIL_' . $isil;
+            }
+            $params->add('fq', implode(' OR ', $filterOr));
+        }
         $params->add('fq', '-id:' . $id);
         $params->add('fq', $this->getFilterString());
 

@@ -41,6 +41,7 @@ class Factory
         $client = $container->get('Bsz\Config\Client');
         return new FindexLibraries($libraries, $client);
     }
+
     /**
      * Factory for volumes tab
      *
@@ -51,7 +52,10 @@ class Factory
     public static function getVolumes(ContainerInterface $container)
     {
         $client = $container->get('Bsz\Config\Client');
-        $isils = $client->getIsils();
+        $isils = [];
+        if ($client->is('show_only_local_volumes')) {
+            $isils = $client->getIsils();
+        }
 
         $volumes = new FindexVolumes(
             $container->get(\VuFindSearch\Service::class),
@@ -70,7 +74,10 @@ class Factory
     public static function getArticles(ContainerInterface $container)
     {
         $client = $container->get('Bsz\Config\Client');
-        $isils = $client->getIsils();
+        $isils = [];
+        if ($client->is('show_only_local_volumes')) {
+            $isils = $client->getIsils();
+        }
 
         $articles = new FindexArticles(
             $container->get(\VuFindSearch\Service::class),
