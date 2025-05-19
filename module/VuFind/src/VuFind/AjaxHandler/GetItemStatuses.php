@@ -495,14 +495,14 @@ class GetItemStatuses extends AbstractBase implements
 // When an instance/holding ("Titel") was not found in Folio, there won't be items ("Exemplare") for this instance/holding.
 // When an error appears for one record it will be visible for all records in a resultlist. Why?
 
-            foreach ($ids as $id) {
-                $results[] = [
-                    [
-                    'id' => $id,
-                    'error' => 'An error has occurred',
-                    ],
-                ];
-           }
+//            foreach ($ids as $id) {
+//                $results[] = [
+//                    [
+//                    'id' => $id,
+//                    'error' => 'An error has occurred',
+//                    ],
+//                ];
+//           }
 /* BSZ: End FOLIO */
         }
 
