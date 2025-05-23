@@ -344,23 +344,10 @@ class Params extends \VuFind\Search\Solr\Params
      */
     public function getFacetLabel($field, $value = null, $default = null)
     {
-        if (!isset($this->facetConfig[$field])
-            && !isset($this->extraFacetLabels[$field])
-            && isset($this->facetAliases[$field])
-        ) {
-            $field = $this->facetAliases[$field];
+        if ($field == 'topic_browse' && preg_match('/^fiv[arst]/', $value)) {
+            return substr($value, 0, 4);
         }
-        if (isset($this->facetConfig[$field])) {
-            return $this->facetConfig[$field];
-        }
-        if ($field == 'topic_browse' && strpos($value, 'fivt ') === 0) {
-            return 'fivt';
-        } elseif ($field == 'topic_browse' && strpos($value, 'fiva ') === 0) {
-            return 'fiva';
-        }
-        return isset($this->extraFacetLabels[$field])
-            ? $this->extraFacetLabels[$field]
-            : ($default ?: 'unrecognized_facet_label');
+        return parent::getFacetLabel($field, $value, $default);
     }
 
 }

@@ -38,10 +38,7 @@ if (($pos = strpos($displayText, ':')) !== false) {
 if (($pos = strpos($displayText, 'rvk ')) !== false) {
     $displayText = substr($displayText, $pos + 4 );
 }
-if (($pos = strpos($displayText, 'fivt ')) !== false) {
-    $displayText = substr($displayText, $pos + 5 );
-}
-if (($pos = strpos($displayText, 'fiva ')) !== false) {
+if (preg_match('/^fiv[arst] /', $displayText)) {
     $displayText = substr($displayText, $pos + 5 );
 }
 if(($pos = strpos($displayText, 'bwlb ')) !== false) {
