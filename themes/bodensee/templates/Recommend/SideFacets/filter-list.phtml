@@ -18,6 +18,9 @@
         if (($pos = strpos($filter['displayText'], 'rvk ')) !== false) {
             $filter['displayText'] = substr($filter['displayText'], $pos + 4 );
         }
+        if (preg_match('/^fiv[arst]/', $filter['displayText'])) {
+            $filter['displayText'] = substr($filter['displayText'], $pos + 4 );
+        }
       ?>
       <a class="facet" href="<?=$removeLink ?>" title="<?=$this->transEsc('clear_tag_filter') ?>">
         <span class="sr-only"><?=$this->transEsc('clear_tag_filter') ?></span>
