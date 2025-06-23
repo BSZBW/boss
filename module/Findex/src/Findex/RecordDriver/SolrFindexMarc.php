@@ -48,9 +48,9 @@ use VuFind\RecordDriver\Feature\MarcReaderTrait;
  */
 class SolrFindexMarc extends SolrMarc implements Constants
 {
-    use IlsAwareTrait;
+    //use IlsAwareTrait;
     use AdvancedMarcReaderTrait;
-    use MarcAdvancedTrait;
+    //use MarcAdvancedTrait;
     use SubrecordTrait;
     use HelperTrait;
     use ContainerTrait;
@@ -150,7 +150,7 @@ class SolrFindexMarc extends SolrMarc implements Constants
      *
      * @return array
      */
-    public function getURLs() : array
+    public function getURRLs() : array
     {
         //url = 856u:555u
 
@@ -186,8 +186,6 @@ class SolrFindexMarc extends SolrMarc implements Constants
                 $url['desc'] = $sfu;
             } elseif ($ind1 == 4 && ($ind2 == 1 || $ind2 == 0)) {
                 $url['desc'] = 'Online Access';
-            } elseif ($ind1 == 4 && ($ind2 == 1 || $ind2 == 0)) {
-                $url['desc'] = 'More Information';
             }
             $urls[] = $url;
         }
@@ -869,11 +867,12 @@ class SolrFindexMarc extends SolrMarc implements Constants
 
             $sfr = $this->getSubfield($field, 'r');
             $sfx = $this->getSubfield($field, 'x');
+            $sfy = $this->getSubfield($field, 'y');
 
             if(!empty($sfr) && in_array($sfx, $isils) && !in_array($sfr, $urlsOnly)) {
                 $retVal[] = [
                     'url' => $sfr,
-                    'label' => $sfr,
+                    'label' => $sfy ?? $sfr,
                     'isil' => $sfx
                 ];
                 $urlsOnly[] = $sfr;
@@ -1033,6 +1032,60 @@ class SolrFindexMarc extends SolrMarc implements Constants
             }
         }
         return $first;
+    }
+
+    public function getPreviousTitles()
+    {
+        return $this->getOtherTitles('780');
+    }
+
+    public function getNewerTitles()
+    {
+        return $this->getOtherTitles('785');
+    }
+
+    protected function getOtherTitles(string $fieldTag)
+    {
+        $fields = $this->getFields($fieldTag);
+
+        $retVal = [];
+        foreach ($fields as $field) {
+            if (!is_array($field)) {
+                continue;
+            }
+
+            $entry = ['title' => $this->getSubfield($field, 't')];
+            foreach ($this->getSubfields($field, 'w') as $sfw) {
+                if (str_starts_with($sfw, '(DE-627)')) {
+                    $entry['ppn'] = substr($sfw, 8);
+                    break;
+                }
+            }
+
+            $entry = array_filter($entry);
+            if(!empty($entry)) {
+                $retVal[] = $entry;
+            }
+        }
+
+        return $retVal;
+    }
+
+    /**
+     * Get all subjects associated with this item. They are unique.
+     * @return array
+     */
+    public function getRVKSubjectHeadings()
+    {
+        $rvkchain = [];
+        foreach ($this->getFields('936') as $field) {
+            if ($field['i1'] == 'r' && $field['i2'] == 'v') {
+                foreach ($this->getSubfields($field, 'k') as $item) {
+                    $rvkchain[] = $item;
+                }
+            }
+        }
+        return array_unique($rvkchain);
     }
 
 }
