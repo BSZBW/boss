@@ -181,6 +181,15 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
         // if one accesses this form with a library that uses custom form,
         // redirect.
         $client = $this->serviceLocator->get('Bsz\Config\Client');
+
+        if ($client->getTag() == 'fl-dienst') {
+            $url = 'https://zfl.bsz-bw.de/flcgi/zfl_bibfreifrm.pl';
+            if($this->isTestMode()) {
+                $url = 'https://fltest.bsz-bw.de/flcgi/zfl_bibfreifrm.pl';
+            }
+            return $this->redirect()->toUrl($url);
+        }
+
         $authManager = $this->serviceLocator->get('VuFind\AuthManager');
         $isils = (array)$this->params()->fromQuery('isil', []);
 
