@@ -26,7 +26,7 @@
                 if (strpos($url, '%lang%') !== false) {
                     $url = str_replace('%lang%', $this->layout()->userLang, $url);
                 }
-                $title = strpos($url, 'Freeform') !== false ? 'ILL::free_form_tooltip' : '';
+                $title = str_contains($url, 'Freeform') && ($this->client()->getTag() !== 'fl-dienst') ? 'ILL::free_form_tooltip' : '';
                 $label = isset($settings->get('label_' . $lang)[$k]) ? $settings->get('label_' . $lang)[$k] : $settings->get('label_de')[$k];
             ?>
             <li>
