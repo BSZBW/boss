@@ -150,7 +150,7 @@ class SolrFindexMarc extends SolrMarc implements Constants
      *
      * @return array
      */
-    public function getURRLs() : array
+    public function getURLs() : array
     {
         //url = 856u:555u
 
