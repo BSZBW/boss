@@ -89,7 +89,7 @@ if ($content['customUrl'] && $this->client()->getTag() !== 'fl-dienst' ) {
            id="illform"
            class="<?= $this->escapeHtmlAttr($class) ?> btn btn-success btn-sm <?php if ($this->customUrl): ?>external hasicon<?php endif; ?>"><?= $this->transEsc('Recall as Interlibrary Loan') ?></a>
     <?php endif; ?>
-<?php elseif ($this->client()->getTag() === 'fl-dienst'): ?>
+<?php elseif ($this->client()->getTag() === 'fl-dienst' && $status): ?>
 
 
     <!-- Split button -->

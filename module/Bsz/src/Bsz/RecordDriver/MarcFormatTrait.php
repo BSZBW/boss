@@ -192,6 +192,13 @@ trait MarcFormatTrait
         return ($l7 == 'm') && (($l19 == 'b') || ($l19 == 'c'));
     }
 
+    public function isMultiPartMonograph()
+    {
+        $l7 = $this->getLeader(7);
+        $l19 = $this->getLeader(19);
+        return ($l7 == 'm') && ($l19 == 'a');
+    }
+
     /**
      * Is this a book serie?
      * @return boolean

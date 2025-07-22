@@ -555,4 +555,11 @@ class Logic
         }
         return false;
     }
+
+    protected function checkGA()
+    {
+        return $this->driver->isMultiPartMonograph()
+            || $this->driver->isMonographicSerial();
+    }
+
 }
