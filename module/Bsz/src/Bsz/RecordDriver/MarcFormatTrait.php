@@ -417,7 +417,9 @@ trait MarcFormatTrait
         foreach ($f856 as $field) {
             if (is_array($field) && $field['i2'] == 0) {
                 $sfz = strtolower($this->getSubfield($field, 'z'));
-                return preg_match('/^kostenlos|kostenfrei$/i', $sfz);
+                if (preg_match('/^[K|k]ostenlos|[K|k]ostenfrei$/i', $sfz)) {
+                    return true;
+                }
             }
         }
         return false;
