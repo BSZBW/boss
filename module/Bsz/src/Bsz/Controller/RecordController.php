@@ -188,7 +188,7 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
 
         if ($client->getTag() == 'fl-dienst') {
             $url = 'https://zfl.bsz-bw.de/flcgi/zfl_bibfreifrm.pl';
-            if($this->isTestMode()) {
+            if($this->isDev()) {
                 $url = 'https://fltest.bsz-bw.de/flcgi/zfl_bibfreifrm.pl';
             }
             return $this->redirect()->toUrl($url);
@@ -244,6 +244,15 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
             }
         }
         return $test;
+    }
+
+    private function isDev()
+    {
+        if (!isset($_SERVER['HTTP_HOST'])) {
+            return false;
+        }
+        $host = strtolower($_SERVER['HTTP_HOST']);
+        return str_contains($host, 'bosstest');
     }
 
     /**
