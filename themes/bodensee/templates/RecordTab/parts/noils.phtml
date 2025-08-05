@@ -42,9 +42,10 @@
                 <a href="<?=$row['ilslink']?>" class="external"><?=$this->transEsc('Local Online Access')?></a></dd>
             <?php endif; ?>
     <?php endif; ?>
-    <?php if (!empty($row['status'])): ?>
+    <?php $status = $row['availability']->getStatusDescription(); ?>
+    <?php if (!empty($status)): ?>
         <dt><?=$this->transEsc('Bestandsangaben')?></dt>
-        <dd><?=$this->escapeHtml($row['status'])?></dd>
+        <dd><?=$this->escapeHtml($status)?></dd>
     <? endif; ?>
     </dl>
     <?php if(!$this->client()->is('only_one_holds_button')): ?>
