@@ -136,6 +136,13 @@ $coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'sm
         <div class="result-previews">
             <?=$this->record($this->driver)->getPreviews()?>
         </div>
+        <?=
+        $this->record($this->driver)->renderTemplate('result-list-explain.phtml', [
+            'driver' => $this->driver,
+            'request' => $this->request,
+            'result' => $this->result,
+        ]);
+        ?>
     </div> <!-- end content col -->
     <div class="col-xs-9 col-sm-4 col-md-3 hidden-print col-xs-offset-3 col-sm-offset-0 col-no-left-padding">
         <ul class="nav nav-pills">
