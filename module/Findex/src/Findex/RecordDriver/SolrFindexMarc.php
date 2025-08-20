@@ -1088,4 +1088,20 @@ class SolrFindexMarc extends SolrMarc implements Constants
         return array_unique($rvkchain);
     }
 
+    /** Get all STandardtheaurus Wirtschaft keywords
+     *
+     * @return array
+     */
+    public function getSTWSubjectHeadings()
+    {
+        // Disable this output
+        $return = [];
+        foreach ($this->getFields('650') as $field) {
+            if ($this->getSubfield($field, '2') == 'stw') {
+                $return[] = $this->getSubfield($field, 'a');
+            }
+        }
+        return array_unique($return);
+    }
+
 }

@@ -25,6 +25,9 @@
         if (($pos = strpos($filter['displayText'], 'fiva ')) !== false) {
             $filter['displayText'] = substr($filter['displayText'], $pos + 5 );
         }
+        if (str_starts_with($filter['displayText'], 'stw ')) {
+            $filter['displayText'] = substr($filter['displayText'], 4);
+        }
       ?>
 
 
