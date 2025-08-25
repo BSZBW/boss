@@ -347,6 +347,9 @@ class Params extends \VuFind\Search\Solr\Params
         if ($field == 'topic_browse' && preg_match('/^fiv[arst]/', $value)) {
             return substr($value, 0, 4);
         }
+        if ($field == 'topic_browse' && str_starts_with($value, 'stw ')) {
+            return 'stw';
+        }
         return parent::getFacetLabel($field, $value, $default);
     }
 
