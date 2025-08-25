@@ -92,9 +92,6 @@ $this->headTitle($this->translate('Holdings') . ': ' . preg_replace('/|/', '
         <?php endforeach; ?>
     **/ ?> <?php //-- SOLR -- ?>
 
-<?php if (substr($_SERVER['SERVER_NAME'] ,0,4) == "test" OR substr($_SERVER['SERVER_NAME'] ,0,6) == "mzbihs") : ?>
-    <?php //if($this->client()->is('test')): ?>
-
         <?php // -- Folio OKAPI -- ?>
         <?php foreach ($holdings['holdings'] ?? [] as $holding): ?>
             <h2>
@@ -200,4 +197,3 @@ $this->headTitle($this->translate('Holdings') . ': ' . preg_replace('/|/', '
         <?php endif; ?>
     <?php endif; ?>
 
- <?php endif; ?> <?php // Ende von test|mzbishs erkannt ?>
