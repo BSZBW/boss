@@ -102,6 +102,9 @@ $this->headTitle($this->translate('Holdings') . ': ' . preg_replace('/|/', '
                     <?=$locationTextEsc?>
                 <?php endif; ?>
             </h2>
+            <?php if(!empty($holding['location_details'])): ?>
+                <?= $this->escapeHtml($holding['location_details']); ?>
+            <?php endif; ?>
             <?php
             $truncateSettings = [
                 'rows' => $this->config()->getHoldingsItemLimit(),
