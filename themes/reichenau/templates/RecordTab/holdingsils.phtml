@@ -139,6 +139,16 @@ $this->headTitle($this->translate('Holdings') . ': ' . preg_replace('/|/', '
                         </td>
                     </tr>
                 <?php endforeach; ?>
+                <?php //BSZ: ?>
+                <?php if (isset($holding['intellectual_item'])): ?>
+                    <?= $this->context($this)->renderInContext(
+                         'RecordTab/holdingsils/standard.phtml', [
+                                 'holding' => $holding['intellectual_item'],
+                                 'intellectual_item' => true
+                         ]
+                    ); ?>
+                <?php endif; ?>
+                <?php //End BSZ ?>
                 <?php foreach ($holding['items'] as $row): ?>
                     <?php
                     try {

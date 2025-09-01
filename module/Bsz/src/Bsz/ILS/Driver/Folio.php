@@ -89,6 +89,27 @@ class Folio extends \VuFind\ILS\Driver\Folio
         return $retVal;
     }
 
+    public function getHolding(
+        $bibId,
+        array $patron = null,
+        array $options = []
+    ) {
+        $retVal = parent::getHolding(
+            $bibId,
+            $patron,
+            $options
+        );
+
+        $newItems = [];
+        foreach ($retVal['holdings'] as $item) {
+            $item['is_intellectual_item'] =
+                'Intellectual item' == ($item['status'] ?? '');
+            $newItems[] = $item;
+        }
+        $retVal['holdings'] = $newItems;
+        return $retVal;
+    }
+
 
     protected function getInstanceByBibId($bibId)
     {
