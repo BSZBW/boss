@@ -112,7 +112,7 @@ $this->headTitle($this->translate('Holdings') . ': ' . preg_replace('/|/', '
             ?>
             <table class="table table-striped truncate-field" data-truncate="<?=$this->htmlSafeJsonEncode($truncateSettings)?>">
                 <caption class="sr-only"><?=$this->transEsc('holdings_details_from', ['%%location%%' => $this->transEsc($holding['location'])]) ?></caption>
-                <?php $callNos = $this->tab->getUniqueCallNumbers($holding['items'], true); ?>
+                <?php $callNos = $this->tab->getUniqueCallNumbers($holding['items'] + [$holding['intellectual_item'] ?? []], true); ?>
                 <?php if (!empty($callNos)): ?>
                     <tr>
                         <th><?=$this->transEsc('Call Number')?>: </th>
