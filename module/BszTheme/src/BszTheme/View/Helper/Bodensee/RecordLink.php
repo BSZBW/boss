@@ -111,6 +111,17 @@ class RecordLink extends \VuFind\View\Helper\Root\RecordLinker
         ];
     }
 
+    public function linkToOpac($opacUrl, $ppn): string
+    {
+        $ppnPattern = [];
+        if(!preg_match('/%PPN{(-?\d+)(?:,(-?\d+))?}%/', $opacUrl, $ppnPattern)) {
+            return str_replace('%PPN%', $ppn, $opacUrl);
+        }
+
+        $modifiedPPN = substr($ppn, $ppnPattern[1], $ppnPattern[2] ?? null);
+        return str_replace($ppnPattern[0], $modifiedPPN, $opacUrl);
+    }
+
     /**
      * This method renders the author names well formated as HTML
      *
