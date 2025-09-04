@@ -45,7 +45,7 @@ $content = $this->tab->getContent();
 
                 <td>
                     <?php if (isset($result['opacurl']) && isset($result['name']) && trim($result['opacurl']) != '' && $this->driver->getNetwork() !== 'ZDB'): ?>
-                        <?php $opac = preg_replace('/%PPN%/', $this->driver->getPPN(), $result['opacurl']) ?>
+                        <?php $opac = $this->recordLinker()->linkToOpac($result['opacurl'], $this->driver->getPPN()); ?>
                         <a data-toggle="tooltip"
                            title="<?= $this->transEsc('ILL::library_opac') ?>"
                            href="<?= $opac ?>"
