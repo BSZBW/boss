@@ -282,4 +282,29 @@ trait HoldsTrait
         $view->setTemplate('record/hold');
         return $view;
     }
+
+    public function FreeHoldAction()
+    {
+        // Stop now if the user does not have valid catalog credentials available:
+        if (!is_array($patron = $this->catalogLogin())) {
+            return $patron;
+        }
+
+        $itemHrid = $this->params()->fromQuery('item_hrid');
+        if (empty($itemHrid)) {
+            return $this->redirectToRecord('#top');
+        }
+
+        $query = ['hrid' => $itemHrid];
+
+        $config = $this->getConfig();
+        $useId = $config->FreeHold->use_external_system_id ?? false;
+        if ($useId && isset($patron['externalSystemId'])) {
+            $query['exSysId'] = $patron['externalSystemId'];
+        }
+        $baseUrl = $config->FreeHold->url;
+        $params = http_build_query($query);
+
+        return $this->redirect()->toUrl($baseUrl . '?' . $params);
+    }
 }

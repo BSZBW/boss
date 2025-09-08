@@ -110,6 +110,28 @@ class Folio extends \VuFind\ILS\Driver\Folio
         return $retVal;
     }
 
+    protected function formatHoldingItem(
+        string $bibId,
+        array $holdingDetails,
+        $item,
+        $number,
+        string $dueDateValue,
+        $boundWithRecords,
+        $currentLoan
+    ): array {
+        $retVal =  parent::formatHoldingItem(
+            $bibId,
+            $holdingDetails,
+            $item,
+            $number,
+            $dueDateValue,
+            $boundWithRecords,
+            $currentLoan
+        );
+        $retVal['item_hrid'] = $item->hrid ?? '';
+        return $retVal;
+    }
+
 
     protected function getInstanceByBibId($bibId)
     {
@@ -125,5 +147,15 @@ class Folio extends \VuFind\ILS\Driver\Folio
         }
         return parent::getStatuses($ids);
     }
+
+    public function patronLogin($username, $password)
+    {
+        $retVal =  parent::patronLogin($username, $password);
+        $profile = $this->getUserById($retVal['id']);
+        return $retVal + [
+            'externalSystemId' => $profile->externalSystemId ?? null
+            ];
+    }
+
 
 }

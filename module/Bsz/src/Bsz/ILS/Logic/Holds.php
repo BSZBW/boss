@@ -21,6 +21,11 @@ class Holds extends \VuFind\ILS\Logic\Holds
                 = $items[0]['location_details'] ?? '';
         }
 
+        $config = $this->config;
+        if (!$config->FreeHold || !$config->FreeHold->url) {
+            return $retVal;
+        }
+
         foreach ($retVal as $groupKey => $items) {
             $newItems = [];
             $intellectualItem = null;
@@ -30,7 +35,13 @@ class Holds extends \VuFind\ILS\Logic\Holds
                     && $intellectualItem == null
                 ) {
                     $intellectualItem = $item;
-                    $intellectualItem['link'] = '/Link/Zu/' . $intellectualItem['id'];
+                    $intellectualItem['link'] = [
+                        'action' => 'FreeHold',
+                        'record' => $item['link']['record'],
+                        'source' => $item['link']['source'],
+                        'query' => 'item_hrid='.$intellectualItem['item_hrid']
+                    ];
+                    $intellectualItem['linkLightbox'] = false;
                 }else {
                     $newItems[] = $item;
                 }
