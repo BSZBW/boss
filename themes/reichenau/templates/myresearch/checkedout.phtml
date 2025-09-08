@@ -199,11 +199,11 @@ $renewAll = !$this->ilsPaging || !$paginator;
                                 <a href="<?=$this->escapeHtmlAttr($ilsDetails['renew_link'])?>"><?=$this->transEsc('renew_item')?></a>
                             <?php endif; ?>
                         </div> <!-- BSZ: Ende class="media-body" -->
-                        <?php /**
+
                         <?php if ($thumbnail && $thumbnailAlignment == 'right'): ?>
-                        <?=$thumbnail ?>
+                            <?=$thumbnail ?>
                         <?php endif ?>
-                         **/?>
+
                     </div> <!-- BSZ: Ende class="col-xs-10 col-sm-6 col-md-7 col-no-left-padding" -->
                     <!-- </div> --> <!-- BSZ: Ende class="media" -->
 

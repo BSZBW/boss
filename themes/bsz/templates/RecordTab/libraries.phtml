@@ -67,7 +67,7 @@ $fulltext_key = $this->driver->isFree() ? 'Volltext_frei' : 'Volltext';
 
                 <td>
                     <?php if (isset($result['opacurl']) && isset($result['name']) && trim($result['opacurl']) != '' && $this->driver->getNetwork() !== 'ZDB'): ?>
-                        <?php $opac = preg_replace('/%PPN%/', $this->driver->getPPN(), $result['opacurl']) ?>
+                        <?php $opac = $this->recordLinker()->linkToOpac($result['opacurl'], $this->driver->getPPN()); ?>
                         <a data-toggle="tooltip"
                            title="<?= $this->transEsc('ILL::library_opac') ?>"
                            href="<?= $opac ?>"
@@ -86,7 +86,7 @@ $fulltext_key = $this->driver->isFree() ? 'Volltext_frei' : 'Volltext';
                            title="<?= $this->transEsc('Fulltext') ?>"><?= $this->transEsc($fulltext_key) ?></a>
                     <?php else: ?>
                         <?php if (isset($result['opacurl']) && isset($result['name']) && trim($result['opacurl']) != '' && $this->driver->getNetwork() !== 'ZDB'): ?>
-                            <?php $opac = preg_replace('/%PPN%/', $this->driver->getPPN(), $result['opacurl']) ?>
+                            <?php $opac = $this->recordLinker()->linkToOpac($result['opacurl'], $this->driver->getPPN()); ?>
                             <a data-toggle="tooltip"
                                title="<?= $this->transEsc('ILL::library_opac') ?>"
                                href="<?= $opac ?>"
