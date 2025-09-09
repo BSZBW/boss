@@ -47,7 +47,7 @@ $renewAll = !$this->ilsPaging || !$paginator;
                 <div class="checkbox">
                     <label>
                         <input type="checkbox" name="selectAll" class="checkbox-select-all">
-                        <?=$this->transEsc('select_all_on_page')?>
+                        <?=$this->transEsc('select_page')?>
                     </label>
                     <?=
                     $this->component(
@@ -141,7 +141,7 @@ $renewAll = !$this->ilsPaging || !$paginator;
                         <?php if ($thumbnail && $thumbnailAlignment == 'left'): ?>
                             <?=$thumbnail ?>
                         <?php endif ?>
-                    </div> <!-- BSZ: Ende class="col-xs-1 col-sm-1 col-md-1 hidden-print" -->
+                    </div> <!-- BSZ: Ende class="col-xs-2 col-xs-pull-1 col-sm-2 col-sm-pull-1 col-md-2  col-md-pull-1 hidden-print" -->
 
                     <div class="col-xs-9 col-sm-9 col-md-9 col-no-left-padding">
                         <div class="media-body">
@@ -204,7 +204,7 @@ $renewAll = !$this->ilsPaging || !$paginator;
                             <?=$thumbnail ?>
                         <?php endif ?>
 
-                    </div> <!-- BSZ: Ende class="col-xs-10 col-sm-6 col-md-7 col-no-left-padding" -->
+                    </div> <!-- BSZ: Ende class="col-xs-9 col-sm-9 col-md-9 col-no-left-padding" -->
                     <!-- </div> --> <!-- BSZ: Ende class="media" -->
 
                     <?=$resource->tryMethod('supportsCoinsOpenUrl') ? '<span class="Z3988" aria-hidden="true" title="' . $this->escapeHtmlAttr($resource->getCoinsOpenUrl()) . '"></span>' : ''?>
