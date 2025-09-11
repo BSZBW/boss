@@ -872,7 +872,7 @@ class SolrFindexMarc extends SolrMarc implements Constants
             if(!empty($sfr) && in_array($sfx, $isils) && !in_array($sfr, $urlsOnly)) {
                 $retVal[] = [
                     'url' => $sfr,
-                    'label' => $sfy ?? $sfr,
+                    'label' => empty($sfy) ? $sfr : $sfy,
                     'isil' => $sfx
                 ];
                 $urlsOnly[] = $sfr;
