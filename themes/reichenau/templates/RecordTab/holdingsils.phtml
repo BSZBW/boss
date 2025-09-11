@@ -31,8 +31,9 @@ $this->headTitle($this->translate('Holdings') . ': ' . preg_replace('/|/', '
         <?=$this->transEsc('account_block_options_missing', ['%%details%%' => implode('; ', $holdings['blocks'])]) ?>
     </div>
 <?php endif; ?>
-
-<?=($offlineMode == "ils-offline") ? $this->render('Helpers/ils-offline.phtml') : ''?>
+<?php $urls = $this->driver->getLocalUrls();?>
+<?php $showElectronic = !empty($urls) && $this->client()->is('show_electronic_holdings'); ?>
+<?=($offlineMode == "ils-offline" && !$showElectronic) ? $this->render('Helpers/ils-offline.phtml') : ''?>
 
 <?php if (($this->ils()->getHoldsMode() == 'driver' && !empty($holdings['holdings'])) || $this->ils()->getTitleHoldsMode() == 'driver'): ?>
     <?php if ($account->loginEnabled() && $offlineMode != 'ils-offline'): ?>
@@ -50,7 +51,12 @@ $this->headTitle($this->translate('Holdings') . ': ' . preg_replace('/|/', '
 <?php $holdingTitleHold = $this->driver->tryMethod('getRealTimeTitleHold'); if (!empty($holdingTitleHold)): ?>
     <a class="placehold" data-lightbox title="<?=$this->transEsc('request_place_text')?>" href="<?=$this->recordLink()->getRequestUrl($holdingTitleHold)?>"><i class="fa fa-flag" aria-hidden="true"></i>&nbsp;<?=$this->transEsc('title_hold_place')?></a>
 <?php endif; ?>
-<?php // removed online access as this is listed in main section ?>
+<?php if ($showElectronic): ?>
+    <?= $this->context($this)->renderInContext(
+            'RecordTab/holdingsils/electronic.phtml',
+            ['holdings' => $urls]
+    ); ?>
+<?php endif; ?>
 <?php $recallButtonCounter = 0 ?>
 <?php if (isset($holdings['holdings'])): ?>
     <?php /** -- SOLR -- ?>
