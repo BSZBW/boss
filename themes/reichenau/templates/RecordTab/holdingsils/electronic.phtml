@@ -1,5 +1,5 @@
 <h2><?=$this->transEsc('Electronic')?></h2>
 <?php foreach ($this->holdings as $holding): ?>
-    <a class="external" href="<?=$holding['url']?>" target="_blank"><?=$holding['desc'] ?? $holding['url']?></a>
+    <a class="external" href="<?=$holding['url']?>" target="_blank"><?=$holding['label'] ?? $holding['url']?></a>
     <br>
 <?php endforeach; ?>
