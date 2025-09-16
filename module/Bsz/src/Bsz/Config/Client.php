@@ -470,4 +470,23 @@ class Client extends Config
         $record = $this->get('Record');
         return $record ? ($record->get('override_text') ?? null) : null;
     }
+
+    public function getUrlLabel(array $holding) {
+        $defaultLabel = $holding['label'] ?? '';
+        $url = $holding['url'] ?? '';
+        if (!empty($defaultLabel) && $defaultLabel != $url) {
+            return $defaultLabel;
+        }
+
+        if ('DE-LFER' != ($holding['isil'] ?? '')) {
+            return $url;
+        }
+
+        $record = $this->get('Record');
+        $label = $record ? ($record->get('lfer_label') ?? null): null;
+        if ($label == null) {
+            return $url;
+        }
+        return $label;
+    }
 }
