@@ -1,6 +1,6 @@
 <h2><?=$this->transEsc('Electronic')?></h2>
 <?php foreach ($this->holdings as $holding): ?>
     <?php $label = $this->client()->getUrlLabel($holding); ?>
-    <a class="external" href="<?=$holding['url']?>" target="_blank"><?=$label?></a>
+    <a class="external" href="<?=$holding['url']?>" target="_blank"><?=$this->transEsc($label)?></a>
     <br>
 <?php endforeach; ?>
