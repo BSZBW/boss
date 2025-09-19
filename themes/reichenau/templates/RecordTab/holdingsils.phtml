@@ -100,14 +100,14 @@ $this->headTitle($this->translate('Holdings') . ': ' . preg_replace('/|/', '
 
         <?php // -- Folio OKAPI -- ?>
         <?php foreach ($holdings['holdings'] ?? [] as $holding): ?>
-            <h2>
+            <h4>
                 <?php $locationTextEsc = $this->transEscWithPrefix('location_', $holding['location']); ?>
                 <?php if ($holding['locationhref'] ?? false): ?>
                     <a href="<?=$this->escapeHtmlAttr($holding['locationhref'])?>" target="_blank"><?=$locationTextEsc?></a>
                 <?php else: ?>
                     <?=$locationTextEsc?>
                 <?php endif; ?>
-            </h2>
+            </h4>
             <?php if(!empty($holding['location_details'])): ?>
                 <?= $this->escapeHtml($holding['location_details']); ?>
             <?php endif; ?>
