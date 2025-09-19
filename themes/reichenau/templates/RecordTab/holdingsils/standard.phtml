@@ -34,7 +34,12 @@
           <?=$this->schemaOrg()->getLink($schemaAvailabilityUri, 'availability')?>
         <?php endif; ?>
       </span>
-      <?php if ($availabilityStatus->isAvailable()): ?>
+      <?php if ($this->intellectual_item && isset($holding['link'])): ?>
+          <a target="_blank" class="placehold icon-link" <?php if (!empty($holding['linkLightbox'])): ?>data-lightbox <?php endif; ?>href="<?=$this->escapeHtmlAttr($this->recordLinker()->getRequestUrl($holding['link']))?>">
+              <?=$this->icon('place-hold', 'icon-link__icon') ?>
+              <span class="icon-link__label"><?=$this->transEsc('Place a Hold')?></span>
+          </a>
+      <?php elseif ($availabilityStatus->isAvailable()): ?>
         <?php /* Begin Available Items (Holds) */ ?>
         <?php if ($holding['link'] ?? false): ?>
           <a class="<?=$check ? 'checkRequest request-check ' : ''?>placehold icon-link" <?php if (!empty($holding['linkLightbox'])): ?>data-lightbox <?php endif; ?>href="<?=$this->escapeHtmlAttr($this->recordLinker()->getRequestUrl($holding['link']))?>">
