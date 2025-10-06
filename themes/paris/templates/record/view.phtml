@@ -28,73 +28,68 @@ use Laminas\View\Helper\HeadScript;
 ?>
 
 <?php if (isset($this->scrollData) && ($this->scrollData['previousRecord'] || $this->scrollData['nextRecord'])): ?>
-<div class="col-sm-2 col-sm-offset-5 text-center">
-    <a class="backtosearch text-link"
-       title="<?= $this->transEsc('Back to Search Results') ?>"
-       href="<?= $this->searchMemory()->getLastSearchUrl('', '', '', false) ?>">
-       <i class="fa fa-chevron-left"></i> <?=$this->transEsc('Back to Search Results')?>
-    </a>
-</div>
-<div class="col-sm-4 col-sm-offset-4">
     <ul class="pager hidden-print">
-
+        <li>
+            <a class="backtosearch btn btn-primary"
+               title="<?= $this->transEsc('Back to Search') ?>"
+               href="<?= $this->searchMemory()->getLastSearchUrl('', '', '', false) ?>"
+               class="backtosearch btn btn-info"><i class="fa fa-list-ol"></i></a>
+        </li>
         <?php if ($this->scrollData['previousRecord']): ?>
             <?php if ($this->scrollData['firstRecord']): ?>
                 <li>
-                    <a class="btn btn-default"
+                    <a class="btn btn-primary"
                        href="<?= $this->recordLink()->getUrl($this->scrollData['firstRecord']) ?>"
                        title="<?= $this->transEsc('First Search Result') ?>"
-                       rel="nofollow"><i class="fa fa-chevron-left"></i><i
-                                class="fa fa-chevron-left"></i></a>
+                       rel="nofollow"><i class="fa fa-caret-left"></i><i
+                                class="fa fa-caret-left"></i></a>
                 </li>
             <?php endif; ?>
             <li>
-                <a class="previous btn btn-default"
+                <a class="previous btn btn-primary"
                    href="<?= $this->recordLink()->getUrl($this->scrollData['previousRecord']) ?>"
                    title="<?= $this->transEsc('Previous Search Result') ?>"
-                   rel="nofollow"><i class="fa fa-chevron-left"></i></a>
+                   rel="nofollow"><i class="fa fa-caret-left"></i></a>
             </li>
         <?php else: ?>
             <?php if ($this->scrollData['firstRecord']): ?>
-                <li class="disabled"><a href="#" class="btn btn-default disabled"><i
-                                class="fa fa-chevron-left"></i><i
-                                class="fa fa-chevron-left"></i></a></li>
+                <li class="disabled"><a href="#" class="btn btn-primary disabled"><i
+                                class="fa fa-caret-left"></i><i
+                                class="fa fa-caret-left"></i></a></li>
             <?php endif; ?>
-            <li class="disabled"><a class="btn btn-default disabled" href="#"><i
-                            class="fa fa-chevron-left"></i></a></li>
+            <li class="disabled"><a class="btn btn-primary disabled" href="#"><i
+                            class="fa fa-caret-left"></i></a></li>
         <?php endif; ?>
-        <li><?= $this->transEsc('of_num_results', [
-            '%%position%%' => $this->localizedNumber($this->scrollData['currentPosition']),
-            '%%total%%' => $this->localizedNumber($this->scrollData['resultTotal'])
-            ]) ?></li>
+        <?= $this->transEsc('of_num_results', [
+                '%%position%%' => $this->localizedNumber($this->scrollData['currentPosition']),
+                '%%total%%' => $this->localizedNumber($this->scrollData['resultTotal'])
+        ]) ?>
         <?php if ($this->scrollData['nextRecord']): ?>
             <li>
-                <a class="next btn btn-default" class="next"
+                <a class="next btn btn-primary" class="next"
                    href="<?= $this->recordLink()->getUrl($this->scrollData['nextRecord']) ?>"
                    title="<?= $this->transEsc('Next Search Result') ?>"
-                   rel="nofollow"><i class="fa fa-chevron-right"></i></a>
+                   rel="nofollow"><i class="fa fa-caret-right"></i></a>
             </li>
             <?php if ($this->scrollData['lastRecord']): ?>
                 <li>
-                    <a class="btn btn-default"
+                    <a class="btn btn-primary"
                        href="<?= $this->recordLink()->getUrl($this->scrollData['lastRecord']) ?>"
                        title="<?= $this->transEsc('Last Search Result') ?>"
-                       rel="nofollow"><i class="fa fa-chevron-right"></i><i
-                                class="fa fa-chevron-right"></i></a>
+                       rel="nofollow"><i class="fa fa-caret-right"></i><i
+                                class="fa fa-caret-right"></i></a>
                 </li>
             <?php endif; ?>
         <?php else: ?>
-            <li class="disabled"><a class="btn btn-default disabled" href="#"><i
-                            class="fa fa-chevron-right"></i></a></li>
+            <li class="disabled"><a class="btn btn-primary disabled" href="#"><i
+                            class="fa fa-caret-right"></i></a></li>
             <?php if ($this->scrollData['lastRecord']): ?>
-                <li class="disabled"><a class="btn btn-default disabled" href="#"><i
-                                class="fa fa-chevron-right"></i><i
-                                class="fa fa-chevron-right"></i></a></li>
+                <li class="disabled"><a class="btn btn-primary disabled" href="#"><i
+                                class="fa fa-caret-right"></i><i
+                                class="fa fa-caret-right"></i></a></li>
             <?php endif; ?>
         <?php endif; ?>
     </ul>
-</div>
-
 <?php endif; ?>
 
 <?= $this->record($this->driver)->getToolbar() ?>
