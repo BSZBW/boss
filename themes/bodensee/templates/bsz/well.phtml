@@ -17,8 +17,13 @@
             <?php foreach ($settings->get('link') as $k => $link): ?>
             <?php
                 if (strpos($link, '://') === false) {
-                    $url = $this->url($link);
-                    $class = strpos($link, 'bsz-library') === false ? 'internal' : 'external';
+                    if (str_contains($link, 'mailto:') === true || str_contains($link, 'tel:') === true) {
+                        $url = $link;
+                        $target = '_blank';
+                    } else {
+                        $url = $this->url($link);
+                        $class = strpos($link, 'bsz-library') === false ? 'internal' : 'external';
+                    }
                 } else {
                     $url = $link;
                     $class = 'external';
@@ -30,7 +35,7 @@
                 $label = isset($settings->get('label_' . $lang)[$k]) ? $settings->get('label_' . $lang)[$k] : $settings->get('label_de')[$k];
             ?>
             <li>
-                <a href="<?=$url?>" title="<?=$this->transEsc($title)?>" <?php if (!empty($title)): ?>data-toggle="tooltip" <?php endif; ?>class="<?=$this->escapeHtmlAttr($class)?>"><?=$this->escapeHtml($label)?></a>
+                <a href="<?=$url?>" title="<?=$this->transEsc($title)?>" <?php if (!empty($title)): ?>data-toggle="tooltip" <?php endif; ?>class="<?=$this->escapeHtmlAttr($class)?>" target="<?=$this->transEsc($target)?>"><?=$this->escapeHtml($label)?></a>
             </li>
             <?php endforeach; ?>
         </ul>
