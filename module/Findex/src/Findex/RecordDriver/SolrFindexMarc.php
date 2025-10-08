@@ -471,7 +471,7 @@ class SolrFindexMarc extends SolrMarc implements Constants
                 $output[] = $this->getSubfield($field, 'a');
             }
         }
-        return $output;
+        return array_unique($output);
     }
 
     public function getParallelEditions()
