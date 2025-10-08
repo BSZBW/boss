@@ -1,40 +1,36 @@
 <div class="navbar navbar-default navbar-fixed-top">
     <?php if($this->client()->is('wlb2')): ?>
-    <div class="container">
-        <div class="navbar-header">
-            <?php if (!isset($frame)): ?>
-                <button type="button" class="navbar-toggle btn btn-primary" data-toggle="collapse" data-target="#header-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <i class="fa fa-bars"></i>
-                </button>
-            <?php endif; ?>
+        <div class="container">
+            <div class="navbar-header">
+                <?php if (!isset($frame)): ?>
+                    <button type="button" class="navbar-toggle btn btn-primary" data-toggle="collapse" data-target="#header-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <i class="fa fa-bars"></i>
+                    </button>
+                <?php endif; ?>
+            </div>
+            <div class="navbar-toggle pull-left">
+                <a href="<?=$this->client()->getWebsite('')?>">
+                    <img src="<?= $this->imageLink('logo/wlb.png') ?>" style="height:3em;margin:5px" alt="Logo Bibliothek">
+                </a>
+            </div>
         </div>
-        <div class="navbar-toggle pull-left">
-            <a href="<?=$this->client()->getWebsite('')?>">
-                <img src="<?= $this->imageLink('logo/wlb.png') ?>" style="height:3em;margin:5px" alt="Logo Bibliothek">
-            </a>
-            </a>
-        </div>
-    </div>
     <?php endif; ?>
 
     <div class="container">
         <a class="sr-only" href="#content"><?=$this->transEsc('Skip to content') ?></a>
-        <div class="navbar-header">
+        <div class="navbar-left">
             <?php if (!isset($frame) && !$this->client()->is('wlb2')): ?>
                 <button type="button" class="navbar-toggle btn btn-primary" data-toggle="collapse" data-target="#header-collapse">
                     <span class="sr-only">Toggle navigation</span>
                     <i class="fa fa-bars"></i>
                 </button>
             <?php endif; ?>
-            <?php if ($this->client()->is('show_small_logo')): ?>
-            <?php $lang = $this->layout()->userLang?>
-            <?php if ($this->client()->getTag() == 'athen' && $lang == 'en'): $lang = 'de'; endif; ?>
-            <a class="navbar-brand external hasicon" href="<?=$this->client()->getWebsite('', $lang)?>">
-                <img class="img-responsive" src="<?=$this->imageLink($this->clientAsset()->getSmallLogo()) ?>"/>
-            </a>
-            <?php endif ?>
-
+            <div class="navbar-left">
+                <?php if ($this->client()->is('show_small_logo')): ?>
+                        <?=$this->clientAsset()->getLogoHtml(false)?>
+                <?php endif ?>
+            </div>
         </div>
         <?php $account = $this->auth()->getManager(); ?>
         <?php if ($this->layout()->searchbox !== false && !$this->client()->is('disable_searchbar')): ?>
@@ -144,14 +140,14 @@
                     </a>
                 </li>
             </ul>
+            <?php /* BSZ: Wozu ist dieser Code?
             <?php if ($this->client()->is('show_header_logo')): ?>
                 <a href="/" class="visible-lg pull-right">
                   <img src="<?= $this->imageLink('logo/wlb.png') ?>" style="height:3em" alt="Logo Bibliothek">
                 </a>
             <?php endif; ?>
+             */ ?>
         </div>
         <?php endif ?>
-
-
     </div>
 </div>
