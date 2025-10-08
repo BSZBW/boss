@@ -100,6 +100,9 @@
                 </div>
                 <label class="control-label col-xs-10 col-sm-11" for="agree-commercial-use">* <?=$this->transEsc('ILL::commercial_use')?></label>
             </div>
+            <div>
+                <b><i class="fa fa-info-circle"></i> <?= $this->transEsc('delivery_time_hint') ?></b> <br><br>
+            </div>
             <div class="form-group form-group-sm">
                 <div class="col-sm-12">
                     <input id="ill-submit" type="submit" class="btn btn-primary<?=$this->submitDisabled?' disabled': ''?>" value="<?=$test ? $this->transEsc('Test Order') : $this->transEsc('Order') ?>"/>
