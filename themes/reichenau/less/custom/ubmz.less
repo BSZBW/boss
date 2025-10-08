@@ -1,0 +1,397 @@
+// Switch on/off highlighting visibility using
+// background color in alpha channel 
+// rgba(255,255,0,0) = off, 
+// rgba(255,255,0,1) = maximum saturation
+
+
+// decent gray gradient
+
+.row.result:nth-child(2n+1) {
+    background-color: #f9f9f9;
+}
+
+.label-default {
+    background-color: inherit;
+}
+
+.breadcrumb {
+    border-radius: 0px;
+}
+
+.nav-tabs > li:not(.active) > a {
+    background-color: #e1e1e1;;
+    color: #000;
+  border-top: 1px solid #d1d1d1;
+  border-left: 1px solid #d1d1d1;
+  border-right: 1px solid #d1d1d1;
+    font-weight: 700;
+}
+.nav-tabs > li.active a {
+  border-top: 1px solid @brand-primary;
+  border-left: 1px solid @brand-primary;
+  border-right: 1px solid @brand-primary;
+  font-weight: 700;
+}
+
+.nav-tabs > li.active a:hover {
+    border-top: 1px solid @brand-primary;
+    border-left: 1px solid @brand-primary;
+    border-right: 1px solid @brand-primary;
+    font-weight: 700;    
+}
+
+.nav-tabs > li:not(.active) > a:hover {
+    background-color: #e1e1e1;
+    color: @brand-primary;
+  border-top: 1px solid @brand-primary;
+  border-left: 1px solid @brand-primary;
+  border-right: 1px solid @brand-primary;
+    font-weight: 700;
+}
+
+.btn.focus, .btn:focus, .btn:hover {
+  color: #c1002a;
+}
+
+.navbar .delete-input {
+  background-color: #fff !important;
+  border-top: 1px solid @gray-light;
+  border-bottom: 1px solid @gray-light;
+}
+
+header {
+    @media (max-width: 545px) {
+        .navbar-form a .text {
+            display: none;
+        }
+    }
+}
+
+.well {
+  min-height: 20px;
+  padding: 19px;
+  margin-bottom: 20px;
+  border: 1px solid #fff;
+  border-radius: @border-radius-base;
+  .box-shadow(inset 0 0px 0px rgba(0,0,0,0));
+  blockquote {
+    border-color: #fff;
+    border-color: rgba(0,0,0,0);
+  }
+}
+
+a:focus, a:hover {
+    text-decoration: underline;
+}
+
+h2 {
+  @media (min-width: 768px) {
+    font-size: 28px;
+    font-weight: normal;
+  }
+  @media (max-width: 767px) {
+    font-size: 20px;
+  }
+}
+
+/**
+RecordTabs get another styling than searchTabs because their background is white
+**/
+.recordTabs {
+    li.active {
+        a {
+            border-top: 1px solid #000 !important;
+            border-right: 1px solid #000 !important;
+            border-left: 1px solid #000 !important;
+        }
+    }
+}
+
+.advancedSearchLink {
+    border-radius: @border-radius-base;
+    i.fa {
+        //Make the button exactly same size as the main search button
+        font-size: 1.2em; 
+    }
+    &:hover {
+        text-decoration: none;
+        background-color: #aaa;
+    }
+    .text {
+        @media (max-width: @screen-lg-min) {
+            display: none;
+        }
+    }
+}
+
+header .navbar-form input[type="text"] {
+    @media (min-width: 768px) {
+        min-width: 52rem;
+        max-width: 90%;
+    }
+    @media (max-width: 767px) {
+        min-width: 45rem;
+        max-width: 80%;
+    }
+    @media (max-width: 579px) {
+        min-width: 40rem;
+        max-width: 80%;
+    }
+    @media (max-width: 529px) {
+        min-width: 15rem;
+        max-width: 60%;
+    }
+}
+
+.pager {
+  a {
+    color: #fff;
+  }
+}
+
+/* ------ MyResearch ------ */
+.myresearch-menu {
+  ul {
+    list-style: none;
+    margin-bottom:0;
+    padding-left: 0;
+  }
+  a {
+    display: inline-flex;
+    gap: 0.375rem;
+    width: 100%;
+    padding: 10px 15px;
+    line-height: 1.15;
+    align-items: baseline;
+
+    &:hover {
+      background-color: @gray-lighter;
+      outline: dotted 1px #000;
+    }
+    &:focus {
+      background-color: @nav-link-hover-bg;
+    }
+    &.user-list-link i {
+      margin-left: 0.5rem;
+    }
+    &.active {
+      background-color: @brand-primary;
+      color: #fff;
+    }
+
+    .icon-link__icon {
+      width: 1rem;
+      text-align: center;
+    }
+
+    .icon-link__label {
+      flex: 1 1 0%;
+    }
+  }
+
+  .status {
+    display: flex;
+    gap: 2px;
+    flex: none;
+    .badge {
+      border-radius: 2px;
+      border: 1px solid; /* color inherited from bootstrap */
+      height: 20px;
+
+      &.account-none {
+        color: @gray-dark;
+        background-color: @gray-lighter;
+      }
+      &.account-info {
+        color: @state-success-text;
+        background-color: @state-success-bg;
+      }
+      &.account-warning {
+        color: @state-warning-text;
+        background-color: @state-warning-bg;
+      }
+      &.account-alert {
+        color: @state-danger-text;
+        background-color: @state-danger-bg;
+      }
+    }
+  }
+
+  .active .status .badge {
+    color: #fff;
+    background-color: transparent;
+    border: 1px solid #fff;
+  }
+}
+
+.record-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  &.search-results-solr-auth {
+    .media-left, .media-right {
+      display: none;
+    }
+  }
+}
+
+.result {
+  display: flex;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+
+  .record-checkbox,
+  .record-number { display: none; }
+
+  .title { font-weight: bold; }
+  //.list-tab-content.record .img-col { display: none; }
+  .list-tab-content.record .info-col { width: 100%; }
+  .format {
+    &:extend(.label);
+    &:extend(.label-info);
+  }
+
+  .checkbox-select-item { float: left; }
+
+  @media (max-width: 767px) {
+    a {
+      max-width: 100%;
+      text-decoration: underline;
+    }
+  }
+  @media (min-width: 768px) {
+    .record-checkbox {
+      display: flex;
+      flex: 0;
+      cursor: pointer;
+    }
+    .record-number {
+      display: flex;
+      flex: 0 2rem;
+      text-align: center;
+    }
+  }
+}
+.record,
+.result {
+  .media {
+    flex: 1;
+    margin: 0;
+  }
+  .media-left,
+  .media-right {
+    text-align: center;
+    img {
+      max-width: 100%;
+      max-height: 300px;
+    }
+    &.small img,
+    &.medium img,
+    &.large img {
+      display: inline-block;
+      width: @thumbnail-width-small;
+      max-width: none;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .media-left,
+    .media-right {
+      max-width: 25%;
+      padding-right: 10px;
+      padding-left: 10px;
+
+      a {
+        display: inline-block;
+        max-width: 100%;
+        text-align: center;
+        white-space: nowrap;
+        text-decoration: underline;
+      }
+
+      &.small img,
+      &.medium img,
+      &.large img {
+        width: auto;
+        max-width: 100%;
+      }
+      &.small  > a,
+      &.small  > img { width: @thumbnail-width-small; }
+      &.medium > a,
+      &.medium > img { width: @thumbnail-width-medium; }
+      &.large  > a,
+      &.large  > img { width: @thumbnail-width-large; }
+    }
+  }
+}
+
+.result-body {
+  padding: 0;
+  padding-bottom: .25rem;
+}
+
+.result-body,
+.media-body {
+  h2 {
+    font-size: unset;
+    line-height: @line-height-base;
+    margin: 0;
+
+    .authors {
+      display: block;
+    }
+  }
+}
+// Customizing for UB Mainz
+
+.navbar-default .navbar-nav > li > a {
+  color: @brand-primary;
+}
+
+.searchForm_lookfor {
+  border: 1px solid;
+  color: @brand-primary;
+}
+
+header {
+  border-bottom: 1px solid @brand-primary;
+}
+
+footer {
+  border-top: 1px solid @brand-primary;
+}
+
+footer .well ul li a, footer .well ul li a:hover {
+  text-decoration: none;
+  color: @brand-primary;
+}
+
+footer .well ul li a:hover {
+  text-decoration: underline;
+}
+.graybg {
+  background-color: @body-bg;
+}
+
+html body:not(.frame) {
+  @media (max-width: 1199px) {
+    padding-top: 175px;
+  }
+  @media (min-width: 1200px) {
+    padding-top: 120px;
+  }
+}
+
+
+.logo {
+  @media (max-width: 1199px) {
+    height: 50px;
+  }
+  @media (min-width: 1200px) {
+    width: 250px;
+  }
+  padding-top: 10px;
+  padding-right: 10px;
+  padding-left: 1px;
+}
