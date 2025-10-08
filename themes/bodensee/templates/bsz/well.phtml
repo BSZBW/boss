@@ -16,6 +16,7 @@
         <ul>
             <?php foreach ($settings->get('link') as $k => $link): ?>
             <?php
+                $target = '';
                 if (strpos($link, '://') === false) {
                     if (str_contains($link, 'mailto:') === true || str_contains($link, 'tel:') === true) {
                         $url = $link;
