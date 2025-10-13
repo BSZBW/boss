@@ -21,6 +21,7 @@
                     if (str_contains($link, 'mailto:') === true || str_contains($link, 'tel:') === true) {
                         $url = $link;
                         $target = '_blank';
+                        $class = 'internal';
                     } else {
                         $url = $this->url($link);
                         $class = strpos($link, 'bsz-library') === false ? 'internal' : 'external';
@@ -36,7 +37,7 @@
                 $label = isset($settings->get('label_' . $lang)[$k]) ? $settings->get('label_' . $lang)[$k] : $settings->get('label_de')[$k];
             ?>
             <li>
-                <a href="<?=$url?>" title="<?=$this->transEsc($title)?>" <?php if (!empty($title)): ?>data-toggle="tooltip" <?php endif; ?>class="<?=$this->escapeHtmlAttr($class)?>" target="<?=$this->transEsc($target)?>"><?=$this->escapeHtml($label)?></a>
+                <a href="<?=$url?>" title="<?=$this->transEsc($title)?>"<?php if (!empty($title)): ?> data-toggle="tooltip"<?php endif; ?> class="<?=$this->escapeHtmlAttr($class)?>" target="<?=$this->transEsc($target)?>"><?=$this->escapeHtml($label)?></a>
             </li>
             <?php endforeach; ?>
         </ul>
