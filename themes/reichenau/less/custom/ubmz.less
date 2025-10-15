@@ -53,6 +53,10 @@
   color: #c1002a;
 }
 
+.btn-bookbag-toggle, .record-nav > li {
+  width: auto;
+}
+
 .navbar .delete-input {
   background-color: #fff !important;
   border-top: 1px solid @gray-light;
@@ -127,19 +131,15 @@ RecordTabs get another styling than searchTabs because their background is white
 header .navbar-form input[type="text"] {
     @media (min-width: 768px) {
         min-width: 52rem;
-        max-width: 90%;
     }
     @media (max-width: 767px) {
         min-width: 45rem;
-        max-width: 80%;
     }
     @media (max-width: 579px) {
-        min-width: 40rem;
-        max-width: 80%;
+        min-width: 35rem;
     }
     @media (max-width: 529px) {
         min-width: 15rem;
-        max-width: 60%;
     }
 }
 
@@ -360,6 +360,7 @@ header {
 
 footer {
   border-top: 1px solid @brand-primary;
+  margin-top: 30px;
 }
 
 footer .well ul li a, footer .well ul li a:hover {
