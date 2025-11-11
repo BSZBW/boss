@@ -1360,5 +1360,17 @@ class SolrGviMarc extends SolrMarc implements Constants
         return false;
     }
 
+    public function canOrderAnyways(): bool {
+        $isils = $this->mainConfig->Site->order_ill ?? '';
+        $isilList = array_map('trim', explode(',', $isils));
+        $localIsils = $this->getHoldingIsils();
+        foreach ($isilList as $orderIsil) {
+            if (in_array($orderIsil, $localIsils)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 }
