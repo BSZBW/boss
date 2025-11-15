@@ -70,7 +70,7 @@ class Debug
     }
 
     /**
-     * Determin if running on Test Server
+     * Determine if running on Test Server
      * @return boolean
      */
     public static function isDev()

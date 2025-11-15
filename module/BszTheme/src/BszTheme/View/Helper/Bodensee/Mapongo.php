@@ -30,13 +30,13 @@ class Mapongo extends AbstractHelper
     /**
      * Invoked in the template, returns HTML
      *
-     * @param string $signatur
+     * @param string $signature
      * @param string $lang
      * @return string
      */
-    public function __invoke($signatur, $lang = 'de')
+    public function __invoke($signature, $lang = 'de')
     {
-        preg_match('/\|\s(.*)/', $signatur, $matches);
+        preg_match('/\|\s(.*)/', $signature, $matches);
         $rvk = $matches[1] ?? '';
         return $this->render($rvk, $lang);
     }
