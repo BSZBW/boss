@@ -182,7 +182,7 @@ class IllForm extends AbstractHelper
     {
         // the first is the label, the second the fieldname, third the value
         // arrays in value are allowed, they are imploded later
-        // most fields here are populated from the containg record
+        // most fields here are populated from the containing record
         $container = $this->driver->getContainer();
         $container = array_shift($container);
         $author = '';

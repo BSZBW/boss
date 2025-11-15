@@ -200,7 +200,7 @@ class Logic
 
     /**
      * Returns the unique status code
-     * TODO: this method shoudl return something from conffiguration.      *
+     * TODO: this method should return something from configuration.      *
      * @return int
      */
     public function getStatusCode()
@@ -221,7 +221,7 @@ class Logic
     {
         /*
          * TODO there are still some messages set in methods. These should be
-         * removed to the configuration. It might be neccessary to split those
+         * removed to the configuration. It might be necessary to split those
          * methods into exactly one task.
          */
         $retval = $this->messages;
@@ -313,7 +313,7 @@ class Logic
     }
 
     /**
-     * Determin if an item is available locally. Checks for
+     * Determine if an item is available locally. Checks for
      * * 924 entries
      * * Parallel editions in SWB
      * * Similar results from SWB (if network != SWB)     *
@@ -492,7 +492,7 @@ class Logic
 
     /**
      * Check if it is a journal and available locally. Journals can always be
-     * ordnered because we can't evauluate their exact holding dates.
+     * ordnered because we can't evaluate their exact holding dates.
      * @return bool
      */
     protected function checkJournalAvailable(): bool
