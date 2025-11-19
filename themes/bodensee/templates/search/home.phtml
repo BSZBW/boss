@@ -75,7 +75,9 @@ JS;
       <div class="col-sm-12">
           <?php if (($this->client()->isIsilSession() && empty($this->client()->getIsils())) || !$this->client()->isIsilSession()): ?>
             <?php if(!$this->client()->is('wlb2')): ?>
-                <h2><?=$this->transEsc('homepage_heading')?> <small><?=$this->transEsc('homepage_subheading')?></small></h2>
+                <?php if($this->transEsc('homepage_heading') != ""): ?>
+                    <h2><?=$this->transEsc('homepage_heading')?><?php if($this->transEsc('homepage_subheading') != ""): ?> <small><?=$this->transEsc('homepage_subheading')?></small><?php endif; ?></h2>
+                <?php endif; ?>
             <?php endif; ?>
           <?php elseif ($this->client()->isIsilSession() && $this->client()->hasIsilSession()): ?>
             <h2><?=$this->escapeHtml((string)$library)?> <small><?=$this->transEsc('homepage_subheading')?></small></h2>
