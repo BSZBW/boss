@@ -7,7 +7,7 @@
 // decent gray gradient
 
 .row.result:nth-child(2n+1) {
-    background-color: #f9f9f9;
+    background-color: #fcfcfc;
 }
 
 .label-default {
@@ -50,7 +50,7 @@
 }
 
 .btn.focus, .btn:focus, .btn:hover {
-  color: #c1002a;
+  color: @brand-primary;
 }
 
 .btn-bookbag-toggle, .record-nav > li {
@@ -63,13 +63,27 @@
   border-bottom: 1px solid @gray-light;
 }
 
-header {
-    @media (max-width: 545px) {
-        .navbar-form a .text {
-            display: none;
-        }
-    }
+.navbar {
+  min-height: 0px;
 }
+
+/** Burger Menue **/
+nav {
+  background-color: @gray-lighter !important;
+}
+@media (max-width: 767px) {
+  header .navbar-toggle {
+    display: none;
+  }
+}
+
+
+
+.container-fluid > .navbar-collapse, .container-fluid > .navbar-header, .container > .navbar-collapse, .container > .navbar-header {
+  margin-right: 50px;
+  margin-left: -10px;
+}
+
 
 .well {
   min-height: 20px;
@@ -128,20 +142,6 @@ RecordTabs get another styling than searchTabs because their background is white
     }
 }
 
-header .navbar-form input[type="text"] {
-    @media (min-width: 768px) {
-        min-width: 52rem;
-    }
-    @media (max-width: 767px) {
-        min-width: 45rem;
-    }
-    @media (max-width: 579px) {
-        min-width: 35rem;
-    }
-    @media (max-width: 529px) {
-        min-width: 15rem;
-    }
-}
 
 .pager {
   a {
@@ -343,26 +343,133 @@ header .navbar-form input[type="text"] {
     }
   }
 }
+
+
 // Customizing for UB Mainz
 
+/** Header **/
+header .navbar-collapse {
+  margin-top: -160px;
+}
+
+header {
+  @media (max-width: 545px) {
+    .navbar-form a .text {
+      display: none;
+    }
+  }
+}
+
+
+header {
+  border-bottom: 1px solid @brand-primary;
+}
+
+@media (min-width: 768px) {
+  header .navbar .container {
+    padding-left: 15px;
+    padding-right: 0;
+  }
+}
+@media (max-width: 767px) {
+  header .navbar .container {
+    width: 720px;
+  }
+}
+@media (min-width: 1000px) {
+  header .navbar .container {
+    width: 995px;
+  }
+}
+
+header .navbar-toggle {
+  padding: 0px 10px;
+}
+
+/** Logo **/
+.logo {
+  @media (min-width: 360px) {
+    height: 70px;
+  }
+  padding-top: 10px;
+  padding-right: 10px;
+  padding-left: 1px;
+}
+
+/** Navbar **/
 .navbar-default .navbar-nav > li > a {
   color: @brand-primary;
 }
+/*
+.container > .navbar-collapse {
+  margin-right: 45px;
+}
+*/
+
+  /** SearchForm **/
+
+header .navbar-form input[type="text"] {
+  @media (min-width: 768px) {
+    min-width: 52rem;
+  }
+  @media (max-width: 767px) {
+    min-width: 45rem;
+  }
+  @media (max-width: 579px) {
+    min-width: 35rem;
+  }
+  @media (max-width: 529px) {
+    min-width: 20rem;
+  }
+}
+
+
+/*
+@media (min-width: 768px) {
+  .navbar-form .form-control {
+    display: inline-block;
+  }
+}
+*/
 
 .searchForm_lookfor {
   border: 1px solid;
   color: @brand-primary;
 }
 
-header {
-  border-bottom: 1px solid @brand-primary;
+@media (max-width: 991px) {
+  .searchForm_type {
+    display: none;
+  }
 }
 
+
+#searchForm #inputGrpSearchBox .keyboard-dropdown {
+  background: white;
+}
+
+@media (min-width: 1200px) {
+  header .navbar-form #searchForm_lookfor {
+    min-width: 650px;
+  }
+}
+/*
+@media (max-width: 767px) {
+  #searchFormLinks {
+    display: none;
+  }
+}
+*/
+
+.searchForm-inputs {
+  display: inline-flex;
+}
+
+/** Footer **/
 footer {
   border-top: 1px solid @brand-primary;
   margin-top: 30px;
 }
-
 footer .well ul li a, footer .well ul li a:hover {
   text-decoration: none;
   color: @brand-primary;
@@ -371,27 +478,55 @@ footer .well ul li a, footer .well ul li a:hover {
 footer .well ul li a:hover {
   text-decoration: underline;
 }
+
 .graybg {
   background-color: @body-bg;
 }
 
+
+/** Body **/
 html body:not(.frame) {
-  @media (max-width: 1199px) {
-    padding-top: 175px;
-  }
-  @media (min-width: 1200px) {
-    padding-top: 120px;
+    padding-top: 245px;
+}
+
+
+.hds-icon-keyboard::before {
+  content: '\f11c';
+}
+
+
+.active-filters {
+  clear: both;
+  display: block;
+  gap: 1rem;
+  align-items: start;
+  margin-block-start: .5rem;
+}
+
+div.specialhome {
+  padding: 20px 20px 20px 20px;
+  background-color: @gray-lighter;
+  line-height: 2;
+}
+
+.record-nav .cart-add, .record-nav .cart-remove {
+  margin-top: 0px;
+}
+
+.record-nav .cart-add, .record-nav .cart-remove, .toolbar-btn {
+  color: #c1002a;
+  background-color: rgba(0,0,0,0);
+}
+
+.searchHomeContent {
+  padding-top: 40px;
+}
+
+
+
+@media (max-width: 1198px) {
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: @brand-primary;
   }
 }
 
-.logo {
-  @media (max-width: 1199px) {
-    height: 50px;
-  }
-  @media (min-width: 1200px) {
-    width: 128px;
-  }
-  padding-top: 10px;
-  padding-right: 10px;
-  padding-left: 1px;
-}
