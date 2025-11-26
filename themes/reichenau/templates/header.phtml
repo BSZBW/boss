@@ -9,8 +9,6 @@
   <?php endif; ?>
 */ ?>
 
-  <?php if ($this->layout()->searchbox !== false): ?>
-      <div class="navbar-left">
 
           <?php /*  Burgermenu */ ?>
           <?php if (!isset($frame)): ?>
@@ -20,9 +18,6 @@
                   <i class="fa fa-bars"></i>
               </button>
           <?php endif; ?>
-
-          <?php /* SearchTabs, input-field, virtual keyboard, field types, submit-button, links  */ ?>
-          <?= $this->layout()->searchbox ?>
 
           <?php /*  Expanded menu */ ?>
           <?php if (!isset($this->layout()->renderingError)): ?>
@@ -141,15 +136,13 @@
                   </nav>
               </div>
           <?php endif; ?>
-      </div>
+
+  <?php /* SearchTabs, input-field, virtual keyboard, field types, submit-button, links  */ ?>
+  <?php if ($this->layout()->searchbox !== false): ?>
+      <?= $this->layout()->searchbox ?>
   <?php endif; ?>
 
-
-
-
-
-
-<?php /* BSZ wozu?
+  <?php /* BSZ wozu?
 <?php if ($this->layout()->searchbox !== false && !$this->client()->is('disable_searchbar')): ?>
   <div class="search container navbar">
     <div class="nav searchbox hidden-print" role="search">

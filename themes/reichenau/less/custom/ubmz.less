@@ -75,11 +75,12 @@
 }
 
 
-
+/**
 .container-fluid > .navbar-collapse, .container-fluid > .navbar-header, .container > .navbar-collapse, .container > .navbar-header {
   margin-right: 50px;
   margin-left: -10px;
 }
+**/
 
 
 .well {
@@ -343,11 +344,17 @@ RecordTabs get another styling than searchTabs because their background is white
 
 
 // Customizing for UB Mainz
+/**
+main {
+  padding-top: 100px;
+}
+**/
 
 /** Header **/
 header .navbar-collapse {
-  margin-top: -160px;
+  margin-top: -70px;
 }
+
 
 header {
   @media (max-width: 545px) {
@@ -394,6 +401,12 @@ header .navbar-toggle {
 }
 
 /** Navbar **/
+/**
+nav {
+  margin-top: -70px;
+}
+**/
+
 .navbar-default .navbar-nav > li > a {
   color: @brand-primary;
 }
@@ -483,7 +496,7 @@ footer .well ul li a:hover {
 
 /** Body **/
 html body:not(.frame) {
-    padding-top: 245px;
+    padding-top: 0px;
 }
 
 
@@ -516,7 +529,7 @@ div.specialhome {
 }
 
 .searchHomeContent {
-  padding-top: 40px;
+  padding-top: 20px;
 }
 
 
