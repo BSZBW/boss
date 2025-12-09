@@ -52,8 +52,6 @@ INSERT INTO libraries.places (id, library, name, code, active, sort) VALUES(27, 
 INSERT INTO libraries.places (id, library, name, code, active, sort) VALUES(31, 'DE-Stg117', 'Postversand', '', 1, 4);
 INSERT INTO libraries.places (id, library, name, code, active, sort) VALUES(32, 'DE-520', 'Zentralbibliothek', '', 1, 1);
 INSERT INTO libraries.places (id, library, name, code, active, sort) VALUES(33, 'DE-520', 'Zweigstelle Pillnitz', '', 1, 2);
-INSERT INTO libraries.places (id, library, name, code, active, sort) VALUES(34, 'DE-Stg257', 'EHZ S-Birkach', '', 1, 1);
-INSERT INTO libraries.places (id, library, name, code, active, sort) VALUES(35, 'DE-Stg257', 'Postversand', '', 1, 2);
 INSERT INTO libraries.places (id, library, name, code, active, sort) VALUES(36, 'DE-Zwi2', 'Hauptbibliothek', '', 1, 1);
 INSERT INTO libraries.places (id, library, name, code, active, sort) VALUES(37, 'DE-Zwi2', 'Markneukirchen', '', 1, 2);
 INSERT INTO libraries.places (id, library, name, code, active, sort) VALUES(38, 'DE-Zwi2', 'Scheffelstraße', '', 1, 4);
