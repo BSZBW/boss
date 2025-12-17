@@ -150,6 +150,7 @@ $this->headTitle($this->translate('Holdings') . ': ' . preg_replace('/|/', '
                     <?= $this->context($this)->renderInContext(
                          'RecordTab/holdingsils/standard.phtml', [
                                  'holding' => $holding['intellectual_item'],
+                                 'callNos' => $callNos,
                                  'intellectual_item' => true
                          ]
                     ); ?>
@@ -160,12 +161,12 @@ $this->headTitle($this->translate('Holdings') . ': ' . preg_replace('/|/', '
                     try {
                         echo $this->context($this)->renderInContext(
                             'RecordTab/holdingsils/' . $this->tab->getTemplate() . '.phtml',
-                            ['holding' => $row]
+                            ['holding' => $row, 'callNos' => $callNos]
                         );
                     } catch (Exception $e) {
                         echo $this->context($this)->renderInContext(
                             'RecordTab/holdingsils/standard.phtml',
-                            ['holding' => $row]
+                            ['holding' => $row, 'callNos' => $callNos]
                         );
                     }
                     ?>
