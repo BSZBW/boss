@@ -108,8 +108,10 @@ $this->headTitle($this->translate('Holdings') . ': ' . preg_replace('/|/', '
                     <?=$locationTextEsc?>
                 <?php endif; ?>
             </h4>
-            <?php if(!empty($holding['location_details'])): ?>
-                <?= $this->escapeHtml($holding['location_details']); ?>
+            <?php $detailKey = $this->translate('location_details'); ?>
+            <?php $locationDetails = $holding['location_details'] ?? []; ?>
+            <?php if(!empty($locationDetails[$detailKey])): ?>
+                <?= $this->escapeHtml($locationDetails[$detailKey]); ?>
             <?php endif; ?>
             <?php
             $truncateSettings = [
@@ -129,6 +131,11 @@ $this->headTitle($this->translate('Holdings') . ': ' . preg_replace('/|/', '
                                 <?php else: ?>
                                     <?=$this->escapeHtml($callNo['display'])?>
                                 <?php endif; ?>
+                                <?php //BSZ: Show mapongo link if available ?>
+                                <?php if ('ja' == ($locationDetails['mapongo'] ?? '')): ?>
+                                    <?= $this->mapongo($callNo['callnumber'], $holding['location']) ?>
+                                <?php endif; ?>
+                                <?php //END BSZ ?>
                                 <br>
                             <?php endforeach; ?>
                         </td>

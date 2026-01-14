@@ -236,6 +236,15 @@ class Factory
         );
     }
 
+    public static function getMainzMapongo(ContainerInterface $container)
+    {
+        $client = $container->get('Bsz\Config\Client');
+        return new MainzMapongo(
+            $client->get('Mapongo'),
+            $container->get('ViewHelperManager')->get('context')
+        );
+    }
+
     public static function getWayfless(ContainerInterface $container)
     {
         $config = $container->get('Bsz\Config\Client');
