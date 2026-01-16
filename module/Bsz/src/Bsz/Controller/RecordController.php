@@ -142,7 +142,7 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
                     $success = $this->parseResponse($message);
                     if($success) {
                         if ($client->ILL->sendConfirmation ?? false) {
-                            $this->sendMail($authManager, $params['Titel'] ?? '', $this->orderId);
+                            $this->sendMail($params['Titel'] ?? '', $this->orderId);
                         }
                         return $this->redirect()->toRoute('record-illsuccess', [], ['query' => ['orderId' => $this->orderId]]);
                     }
@@ -177,12 +177,13 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
         return $view;
     }
 
-    protected function sendMail(Manager $auth, string $title, int $orderId): bool {
-        $user = $auth->getIdentity();
+    protected function sendMail(string $title, int $orderId): bool {
+        $auth = $this->getILSAuthenticator();
+        $user = $auth->storedCatalogLogin();
         if ($user == null) {
             return false;
         }
-        $to = $user->getEmail();
+        $to = $user['email'] ?? '';
         if (empty($to) || empty($title)) {
             return false;
         }
