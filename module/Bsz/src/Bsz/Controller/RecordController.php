@@ -23,6 +23,7 @@ namespace Bsz\Controller;
 use Bsz\Config\Library;
 use Bsz\Net\Tools as NetTools;
 use Exception;
+use VuFind\Auth\Manager;
 use VuFind\Controller\HoldsTrait;
 use VuFind\Controller\ILLRequestsTrait;
 use VuFind\Controller\StorageRetrievalRequestsTrait;
@@ -35,6 +36,7 @@ use Laminas\Http\Header\SetCookie;
 use Laminas\Log\LoggerAwareInterface as LoggerAwareInterface;
 use Laminas\ServiceManager\ServiceManager as ServiceManager;
 use Laminas\View\Model\ViewModel;
+use VuFind\Mailer\Mailer;
 
 /**
  * This class was created to make a default record tab behavior possible
@@ -139,6 +141,9 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
                     $message = $dom->queryXPath('ergebnis/text()')->getDocument();
                     $success = $this->parseResponse($message);
                     if($success) {
+                        if ($client->ILL->sendConfirmation ?? false) {
+                            $this->sendMail($authManager, $params['Titel'] ?? '', $this->orderId);
+                        }
                         return $this->redirect()->toRoute('record-illsuccess', [], ['query' => ['orderId' => $this->orderId]]);
                     }
                 } catch (Exception $ex) {
@@ -170,6 +175,32 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
                     'orderId' => $this->orderId
                 ])->setTemplate('record/illform.phtml');
         return $view;
+    }
+
+    protected function sendMail(Manager $auth, string $title, int $orderId): bool {
+        $user = $auth->getIdentity();
+        if ($user == null) {
+            return false;
+        }
+        $to = $user->getEmail();
+        if (empty($to) || empty($title)) {
+            return false;
+        }
+        $client = $this->serviceLocator->get('Bsz\Config\Client');
+        $from = $client->ILL->replyAddress;
+
+        $body = $this->getViewRenderer()->partial(
+            'Email/ill-confirm.phtml',
+            ['title' => $title, 'orderId' => $orderId, 'replyAdress' => $from]
+        );
+
+        $mailer = $this->serviceLocator->get(Mailer::class);
+        try {
+            $mailer->send($to, $from, 'Fernleihbestellung', $body);
+        }catch (\VuFind\Exception\Mail $e) {
+            return false;
+        }
+        return true;
     }
 
     public function ILLSuccessAction()
