@@ -85,6 +85,13 @@
   <div class="keyboard-box">
     <div class="simple-keyboard"></div>
   </div>
+<?php if ($this->client()->is('show_searchbox_logo')): ?>
+  <div class="row">
+  <div class="sidebar col-sm-4 col-md-3 hidden-print">
+      <?= $this->clientAsset()->getLogoHtml() ?>
+  </div>
+  <div class="col-sm-8 col-md-9">
+<?php endif; ?>
   <form id="searchForm" class="searchForm navbar-form navbar-left flip" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
     <?= $this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs'], 'showCounts' => $tabConfig['showCounts']]); ?>
     <div class="searchForm-inputs">
@@ -245,4 +252,8 @@
       );?>
    */ ?>
   </form>
+<?php if ($this->client()->is('show_searchbox_logo')): ?>
+  </div>
+    </div>
+<?php endif; ?>
 <?php endif; ?>

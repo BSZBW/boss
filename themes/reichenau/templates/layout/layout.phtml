@@ -193,7 +193,9 @@ if (!isset($this->layout()->searchbox)) {
         <?php if ($this->client()->is('two_row_header')): ?>
             <div class="container white-bg">
                 <div class="navbar-brand">
-                    <?= $this->clientAsset()->getLogoHtml() ?>
+                    <?php if (!$this->client()->is('show_searchbox_logo')): ?>
+                        <?= $this->clientAsset()->getLogoHtml() ?>
+                    <?php endif; ?>
                 </div>
             </div>
         <?php endif; ?>
