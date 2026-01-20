@@ -1372,5 +1372,16 @@ class SolrGviMarc extends SolrMarc implements Constants
         return false;
     }
 
+    public function setSourceIdentifiers($recordSourceId, $searchBackendId = '')
+    {
+        parent::setSourceIdentifiers($recordSourceId, $searchBackendId);
+
+        if(empty($this->fields['_subRecords'])) {
+            return;
+        }
+        foreach ($this->fields['_subRecords'] as $record) {
+            $record->setSourceIdentifiers($recordSourceId, $searchBackendId);
+        }
+    }
 
 }
