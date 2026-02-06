@@ -53,9 +53,12 @@
     if ($this->client()->isIsilSession() && !$this->client()->hasIsilSession()) {
         $disabled = 'disabled';
     }
+    if(!isset($this->isHome)) {
+        $this->isHome = false;
+    }
 ?>
 <?php $tabConfig = $this->searchTabs()->getTabConfig($this->searchClassId, $this->lookfor, $this->searchIndex, $this->searchType, $hiddenFilters); ?>
-<?php if ($this->searchType == 'advanced'): ?>
+<?php if ($this->searchType == 'blala'): ?>
   <div class="navbar-form navbar-left flip">
     <?php $tabs = $this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs'], 'showCounts' => false]); ?>
     <?php if (!empty($tabs)): ?><?=$tabs ?><div class="tab-content clearfix"><?php endif; ?>
@@ -85,13 +88,7 @@
   <div class="keyboard-box">
     <div class="simple-keyboard"></div>
   </div>
-<?php if ($this->client()->is('show_searchbox_logo')): ?>
-  <div class="row">
-  <div class="sidebar col-sm-4 col-md-3 hidden-print">
-      <?= $this->clientAsset()->getLogoHtml() ?>
-  </div>
-  <div class="col-sm-8 col-md-9">
-<?php endif; ?>
+
   <form id="searchForm" class="searchForm navbar-form navbar-left flip" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
     <?= $this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs'], 'showCounts' => $tabConfig['showCounts']]); ?>
     <div class="searchForm-inputs">
@@ -102,7 +99,7 @@
           'class' => 'searchForm_lookfor form-control search-query',
           'type' => 'text',
           'name' => 'lookfor',
-          'value' => $this->lookfor,
+          'value' => $this->searchMemory()->getLastSearchterms($this->isHome),
           'aria-label' => $this->translate('search_terms'),
         ];
         if ($placeholder = $this->searchbox()->getPlaceholderText($tabConfig['selected']['id'] ?? $this->searchClassId)) {
@@ -252,8 +249,4 @@
       );?>
    */ ?>
   </form>
-<?php if ($this->client()->is('show_searchbox_logo')): ?>
-  </div>
-    </div>
-<?php endif; ?>
 <?php endif; ?>

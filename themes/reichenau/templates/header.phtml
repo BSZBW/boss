@@ -9,20 +9,21 @@
   <?php endif; ?>
 */ ?>
 
-
+<div class="banner container">
           <?php /*  Burgermenu */ ?>
           <?php if (!isset($frame)): ?>
+          <div class="navbar-header">
               <button type="button" class="navbar-toggle btn btn-primary"
                       data-toggle="collapse" data-target="#header-collapse">
                   <span class="sr-only">Toggle navigation</span>
                   <i class="fa fa-bars"></i>
               </button>
+          </div>
           <?php endif; ?>
 
           <?php /*  Expanded menu */ ?>
           <?php if (!isset($this->layout()->renderingError)): ?>
-              <div class="collapse navbar-collapse pull-right" id="header-collapse">
-                  <nav>
+              <div class="collapse navbar-collapse" id="header-collapse">
                       <ul class="nav navbar-nav navbar-right flip">
                           <?php if ($this->feedback()->tabEnabled()): ?>
                               <li>
@@ -133,15 +134,27 @@
                               </a>
                           </li>
                       </ul>
-                  </nav>
               </div>
           <?php endif; ?>
+</div>
 
   <?php /* SearchTabs, input-field, virtual keyboard, field types, submit-button, links  */ ?>
-  <?php if ($this->layout()->searchbox !== false): ?>
+<div class="container">
+  <?php if ($this->client()->is('show_searchbox_logo')): ?>
+  <div class="row">
+      <div class="sidebar col-sm-4 col-md-3 hidden-print">
+          <?= $this->clientAsset()->getLogoHtml() ?>
+      </div>
+      <?php if ($this->layout()->searchbox !== false): ?>
+          <div class="col-sm-8 col-md-9">
+              <?= $this->layout()->searchbox ?>
+          </div>
+      <?php endif; ?>
+  </div>
+  <?php elseif ($this->layout()->searchbox !== false): ?>
       <?= $this->layout()->searchbox ?>
   <?php endif; ?>
-
+</div>
   <?php /* BSZ wozu?
 <?php if ($this->layout()->searchbox !== false && !$this->client()->is('disable_searchbar')): ?>
   <div class="search container navbar">

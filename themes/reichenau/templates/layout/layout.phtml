@@ -190,20 +190,7 @@ if (!isset($this->layout()->searchbox)) {
 ?>
 <header class="hidden-print">
     <div class="navbar navbar-default">
-        <?php if ($this->client()->is('two_row_header')): ?>
-            <div class="container white-bg">
-                <div class="navbar-brand">
-                    <?php if (!$this->client()->is('show_searchbox_logo')): ?>
-                        <?= $this->clientAsset()->getLogoHtml() ?>
-                    <?php endif; ?>
-                </div>
-            </div>
-        <?php endif; ?>
-        <div class="container primary-bg">
-            <a class="sr-only"
-               href="#content"><?= $this->transEsc('Skip to content') ?></a>
-            <?= $this->render('header.phtml') ?>
-        </div>
+        <?= $this->render('header.phtml') ?>
     </div>
 </header>
 <main role="main" class="main">
@@ -228,7 +215,8 @@ if (!isset($this->layout()->searchbox)) {
                             ]) ?>
                         <?php endif; ?>
                     <?php else: ?>
-                        <?=$this->layout()->breadcrumbs ?>
+                        <?php $home = '<li><a href="/"><i class="fa fa-home"></i></a></li>'; ?>
+                        <?=$home.$this->layout()->breadcrumbs ?>
                     <?php endif; ?>
                 </ul>
             <?php endif; ?>

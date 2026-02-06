@@ -1,6 +1,6 @@
 // Switch on/off highlighting visibility using
-// background color in alpha channel 
-// rgba(255,255,0,0) = off, 
+// background color in alpha channel
+// rgba(255,255,0,0) = off,
 // rgba(255,255,0,1) = maximum saturation
 
 
@@ -37,7 +37,7 @@
     border-top: 1px solid @brand-primary;
     border-left: 1px solid @brand-primary;
     border-right: 1px solid @brand-primary;
-    font-weight: 700;    
+    font-weight: 700;
 }
 
 .nav-tabs > li:not(.active) > a:hover {
@@ -68,12 +68,11 @@
 }
 
 /** Burger Menue **/
-@media (max-width: 767px) {
-  header .navbar-toggle {
-    display: none;
-  }
-}
-
+//@media (max-width: 767px) {
+//  header .navbar-toggle {
+//    display: none;
+//  }
+//}
 
 /**
 .container-fluid > .navbar-collapse, .container-fluid > .navbar-header, .container > .navbar-collapse, .container > .navbar-header {
@@ -81,6 +80,11 @@
   margin-left: -10px;
 }
 **/
+header {
+  .navbar-header  {
+    float: none;
+  }
+}
 
 
 .well {
@@ -351,9 +355,9 @@ main {
 **/
 
 /** Header **/
-header .navbar-collapse {
-  margin-top: -70px;
-}
+//header .navbar-collapse {
+//  margin-top: -70px;
+//}
 
 
 header {
@@ -375,11 +379,11 @@ header {
     padding-right: 0;
   }
 }
-@media (max-width: 767px) {
-  header .navbar .container {
-    width: 720px;
-  }
-}
+//@media (max-width: 767px) {
+//  header .navbar .container {
+//    width: 720px;
+//  }
+//}
 //@media (min-width: 1000px) {
 //  header .navbar .container {
 //    width: 995px;
