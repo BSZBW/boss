@@ -36,6 +36,7 @@ use VuFind\Controller\ILLRequestsTrait;
 use VuFind\Controller\StorageRetrievalRequestsTrait;
 use VuFind\Log\Logger;
 use VuFind\Log\LoggerAwareTrait;
+use VuFind\Mailer\Mailer;
 
 class Search2RecordController extends \VuFind\Controller\Search2recordController implements LoggerAwareInterface
 {
@@ -148,6 +149,9 @@ class Search2RecordController extends \VuFind\Controller\Search2recordController
                     $message = $dom->queryXPath('ergebnis/text()')->getDocument();
                     $success = $this->parseResponse($message);
                     if($success) {
+                        if ($client->ILL->sendConfirmation ?? false) {
+                            $this->sendMail($params['Titel'] ?? '', $this->orderId, $params['AusgabeOrt'] ?? '');
+                        }
                         return $this->redirect()->toRoute('search2record-illsuccess', [], ['query' => ['orderId' => $this->orderId]]);
                     }
                 } catch (Exception $ex) {
@@ -179,6 +183,33 @@ class Search2RecordController extends \VuFind\Controller\Search2recordController
             'orderId' => $this->orderId
         ])->setTemplate('record/illform.phtml');
         return $view;
+    }
+
+    protected function sendMail(string $title, int $orderId, string $orderPlace): bool {
+        $auth = $this->getILSAuthenticator();
+        $user = $auth->storedCatalogLogin();
+        if ($user == null) {
+            return false;
+        }
+        $to = $user['email'] ?? '';
+        if (empty($to) || empty($title)) {
+            return false;
+        }
+        $client = $this->serviceLocator->get('Bsz\Config\Client');
+        $from = $client->ILL->replyAddress;
+
+        $body = $this->getViewRenderer()->partial(
+            'Email/ill-confirm.phtml',
+            ['orderTitle' => $title, 'orderId' => $orderId, 'orderPlace' => $orderPlace]
+        );
+
+        $mailer = $this->serviceLocator->get(Mailer::class);
+        try {
+            $mailer->send($to, $from, 'Wir machen uns auf den Weg!', $body);
+        }catch (\VuFind\Exception\Mail $e) {
+            return false;
+        }
+        return true;
     }
 
     public function ILLSuccessAction()
