@@ -142,7 +142,7 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
                     $success = $this->parseResponse($message);
                     if($success) {
                         if ($client->ILL->sendConfirmation ?? false) {
-                            $this->sendMail($params['Titel'] ?? '', $this->orderId);
+                            $this->sendMail($params['Titel'] ?? '', $this->orderId, $params['AusgabeOrt'] ?? '');
                         }
                         return $this->redirect()->toRoute('record-illsuccess', [], ['query' => ['orderId' => $this->orderId]]);
                     }
@@ -177,7 +177,7 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
         return $view;
     }
 
-    protected function sendMail(string $title, int $orderId): bool {
+    protected function sendMail(string $title, int $orderId, string $orderPlace): bool {
         $auth = $this->getILSAuthenticator();
         $user = $auth->storedCatalogLogin();
         if ($user == null) {
@@ -192,12 +192,12 @@ class RecordController extends \VuFind\Controller\RecordController implements Lo
 
         $body = $this->getViewRenderer()->partial(
             'Email/ill-confirm.phtml',
-            ['title' => $title, 'orderId' => $orderId, 'replyAdress' => $from]
+            ['orderTitle' => $title, 'orderId' => $orderId, 'orderPlace' => $orderPlace]
         );
 
         $mailer = $this->serviceLocator->get(Mailer::class);
         try {
-            $mailer->send($to, $from, 'Fernleihbestellung', $body);
+            $mailer->send($to, $from, 'Wir machen uns auf den Weg!', $body);
         }catch (\VuFind\Exception\Mail $e) {
             return false;
         }
