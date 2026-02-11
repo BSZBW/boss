@@ -20,7 +20,7 @@
 namespace BszTheme;
 
 /**
- * BSZ implementation of ThemeInfo, here we load all client specific ressources.
+ * BSZ implementation of ThemeInfo, here we load all client specific resources.
  *
  * @author Cornelius Amzar <cornelius.amzar@bsz-bw.de>
  */

@@ -305,7 +305,7 @@ class Client extends Config
     }
 
     /**
-     * Does this entity alreay have an isil stored in session (ill portal)
+     * Does this entity already have an isil stored in session (ill portal)
      * @return bool
      */
     public function hasIsilSession()
