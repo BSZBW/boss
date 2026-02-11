@@ -162,5 +162,25 @@ class Folio extends \VuFind\ILS\Driver\Folio
             ];
     }
 
+    public function getMyHolds($patron)
+    {
+        $holds = parent::getMyHolds($patron);
+        foreach ($holds as &$hold) {
+            $response = $this->makeRequest(
+            'GET',
+            '/circulation/requests/' . $hold['reqnum']
+            );
+            if ($response->isSuccess()) {
+                $request = json_decode($response->getBody());
+                if($request->pickupServicePoint) {
+                    $hold = $hold + [
+                        'pickupServicePoint' => $request->pickupServicePoint
+                    ];
+                }
+            }
+        }
+        return $holds;
+    }
+
 
 }
