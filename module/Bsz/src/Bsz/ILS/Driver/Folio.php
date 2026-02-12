@@ -196,5 +196,23 @@ class Folio extends \VuFind\ILS\Driver\Folio
         ];
     }
 
+    public function getMyTransactions($patron, $params = [])
+    {
+        $retVal =  parent::getMyTransactions($patron, $params);
+        foreach ($retVal['records'] as &$trans) {
+            $response = $this->makeRequest(
+                'GET',
+                '/inventory/items/' . $trans['item_id']
+            );
+            if ($response->isSuccess()) {
+                $item = json_decode($response->getBody());
+                $trans += [
+                    'callnum' => $item->callNumber ?? null
+                ];
+            }
+        }
+        return $retVal;
+    }
+
 
 }
