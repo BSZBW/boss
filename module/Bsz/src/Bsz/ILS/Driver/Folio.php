@@ -182,5 +182,19 @@ class Folio extends \VuFind\ILS\Driver\Folio
         return $holds;
     }
 
+    public function getMyProfile($patron)
+    {
+        $retVal = parent::getMyProfile($patron);
+        $profile = $this->getUserById($patron['id']);
+        $fullName = trim(($retVal['firstname'] ?? '') . ' ' . ($retVal['lastname'] ?? ''));
+        $zipAndCity = trim(($retVal['zip'] ?? '') . ' ' . ($retVal['city'] ?? ''));
+        return $retVal + [
+            'fullname' => $fullName ?? null,
+            'zip_and_city' => $zipAndCity ?? null,
+            'barcode' => $profile->barcode ?? null,
+            'email' => $profile->personal->email ?? null,
+        ];
+    }
+
 
 }
