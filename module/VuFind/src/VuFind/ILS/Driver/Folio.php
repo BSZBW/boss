@@ -1595,7 +1595,7 @@ class Folio extends AbstractAPI implements
         // have to obtain a list of IDs to use as a filter below.
         $legalServicePoints = null;
         if ($holdInfo) {
-            $allowed = $this->getAllowedServicePoints($this->getInstanceByBibId($holdInfo['id'])->id, $patron['id']);
+            $allowed = $this->getAllowedServicePoints($holdInfo['item_id'], $patron['id']);
             if ($allowed !== null) {
                 $legalServicePoints = [];
                 $preferredRequestType = $this->getPreferredRequestType($holdInfo);
@@ -1946,7 +1946,7 @@ class Folio extends AbstractAPI implements
      * @return ?array
      */
     public function getAllowedServicePoints(
-        string $instanceId,
+        string $itemId,
         string $requesterId,
         string $operation = 'create'
     ): ?array {
@@ -1955,7 +1955,7 @@ class Folio extends AbstractAPI implements
             $response = $this->makeRequest(
                 'GET',
                 '/circulation/requests/allowed-service-points?'
-                . http_build_query(compact('instanceId', 'requesterId', 'operation'))
+                . http_build_query(compact('itemId', 'requesterId', 'operation'))
             );
             if (!$response->isSuccess()) {
                 $this->warning('Unexpected service point lookup response: ' . $response->getBody());
