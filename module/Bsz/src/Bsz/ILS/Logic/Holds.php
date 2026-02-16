@@ -17,8 +17,7 @@ class Holds extends \VuFind\ILS\Logic\Holds
         $retVal = parent::formatHoldings($holdings);
 
         foreach ($holdings as $groupKey => $items) {
-            $retVal[$groupKey]['location_details']
-                = $items[0]['location_details'] ?? '';
+            $retVal[$groupKey]['location_details'] = $items[0]['location_details'] ?? [];
         }
 
         $config = $this->config;

@@ -1,0 +1,141 @@
+<?php $this->headTitle($this->translate('Help')); ?>
+
+<h1><?=$this->transEsc('Help') ?></h1>
+
+<div class="helptext">
+    
+        <h2 class="main">Informationen zum Rechercheportal der UB Mainz</h2>
+        <ul class="inhalt">
+            <li><a href="#AllgHin">Allgemeine Hinweise</a></li>
+            <li><a href="#BumAllg">Bibliothekskatalog - Allgemeines</a></li>
+            <li><a href="#BumMod">Bibliothekskatalog - Suchmodalitäten</a></li>
+            <li><a href="#AumAllg">Mehr Literatur - Allgemeines</a></li>
+            <li><a href="#AumMod">Mehr Literatur - Suchmodalitäten</a></li>
+            <li><a href="#ErwSuche">Erweiterte Suche</a></li>
+            <li><a href="#ZugVoll">Zugriff auf Volltexte</a></li>
+            <li><a href="#Anmeldung">Anmelden</a></li>
+            <li><a href="#Fragen">Weitere Fragen?</a></li>
+        </ul>
+    
+
+    
+        <h2><a id="AllgHin"></a>Allgemeine Hinweise</h2>
+        <ul class="allghin">
+            <li><strong>EIN zentraler Sucheinstieg, ZWEI Trefferlisten<br>⇒ mit einer Suche werden sowohl Bücher als auch Artikel gefunden</strong></li>
+            <li><strong>Bibliothekskatalog</strong><br>= Medienbestand der Universitätsbibliothek Mainz (Bücher, Zeitschriften, Online-Ressourcen etc.)</li>
+            <li><strong>Mehr Literatur</strong><br>= online zugängliche Aufsätze und Bücher, Literaturhinweise aus Datenbanken etc.<br>(Es wird auch Literatur angezeigt, die sich nicht im Bestand der Universitätsbibliothek Mainz befindet.)</li>
+        </ul>
+        <p>Nicht alle für die Johannes Gutenberg-Universität verfügbaren Datenbanken werden durchsucht. Für eine detaillierte sachliche Suche empfehlen wir, direkt in einer <a href="https://dbis.ur.de/UBMZ/browse/subjects/" target="_blank">Fachdatenbank</a> zu recherchieren.</p>
+    
+
+    
+        <h2><a id="BumAllg"></a>Bibliothekskatalog - Allgemeines</h2>
+        <ul class="info">
+            <li>Sortierung der Treffer voreingestellt nach errechneter Relevanz (umstellbar)</li>
+            <li>Verfügbarkeit schon in der Kurztitelliste zu erkennen</li>
+            <li>genaue Standortangaben und Detailinformationen bei der Vollanzeige der einzelnen Titel</li>
+            <li>verschiedene Suchfilter zum Einschränken der Treffermenge</li>
+            <li>größere Treffermenge im Bereich Bibliothekskatalog im Vergleich zum Online-Katalog durch
+                <ul>
+                    <li>zusätzliche Auswertung von Inhaltsverzeichnissen und Abstracts</li>
+                    <li>automatische Suche auch mit dem Wortstamm, nicht nur exakt nach dem eingegebenen Begriff</li>
+                    <li>phonetische Suche: ähnlich klingende Wörter werden automatisch mitgesucht</li>
+                </ul>
+            </li>
+        </ul>
+    
+
+    
+        <h2><a id="BumMod"></a>Bibliothekskatalog - Suchmodalitäten</h2>
+
+        <ul class="info">
+            <li>Bei 1 - 4 eingegebenen Suchbegriffen werden die Titel gesucht, in denen alle diese Wörter vorkommen. Deshalb ist es wichtig, nur sinntragende Begriffe einzugeben (Artikel, Präpositionen etc. weglassen). Die Begriffe werden automatisch mit AND verknüpft. Bei  5 - 7 eingegebenen Suchbegriffen darf einer fehlen, ab 8 Suchbegriffen müssen 80% der Suchbegriffe in den Dokumenten enthalten sein, damit diese als Treffer angezeigt werden.</li>
+            <li>Suche mit Platzhaltern (Trunkierung)
+                <ul>
+                    <li>? ersetzt <i>genau 1</i> Zeichen</li>
+                    <li>* ersetzt <i>mehrere</i> Zeichen (auch mitten im Wort)</li>
+                </ul><br>
+                <div class="alert alert-info">Beispiel: <i>existen?ialism*</i></div>
+            </li>
+
+            <li>Suchbegriffe, die aus mehr als einem Wort bzw. aus einer exakten Wortfolge bestehen, in Anführungszeichen setzen:<br><br>
+                <div class="alert alert-info">Beispiel: <i>"slow food"</i></div>
+                <div class="alert alert-info">Beispiel: <i>"Nachname, Vorname"</i>, wenn nach einer bestimmten Person gesucht wird</div></li>
+
+            <li>Wenn bestimmte Suchbegriffe ein- oder ausgeschlossen werden sollen, Boolesche Operatoren nutzen: AND, OR, NOT (großschreiben); beim „Bibliothekskatalog“ sind auch die Zeichen + und – möglich (jeweils ohne Leerzeichen direkt vor den Suchbegriff setzen). Bis zu 4 Suchbegriffe werden automatisch mit AND verknüpft. Mehr als 4 Suchbegriffe, die zwingend vorkommen sollen, muss man mit AND oder + verknüpfen. <b>Auch bei der Kombination verschiedener Operatoren muss der AND-Operator mit angegeben werden.</b><br><br>
+                <div class="alert alert-info">Beispiel: <i>+internationale +politik +ulrich +albrecht +herrschaft</i></div>
+                <div class="alert alert-info">Beispiel: <i>+faust +mann -goethe</i></div>
+                <div class="alert alert-info">Beispiel: <i>Wohn* AND alter* NOT alternativ*</i></div></li>
+        </ul>
+    
+
+    
+        <h2><a id="AumAllg"></a>Mehr Literatur - Allgemeines</h2>
+
+        <ul class="info">
+            <li>meist mehr Treffer als beim "Bibliothekskatalog"; Suche mit englischsprachigen Begriffen bringt noch 	mehr Treffer, weil sehr viele englischsprachige Datenquellen ausgewertet werden.</li>
+            <li>andere Suchfilter als beim "Bibliothekskatalog"; hilfreich können die Suchfilter "Erschienen in" und "Datenbank" sein, um festzustellen, aus welcher Zeitschrift bzw.  Datenbank die meisten relevanten Treffer stammen, um dann eventuell gezielt in dieser Zeitschrift bzw. Datenbank weiter zu suchen.</li>
+            <li>statt Anzeige der Verfügbarkeit vor Ort hier Links direkt zum Volltext oder zur Prüfung der Verfügbarkeit.<br>
+                Bei der Anzeige der Verfügbarkeit wird der Zugang zum elektronischen Volltext mit Ampelfarben gekennzeichnet
+                <p>→ gelbe Ampel: Zugang nur im Campusnetz</p>
+                <p>→ grüne Ampel: frei im Internet zugänglich</p>
+                <p>→ rote Ampel: kein Zugang zu den Volltexten</p>
+                Kommt man auf diesem Weg nicht zum Volltext, werden weitere Möglichkeiten aufgezeigt
+                <ul>
+                    <li>Lokale Verfügbarkeit</li>
+                    <li>Bestellung aus anderen Bibliotheken</li>
+                    <li>Bestände anderer Bibliotheken</li>
+                    <li>Suche im Internet</li>
+                    <li>Kontaktaufnahme</li>
+                </ul>
+            </li>
+        </ul>
+    
+
+    
+        <h2><a id="AumMod"></a>Mehr Literatur - Suchmodalitäten</h2>
+
+        <ul class="info">
+            <li>Suche mit Platzhaltern (Trunkierung)
+                <ul>
+                    <li>? ersetzt <i>genau 1</i> Zeichen</li>
+                    <li>* ersetzt <i>mehrere</i> Zeichen (auch mitten im Wort)</li>
+                </ul><br>
+                <div class="alert alert-info">Beispiel: <i>existen?ialism*</i></div>
+            </li>
+
+            <li>Suchbegriffe, die aus mehr als einem Wort bzw. aus einer exakten Wortfolge bestehen, in Anführungszeichen setzen:<br><br>
+                <div class="alert alert-info">Beispiel: <i>"slow food"</i></div></li>
+
+            <li>Boolesche Operatoren: AND, OR, NOT (in Großbuchstaben, + und – funktionieren hier nicht). Ohne Eingabe von Operatoren wird  eine "unscharfe" Suche ("weiches AND") durchgeführt. Suchbegriffe sind nicht durch implizites "AND" verbunden. Gezielte Eingabe der Operatoren kann die Suche eingrenzen oder erweitern:<br><br>
+                <div class="alert alert-info">Beispiel: <i>sleep AND disorder AND barbiturate NOT depression</i></div></li>
+
+        </ul>
+    
+
+    
+        <h2><a id="ErwSuche"></a>Erweiterte Suche</h2>
+        <p>Neben der einfachen Suche mit einem Suchfeld gibt es sowohl für den "Bibliothekskatalog" als auch für "Mehr Literatur" eine erweiterte Suche mit mehreren Suchfeldern.</p>
+    
+
+    
+        <h2><a id="ZugVoll"></a>Zugriff auf die Volltexte</h2>
+        <p>Im Rechercheportal Mainz werden sowohl frei im Internet verfügbare als auch von der Universität Mainz lizenzierte Volltexte angeboten. Der Zugriff auf lizenzierte Volltexte ist nur möglich von PC-Arbeitsplätzen, die dem Campusnetz der Universität Mainz angeschlossen sind, oder von persönlichen Rechnern via Remotedesktop-Verbindung oder <abbr title="Virtual Private Network">VPN</abbr> (s. <a href="https://www.zdv.uni-mainz.de/internet-und-netzzugang/" target="_blank">https://www.zdv.uni-mainz.de/internet-und-netzzugang/</a>).</p>
+        <p>Die <a href="https://www.ub.uni-mainz.de/faq#account-w-lan-zugriff-auf-elektronische-medien">Nutzungsbedingungen für E-Medien und die Zugriffsbeschränkungen zu den Volltexten</a> gelten auch für den Zugriff via Rechercheportal.</p>
+    
+
+    
+        <h2><a id="Anmeldung"></a>"Anmelden" bzw. "Ihr Konto"</h2>
+        <p>Anmeldung mit Bibliotheksausweisnummer nötig für</p>
+        <ul class="info">
+            <li>Zugriff auf das Nutzerkonto (Entleihungen, Fernleihdaten, Merkliste  u.a.)</li>
+            <li>Anzeige von Treffern aus lizenzierten Datenbanken außerhalb des IP-Adressbereichs der Uni</li>
+        </ul>
+    
+
+    
+        <h2><a id="Fragen"></a>Weitere Fragen?</h2>
+        <p>Nehmen Sie <a href="mailto:info@ub.uni-mainz.de">Kontakt</a> mit uns auf.</p>
+    
+
+</div>

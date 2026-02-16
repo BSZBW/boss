@@ -1,0 +1,546 @@
+// Switch on/off highlighting visibility using
+// background color in alpha channel
+// rgba(255,255,0,0) = off,
+// rgba(255,255,0,1) = maximum saturation
+
+
+// decent gray gradient
+
+.row.result:nth-child(2n+1) {
+    background-color: #fcfcfc;
+}
+
+.label-default {
+    background-color: inherit;
+}
+
+.breadcrumb {
+    border-radius: 0px;
+}
+
+.nav-tabs > li:not(.active) > a {
+    background-color: #e1e1e1;;
+    color: #000;
+  border-top: 1px solid #d1d1d1;
+  border-left: 1px solid #d1d1d1;
+  border-right: 1px solid #d1d1d1;
+    font-weight: 700;
+}
+.nav-tabs > li.active a {
+  border-top: 1px solid @brand-primary;
+  border-left: 1px solid @brand-primary;
+  border-right: 1px solid @brand-primary;
+  font-weight: 700;
+}
+
+.nav-tabs > li.active a:hover {
+    border-top: 1px solid @brand-primary;
+    border-left: 1px solid @brand-primary;
+    border-right: 1px solid @brand-primary;
+    font-weight: 700;
+}
+
+.nav-tabs > li:not(.active) > a:hover {
+    background-color: #e1e1e1;
+    color: @brand-primary;
+  border-top: 1px solid @brand-primary;
+  border-left: 1px solid @brand-primary;
+  border-right: 1px solid @brand-primary;
+    font-weight: 700;
+}
+
+.btn.focus, .btn:focus, .btn:hover {
+  color: @brand-primary;
+}
+
+.btn-bookbag-toggle, .record-nav > li {
+  width: auto;
+}
+
+.navbar .delete-input {
+  background-color: #fff !important;
+  border-top: 1px solid @gray-light;
+  border-bottom: 1px solid @gray-light;
+}
+
+.navbar {
+  min-height: 0px;
+}
+
+/** Burger Menue **/
+//@media (max-width: 767px) {
+//  header .navbar-toggle {
+//    display: none;
+//  }
+//}
+
+/**
+.container-fluid > .navbar-collapse, .container-fluid > .navbar-header, .container > .navbar-collapse, .container > .navbar-header {
+  margin-right: 50px;
+  margin-left: -10px;
+}
+**/
+header {
+  .navbar-header  {
+    float: none;
+  }
+}
+
+
+.well {
+  min-height: 20px;
+  padding: 19px;
+  margin-bottom: 20px;
+  border: 1px solid #fff;
+  border-radius: @border-radius-base;
+  .box-shadow(inset 0 0px 0px rgba(0,0,0,0));
+  blockquote {
+    border-color: #fff;
+    border-color: rgba(0,0,0,0);
+  }
+}
+
+a:focus, a:hover {
+    text-decoration: underline;
+}
+
+h2 {
+  @media (min-width: 768px) {
+    font-size: 28px;
+    font-weight: normal;
+  }
+  @media (max-width: 767px) {
+    font-size: 20px;
+  }
+}
+
+/**
+RecordTabs get another styling than searchTabs because their background is white
+**/
+.recordTabs {
+    li.active {
+        a {
+            border-top: 1px solid #000 !important;
+            border-right: 1px solid #000 !important;
+            border-left: 1px solid #000 !important;
+        }
+    }
+}
+
+.advancedSearchLink {
+    border-radius: @border-radius-base;
+    i.fa {
+        //Make the button exactly same size as the main search button
+        font-size: 1.2em; 
+    }
+    &:hover {
+        text-decoration: none;
+        background-color: #aaa;
+    }
+    .text {
+        @media (max-width: @screen-lg-min) {
+            display: none;
+        }
+    }
+}
+
+
+.pager {
+  a {
+    color: #fff;
+  }
+}
+
+/* ------ MyResearch ------ */
+.myresearch-menu {
+  ul {
+    list-style: none;
+    margin-bottom:0;
+    padding-left: 0;
+  }
+  a {
+    display: inline-flex;
+    gap: 0.375rem;
+    width: 100%;
+    padding: 10px 15px;
+    line-height: 1.15;
+    align-items: baseline;
+
+    &:hover {
+      background-color: @gray-lighter;
+      outline: dotted 1px #000;
+    }
+    &:focus {
+      background-color: @nav-link-hover-bg;
+    }
+    &.user-list-link i {
+      margin-left: 0.5rem;
+    }
+    &.active {
+      background-color: @brand-primary;
+      color: #fff;
+    }
+
+    .icon-link__icon {
+      width: 1rem;
+      text-align: center;
+    }
+
+    .icon-link__label {
+      flex: 1 1 0%;
+    }
+  }
+
+  .status {
+    display: flex;
+    gap: 2px;
+    flex: none;
+    .badge {
+      border-radius: 2px;
+      border: 1px solid; /* color inherited from bootstrap */
+      height: 20px;
+
+      &.account-none {
+        color: @gray-dark;
+        background-color: @gray-lighter;
+      }
+      &.account-info {
+        color: @state-success-text;
+        background-color: @state-success-bg;
+      }
+      &.account-warning {
+        color: @state-warning-text;
+        background-color: @state-warning-bg;
+      }
+      &.account-alert {
+        color: @state-danger-text;
+        background-color: @state-danger-bg;
+      }
+    }
+  }
+
+  .active .status .badge {
+    color: #fff;
+    background-color: transparent;
+    border: 1px solid #fff;
+  }
+}
+
+.record-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  &.search-results-solr-auth {
+    .media-left, .media-right {
+      display: none;
+    }
+  }
+}
+
+.result {
+  /* display: flex; */
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+
+  .record-checkbox,
+  .record-number { display: none; }
+
+  .title { font-weight: bold; }
+  //.list-tab-content.record .img-col { display: none; }
+  .list-tab-content.record .info-col { width: 100%; }
+  .format {
+    &:extend(.label);
+    &:extend(.label-info);
+  }
+
+  .checkbox-select-item { float: left; }
+
+  @media (max-width: 767px) {
+    a {
+      max-width: 100%;
+      text-decoration: underline;
+    }
+  }
+  @media (min-width: 768px) {
+    .record-checkbox {
+      display: flex;
+      flex: 0;
+      cursor: pointer;
+    }
+    .record-number {
+      display: flex;
+      flex: 0 2rem;
+      text-align: center;
+    }
+  }
+}
+.record,
+.result {
+  .media {
+    flex: 1;
+    margin: 0;
+  }
+  .media-left,
+  .media-right {
+    text-align: center;
+    img {
+      max-width: 100%;
+      max-height: 300px;
+    }
+    &.small img,
+    &.medium img,
+    &.large img {
+      display: inline-block;
+      width: @thumbnail-width-small;
+      max-width: none;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .media-left,
+    .media-right {
+      max-width: 25%;
+      padding-right: 10px;
+      padding-left: 10px;
+
+      a {
+        display: inline-block;
+        max-width: 100%;
+        text-align: center;
+        white-space: nowrap;
+        text-decoration: underline;
+      }
+
+      &.small img,
+      &.medium img,
+      &.large img {
+        width: auto;
+        max-width: 100%;
+      }
+      &.small  > a,
+      &.small  > img { width: @thumbnail-width-small; }
+      &.medium > a,
+      &.medium > img { width: @thumbnail-width-medium; }
+      &.large  > a,
+      &.large  > img { width: @thumbnail-width-large; }
+    }
+  }
+}
+
+.result-body {
+  padding: 0;
+  padding-bottom: .25rem;
+}
+
+.result-body,
+.media-body {
+  h2 {
+    font-size: unset;
+    line-height: @line-height-base;
+    margin: 0;
+
+    .authors {
+      display: block;
+    }
+  }
+}
+
+
+// Customizing for UB Mainz
+/**
+main {
+  padding-top: 100px;
+}
+**/
+
+/** Header **/
+//header .navbar-collapse {
+//  margin-top: -70px;
+//}
+
+
+header {
+  @media (max-width: 545px) {
+    .navbar-form a .text {
+      display: none;
+    }
+  }
+}
+
+
+header {
+  border-bottom: 1px solid @brand-primary;
+}
+
+@media (min-width: 768px) {
+  header .navbar .container {
+    padding-left: 15px;
+    padding-right: 0;
+  }
+}
+//@media (max-width: 767px) {
+//  header .navbar .container {
+//    width: 720px;
+//  }
+//}
+//@media (min-width: 1000px) {
+//  header .navbar .container {
+//    width: 995px;
+//  }
+//}
+
+header .navbar-toggle {
+  padding: 0px 10px;
+}
+
+/** Logo **/
+.logo {
+  @media (min-width: 360px) {
+    height: 70px;
+  }
+  padding-top: 10px;
+  padding-right: 10px;
+  padding-left: 1px;
+}
+
+/** Navbar **/
+/**
+nav {
+  margin-top: -70px;
+}
+**/
+
+.navbar-default .navbar-nav > li > a {
+  color: @brand-primary;
+}
+/*
+.container > .navbar-collapse {
+  margin-right: 45px;
+}
+*/
+
+  /** SearchForm **/
+
+header .navbar-form input[type="text"] {
+  @media (min-width: 768px) {
+    min-width: 52rem;
+  }
+  @media (max-width: 767px) {
+    min-width: 45rem;
+  }
+  @media (max-width: 579px) {
+    min-width: 35rem;
+  }
+  @media (max-width: 529px) {
+    min-width: 20rem;
+  }
+}
+
+
+/*
+@media (min-width: 768px) {
+  .navbar-form .form-control {
+    display: inline-block;
+  }
+}
+*/
+
+.searchForm_lookfor {
+  border: 1px solid;
+  color: @brand-primary;
+}
+
+@media (max-width: 991px) {
+  .searchForm_type {
+    display: none;
+  }
+}
+
+
+#searchForm #inputGrpSearchBox .keyboard-dropdown {
+  background: white;
+}
+
+@media (min-width: 1200px) {
+  header .navbar-form #searchForm_lookfor {
+    min-width: 650px;
+  }
+}
+/*
+@media (max-width: 767px) {
+  #searchFormLinks {
+    display: none;
+  }
+}
+*/
+
+.searchForm-inputs {
+  display: inline-flex;
+}
+
+/** Footer **/
+footer {
+  border-top: 1px solid @brand-primary;
+  margin-top: 30px;
+}
+footer .well ul li a, footer .well ul li a:hover {
+  text-decoration: none;
+  color: @brand-primary;
+}
+
+footer .well ul li a:hover {
+  text-decoration: underline;
+}
+
+.graybg {
+  background-color: @body-bg;
+}
+
+
+/** Body **/
+html body:not(.frame) {
+    padding-top: 0px;
+}
+
+
+.hds-icon-keyboard::before {
+  content: '\f11c';
+}
+
+
+.active-filters {
+  clear: both;
+  display: block;
+  gap: 1rem;
+  align-items: start;
+  margin-block-start: .5rem;
+}
+
+div.specialhome {
+  padding: 20px 20px 20px 20px;
+  background-color: @gray-lighter;
+  line-height: 2;
+}
+
+.record-nav .cart-add, .record-nav .cart-remove {
+  margin-top: 0px;
+}
+
+.record-nav .cart-add, .record-nav .cart-remove, .toolbar-btn {
+  color: #c1002a;
+  background-color: rgba(0,0,0,0);
+}
+
+.searchHomeContent {
+  padding-top: 20px;
+}
+
+
+
+@media (max-width: 1198px) {
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: @brand-primary;
+  }
+}
+

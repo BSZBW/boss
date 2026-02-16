@@ -333,7 +333,8 @@ class Logic
         ];
 
         if ($this->driver->hasLocalHoldings() &&
-            !in_array($this->getFormat(), $formats)
+            !in_array($this->getFormat(), $formats) &&
+            !$this->driver->canOrderAnyways()
         ) {
             $this->swbppns[] = $this->driver->getPPN();
             $this->linklabels[] = 'ILL::library_opac';

@@ -11,7 +11,7 @@ class Folio extends \VuFind\ILS\Driver\Folio
      * The implementation is based on the implementation of the
      * getLocations() helper method in class \VuFind\ILS\Driver\Folio.
      *
-     * @return string
+     * @return array
      */
     protected function getLocationDetails()
     {
@@ -25,7 +25,11 @@ class Folio extends \VuFind\ILS\Driver\Folio
                     '/locations'
                 ) as $location
             ) {
-                $details = $location->details->BOSS ?? '';
+                $details = [
+                    'description' => $location->details->BOSS ?? '',
+                    'description_en' => $location->details->BOSSENG ?? '',
+                    'mapongo' => $location->details->MAPONGO ?? '',
+                ];
                 $detailsMap[$location->id] = $details;
             }
             $this->putCachedData($cacheKey, $detailsMap);
@@ -40,12 +44,12 @@ class Folio extends \VuFind\ILS\Driver\Folio
      *
      * @param string $locationId Location identifier from FOLIO
      *
-     * @return string
+     * @return array
      */
     protected function getLocationDetailData($locationId)
     {
         $detailsMap = $this->getLocationDetails();
-        $details = '';
+        $details = [];
         if (array_key_exists($locationId, $detailsMap)) {
             return $detailsMap[$locationId];
         } else {
@@ -56,7 +60,10 @@ class Folio extends \VuFind\ILS\Driver\Folio
                 '/locations/' . $locationId
             );
             if ($locationResponse->isSuccess()) {
-                $details = $location->details->BOSS ?? '';
+                $location = json_decode($locationResponse->getBody());
+                $details['description'] = $location->details->BOSS ?? '';
+                $details['description_en'] = $location->details->BOSSENG ?? '';
+                $details['mapongo'] = $location->details->MAPONGO ?? '';
             }
         }
         return $details;
@@ -83,9 +90,7 @@ class Folio extends \VuFind\ILS\Driver\Folio
             $currentLoan
         );
 
-        $retVal['location_details']
-            = $this->getLocationDetailData($locationId);
-
+        $retVal['location_details'] = $this->getLocationDetailData($locationId);
         return $retVal;
     }
 
@@ -155,6 +160,58 @@ class Folio extends \VuFind\ILS\Driver\Folio
         return $retVal + [
             'externalSystemId' => $profile->externalSystemId ?? null
             ];
+    }
+
+    public function getMyHolds($patron)
+    {
+        $holds = parent::getMyHolds($patron);
+        foreach ($holds as &$hold) {
+            $response = $this->makeRequest(
+            'GET',
+            '/circulation/requests/' . $hold['reqnum']
+            );
+            if ($response->isSuccess()) {
+                $request = json_decode($response->getBody());
+                if($request->pickupServicePoint) {
+                    $hold = $hold + [
+                        'pickupServicePoint' => $request->pickupServicePoint
+                    ];
+                }
+            }
+        }
+        return $holds;
+    }
+
+    public function getMyProfile($patron)
+    {
+        $retVal = parent::getMyProfile($patron);
+        $profile = $this->getUserById($patron['id']);
+        $fullName = trim(($retVal['firstname'] ?? '') . ' ' . ($retVal['lastname'] ?? ''));
+        $zipAndCity = trim(($retVal['zip'] ?? '') . ' ' . ($retVal['city'] ?? ''));
+        return $retVal + [
+            'fullname' => $fullName ?? null,
+            'zip_and_city' => $zipAndCity ?? null,
+            'barcode' => $profile->barcode ?? null,
+            'email' => $profile->personal->email ?? null,
+        ];
+    }
+
+    public function getMyTransactions($patron, $params = [])
+    {
+        $retVal =  parent::getMyTransactions($patron, $params);
+        foreach ($retVal['records'] as &$trans) {
+            $response = $this->makeRequest(
+                'GET',
+                '/inventory/items/' . $trans['item_id']
+            );
+            if ($response->isSuccess()) {
+                $item = json_decode($response->getBody());
+                $trans += [
+                    'callnum' => $item->callNumber ?? null
+                ];
+            }
+        }
+        return $retVal;
     }
 
 

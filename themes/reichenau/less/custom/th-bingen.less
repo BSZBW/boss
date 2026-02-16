@@ -50,6 +50,10 @@ header {
             display: none;
         }
     }
+
+    .navbar-header  {
+      float: none;
+    }
 }
 
 .well {
@@ -327,4 +331,20 @@ header .navbar-form input[type="text"] {
       display: block;
     }
   }
+}
+
+.searchForm-inputs {
+  display: inline-flex;
+}
+.searchForm-query {
+  background-color: white;
+}
+.searchForm .searchForm-query #searchForm-reset {
+  width: 2em;
+  margin: 0px 2px 0px 0px;
+}
+
+/** Body **/
+html body:not(.frame) {
+  padding-top: 0px;
 }

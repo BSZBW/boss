@@ -61,16 +61,11 @@ $arrTemplate = '<tr><th>%%LABEL%%:</th><td> %%VALUE%%</td></tr>';
                 $arrTemplate,
                 $this->profile,
                 [
-                    $this->transEsc('First Name') => 'firstname',
-                    $this->transEsc('Last Name') => 'lastname',
-                    $this->transEsc('Address') . ' 1' => 'address1',
-                    $this->transEsc('Address') . ' 2' => 'address2',
-                    $this->transEsc('Zip') => 'zip',
-                    $this->transEsc('City') => 'city',
-                    $this->transEsc('Country') => 'country',
-                    $this->transEsc('Phone Number') => 'phone',
-                    $this->transEsc('Mobile Number') => 'mobile_phone',
-                    $this->transEsc('Group') => 'group',
+                    $this->transEsc('Library Number') => 'barcode',
+                    $this->transEsc('Full Name') => 'fullname',
+                    $this->transEsc('Address') => 'address1',
+                    $this->transEsc('City') => 'zip_and_city',
+                    $this->transEsc('Email') => 'email',
                     $this->transEsc('patron_account_expires') => 'expiration_date',
                 ]
             );

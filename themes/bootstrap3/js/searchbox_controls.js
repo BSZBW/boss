@@ -216,7 +216,7 @@ VuFind.register('searchbox_controls', function SearchboxControls() {
       const typeahead = new Autocomplete({
         rtl: $(document.body).hasClass("rtl"),
         maxResults: 10,
-        loadingString: VuFind.translate('loading_ellipsis'),
+        loadingString: VuFind.translate('loading'),
       });
 
       let cache = {};
