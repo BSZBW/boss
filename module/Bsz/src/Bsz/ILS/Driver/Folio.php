@@ -210,6 +210,28 @@ class Folio extends \VuFind\ILS\Driver\Folio
                     'callnum' => $item->callNumber ?? null
                 ];
             }
+
+            $currentLoan = $this->getCurrentLoan($trans['item_id']);
+            if ($currentLoan == null || $currentLoan->userId != $patron['id']) {
+                continue;
+            }
+            $query = [
+                'limit' => '1',
+                'query' => '(items="'.$currentLoan->id.'" and action=="Patron info added") sortBy date/sort.descending'
+            ];
+            $logResponse = $this->makeRequest(
+                'GET',
+                '/audit-data/circulation/logs',
+                $query
+            );
+            if($logResponse->isSuccess()) {
+                $log = json_decode($logResponse->getBody());
+                if(!empty($log->logRecords)) {
+                    $trans += [
+                        'patronInfo' => $log->logRecords[0]->description ?? null
+                    ];
+                }
+            }
         }
         return $retVal;
     }
