@@ -10,10 +10,12 @@
       <?php if ($this->intellectual_item): ?>
         <th class="copy-number"> <?= $this->transEsc('order_intellectual_item')?>:</th>
       <?php else: ?>
-        <th class="copy-number"><?=$this->transEsc('Copy')?> <?=$this->escapeHtml($holding['number'])?>
-        <?php if ($holding['enumchron'] ?? false): ?>
-            <span class="enumchron">(<?=$this->escapeHtml($holding['enumchron'])?>)</span>
-        <?php endif; ?>
+        <th class="copy-number">
+          <?php if ($holding['enumchron'] ?? false): ?>
+            <span class="enumchron"><?=$this->escapeHtml($holding['enumchron'])?></span>
+          <?php else: ?>
+            <?=$this->transEsc('Copy')?> <?=$this->escapeHtml($holding['number'])?>
+          <?php endif; ?>
         </th>
       <?php endif; ?>
       <?php //End BSZ ?>
