@@ -14,7 +14,8 @@ endif;
 
 $hanApi = $this->hanApi($this->driver, '', 'record');
 
-$localUrls = $this->driver->tryMethod('getLocalUrls'); ?>
+$ezbOnly = $this->client()->is('show_only_ezb_urls');
+$localUrls = $this->driver->tryMethod($ezbOnly ? 'getEZBUrls' : 'getLocalUrls'); ?>
 <?php // Show local Urls?>
 <?php if (!empty($localUrls[0]['url'])): ?>
     <div style="overflow:clip">
