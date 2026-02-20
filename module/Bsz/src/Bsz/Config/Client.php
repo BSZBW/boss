@@ -478,12 +478,13 @@ class Client extends Config
             return $defaultLabel;
         }
 
+        $key = 'lfer_label';
         if ('DE-LFER' != ($holding['isil'] ?? '')) {
-            return $url;
+            $key = 'default_label';
         }
 
         $record = $this->get('Record');
-        $label = $record ? ($record->get('lfer_label') ?? null): null;
+        $label = $record ? ($record->get($key) ?? null): null;
         if ($label == null) {
             return $url;
         }
