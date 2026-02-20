@@ -6,7 +6,7 @@
 $overrideText = $this->client()->getOverrideText();
 // Account for replace_other_urls setting
 $openUrl = $this->openUrl($this->driver, 'results');
-$openUrlActive = $openUrl->isActive();
+$openUrlActive = !$this->client()->is('open_url_disabled') && $openUrl->isActive();
 $urls = $this->record($this->driver)->getLinkDetails($openUrlActive);
 if (!is_array($urls)):
     $urls = [];
