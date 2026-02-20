@@ -875,7 +875,7 @@ class SolrFindexMarc extends SolrMarc implements Constants
                     'url' => $sfr,
                     'label' => empty($sfy) ? $sfr : $sfy,
                     'isil' => $sfx,
-                    'occurrence' => $sf1
+                    'prefix' => $this->getUrlPrefixFrom980($sfx, $sf1)
                 ];
                 $urlsOnly[] = $sfr;
             }
@@ -1112,14 +1112,7 @@ class SolrFindexMarc extends SolrMarc implements Constants
         $ezbUrls = [];
         foreach ($urls as $url) {
             if (preg_match('/ezb\.ur\.de\/detail\.phtml/', $url['url'])) {
-                $label = ($url['label'] == $url['url']) ? 'local_institution_access' : $url['label'];
-                $prefix = $this->getUrlPrefixFrom980($url['isil'], $url['occurrence']);
-                $ezbUrls[] = [
-                    'url' => $url['url'],
-                    'label' => $label,
-                    'isil' => $url['isil'],
-                    'prefix' => $prefix ?? null
-                ];
+                $ezbUrls[] = $url;
             }
         }
         if (!empty($ezbUrls)) {
