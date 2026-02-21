@@ -472,9 +472,12 @@ class Client extends Config
     }
 
     public function getUrlLabel(array $holding) {
+        $record = $this->get('Record');
+
+        $override_marc = $record && (((bool)$record->get('override_marc') ?? false));
         $defaultLabel = $holding['label'] ?? '';
         $url = $holding['url'] ?? '';
-        if (!empty($defaultLabel) && $defaultLabel != $url) {
+        if (!empty($defaultLabel) && $defaultLabel != $url && !$override_marc) {
             return $defaultLabel;
         }
 
@@ -483,7 +486,6 @@ class Client extends Config
             $key = 'default_label';
         }
 
-        $record = $this->get('Record');
         $label = $record ? ($record->get($key) ?? null): null;
         if ($label == null) {
             return $url;
