@@ -868,4 +868,8 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
         return $retVal;
     }
 
+    public function getEZBUrls() {
+        return $this->getLocalUrls();
+    }
+
 }
