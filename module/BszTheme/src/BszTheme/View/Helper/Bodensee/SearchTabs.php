@@ -172,6 +172,13 @@ class SearchTabs extends \VuFind\View\Helper\Root\SearchTabs
      */
     protected function getIcon($id)
     {
+        if (str_contains($_SERVER['HTTP_HOST'], 'ubmz')) {
+            switch (strtolower($id)) {
+                case 'search2': return 'fa-globe';
+                case 'eds': return 'fa-newspaper-o';
+                default: return 'fa-search';
+            }
+        }
         switch (strtolower($id)) {
             case 'summon':
             case 'solr:filtered2':

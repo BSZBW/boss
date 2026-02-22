@@ -1,6 +1,9 @@
 <h2><?=$this->transEsc('Electronic')?></h2>
 <?php foreach ($this->holdings as $holding): ?>
-    <?php $label = $this->client()->getUrlLabel($holding); ?>
+    <?php $label = $this->transEsc($this->client()->getUrlLabel($holding)); ?>
+    <?php if ($this->client()->is('show_url_prefix') && ($holding['prefix'] ?? null)): ?>
+      <?= $holding['prefix']?> &ndash;
+    <?php endif; ?>
     <a class="external" href="<?=$holding['url']?>" target="_blank"><?=$this->transEsc($label)?></a>
     <br>
 <?php endforeach; ?>
