@@ -137,7 +137,7 @@ $this->headTitle($this->translate('Holdings') . ': ' . preg_replace('/|/', '
                                 <?php endif; ?>
                                 <?php //BSZ: Show mapongo link if available ?>
                                 <?php if ('ja' == ($locationDetails['mapongo'] ?? '')): ?>
-                                    <?= $this->mapongo($callNo['callnumber'], $holding['location']) ?>
+                                    <?= $this->mapongo($callNo['display'], $holding['location']) ?>
                                 <?php endif; ?>
                                 <?php //END BSZ ?>
                                 <br>
