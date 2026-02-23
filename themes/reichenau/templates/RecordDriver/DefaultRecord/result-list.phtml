@@ -108,6 +108,8 @@ $coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'sm
             'hiddenFilterString' => $hiddenFilterString,
             'area' => 'results']) ?>
 
+        <?php $hideIls = $this->driver->isElectronic() && $this->client()->is('hide_ils_for_electronic_holdings'); ?>
+        <?php if(!$hideIls): ?>
         <?php if ($this->ils()->getDriverClass() !== 'Bsz\ILS\Driver\NoILS'): ?>
             <div class="callnumAndLocation ajax-availability hidden">
                 <?php if ($this->driver->supportsAjaxStatus()): ?>
@@ -123,6 +125,7 @@ $coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'sm
                 <div class="locationDetails"></div>
             <?php endif; ?>
             </div>
+        <?php endif; ?>
         <?php endif; ?>
 
         <div class="result-formats">
