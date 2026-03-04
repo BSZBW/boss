@@ -3,7 +3,7 @@
     <noscript><p class="alert alert-danger"><?=$this->transEsc('Please enable JavaScript.')?></p></noscript>
     <?=$this->flashmessages()?>
     <?php if ($this->orderId > 0):?>
-        <p><?=$this->transEsc('ILL::request_submit_ok_text')?><strong><?=$this->escapeHtml($this->orderId)?></strong></p>
+        <p><?=$this->transEsc('ILL::request_submit_ok_text')?><strong><?=$this->escapeHtml($this->orderId)?></strong>.</p>
     <?php else: ?>
         <p><?=$this->transEsc('ILL::request_submit_ok_text_0')?></p>
     <?php endif; ?>
