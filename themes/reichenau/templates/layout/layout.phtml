@@ -106,6 +106,12 @@ use Laminas\View\Helper\HeadScript;
                 "Phone number too short after IDD" => 'libphonenumber_tooshortidd'
             ]
         );
+        //BSZ: Add ill.js strings
+        $this->jsTranslations()->addStrings([
+            'illFormError' => 'ILL::form_error',
+            'illCostsError' => 'ILL::costs_error',
+            'illYearError' => 'ILL::error_year',
+        ]);
         // Deal with cart stuff:
         $cart = $this->cart();
         $this->jsTranslations()->addStrings([
@@ -142,10 +148,7 @@ use Laminas\View\Helper\HeadScript;
                     'itemsAddBag' => 'items_added_to_bookbag',
                     'itemsInBag' => 'items_already_in_bookbag',
                     'removeBookBag' => 'Remove from Book Bag',
-                    'viewBookBag' => 'View Book Bag',
-                    'illFormError' => 'ILL::form_error',
-                    'illCostsError' => 'ILL::costs_error',
-                    'illYearError' => 'ILL::error_year',
+                    'viewBookBag' => 'View Book Bag'
                 ]
             );
             $this->jsTranslations()->addStrings(
