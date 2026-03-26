@@ -380,7 +380,11 @@ class Logic
             if (!empty($zdb)) {
                 $this->holding->setZdbId($zdb);
             } else {
-                $this->holding->setIsxns($this->driver->getCleanISSN());
+                $isxns = array_filter([
+                    $this->driver->getCleanISSN(),
+                    $this->driver->getCleanISBN()
+                ]);
+                $this->holding->setIsxns($isxns);
             }
             // use ISSN and year
         } elseif (!empty($isbn)) {
