@@ -89,7 +89,7 @@ class Holding
     /**
      * Set ISBNs
      *
-     * @param string $isxns
+     * @param array|string $isxns
      *
      * @return Holding
      */

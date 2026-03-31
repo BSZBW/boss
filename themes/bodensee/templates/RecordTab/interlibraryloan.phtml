@@ -53,7 +53,7 @@ if ($content['customUrl'] && $this->client()->getTag() !== 'fl-dienst' ) {
                     <li><?= $this->transEsc('ILL::library_opac') ?>
                         : <?= $this->recordLink()->linkPPN($this->driver) ?></li>
                 <?php endif; ?>
-            <?php elseif (($this->client()->is('wlb2') || $this->client()->is('elk_wue')) && $ll == 'ILL::to_local_hit'): ?>
+            <?php elseif (($this->client()->is('wlb2') || $this->client()->is('elk_wue') || $this->client()->getTag() == 'ubmz') && $ll == 'ILL::to_local_hit'): ?>
                 <?php $ppn = $id;
                 $ppn = preg_replace('/^\(.*\)/', '', $id);
                 $exists = $this->idVerifier($ppn, 'Solr');
