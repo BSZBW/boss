@@ -11,12 +11,7 @@
             <a class="external localUrls"
                href="<?= $current['url'] ?>"><?= $this->transEsc($text) ?></a>
             <?php if ($this->client()->is('local_url_help_regex') && isset($current['label'][1])): ?>
-                <?php $htmllink = preg_replace(
-                    $this->client()->getHelpRegEx(),
-                    "<a class='external' href='" . $this->client()->getHelpUrl() . "'>" . $this->client()->getHelpGroups() . "</a>",
-                    $this->transEsc($current['label'][1])
-                ) ?>
-                <?= $htmllink ?>
+                <?= $this->client()->replaceHelp($current['label'][1]) ?>
             <?php elseif (isset($current['label'][1])): ?>
                 &ndash; <?= $this->transEsc($current['label'][1]) ?>
                 <br/>
