@@ -164,6 +164,9 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
                     $arrsub[$k] = $split;
                 }
             }
+            if (isset($arrsub['issue']) && is_array($arrsub['issue'])) {
+                $arrsub['issue'] = implode(' ', $arrsub['issue']);
+            }
             $result[] = $arrsub;
         }
         return $result;
