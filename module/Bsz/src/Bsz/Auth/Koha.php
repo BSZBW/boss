@@ -101,7 +101,7 @@ class Koha extends \VuFind\Auth\AbstractBase
         $serviceid = $config->get('Koha')->get('serviceid:' . $this->isil);
         $apikey = $this->getSecretFromConfig(
             $this->config->Koha,
-            'apikey_' . $this->isil
+            'apikey:' . $this->isil
         );
         //apikey_De-Stg117_file
         $query_url = $config->get('Koha')->get('url:' . $this->isil);
@@ -164,7 +164,7 @@ class Koha extends \VuFind\Auth\AbstractBase
                 || strlen($this->config->Koha->$req) === 0
             ) {
                 if ($required == 'apikey') {
-                    $reqFile = $required . '_' . $this->isil . '_file';
+                    $reqFile = $req . '_file';
                     if (isset($this->config->Koha->$reqFile)
                         && !empty($this->config->Koha->$reqFile)
                     ) {
