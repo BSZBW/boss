@@ -20,7 +20,7 @@ $localUrls = $this->driver->tryMethod('getLocalUrls'); ?>
     <div style="overflow:clip">
         <?php foreach ($localUrls as $current): ?>
             <?php if (is_array($current['label'])):?>
-                <?php $text = $overrideText ?? $current['label'][0] ?>
+                <?php $text = $this->client()->getLabelForUrl($current['url'], $current['label'][0]); ?>
                 <a class="external"
                    href="<?= $current['url'] ?>"
                    <?php if (!$this->client()->is('local_url_help_regex') && isset($current['label'][1])): ?>title="<?= $this->transEsc($current['label'][1]) ?>"
@@ -36,7 +36,7 @@ $localUrls = $this->driver->tryMethod('getLocalUrls'); ?>
                     <br/>
                 <?php endif; ?>
             <?php else: ?>
-                <?php $text = $overrideText ?? $current['label']; ?>
+                <?php $text = $this->client()->getLabelForUrl($current['url'], $current['label']); ?>
                 <a class="external" href="<?=$current['url']?>"><?=$this->transEsc($text)?></a>
             <br>
             <?php endif ?>

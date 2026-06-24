@@ -7,7 +7,7 @@
         <?php endif; ?>
         <?php $count++; ?>
         <?php if (is_array($current['label'])): ?>
-            <?php $text = $overrideText ?? $current['label'][0]; ?>
+            <?php $text = $this->client()->getLabelForUrl($current['url'], $current['label'][0]); ?>
             <a class="external localUrls"
                href="<?= $current['url'] ?>"><?= $this->transEsc($text) ?></a>
             <?php if ($this->client()->is('local_url_help_regex') && isset($current['label'][1])): ?>
@@ -22,10 +22,7 @@
                 <br/>
             <?php endif; ?>
         <?php else: ?>
-            <?php $text = $current['label'];
-            if ($text == $current['url'] && $overrideText != null) {
-                $text = $overrideText;
-            } ?>
+            <?php $text = $this->client()->getLabelForUrl($current['url'], $current['label']); ?>
             <a class="external"
                href="<?= $current['url'] ?>"><?= $this->transEsc($text) ?></a>
         <?php endif ?>
