@@ -502,4 +502,18 @@ class Client extends Config
         }
         return $label;
     }
+
+    protected function getDefaultUrlLabel()
+    {
+        $record = $this->get('Record');
+        return $record ? ($record->get('default_url_label') ?? null) : null;
+    }
+
+    public function getLabelForUrl(string $url, ?string $providedLabel): ?string {
+        $overrideText = $this->getDefaultUrlLabel();
+        if (($providedLabel ?? $url) == $url) {
+            return $overrideText ?? $url;
+        }
+        return $providedLabel;
+    }
 }
