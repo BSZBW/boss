@@ -260,7 +260,7 @@ class Search2RecordController extends \VuFind\Controller\Search2recordController
     }
 
     /**
-     * Determin if we should use the test or live url.
+     * Determine if we should use the test or live url.
      * @return boolean
      */
     private function isTestMode()
@@ -410,11 +410,11 @@ class Search2RecordController extends \VuFind\Controller\Search2recordController
         // so if it matches is returns 1 which is casted to true
         if ((bool)preg_match('/Bestell-Id:\s*(\d*)/', $html->textContent, $id) === true) {
             $this->orderId = $id[1];
-            // Order is successfull
+            // Order is successful
             $this->flashMessenger()->addSuccessMessage('ILL::request_submit_ok');
             return true;
         } else {
-            // order not successfull - disable error reporting because
+            // order not successful - disable error reporting because
             // preg_match errors may occur.
             $error_reporting = error_reporting();
             error_reporting(0);
