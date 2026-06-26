@@ -84,14 +84,14 @@ class Factory
         $config = $container->get('VuFind\Config')->get('config');
         $adapterfactory = $container->get('VuFind\DbAdapterFactory');
         $database = $config->get('Database');
-        $library = self::getSecretFromConfigStatic($database);
+        $library = self::getSecretFromConfigStatic($database, 'db_libraries');
         $adapter = $adapterfactory->getAdapterFromConnectionString($library);
         $resultSetPrototype = new ResultSet(ResultSet::TYPE_ARRAYOBJECT, new Library());
         $librariesTable = new Libraries('libraries', $adapter, null, $resultSetPrototype);
         return $librariesTable;
     }
 
-    private static function getSecretFromConfigStatic($config, $key = "db_libraries"){
+    private static function getSecretFromConfigStatic($config, $key){
         $fileKey = $key . '_file';
 
         if (isset($config->$fileKey)){
