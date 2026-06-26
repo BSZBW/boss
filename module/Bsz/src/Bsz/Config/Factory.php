@@ -84,17 +84,26 @@ class Factory
         $config = $container->get('VuFind\Config')->get('config');
         $adapterfactory = $container->get('VuFind\DbAdapterFactory');
         $database = $config->get('Database');
-        if($database->get('db_libraries_file')){
-            $library = trim(file_get_contents($database->get('db_libraries_file')));
-        }else{
-            $library = $database->get('db_libraries');
-        }
+        $library = self::getSecretFromConfigStatic($database);
         $adapter = $adapterfactory->getAdapterFromConnectionString($library);
         $resultSetPrototype = new ResultSet(ResultSet::TYPE_ARRAYOBJECT, new Library());
         $librariesTable = new Libraries('libraries', $adapter, null, $resultSetPrototype);
         return $librariesTable;
     }
 
+    private static function getSecretFromConfigStatic($config, $key = "db_libraries"){
+        $fileKey = $key . '_file';
+
+        if (isset($config->$fileKey)){
+            $file = $config->get($fileKey);
+            if(!is_readable($file)){
+                throw new \Exception('Secret file not readable: ' . $file);
+            }
+
+            return trim(file_get_contents($file));
+        }
+        return $config->get($key);
+    }
     /**
      * @param ContainerInterface $container
      *
