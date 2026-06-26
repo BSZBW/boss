@@ -84,7 +84,11 @@ class Factory
         $config = $container->get('VuFind\Config')->get('config');
         $adapterfactory = $container->get('VuFind\DbAdapterFactory');
         $database = $config->get('Database');
-        $library = $database->get('db_libraries');
+        if($database->get('db_libraries_file')){
+            $library = trim(file_get_contents($database->get('db_libraries_file')));
+        }else{
+            $library = $database->get('db_libraries');
+        }
         $adapter = $adapterfactory->getAdapterFromConnectionString($library);
         $resultSetPrototype = new ResultSet(ResultSet::TYPE_ARRAYOBJECT, new Library());
         $librariesTable = new Libraries('libraries', $adapter, null, $resultSetPrototype);
