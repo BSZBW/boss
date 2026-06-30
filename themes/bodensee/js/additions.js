@@ -174,7 +174,7 @@ function inputLength(selector) {
 }
 
 function checkAdvSearch() {
-    var limit = 2;
+    var limit = 1;
     var selector = '.adv-term-input.no-empty-search';
     if ($(selector).length === 0) return true;
     $('#advSearchForm').on('submit', function(e) {
