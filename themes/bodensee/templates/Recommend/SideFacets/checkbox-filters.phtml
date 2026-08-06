@@ -18,7 +18,7 @@
                 <?= $this->bibliographyIcon($current['desc']) ?>
             <?php endif ?>
             <?php if ($this->client()->is('wlb_facet_tooltip') && (strpos($current['desc'], 'ePflicht') !== false)): ?>
-                <a class="external hasicon" href="https://www.wlb-stuttgart.de/die-wlb/wir-ueber-uns/abteilungen/pflichtexemplare/"><span class="" data-toggle="tooltip" title="<?=$this->transEsc('ePflicht-BW Tooltip')?>"><i class="fa fa-info-circle text-success"></i></span></a>
+                <a class="external hasicon" href="https://www.wlb-stuttgart.de/region/pflichtexemplar"><span class="" data-toggle="tooltip" title="<?=$this->transEsc('ePflicht-BW Tooltip')?>"><i class="fa fa-info-circle text-success"></i></span></a>
             <?php endif ?>
         </div>
     <?php endif; ?>
