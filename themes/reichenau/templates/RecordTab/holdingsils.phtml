@@ -19,7 +19,8 @@ try {
     ];
     $offlineMode = 'ils-offline';
 }
-$urls = $this->client()->is('show_only_ezb_urls') ? $this->driver->getEZBUrls() : $this->driver->getLocalUrls();
+//$urls = $this->client()->is('show_only_ezb_urls') ? $this->driver->getEZBUrls() : $this->driver->getLocalUrls();
+$urls = $this->driver->getElectronicHoldings($this->client()->is('show_only_ezb_urls'));
 $showElectronic = !empty($urls) && $this->client()->is('show_electronic_holdings');
 $hideIls = $this->driver->isElectronic() && $this->client()->is('hide_ils_for_electronic_holdings');
 
@@ -56,7 +57,7 @@ $this->headTitle($this->translate('Holdings') . ': ' . preg_replace('/|/', '
 <?php endif; ?>
 <?php if ($showElectronic): ?>
     <?= $this->context($this)->renderInContext(
-            'RecordTab/holdingsils/electronic.phtml',
+            'RecordTab/holdingsils/electronicurls.phtml',
             ['holdings' => $urls]
     ); ?>
 <?php endif; ?>
