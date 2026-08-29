@@ -558,7 +558,7 @@ class SolrGviMarc extends SolrMarc implements Constants
             $ind2 = $field['i2'];
 
             //  we don't want to show licensed content
-            //  ind1,2 = 4,0 is probably lincensed content.
+            //  ind1,2 = 4,0 is probably licensed content.
             //  only if we find a kostenfrei in |z, we use the link
             //  special case: DE-950 Proquest links are shown
             if (!$is950 && $ind1 == 4 && $ind2 == 0) {
@@ -860,10 +860,10 @@ class SolrGviMarc extends SolrMarc implements Constants
     }
 
     /**
-     * get local Urls from 924|k and the correspondig linklabel 924|l
+     * get local Urls from 924|k and the corresponding linklabel 924|l
      * - $924 is repeatable
-     * - |k is repeatable, |l aswell
-     * - we can have more than one isil ?is this true? maybe allways the first isil
+     * - |k is repeatable, |l as well
+     * - we can have more than one isil ?is this true? maybe always the first isil
      * - different Urls from one instition may have different issues (is this true?)
      * @return array
      */
@@ -883,7 +883,7 @@ class SolrGviMarc extends SolrMarc implements Constants
         }
 
         /**
-         * Anonymous function, called bellow. It handles ONE url.
+         * Anonymous function, called below. It handles ONE url.
          *
          * @param $link
          * @param $label

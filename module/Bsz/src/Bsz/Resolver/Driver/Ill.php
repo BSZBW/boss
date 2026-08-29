@@ -83,7 +83,7 @@ class Ill extends Ezb
             }
         }
 
-        // remove date info for journals because users must choose themselfes.
+        // remove date info for journals because users must choose themselves.
         if ($newParams['genre'] == 'journal') {
             unset($newParams['date']);
         }
