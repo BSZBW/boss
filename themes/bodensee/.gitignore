@@ -2,3 +2,9 @@
 make/*.d
 css/*.css
 css/*.map
+/images/logo/chun.png
+/less/chun.less
+/images/favicon/chun.ico
+/images/header/chun.jpg
+/less/bsz/custom/chun.less
+/less/bsz/variables/chun.less
