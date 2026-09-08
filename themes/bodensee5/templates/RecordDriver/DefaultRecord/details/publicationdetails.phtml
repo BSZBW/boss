@@ -1,0 +1,8 @@
+<?php foreach ($this->data['publicationsOl'] ?? [] as $field): ?>
+    <?=$this->context($this)->renderInContext('RecordDriver/DefaultRecord/parts/publication.phtml', ['publication' => $field])?>
+    <br/>
+<?php endforeach; ?>
+<?php foreach ($this->data['publications'] as $field): ?>
+    <?=$this->context($this)->renderInContext('RecordDriver/DefaultRecord/parts/publication.phtml', ['publication' => $field])?>
+    <br/>
+<?php endforeach; ?>

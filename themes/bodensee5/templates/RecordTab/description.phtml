@@ -1,0 +1,10 @@
+<?php
+    // Set page title.
+    $this->headTitle($this->translate('Description') . ': ' . $this->driver->getBreadcrumb());
+?>
+
+<?php $entries = $this->detailList('Details'); ?>
+<?= $this->record($this->driver)->renderTemplate(
+    'table.phtml',
+    ['data' => $entries]
+) ?>

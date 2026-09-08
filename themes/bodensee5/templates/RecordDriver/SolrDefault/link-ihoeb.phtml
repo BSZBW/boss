@@ -1,0 +1,25 @@
+<?php $searchRoute = $this->searchOptions($this->driver->getSourceIdentifier())->getSearchAction(); ?>
+<?php
+
+$urlParams = '';
+if (count($this->lookfor) == 1 && count($this->lookfor[0]) == 1) {
+    $item = $this->lookfor[0][0];
+    $data = urlencode('"' . $item['data'] . '"');
+    $type = urlencode($item['type']);
+    $urlParams = '?lookfor=' . $data . '&type=' . $type;
+} else {
+    $urlParams = '?join=OR';
+    $i = 0;
+    foreach ($this->lookfor as $pairs) {
+        foreach ($pairs as $item) {
+            $data = urlencode('"' . $item['data'] . '"');
+            $type = urlencode($item['type']);
+            $urlParams .= '&lookfor' . $i . '[]=' . $data;
+            $urlParams .= '&type' . $i . '[]=' . $type;
+            $urlParams .= '&bool' . $i . '[]=AND';
+        }
+        $i++;
+    }
+}
+?>
+<?=$this->url($searchRoute)?><?=$urlParams?>

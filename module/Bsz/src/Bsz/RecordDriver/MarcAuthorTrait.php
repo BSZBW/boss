@@ -22,7 +22,7 @@ trait MarcAuthorTrait
      */
     public function getPrimaryAuthors() : array
     {
-        $primary = $this->getFirstFieldValue('100', ['a', 'b']);
+        $primary = $this->getFirstFieldValue('100', ['a', 'b', 'c']);
         return empty($primary) ? [] : [$primary];
     }
 
@@ -70,7 +70,7 @@ trait MarcAuthorTrait
      */
     public function getSecondaryAuthors() : array
     {
-        return $this->getFieldArray('700', ['a', 'b']);
+        return $this->getFieldArray('700', ['a', 'b', 'c']);
     }
 
     /**

@@ -1,0 +1,79 @@
+
+@import "vendor/bootstrap/bootstrap";
+
+@import "../../bootstrap3/less/components/advanced-search";
+@import "../../bootstrap3/less/components/alphabrowse";
+@import "../../bootstrap3/less/components/autocomplete";
+@import "../../bootstrap3/less/components/channels";
+@import "components/icons";
+@import "../../bootstrap3/less/components/trees";
+@import "../../bootstrap3/less/components/lightbox";
+@import "components/offcanvas";
+@import "../../bootstrap3/less/components/record";
+@import "components/search";
+@import "../../bootstrap3/less/components/sidebar";
+@import "../../bootstrap3/less/components/similar-carousel";
+@import "components/sliders";
+
+/* Change variables to change colors and values through-out the theme */
+/*@image-path: "../../bodensee/images";
+@active-orange: #fff93c;
+@dark-green: #137752;
+ Bootstrap variables as well
+@brand-primary: #0045a1;
+@body-bg: #5ab48a;
+@grid-gutter-width: 20px;*/
+
+/* Change specific styles below */
+/*body {
+  font-size: 14px;
+  color: #333;
+}
+header {
+  font-size: 16px;
+  color: @dark-green;
+}
+.container {
+  padding-left: 2rem;
+  padding-right: 2rem;
+  border-left: 2px solid @dark-green;
+  border-right: 2px solid @dark-green;
+  background-color: #fff;
+  border-radius: 0;
+}*/
+/*footer .container { border-bottom: 2px solid #137752; }
+.alert { padding: 8px; }*/
+
+
+/*.searchHomeContent {
+  margin-left: -@grid-gutter-width;
+  margin-right: -@grid-gutter-width;
+}*/
+.search-hero {
+  &:extend(.clearfix all);
+
+  position: relative;
+  padding: 16rem 8rem;
+  font-size: 1rem;
+  /*color: #fff;*/
+/*  background-image: url('@{image-path}/yosemite.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;*/
+
+/*  a { color: #eef; }
+
+  .image-credit {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 1rem;
+    font-size: .8rem;
+    color: rgba(255,255,255,.5);
+    background-color: rgba(0,0,0,.5);
+
+    a { color: #fff; }
+  }*/
+}
+/* Hide search bar */
+.template-dir-search.template-name-home .search.container { display: none; }

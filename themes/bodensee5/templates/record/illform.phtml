@@ -1,0 +1,113 @@
+<?php
+    $this->headTitle($this->translate('ILL::request_title'));
+    $this->headScript()->appendFile("vendor/bootstrap-datepicker.js");
+    $this->headScript()->appendFile("vendor/bootstrap-datepicker.".$this->layout()->userLang.".min.js");
+    $this->headScript()->appendFile("ill.js");
+
+    $this->layout()->breadcrumbs = '<li>' . $this->searchMemory()->getLastSearchLink($this->transEsc('Search'), '', '</li> ')
+    . '<li class="active">' . $this->transEsc('ILL::request_title') . '</li>';
+    $collapse = 'panel-collapse collapse';
+    // avoid notices when using free form
+    $params = !isset($params) ? [] : $params;
+    $type = 'book';
+    if (isset($this->driver)) {
+        if ($this->driver->isJournal()) { $type = 'journal';}
+        elseif ($this->driver->isContainerMonography()) { $type = 'article-book';}
+        elseif ($this->driver->isArticle()) {$type = 'article';}
+        elseif ($this->driver->isElectronicBook()) {$type = 'ebook';}
+    } else {
+        $type = 'free';
+    }
+
+    $form = '';
+
+    $this->libraries = $this->libraries()->getActive($this->client()->getIsils());
+    $this->firstLibrary = $this->libraries()->getFirstActive($this->client()->getIsils());
+
+?>
+<div class="col-sm-12">
+    <h2><?=$this->illform($success, $this->driver)->getText('headline')?></h2>
+    <noscript><p class="alert alert-danger"><?=$this->transEsc('Please enable JavaScript.')?></p></noscript>
+    <?=$this->flashmessages()?>
+    <? if ($success && !empty($this->orderId) && $this->orderId > 0):?>
+    <p><?=$this->transEsc('ILL::request_submit_ok_text')?><strong><?=$this->escapeHtml($this->orderId)?></strong></p>
+    <p><?=$this->transEsc('ILL::request_submit_ok_text_2')?></p>
+    <?php $isilsClosePopup = ['DE-31', 'DE-93'] ?>
+    <?php foreach ($isilsClosePopup as $isil):?>
+    <?php if (in_array($isil, $this->client()->getIsils())): ?>
+        <div class="alert alert-info">
+            <p><?=$this->transEsc('ILL::request_submit_ok_text_3')?></p>
+            <?php break; ?>
+        </div>
+    <?php endif ?>
+    <?php endforeach ?>
+
+    <? endif; ?>
+    <? if (!isset($success) || !$success): ?>
+
+        <p><?=$this->transEsc('ILL::help_intro1')?></p>
+        <p><?=$this->transEsc('ILL::help_intro2')?></p>
+        <p><?=$this->transEsc('ILL::help_intro3')?></p>
+
+        <form data-format="<?=$type?>" class="<?=$type?> form-horizontal" id="form-ill" action="<?=$this->recordLink()->getUrl($this->driver ?? '')?>/ILLForm" method="POST" role="form">
+            <div class="form-group form-group-sm">
+            <? if (isset($params['Bestellform'])):
+                $form = $params['Bestellform'];
+            endif; ?>
+            <?php if ($type !== 'article'): ?>
+                <div class="col-sm-2">
+                    <input type="radio" id="ill-lend" name="Bestellform" data-bestellform=""  value="Leihen" <? if($form == 'Leihen'):?>checked<?endif; ?> required />
+                    <span for="ill-copy"><strong><?=$this->transEsc('lend')?></strong></span>
+                </div>
+             <?php endif;?>
+            <div class="col-sm-2">
+                <input type="radio" id="ill-copy" name="Bestellform" data-bestellform="" value="Kopie" <? if($form == 'Kopie'):?>checked<?endif; ?> required />
+                <span for="ill-copy"><strong><?=$this->transEsc('paperdata')?></strong></span>
+            </div>
+        </div>
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <? $content = $this->illform($success, $this->driver)->renderBibliographicFields() ?>
+            <?= $this->partial('Helpers/ill/panel.phtml', [
+                'title' => 'Bibliographic Details',
+                'open'  => true,
+                'content' => $content,
+            ])?>
+            <? $content = '<p><strong>'.$this->illform($success, $this->driver)->getText('hint').'</strong></p>';
+                $content .= $this->illform($success, $this->driver)->renderCopies();
+            ?>
+            <?= $this->partial('Helpers/ill/panel.phtml', [
+                'title' => 'paperdata',
+                'open'  => $this->illform($success, $this->driver)->isVisibleCopies(),
+                'content' => $content,
+            ])?>
+            <? $content = $this->context($this)->renderInContext('Helpers/ill/delivery.phtml', ['params' => $params, 'driver' => $this->driver])?>
+            <?= $this->partial('Helpers/ill/panel.phtml', [
+                'title' => 'delivery_conditions',
+                'open'  => true,
+                'content' => $content,
+
+            ])?>
+            <? $content = $this->render('Helpers/ill/login.phtml', ['params' => $params, 'driver' => $this->driver])?>
+            <?= $this->partial('Helpers/ill/panel.phtml', [
+                'title' => 'Benutzerdaten',
+                'open'  => true,
+                'content' => $content,
+            ])?>
+            <br/>
+            <div class="form-group form-group-sm">
+                <div class="col-sm-1 col-xs-2">
+                    <input type="checkbox" required="true" class="" id="agree-commercial-use" name="agree-commerial-use"/>
+                </div>
+                <label class="control-label col-xs-10 col-sm-11" for="agree-commercial-use">* <?=$this->transEsc('ILL::commercial_use')?></label>
+            </div>
+            <div class="form-group form-group-sm">
+                <div class="col-sm-12">
+                    <input id="ill-submit" type="submit" class="btn btn-primary<?=$this->submitDisabled?' disabled': ''?>" value="<?=$test ? $this->transEsc('Test Order') : $this->transEsc('Order') ?>"/>
+                    <p>* <?=$this->transEsc('This field is required')?></p>
+
+                </div>
+            </div>
+        </div>
+    </form>
+    <? endif; ?>
+</div>

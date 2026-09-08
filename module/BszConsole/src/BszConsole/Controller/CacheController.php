@@ -32,6 +32,8 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
  */
 class CacheController extends AbstractActionController
 {
+    protected ServiceLocatorInterface $serviceLocator;
+
     protected $basepath;
     protected $localdirs;
 

@@ -35,7 +35,7 @@ class RouteGenerator extends \VuFind\Route\RouteGenerator
         if (null === $nonTabRecordActions) {
             self::$nonTabRecordActions = [
                 'AddComment', 'DeleteComment', 'AddTag', 'DeleteTag', 'Save',
-                'Email', 'SMS', 'Cite', 'Export', 'RDF', 'Hold', 'BlockedHold',
+                'Email', 'SMS', 'Cite', 'Export', 'RDF', 'Hold', 'FreeHold', 'BlockedHold',
                 'Home', 'StorageRetrievalRequest', 'AjaxTab',
                 'BlockedStorageRetrievalRequest', 'ILLRequest', 'BlockedILLRequest',
                 'PDF', 'ILLForm'

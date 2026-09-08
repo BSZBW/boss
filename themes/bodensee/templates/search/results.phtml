@@ -111,16 +111,15 @@
      </form>
 
       <div class="searchtools hidden-print finger-friendly-icons">
-        <strong><?=$this->transEsc('Search Tools')?>:</strong>
-        <a href="<?=$this->results->getUrlQuery()->setViewParam('rss')?>"><i class="fa fa-rss"></i><span class="text hidden-xs"><?=$this->transEsc('Get RSS Feed')?></span></a>
+        <strong><?=$this->transEsc('Search Tools')?>:</strong><a href="<?=$this->results->getUrlQuery()->setViewParam('rss')?>"><i class="fa fa-rss"></i><span class="text hidden-xs"><?=$this->transEsc('Get RSS Feed')?></span></a>
         <!--&mdash;-->
         <a href="<?=$this->url('search-email')?>" class="mailSearch modal-link" id="mailSearch<?=$this->escapeHtmlAttr($this->results->getSearchId())?>" title="<?=$this->transEsc('Email this Search')?>"><i class="fa fa-envelope"></i><span class="text"><?=$this->transEsc('Email this Search')?></span></a>
-<!--        &mdash;-->
+        <!--&mdash;-->
         <?php if (false && is_numeric($this->results->getSearchId())): ?>
           <?php if ($this->results->isSavedSearch()): ?>
-        <a href="<?=$this->url('myresearch-savesearch')?>?delete=<?=urlencode($this->results->getSearchId())?>"><i class="fa fa-minus-square"></i><span class="text"><?=$this->transEsc('save_search_remove')?></span></a>
+            <a href="<?=$this->url('myresearch-savesearch')?>?delete=<?=urlencode($this->results->getSearchId())?>"><i class="fa fa-minus-square"></i><span class="text"><?=$this->transEsc('save_search_remove')?></span></a>
           <?php else: ?>
-        <a href="<?=$this->url('myresearch-savesearch')?>?save=<?=urlencode($this->results->getSearchId())?>"><i class="fa fa-plus-square"></i><span class="text"><?=$this->transEsc('save_search')?></span></a>
+            <a href="<?=$this->url('myresearch-savesearch')?>?save=<?=urlencode($this->results->getSearchId())?>"><i class="fa fa-plus-square"></i><span class="text"><?=$this->transEsc('save_search')?></span></a>
           <?php endif; ?>
         <?php endif; ?>
         <?php $library = $this->libraries()->getFirstActive($this->client()->getIsils()); ?>

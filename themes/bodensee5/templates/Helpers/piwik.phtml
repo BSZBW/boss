@@ -1,0 +1,42 @@
+<script type="text/javascript">
+
+    window.matomoAsyncInit = function () {
+        try {
+            <?php if ($this->siteId > 0): ?>
+            var matomoTracker = Matomo.getTracker("<?=$this->piwikUrl?>matomo.php", <?=$this->siteId?>);
+            matomoTracker.trackPageView();
+            <?php endif; ?>
+            <?php if ($this->globalSiteId > 0): ?>
+            var matomoTracker2 = Matomo.getTracker("<?=$this->piwikUrl?>matomo.php", 28);
+            <?php if ($this->client()->isIsilSession() && $this->client()->hasIsilSession()): ?>
+            matomoTracker2.setCustomVariable(1, "sigel", '<?=$this->escapeHtml($this->client()->getSigel())?>', "visit");
+            <?php endif; ?>
+            matomoTracker2.trackPageView();
+            <?php endif; ?>
+            <?php if ($this->groupSiteId > 0): ?>
+            var matomoTracker3 = Matomo.getTracker("<?=$this->piwikUrl?>matomo.php", <?=$this->groupSiteId?>);
+            matomoTracker3.trackPageView();
+            <?php endif; ?>
+        } catch (err) {
+            console.error(err.toString());
+        }
+    };
+</script>
+<script type="text/javascript" src="<?= $this->piwikUrl ?>matomo.js"></script>
+<noscript>
+    <?php if ($this->siteId > 0): ?>
+        <p><img src="<?= $this->piwikUrl ?>matomo.php?idsite=<?= $this->siteId ?>"
+                style="border:0;" alt=""/></p>
+    <?php endif; ?>
+    <?php if ($this->globalSiteId > 0): ?>
+        <p>
+            <img src="<?= $this->piwikUrl ?>matomo.php?idsite=<?= $this->globalSiteId ?>"
+                 style="border:0;" alt=""/></p>
+    <?php endif; ?>
+    <?php if ($this->groupSiteId > 0): ?>
+        <p>
+            <img src="<?= $this->piwikUrl ?>matomo.php?idsite=<?= $this->groupSiteId ?>"
+                 style="border:0;" alt=""/></p>
+    <?php endif; ?>
+</noscript>
+

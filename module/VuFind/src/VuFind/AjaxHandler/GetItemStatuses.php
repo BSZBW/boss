@@ -489,14 +489,21 @@ class GetItemStatuses extends AbstractBase implements
             // If the ILS fails, send an error response instead of a fatal
             // error; we don't want to confuse the end user unnecessarily.
             error_log($e->getMessage());
-            foreach ($ids as $id) {
-                $results[] = [
-                    [
-                        'id' => $id,
-                        'error' => 'An error has occurred',
-                    ],
-                ];
-            }
+
+/* BSZ: FOLIO */
+// This exeception is also thrown, if ILS is available, but no instance/holding could be found.
+// When an instance/holding ("Titel") was not found in Folio, there won't be items ("Exemplare") for this instance/holding.
+// When an error appears for one record it will be visible for all records in a resultlist. Why?
+
+//            foreach ($ids as $id) {
+//                $results[] = [
+//                    [
+//                    'id' => $id,
+//                    'error' => 'An error has occurred',
+//                    ],
+//                ];
+//           }
+/* BSZ: End FOLIO */
         }
 
         if (!is_array($results)) {
@@ -556,10 +563,14 @@ class GetItemStatuses extends AbstractBase implements
                     );
                 }
 
-                // BSZ
+                /* BSZ: FOLIO Instance-Ids */
+                // There is no prefix in Folio HRIDs like (DE-627) = K10plus or (DE-603) = Hebis
                 if (substr($_SERVER['SERVER_NAME'] ,0,4) == "test")  {
                     $current['id'] = '(DE-627)' . $current['id'];
+                } elseif (substr($_SERVER['SERVER_NAME'] ,0,6) == "mzbihs") {
+                    $current['id'] = '(DE-603)' . $current['id'];
                 }
+                /* BSZ: End FOLIO Instance-Ids */
 
                 $current['record_number'] = array_search($current['id'], $ids);
                 $statuses[] = $current;

@@ -859,4 +859,20 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
         return $authors[$role] ?? [];
     }
 
+    public function getDeweyCallNumber()
+    {
+        $retVal = [];
+        foreach ($this->getFields('082') as $field) {
+            if(!is_array($field) || $field['i2'] == 4) {
+                continue;
+            }
+            $retVal[] = $this->getSubfield($field, 'a');
+        }
+        return $retVal;
+    }
+
+    public function getEZBUrls() {
+        return $this->getLocalUrls();
+    }
+
 }

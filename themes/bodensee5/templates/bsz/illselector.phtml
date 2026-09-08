@@ -1,0 +1,17 @@
+<?
+    $this->headScript(\Laminas\View\Helper\HeadScript::FILE, 'vendor/bootstrap-typeahead.min.js');
+    $account = $this->auth()->getManager();
+?>
+<?php if(!$account->isLoggedIn()): ?>
+<? if ($this->client()->hasIsilSession()):?>
+<p><?=$this->transEsc('ILL::update_library')?>: <a class="textlink" href="#" data-toggle="collapse" data-target="#library-typeahead"><?=$this->transEsc('ILL::button_change_library')?> <i class="fa fa-caret-down"></i></a></p>
+<? endif; ?>
+<div class="well collapse<? if (!$this->client()->hasIsilSession()):?> in<?endif;?>" id="library-typeahead" aria-expanded="<?php if($this->client()->hasIsilSession()):?>false<?php else: ?>true<?php endif; ?>">
+    <p><?=$this->translate('ILL::select_library')?></p>
+    <form class="form-horizontal" method="POST">
+            <input type="hidden" name="referer" id="typeahead-referer" value="<? if (isset($this->referer) && is_object($this->referer)):?><?=$this->referer->getUri()?><? else: ?><?=$this->url('home') ?><? endif;?>" />
+            <input type="text" class="form-control typeahead" data-provide="typeahead" autocomplete="off" placeholder="<?=$this->transEsc('ILL::placeholder_typeahead')?>" />
+
+    </form>
+</div>
+<?php endif; ?>

@@ -1,0 +1,6 @@
+<?php $count = 0; ?>
+<?php foreach ($this->data as $current): ?>
+    <?php if ($count > 0): ?><br><?php endif; ?>
+    <a class="external" href="<?=$this->wayfless($current['url'], $this->client()->getIsils())?>"><?=$this->transEsc($current['desc'])?></a>
+    <?php $count++; ?>
+<?php endforeach; ?>

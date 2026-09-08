@@ -1,0 +1,8 @@
+<?php foreach($this->data as $ctx): ?>
+    <?php if (isset($ctx['prefix'])): ?><?=$this->transEsc($ctx['prefix'])?><?php endif ?>
+    <?php if (isset($ctx['ppn'], $ctx['label'])): ?>
+        <a class="searchicon" href="<?=$this->recordLink()->getUrl($ctx['ppn'])?>" ><?=$this->transEsc($ctx['label'])?></a>
+    <?php endif; ?>
+    <?php if (isset($ctx['postfix'])): ?> (<?=$this->transEsc($ctx['postfix'])?>)<?php endif ?>
+    <br/>
+<?php endforeach; ?>

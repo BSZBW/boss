@@ -1,0 +1,39 @@
+<h2>Privacy Policy</h2>
+
+<h3>Access to this website</h3>
+
+<p>
+Every time you access the website of the Library Service Centre (Bibliotheksservice Zentrum) Baden-Württemberg is stored in a log file with the following data:</p>
+
+<ul>
+    <li>Name of the file retrieved</li>
+    <li>Date and time of retrievals</li>
+    <li>Amount of data transmitted</li>
+    <li>State of retrieval of he current web page displayed just successfully feedback of your browser</li>
+
+</ul>
+<p>The IP address is not being logged. </p>
+
+<p>A transfer of data protection information to third parties for commercial or noncommercial purposes does not take place. </p>
+
+<p>
+Our website uses cookies in several places. They serve to make our offer more
+user-friendly, effective and safer. Cookies are small text files that are
+stored on your computer and stored by your browser if necessary. All cookies
+used by the Web servers of the BSZ are so-called " session cookies". Therefore,
+they are automatically deleted after your visit of your browser.
+The Cookies used by the BSZ to your computer no harm and do not contain viruses.
+</p>
+
+<?php if ($this->piwik('siteid') > 0): ?>
+<h3>Matomo</h3>
+<p>We use tracking software Matomo to our users to count anonymously .</p>
+<iframe style="border: 0; width: 100%; height: 160px" src="<?=$this->piwik('baseurl')?>/index.php?module=CoreAdminHome&action=optOut&idsite=<?=$this->piwik('siteid')?>&language=<?=$this->layout()->userLang?>&fontColor=553333&fontSize=14px&fontFamily=Ubuntu,Helvetica,Arial,sans-serif"></iframe>
+<?php endif; ?>
+
+
+<h3>Your right : exchange of information</h3>
+
+<p>Your trust is important to us. You always have the right to information
+    stored regarding your personal data, its origin , where appropriate,
+    destination and the purpose of storage.</p>

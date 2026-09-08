@@ -1,0 +1,60 @@
+<?php
+$count = 0;
+$rand = rand(0, 9999);
+$max = 5;
+$selectors = [];
+?>
+<?php if(!isset($this->linktype)):
+    $this->linktype = 'subject';
+endif; ?>
+<?php foreach ($this->data as $key => $f): ?>
+    <?php
+    if(is_array($f) && array_key_exists('data', $f)) {
+        $linktype = $f['type'] ?? $linktype;
+        $type = $f['type'] ??  $this->type;
+        $field = $f['data'];
+        $searchterm = $f['term'] ?? ((strlen($key) > 2) ? $key : $field);
+    } else {
+        $linktype = $this->linktype;
+        $type = $this->type;
+        $field = $f;
+        $searchterm = (strlen($key) > 2) ? $key : $field;
+    }
+    $selectors[] = '.'.$type.'subjects-'.$rand;
+    ?>
+    <span class="subjectLine" property="keywords">
+         <?php $subject = ''; ?>
+        <?php // case 1 : subjects in one field separated by --?>
+        <?php if( is_array($field) && count($field) == 1): $field = explode('--', $field[0]); ?>
+            <?php $i = 0; foreach ($field as $subfield): ?>
+                <?=($i++ == 0) ? '' : ' &gt; '?>
+                <?php $subject = trim($subject . ' ' . $subfield); ?>
+                <a class="searchicon <?php if($count >= $max): ?><?=$type?>subjects-<?=$rand?>collapse-inline collapse multi-collapse<?php endif; ?>" title="<?=$this->escapeHtmlAttr($subject)?>"
+                   href="<?=$this->record($this->driver)->getLink($linktype, $subject, $this->searchClassId)?>"><?=trim($this->escapeHtml($subfield))?></a>
+                <?php $count++ ?>
+            <?php endforeach; ?>
+            <?php // case 2: subjects in array ?>
+        <?php elseif (is_array($field) && count($field) > 1): ?>
+            <?php foreach ($field as $subfield): ?>
+                <a class="searchicon <?php if($count >= $max): ?><?=$type?>subjects-<?=$rand?>collapse-inline collapse multi-collapse<?php endif; ?>" title="<?=$this->escapeHtmlAttr($subfield)?>" href="<?=$this->record($this->driver)->getLink('subject', $subfield, $this->searchClassId)?>"><?=trim($this->escapeHtml($subfield))?></a>
+                <?php $count++ ?>
+            <?php endforeach; ?>
+            <?php // case 3: subjects in string ?>
+        <?php else: ?>
+            <?php $href = $this->record($this->driver)->getLink($linktype, $searchterm, $this->searchClassId);?>
+            <a class="searchicon <?php if ($count >= $max): ?><?=$type?>subjects-<?=$rand?> collapse-inline collapse multi-collapse<?php endif; ?>"
+               title="<?= $this->escapeHtmlAttr($field) ?>"
+               href="<?=$href?>"><?= trim($this->escapeHtml($field)) ?></a>
+            <?php if($type == 'gnd'): ?>
+                <a class="external hasicon <?php if ($count >= $max): ?><?=$type?>subjects-<?=$rand?> collapse-inline collapse multi-collapse<?php endif; ?>" data-toggle="tooltip" title="<?=$this->transEsc('GND_DNB_link')?>" href=<?= $this->gndLink()->fromExplore($key) ?>>
+                <i class="fa fa-info-circle"></i>
+            </a>
+            <?php endif; ?>
+            <?php $count++ ?>
+        <? endif; ?>
+      </span>
+<?php endforeach; ?>
+
+<?php if($count > $max): ?>
+    <?=$this->showmore(implode(', ', array_unique($selectors)), false)?>
+<?endif; ?>

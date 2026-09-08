@@ -1,0 +1,31 @@
+<?php $count = 0; ?>
+<?php foreach ($this->data as $item): ?>
+    <?php if ($count > 0):?><br><?php endif; ?>
+
+    <?php if (isset($item['signature'])): ?>
+        <?= $this->escapeHtml($item['signature']) ?>
+    <?php endif; ?>
+
+    <?php if (isset($item['header'])): ?>
+        <?= $this->escapeHtml($item['header']) . ": " ?>
+    <?php endif;?>
+
+    <?php if (isset($item['name'])): ?>
+        <?php if (isset($item['gnd'])): ?>
+            <a class="external hasicon" data-toggle="tooltip" title="<?=$this->transEsc('DNB_link')?>" href="<?=$this->gndLink()->fromExplore($item['gnd'])?>">
+                <?= $this->escapeHtml($item['name']) ?>
+                <i class="fa fa-info-circle"></i>
+            </a>
+        <?php else: ?>
+            <?= $this->escapeHtml($item['name']) ?>
+        <?php endif; ?>
+    <?php endif; ?>
+
+    <?php if (isset($item['details'])): ?>
+        <?php foreach ($item['details'] as $detail): ?>
+            <?= ' | ' . $this->escapeHtml($detail) ?>
+        <?php endforeach; ?>
+    <?php endif; ?>
+
+    <?php $count++; ?>
+<?php endforeach; ?>

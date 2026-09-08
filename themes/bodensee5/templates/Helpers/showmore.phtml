@@ -1,0 +1,23 @@
+<? /* Use random numbers in the selector - they must be unique
+     add   collapse multi-collapse and the selector to the elements to be hidden  */?>
+
+<?php if ($this->btn):?>
+    <button class="btn btn-info btn-xs text-toggle"
+            data-toggle="collapse"
+            data-target="<?=$this->transEsc($this->selector)?>"
+            aria-expanded="false"
+            data-alttext="<?=$this->transEsc($this->alttext)?>"
+    >
+        <i class="fa fa-caret-down"></i>
+        <span class="text"><?=$this->transEsc($this->text)?></span>
+    </button>
+<?php else: ?>
+    <a href="#" class="text-toggle"
+            data-toggle="collapse"
+            data-target="<?=$this->transEsc($this->selector)?>"
+            aria-expanded="false"
+            data-alttext="<?=$this->transEsc($this->alttext)?>"
+    >
+        <i class="fa fa-caret-down"></i><span class="text"><?=$this->transEsc($this->text)?></span>
+    </a>
+<?php endif ?>

@@ -1,0 +1,70 @@
+<?php
+/*
+ * Copyright 2021 (C) Bibliotheksservice-Zentrum Baden-
+ * Württemberg, Konstanz, Germany
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ */
+
+$hiddenFilters = $this->searchMemory()->getLastHiddenFilters($this->searchClassId);
+    $hiddenFilterString = '';
+    foreach ($hiddenFilters as $key => $filter) {
+        foreach ($filter as $value) {
+            $hiddenFilterString .= '&hiddenFilters[]=' . $this->escapeHtmlAttr($key) . ':' . $this->escapeHtmlAttr($value);
+        }
+    }
+?>
+<div class="row" vocab="http://schema.org/" resource="#record">
+    <div class="col-xs-12 col-sm-9">
+        <?php
+        $title = $this->driver->getTitle();
+        $section = $this->driver->getTitleSection();
+        $sectionol = $this->driver->tryMethod('getTitleSectionOl');
+        $titleol = $this->driver->tryMethod('getTitleOl');
+        ?>
+        <h3 property="name">
+            <?php if (empty($titleol)): ?>
+            <?=$this->escapeHtml($title) ?><br/><?= $this->string()->cleanEsc($section) ?>
+            <?php else: ?>
+            <?=$this->escapeHtml($titleol) ?><br/><?= $this->escapeHtml($sectionol) ?>
+            <?php endif; ?>
+        </h3>
+        <? if (!empty($titleol)): ?>
+            <h4><?=$this->escapeHtml($title) ?><br/><?= $this->string()->cleanEsc($section) ?></h4>
+        <? endif; ?>
+
+        <? if ($this->userlist()->getMode() !== 'disabled'): ?>
+            <? /* Display the lists that this record is saved to */ ?>
+            <div class="savedLists hidden alert alert-info" id="savedLists">
+                <strong><?= $this->transEsc("Saved in") ?>:</strong>
+            </div>
+        <? endif; ?>
+
+        <?php $detailList = $this->detailList('Items'); ?>
+        <?=$this->record($this->driver)->renderTemplate(
+            'table.phtml',
+            ['data' => $detailList]
+        ) ?>
+    </div>
+    <div class="col-xs-6 col-sm-3 col-md-2 col-xs-offset-3 col-sm-offset-0" >
+        <a class="cover" data-img-url="<?=$this->record($this->driver)->getThumbnail('large')?>">
+            <?=$this->context($this)->renderInContext('record/cover.phtml', [
+                'cover' => $this->record($this->driver)->getThumbnail('large'),
+
+            ])?>
+        </a>
+    </div>
+</div>

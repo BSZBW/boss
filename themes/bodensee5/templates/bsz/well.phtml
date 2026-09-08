@@ -1,0 +1,68 @@
+<?php
+   $lang = $this->layout()->userLang;
+   $heading = $settings->get('heading_' . $lang) !== null ? $settings->get('heading_' . $lang) : '';
+   $xswidth = 'col-xs-12';
+   if ($settings->offsetExists('image') && count($settings->offsetGet('image')) > 0) {
+       $xswidth = 'col-xs-6 col-xs-offset-6 col-sm-offset-0';
+   }
+?>
+
+<div class="<?=$xswidth?> col-sm-<?=(12 / $count)?>">
+    <div class="well clearfix">
+        <?php if (!empty($heading)): ?>
+        <h5><?=$this->escapeHtml($heading)?></h5>
+        <?php endif; ?>
+        <?php if ($settings->offsetExists('link') && count($settings->get('link')) > 0): ?>
+        <ul>
+            <?php foreach ($settings->get('link') as $k => $link): ?>
+            <?php
+                if (strpos($link, '://') === false) {
+                    $url = $this->url($link);
+                    $class = strpos($link, 'bsz-library') === false ? 'internal' : 'external';
+                } else {
+                    $url = $link;
+                    $class = 'external';
+                }
+                if (strpos($url, '%lang%') !== false) {
+                    $url = str_replace('%lang%', $this->layout()->userLang, $url);
+                }
+                $title = strpos($url, 'Freeform') !== false ? 'ILL::free_form_tooltip' : '';
+                $label = isset($settings->get('label_' . $lang)[$k]) ? $settings->get('label_' . $lang)[$k] : $settings->get('label_de')[$k];
+            ?>
+            <li>
+                <a href="<?=$url?>" title="<?=$this->transEsc($title)?>" <?php if (!empty($title)): ?>data-toggle="tooltip" <?php endif; ?>class="<?=$this->escapeHtmlAttr($class)?>"><?=$this->escapeHtml($label)?></a>
+            </li>
+            <?php endforeach; ?>
+        </ul>
+        <?php endif; ?>
+        <?php if ($settings->get('text_' . $lang)): ?>
+        <small style="margin-left: 0"><?=$this->escapeHtml($settings->get('text_' . $lang))?></small>
+        <?php endif; ?>
+        <?php if ($settings->offsetExists('image') && count($settings->offsetGet('image')) > 0):?>
+            <?php
+
+            $images = $settings->offsetGet('image');
+            $alts = $settings->offsetGet('image_alt');
+            $links = $settings->offsetGet('image_link');
+            ?>
+            <?php foreach($images as $k => $image): ?>
+                <?php
+                $image = $images[$k] ?? null;
+                $alt = $alts[$k] ?? null;
+                $link = $links[$k] ?? null;
+                ?>
+                <?php if ($image && $alt):?>
+                    <?php if ($link):?>
+                        <a href="<?=$link?>" class="external">
+                    <?php endif; ?>
+                    <img class="pull-right img-responsive" src="<?=$this->imageLink($image)?>" alt="<?=$this->transEsc($alt)?>"/>
+                    <?php if ($link):?>
+                        </a>
+                    <?php endif; ?>
+                <?php endif; ?>
+            <? endforeach; ?>
+        <? endif; ?>
+    </div>
+
+
+</div>

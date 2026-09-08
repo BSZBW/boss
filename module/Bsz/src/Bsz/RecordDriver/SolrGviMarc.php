@@ -704,7 +704,7 @@ class SolrGviMarc extends SolrMarc implements Constants
      */
     public function supportsAjaxStatus()
     {
-        if ($this->getNetwork() != 'SWB') {
+        if ($this->getNetwork() != 'SWB' && $this->getNetwork() != 'HEBIS') {
             return false;
         }
         if ($this->mainConfig->isIsilSession() && !$this->mainConfig->hasIsilSession()) {

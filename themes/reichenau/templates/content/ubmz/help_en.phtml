@@ -1,0 +1,140 @@
+<?php $this->headTitle($this->translate('Help')); ?>
+
+<h1><?=$this->transEsc('Help') ?></h1>
+
+        <div class="helptext">
+            
+                <h2 class="main">Our search interface</h2>
+                <ul class="inhalt">
+                    <li><a href="#AllgHin">General Information</a></li>
+                    <li><a href="#BumAllg">Library catalogue - general information</a></li>
+                    <li><a href="#BumMod">Library catalogue - how to search </a></li>
+                    <li><a href="#AumAllg">More literature - general information</a></li>
+                    <li><a href="#AumMod">More literature - how to search</a></li>
+                    <li><a href="#ErwSuche">Advanced search </a></li>
+                    <li><a href="#ZugVoll">Full-text versions</a></li>
+                    <li><a href="#Anmeldung">"Log On" and "Your Account"</a></li>
+                    <li><a href="#Fragen">Any questions?</a></li>
+                </ul>
+            
+
+            
+                <h2><a id="AllgHin"></a>General information</h2>
+                <ul class="allghin">
+                    <li><strong>ONE search interface, TWO search results lists.<br>Search results include books as well as articles.</strong></li><!-- &rArr; -->
+                    <li><strong>Library catalogue</strong><br>holdings of the University Library (books, journals, online resources etc.)</li>
+                    <li><strong>More literature</strong><br>articles and books available online, search results from bibliographic databases etc.<br>Search results may include material not in the Library’s holdings</li>
+                </ul>
+                <p>
+                    Please note that some databases available at the University Library are not included here.
+                    <!-- Databases included here are listed here (<a href="TOP_Datenbanken_alphabetisch.pdf" target="_blank">in alphabetical order</a>) and here (<a href="TOP_Datenbanken_nach_Faechern.pdf" target="_blank">grouped according to subjects</a>).-->
+                    To refine your search, choose use one of the subject <a href="https://dbis.ur.de/UBMZ/browse/subjects/" target="_blank">databases</a>.
+                </p>
+            
+
+            
+                <h2><a id="BumAllg"></a>Library catalogue - general information</h2>
+                <ul class="info">
+                    <li>Search results are ranked according to relevance, by default. Other options are available.</li>
+                    <li>Search results contain information on whether an item is currently available.</li>
+                    <li>Search results include the call number and the location of items.</li>
+                    <li>Filter options are available.</li>
+                    <li>This search offers more search results than the local catalogue as:
+                        <ul>
+                            <li>Tables of contents and abstracts are included</li>
+                            <li>Morphologically related search terms are included</li>
+                            <li>Phonetically similar search terms are included</li>
+                        </ul>
+                    </li>
+                </ul>
+            
+
+            
+                <h2><a id="BumMod"></a>Library catalogue - how to search</h2>
+
+                <ul class="info">
+                    <li>If you use four or less search terms, search results will only include items who contains all of these terms. Therefore, articles, prepositions etc. should not be used as search terms. If you use from five to seven search terms, results may include items from whose title one of the search terms is missing. If you use eight or more search terms, results will include all items whose title contains at least 80 % of your search terms.</li>
+                    <li>Wildcards
+                        <ul>
+                            <li>You may use "?" to replace a <i>single character</i> anywhere within a word.</li>
+                            <li>You may use "*" to replace <i>two or more characters</i> (also within words)</li>
+                        </ul><br>
+                        <div class="alert alert-info">Example: <i>existen?ialism*</i></div>
+                    </li>
+                    <li>If you use inverted commas around your search terms, search results will only include items whose titels contain all your search terms in exactly that order.<br><br>
+                        <div class="alert alert-info">Example: <i>"slow food"</i></div>
+                        <div class="alert alert-info">Example: <i>"name, first name"</i> (when looking for a specific person)</div></li>
+                    <li>Boolean operators:<br>Use "AND" or "OR" (in capitals) to specify multiple terms, any order. Use "NOT" (in capitals) to exclude terms. In the “Library catalogue” you may also use "+" or "-" directly before your search term. If you use four or less search terms, they are automatically combined using "AND". Five or more search terms need to be combined using "AND" or "+" if search results should only contain those items whose titles contain all of the search terms. If you want to combine different operators you must use the AND-operator.<br><br>
+                        <div class="alert alert-info">Example: <i>+internationale +politik +ulrich +albrecht +herrschaft</i></div>
+                        <div class="alert alert-info">Example: <i>+faust +mann -goethe</i></div>
+                        <div class="alert alert-info">Example: <i>Wohn* AND alter* NOT alternativ*</i></div></li>
+                </ul>
+            
+
+            
+                <h2><a id="AumAllg"></a>More literature - general information</h2>
+
+                <ul class="info">
+                    <li>Usually generates more results than "Library catalogue"; search terms in English will generate even more results as many English-language databases are included.</li>
+                    <li>Filters are different from "Library catalogue"; the filters "published in" and "database" are particularly useful as they indicate the journals and databases with the most relevant results and thus identify starting points for a more refined search.</li>
+                    <li>Instead of the call number and location, search results will contain links to full-text versions of the items or links to verify the availability of items.<br><br>
+                        The availability of full-text versions is indicated by color:
+                        <p>→ Yellow: item is available on campus only</p>
+                        <p>→ Green: item is available</p>
+                        <p>→ Red: Item is not available</p>
+                        If a full-text version is not available, more options are listed
+                        <ul>
+                            <li>local holdings</li>
+                            <li>interlibrary loans</li>
+                            <li>holdings of other libraries</li>
+                            <li>online search</li>
+                            <li>contact a librarian</li>
+                        </ul>
+                    </li>
+                </ul>
+            
+
+            
+                <h2><a id="AumMod"></a>More literature - how to search </h2>
+
+                <ul class="info">
+                    <li>Wildcards
+                        <ul>
+                            <li>You may use "?" to replace a <i>single character</i> anywhere within a word.</li>
+                            <li>You may use "*" to replace <i>two or more characters</i> (also within words)</li>
+                        </ul><br>
+                        <div class="alert alert-info">Example: <i>existen?ialism*</i></div>
+                    </li>
+                    <li>If you use inverted commas around your search terms, search results will only include items who contain all your search terms in exactly that order.<br><br>
+                        <div class="alert alert-info">Example: <i>"slow food"</i></div></li>
+                    <li>Boolean operators:<br>Use "AND" or "OR" (in capitals) to specify multiple terms, any order. Use "NOT" (in capitals) to exclude terms. Do not use "+" or "-" here. In contrast to "Library catalogue", search terms are not automatically combined.<br><br>
+                        <div class="alert alert-info">Example: <i>sleep AND disorder AND barbiturate NOT depression</i></div></li>
+                </ul>
+            
+
+            
+                <h2><a id="ErwSuche"></a>Advanced search </h2>
+                <p>Advanced search with several search fields is available for both "Library catalogue" and "More literature".</p>
+            
+
+            
+                <h2><a id="ZugVoll"></a>Full-text versions</h2>
+                <p>Search results may include items freely available online as well as items only available on campus. To access full-text versions only available on campus, you need to use a computer connected to the JGU servers – either directly or via the Remote Desktop Server (see <a href="https://www.en-zdv.uni-mainz.de/internet-and-net-access/" target="_blank">https://www.en-zdv.uni-mainz.de/internet-and-net-access/</a>).</p>
+                <p>Certain <a href="https://www.ub.uni-mainz.de/faq#account-w-lan-zugriff-auf-elektronische-medien">rules and restrictions</a> concerning the use of full-text versions apply.</p>
+            
+
+            
+                <h2><a id="Anmeldung"></a>"Log On" and "Your Account"</h2>
+                <p>Use your Library card number to log on to your Library account in order to</p>
+                <ul class="info">
+                    <li>view your on-loan items, interlibrary loans, saved searches etc.</li>
+                    <li>use databases only available on campus when you are off campus</li>
+                </ul>
+            
+
+            
+                <h2><a id="Fragen"></a>Any questions?</h2>
+                <p><a href="mailto:info@ub.uni-mainz.de">Contact</a> a librarian.</p>
+            
+
+        </div>

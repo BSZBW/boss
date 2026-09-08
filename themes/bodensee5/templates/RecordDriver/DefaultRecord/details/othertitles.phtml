@@ -1,0 +1,4 @@
+<?php $hf = $this->searchMemory()->getHiddenFilterString($this->searchClassId); ?>
+<?php foreach($this->data as $field): ?>
+    <a href="<?=$this->url('search-results')?>?lookfor=%22<?=urlencode($field)?>%22&amp;type=AllFields&amp;filter[]=~material_content_type:%22Journal/Magazine%22<?= $hf ?>"><?=$this->escapeHtml($field)?></a><br/>
+<?php endforeach; ?>

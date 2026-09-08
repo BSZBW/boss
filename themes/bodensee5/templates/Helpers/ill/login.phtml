@@ -1,0 +1,82 @@
+<?php $labelSize = 3;
+
+
+$inputSize = 9;
+$account = $this->auth()->getManager();
+$library = $this->libraries()->getFirstActive($this->client()->getIsils());
+
+?>
+<?php if (!$account->loginEnabled() || !$library->loginEnabled()): ?>
+    <div class=" form-group form-group-sm <?= isset($success) && !$success ? 'has-error' : '' ?>">
+        <label class="control-label col-sm-<?= $labelSize ?>"
+               for="ill-user"><?= $this->transEsc('Benutzernummer') ?>*</label>
+        <div class="col-sm-3">
+            <input required="" type="text" class="form-control" id="ill-user"
+                   name="BenutzerNummer"
+                   value="<?= $params['BenutzerNummer'] ?? '' ?>"/>
+        </div>
+    </div>
+    <?php $libraries = $this->libraries()->getActive($this->client()->getIsils()) ?>
+    <?php $firstLibrary = array_shift($libraries);
+    if (isset($firstLibrary) && in_array('tan', $firstLibrary->getAuth())): ?>
+        <div class=" form-group form-group-sm <?= isset($success) && !$success ? 'has-error' : '' ?>">
+            <label class="control-label col-sm-<?= $labelSize ?>"
+                   for="ill-tan"><?= $this->transEsc('TAN') ?>*</label>
+            <div class="col-sm-3">
+                <input type="password" class="form-control" id="ill-tan" name="TAN"
+                       required=""/>
+            </div>
+        </div>
+    <?php else: ?>
+        <div class=" form-group form-group-sm <?= isset($success) && !$success ? 'has-error' : '' ?> ">
+            <label class="control-label col-sm-<?= $labelSize ?>"
+                   for="ill-password"><?= $this->transEsc('Password') ?>*</label>
+            <div class="col-sm-3">
+                <input type="password" class="form-control" id="ill-password"
+                       name="Passwort" required=""/>
+            </div>
+        </div>
+    <?php endif; ?>
+<?php elseif ($account->isLoggedIn()): ?>
+    <?php $identity = $account->getIdentity() ?>
+    <div CLASS="col-sm-12 col-sm-offset-3">
+        <?php $parts = explode('@', $identity->username); ?>
+        <p>
+            <i class="fa fa-check text-success"></i> <?= $this->transEsc('shib_already_logged_in_with_id') . ' <b>' . htmlspecialchars($parts[0]) .  '</b>.'?>
+        </p>
+    </div>
+    <!-- user name may be replaced before sending to zfl server -->
+    <input type="hidden" name="BenutzerNummer"
+           value="<?= htmlspecialchars($identity->username) ?>"/>
+<?php endif; ?>
+<?php
+$ppn = 999999999;
+$verbund = '';
+if (isset($this->driver)) {
+    $zdb = $this->driver->getZdbId();
+    $verbund = ($this->driver->tryMethod('getNetwork') ?? '');
+    if (empty($zdb) && ($verbund != 'HBZ')) {
+        $ppn = $this->driver->getPPN();
+    } elseif ($verbund == 'HBZ') {
+        $ppn = $this->driver->getUniqueId();
+        $ppn = preg_replace('/\(.*\)/', '', $ppn);
+    } elseif (!empty($zdb)) {
+        $ppn = $zdb;
+        $verbund = 'ZDB';
+    }
+}
+?>
+<input type="hidden" name="Verbund" value="<?= $this->escapeHtmlAttr($verbund) ?>"/>
+<input type="hidden" name="TitelId" value="<?= $this->escapeHtmlAttr($ppn) ?>"/>
+<input type="hidden" name="Besteller" value="E"/>
+
+<?php if (isset($this->driver)): ?>
+    <?php // nicht freies Fernleihformular ?>
+    <input type="hidden" name="ATEB" value="off"/>
+<?php else: ?>
+    <?php // freies Fernleihformular ?>
+    <input type="hidden" name="ATEB" value="on"/>
+<?php endif; ?>
+
+<input type="hidden" name="SignZustand" value="off"/>
+

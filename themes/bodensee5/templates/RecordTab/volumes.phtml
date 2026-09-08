@@ -1,0 +1,47 @@
+<?php
+    // Set page title.
+    $this->headTitle($this->translate('Volumes') . ': ' . $this->driver->getBreadcrumb());
+
+    $content = $this->tab->getResults();
+?>
+<?php if (isset($content) && count($content) > 0): ?>
+<?php $rand = rand(0, 9999)?>
+<table class="table table-striped table-condensed tablesorter tablesorter-bootstrap">
+    <thead>
+        <tr>
+            <th class="col-xs-8"><?=$this->transEsc('Title')?></th>
+            <th class="col-xs-1"><?=$this->transEsc('Year')?></th>
+            <th class="col-xs-1"><?=$this->transEsc('volume_tab')?></th>
+            <th class="col-xs-2"><?=$this->transEsc('Author')?></th>
+        </tr>
+    </thead>
+    <tbody>
+
+    <?php $count = 1; foreach ($content as $result): ?>
+        <tr <?php if ($count > 10): ?> class="showmore-<?=$rand?> collapse multi-collapse"<?php endif; ?>>
+            <td><a class="internal"  href="<?=$this->recordLink()->getUrl($result)?>"><?=$this->string()->cleanEsc($result->getTitle())?> <?=$this->string()->cleanEsc($result->getTitleSection())?></a></td>
+            <td><?=implode(', ', $result->getPublicationDates())?></td>
+            <td><?=$this->string()->cleanEsc($result->getVolumeNumber())?></td>
+            <td><?=$result->getPrimaryAuthor()?></td>
+        </tr>
+        <?php $count++ ?>
+    <?php endforeach; ?>
+    <?php if ($count > 10): ?>
+    </tbody>
+    <tfoot>
+        <tr><td>
+            <?=$this->showmore('.showmore-'.$rand)?>
+        </td></tr>
+    </tfoot>
+    <?php endif; ?>
+</table>
+<script type="text/javascript">
+    $(document).ready(function() {
+       $('.tablesorter').tablesorter({
+            sortList : [[1,1]]
+       });
+    });
+</script>
+<?php else: ?>
+<p><?=$this->transEsc('nohit_heading')?></p>
+<?php endif; ?>

@@ -1,0 +1,51 @@
+<?php
+
+
+$this->layout()->breadcrumbs .= '<li class="active">' . $this->transEsc('Shibboleth') . '</li>';
+    $this->headTitle()->setPrefix($this->transEsc('Shibboleth'));
+    ?>
+
+
+<div class="col-sm-12">
+    <h3><?=$this->transEsc('shib_wayf_headline')?></h3>
+    <p><?=$this->transEsc('shib_wayf_hint')?></p>
+</div>
+<div class="col-md-6">
+    <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button"
+                id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="true">
+            <?= $this->transEsc('Library') ?>
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="idp-list">
+
+            <?php
+            $baseUrl = $this->url('shib-redirect');
+            $params = [];
+            foreach ($this->libraries()->getByShib() as $library):
+                $params['isil'] = $library->getIsil(); ?>
+                <li><a href="<?= $baseUrl . '?' . http_build_query($params) ?>"
+                       data-isil="<?= $this->escapeHtmlAttr($library->getIsil()) ?>"><?= $this->EscapeHtml($library->getName()) ?></a>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var isilsSession = [];
+        <?php foreach ($this->client()->getIsils() as $isil): ?>
+        isilsSession.push('<?=$this->escapeHtml($isil)?>');
+        <?php endforeach; ?>
+        isilsSession.forEach(function (isil) {
+            var href = $('#idp-list').find('a[data-isil=' + isil + ']').attr('href');
+            if (href != undefined && href.length > 0) {
+                window.location.replace(href);
+            }
+        });
+    });
+
+
+
+</script>

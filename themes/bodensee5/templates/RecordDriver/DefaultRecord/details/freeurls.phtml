@@ -1,0 +1,8 @@
+<?php $count = 0; ?>
+<?php $overrideText = $this->client()->getOverrideText(); ?>
+<?php foreach ($this->data as $current): ?>
+    <?php if ($count > 0): ?><br><?php endif; ?>
+    <?php $text = $overrideText ?? $current; ?>
+    <a class="external" href="<?=$current?>"><?= $this->transEsc($text) ?></a>
+    <?php $count++; ?>
+<?php endforeach; ?>

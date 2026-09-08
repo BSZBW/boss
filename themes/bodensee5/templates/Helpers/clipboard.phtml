@@ -1,0 +1,7 @@
+<?php $rand = rand(0, 10000)?>
+<?php if (!empty($content)): ?>
+    <span id="clipboard-<?=$rand?>"><?=$this->escapeHtml($content)?></span>
+    <span id="clipboasrd-trigger-<?=$rand?>" class="copy-clipboard-toggle" data-toggle="tooltip" title="<?=$this->transEsc('clipboard')?>" data-clipboard-target="#clipboard-<?=$rand?>"><i class="fa fa-copy"></i></span>
+<?php elseif (!empty($id)): ?>
+    <span id="clipboasrd-trigger-<?=$rand?>" class="copy-clipboard-toggle" data-toggle="tooltip" title="<?=$this->transEsc('clipboard')?>" data-clipboard-target="#<?=$id?>"><i class="fa fa-copy"></i></span>
+<?php endif; ?>

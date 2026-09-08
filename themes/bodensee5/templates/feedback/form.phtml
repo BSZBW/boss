@@ -1,0 +1,103 @@
+<?php
+
+
+$form = $this->form;
+$form->prepare();
+
+$title = $form->getTitle();
+$title = !empty($title)
+    ? $this->transEsc($title) : null;
+
+$formUrl = $this->url('feedback-form', ['id' => $this->formId]);
+$form->setAttribute('action', $formUrl);
+$form->setAttribute('class', 'dynamic-form');
+$form->setAttribute('method', 'post');
+
+$help = $form->getHelp();
+$helpPre = $helpPost = null;
+$helpPre = isset($help['pre']) ? $this->translate($help['pre']) : null;
+$helpPost = isset($help['post']) ? $this->translate($help['post']) : null;
+?>
+<div class="col-sm-12">
+    <div class="feedback-content">
+        <?php if ($title): ?>
+            <?php $this->headTitle($title); ?>
+            <h1><?=$title?></h1>
+        <?php endif; ?>
+        <?=$this->flashmessages()?>
+        <?php if ($form->showOnlyForLoggedUsers() && !$this->user): ?>
+            <div class="form-group">
+                <p><?=$this->translate('feedback_login_required')?></p>
+                <a href="<?=$this->url('myresearch-userlogin') ?>" class="btn btn-primary" data-lightbox title="Login"><i class="fa fa-sign-in" aria-hidden="true" data-lightbox-onclose="window.location.href='<?=$this->escapeHtmlAttr($formUrl) ?>'"></i> <?=$this->transEsc("Login") ?></a>
+            </div>
+        <?php else: ?>
+        <?= $this->form()->openTag($form); ?>
+        <?php if ($helpPre): ?>
+            <div class="form-group">
+                <div class="form-info pre">
+                    <?=$helpPre?>
+                </div>
+            </div>
+        <?php endif ?>
+        <?php $currentGroup = null; ?>
+        <?php foreach($form->getFormElementConfig() as $el): ?>
+        <?php
+
+        $formElement = $form->get($el['name']);
+
+        // Group form elements into field sets
+        $handleGroup = $group = null;
+        if ($group && $currentGroup === null) {
+            $handleGroup = 'open';
+            $currentGroup = $group;
+        } elseif ($currentGroup && !$group) {
+            $handleGroup = 'close';
+            $currentGroup = null;
+        } elseif ($currentGroup !== $group) {
+            $handleGroup = 'openAndClose';
+            $currentGroup = $group;
+        }
+        if (isset($el['group']) && !empty($el['group'])) {
+            $group = $el['group'];
+        }
+        ?>
+
+        <?php if (in_array($handleGroup, ['close', 'openAndClose'])): ?>
+    </div>
+    <?php endif ?>
+    <?php if (in_array($handleGroup, ['open', 'openAndClose'])): ?>
+    <?php if (in_array($el['type'], ['checkbox', 'radio'])): ?>
+    <div class="field-set" role="group"<?= !empty($el['label']) ? ' aria-labelledby="' . $this->escapeHtmlAttr($el['name']) . '"' : ''?>>
+        <?php else: ?>
+        <div class="field-set">
+            <?php endif ?>
+            <?php endif ?>
+
+            <div class="form-group <?= $el['type'] ?>">
+                <?php if (!empty($el['help'])): ?>
+                    <p class="info"><?= substr($el['help'], -5) === '_html' ? $this->translate($el['help']) : $this->transEsc($el['help']) ?></p>
+                <?php endif ?>
+                <?php if ($el['type'] !== 'submit'): ?>
+                    <?php if ($el['label']): ?>
+                        <?php if (in_array($el['type'], ['checkbox', 'radio'])): ?>
+                            <p id="<?=$this->escapeHtmlAttr($el['name'])?>" class="control-label radio-label<?=!empty($el['required']) ? ' required' : ''?>"><?=$this->transEsc($el['label'])?>:</p>
+                        <?php else: ?>
+                            <label for="<?=$this->escapeHtmlAttr($el['name'])?>" class="control-label<?=!empty($el['required']) ? ' required' : ''?>"><?=$this->transEsc($el['label'])?>:</label>
+                        <?php endif ?>
+                    <?php endif ?>
+                <?php else: ?>
+                    <?php if ($helpPost): ?>
+                        <div class="form-info post">
+                            <?=$helpPost?>
+                        </div>
+                    <?php endif ?>
+                    <?=$this->captcha()->html($this->useCaptcha) ?>
+                <?php endif ?>
+                <?= $this->formRow($formElement) ?>
+            </div>
+            <?php endforeach ?>
+            <?= $this->form()->closeTag() ?>
+            <?php endif ?>
+        </div>
+</div>
+

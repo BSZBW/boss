@@ -91,7 +91,7 @@ $config = [
             'Bsz\Auth\PluginManager' => 'VuFind\ServiceManager\AbstractPluginManagerFactory',
             'Bsz\RecordDriver\PluginManager' => 'Bsz\RecordDriver\PluginManagerFactory',
             'Bsz\ILL\Logic' => 'Bsz\ILL\Factory::getIllLogic',
-
+            'Bsz\ILS\Logic\Holds' => 'VuFind\ILS\Logic\LogicFactory',
         ],
         'invokables' => [
             'Bsz\RecordDriver\Constants' => 'Bsz\RecordDriver\Constants',
@@ -101,8 +101,8 @@ $config = [
             'VuFind\SearchTabsHelper'   => 'Bsz\SearchTabsHelper',
             'VuFind\Auth\Manager'           => 'Bsz\Auth\Manager',
             'VuFind\RecordDriver\PluginManager' => 'Bsz\RecordDriver\PluginManager',
-            'VuFind\Auth\PluginManager' => 'Bsz\Auth\PluginManager'
-
+            'VuFind\Auth\PluginManager' => 'Bsz\Auth\PluginManager',
+            'VuFind\ILS\Logic\Holds' => 'Bsz\ILS\Logic\Holds'
         ]
     ],
     'view_manager' => [

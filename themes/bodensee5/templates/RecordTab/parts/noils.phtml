@@ -1,0 +1,56 @@
+<div class="col-lg-4 col-md-6 col-sm-12">
+
+    <dl class="dl-horizontal">
+    <?php //$callNos = $this->tab->getUniqueCallNumbers($this->holding['items']); if (!empty($callNos)): ?>
+<!--    <dt>--><?php //=$this->transEsc("Call Number")?><!--</dt>-->
+
+<!--    <dd>--><?php //foreach ($callNos as $callNo): ?>
+<!--          --><?php //if ($this->callnumberHandler): ?>
+<!--            <a href="--><?php //=$this->url('alphabrowse-home') ?><!--?source=--><?php //=$this->escapeHtmlAttr($this->callnumberHandler) ?><!--&amp;from=--><?php //=$this->escapeHtmlAttr($callNo) ?><!--">--><?php //=$this->escapeHtml($callNo)?><!--</a>-->
+<!--          --><?php //else: ?>
+<!--            --><?php //=$this->escapeHtml($callNo)?>
+<!--          --><?php //endif; ?>
+<!--          <br />-->
+<!--        --><?php //endforeach; ?>
+<!--    </dd>-->
+<!--    --><?php //endif; ?>
+    <?php if (!empty($row['callnumber'])): ?>
+        <dt><?=$this->transEsc("Call Number")?></dt>
+        <dd><?=$this->escapeHtml($row['callnumber'])?></dd>
+    <?php endif; ?>
+    <?php if (!empty($row['number'])): ?>
+        <dt><?=$this->transEsc('Local IDN')?></dt>
+        <dd><?=$this->escapeHtml($row['number'])?></dd>
+    <?php endif; ?>
+    <?php if (!empty($row['storage'])): ?>
+        <dt><?=$this->transEsc('storage')?></dt>
+        <dd><?=$this->escapeHtml($row['storage'])?></dd>
+    <?php endif; ?>
+    <?php if (!empty($row['notes'])): ?>
+        <dt><?=$this->transEsc('Note')?></dt>
+        <dd><?=$this->transEsc($row['notes'])?></dd>
+    <?php endif; ?>
+    <?php if (!$this->client()->is('only_one_holds_button') && !empty($row['ilslink']) && strpos($row['ilslink'], 'http') === 0): ?>
+        <dt><?=$this->transEsc('Link')?></dt>
+        <dd>
+            <?php $links = explode (' ', $row['ilslink']) ?>
+            <?php if (is_array($links)): ?>
+                <?php foreach ($links as $linkitem): ?>
+                    <a href="<?=$linkitem?>" class="external"><?=$this->transEsc('Local Online Access')?></a><br/>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <a href="<?=$row['ilslink']?>" class="external"><?=$this->transEsc('Local Online Access')?></a></dd>
+            <?php endif; ?>
+    <?php endif; ?>
+    <?php if (!empty($row['status'])): ?>
+        <dt><?=$this->transEsc('Bestandsangaben')?></dt>
+        <dd><?=$this->escapeHtml($row['status'])?></dd>
+    <? endif; ?>
+    </dl>
+    <?php if(!$this->client()->is('only_one_holds_button')): ?>
+    <? $ppn = $this->driver->tryMethod('getPPN'); if(!empty($ppn) && ($this->driver->isJournal() || $this->driver->isSerial())): ?>
+        <?=$this->recordLink()->linkPPNButton($this->driver) ?>
+    <? endif; ?>
+    <?php endif; ?>
+</div>
+

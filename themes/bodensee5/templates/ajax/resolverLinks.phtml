@@ -1,0 +1,48 @@
+<div>
+  <? if (!empty($this->electronic)): ?>
+    <div class="openurls">
+      <strong><?=$this->transEsc('Electronic')?></strong>
+      <ul>
+        <? foreach ($this->electronic as $link): ?>
+          <li>
+            <? if (!empty($link['href'])): ?>
+              <strong><a target="_blank" href="<?=$this->escapeHtmlAttr($link['href'])?>" title="<?=isset($link['service_type'])?$this->transEsc($this->escapeHtmlAttr($link['service_type'])):''?>"<?=!empty($link['access'])?' class="access-' . $link['access'] . '"':''?>><i class="fa fa-file-pdf-o"></i><?=isset($link['title'])?$this->escapeHtml($link['title']):''?></a></strong> <?=isset($link['coverage'])?$this->transEsc($this->escapeHtml($link['coverage'])):''?>
+            <? else: ?>
+              <?=isset($link['title'])?$this->escapeHtml($link['title']):''?> <?=isset($link['coverage'])?$this->escapeHtml($link['coverage']):''?>
+            <? endif; ?>
+          </li>
+        <? endforeach; ?>
+      </ul>
+    </div>
+  <? endif; ?>
+  <? if (!empty($this->print)): ?>
+    <div class="openurls">
+      <strong><?=$this->transEsc('Printed')?></strong>
+      <ul>
+        <? foreach ($this->print as $link): ?>
+          <li>
+            <? if (!empty($link['href'])): ?>
+              <a target="_blank" href="<?=$this->escapeHtmlAttr($link['href'])?>" title="<?=isset($link['title'])?$this->escapeHtml($link['title']):''?>"<?=!empty($link['access'])?' class="access-' . $link['access'] . '"':''?>><strong><i class="fa fa-print"></i> <?=isset($link['coverage'])?$this->escapeHtml($link['coverage']):''?></strong></a>
+            <? else: ?>
+              <?=isset($link['title'])?$this->escapeHtml($link['title']):''?> <?=isset($link['coverage'])?$this->escapeHtml($link['coverage']):''?>
+            <? endif; ?>
+          </li>
+        <? endforeach; ?>
+      </ul>
+    </div>
+  <? endif; ?>
+  <div class="openurls">
+      <? if (!empty($this->moreOptionsLink)): ?><a class="modal-remote" data-size="md" data-name="Linkresolver" href="<?=$this->escapeHtmlAttr($this->moreOptionsLink)?>"><?=$this->transEsc('More options')?></a><?endif; ?>
+    <? if (!empty($this->services)): ?>
+      <ul>
+        <? foreach ($this->services as $link): ?>
+          <? if (!empty($link['href'])): ?>
+            <li>
+              <a href="<?=$this->escapeHtmlAttr($link['href'])?>" title="<?=isset($link['service_type'])?$this->transEsc($this->escapeHtmlAttr($link['service_type'])):''?>"<?=!empty($link['access'])?' class="access-' . $link['access'] . '"':''?>><?=isset($link['title'])?$this->transEsc($this->escapeHtml($link['title'])):''?></a>
+            </li>
+          <? endif; ?>
+        <? endforeach; ?>
+      </ul>
+    <? endif; ?>
+  </div>
+</div>

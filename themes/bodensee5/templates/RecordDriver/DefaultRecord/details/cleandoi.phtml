@@ -1,0 +1,5 @@
+<?php $rand = rand(0, 2000) ?>
+<a id="clipboard-doi-<?= $rand ?>"
+   href="https://doi.org/<?= $this->escapeHtml($this->data) ?>"
+   target="_blank">https://doi.org/<?= $this->escapeHtml($this->data) ?></a>
+<?= $this->clipboard('', 'clipboard-doi-' . $rand) ?>

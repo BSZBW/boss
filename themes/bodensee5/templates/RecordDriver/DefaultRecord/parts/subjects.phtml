@@ -1,0 +1,361 @@
+<?php $rand = rand(0, 9999) ?>
+<?php $notations = $this->driver->tryMethod('getRVKNotations');
+if (!empty($notations) && $this->client()->is('show_rvk') &&!$this->client()->is('wlb2')): ?>
+    <?php $contentDisplayed = true; ?>
+    <tr>
+        <th>
+            <span class="text-nowrap"><?= $this->abbrev('RVK') ?>-<?= $this->transEsc('Notation') ?></span>
+        </th>
+        <?php if (is_array($notations)): ?>
+            <td>
+                <?php foreach ($notations as $shortcut => $description): ?>
+                    <?php $descriptionHtml = '<ol>';
+                    foreach ($description as $item) {
+                        $descriptionHtml .= '<li>' . $item . '</li>';
+                    }
+                    $descriptionHtml .= '</ol>';
+                    if ($descriptionHtml == '<ol></ol>') {
+                        $descriptionHtml = '';
+                    } else {
+                        $descriptionHtml = '<h5>' . $this->transEsc('RVK') . '</h5>' . $descriptionHtml;
+                    }
+
+                    ?>
+                    <span class="notationLine">
+                <a data-toggle="tooltip" data-placement="right" data-html="true"
+                   href="<?= $this->record($this->driver)->getLink('rvknotation', $shortcut, $this->searchClassId) ?>"
+                   class="searchicon"
+                   title="<?= $descriptionHtml ?>"><?= $this->transEsc($shortcut) ?></a>
+          </span>
+                <?php endforeach; ?>
+            </td>
+        <?php endif; ?>
+        <?php unset($notations) ?>
+    </tr>
+<?php endif; ?>
+
+<?php $bwlbNotations = $this->driver->tryMethod('getSystematics'); ?>
+<?php if ((!empty($notations) || !empty($bwlbNotations)) && $this->client()->is('wlb2')): ?>
+    <?php $contentDisplayed = true; ?>
+    <tr>
+        <th>
+            <span class="text-nowrap"><?= $this->transEsc('systematics') ?></span>
+        </th>
+        <?php if (is_array($notations)): ?>
+            <td>
+                <?php foreach ($notations ?? [] as $shortcut => $description): ?>
+                    <?php $descriptionHtml = '<ol>';
+                    foreach ($description as $item) {
+                        $descriptionHtml .= '<li>' . $item . '</li>';
+                    }
+                    $descriptionHtml .= '</ol>';
+                    if ($descriptionHtml == '<ol></ol>') {
+                        $descriptionHtml = '';
+                    } else {
+                        $descriptionHtml = '<h5>' . $this->transEsc('RVK') . '</h5>' . $descriptionHtml;
+                    }
+
+                    ?>
+                    <span class="notationLine">
+                <a data-toggle="tooltip" data-placement="right" data-html="true"
+                   href="<?= $this->record($this->driver)->getLink('rvknotation', $shortcut, $this->searchClassId) ?>"
+                   class="searchicon"
+                   title="<?= $descriptionHtml ?>"><?= $this->transEsc($shortcut) ?></a>
+          </span>
+                <?php endforeach; ?>
+                <?php foreach ($bwlbNotations ?? [] as $item): ?>
+                    <?php
+                    $description = '';
+                    $abbrev = $this->bwlbConcordance($item);
+                    foreach ($abbrev as $key => $value) {
+                        $description .= '<tr>';
+                        $description .= '<td style="text-align:left; padding-right:10px">' . $key . '</td>';
+                        $description .= '<td style="text-align:left">' . $value . '</td>';
+                        $description .= '</tr>';
+                    }
+                    if (!empty($description)) {
+                        $header = '<h5>' . $this->transEsc('BWLB') . '</h5>';
+                        $description = $header . '<table><tbody>' . $description . '</tbody></table>';
+                    }
+                    ?>
+                    <?php if(empty($description)): ?>
+                        <span class="text-nowrap"><?=$item ?></span>
+                    <?php else: ?>
+                        <script>
+                          var myDefaultWhiteList = $.fn.popover.Constructor.DEFAULTS.whiteList
+                          myDefaultWhiteList.table = []
+                          myDefaultWhiteList.tbody = []
+                          myDefaultWhiteList.tr = []
+                          myDefaultWhiteList.h5 = []
+                          myDefaultWhiteList.td = ['style']
+                        </script>
+                        <a data-toggle="tooltip" data-placement="right" data-html="true" class="searchicon"
+                           href="<?= $this->record($this->driver)->getLink('bwlb', $item, $this->searchClassId) ?>"
+                           title="<?= $this->escapeHtml($description) ?>"><?=$item ?></a>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </td>
+
+        <?php endif; ?>
+        <?php unset($notations) ?>
+    </tr>
+<?php endif; ?>
+
+<?php $dficlassification = $this->driver->tryMethod('getDFIClassification');
+if (!empty($dficlassification) && $this->client()->is('show_dfi')): ?>
+    <?php $contentDisplayed = true; ?>
+    <tr>
+        <th>
+            <span class="text-nowrap"><?= $this->abbrev('DFI') ?>-<?= $this->transEsc('Classification') ?></span>
+        </th>
+        <?php if (is_array($dficlassification)): ?>
+            <td>
+                <?php foreach ($dficlassification as $notation): ?>
+                    <span class="notationLine">
+                <a data-toggle="tooltip" data-placement="right" data-html="true"
+                   href="<?= $this->record($this->driver)->getLink('dficlassification', $notation, $this->searchClassId) ?>"
+                   class="searchicon"
+                   title="<?= $this->transEsc($notation) ?>"><?=$notation?> <?=$this->transEsc('FIV::'.preg_replace('/\s/', '', strtolower($notation))) ?></a>
+            </span>
+                <?php endforeach; ?>
+            </td>
+        <?php endif; ?>
+        <?php unset($dficlassification) ?>
+    </tr>
+<?php endif; ?>
+
+<?php $fivclassification = $this->driver->tryMethod('getFIVClassification');
+if(!empty($fivclassification) && $this->client()->is('show_fiv')): ?>
+    <?php $contentDisplayed = true; ?>
+    <tr>
+        <th><span class="text-nowrap"><?=$this->abbrev('FIV')?>-<?=$this->transEsc('Classification')?>:</span></th>
+        <?php if(is_array($fivclassification)): ?>
+            <td>
+                <?php foreach ($fivclassification as $notation): ?>
+                    <?php $trans = 'FIV::'.preg_replace('/\.|\s.*/', '', strtolower($notation))?>
+                    <span class="notationLine">
+                    <a href="<?=$this->record($this->driver)->getLink('fivclassification', $notation, $this->searchClassId)?>" class="searchicon"><?=$this->transEsc($trans)?></a>
+                </span>
+                <?php endforeach; ?>
+            </td>
+        <?php endif; ?>
+    </tr>
+<?php endif; ?>
+
+<?php $fivsubjects = $this->driver->tryMethod('getFIVSubjects', ['main_topics']);
+if (!empty($fivsubjects) && $this->client()->is('show_fiv')): ?>
+    <?php $contentDisplayed = true; ?>
+    <tr>
+        <th>
+            <span class="text-nowrap"><?= $this->transEsc('Main Topics') ?>:</span>
+        </th>
+        <?php if (is_array($fivsubjects)): ?>
+            <td>
+                <?= $this->context($this)->renderInContext('RecordDriver/DefaultRecord/parts/singlesubject.phtml',
+                    ['subjects' => $fivsubjects, 'type' => 'fivt', 'linktype' => 'fivtclassification']) ?>
+            </td>
+        <?php endif; ?>
+        <?php unset($fivsubjects) ?>
+    </tr>
+<?php endif; ?>
+<?php $fivsubjects = $this->driver->tryMethod('getFIVSubjects', ['partial_aspects']);
+if (!empty($fivsubjects) && $this->client()->is('show_fiv')): ?>
+    <?php $contentDisplayed = true; ?>
+    <tr>
+        <th>
+            <span class="text-nowrap"><?= $this->transEsc('Partial Aspects') ?>:</span>
+        </th>
+        <?php if (is_array($fivsubjects)): ?>
+            <td>
+                <?= $this->context($this)->renderInContext(
+                    'RecordDriver/DefaultRecord/parts/singlesubject.phtml',
+                    ['subjects' => $fivsubjects, 'type' => 'fiva', 'linktype' => 'fivaclassification']) ?>
+            </td>
+
+        <?php endif; ?>
+        <?php unset($fivsubjects) ?>
+    </tr>
+<?php endif; ?>
+
+<?php $dfisubject = $this->driver->tryMethod('getDFISubject');
+if (!empty($dfisubject) && $this->client()->is('show_dfi')): ?>
+    <?php $contentDisplayed = true; ?>
+    <tr>
+        <th>
+            <span class="text-nowrap"><?= $this->abbrev('DFI') ?>-<?= $this->transEsc('Subject') ?>:</span>
+        </th>
+        <?php if (is_array($dfisubject)): ?>
+            <?php $count = 0; ?>
+            <td>
+                <?php foreach ($dfisubject as $notation): ?>
+                    <div class="notationLine">
+                        <?php if(is_array($notation)): ?>
+                            <?php foreach ($notation as $key => $value): ?>
+                                <a href="<?=$this->record($this->driver)->getLink('dfi2060subject', $value, $this->searchClassId) ?>"
+                                   class="searchicon <?php if ($count >= 5): ?>dfisubjects-<?= $rand ?> collapse-inline collapse multi-collapse <?php endif; ?>"
+                                ><?=$this->escapeHtml($value)?>
+                                </a>
+                                <?php $count++; ?>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <a href="<?=$this->record($this->driver)->getLink('dfi2060subject', $notation, $this->searchClassId) ?>"
+                               class="searchicon <?php if ($count >= 5): ?>dfisubjects-<?= $rand ?> collapse-inline collapse multi-collapse <?php endif; ?>"
+                            ><?=$this->escapeHtml($notation)?></a>
+                            <?php $count++; ?>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+                <?php if ($count > 5): ?>
+                    <?= $this->showmore('.dfisubjects-' . $rand, false) ?>
+                <?php endif; ?>
+            </td>
+        <?php endif; ?>
+        <?php unset($dfisubject) ?>
+    </tr>
+<?php endif; ?>
+
+<?php $subjects = $this->driver->tryMethod('getRVKSubjectHeadings');
+if (!empty($subjects) && $this->client()->is('show_rvk')): ?>
+    <tr>
+        <th>
+            <span class="text-nowrap"><?= $this->abbrev('RVK') ?>-<?= $this->transEsc('Subjects') ?></span>
+        </th>
+        <td>
+            <div class="subjectLine" property="keywords">
+                <?php $count = 0; ?>
+                <?php foreach ($subjects as $field): ?>
+                    <?php $subject = ''; ?>
+                    <?php if (is_array($field) && count($field) == 1): $field = explode('--', $field[0]); ?>
+                        <?php $i = 0;
+                        foreach ($field as $subfield): ?>
+                            <?= ($i++ == 0) ? '' : ' &gt; ' ?>
+                            <?php $subject = trim($subject . ' ' . $subfield); ?>
+                            <?php //Die Links hatten eine Klasse backlink. Diese führt mit einer
+                            // bestimmten Browsererweiterung (uBlock / AdBlock?) zu komischer
+                            // Darstellung beim Hovern
+                            ?>
+                            <a class="searchicon"
+                               title="<?= $this->escapeHtmlAttr($subject) ?>"
+                               href="<?= $this->record($this->driver)->getLink('subject', $subject, $this->searchClassId) ?>"><?= trim($this->escapeHtml($subfield)) ?></a>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <a class="searchicon <?php if ($count >= 5): ?>rvksubjects-<?= $rand ?> collapse-inline collapse multi-collapse <?php endif; ?>"
+                           title="<?= $this->escapeHtmlAttr($field) ?>"
+                           href="<?= $this->record($this->driver)->getLink('rvkheading', $field, $this->searchClassId) ?>">
+                            <?= trim($this->escapeHtml($field)) ?></a>
+                    <?php endif; ?>
+                    <?php $count++ ?>
+                <?php endforeach; ?>
+                <?php if ($count > 5): ?>
+                    <?= $this->showmore('.rvksubjects-' . $rand, false) ?>
+                <?php endif; ?>
+            </div>
+        </td>
+        <?php unset($subjects) ?>
+    </tr>
+<?php endif; ?>
+<?php $subjects = $this->driver->tryMethod('getSTWSubjectHeadings'); ?>
+<?php if (!empty($subjects) && $this->client()->is('show_stw')): ?>
+    <tr>
+        <th>
+            <span class="text-nowrap"><?= $this->abbrev('STW') ?>-<?= $this->transEsc('Subjects') ?>:</span>
+        </th>
+        <td>
+            <?= $this->context($this)->renderInContext(
+                'RecordDriver/DefaultRecord/parts/singlesubject.phtml',
+                ['subjects' => $subjects, 'type' => 'stw']
+            ) ?>
+        </td>
+    </tr>
+    <?php unset($subjects) ?>
+<?php endif; ?>
+<?php
+$subjects = $this->driver->tryMethod('getGNDSubjectHeadings');
+if ($this->client()->is('showFreeKeywords')) {
+    $subjects = $subjects + ($this->driver->tryMethod('getFreeKeywords') ?? []);
+}
+$ihoebSubjects = $this->driver->tryMethod('getIhbSubjects');
+?>
+<?php if ((!empty($subjects) || !empty($ihoebSubjects)) && $this->client()->is('show_gnd')): ?>
+    <tr>
+        <th>
+            <?php
+            $text = $this->transEsc('Subjects');
+            if(!$this->client()->is('wlb2')) {
+                $text = $this->abbrev('GND') . '-' . $text;
+            }
+            ?>
+            <span class="text-nowrap"><?= $text ?>:</span>
+        </th>
+        <td>
+            <?php if(!empty($subjects)): ?>
+            <?= $this->context($this)->renderInContext(
+                'RecordDriver/DefaultRecord/parts/singlesubject.phtml',
+                ['subjects' => $subjects, 'type' => 'gnd', 'linktype' => 'gnd']
+            ) ?>
+            <?php endif; ?>
+
+            <?php if (!empty($ihoebSubjects)): ?>
+                <?php if (!empty($subjects)):?><br><br><?php endif;?>
+                Internationale Hölderlin-Bibliographie: Systemstellen - Schlagwörter:<br>
+                <?php $values = []; ?>
+                <?php foreach ($ihoebSubjects['main'] ?? [] as $s): ?>
+                    <?php
+                        $terms = array_map(function ($k) use ($s){
+                            return [
+                                ['data' => $k, 'type' => 'Systemstelle'],
+                                ['data' => $s['value']['term'], 'type' => 'Schlagwort']
+                            ];
+                        }, $s['key']);
+                    ?>
+                    <?php $values[] = [
+                        'data' => implode(' ', $s['key']) . ' ' . $s['value']['display'],
+                        'term' => $terms
+                    ]; ?>
+                <?php endforeach; ?>
+                <?php unset($s); ?>
+                <?php foreach ($ihoebSubjects['secondary'] ?? [] as $s): ?>
+                    <?php $terms = ['data' => $s['term'], 'type' => 'Schlagwort'] ?>
+                    <?php $values[] = ['data' => $s['display'], 'term' => [[$terms]]] ?>
+                <?php endforeach; ?>
+                 <?= $this->context($this)->renderInContext(
+                    'RecordDriver/DefaultRecord/parts/singlesubject.phtml',
+                    ['subjects' => $values, 'type' => 'ihoeb', 'linktype' => 'ihoeb']
+                )?>
+            <?php endif; ?>
+        </td>
+    </tr>
+    <?php unset($subjects) ?>
+<?php endif; ?>
+<?php $subjects = $this->driver->tryMethod('getLocalSubjects'); ?>
+<?php if (!empty($subjects) && $this->client()->is('show_local')): ?>
+    <tr>
+        <th>
+            <span class="text-nowrap"><?php if (!$this->client()->is('wlb2)')): ?><?= $this->abbrev('GND') ?>-<?php endif; ?><?= $this->transEsc('Local Subjects') ?>:</span>
+        </th>
+        <td>
+            <?= $this->context($this)->renderInContext(
+                'RecordDriver/DefaultRecord/parts/singlesubject.phtml',
+                ['subjects' => $subjects, 'type' => 'gnd', 'linktype' => 'gnd']
+            ) ?>
+        </td>
+    </tr>
+    <?php unset($subjects) ?>
+<?php endif; ?>
+
+<?php $subjects = $this->driver->getAllSubjectHeadings(); ?>
+<?php if (!empty($subjects) && $this->client()->is('show_general_keywords')): ?>
+    <tr>
+        <th><?= $this->transEsc('Subjects') ?></th>
+        <td>
+            <?= $this->context($this)->renderInContext(
+                'RecordDriver/DefaultRecord/parts/singlesubject.phtml',
+                ['subjects' => $subjects, 'type' => 'all']
+            ) ?>
+        </td>
+    </tr>
+    <?php unset($subjects) ?>
+<?php endif; ?>
+
+
+
