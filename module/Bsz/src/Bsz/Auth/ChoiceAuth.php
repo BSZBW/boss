@@ -86,6 +86,8 @@ class ChoiceAuth extends \VuFind\Auth\ChoiceAuth
             break;
             case 'adisauth': $output = 'adis';
             break;
+            case 'shibboleth': $output = 'Shibboleth';
+            break;
         }
         return $output;
     }
