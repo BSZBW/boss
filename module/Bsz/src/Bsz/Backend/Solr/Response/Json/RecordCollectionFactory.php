@@ -15,10 +15,6 @@ use VuFindSearch\Response\RecordCollectionFactoryInterface;
 
 class RecordCollectionFactory implements RecordCollectionFactoryInterface
 {
-
-    protected $recordFactory;
-    protected $collectionClass;
-
     /**
      * Constructor.
      *

@@ -27,12 +27,6 @@ use VuFind\RecordTab\AbstractBase;
 
 class InterlibraryLoan extends AbstractBase
 {
-    protected bool $active;
-
-    protected bool $internalill;
-
-    protected string $orderid;
-
     /**
      * @var Logic
      */

@@ -61,6 +61,7 @@ class Libraries extends TableGateway
                     ['auth2_name' => 'name'],
                     Select::JOIN_LEFT
                 )
+                ->order('li.name')
                 ->order('li.isil');
             $select->where->and
                 ->equalTo('is_ill_active', 1)

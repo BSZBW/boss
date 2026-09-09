@@ -19,8 +19,8 @@
     <meta name="robots" content="noindex, nofollow"/>
     <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
     <? $this->headMeta()->appendName('author', 'Bibliotheksservice-Zentrum Baden-Württemberg (BSZ)') ?>
-    <? $this->headMeta()->appendName('keywords', 'boss, bsz, bibliothek, bücher, zeitschriften, aufsätze') ?>
-    <? $this->headMeta()->appendName('application-name', 'BSZ - One Stop Search (BOSS)') ?>
+    <? $this->headMeta()->appendName('keywords', 'boss4, boss, bsz, bibliothek, bücher, zeitschriften, aufsätze') ?>
+    <? $this->headMeta()->appendName('application-name', 'BSZ - One Step Search (BOSS) v4') ?>
 
     <?php $this->headTitle()->setPostfix(' - ' . $this->client()->getTitle()); ?>
     <?= $this->headTitle() ?>
@@ -99,12 +99,6 @@
             "Phone number too short after IDD" => 'libphonenumber_tooshortidd'
           ]
         );
-          //BSZ: Add ill.js strings
-          $this->jsTranslations()->addStrings([
-                  'illFormError' => 'ILL::form_error',
-                  'illCostsError' => 'ILL::costs_error',
-                  'illYearError' => 'ILL::error_year',
-          ]);
           // Deal with cart stuff:
           $cart = $this->cart();
           $this->jsTranslations()->addStrings([
@@ -141,7 +135,10 @@
                   'itemsAddBag' => 'items_added_to_bookbag',
                   'itemsInBag' => 'items_already_in_bookbag',
                   'removeBookBag' => 'Remove from Book Bag',
-                  'viewBookBag' => 'View Book Bag'
+                  'viewBookBag' => 'View Book Bag',
+                  'illFormError' => 'ILL::form_error',
+                  'illCostsError' => 'ILL::costs_error',
+                  'illYearError' => 'ILL::error_year',
                 ]
               );
           }

@@ -22,30 +22,23 @@
 namespace Bsz\Auth;
 
 use Bsz\Config\Libraries;
-use Bsz\Config\Library;
 use Laminas\Http\Client;
 use Laminas\Http\Client as HttpClient;
-use Laminas\Session\ManagerInterface;
-use VuFind\Config\Feature\SecretTrait;
 use VuFind\Db\Entity\UserEntityInterface;
 use VuFind\Exception\Auth as AuthException;
 
 class Koha extends \VuFind\Auth\AbstractBase
 {
-    use SecretTrait;
-
-    protected ManagerInterface $sessionManager;
-
-    protected Library $library;
+    protected $library;
     protected $isil;
 
     /**
-     * @param ManagerInterface $sessionManager
-     * @param Libraries        $libraries
-     * @param                  $isils
+     * @param \Laminas\Session\ManagerInterface $sessionManager
+     * @param Libraries $libraries
+     * @param $isils
      */
     public function __construct(
-        ManagerInterface $sessionManager,
+        \Laminas\Session\ManagerInterface $sessionManager,
         Libraries $libraries,
         $isils
     ) {
@@ -64,7 +57,7 @@ class Koha extends \VuFind\Auth\AbstractBase
     public function authenticate($request): UserEntityInterface
     {
         if ($this->validateCredentials($request)) {
-            $username = trim($request->getPost()->get('username'));
+            $username =  trim($request->getPost()->get('username'));
             // If we made it this far, we should log in the user!
             //$user = $this->getUserTable()->getByUsername($username);
             $user = $this->getOrCreateUserByUsername($username);
@@ -82,10 +75,10 @@ class Koha extends \VuFind\Auth\AbstractBase
      * otherwise.
      *
      * @param \Laminas\Http\PhpEnvironment\Request $request Request object containing
-     *                                                      account credentials.
+     * account credentials.
      *
-     * @return bool
      * @throws AuthException
+     * @return bool
      */
     public function validateCredentials($request)
     {
@@ -98,13 +91,10 @@ class Koha extends \VuFind\Auth\AbstractBase
 
         $config = $this->getConfig();
 
-        $serviceid = $config->get('Koha')->get('serviceid:' . $this->isil);
-        $apikey = $this->getSecretFromConfig(
-            $this->config->Koha,
-            'apikey:' . $this->isil
-        );
-        //apikey_De-Stg117_file
-        $query_url = $config->get('Koha')->get('url:' . $this->isil);
+        $serviceid = $config->get('Koha')->get('serviceid:'.$this->isil);
+        $apikey = $config->get('Koha')->get('apikey:'.$this->isil);
+
+        $query_url = $config->get('Koha')->get('url:'.$this->isil);
         $query_url = str_replace('%isil%', $this->isil, $query_url);
 
         $data = [
@@ -131,14 +121,10 @@ class Koha extends \VuFind\Auth\AbstractBase
         $json_response = $response->getContent();
         $data_response = json_decode($json_response);
 
-        if ($response->getStatusCode() === 200
-            && $data_response->auth == true
-        ) {
+        if ($response->getStatusCode() === 200 && $data_response->auth == true) {
             return true;
         } elseif ($response->getStatusCode() === 403) {
-            throw new AuthException(
-                'Invalid API token: ' . $data_response->detail
-            );
+            throw new AuthException('Invalid API token: '.$data_response->detail);
         } else {
             throw new AuthException($data_response->message);
         }
@@ -158,19 +144,11 @@ class Koha extends \VuFind\Auth\AbstractBase
                 "Koha section is missing in your config.ini!"
             );
         }
-        foreach ($requiredKeys as $required) {
-            $req = $required . ':' . $this->isil;
+        foreach ($requiredKeys as $req) {
+            $req .= ':'.$this->isil;
             if (!isset($this->config->Koha->$req)
                 || strlen($this->config->Koha->$req) === 0
             ) {
-                if ($required == 'apikey') {
-                    $reqFile = $req . '_file';
-                    if (isset($this->config->Koha->$reqFile)
-                        && !empty($this->config->Koha->$reqFile)
-                    ) {
-                        continue;
-                    }
-                }
                 throw new AuthException(
                     "Koha section is missing required keys (url, serviceid, apikey)!"
                 );

@@ -56,7 +56,6 @@ class NCIP extends AbstractBase
     private $_ncip;
     private $_service;
 
-    private $_curlHandle;
     public $usernameType = 'Barcode Id';
     public $passwordType = 'PIN';
     public $userElementTypes = array( 'NameInformation',
@@ -68,8 +67,6 @@ class NCIP extends AbstractBase
 
     public $connectTimeout = 10;
     public $timeout = 30;
-
-    protected $sessionManager;
 
 
     /**

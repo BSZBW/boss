@@ -19,16 +19,11 @@ try {
     ];
     $offlineMode = 'ils-offline';
 }
-//$urls = $this->client()->is('show_only_ezb_urls') ? $this->driver->getEZBUrls() : $this->driver->getLocalUrls();
-$urls = $this->driver->tryMethod('getElectronicHoldings', [$this->client()->is('show_only_ezb_urls')], []);
-$showElectronic = !empty($urls) && $this->client()->is('show_electronic_holdings');
-$hideIls = $this->driver->isElectronic() && $this->client()->is('hide_ils_for_electronic_holdings');
 
 // Set page title.
 $this->headTitle($this->translate('Holdings') . ': ' . preg_replace('/|/', '', $this->driver->getBreadcrumb()));
 ?>
 
-<?php if (!$hideIls): ?>
 <?=$this->context($this)->renderInContext('librarycards/selectcard.phtml', ['user' => $this->auth()->isLoggedIn()]); ?>
 
 <?php if (!empty($holdings['blocks'])):?>
@@ -36,13 +31,14 @@ $this->headTitle($this->translate('Holdings') . ': ' . preg_replace('/|/', '
         <?=$this->transEsc('account_block_options_missing', ['%%details%%' => implode('; ', $holdings['blocks'])]) ?>
     </div>
 <?php endif; ?>
+
 <?=($offlineMode == "ils-offline") ? $this->render('Helpers/ils-offline.phtml') : ''?>
 
 <?php if (($this->ils()->getHoldsMode() == 'driver' && !empty($holdings['holdings'])) || $this->ils()->getTitleHoldsMode() == 'driver'): ?>
     <?php if ($account->loginEnabled() && $offlineMode != 'ils-offline'): ?>
         <?php if (!$user): ?>
             <div class="alert alert-info">
-                <a id="hold-login" href="<?=$this->serverUrl($this->url('myresearch-userlogin'))?>"><?=$this->transEsc('hold_login')?></a>
+                <a href="<?=$this->recordLink()->getTabUrl($this->driver, 'Holdings')?>?login=true&amp;catalogLogin=true" data-lightbox><?=$this->transEsc("hold_login")?></a>
             </div>
         <?php elseif (!$user->cat_username): ?>
             <div class="alert alert-info">
@@ -54,18 +50,11 @@ $this->headTitle($this->translate('Holdings') . ': ' . preg_replace('/|/', '
 <?php $holdingTitleHold = $this->driver->tryMethod('getRealTimeTitleHold'); if (!empty($holdingTitleHold)): ?>
     <a class="placehold" data-lightbox title="<?=$this->transEsc('request_place_text')?>" href="<?=$this->recordLink()->getRequestUrl($holdingTitleHold)?>"><i class="fa fa-flag" aria-hidden="true"></i>&nbsp;<?=$this->transEsc('title_hold_place')?></a>
 <?php endif; ?>
-<?php endif; ?>
-<?php if ($showElectronic && $this->driver->isElectronic()): ?>
-    <?= $this->context($this)->renderInContext(
-            'RecordTab/holdingsils/electronicurls.phtml',
-            ['holdings' => $urls]
-    ); ?>
-<?php endif; ?>
-<?php if (!$hideIls): ?>
+<?php // removed online access as this is listed in main section ?>
 <?php $recallButtonCounter = 0 ?>
 <?php if (isset($holdings['holdings'])): ?>
-     <?php /** -- SOLR -- ?>
-        <?php foreach ($holdings['holdings'] as $holding): ?>
+    <?php // -- SOLR -- ?>
+    <?php foreach ($holdings['holdings'] as $holding): ?>
         <div class="row">
             <div class="col-sm-12">
                 <h4>
@@ -100,24 +89,22 @@ $this->headTitle($this->translate('Holdings') . ': ' . preg_replace('/|/', '
                 <?php endif; // End of old DAIA code?>
             <?php endforeach; ?>
         </div>
-        <?php endforeach; ?>
-    **/ ?> <?php //-- SOLR -- ?>
+    <?php endforeach; ?>
+
+    <?php //var_dump($_SERVER['SERVER_NAME']); ?>
+<?php if (substr($_SERVER['SERVER_NAME'] ,0,4) == "test"): ?>
+    <?php //if($this->client()->is('test')): ?>
 
         <?php // -- Folio OKAPI -- ?>
         <?php foreach ($holdings['holdings'] ?? [] as $holding): ?>
-            <h4>
+            <h2>
                 <?php $locationTextEsc = $this->transEscWithPrefix('location_', $holding['location']); ?>
                 <?php if ($holding['locationhref'] ?? false): ?>
                     <a href="<?=$this->escapeHtmlAttr($holding['locationhref'])?>" target="_blank"><?=$locationTextEsc?></a>
                 <?php else: ?>
                     <?=$locationTextEsc?>
                 <?php endif; ?>
-            </h4>
-            <?php $detailKey = $this->translate('location_details'); ?>
-            <?php $locationDetails = $holding['location_details'] ?? []; ?>
-            <?php if(!empty($locationDetails[$detailKey])): ?>
-                <?= $this->escapeHtml($locationDetails[$detailKey]); ?>
-            <?php endif; ?>
+            </h2>
             <?php
             $truncateSettings = [
                 'rows' => $this->config()->getHoldingsItemLimit(),
@@ -125,7 +112,7 @@ $this->headTitle($this->translate('Holdings') . ': ' . preg_replace('/|/', '
             ?>
             <table class="table table-striped truncate-field" data-truncate="<?=$this->htmlSafeJsonEncode($truncateSettings)?>">
                 <caption class="sr-only"><?=$this->transEsc('holdings_details_from', ['%%location%%' => $this->transEsc($holding['location'])]) ?></caption>
-                <?php $callNos = $this->tab->getUniqueCallNumbers($holding['items'] + [$holding['intellectual_item'] ?? []], true); ?>
+                <?php $callNos = $this->tab->getUniqueCallNumbers($holding['items'], true); ?>
                 <?php if (!empty($callNos)): ?>
                     <tr>
                         <th><?=$this->transEsc('Call Number')?>: </th>
@@ -136,11 +123,6 @@ $this->headTitle($this->translate('Holdings') . ': ' . preg_replace('/|/', '
                                 <?php else: ?>
                                     <?=$this->escapeHtml($callNo['display'])?>
                                 <?php endif; ?>
-                                <?php //BSZ: Show mapongo link if available ?>
-                                <?php if ('ja' == ($locationDetails['mapongo'] ?? '')): ?>
-                                    <?= $this->mapongo($callNo['display'], $holding['location']) ?>
-                                <?php endif; ?>
-                                <?php //END BSZ ?>
                                 <br>
                             <?php endforeach; ?>
                         </td>
@@ -157,28 +139,17 @@ $this->headTitle($this->translate('Holdings') . ': ' . preg_replace('/|/', '
                         </td>
                     </tr>
                 <?php endforeach; ?>
-                <?php //BSZ: ?>
-                <?php if (isset($holding['intellectual_item'])): ?>
-                    <?= $this->context($this)->renderInContext(
-                         'RecordTab/holdingsils/standard.phtml', [
-                                 'holding' => $holding['intellectual_item'],
-                                 'callNos' => $callNos,
-                                 'intellectual_item' => true
-                         ]
-                    ); ?>
-                <?php endif; ?>
-                <?php //End BSZ ?>
                 <?php foreach ($holding['items'] as $row): ?>
                     <?php
                     try {
                         echo $this->context($this)->renderInContext(
                             'RecordTab/holdingsils/' . $this->tab->getTemplate() . '.phtml',
-                            ['holding' => $row, 'callNos' => $callNos]
+                            ['holding' => $row]
                         );
                     } catch (Exception $e) {
                         echo $this->context($this)->renderInContext(
                             'RecordTab/holdingsils/standard.phtml',
-                            ['holding' => $row, 'callNos' => $callNos]
+                            ['holding' => $row]
                         );
                     }
                     ?>
@@ -223,9 +194,11 @@ $this->headTitle($this->translate('Holdings') . ': ' . preg_replace('/|/', '
             <?php $text = $class === 'Bsz\ILS\Driver\NoILS' ? $this->transEsc('Local Online Access') : $this->transEsc('recall/hold');?>
             <a href="<?=$row['ilslink']?>" class="btn btn-primary btn-sm recallholdButtonLink external "><?=$text?></a>
         <?php elseif($class == 'Bsz\ILS\Driver\NoILS'): ?>
-            <?php $ppn = $this->driver->tryMethod('getPPN'); if(!empty($ppn) && ($this->driver->isJournal() || $this->driver->isSerial())): ?>
+            <? $ppn = $this->driver->tryMethod('getPPN'); if(!empty($ppn) && ($this->driver->isJournal() || $this->driver->isSerial())): ?>
                 <?=$this->recordLink()->linkPPNButton($this->driver) ?>
-            <?php endif; ?>
+            <? endif; ?>
         <?php endif; ?>
     <?php endif; ?>
-<?php endif; ?>
+
+
+<?php endif; ?> <?php // Ende von Test erkannt ?>

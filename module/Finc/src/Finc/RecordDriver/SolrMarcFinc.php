@@ -58,8 +58,6 @@ class SolrMarcFinc extends SolrMarc
      */
     protected $isil = [];
 
-    protected $formats;
-
     /**
      * Local marc field of institution participated in Finc.
      *

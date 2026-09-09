@@ -12,8 +12,6 @@ class SearchController extends \VuFind\Controller\SearchController
 {
     use IsilTrait;
 
-    protected $filterFacets;
-
     /**
      * Home action
      * @return mixed

@@ -32,8 +32,6 @@ use Laminas\Json\Json;
  */
 class HoldingController extends AbstractBase
 {
-    protected $holding;
-
     public function queryAction()
     {
         $isxns =    (array)$this->params()->fromQuery('isxn');
