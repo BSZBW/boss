@@ -11,7 +11,6 @@ use Laminas\Session\SessionManager;
  */
 class MyResearchController extends \VuFind\Controller\MyResearchController
 {
-
 //    /**
 //     * Prepare and direct the home page where it needs to go
 //     *
