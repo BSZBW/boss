@@ -123,7 +123,7 @@ class RecordLink extends \VuFind\View\Helper\Root\RecordLinker
     }
 
     /**
-     * This method renders the author names well formated as HTML
+     * This method renders the author names well formatted as HTML
      *
      * @param SolrMarc $driver
      * @param int $number 1 to number of authors
