@@ -21,7 +21,7 @@
         <?php if ($this->client()->is('show_url_prefix') && ($holding['prefix'] ?? null)): ?>
             <?= $holding['prefix']?> &ndash;
         <?php endif; ?>
-        <a class="external" href="<?=$url['url']?>" target="_blank"><?=$this->transEsc($url['label'])?></a>
+        <a class="external" href="<?=$url['url']?>" target="_blank"><?=$this->transEsc($label)?></a>
         <br>
     <?php endforeach; ?>
 <?php endforeach; ?>
