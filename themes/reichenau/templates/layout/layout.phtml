@@ -262,5 +262,8 @@ if (!isset($this->layout()->searchbox)) {
 <?php foreach ($this->captcha()->js() as $jsInclude):?>
     <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::FILE, $jsInclude, 'SET')?>
 <?php endforeach; ?>
+<?php if($this->client()->getTag() == 'ubmz'): ?>
+    <script async type="text/javascript" src="https://userlike-cdn-widgets.s3-eu-west-1.amazonaws.com/77ee4b485f3e48c0a74f08b73b15c96b3d77d73a76cd435fb6303fb28e1c1c82.js"></script>
+<?php endif; ?>
 </body>
 </html>

@@ -446,6 +446,16 @@ class Client extends Config
         return $this->get('Help')->get('groups');
     }
 
+    public function replaceHelp(string $text): string
+    {
+        $replace = $this->get('HelpReplace')->toArray();
+        foreach ($replace as $key => $value) {
+            $url = '<a href="' . $value . '" class="external">' . $key . '</a>';
+            $replace[$key] = $url;
+        }
+        return str_replace(array_keys($replace), array_values($replace), $text);
+    }
+
     /**
      * @return null|Library
      */
@@ -491,5 +501,19 @@ class Client extends Config
             return $url;
         }
         return $label;
+    }
+
+    protected function getDefaultUrlLabel()
+    {
+        $record = $this->get('Record');
+        return $record ? ($record->get('default_url_label') ?? null) : null;
+    }
+
+    public function getLabelForUrl(string $url, ?string $providedLabel): ?string {
+        $overrideText = $this->getDefaultUrlLabel();
+        if (($providedLabel ?? $url) == $url) {
+            return $overrideText ?? $url;
+        }
+        return $providedLabel;
     }
 }

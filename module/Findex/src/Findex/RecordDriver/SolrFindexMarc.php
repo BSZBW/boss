@@ -1137,5 +1137,86 @@ class SolrFindexMarc extends SolrMarc implements Constants
         }
         return null;
     }
+    public function getElectronicHoldings(bool $onlyEzb): array
+    {
+        $isils = $this->mainConfig->getIsils();
+        $isils4local = $this->mainConfig->get('Site')->get('isil_local_url');
+
+        if (empty($isils4local)) {
+            $isils = [array_shift($isils)];
+        } else {
+            $isils = explode(',', $isils4local);
+        }
+
+        $f980 = $this->getFields('980');
+        $retVal = [];
+        foreach ($f980 as $field) {
+            if(!is_array($field)) {
+                continue;
+            }
+
+            $sfx = $this->getSubfield($field, 'x');
+            if(!in_array($sfx, $isils)) {
+                continue;
+            }
+
+            $sf1 = $this->getSubfield($field, '1');
+            $sfg = $this->getSubfield($field, 'g');
+            $sfd = $this->getSubfield($field, 'd');
+            $sfk = $this->getSubfield($field, 'k');
+            $urls = $this->getUrlsForOccurrence($sfx, $sf1, $onlyEzb);
+
+            $retVal[] = array_filter([
+                'isil' => $sfx,
+                'prefix' => $sfg,
+                'signature' => $sfd == '--%%--' ? '' : $sfd,
+                'comment' => $sfk
+            ]) + ['urls' => $urls];
+        }
+        return $retVal;
+    }
+
+    protected function getUrlsForOccurrence(string $isil, string $occurrence, bool $onlyEzb): array
+    {
+        $f981 = $this->getFields('981');
+
+        $retVal = [];
+        foreach ($f981 as $field) {
+            if(!is_array($field)) {
+                continue;
+            }
+
+            $sf1 = $this->getSubfield($field, '1');
+            $sfx = $this->getSubfield($field, 'x');
+            if(($sf1 != $occurrence) || ($sfx != $isil)) {
+                continue;
+            }
+
+            $sfr = $this->getSubfield($field, 'r');
+            $sfy = $this->getSubfield($field, 'y');
+            $retVal[] = [
+                'url' => $sfr,
+                'label' => empty($sfy) ? $sfr : $sfy,
+            ];
+        }
+        if($onlyEzb) {
+            return $this->filterEzbUrls($retVal);
+        }
+        return $retVal;
+    }
+
+    protected function filterEzbUrls(array $urls): array
+    {
+        $ezbUrls = [];
+        foreach ($urls as $url) {
+            if (preg_match('/ezb\.ur\.de\/detail\.phtml/', $url['url']) || preg_match('/dbis\.ur\.de/', $url['url'])) {
+                $ezbUrls[] = $url;
+            }
+        }
+        if (!empty($ezbUrls)) {
+            return $ezbUrls;
+        }
+        return $urls;
+    }
 
 }
