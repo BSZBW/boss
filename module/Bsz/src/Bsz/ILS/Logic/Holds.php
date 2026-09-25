@@ -21,9 +21,7 @@ class Holds extends \VuFind\ILS\Logic\Holds
         }
 
         $config = $this->config;
-        if (!$config->FreeHold || !$config->FreeHold->url) {
-            return $retVal;
-        }
+        $showIntellectualItem = $config->FreeHold && $config->FreeHold->url;
 
         foreach ($retVal as $groupKey => $items) {
             $newItems = [];
@@ -46,10 +44,10 @@ class Holds extends \VuFind\ILS\Logic\Holds
                 }
             }
 
-            if ($intellectualItem != null) {
+            if ($intellectualItem != null && $showIntellectualItem) {
                 $retVal[$groupKey]['intellectual_item'] = $intellectualItem;
-                $retVal[$groupKey]['items'] = $newItems;
             }
+            $retVal[$groupKey]['items'] = $newItems;
         }
 
         return $retVal;
