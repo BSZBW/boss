@@ -1327,7 +1327,8 @@ class SolrGviMarc extends SolrMarc implements Constants
     public function isEPflicht() : bool
     {
         $fields = $this->getFieldArray('912', ['a']);
-        return in_array('EPF-BW-GESAMT', $fields, true) && !$this->isBLB();
+        return (in_array('EPF-BW-GESAMT', $fields, true) && !$this->isBLB())
+            || in_array('EPF-24-DNB-EPAPER', $fields, true);
     }
 
 
