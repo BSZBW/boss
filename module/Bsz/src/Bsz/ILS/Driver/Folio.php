@@ -247,12 +247,12 @@ class Folio extends \VuFind\ILS\Driver\Folio
                 'volumes' => $patronrequest->volumes[0] ?? '',
                 'create' => $this->dateConverter->convertToDisplayDate(
                         'Y-m-d',
-                        $patronrequest->dateCreated
-                    ) ?? '',
+                        $patronrequest->dateCreated ?? ''
+                    ),
                 'expire' => $this->dateConverter->convertToDisplayDate(
                         'Y-m-d',
-                        $patronrequest->neededBy
-                    ) ?? '',
+                        $patronrequest->neededBy ?? ''
+                    ),
                 'location' => $patronrequest->pickupLocation ?? '',
                 'patronNote' => $patronrequest->patronNote ?? ''
             ];
