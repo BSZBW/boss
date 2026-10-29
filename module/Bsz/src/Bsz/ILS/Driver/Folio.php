@@ -182,6 +182,85 @@ class Folio extends \VuFind\ILS\Driver\Folio
         return $holds;
     }
 
+    /**
+     * This method queries the ILS for a patron's current ILLRequests
+     * (OKAPI-)Systemuser needs the following permission:
+     * - rs.patronrequests.collection.get
+     *
+     * Therefor this permission had to be added in Folio for
+     * (OKAPI-)Systemuser:
+     * - ILL Request: View requests
+     *
+     * And for future safety, also these permissions:
+     * - patronrequests collection get
+     * - patronrequests item get
+     * - patronrequests read
+     *
+     * @param array $patron The patron array from patronLogin
+     *
+     * @return array
+     */
+    public function getMyILLRequests($patron)
+    {
+        // Identify patron
+        $patronrequests = [];
+        $patronIdentifier = $patron["username"]; // the user-barcode
+        if ($patronIdentifier === '') {
+            throw new \VuFind\Exception\ILS('The patron identifier is empty');
+        }
+
+        $pageSize = 100;
+
+        // Build query to filter the requests the library got
+        $query = [
+            'filters' => 'patronIdentifier==' . $patronIdentifier
+                . '&&isRequester==true',
+            'stats' => 'true',
+            'perPage' => $pageSize,
+            'sort' => 'id',
+        ];
+
+        // Send query to endpoint
+        foreach (
+            $this->getPagedResults(
+                'results',
+                '/rs/patronrequests',
+                $query,
+                $pageSize
+            ) as $patronrequest
+        ) {
+            // Precaution: do not send the requests of other patrons
+            if (($patronrequest->patronIdentifier ?? null) !== $patronIdentifier) {
+                throw new \VuFind\Exception\ILS(
+                    'Reshare sent requests of another patron.'
+                );
+            }
+
+            // Build array for illrequest.phtml
+            $currentRequest = [
+                'author' => $patronrequest->author ?? '',
+                'id' => $patronrequest->hrid ?? '',
+                'title' => $patronrequest->title ?? '',
+                'subtitle' => $patronrequest->subtitle ?? '',
+                'publisher' => $patronrequest->publisher ?? '',
+                'placeOfPublication' => $patronrequest->placeOfPublication ?? '',
+                'volumes' => $patronrequest->volumes[0] ?? '',
+                'create' => $this->dateConverter->convertToDisplayDate(
+                        'Y-m-d',
+                        $patronrequest->dateCreated
+                    ) ?? '',
+                'expire' => $this->dateConverter->convertToDisplayDate(
+                        'Y-m-d',
+                        $patronrequest->neededBy
+                    ) ?? '',
+                'location' => $patronrequest->pickupLocation ?? '',
+                'patronNote' => $patronrequest->patronNote ?? ''
+            ];
+            $patronrequests[] = $currentRequest;
+        }
+        return $patronrequests;
+    }
+
     public function getMyProfile($patron)
     {
         $retVal = parent::getMyProfile($patron);
