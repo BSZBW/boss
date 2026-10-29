@@ -1385,4 +1385,16 @@ class SolrGviMarc extends SolrMarc implements Constants
         }
     }
 
+    public function hasIllIndicators(array $inds): bool
+    {
+        $f924 = $this->getField924();
+        foreach ($f924 as $field) {
+            $code = $field['ill_indicator'] ?? null;
+            if (isset($code) && in_array($code, $inds)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

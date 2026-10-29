@@ -14,7 +14,13 @@
         if ($this->driver->isJournal()) { $type = 'journal';}
         elseif ($this->driver->isContainerMonography()) { $type = 'article-book';}
         elseif ($this->driver->isArticle()) {$type = 'article';}
-        elseif ($this->driver->isElectronicBook()) {$type = 'ebook';}
+        elseif ($this->driver->isElectronicBook()) {
+            if($this->driver->hasIllIndicators(['c'])) {
+                $type = 'ebook-leihe';
+            }else {
+                $type = 'ebook-kopie';
+            }
+        }
     } else {
         $type = 'free';
     }
@@ -100,6 +106,14 @@
                 </div>
                 <label class="control-label col-xs-10 col-sm-11" for="agree-commercial-use">* <?=$this->transEsc('ILL::commercial_use')?></label>
             </div>
+            <?php if ($type == 'ebook-leihe'): ?>
+              <div class="form-group form-group-sm">
+                  <div class="col-sm-1 col-xs-2">
+                      <input type="checkbox" required="true" class="" id="confirm-residence" name="confirm-residence"/>
+                  </div>
+                  <label class="control-label col-xs-10 col-sm-11" for="confirm-residence">* <?=$this->transEsc('ILL::confirm_residence')?></label>
+              </div>
+            <?php endif; ?>
             <div>
                 <b><i class="fa fa-info-circle"></i> <?= $this->transEsc('delivery_time_hint') ?></b> <br><br>
             </div>

@@ -176,9 +176,9 @@ function copyLend() {
     if ($('input[name=Bestellform]:checked').length === 0
         && $('input[name=Bestellform]').length === 2) {
         var format = $('#form-ill').attr('data-format');
-        if ($.inArray(format, ['book']) > -1) {
+        if ($.inArray(format, ['book', 'ebook-leihe']) > -1) {
             $('#ill-lend').prop('checked', true);
-        } else if ($.inArray(format, ['journal', 'article-book', 'article', 'ebook']) > -1){
+        } else if ($.inArray(format, ['journal', 'article-book', 'article', 'ebook-kopie']) > -1){
             $('#ill-copy').prop('checked', true);
         }
 
