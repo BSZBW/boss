@@ -92,6 +92,8 @@ $config = [
             'Bsz\RecordDriver\PluginManager' => 'Bsz\RecordDriver\PluginManagerFactory',
             'Bsz\ILL\Logic' => 'Bsz\ILL\Factory::getIllLogic',
             'Bsz\ILS\Logic\Holds' => 'VuFind\ILS\Logic\LogicFactory',
+            'Bsz\Db\AdapterFactory' => 'VuFind\Service\ServiceWithConfigIniFactory',
+            'Laminas\Db\Adapter\Adapter' => 'Bsz\Db\AdapterFactory'
         ],
         'invokables' => [
             'Bsz\RecordDriver\Constants' => 'Bsz\RecordDriver\Constants',
@@ -102,7 +104,8 @@ $config = [
             'VuFind\Auth\Manager'           => 'Bsz\Auth\Manager',
             'VuFind\RecordDriver\PluginManager' => 'Bsz\RecordDriver\PluginManager',
             'VuFind\Auth\PluginManager' => 'Bsz\Auth\PluginManager',
-            'VuFind\ILS\Logic\Holds' => 'Bsz\ILS\Logic\Holds'
+            'VuFind\ILS\Logic\Holds' => 'Bsz\ILS\Logic\Holds',
+            'VuFind\Db\AdapterFactory' => 'Bsz\Db\AdapterFactory'
         ]
     ],
     'view_manager' => [

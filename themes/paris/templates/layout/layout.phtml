@@ -6,9 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="robots" content="noindex, nofollow"/>
     <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-    <? $this->headMeta()->appendName('author', 'Bibliotheksservice-Zentrum Baden-Württemberg (BSZ)') ?>
-    <? $this->headMeta()->appendName('keywords', 'boss, bsz, bibliothek, bücher, zeitschriften, aufsätze') ?>
-    <? $this->headMeta()->appendName('application-name', 'BSZ - One Stop Search (BOSS)') ?>
+    <?php $this->headMeta()->appendName('author', 'Bibliotheksservice-Zentrum Baden-Württemberg (BSZ)') ?>
+    <?php $this->headMeta()->appendName('keywords', 'boss, bsz, bibliothek, bücher, zeitschriften, aufsätze') ?>
+    <?php $this->headMeta()->appendName('application-name', 'BSZ - One Stop Search (BOSS)') ?>
 
     <?php $this->headTitle()->setPostfix(' - ' . $this->client()->getTitle()); ?>
     <?= $this->headTitle() ?>
@@ -24,16 +24,16 @@
       );
     ?>
     <?php $icons = !isset($this->renderingError) ? $this->render('js-icons.phtml') : '{}'; ?>
-    <?$this->headMeta()->appendProperty('og:type', 'website')?>
-    <?$this->headMeta()->appendProperty('og:title',$this->headTitle()->renderTitle())?>
-    <?$this->headMeta()->appendProperty('og:name', 'BOSS: BSZ - One Stop Search')?>
-    <?$this->headMeta()->appendProperty('og:url', $this->serverUrl(true))?>
-    <?$this->headMeta()->appendProperty('og:description', $this->transEsc('homepage_text'))?>
+    <?php $this->headMeta()->appendProperty('og:type', 'website')?>
+    <?php $this->headMeta()->appendProperty('og:title',$this->headTitle()->renderTitle())?>
+    <?php $this->headMeta()->appendProperty('og:name', 'BOSS: BSZ - One Stop Search')?>
+    <?php $this->headMeta()->appendProperty('og:url', $this->serverUrl(true))?>
+    <?php $this->headMeta()->appendProperty('og:description', $this->transEsc('homepage_text'))?>
 
     <?php if ($this->client()->isisilSession()): ?>
-    <?$this->headMeta()->appendProperty('og:image', $this->serverUrl().$this->imageLink('logo/bsz.svg'))?>
+        <?php $this->headMeta()->appendProperty('og:image', $this->serverUrl().$this->imageLink('logo/bsz.svg'))?>
     <?php else: ?>
-    <?$this->headMeta()->appendProperty('og:image', $this->serverUrl().$this->imageLink($this->clientAsset()->getLogo()))?>
+        <?php $this->headMeta()->appendProperty('og:image', $this->serverUrl().$this->imageLink($this->clientAsset()->getLogo()))?>
     <?php endif;?>
     <?=$this->headMeta()?>
 
