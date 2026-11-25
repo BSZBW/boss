@@ -1,0 +1,12 @@
+// Switch on/off highlighting visibility using
+// background color in alpha channel 
+// rgba(255,255,0,0) = off, 
+// rgba(255,255,0,1) = maximum saturation
+
+
+// decent gray gradient
+body:not(.frame) {
+    #gradient.vertical(@gray-light; darken(@gray-lighter, 5%); 15%; 90%);        
+}
+
+
