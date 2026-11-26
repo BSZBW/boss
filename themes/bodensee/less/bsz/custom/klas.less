@@ -49,3 +49,31 @@ img[alt="Aufmacherbild"] {
 //  background-color: #FF3C2D;
 //  border-color: #FF3C2D;
 //  }
+
+// „In die Merkliste“ und die anderen Aktionslinks: beim Hovern blaue Schrift,
+// ohne Hintergrundfarbe. Bootstrap würde sonst Weiß auf Hellgrau setzen.
+.record-nav > li > a.btn,
+.nav-pills > li > a.btn {
+  &:hover,
+  &:focus,
+  &.focus,
+  &:active,
+  &.active {
+    color: #0069FF;
+    background-color: transparent;
+    border-color: transparent;
+  }
+}
+
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus {
+  color: #0069FF;
+  background-color: transparent;
+}
+
+.nav-tabs > li:not(.active) > a:hover,
+.nav-tabs > li:not(.active) > a:focus {
+  color: #0069FF;
+  background-color: transparent;
+}
